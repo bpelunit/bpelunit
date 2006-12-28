@@ -1,0 +1,66 @@
+
+Die primäre Aufgabe der Code-Coverage-Analyse liegt darin, die im Code durch Tests abgedeckten Bereiche  zu identifizieren und einige Kennzahlen der Abdeckungen zu ermitteln
+(z.B. Anzahl der Durchläufe einer Codezeile). Daher werden bei der Code-Coverage-Analyse während der Testausführung
+verschiedene Messungen durchgeführt, die jeweils Informationen über eine bestimmte Art der Abdeckung sammeln. Im
+Folgenden werden die wichtigsten Messmetriken bei der Code-Coverage-Analyse aufgelistet.
+wieviel des zu untersuchenden Codes tatsächlichdurch die Tests ausgeführt wurde. Es wird auch oft der Begriff \textit{Testabdeckung} verwendet.
+
+
+
+Anweisungs¨uberdeckung wird im allgemeinen nicht als hinreichendes Kriterium
+f¨ur die Vollst¨andigkeit eines Tests betrachtet, ihre Auswertung ergibt sich als
+Nebenprodukt der Auswertung umfassenderer ¨Uberdeckungskriterien. Empirische
+Untersuchungen zeigen eine Fehlererkennungsrate von 15\% bis unter 20\% f¨ur
+reine Anweisungs¨uberdeckung. Sie liefert allerdings in allen Untersuchungen h¨ohere
+Prozents¨atze als die statische Analyse des Quelltextes.
+Die Kanten¨uberdeckung gilt als Standard bei kontrollflussbasierten ¨Uberdeckungsmaßen
+und wird oft als Kriterium an Tests gestellt. Sie wird als leistungsf
+¨ahiger Test vor allem zum Auffinden von logischen Fehlern betrachtet. Untersuchungen
+bez¨uglich der Leistungsf¨ahigkeit streuen in einem weiten Bereich von
+20\% bis 70\% gefundener Fehler. Zumeist liegen die Prozents¨atze im unteren Drittel
+dieses Intervalls. Studien, die ebenfalls Anweisungs¨uberdeckung betrachten, zeigen
+f¨ur Zweig¨uberdeckung eine Fehlererkennungsrate, die um 50% bis 100% ¨uber der
+der Anweisungs¨uberdeckung liegt.
+Bedingungs¨uberdeckung findet vor allem bei Systemen mit komplexer Verarbeitungslogik
+Verwendung, die in der Regel kompliziert aufgebaute Bedingungen
+verwende.
+
+
+
+D
+
+Erfolgsquote:
+..Anweisungsüberdeckungstest 18%
+..Zeigüberdeckungstest 32%
+..Bedingungsüberdeckungstest ?
+..Pfadüberdeckungstest 65%
+
+
+Beim Erstellen von Tracedaten unterscheidet man zwischen Methoden, die es erfordern
+den bestehenden Source- bzw. Objektcode zu instrumentieren und Methoden,
+die automatisch Traceausgaben erzeugen. Moderne Entwicklungsumgebungen bieten
+meist Techniken an, um Traceausgaben ohne Sourcecode-¨Anderung zu erstellen.
+
+
+Die Testabdeckungsanalyse gibt an, in welchem Umfang die durchgeführten Tests die zu testende Software erfasst haben.
+
+
+
+Bis jetzt wurde Instrumentierungsansatz allgemein betrachtet, ohne auf eine bestimmte Sprache einzugehen. Jetzt werden BPEL-spezifische Einschränkungen untersucht. Als Erstes dürfen nur BPEL-Aktivitäten eingefügt werden, sonst kann der BPEL-Prozess von der BPEL-Engine nicht ausgeführt werden. Um Protokollierung zu realisieren, muss eine Kommunikation von der Ausführungsumgebung nach außen stattfinden. Die einzige dafür geeignete Aktivität ist \textit{invoke}. Außerdem muss ein (lokales) Web Service eingerichtet werden, der für das Protokollieren zuständig ist. Bevor zu tief in die Details eingestiegen wird, werden zuerst die anderen Lösungsmöglichkeiten vorgestellt und besprochen.	
+	
+	
+	\begin{itemize}
+\item BPEL-Prozesse werden in speziellen Ablaufumgebungen (\textit{BPEL-Engine}) ausgeführt.
+\item BPEL-Prozesse können nur mit Web Services (\textit{partner}) kommunizieren.
+\begin{itemize}
+	\item Die entsprechenden WSDL-Beschreibungen sind notwendig.
+	\item Die \textit{partner link types} und \textit{partner liks} müssen definiert werden
+\end{itemize}
+	\item Businesslogik wird in BPEL-Prozesse durch BPEL-Aktivitäten (s. Abschnitt \ref{}) realisiert. 
+\end{itemize}
+
+\begin{figure}
+	\centering
+		\includegraphics[width=0.90\textwidth]{bilder/loggingservice.pdf}
+	\label{fig:loggingservice}
+\end{figure}

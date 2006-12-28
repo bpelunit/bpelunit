@@ -1,0 +1,105 @@
+Unit-Tests spielen eine sehr wichtige Rolle bei der Qualitätssicherung in der Softwareentwicklung. Um die Softwarequalität anhand der Test bewerten zu können, müssen zusätzliche Informationen über die Tests bekannt sein. Wichtig sind unter anderem die \textit{Anforderungs}- und \textit{Codeabdeckung} der Tests.
+\begin{itemize}
+	\item \textbf{Anforderungsabdeckung}(\textit{eng. requirements coverage}). Die Anforderungsabdeckung ist eine funktionale
+Abdeckung auf Basis einer Spezifikation, die angibt, inwieweit die Testfälle alle Anforderungen abdecken. Diese Metrik wird meist im Zusammenhang mit \textit{Black-Box-Tests} verwendet. 
+	\item \textbf{Codeabdeckung}(\textit{eng. code coverage}). Die Codeabdeckung ist eine Metrik für das Verhältnis zwischen
+zu testenden und tatsächlich getesteten Elementen des Prüflings. Die Tests, die auf der Codeabdeckung basieren, gehören zur Gruppe der strukturorientierten Testtechniken und zielen darauf ab, die innere Struktur der Software zu testen (\textit{Glass-Box-Test}). 
+\end{itemize}
+Die \textit{Anforderungs}- und \textit{Codeabdeckung} sind Mittel zur Messung der Qualität bzw. Voll"-stän"-dig"-keit der Tests. Die beiden Testarten (\textit{Black-Box} und \textit{Glass-Box}) ergänzen sich gegenseitig und werden in der Regel kombiniert angewendet. Damit werden die beiden Arten der Abdeckungsmetriken auch gemeinsam verwendet. Da für diese Arbeit nur die Codeabdeckung relevant ist, geht es im weiteren Verlauf des Dokuments nur um diesen Aspekt. Der Begriff \textit{Testabdeckung} wird auch in diesem Sinne verwendet. 
+
+Die Unit-Tests werden verwendet, um sicherzustellen, dass der erstellte Code korrekt funktioniert. Jedoch lassen sich dabei nur Aussagen über die Codebereiche machen, die im Test aufgerufen oder, anders gesagt, durch den Test abgedeckt wurden. Das Ausführen aller potentiell fehlerhaften Stellen des Programms ist ein notwendiges Kriterium für das Finden der Fehler im Code. Deswegen ist die Angabe der erreichten Codeabdeckung aus der Sicht der Qualitätssicherung nicht nur sinnvoll sondern unabdingbar.
+
+Bei der Analyse der Codeabdeckung geht es also darum festzustellen, wie gut die Codebereiche durch die Tests abgedeckt sind bzw. welche Bereiche gar nicht oder nicht ausreichend abgedeckt sind. Wenn ein Testentwickler auf diese Information ständig und einfach zugreifen kann, dann hat er die Möglichkeit, neue Tests gezielt zu erstellen. Dadurch kann die Qualität der Tests schrittweise erhöht und die Erstellung der überflüssigen Tests vermieden werden. Mit Hilfe der Codeabdeckung kann also ein Optimum zwischen dem wirtschaftlichen Aufwand und der Testqualität gefunden werden, was bei der Herstellung der Software auch ein wichtiger Aspekt ist. 
+
+In der folgenden Aussage werden die drei Begriffe \textit{Codeabdeckungsanalyse}, \textit{Testqualität} und \textit{Systemqualität} in eine Relation zueinander gestellt:
+\begin{quotation}
+	\textit{Während Unit-Tests dazu dienen, die korrekte
+	Funktionsweise der erstellten Software zu verifizieren und die Qualität des Gesamtsystems zu steigern, dient die Analyse der Codeabdeckung dazu, die Qualität der Tests sicherzustellen und zu erhöhen(\cite{Wang2006})}.
+\end{quotation}
+Demzufolge hat die Codeabdeckungsanalyse einen unmittelbaren Einfluss auf die Qualität der Tests und einen indirekten auf die Qualität des Gesamtsystems.
+
+Testabdeckung wird anhand der Abdeckung des Kontrollflußes gemessen, der durch einen Graph dargestellt werden kann. Im nächsten Abschnitt wird der Aufbau solcher Graphen, die auch Kontrollflußgraphen genannt werden, kurz vorgestellt und einige Begriffe eingeführt und erläutert.
+
+\textbf{Kontrollflußgraph}\\[0.4cm]
+Kontrollflußgraphen dienen zur Darstellung der Kontrollstruktur und werden folgendermaßen definiert:\\[0.3cm]
+\textit{Ein Kontrollflußgraph ist ein gerichteter Graph $G=(N,E,n_{start},n_{final})$. $N$ ist die endliche Menge der Knoten. $E\subseteq N\times N$ ist die Menge der gerichteten Kanten. $n_{start}\in N$ ist der Startknoten. $n_{final}\in N$ ist der Endknoten.}
+
+Knoten stellen Anweisungen dar und Kanten die mögliche Übergänge zwischen verschiedenen Anweisungen.
+Kanten werden auch als \textit{Zweige} bezeichnet. Eine alternierende Sequenz aus Knoten und Kanten, die mit dem Startknoten $n_{start}$ anfangen und mit dem Endknoten $n_{final}$ enden, heißt \textit{Pfad}.
+
+Kontrollflußgraphen beschreiben die logische Struktur eines Programms oder Moduls und lassen sich verwenden, um den Ablauf der Ausführung von Konstrukten imperativer
+Programmiersprachen\footnote{Imperative Programmiersprachen sind Sprachen, mit denen Programme als Folgen von Befehlen geschrieben werden, die der Rechner in einer definierten Reihenfolge abarbeitet. Daten sind dabei die zu verarbeitenden Werte. } nachzuvollziehen. In der Abbildung \ref{fig:Kontrollflussteile} sind die Graphen für die einzelnen Konstrukte abgebildet.
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.75\textwidth]{bilder/Kontrollflussteile.pdf}
+	\caption{Graphen für einzelne Konstrukte}
+	\label{fig:Kontrollflussteile}
+\end{figure}
+
+Ein \textit{Segment} (Abbildung \ref{fig:segmente}) ist eine alternierende Folge von Knoten und Kanten mit maximaler Länge, die folgende Eigenschaften besitzt:
+\begin{itemize}
+	\item Es gibt nur einen Eintrittspunkt (eingehende Kante) über den ersten Knoten des Segments.
+	\item Wird der erste Knoten des Segments durchlaufen, so werden alle Knoten des Segments in der vorgesehenen Reihenfolge genau einmal durchlaufen.
+\end{itemize}
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.4\textwidth]{bilder/segmente.pdf}
+	\caption{Segmente in einem Kontrillflussgraph}
+	\label{fig:segmente}
+\end{figure}
+
+
+Kontrollflußgraphen werden unter anderem für die Berechnung der logischen Komplexität eines Programmabschnitts und der kontrollflußorientierten Abdeckungsmetriken. Die bekanntesten Abdeckungsmetriken werden im nächsten Abschnitt beschrieben.
+\subsection{Abdeckungsmetriken }
+Es gibt eine Vielzahl von unterschiedlichsten Abdeckungsmetriken (\cite{Kaner1995}). In diesem Abschnitt werden nur die wichtigsten Abdeckungsmetriken vorgestellt, die für diese Arbeit relevant sind.
+
+Als \textit{Testabdeckung} wird üblicherweise das Verhältnis zwischen
+zu testenden und tatsächlich getesteten Elementen des Prüflings bezeichnet. Es muss nicht immer 100\% gefordert werden. Je nach festgelegtem Ziel kann auch ein gewisser Anteil festgelegt werden. Die bekanntesten Kriterien sind 
+Anweisungs-, Zweig-, Bedingungs- und Pfadüberdeckung.
+\subsubsection{Anweisungsabdeckung}
+Die Anweisungsabdeckung (\textit{eng. statement coverage}) ist die enfachse kontrollflußorientierte Metrik.  
+Sie wird wie folgt definiert: 
+\[
+	Anweisungsabdeckung=\frac{\text{\textit{Anzahl der ausgeführten Anweisungen}}}{\text{\textit{Anzahl der Anweisungen}}}
+\]
+Das Ziel der Anweisungsüberdeckung ist die mindestens einmalige Ausführung aller Anweisungen des zu testenden Programms.
+Bezogen auf den Kontrollflußgraph heißt es, dass alle Knoten abgedeckt werden müssen. Es ist möglich, mehrerer Anweisungen (z. B. Anweisungen innerhalb einer Schleife) zu einer Einheit
+zusammenzufassen, die keinerlei Verzweigungen im Sinne von \textit{if-else}-Anweisungen enthält. zusammenzufassen. Wenn die 100\% Anweisungsabdeckung nicht erreicht werden kann, dann ist das ein Hinweis auf Programmcode, der möglicherweise unter keinen Umständen ausgeführt werden kann. 
+
+Anweisungsabdeckung ist ein schwaches Kriterium. Die Fehleridentifizierungsquote ist sehr niedrig und wird in der Literatur mit 18\% angegeben. Der Grund dafür ist, dass Anweisungsabdeckung nur die einzelnen Anweisungen betrachtet, ohne Zusammenhänge zu berücksichtigen.
+\subsubsection{Zweigabdeckung}
+Zweigabdeckung (\textit{eng. branch coverage}) gilt als minimales Kriterium für kontrollflußorientierte Testtechniken.
+\[
+Zweigabdeckung=\frac{\text{\textit{Anzahl durchlaufene Zweige}}}{\text{\textit{Gesamtzahl Zweige}}}
+\]
+Das heißt, dass die hundertprozentige Zweigabdeckung dann erreicht ist, wenn alle Kanten des Kontrollflussgraphen mindestens einmal durchlaufen wurden. Erfüllte Zweigabdeckung stellt sicher, dass alle Verzweigungen des zu testenden Moduls tatsächlich erreichbar sind. Weil das Durchlaufen aller Zweige die Ausführung aller Anweisungen verursacht, impliziert die Zweigabdeckung die Erfüllung der Anweisungsabdeckung. Mit der Zweigabdeckung können die nichtausführbaren Programmzweige zusätzlich aufgespürt werden. 
+
+Obwohl die Fehlererkennungsquote gegenüber der Anweisungsabdeckung steigt, werden nicht alle Aspekte des Kontrollflusses erfasst. Bei den Schleifen wird nur ermittelt, ob diese durchlaufen werden können.
+Obwohl bei der vollständigen Zweigabdeckung jede Entscheidung (komplexe Bedingungen), die Verzweigungen im Kontrollfluss auslösen, insgesamt die Wahrheitswerte $wahr$ und $falsch$ mindestens einmal annehmen muss, bleiben die Werte der einzelnen Bedingungen unberücksichtigt. Außerdem wird jeder Zweig für sich alleine betrachtet, ohne die Kombinationen von Zweigen zu berücksichtigen. 
+\subsubsection{Pfadabdeckung}
+Die Pfadüberdeckung (\textit{engl. path coverage}) konzentriert sich auf die einzelnen Pfade
+des zu testenden Programms. Pfadabdeckung wird folgendermaßen definiert:
+\[
+Pfadabdeckung=\frac{\text{\textit{Anzahl durchlaufene Pfade}}}{\text{\textit{Gesamtzahl Pfade}}}
+\]
+Die vollständige Pfadabdeckung verlangt die Ausführung aller vorhandene Pfade durch die Tests. Das heißt, dass die Schleifen auch getestet werden. Bei komplexeren Programmen aus der Praxis  ist die vollständige Pfadabdeckung aufgrund der großen Anzahl von Pfaden nicht relevant. Aus diesem Grund existieren andere Varianten neben der vollständigen Pfadabdeckung.
+
+Bei dem so genannten strukturierten Pfadtest wird ein Schleifenrumpf maximal k-mal ausgeführt. Bei k=2 spricht man von einer \textit{Grenze-Inneres-Abdeckung} (\textit{eng. boundary interior coverage}). Dabei muss der Schleifenrumpf kein Mal, ein Mal und mindestens zwei Mal ausgeführt werden. Aufgrund möglicher Abhängigkeiten zwischen den Variablen vor, in und hinter der Schleife hat sich diese Abdeckung als besonders sinnvoll erwiesen.
+\subsubsection{Bedinungsabdeckung}
+Die Prüfung der Verarbeitungslogik besonders mit kompliziert aufgebauten Entscheidungen ist auch sehr wichtig. Die geeignete Metrik für die Abdeckung der Bedingungen ist die Bedinungsabdeckung (\textit{eng. condition coverage}). Sie beachtet die logische Struktur von Entscheidungen des zu testenden Programms. Die zugehörigen Tests haben als Ziel die Überprüfung zusammengesetzter Entscheidungen. Es gibt mehrere Versionen der Bedingungsabdeckung:
+\begin{itemize}
+	\item \textbf{einfache Bedingungsabdeckung} (\textit{simple condition coverage}). Bei der \textit{einfachen Bedingungsüberdeckung} muss jede Teilbedingung einmal
+den Wert \textit{wahr} und einmal den Wert \textit{falsch} annehmen. Der Wert der gesamten Bedingung spielt dabei keine Rolle.
+	\item \textbf{mehrfache Bedingungsabdeckung} (\textit{multiple condition coverage}). Bei der \textit{mehrfachen Bedingungsüberdeckung} müssen dagegen alle Kombinationen von \textit{wahr} und \textit{falsch} berücksichtigt werden.
+	\item \textbf{minimale Mehrfach-Bedingungsabdeckung} (\textit{minimal multiple condition coverage}). Die \textit{minimale Mehrfach-Bedingungsüberdeckung} fordert, dass bei zusammengesetzten logischen Ausdrücken nicht nur alle atomaren Entscheidungen
+einmal zu \textit{wahr} und einmal zu \textit{falsch} ausgewertet werden, sondern auch jeder auftretende zusammengesetzte
+Teilausdruck  ebenfalls jeweils den Wer \textit{wahr} und \textit{falsch} annimmt.
+\end{itemize}
+
+\ \\[1cm]Im nächsten Kapitel werden die Abdeckungsmetriken im Kontext mit BPEL besprochen.
+
+
+
+\nocite{Liggesmeyer2002}
+\nocite{Winkler2003}

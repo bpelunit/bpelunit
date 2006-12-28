@@ -1,0 +1,138 @@
+\documentclass[12pt,a4paper]{scrreprt}
+
+\usepackage[latin1]{inputenc}   % UNIX Umlaute und ß
+%\usepackage{ae}                 % interne 8bit Codierung für bessere Trennungen
+\usepackage[ngerman]{babel}           % deutsche Trennungen und Bezeichnungen
+%\usepackage{bibdbis}            % Literaturangaben aus der Datenbank mit bibtex
+\usepackage {natbib}
+\citestyle{dinat}
+\bibliographystyle{dinat}
+\usepackage{typearea}           % Satzspiegelberechnung: Texthöhe und -breite
+\typearea{12}                   % je höher das Argument, desto kleiner die Ränder
+\usepackage{graphicx}           % zur Graphikeinbindung
+\usepackage{amssymb,amsmath}	% mathematische Symbole
+
+\usepackage{pdftricks}			% Zeichnen von Bäumen
+%\begin{psinputs}
+%\usepackage{pst-all}
+%\end{psinputs}			
+\setcounter{secnumdepth}{3} %Gibt an wieviele Ebenen nummeriert werden
+%% ... und nimm alle 4 Ebenen in das Inhaltsverzeichnis auf.
+\setcounter{tocdepth}{3}
+\addtolength{\topmargin}{.5cm}  	% Rand oberhalb der Kopfzeile
+%\setlength{\footskip}{1.2cm}		% Abstand Text - Fusszeile
+%\oddsidemargin+13mm					% Ränder für ungerade Seiten
+%\addtolength{\evensidemargin}{-2cm}	% Ränder für gerade Seiten
+\textheight24cm						% Vertikale Texthöhe
+
+\parskip4mm						%Abstand zwischen Absätzen
+\parindent0mm					%Einrückung bei Absatzbeginn
+
+
+\newcommand{\hidden}[1]{}
+\newcommand{\code}[1]{{\tt #1}}
+\newcommand{\relation}[1]{\textsc{#1}}
+\newcommand{\attrib}[1]{\textit{#1}}
+\newcommand{\lsemijoin}{\ltimes}
+\newcommand{\rsemijoin}{\rtimes}
+\newcommand{\lantisemijoin}{\: \overline{\ltimes}}
+\newcommand{\rantisemijoin}{\: \overline{\rtimes}}
+% \newcommand{\fullouterjoin}{\sqsupset\hspace{-2.1mm}\times\hspace{-2.1mm}\sqsubset}
+\newcommand{\element}{\in}
+\newcommand{\notelement}{\;|\hspace{-2ex}\in}
+\newcommand{\cbox}[2]{\parbox{#1}{\begin{center} #2 \end{center}}}
+
+\newenvironment{iterator}[1]{\begin{minipage}{15.2cm}\textbf{iterator} #1 \\}
+{\end{minipage}}
+\newenvironment{method}[1]{\hspace*{0.2cm}\textbf{#1}\begin{itemize}}{\end{itemize}}
+\newenvironment{subproc}{\begin{itemize}}{\end{itemize}}
+\newenvironment{costtable}{\begin{center}\renewcommand{\arraystretch}{1.5}\begin{tabular}{l|c|c}}{\end{tabular}\end{center}}
+\newenvironment{formtable}[1]{\begin{center}\renewcommand{\arraystretch}{2}\begin{tabular}{#1}}{\end{tabular}\end{center}}
+
+\date{\today \\[2cm]
+	Erstprüfer: Prof. Dr. Kurt Schneider\\
+	Zweitprüfer: \\
+	Betreuer: Dipl.-Wirt.-Inform. Daniel Lübke}
+\author{Alex Salnikow\\
+		Matr.Nr. 2116853\\[1cm]
+		}
+\title{ \vspace*{-3cm}
+		{
+		\normalsize\textsc{Fachgebiet Software Engineering\\
+		Institut für Praktische Informatik\\
+		Fachbereich Informatik\\
+		Universität Hannover}\\[1cm]
+		}
+	%	\hrule Horizontale Linie
+		\vspace*{4cm}
+		{\Huge Masterarbeit} \\
+		{\large im Studiengang Informatik} \\[1cm]
+		{\Huge Thema}\\[1cm]}
+
+
+
+\begin{document}
+%\maketitle			
+%\input{erklaerung}
+\input{titelseite}
+%\vspace{1cm}
+%\newpage
+%\thispagestyle{empty}
+%{\Large \bf Zusammenfassung}
+\input{zusammenfassung}
+%\vspace{1cm}
+  
+\parskip0mm
+\newpage
+%\thispagestyle{empty}~
+\pagenumbering{arabic}
+\tableofcontents
+\parskip5mm
+\chapter{Einleitung}
+\section{Motivation}
+%\input{motivation}
+\section{Aufgabenstellung}
+%\input{aufgabenstellung}
+\section{Aufbau der Arbeit}
+%\input{struktur}
+\chapter{Grundlagen}
+\section{SOA}
+\section{Web Services}
+\subsection{SOAP}
+\subsection{WSDL}
+\section{Komposition der Services mit BPEL}
+%\input{bpel}
+\subsection{BPEL Prozess}
+%\input{bpelprozess}
+\subsection{Geschäftslogik mit BPEL}
+%\input{geschaeftslogik}
+\subsubsection{Basisaktivitäten}
+%\input{basisaktivitaeten}
+\subsubsection{Strukturierte Aktivitäten}
+%\input{strukrurierteaktivitaeten}
+\subsubsection{Fault handling und compensation}
+\subsection{BPEL Ausführungsumgebung}
+\section{BPEL Testen}
+%\input{bpeltesten}
+\subsection{BPELUnit Framework}
+\subsubsection{Konzepte}
+\subsubsection{Spezifikation, Organisation und Ausführung der Tests}
+\subsubsection{Clients}
+\newpage
+\section{Abdeckung, als Maß für die Testqualität}
+\input{testabdeckung}
+\chapter{Testabdeckung in BPEL}
+\input{konzepte}
+\newpage
+\section{Konventionelle Abdeckungsmetriken}
+\section{BPEL-spezifische Abdeckungsmetriken}
+\chapter{Design und Implementierung}
+
+\section{Integration der Testabdeckungsmetriken in BPELUnit-Framework}
+\chapter{Beispiele}\label{beispiele}
+%\input{beispiele}
+\chapter{Zusammenfassung und Ausblick}
+%\input{ausblick}
+%\input{rest}
+\bibliography{referenzen}
+\end{document}
