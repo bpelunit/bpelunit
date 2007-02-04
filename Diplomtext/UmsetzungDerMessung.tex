@@ -1,0 +1,59 @@
+ Ziel: möglichst wenige Eingriffe in die Logik des Programms.
+  Damit die BPEL-Datei syntaktisch korrekt bleibt, muss die Datei für die Instrumentierung vorbereitet werden.
+
+  \subsection{Statementabdeckung}
+
+  
+  Alle strukturierenden Aktivitäten (bis auf Sequence) sind so konstruiert, dass sie in ihren Komponenten genau oder maximal eine Aktivität erlauben. Durch das Schachtelungsprinzip können trotzdem beliebig komplexe Strukturen an diesen Stellen eingefügt werden. Wenn an diesen Stellen nur ein Basic-Aktivität vorhanden ist, dann kann man nicht ohne Weiteres dahinter oder davor eine zusätzliche Aktivität hinzufügen. Das würde zur Verletzung der Syntaxregeln führen. Also muss man vor der Instrumentierung eine umschließende strukturierende Aktivität hinzufügen. Da das Logging entweder direkt davor oder danach statfinden soll, ist die Sequence-Aktivität gut für diesen Zweck geeignet. 
+  
+  Innerhalb der Flow-Aktivitäten ermöglicht das Link-Konzept die Synchronisationsabhängigkeiten zwischen den Aktivitätten zu definieren und durch die darauf aufbauenden Bedingungen die Ausführung der Aktivitäten zu steuern. Durch das Einfügen der Protokollieranweisungen alleine kann eine Basic-Aktivität, die das Ziel eines oder meheren Links ist, nicht protokolliert werden. ...
+  
+  Lösung Sequence-Element um diese Aktivität und den Link auf die Sequence verschieben. Damit ist die richtige Protokollierung unabhängig vom suppressJoin-Wertes garantiert. Die Crossing-Boundary Bedingung wird durch den Eingriff auch nicht verletzt.
+  
+  
+ 
+\lstset{emph={joinCondition,target }, emphstyle=\color{blue}}
+      \begin{lstlisting}[caption=Beispielcode]{Name}
+<flow>
+  <links>
+    <link name="CtoD"/>
+  </links>
+  <receive name="C" ...>
+    <source linkName="CtoD"/>
+  </receive>
+  <invoke ... joinCondition=...>
+    <target linkName="CtoD"/>
+  </invoke>
+</flow>      \end{lstlisting}
+
+\lstset{emph={[2]sequence}, emphstyle=[2]\color{red}}
+      \begin{lstlisting}[caption=Beispielcode][firstnumber=1]{Name}
+<flow>
+  <links>
+    <link name="CtoD"/>
+  </links>
+  <receive name="C" ...>
+    <source linkName="CtoD"/>
+  </receive>
+  <sequence joinCondition=...>
+    <target linkName="CtoD"/>
+    <!--Logging-->
+    <invoke .../>
+    <!--Logging-->
+  </sequence>
+</flow>      \end{lstlisting}
+
+
+\subsection{Zweigabdeckung}
+
+Jede Kante wird geloggt durch Einfügen von Marken vor den Aktivitäten
+
+otherwise oder else einfügen
+
+sequenzen Einfügen
+
+ Flow: beim Fehler.
+ 
+ \subsection{Fault Handler Abdeckung}
+
+\subsection{Compensation Handler Abdeckung}

@@ -11,6 +11,9 @@
 \typearea{12}                   % je höher das Argument, desto kleiner die Ränder
 \usepackage{graphicx}           % zur Graphikeinbindung
 \usepackage{amssymb,amsmath}	% mathematische Symbole
+\usepackage{color}
+\usepackage{listings} \lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} \lstset{language=XML}
+
 
 \usepackage{pdftricks}			% Zeichnen von Bäumen
 %\begin{psinputs}
@@ -25,7 +28,7 @@
 %\addtolength{\evensidemargin}{-2cm}	% Ränder für gerade Seiten
 \textheight24cm						% Vertikale Texthöhe
 
-\parskip4mm						%Abstand zwischen Absätzen
+%\parskip4mm						%Abstand zwischen Absätzen
 \parindent0mm					%Einrückung bei Absatzbeginn
 
 
@@ -67,7 +70,8 @@
 		\vspace*{4cm}
 		{\Huge Masterarbeit} \\
 		{\large im Studiengang Informatik} \\[1cm]
-		{\Huge Thema}\\[1cm]}
+		{\Huge Ermittlung von Testabdeckungsmetriken}\\
+		{\Huge in BPEl-Komositionen}\\[1cm]}
 
 
 
@@ -90,49 +94,48 @@
 \parskip5mm
 \chapter{Einleitung}
 \section{Motivation}
-%\input{motivation}
+\input{motivation}
 \section{Aufgabenstellung}
-%\input{aufgabenstellung}
+\input{aufgabenstellung}
 \section{Aufbau der Arbeit}
-%\input{struktur}
-\chapter{Grundlagen}
-\section{SOA}
+\input{struktur}
+\chapter{Grundlagen}\section{SOA}
 \section{Web Services}
 \subsection{SOAP}
 \subsection{WSDL}
 \section{Komposition der Services mit BPEL}
-%\input{bpel}
+\input{bpel}
 \subsection{BPEL Prozess}
-%\input{bpelprozess}
+\input{bpelprozess}
 \subsection{Geschäftslogik mit BPEL}
-%\input{geschaeftslogik}
+\input{geschaeftslogik}
 \subsubsection{Basisaktivitäten}
-%\input{basisaktivitaeten}
+\input{basisaktivitaeten}
 \subsubsection{Strukturierte Aktivitäten}
-%\input{strukrurierteaktivitaeten}
+\input{strukrurierteaktivitaeten}
 \subsubsection{Fault handling und compensation}
+\input{faulthandling}
 \subsection{BPEL Ausführungsumgebung}
 \section{BPEL Testen}
-%\input{bpeltesten}
+\input{bpeltesten}
 \subsection{BPELUnit Framework}
 \subsubsection{Konzepte}
 \subsubsection{Spezifikation, Organisation und Ausführung der Tests}
 \subsubsection{Clients}
-\newpage
 \section{Abdeckung, als Maß für die Testqualität}
 \input{testabdeckung}
 \chapter{Testabdeckung in BPEL}
 \input{konzepte}
-\newpage
-\section{Konventionelle Abdeckungsmetriken}
-\section{BPEL-spezifische Abdeckungsmetriken}
+\section{Definition der Abdeckungsmetriken für BPEL}
+\input{konventionelleMetriken}
+\section{Umsetzung der Abdeckungsmessung}
+\input{UmsetzungDerMessung}
 \chapter{Design und Implementierung}
-
 \section{Integration der Testabdeckungsmetriken in BPELUnit-Framework}
 \chapter{Beispiele}\label{beispiele}
-%\input{beispiele}
+\input{beispiele}
 \chapter{Zusammenfassung und Ausblick}
-%\input{ausblick}
-%\input{rest}
+\input{ausblick}
+\input{rest}
 \bibliography{referenzen}
 \end{document}

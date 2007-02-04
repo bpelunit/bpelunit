@@ -1,0 +1,84 @@
+ In diesem Abschnitt werden die Metriken für die Messung der Testabdeckung in BPEL definiert. Dabei werden die in ... beschrieben Abdeckungsmetriken an BPEL-Kontext angepasst und neue spezifische Metriken eingeführt. Anschließend wird auf der Instrumentierung basierende Umsetzung vorgestellt.
+ 
+
+  \subsection{Statementabdeckung}
+  Die wesentliche Aufgabe der BPEL ist die Kommunikation ...BPEL ist eine Kompositionssprache und kommuniziert....., Die Kommunikation wird durch die Basisaktivitäten realisiert. Aus diesem Grund ist es für den Tester besonders interessant, ob beim Testen z.B. alle WebService aufgerufen wurden oder ob alle angesprochenen WebServices die Anfragen beantwortet haben. Um solche Statistiken erstellen zu können, muss die Abdeckung der einzelnen Basisaktivitäten gemessen werden. 
+
+Angesichts der Tatsache, dass die  Strukturierten Aktivitäten, die den Kontrollfluss des BPEL-Prozesses definieren, im Zusammenhang mit der Zweigabdeckung detailiert behandelt werden, wird die Statementabdeckung in dieser Arbeit auf die Messung ausschließlich  der Basisaktivitäten  beziehen:  
+\[
+	Anweisungsabdeckung=\frac{\text{\textit{Anzahl der ausgeführten Basisaktivitäten}}}{\text{\textit{Anzahl der Basisaktivitäten}}}
+\]
+Wenn das Logging der struktueierten Aktivitäten trotzdem realisiert werden sollte, so können die in folgenden Abschnitten vorgestellten Konzepte einfach für diese Aufgabe angepasst werden.  
+ 
+    Die Information über tatsächliche Ausführung der Aktivitäten hat einen Mehrwert gegenüber der Information, dass eine Aktivität zur Ausführung stimuliert wurde. Deswegen erfolgt das Logging jeweils \textit{nach} der Ausführung der entsprechenden Aktivität.  Die Aktivitäten, die den normalen Kontrollfluss ändern, können allerdings auf diese Weise nicht bzw. nur sehr umständlich  geloggt werden:  
+\begin{itemize}
+	\item \textit{throw}
+	\item \textit{rethrow}
+	\item \textit{compensate}
+	\item \textit{compensateScope}
+	\item \textit{exit}
+\end{itemize}
+\textit{Throw}, \textit{rethrow}, \textit{compensate} und \textit{compensateScope} unterbrechen den normalen Kontrollfluss und veranlassen die Ausführung der ensprechenden \textit{Handler} (siehe ...). Obwohl die tatsächliche Ausführung dieser Aktivitäten in den entsprechenden Händlern registriert werden könnte, wurde auf Grund eines großen zusätzlichen Aufwandes und dazu verhältnismäßig kleines Informationsgewinns entschieden, darauf zu verzichten und die Aktivitäten, wie bei \textit{Exit}, vor der Ausführung zu loggen. 
+Aus diesem Grund werden die entsprechenden Aktivitäten auch dann geloggt (als ausgeführt markiert), wenn bei der Ausführung ein Fehler auftreten sollte.
+
+Wie im Abschnitt ... schon ausgeführt, ist die Statementabdeckung ein schwaches Kriterium, weil dabei nur die einzelnen Anweisungen betrachtet, ohne Zusammenhänge
+zu berücksichtigen.
+
+\subsection{Zweigabdeckung}
+
+\subsubsection{normaler Kontrollfluss}
+Den Kontrollfluss bestimmen in BPEL, wie bereits mehrmals erwähnt, die strukturierten Aktivitäten. In den folgenden Bildern sind die entsprechenden Kontrollflussgraphen abgebildet. Die grauen Pfeilen deuten an, wie die einzelnen Graphen in den Gesamtfluss eingebunden werden. Für die Zweigabdeckung relevanten Pfeile sind schwarz dargestellt.
+\begin{figure}[htbp!]
+	\centering
+		\includegraphics[width=0.8\textwidth]{bilder/h1.png}
+	\label{fig:h1}
+\end{figure}
+
+\begin{figure}[htbp!]
+	\centering
+		\includegraphics[width=0.8\textwidth]{bilder/h2.png}
+	\label{fig:h2}
+\end{figure}
+
+Bei den vorgestellten Konstrukten, die aus vielen Programmiersprachen bekannt sind, entspricht die Abdeckung der Zweigen der allgemeinbekannten Definition dieser Metrik. Die Restlichen sind BPEL-spezifisch und müssen gesondert betrachtet werden.
+
+\paragraph{Pick}
+  Bei diesem Konstrukt wird ein Zweig aus mehreren anhand eines Ereignisses (Nachricht oder Alarm) ausgewählt. Wurde ein zutreffendes Ereignis empfangen, so wird die zugehörige Aktivität ausgeführt und alle nachfolgenden Ereignisse nicht mehr berücksichtigt. Aus der Sicht des Kontrollflusses stimmt dieses Verhalten mit dem einer IF-Aktivität überein. 
+  
+  \paragraph{Flow} 
+  Mit der Flow-Aktivität wird in BPEL paralleler Ablauf mehrerer Aktivitäten realisiert. Außerdem gibt es mit dem Link-Konzept, ein mächtiges Instrument, das ermöglicht, komplexe Abläufe zu realisieren. In der Abbildung ... sieht man den zugehörigen Kontrollfluss. 
+  
+  Die andere Darstellung der Links (gestrichelt) ergibt sich aus der anderen Semantik, die mit den normalen Kanten des Kontrollflussgraphen nicht übereinstimmt. Wie es im Abschnitt .. geschildert wurde, haben die Links trotzdem einen erheblichen Einfluß auf den Kontrollfluss und sind damit für die Zweigabdeckung relevant. 
+  
+  Aus der Sicht der Abdeckungsmessung ist die Tatsache besonders, dass der Status der Links drei Werte annehmen kann: \textit{true}, \textit{false} und \textit{unset}  Während die normalen Kontrollflusskanten zwei Werte annehmen können: entweder \textit{aktiviert} oder \textit{nicht aktiviert}(\textit{unset}). Für die Messung heisst es, während es bei normalen Kanten ausreichend ist, die aktivierten Kanten zu erfassen, muss es bei den Links zusätzlich zwischen \textit{true}- und \textit{false}-Status unterschieden werden. 
+  
+  Die relevanten für die Zweigabdeckung Kanten sind hervorgehoben. 
+
+\paragraph{For Each}
+Die \textit{ForEach}-Aktivität sorgt für mehrmaliges Ausführen des enthaltenen Scopes. Die Anzahl der Ausführungen wird durch Start- und Stopvariablen vorgegeben. Die Besonderhait dabei ist, dass die Ausführung entweder sequenziell oder parallel erfolgen kann. Um gewünschtes Verhalten zu erreichen muss die Variable \textit{parallel} mit ensprechenden Wert (\textit{yes}/\textit{no}) belegt werden. 
+
+Dieses Verhalten kann durch zwei Kontrollflussgraphen abgebildet werden. Der Graph auf der Abbildung ... repräsentiert sequentielle Ausführung, die einer for-Schleife aus den konventionellen Programmiersprachen entspricht. Der rechte Graph steht für eine parallele Ausführung.  
+
+Während der reguläre Kontrollfluss des Programms den Steuerfluss der Ausführung für alle reguläre Situationen vorgibt, gibt es in BPEL ein (\textit{FaultHandler})-Kontrollfluss, der für die Behandlung zur Laufzeit aufgetretener Fehler vorgesehen ist. Inwiefern dieses Verhalten in die Zweigabdeckung miteinfließen kann, wird im nächsten Abschnitt diskutiert. 
+
+\subsubsection{Kontrollfluss bei Ausnahmebehandlung}
+BPEL-Sprache hat wie viele moderne Programmiersprachen ein Konzept zur strukturierten Behandlung von Fehlern, die zur Laufzeit auftreten. 
+
+Die Umschaltung von normalen auf \textit{FaultHandler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was programmtechnisch nichts anderes heisst, als dass der zugehörige FaultHandler ausgeführt wird. Vor allem die vielfältige Fehlerquellen und die Möglichkeit die Fehler weiterzuleiten machen es schwierig die Übergabe der Aus\-füh\-rungs\-kon\-tro\-lle an die FaultHandler bei der Zweigabdeckung zu berücksichtigen. 
+Die Compemsation Handler, die nur im Rahmen der Fehlerbehandlung ausgeführt werden, werden bei der Messung der Abdeckung auf die gleiche Weise behandelt.
+
+Dass die Fault- und Compensation Handler trotzdem durch die Tests abgedeckt werden sollten, ist unumstritten. Demzufolge ist es sinnvoll den Kontrollfluss \textit{innerhalb} der Handler bei der Messung der Abdeckung zu berücksichtigen.  
+Die Abbildung ... gibt beispielhaft einen Überblick über den gesamten Kontrollfluss. Die gestriechelten Kanten repräsentieren die Übergabe der Ausführungskontrolle an die Handler und werden bei der Zweigabdeckung nicht berücksichtigt.  
+
+ 
+ In den folgenden Abschnitten werden die Metriken vorgestellt, die den Grad der durch die Tests abgedeckten Fault- bzw. Compensation Handler wiedergeben.
+\subsection{Fault Handler Abdeckung}
+impliziten werden nicht berücksichtigt
+
+inline und normale
+alle catch
+catchAll
+
+\subsection{Compensation Handler Abdeckung}
+
+inline und normale
