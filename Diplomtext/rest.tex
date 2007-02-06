@@ -89,4 +89,40 @@ Bis jetzt wurde Instrumentierungsansatz allgemein betrachtet, ohne auf eine best
 	\label{fig:flow}
 \end{figure}
 
+
+Protokolliert man eine Aktivität, die das Ziel eines oder mehreren Links ist, davor, so kann es sein, dass sie aufgrund der transition- bzw. joinCondition gar nicht ausgeführt wird.
       \lstinline|print "hello world"|
+      
+      
+      \lstset{emph={joinCondition,target }, emphstyle=\color{blue}}
+      \begin{lstlisting}[caption=Beispielcode]{Name}
+<flow>
+  <links>
+    <link name="CtoD"/>
+  </links>
+  <receive name="C" ...>
+    <source linkName="CtoD"/>
+  </receive>
+  <invoke ... joinCondition=...>
+    <target linkName="CtoD"/>
+  </invoke>
+</flow>      \end{lstlisting}
+
+\lstset{emph={[2]sequence}, emphstyle=[2]\color{red}}
+      \begin{lstlisting}[caption=Beispielcode][firstnumber=1]{Name}
+<flow>
+  <links>
+    <link name="CtoD"/>
+  </links>
+  <receive name="C" ...>
+    <source linkName="CtoD"/>
+  </receive>
+  <sequence joinCondition=...>
+    <target linkName="CtoD"/>
+    <!--Logging-->
+    <invoke .../>
+    <!--Logging-->
+  </sequence>
+</flow>      \end{lstlisting}
+
+Für die Messung heisst es, während es bei normalen Kanten ausreichend ist, die aktivierten Kanten zu erfassen, muss es bei den Links zusätzlich zwischen \textit{true}- und \textit{false}-Status unterschieden werden. 
