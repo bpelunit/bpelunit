@@ -6,6 +6,9 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
+import sun.security.krb5.internal.br;
+
+import coverage.instrumentation.ActivityTools;
 import coverage.instrumentation.BasisActivity;
 import coverage.instrumentation.StructuredActivity;
 
@@ -19,56 +22,49 @@ public class IfActivityHandler implements IStructuredActivity {
 		if (element.getChild(ELSE_ELEMENT) == null) {
 			insertElseBranch(element);
 		}
-		List children = element.getChildren();
-		Element branchActivityChild;
-		for (int i = 0; i < children.size(); i++) {
-			branchActivityChild = (Element) children.get(i);
-			insertMarkerForBranch(branchActivityChild);
+		insertMarkerForIfBranch(element);
+		insertMarkerForELSEIFBranches(element);
+		insertMarkerForElseBranch(element);
+	}
+
+	private void insertMarkerForElseBranch(Element element) {
+		Element branch_activity;
+		branch_activity=ActivityTools.getActivity(element.getChild(ELSE_ELEMENT));
+		if(branch_activity!=null){
+			insertMarkerForBranch(ActivityTools.ensureActivityInSequence(branch_activity));
 		}
 	}
 
-	private Element getBranchActivity(Element element) {
-		Element result = null;
-		String name = element.getName();
-		List children;
-		if (BasisActivity.isBasisActivity(element)
-				|| StructuredActivity.isStructuredActivity(element)) {
-			result = encloseInSequence(element);
-		} else if (StructuredActivity.isStructuredActivity(element)) {
-			result = element;
-		} else if (name.equals(ELSE_IF_ELEMENT)) {
-			children = element.getChildren();
-			for (int i = 0; result != null && i < children.size(); i++) {
-				result=getBranchActivity((Element)children.get(i));
-			}
-		} else if (name.equals(ELSE_ELEMENT)) {
-			children = element.getChildren();
-			for (int i = 0; result != null && i < children.size(); i++) {
-				result=getBranchActivity((Element)children.get(i));
+	private void insertMarkerForELSEIFBranches(Element element) {
+		Element branch_activity;
+		List elseif_branches=element.getChildren(ELSE_IF_ELEMENT);
+		for(int i=0;i<elseif_branches.size();i++){
+			branch_activity=ActivityTools.getActivity((Element)elseif_branches.get(i));
+			if(branch_activity!=null){
+				insertMarkerForBranch(ActivityTools.ensureActivityInSequence(branch_activity));
 			}
 		}
-		return result;
 	}
+
+	private void insertMarkerForIfBranch(Element element) {
+		Element branch_activity=ActivityTools.getActivity(element);
+		if(branch_activity!=null){
+			insertMarkerForBranch(ActivityTools.ensureActivityInSequence(branch_activity));
+		}
+	}
+	
+
+
+
 
 	private void insertMarkerForBranch(Element element) {
-		Comment comment1=new Comment(BranchMetric.getNextLabel());
-		Comment comment2=new Comment(BranchMetric.getNextLabel());
-		Element parent=element.getParentElement();
-		int index=parent.indexOf(element);
-		parent.addContent(index+1, comment2);
-		parent.addContent(index, comment1);
+		Comment comment1 = new Comment(BranchMetric.getNextLabel());
+		Comment comment2 = new Comment(BranchMetric.getNextLabel());		
+		element.addContent(element.getContentSize(), comment2);
+		element.addContent(0, comment1);
 	}
 
-	private Element encloseInSequence(Element element) {
-		Namespace namespace = element.getNamespace();
-		Element parent = element.getParentElement();
-		int index = parent.indexOf(element);
-		Element sequence = new Element("sequence", namespace);
-		element.detach();
-		sequence.addContent(element);
-		parent.addContent(index, sequence);
-		return sequence;
-	}
+
 
 	private void insertElseBranch(Element element) {
 		Element elseElement = new Element(ELSE_ELEMENT, element.getNamespace());

@@ -3,6 +3,7 @@ package coverage.instrumentation;
 import java.util.Hashtable;
 
 import org.jdom.Element;
+import org.jdom.Namespace;
 
 public class BasisActivity {
 
@@ -49,5 +50,7 @@ public class BasisActivity {
 			isBasis = true;
 		return isBasis;
 	}
+	
+
 
 }

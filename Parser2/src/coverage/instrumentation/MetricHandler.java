@@ -16,10 +16,12 @@ import org.jdom.output.XMLOutputter;
 
 
 public class MetricHandler implements IMetricHandler {
-
+	
 	private static IMetricHandler instance=null;
 	
 	private List<IMetric> metrics=new LinkedList<IMetric>();
+
+	private Element process_element;
 
 	public static IMetricHandler getInstance() {
 		if(instance==null){
@@ -47,7 +49,7 @@ public class MetricHandler implements IMetricHandler {
 		Document doc = builder.build(file);
 		XMLOutputter fmt = new XMLOutputter();
 		fmt.output(doc, System.out);
-		Element process_element=doc.getRootElement();
+		process_element=doc.getRootElement();
 		IMetric metric;
 		for ( Iterator<IMetric> i = metrics.iterator(); i.hasNext(); ) 
 		{ 
