@@ -15,7 +15,7 @@ public class WhileActivityHandler implements IStructuredActivity {
 		for (int i = 0; i < children.size(); i++) {
 			child=(Element)children.get(i);
 			if (ActivityTools.isActivity(child)) {
-				activity = ActivityTools.ensureActivityInSequence(child);
+				activity = ActivityTools.encloseActivityInSequence(child);
 				insertMarkerForBranch(activity);
 				break;
 			}

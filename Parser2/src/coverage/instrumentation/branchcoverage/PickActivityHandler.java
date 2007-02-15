@@ -31,7 +31,7 @@ public class PickActivityHandler implements IStructuredActivity {
 	}
 
 	private void insertMarker(Element child) {
-		Element sequence=ActivityTools.ensureActivityInSequence(child);
+		Element sequence=ActivityTools.encloseActivityInSequence(child);
 		sequence.addContent(0, new Comment(BranchMetric.getNextLabel()));
 		sequence.addContent(new Comment(BranchMetric.getNextLabel()));	
 	}

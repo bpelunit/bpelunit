@@ -7,7 +7,7 @@ import org.jdom.Namespace;
 
 public class ActivityTools {
 
-	public static Element ensureActivityInSequence(Element activity) {
+	public static Element encloseActivityInSequence(Element activity) {
 		if (!activity.getName().equals(StructuredActivity.SEQUENCE_ACTIVITY)) {
 			Namespace namespace = activity.getNamespace();
 			Element parent = activity.getParentElement();
@@ -47,4 +47,22 @@ public class ActivityTools {
 		}
 		return activity;
 	}
+	
+	
+	public static Element encloseActivityInFlow(Element activity) {
+		if (!activity.getName().equals(StructuredActivity.FLOW_ACTIVITY)) {
+			Namespace namespace = activity.getNamespace();
+			Element parent = activity.getParentElement();
+			int index = parent.indexOf(activity);
+			Element sequence = new Element(
+					StructuredActivity.FLOW_ACTIVITY, namespace);
+			activity.detach();
+			sequence.addContent(activity);
+			parent.addContent(index, sequence);
+			activity = sequence;
+		}
+
+		return activity;
+	}
+	
 }

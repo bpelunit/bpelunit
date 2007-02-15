@@ -13,11 +13,16 @@ import coverage.instrumentation.IMetric;
 public class BranchMetric implements IMetric {
 	
 	private static final String BRANCH_LABEL="branch";
+	private static final String LINK_LABEL="link";
 	
 	private static int count=0;
 
 	public static String getNextLabel(){
 		return BRANCH_LABEL+(count++);
+	}
+	
+	public static String getNextLinkLabel(){
+		return LINK_LABEL+getNextLabel();
 	}
 	
 	private Hashtable<String, IStructuredActivity> structured_activity_handler=new Hashtable<String, IStructuredActivity>();

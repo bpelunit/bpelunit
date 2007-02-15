@@ -31,7 +31,7 @@ public class IfActivityHandler implements IStructuredActivity {
 		Element branch_activity;
 		branch_activity=ActivityTools.getActivity(element.getChild(ELSE_ELEMENT));
 		if(branch_activity!=null){
-			insertMarkerForBranch(ActivityTools.ensureActivityInSequence(branch_activity));
+			insertMarkerForBranch(ActivityTools.encloseActivityInSequence(branch_activity));
 		}
 	}
 
@@ -41,7 +41,7 @@ public class IfActivityHandler implements IStructuredActivity {
 		for(int i=0;i<elseif_branches.size();i++){
 			branch_activity=ActivityTools.getActivity((Element)elseif_branches.get(i));
 			if(branch_activity!=null){
-				insertMarkerForBranch(ActivityTools.ensureActivityInSequence(branch_activity));
+				insertMarkerForBranch(ActivityTools.encloseActivityInSequence(branch_activity));
 			}
 		}
 	}
@@ -49,7 +49,7 @@ public class IfActivityHandler implements IStructuredActivity {
 	private void insertMarkerForIfBranch(Element element) {
 		Element branch_activity=ActivityTools.getActivity(element);
 		if(branch_activity!=null){
-			insertMarkerForBranch(ActivityTools.ensureActivityInSequence(branch_activity));
+			insertMarkerForBranch(ActivityTools.encloseActivityInSequence(branch_activity));
 		}
 	}
 	

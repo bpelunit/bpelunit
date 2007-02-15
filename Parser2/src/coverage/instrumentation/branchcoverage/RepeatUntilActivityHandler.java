@@ -20,7 +20,7 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 
 	private void branchFromActivityToCondition(Element element) {
 		Element activity=ActivityTools.getActivity(element);
-		Element sequence=ActivityTools.ensureActivityInSequence(activity);
+		Element sequence=ActivityTools.encloseActivityInSequence(activity);
 		sequence.addContent(new Comment(BranchMetric.getNextLabel()));
 	}
 
@@ -58,7 +58,7 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 	}
 
 	private void insert(Element initializeAssign, Element element) {
-		Element sequence = ActivityTools.ensureActivityInSequence(element);
+		Element sequence = ActivityTools.encloseActivityInSequence(element);
 		sequence.addContent(sequence.indexOf(element), initializeAssign);
 	}
 
