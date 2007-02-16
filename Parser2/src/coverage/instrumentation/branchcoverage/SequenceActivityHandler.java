@@ -24,7 +24,7 @@ public class SequenceActivityHandler implements IStructuredActivity {
 											// zählen nach pick,flow,if..
 					index = element.indexOf(child);
 					element.addContent(index, new Comment(BranchMetric
-							.getNextLabel()));
+							.getNextLabel()+" sequence"));
 				}
 				lastElement = child;
 

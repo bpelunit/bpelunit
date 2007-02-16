@@ -43,17 +43,17 @@ public class BpelDocument {
 	
 	public static void insertVariable(Element variable,Element scope){
 
-		scope.getChild(VARIABLES_TAG).addContent(variable);;
+		scope.getChild(VARIABLES_TAG,ActivityTools.NAMESPACE_BPEL_2).addContent(variable);;
 	}
 
 	public static Element createInitializeAssign(Element countVariable) {
 
 		Element process = countVariable.getDocument().getRootElement();
-		Element assign = new Element(ASSIGN_TAG, process.getNamespace());
-		Element copy = new Element(COPY_TAG);
-		Element from = new Element(FROM_TAG);
-		Element to = new Element(TO_TAG);
-		Element literal = new Element(LITERAL_TAG);
+		Element assign = new Element(ASSIGN_TAG,ActivityTools.NAMESPACE_BPEL_2);
+		Element copy = new Element(COPY_TAG,ActivityTools.NAMESPACE_BPEL_2);
+		Element from = new Element(FROM_TAG,ActivityTools.NAMESPACE_BPEL_2);
+		Element to = new Element(TO_TAG,ActivityTools.NAMESPACE_BPEL_2);
+		Element literal = new Element(LITERAL_TAG,ActivityTools.NAMESPACE_BPEL_2);
 		literal.setText("0");
 		from.addContent(literal);
 		to.setAttribute(ATTRIBUTE_VARIABLE, countVariable.getName());
@@ -65,10 +65,10 @@ public class BpelDocument {
 	
 	public static Element createIncreesAssign(Element countVariable) {
 		Element process = countVariable.getDocument().getRootElement();
-		Element assign = new Element(ASSIGN_TAG, process.getNamespace());
-		Element copy = new Element(COPY_TAG);
-		Element from = new Element(FROM_TAG);
-		Element to = new Element(TO_TAG);
+		Element assign = new Element(ASSIGN_TAG,ActivityTools.NAMESPACE_BPEL_2);
+		Element copy = new Element(COPY_TAG,ActivityTools.NAMESPACE_BPEL_2);
+		Element from = new Element(FROM_TAG,ActivityTools.NAMESPACE_BPEL_2);
+		Element to = new Element(TO_TAG,ActivityTools.NAMESPACE_BPEL_2);
 		from.setText("$"+countVariable.getName()+" + 1");
 		to.setAttribute(ATTRIBUTE_VARIABLE, countVariable.getName());
 		copy.addContent(from);

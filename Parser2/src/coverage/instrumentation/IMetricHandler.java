@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import org.jdom.JDOMException;
 
+import coverage.instrumentation.exception.BpelException;
+import coverage.instrumentation.exception.BpelVersionException;
+
 
 public interface IMetricHandler {
 
@@ -11,6 +14,7 @@ public interface IMetricHandler {
 	
 	public void remove(IMetric metric);
 	
-	public void startInstrumentation(File file) throws JDOMException, IOException;
+	public void startInstrumentation(File file) throws JDOMException,
+			IOException, BpelException, BpelVersionException;
 
 }

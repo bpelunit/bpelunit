@@ -6,14 +6,16 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 
 public class ActivityTools {
+	public static final Namespace NAMESPACE_BPEL_2 = Namespace
+			.getNamespace("http://docs.oasis-open.org/wsbpel/2.0/process/executable");
+
+	public static final String PROCESS_ELEMENT = "process";
 
 	public static Element encloseActivityInSequence(Element activity) {
 		if (!activity.getName().equals(StructuredActivity.SEQUENCE_ACTIVITY)) {
-			Namespace namespace = activity.getNamespace();
 			Element parent = activity.getParentElement();
 			int index = parent.indexOf(activity);
-			Element sequence = new Element(
-					StructuredActivity.SEQUENCE_ACTIVITY, namespace);
+			Element sequence = createSequence();
 			activity.detach();
 			sequence.addContent(activity);
 			parent.addContent(index, sequence);
@@ -40,22 +42,21 @@ public class ActivityTools {
 			child = (Element) children.get(i);
 			if (BasisActivity.isBasisActivity(child)
 					|| StructuredActivity.isStructuredActivity(child)) {
-				activity = element;
+				activity = child;
 				break;
 			}
 
 		}
 		return activity;
 	}
-	
-	
+
 	public static Element encloseActivityInFlow(Element activity) {
 		if (!activity.getName().equals(StructuredActivity.FLOW_ACTIVITY)) {
-			Namespace namespace = activity.getNamespace();
+			;
 			Element parent = activity.getParentElement();
 			int index = parent.indexOf(activity);
-			Element sequence = new Element(
-					StructuredActivity.FLOW_ACTIVITY, namespace);
+			Element sequence = new Element(StructuredActivity.FLOW_ACTIVITY,
+					NAMESPACE_BPEL_2);
 			activity.detach();
 			sequence.addContent(activity);
 			parent.addContent(index, sequence);
@@ -64,5 +65,10 @@ public class ActivityTools {
 
 		return activity;
 	}
-	
+
+	public static Element createSequence() {
+		return new Element(StructuredActivity.SEQUENCE_ACTIVITY,
+				NAMESPACE_BPEL_2);
+	}
+
 }

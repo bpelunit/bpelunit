@@ -12,28 +12,28 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-
-
+import coverage.instrumentation.exception.BpelException;
+import coverage.instrumentation.exception.BpelVersionException;
 
 public class MetricHandler implements IMetricHandler {
-	
-	private static IMetricHandler instance=null;
-	
-	private List<IMetric> metrics=new LinkedList<IMetric>();
+
+	private static IMetricHandler instance = null;
+
+	private List<IMetric> metrics = new LinkedList<IMetric>();
 
 	private Element process_element;
 
 	public static IMetricHandler getInstance() {
-		if(instance==null){
-			instance=new MetricHandler();
+		if (instance == null) {
+			instance = new MetricHandler();
 		}
 		return instance;
 	}
-	
-	private MetricHandler(){
-		
+
+	private MetricHandler() {
+
 	}
-	
+
 	public void addMetric(IMetric metric) {
 		metrics.add(metric);
 
@@ -44,18 +44,27 @@ public class MetricHandler implements IMetricHandler {
 
 	}
 
-	public void startInstrumentation(File file) throws JDOMException, IOException {
+	public void startInstrumentation(File file) throws JDOMException,
+			IOException, BpelException, BpelVersionException {
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = builder.build(file);
 		XMLOutputter fmt = new XMLOutputter();
 		fmt.output(doc, System.out);
-		process_element=doc.getRootElement();
-		IMetric metric;
-		for ( Iterator<IMetric> i = metrics.iterator(); i.hasNext(); ) 
-		{ 
-		  metric = i.next(); 
-		  metric.insertMarker(process_element);
+		process_element = doc.getRootElement();
+		if (!process_element.getName().equalsIgnoreCase(
+				ActivityTools.PROCESS_ELEMENT)) {
+			throw(new BpelException(BpelException.NO_VALIDE_BPEL));
 		}
+		if(!process_element.getNamespace().equals(ActivityTools.NAMESPACE_BPEL_2)){
+			throw(new BpelVersionException(BpelVersionException.WRONG_VERSION));
+		}
+		IMetric metric;
+		for (Iterator<IMetric> i = metrics.iterator(); i.hasNext();) {
+			metric = i.next();
+			metric.insertMarker(process_element);
+		}
+
+		fmt.output(doc, System.out);
 	}
 
 }

@@ -24,7 +24,7 @@ public class StructuredActivity {
 		basis_activities.put(REPEATUNTIL_ACTIVITY, REPEATUNTIL_ACTIVITY);
 		basis_activities.put(FOREACH_ACTIVITY, FOREACH_ACTIVITY);
 		basis_activities.put(PICK_ACTIVITY,PICK_ACTIVITY );
-		basis_activities.put(SCOPE_ACTIVITY, SCOPE_ACTIVITY);	
+//		basis_activities.put(SCOPE_ACTIVITY, SCOPE_ACTIVITY);	
 		basis_activities.put(FLOW_ACTIVITY, FLOW_ACTIVITY);	
 	}
 	public static boolean isStructuredActivity(Element element){

@@ -8,6 +8,7 @@ import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
 import coverage.instrumentation.ActivityTools;
+import coverage.instrumentation.BasisActivity;
 import coverage.instrumentation.StructuredActivity;
 import coverage.instrumentation.branchcoverage.IStructuredActivity;
 
@@ -34,7 +35,25 @@ public class FlowActivityHandler implements IStructuredActivity {
 	private static final String COPY_LINK_DPE_POSTFIX = "_dpe";
 
 	public void insertMarkerForBranchCoverage(Element element) {
-		List links = element.getChildren(LINK_TAG);
+		loggingOfLinks(element);
+		loggingOfBranches(element);
+	}
+
+	private void loggingOfBranches(Element element) {
+		List children = element.getChildren();
+		Element child;
+		for (int i = 0; i < children.size(); i++) {
+			child = (Element) children.get(i);
+			if (StructuredActivity.isStructuredActivity(child)
+					|| BasisActivity.isBasisActivity(child)) {
+				BranchMetric.insertMarkerForBranch(child,"");
+			}
+		}
+
+	}
+
+	private void loggingOfLinks(Element element) {
+		List links = element.getChildren(LINK_TAG,ActivityTools.NAMESPACE_BPEL_2);
 		for (int i = 0; i < links.size(); i++) {
 			createMarkerForLink((Element) links.get(i), element);
 		}
@@ -77,7 +96,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 		if (loggingMarker != null && !loggingMarker.equals("")) {
 			logging = loggingMarker;
 		} else {
-			logging = new Comment(BranchMetric.getNextLinkLabel());
+			logging = new Comment(BranchMetric.getNextLinkLabel() + " flow");
 		}
 		Element sequence = new Element(StructuredActivity.SEQUENCE_ACTIVITY,
 				enclosedFlow.getNamespace());
@@ -98,7 +117,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		Element transConditionElement = sourceElement
-				.getChild(TRANSITION_CONDITION_TAG);
+				.getChild(TRANSITION_CONDITION_TAG,ActivityTools.NAMESPACE_BPEL_2);
 		Element new_transConditEl;
 		if (transConditionElement != null) {
 			new_transConditEl = (Element) transConditionElement.clone();
@@ -120,7 +139,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		Element transConditionElement = sourceElement
-				.getChild(TRANSITION_CONDITION_TAG);
+				.getChild(TRANSITION_CONDITION_TAG,ActivityTools.NAMESPACE_BPEL_2);
 		if (transConditionElement != null) {
 			new_source_element.addContent((Element) transConditionElement
 					.clone());
@@ -134,7 +153,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 		link_copy.setAttribute(ATTRIBUTE_LINKNAME, link
 				.getAttributeValue(ATTRIBUTE_NAME)
 				+ postfix);
-		flow.getChild(LINKS_TAG).addContent(link_copy);
+		flow.getChild(LINKS_TAG,ActivityTools.NAMESPACE_BPEL_2).addContent(link_copy);
 		return link_copy;
 	}
 

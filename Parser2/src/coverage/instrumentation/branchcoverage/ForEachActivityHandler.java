@@ -28,19 +28,15 @@ public class ForEachActivityHandler implements IStructuredActivity {
 
 	private void insertMarkerForSequenceBranches(Element element) {
 		Element activity = ActivityTools.getActivity(element);
-		activity = ActivityTools.encloseActivityInSequence(activity);
-		activity.addContent(0, new Comment(BranchMetric.getNextLabel()));
-		activity.addContent(new Comment(BranchMetric.getNextLabel()));
+		BranchMetric.insertMarkerForBranch(activity,"");
 
 	}
 
 	private void insertMarkerForParallelBranches(Element element,
 			String counterVariable) {
-		
+
 		Element activity = ActivityTools.getActivity(element);
-		activity = ActivityTools.encloseActivityInSequence(activity);
-		activity.addContent(0, new Comment(BranchMetric.getNextLabel()+" "+counterVariable));
-		activity.addContent(new Comment(BranchMetric.getNextLabel())+" "+counterVariable);
+		BranchMetric.insertMarkerForBranch(activity, counterVariable);
 	}
 
 }

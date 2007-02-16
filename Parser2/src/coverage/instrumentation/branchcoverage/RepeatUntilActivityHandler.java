@@ -5,6 +5,7 @@ import org.jdom.Element;
 
 import coverage.instrumentation.ActivityTools;
 import coverage.instrumentation.BpelDocument;
+import coverage.instrumentation.StructuredActivity;
 
 public class RepeatUntilActivityHandler implements IStructuredActivity {
 	
@@ -20,8 +21,7 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 
 	private void branchFromActivityToCondition(Element element) {
 		Element activity=ActivityTools.getActivity(element);
-		Element sequence=ActivityTools.encloseActivityInSequence(activity);
-		sequence.addContent(new Comment(BranchMetric.getNextLabel()));
+		BranchMetric.insertMarkerAfterAllActivities(activity, "");
 	}
 
 	private void branchFromConditionToActivity(Element element) {
@@ -41,11 +41,13 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 		Element sequence=ActivityTools.getActivity(element);
 		if(sequence!=null){
 			Element if_element=new Element(IF_TAG,element.getNamespace());
-			Element condition=new Element(CONDITION_TAG);
+			Element condition=new Element(CONDITION_TAG,ActivityTools.NAMESPACE_BPEL_2);
+			Element sequence2=new Element(StructuredActivity.SEQUENCE_ACTIVITY,element.getNamespace());
 			condition.setText("$"+countVariable.getName()+"=1");
 			if_element.addContent(condition);
-			if_element.addContent(new Comment(BranchMetric.getNextLabel()));
+			if_element.addContent(sequence2);
 			sequence.addContent(0,if_element);
+			BranchMetric.insertMarkerForAllActivities(sequence2, "");
 		}
 		
 	}

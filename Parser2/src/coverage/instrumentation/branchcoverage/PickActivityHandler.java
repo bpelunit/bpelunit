@@ -18,22 +18,18 @@ public class PickActivityHandler implements IStructuredActivity {
 	}
 
 	private void identifyBranches(Element element, String name) {
-		List children=element.getChildren(name);
+		List children=element.getChildren(name,ActivityTools.NAMESPACE_BPEL_2);
 		Element child;
 		for(int i=0;i<children.size();i++){
 			child=(Element) children.get(i);
 			child=ActivityTools.getActivity(child);
 			if(child!=null){
-				insertMarker(child);
+				BranchMetric.insertMarkerForBranch(child,"");
 			}
 		}
 		
 	}
 
-	private void insertMarker(Element child) {
-		Element sequence=ActivityTools.encloseActivityInSequence(child);
-		sequence.addContent(0, new Comment(BranchMetric.getNextLabel()));
-		sequence.addContent(new Comment(BranchMetric.getNextLabel()));	
-	}
+
 
 }

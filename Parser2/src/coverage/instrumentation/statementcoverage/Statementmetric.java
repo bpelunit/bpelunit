@@ -9,6 +9,7 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
+import coverage.instrumentation.ActivityTools;
 import coverage.instrumentation.IMetric;
 
 public class Statementmetric implements IMetric {
@@ -48,7 +49,7 @@ public class Statementmetric implements IMetric {
 				.hasNext();) {
 			element = iter.next();
 			Element parent = element.getParentElement();
-			targetelement = element.getChild("target");
+			targetelement = element.getChild("target",ActivityTools.NAMESPACE_BPEL_2);
 			if (targetelement != null || !parent.getName().equals("sequence")) {
 				encloseInSequence(element, targetelement);
 			}
@@ -59,7 +60,7 @@ public class Statementmetric implements IMetric {
 	private void insertMarkerForThisActivity(Element element) {
 		Element parent = element.getParentElement();
 		String element_name = element.getName();
-		Comment mark = new Comment(element_name+(count++));
+		Comment mark = new Comment(element_name+(count++)+" "+element.getName());
 		int index = parent.indexOf(element);
 		if (logging_before_activity.contains(element_name)) {
 			parent.addContent(index, mark);

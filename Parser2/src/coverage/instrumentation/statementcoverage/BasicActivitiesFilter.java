@@ -6,6 +6,8 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 
+import coverage.instrumentation.BasisActivity;
+
 public class BasicActivitiesFilter extends ElementFilter {
 
 	private Hashtable<String, String> activities_to_respect; 
@@ -21,7 +23,7 @@ public class BasicActivitiesFilter extends ElementFilter {
 		Element element;
 		if(super.matches(obj)){
 			element=(Element)obj;
-			if(activities_to_respect.containsKey(element.getName())){
+			if(BasisActivity.isBasisActivity(element)){
 				result=true;
 			}
 		}
