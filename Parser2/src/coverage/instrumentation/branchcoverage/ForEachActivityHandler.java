@@ -1,6 +1,5 @@
 package coverage.instrumentation.branchcoverage;
 
-import org.jdom.Comment;
 import org.jdom.Element;
 
 import coverage.instrumentation.ActivityTools;

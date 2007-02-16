@@ -41,14 +41,16 @@ public class BpelDocument {
 	}
 	
 	
-	public static void insertVariable(Element variable,Element scope){
-
-		scope.getChild(VARIABLES_TAG,ActivityTools.NAMESPACE_BPEL_2).addContent(variable);;
+	public static void insertVariable(Element variable,Element process){
+		Element variables=process.getChild(VARIABLES_TAG,ActivityTools.NAMESPACE_BPEL_2);
+		if(variables==null){
+			variables=new Element(VARIABLES_TAG,ActivityTools.NAMESPACE_BPEL_2);
+			process.addContent(0,variables);
+		}
+		variables.addContent(variable);
 	}
 
 	public static Element createInitializeAssign(Element countVariable) {
-
-		Element process = countVariable.getDocument().getRootElement();
 		Element assign = new Element(ASSIGN_TAG,ActivityTools.NAMESPACE_BPEL_2);
 		Element copy = new Element(COPY_TAG,ActivityTools.NAMESPACE_BPEL_2);
 		Element from = new Element(FROM_TAG,ActivityTools.NAMESPACE_BPEL_2);
@@ -64,7 +66,6 @@ public class BpelDocument {
 	}
 	
 	public static Element createIncreesAssign(Element countVariable) {
-		Element process = countVariable.getDocument().getRootElement();
 		Element assign = new Element(ASSIGN_TAG,ActivityTools.NAMESPACE_BPEL_2);
 		Element copy = new Element(COPY_TAG,ActivityTools.NAMESPACE_BPEL_2);
 		Element from = new Element(FROM_TAG,ActivityTools.NAMESPACE_BPEL_2);

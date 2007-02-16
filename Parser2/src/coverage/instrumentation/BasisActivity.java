@@ -3,7 +3,6 @@ package coverage.instrumentation;
 import java.util.Hashtable;
 
 import org.jdom.Element;
-import org.jdom.Namespace;
 
 public class BasisActivity {
 
@@ -27,11 +26,14 @@ public class BasisActivity {
 
 	public static final String COMPENSATESCOPE_ACTIVITY = "compensateScope";
 
+	public static final String EXIT_ACTIVITY = "exit";
+
 	private static Hashtable<String, String> basis_activities;
 
 	static {
 		basis_activities = new Hashtable<String, String>();
 		basis_activities.put(INVOKE_ACTIVITY, INVOKE_ACTIVITY);
+		basis_activities.put(EXIT_ACTIVITY, EXIT_ACTIVITY);
 		basis_activities.put(RECEIVE_ACTIVITY, RECEIVE_ACTIVITY);
 		basis_activities.put(REPLY_ACTIVITY, REPLY_ACTIVITY);
 		basis_activities.put(THROW_ACTIVITY, THROW_ACTIVITY);

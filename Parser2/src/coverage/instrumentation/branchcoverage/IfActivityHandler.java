@@ -41,7 +41,7 @@ public class IfActivityHandler implements IStructuredActivity {
 					.getActivity((Element) elseif_branches.get(i));
 			if (branch_activity != null) {
 				BranchMetric.insertMarkerForBranch(ActivityTools
-						.encloseActivityInSequence(branch_activity),"");
+						.ensureActivityIsInSequence(branch_activity),"");
 			}
 		}
 	}
@@ -50,7 +50,7 @@ public class IfActivityHandler implements IStructuredActivity {
 		Element branch_activity = ActivityTools.getActivity(element);
 		if (branch_activity != null) {
 			BranchMetric.insertMarkerForBranch(ActivityTools
-					.encloseActivityInSequence(branch_activity),"");
+					.ensureActivityIsInSequence(branch_activity),"");
 		}
 	}
 

@@ -2,7 +2,6 @@ package coverage.instrumentation.branchcoverage;
 
 import java.util.List;
 
-import org.jdom.Comment;
 import org.jdom.Element;
 
 import coverage.instrumentation.ActivityTools;
@@ -10,7 +9,7 @@ import coverage.instrumentation.ActivityTools;
 public class PickActivityHandler implements IStructuredActivity {
 	
 	private static final String ON_MESSAGE="onMessage";
-	private static final String ON_ALARM="onAlaram";
+	private static final String ON_ALARM="onAlarm";
 
 	public void insertMarkerForBranchCoverage(Element element) {
 		identifyBranches(element,ON_MESSAGE);
@@ -27,9 +26,5 @@ public class PickActivityHandler implements IStructuredActivity {
 				BranchMetric.insertMarkerForBranch(child,"");
 			}
 		}
-		
 	}
-
-
-
 }

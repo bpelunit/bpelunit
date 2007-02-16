@@ -23,7 +23,7 @@ public class BasicActivitiesFilter extends ElementFilter {
 		Element element;
 		if(super.matches(obj)){
 			element=(Element)obj;
-			if(BasisActivity.isBasisActivity(element)){
+			if(activities_to_respect.containsKey(element.getName())){
 				result=true;
 			}
 		}

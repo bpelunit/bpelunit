@@ -12,16 +12,20 @@ public class ActivityTools {
 	public static final String PROCESS_ELEMENT = "process";
 
 	public static Element encloseActivityInSequence(Element activity) {
-		if (!activity.getName().equals(StructuredActivity.SEQUENCE_ACTIVITY)) {
-			Element parent = activity.getParentElement();
-			int index = parent.indexOf(activity);
-			Element sequence = createSequence();
-			activity.detach();
-			sequence.addContent(activity);
-			parent.addContent(index, sequence);
-			activity = sequence;
-		}
+		Element parent = activity.getParentElement();
+		int index = parent.indexOf(activity);
+		Element sequence = createSequence();
+		sequence.addContent(activity.detach());
+		parent.addContent(index, sequence);
+		activity = sequence;
 
+		return activity;
+	}
+
+	public static Element ensureActivityIsInSequence(Element activity) {
+		if (!activity.getName().equals(StructuredActivity.SEQUENCE_ACTIVITY)) {
+			encloseActivityInSequence(activity);
+		}
 		return activity;
 	}
 

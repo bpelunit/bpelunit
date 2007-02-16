@@ -60,7 +60,7 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 	}
 
 	private void insert(Element initializeAssign, Element element) {
-		Element sequence = ActivityTools.encloseActivityInSequence(element);
+		Element sequence = ActivityTools.ensureActivityIsInSequence(element);
 		sequence.addContent(sequence.indexOf(element), initializeAssign);
 	}
 
