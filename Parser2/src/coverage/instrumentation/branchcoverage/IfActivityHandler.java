@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import coverage.instrumentation.ActivityTools;
+import coverage.instrumentation.activitytools.ActivityTools;
 
 public class IfActivityHandler implements IStructuredActivity {
 
@@ -24,7 +24,7 @@ public class IfActivityHandler implements IStructuredActivity {
 	private void insertMarkerForElseBranch(Element element) {
 		Element branch_activity;
 		Element else_el=element.getChild(ELSE_ELEMENT,ActivityTools.NAMESPACE_BPEL_2);
-		branch_activity = ActivityTools.getActivity(else_el);
+		branch_activity = ActivityTools.getFirstActivityChild(else_el);
 		if (branch_activity == null) {
 			branch_activity =ActivityTools.createSequence();
 			element.addContent(branch_activity);
@@ -38,19 +38,19 @@ public class IfActivityHandler implements IStructuredActivity {
 		List elseif_branches = element.getChildren(ELSE_IF_ELEMENT,ActivityTools.NAMESPACE_BPEL_2);
 		for (int i = 0; i < elseif_branches.size(); i++) {
 			branch_activity = ActivityTools
-					.getActivity((Element) elseif_branches.get(i));
+					.getFirstActivityChild((Element) elseif_branches.get(i));
 			if (branch_activity != null) {
 				BranchMetric.insertMarkerForBranch(ActivityTools
-						.ensureActivityIsInSequence(branch_activity),"");
+						.ensureElementIsInSequence(branch_activity),"");
 			}
 		}
 	}
 
 	private void insertMarkerForIfBranch(Element element) {
-		Element branch_activity = ActivityTools.getActivity(element);
+		Element branch_activity = ActivityTools.getFirstActivityChild(element);
 		if (branch_activity != null) {
 			BranchMetric.insertMarkerForBranch(ActivityTools
-					.ensureActivityIsInSequence(branch_activity),"");
+					.ensureElementIsInSequence(branch_activity),"");
 		}
 	}
 

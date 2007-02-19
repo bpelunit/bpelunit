@@ -1,4 +1,4 @@
-package coverage.instrumentation;
+package coverage.instrumentation.activitytools;
 
 import java.util.Hashtable;
 
@@ -46,13 +46,8 @@ public class BasisActivity {
 				.put(COMPENSATESCOPE_ACTIVITY, COMPENSATESCOPE_ACTIVITY);
 	}
 
-	public static boolean isBasisActivity(Element element) {
-		boolean isBasis = false;
-		if (basis_activities.containsKey(element.getName()))
-			isBasis = true;
-		return isBasis;
+	static boolean isBasisActivity(Element element) {
+		return basis_activities.containsKey(element.getName()) ? true : false;
 	}
-	
-
 
 }

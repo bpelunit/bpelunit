@@ -8,10 +8,10 @@ import java.util.List;
 import org.jdom.Comment;
 import org.jdom.Element;
 
-import coverage.instrumentation.ActivityTools;
-import coverage.instrumentation.BasisActivity;
 import coverage.instrumentation.IMetric;
-import coverage.instrumentation.StructuredActivity;
+import coverage.instrumentation.activitytools.ActivityTools;
+import coverage.instrumentation.activitytools.BasisActivity;
+import coverage.instrumentation.activitytools.StructuredActivity;
 
 public class Statementmetric implements IMetric {
 
@@ -53,11 +53,11 @@ public class Statementmetric implements IMetric {
 					ActivityTools.NAMESPACE_BPEL_2);
 			if (targetelement != null) {
 				Element sequence = ActivityTools
-						.encloseActivityInSequence(element);
+						.encloseInSequence(element);
 				sequence.addContent(0, targetelement.detach());
 			} else if (!parent.getName().equals(
 					StructuredActivity.SEQUENCE_ACTIVITY)) {
-				ActivityTools.ensureActivityIsInSequence(element);
+				ActivityTools.ensureElementIsInSequence(element);
 			}
 			insertMarkerForThisActivity(element);
 		}

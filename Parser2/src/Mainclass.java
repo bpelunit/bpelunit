@@ -3,9 +3,9 @@ import java.io.IOException;
 
 import org.jdom.JDOMException;
 
-import coverage.instrumentation.BasisActivity;
 import coverage.instrumentation.IMetricHandler;
 import coverage.instrumentation.MetricHandler;
+import coverage.instrumentation.activitytools.BasisActivity;
 import coverage.instrumentation.branchcoverage.BranchMetric;
 import coverage.instrumentation.exception.BpelException;
 import coverage.instrumentation.exception.BpelVersionException;
@@ -29,9 +29,9 @@ public class Mainclass {
 		statementMetric.addBasicActivity(BasisActivity.RETHROW_ACTIVITY);
 		statementMetric.addBasicActivity(BasisActivity.THROW_ACTIVITY);
 		statementMetric.addBasicActivity(BasisActivity.WAIT_ACTIVITY);
-		metric_handler.addMetric(statementMetric);
+//		metric_handler.addMetric(statementMetric);
 		
-//		metric_handler.addMetric(new BranchMetric());
+		metric_handler.addMetric(new BranchMetric());
 //		metric_handler.startInstrumentation(new File(filename));
 		
 		filename = args[1];

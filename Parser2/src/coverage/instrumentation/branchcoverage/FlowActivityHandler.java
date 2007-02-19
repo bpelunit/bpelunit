@@ -1,5 +1,6 @@
 package coverage.instrumentation.branchcoverage;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -7,10 +8,9 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
-import coverage.instrumentation.ActivityTools;
-import coverage.instrumentation.BasisActivity;
-import coverage.instrumentation.StructuredActivity;
-import coverage.instrumentation.branchcoverage.IStructuredActivity;
+
+import coverage.instrumentation.activitytools.ActivityTools;
+import coverage.instrumentation.activitytools.StructuredActivity;
 
 public class FlowActivityHandler implements IStructuredActivity {
 
@@ -26,7 +26,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 
 	private static final String ATTRIBUTE_LINKNAME = "linkName";
 
-	private static final String ATTRIBUTE_NAME = "linkName";
+	private static final String ATTRIBUTE_NAME = "name";
 
 	private static final String COPY_LINK_POSTFIX = "_copy";
 
@@ -36,7 +36,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 
 	public void insertMarkerForBranchCoverage(Element element) {
 		loggingOfLinks(element);
-		loggingOfBranches(element);
+		 loggingOfBranches(element);
 	}
 
 	private void loggingOfBranches(Element element) {
@@ -44,18 +44,32 @@ public class FlowActivityHandler implements IStructuredActivity {
 		Element child;
 		for (int i = 0; i < children.size(); i++) {
 			child = (Element) children.get(i);
-			if (StructuredActivity.isStructuredActivity(child)
-					|| BasisActivity.isBasisActivity(child)) {
-				BranchMetric.insertMarkerForBranch(child,"");
+			if (ActivityTools.isActivity(child)) {
+				BranchMetric.insertMarkerForBranch(child, "");
 			}
 		}
 
 	}
 
 	private void loggingOfLinks(Element element) {
-		List links = element.getChildren(LINK_TAG,ActivityTools.NAMESPACE_BPEL_2);
-		for (int i = 0; i < links.size(); i++) {
-			createMarkerForLink((Element) links.get(i), element);
+		Element linksElement = element.getChild(LINKS_TAG,
+				ActivityTools.NAMESPACE_BPEL_2);
+		if (linksElement != null) {
+			// List links = linksElement.getChildren(LINK_TAG,
+			// ActivityTools.NAMESPACE_BPEL_2);
+			// int size=links.size(); //TODO HE????
+			// for (int i = 0; i < size; i++) {
+			// createMarkerForLink((Element) links.get(i), element);
+			// }
+			Iterator iter=linksElement.getDescendants(new ElementFilter(
+					LINK_TAG, ActivityTools.NAMESPACE_BPEL_2));
+			List<Element> links=new ArrayList<Element>();
+			while(iter.hasNext()){
+				links.add((Element)iter.next());
+			}
+			for (int i = 0; i < links.size(); i++) {
+			 createMarkerForLink((Element) links.get(i), element);
+			}
 		}
 	}
 
@@ -63,17 +77,51 @@ public class FlowActivityHandler implements IStructuredActivity {
 		Element sourceElement = searchSourceElement(link, flow);
 		if (sourceElement != null) {
 			Element enclosedFlow = ActivityTools
-					.encloseActivityInFlow(sourceElement.getParentElement()
+					.ensureElementIsInFlow(sourceElement.getParentElement()
 							.getParentElement());
-			Element new_link = insertPostivLink(flow, sourceElement, link);
-			insertLoggingMarker(new_link, enclosedFlow, null);
-			new_link = insertNegativLink(flow, sourceElement, link);
-			Comment negativLinkLoggingMarker = insertLoggingMarker(new_link,
-					enclosedFlow, null);
-			new_link = insertDPELink(flow, sourceElement, link);
-			insertLoggingMarker(new_link, enclosedFlow,
-					negativLinkLoggingMarker);
+			 Element new_link =
+			insertPostivLink(flow, sourceElement, link);
+			 insertLoggingMarker(new_link, enclosedFlow, null);
+
+			 new_link = insertNegativLink(flow, sourceElement, link);
+			 Comment negativLinkLoggingMarker = (Comment) insertLoggingMarker(
+			 new_link, enclosedFlow, null).clone();
+			 new_link = insertDPELink(flow, sourceElement, link);
+			 insertLoggingMarker(new_link, enclosedFlow,
+			 negativLinkLoggingMarker);
 		}
+	}
+
+	private Element insertPostivLink(Element flow, Element sourceElement,
+			Element link) {
+		Element link_copy = createLinkCopy(link, flow, COPY_LINK_POSTFIX);
+		 Element new_source_element = new Element(SOURCE_TAG,
+		 ActivityTools.NAMESPACE_BPEL_2);
+		 new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
+		 .getAttributeValue(ATTRIBUTE_NAME));
+		 Element transConditionElement = sourceElement.getChild(
+		 TRANSITION_CONDITION_TAG, ActivityTools.NAMESPACE_BPEL_2);
+		 if (transConditionElement != null) {
+		 new_source_element.addContent((Element) transConditionElement
+		 .clone());
+		 }
+		 sourceElement.getParentElement().addContent(new_source_element);
+		return link_copy;
+	}
+
+	private Element createLinkCopy(Element link, Element flow, String postfix) {
+		Element link_copy = (Element) link.clone();
+		link_copy.setAttribute(ATTRIBUTE_NAME, link
+				.getAttributeValue(ATTRIBUTE_NAME)
+				+ postfix);
+		Element links = flow
+				.getChild(LINKS_TAG, ActivityTools.NAMESPACE_BPEL_2);
+		// .addContent(
+		// link_copy);
+
+		links.addContent(link_copy);
+
+		return link_copy;
 	}
 
 	private Element insertDPELink(Element flow, Element sourceElement,
@@ -99,10 +147,10 @@ public class FlowActivityHandler implements IStructuredActivity {
 			logging = new Comment(BranchMetric.getNextLinkLabel() + " flow");
 		}
 		Element sequence = new Element(StructuredActivity.SEQUENCE_ACTIVITY,
-				enclosedFlow.getNamespace());
-		sequence
-				.addContent(new Element(TARGET_TAG, enclosedFlow.getNamespace()));
-		sequence.addContent(loggingMarker);
+				ActivityTools.NAMESPACE_BPEL_2);
+		sequence.addContent(new Element(TARGET_TAG,
+				ActivityTools.NAMESPACE_BPEL_2));
+		sequence.addContent(logging);
 		enclosedFlow.addContent(sequence);
 		return logging;
 
@@ -116,8 +164,8 @@ public class FlowActivityHandler implements IStructuredActivity {
 				.getNamespace());
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
-		Element transConditionElement = sourceElement
-				.getChild(TRANSITION_CONDITION_TAG,ActivityTools.NAMESPACE_BPEL_2);
+		Element transConditionElement = sourceElement.getChild(
+				TRANSITION_CONDITION_TAG, ActivityTools.NAMESPACE_BPEL_2);
 		Element new_transConditEl;
 		if (transConditionElement != null) {
 			new_transConditEl = (Element) transConditionElement.clone();
@@ -131,35 +179,9 @@ public class FlowActivityHandler implements IStructuredActivity {
 		return link_copy;
 	}
 
-	private Element insertPostivLink(Element flow, Element sourceElement,
-			Element link) {
-		Element link_copy = createLinkCopy(link, flow, COPY_LINK_POSTFIX);
-		Element new_source_element = new Element(SOURCE_TAG, flow
-				.getNamespace());
-		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
-				.getAttributeValue(ATTRIBUTE_NAME));
-		Element transConditionElement = sourceElement
-				.getChild(TRANSITION_CONDITION_TAG,ActivityTools.NAMESPACE_BPEL_2);
-		if (transConditionElement != null) {
-			new_source_element.addContent((Element) transConditionElement
-					.clone());
-		}
-		sourceElement.getParentElement().addContent(new_source_element);
-		return link_copy;
-	}
-
-	private Element createLinkCopy(Element link, Element flow, String postfix) {
-		Element link_copy = (Element) link.clone();
-		link_copy.setAttribute(ATTRIBUTE_LINKNAME, link
-				.getAttributeValue(ATTRIBUTE_NAME)
-				+ postfix);
-		flow.getChild(LINKS_TAG,ActivityTools.NAMESPACE_BPEL_2).addContent(link_copy);
-		return link_copy;
-	}
-
 	private Element searchSourceElement(Element link, Element flow) {
 		Iterator sources = flow.getDescendants(new ElementFilter(SOURCE_TAG,
-				flow.getNamespace()));
+				ActivityTools.NAMESPACE_BPEL_2));
 		Element source = null;
 		String linkName;
 		while (sources.hasNext()) {

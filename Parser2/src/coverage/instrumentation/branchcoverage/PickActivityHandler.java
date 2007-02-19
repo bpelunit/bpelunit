@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import coverage.instrumentation.ActivityTools;
+import coverage.instrumentation.activitytools.ActivityTools;
 
 public class PickActivityHandler implements IStructuredActivity {
 	
@@ -21,7 +21,7 @@ public class PickActivityHandler implements IStructuredActivity {
 		Element child;
 		for(int i=0;i<children.size();i++){
 			child=(Element) children.get(i);
-			child=ActivityTools.getActivity(child);
+			child=ActivityTools.getFirstActivityChild(child);
 			if(child!=null){
 				BranchMetric.insertMarkerForBranch(child,"");
 			}

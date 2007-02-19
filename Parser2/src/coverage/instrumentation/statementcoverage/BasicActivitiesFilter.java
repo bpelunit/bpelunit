@@ -6,7 +6,7 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 
-import coverage.instrumentation.BasisActivity;
+import coverage.instrumentation.activitytools.BasisActivity;
 
 public class BasicActivitiesFilter extends ElementFilter {
 

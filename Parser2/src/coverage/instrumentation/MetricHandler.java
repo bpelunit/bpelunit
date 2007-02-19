@@ -12,9 +12,15 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
+import coverage.instrumentation.activitytools.ActivityTools;
 import coverage.instrumentation.exception.BpelException;
 import coverage.instrumentation.exception.BpelVersionException;
 
+/**
+ * Die Klasse implementiert das Interface IMetricHandler.
+ * 
+ * @author Alex Salnikow
+ */
 public class MetricHandler implements IMetricHandler {
 
 	private static IMetricHandler instance = null;
@@ -31,7 +37,6 @@ public class MetricHandler implements IMetricHandler {
 	}
 
 	private MetricHandler() {
-
 	}
 
 	public void addMetric(IMetric metric) {
@@ -53,10 +58,11 @@ public class MetricHandler implements IMetricHandler {
 		process_element = doc.getRootElement();
 		if (!process_element.getName().equalsIgnoreCase(
 				ActivityTools.PROCESS_ELEMENT)) {
-			throw(new BpelException(BpelException.NO_VALIDE_BPEL));
+			throw (new BpelException(BpelException.NO_VALIDE_BPEL));
 		}
-		if(!process_element.getNamespace().equals(ActivityTools.NAMESPACE_BPEL_2)){
-			throw(new BpelVersionException(BpelVersionException.WRONG_VERSION));
+		if (!process_element.getNamespace().equals(
+				ActivityTools.NAMESPACE_BPEL_2)) {
+			throw (new BpelVersionException(BpelVersionException.WRONG_VERSION));
 		}
 		IMetric metric;
 		for (Iterator<IMetric> i = metrics.iterator(); i.hasNext();) {

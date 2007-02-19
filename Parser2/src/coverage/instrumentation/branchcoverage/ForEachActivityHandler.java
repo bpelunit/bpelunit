@@ -2,7 +2,7 @@ package coverage.instrumentation.branchcoverage;
 
 import org.jdom.Element;
 
-import coverage.instrumentation.ActivityTools;
+import coverage.instrumentation.activitytools.ActivityTools;
 
 public class ForEachActivityHandler implements IStructuredActivity {
 
@@ -26,7 +26,7 @@ public class ForEachActivityHandler implements IStructuredActivity {
 	}
 
 	private void insertMarkerForSequenceBranches(Element element) {
-		Element activity = ActivityTools.getActivity(element);
+		Element activity = ActivityTools.getFirstActivityChild(element);
 		BranchMetric.insertMarkerForBranch(activity,"");
 
 	}
@@ -34,7 +34,7 @@ public class ForEachActivityHandler implements IStructuredActivity {
 	private void insertMarkerForParallelBranches(Element element,
 			String counterVariable) {
 
-		Element activity = ActivityTools.getActivity(element);
+		Element activity = ActivityTools.getFirstActivityChild(element);
 		BranchMetric.insertMarkerForBranch(activity, counterVariable);
 	}
 

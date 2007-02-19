@@ -9,9 +9,9 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
-import coverage.instrumentation.ActivityTools;
 import coverage.instrumentation.IMetric;
-import coverage.instrumentation.StructuredActivity;
+import coverage.instrumentation.activitytools.ActivityTools;
+import coverage.instrumentation.activitytools.StructuredActivity;
 
 public class BranchMetric implements IMetric {
 
@@ -31,20 +31,20 @@ public class BranchMetric implements IMetric {
 
 	public static void insertMarkerForBranch(Element activity,
 			String additionalInfo) {
-		insertMarkerForAllActivities(activity, additionalInfo);
+		insertMarkerBevorAllActivities(activity, additionalInfo);
 		insertMarkerAfterAllActivities(activity, additionalInfo);
 	}
 
-	public static void insertMarkerForAllActivities(Element activity,
+	public static void insertMarkerBevorAllActivities(Element activity,
 			String additionalInfo) {
-		activity = ActivityTools.ensureActivityIsInSequence(activity);
+		activity = ActivityTools.ensureElementIsInSequence(activity);
 		activity.addContent(0, new Comment(BranchMetric.getNextLabel()
 				+ additionalInfo));
 	}
 
 	public static void insertMarkerAfterAllActivities(Element activity,
 			String additionalInfo) {
-		activity = ActivityTools.ensureActivityIsInSequence(activity);
+		activity = ActivityTools.ensureElementIsInSequence(activity);
 		activity.addContent(new Comment(BranchMetric.getNextLabel()
 				+ additionalInfo));
 	}
@@ -81,7 +81,7 @@ public class BranchMetric implements IMetric {
 		Iterator iterator2 = element.getDescendants(new ElementFilter());
 		while (iterator2.hasNext()) {
 			next_element = (Element) iterator2.next();
-			if (StructuredActivity.isStructuredActivity(next_element)) {
+			if (ActivityTools.isStructuredActivity(next_element)) {
 				elements_to_log.add(next_element);
 			}
 		}
