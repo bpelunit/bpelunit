@@ -137,8 +137,11 @@ public class ActivityTools {
 		return activity;
 	}
 
-
-
+	/**
+	 * Erzeugt ein Sequence-Element
+	 * 
+	 * @return
+	 */
 	public static Element createSequence() {
 		return new Element(StructuredActivity.SEQUENCE_ACTIVITY,
 				NAMESPACE_BPEL_2);
@@ -156,25 +159,43 @@ public class ActivityTools {
 		return isBasicActivity(element) || isStructuredActivity(element);
 	}
 
+	/**
+	 * Erzeugt ein Variable-Element ohne es in BPEL einzufügen.
+	 * 
+	 * @param document
+	 * @return
+	 */
 	public static Element createVariable(Document document) {
-		Element process = document.getRootElement();
-		Element variable = new Element(VARIABLE_TAG, process.getNamespace());
+		Element variable = new Element(VARIABLE_TAG,
+				ActivityTools.NAMESPACE_BPEL_2);
 		variable.setAttribute(ATTRIBUTE_NAME, createVariableName());
 		variable.setAttribute(ATTRIBUTE_TYPE, COUNT_VARIABLE_TYPE);
 		return variable;
 	}
 
-	public static void insertVariable(Element variable, Element process) {
-		Element variables = process.getChild(VARIABLES_TAG,
+	/**
+	 * Fügt Variable in dem Scope ein. Wenn ein Varables-Element fehlt, dann
+	 * wird ein hinzugefügt.
+	 * 
+	 * @param variable
+	 * @param scope
+	 */
+	public static void insertVariable(Element variable, Element scope) {
+		Element variables = scope.getChild(VARIABLES_TAG,
 				ActivityTools.NAMESPACE_BPEL_2);
 		if (variables == null) {
 			variables = new Element(VARIABLES_TAG,
 					ActivityTools.NAMESPACE_BPEL_2);
-			process.addContent(0, variables);
+			scope.addContent(0, variables);
 		}
 		variables.addContent(variable);
 	}
 
+	/**
+	 * Erzeugt ein Assign-Element für eine Count-Variable und setzt auf 0.
+	 * @param countVariable 
+	 * @return Assign-Element
+	 */
 	public static Element createInitializeAssign(Element countVariable) {
 		Element assign = new Element(ASSIGN_TAG, ActivityTools.NAMESPACE_BPEL_2);
 		Element copy = new Element(COPY_TAG, ActivityTools.NAMESPACE_BPEL_2);
@@ -191,6 +212,11 @@ public class ActivityTools {
 		return assign;
 	}
 
+	/**
+	 * Erzeugt ein Assign-Element für die Erhöhung der Count-Variable um 1.
+	 * @param countVariable 
+	 * @return Assign-Element
+	 */
 	public static Element createIncreesAssign(Element countVariable) {
 		Element assign = new Element(ASSIGN_TAG, ActivityTools.NAMESPACE_BPEL_2);
 		Element copy = new Element(COPY_TAG, ActivityTools.NAMESPACE_BPEL_2);

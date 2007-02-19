@@ -13,10 +13,24 @@ import coverage.instrumentation.activitytools.ActivityTools;
 import coverage.instrumentation.activitytools.BasisActivity;
 import coverage.instrumentation.activitytools.StructuredActivity;
 
+/**
+ * Klasse instrumentiert ein BPEL-Prozess um die Abdeckung der BasicActivities bei der Ausführung zu messen.
+ * Die einzelnen Aktivitäten, die bei der Messung berücksichtigt werden müssen, müssen explizit angegeben werden ({@link #addBasicActivity(String)}).
+ * 
+ * @author Alex Salnikow
+ */
 public class Statementmetric implements IMetric {
 
-	private Hashtable<String, String> logging_before_activity;
+	private static Hashtable<String, String> logging_before_activity;
 
+	static{
+		logging_before_activity = new Hashtable<String, String>();
+		logging_before_activity.put(BasisActivity.THROW_ACTIVITY, BasisActivity.THROW_ACTIVITY);
+		logging_before_activity.put(BasisActivity.RETHROW_ACTIVITY, BasisActivity.RETHROW_ACTIVITY);
+		logging_before_activity.put(BasisActivity.COMPENSATE_ACTIVITY, BasisActivity.COMPENSATE_ACTIVITY);
+		logging_before_activity.put(BasisActivity.COMPENSATESCOPE_ACTIVITY, BasisActivity.COMPENSATESCOPE_ACTIVITY);
+		logging_before_activity.put(BasisActivity.EXIT_ACTIVITY, BasisActivity.EXIT_ACTIVITY);
+	}
 	private Hashtable<String, String> activities_to_respekt;
 
 	private List<Element> elements_to_log;
@@ -26,24 +40,26 @@ public class Statementmetric implements IMetric {
 	public Statementmetric() {
 		activities_to_respekt = new Hashtable<String, String>();
 		elements_to_log = new ArrayList<Element>();
-		logging_before_activity = new Hashtable<String, String>();
-		logging_before_activity.put(BasisActivity.THROW_ACTIVITY, BasisActivity.THROW_ACTIVITY);
-		logging_before_activity.put(BasisActivity.RETHROW_ACTIVITY, BasisActivity.RETHROW_ACTIVITY);
-		logging_before_activity.put(BasisActivity.COMPENSATE_ACTIVITY, BasisActivity.COMPENSATE_ACTIVITY);
-		logging_before_activity.put(BasisActivity.COMPENSATESCOPE_ACTIVITY, BasisActivity.COMPENSATESCOPE_ACTIVITY);
-		logging_before_activity.put(BasisActivity.EXIT_ACTIVITY, BasisActivity.EXIT_ACTIVITY);
 	}
-
+	
+	/**
+	 * Diese Methode fügt die Marker an den richtigen Stellen in
+	 * BPEL-Process-Element ein (Instrumentierung). Anhand dieser Marker werden
+	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
+	 * bestimmter Aktivitäten geloggt.
+	 * 
+	 * @param process_element
+	 */
 	public void insertMarker(Element element) {
 		BasicActivitiesFilter filter = new BasicActivitiesFilter(element
 				.getNamespace(), activities_to_respekt);
 		for (Iterator iter = element.getDescendants(filter); iter.hasNext();) {
 			elements_to_log.add((Element) iter.next());
 		}
-		insertMarkerForEachElement(elements_to_log);
+		insertMarkerForEachActivity(elements_to_log);
 	}
 
-	private void insertMarkerForEachElement(List<Element> elements_to_log) {
+	private void insertMarkerForEachActivity(List<Element> elements_to_log) {
 		Element element;
 		Element targetelement;
 		for (int i = 0; i < elements_to_log.size(); i++) {
@@ -59,11 +75,11 @@ public class Statementmetric implements IMetric {
 					StructuredActivity.SEQUENCE_ACTIVITY)) {
 				ActivityTools.ensureElementIsInSequence(element);
 			}
-			insertMarkerForThisActivity(element);
+			insertMarkerActivity(element);
 		}
 	}
 
-	private void insertMarkerForThisActivity(Element element) {
+	private void insertMarkerActivity(Element element) {
 		Element parent = element.getParentElement();
 		String element_name = element.getName();
 		Comment mark = new Comment(element_name + (count++) + " "

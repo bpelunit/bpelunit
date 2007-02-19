@@ -36,6 +36,11 @@ public class StructuredActivity {
 		structured_activities.put(FLOW_ACTIVITY, FLOW_ACTIVITY);
 	}
 
+	/**
+	 * Überprüft, ob das Element eine BPEL-StructuredActivität repräsentiert. 
+	 * @param element
+	 * @return
+	 */
 	static boolean isStructuredActivity(Element activity) {
 		return structured_activities.containsKey(activity.getName()) ? true
 				: false;

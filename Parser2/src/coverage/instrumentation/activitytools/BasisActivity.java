@@ -45,7 +45,12 @@ public class BasisActivity {
 		basis_activities
 				.put(COMPENSATESCOPE_ACTIVITY, COMPENSATESCOPE_ACTIVITY);
 	}
-
+	
+	/**
+	 * Überprüft, ob das Element eine BPEL-BasicActivität repräsentiert. 
+	 * @param element
+	 * @return
+	 */
 	static boolean isBasisActivity(Element element) {
 		return basis_activities.containsKey(element.getName()) ? true : false;
 	}
