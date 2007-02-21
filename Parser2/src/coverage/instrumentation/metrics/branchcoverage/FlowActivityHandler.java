@@ -9,7 +9,6 @@ import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
-import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.exception.BpelException;
 
 public class FlowActivityHandler implements IStructuredActivity {
