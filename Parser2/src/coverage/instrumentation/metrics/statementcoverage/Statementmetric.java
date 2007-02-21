@@ -1,4 +1,4 @@
-package coverage.instrumentation.statementcoverage;
+package coverage.instrumentation.metrics.statementcoverage;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -11,10 +11,10 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 
-import coverage.instrumentation.IMetric;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
+import coverage.instrumentation.metrics.IMetric;
 
 /**
  * Klasse instrumentiert ein BPEL-Prozess um die Abdeckung der BasicActivities

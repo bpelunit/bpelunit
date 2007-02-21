@@ -1,4 +1,4 @@
-package coverage.instrumentation;
+package coverage.instrumentation.metrics;
 
 import org.jdom.Element;
 

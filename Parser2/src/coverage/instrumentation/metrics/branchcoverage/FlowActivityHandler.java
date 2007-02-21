@@ -1,4 +1,4 @@
-package coverage.instrumentation.branchcoverage;
+package coverage.instrumentation.metrics.branchcoverage;
 
 import java.util.ArrayList;
 import java.util.Iterator;

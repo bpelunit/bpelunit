@@ -1,15 +1,12 @@
-import java.beans.Statement;
 import java.io.File;
 import java.io.IOException;
 
 import org.jdom.JDOMException;
 
-import coverage.instrumentation.IMetric;
-import coverage.instrumentation.IMetricHandler;
-import coverage.instrumentation.MetricHandler;
 import coverage.instrumentation.exception.BpelException;
 import coverage.instrumentation.exception.BpelVersionException;
-import coverage.instrumentation.statementcoverage.Statementmetric;
+import coverage.instrumentation.metrics.IMetricHandler;
+import coverage.instrumentation.metrics.MetricHandler;
 
 
 

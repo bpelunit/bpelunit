@@ -1,4 +1,4 @@
-package coverage.instrumentation.branchcoverage;
+package coverage.instrumentation.metrics.branchcoverage;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -9,9 +9,9 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
-import coverage.instrumentation.IMetric;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.exception.BpelException;
+import coverage.instrumentation.metrics.IMetric;
 
 public class BranchMetric implements IMetric {
 

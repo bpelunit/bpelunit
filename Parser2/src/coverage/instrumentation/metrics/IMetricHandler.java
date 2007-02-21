@@ -1,14 +1,14 @@
-package coverage.instrumentation;
+package coverage.instrumentation.metrics;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.jdom.JDOMException;
 
-import coverage.instrumentation.branchcoverage.BranchMetric;
 import coverage.instrumentation.exception.BpelException;
 import coverage.instrumentation.exception.BpelVersionException;
-import coverage.instrumentation.statementcoverage.Statementmetric;
+import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
+import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
 
 /**
  * Dieses Interface wird von dem Handler implementiert, der dafür zuständig ist,
