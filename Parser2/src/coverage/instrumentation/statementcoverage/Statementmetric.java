@@ -12,7 +12,7 @@ import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 
 import coverage.instrumentation.IMetric;
-import coverage.instrumentation.bpelxmltools.ActivityTools;
+import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 
@@ -70,7 +70,7 @@ public class Statementmetric implements IMetric {
 	 */
 	public void insertMarker(Element element) {
 		BasicActivitiesFilter filter = new BasicActivitiesFilter(
-				ActivityTools.getBpelNamespace(), activities_to_respekt);
+				BpelXMLTools.getBpelNamespace(), activities_to_respekt);
 		for (Iterator iter = element.getDescendants(filter); iter.hasNext();) {
 			elements_to_log.add((Element) iter.next());
 		}
@@ -85,13 +85,13 @@ public class Statementmetric implements IMetric {
 			element = elements_to_log.get(i);
 			Element parent = element.getParentElement();
 			targetelement = element.getChild("targets",
-					ActivityTools.getBpelNamespace());
+					BpelXMLTools.getBpelNamespace());
 			if (targetelement != null) {
-				Element sequence = ActivityTools.encloseInSequence(element);
+				Element sequence = BpelXMLTools.encloseInSequence(element);
 				sequence.addContent(0, targetelement.detach());
 			} else if (!parent.getName().equals(
 					StructuredActivity.SEQUENCE_ACTIVITY)) {
-				ActivityTools.ensureElementIsInSequence(element);
+				BpelXMLTools.ensureElementIsInSequence(element);
 			}
 			insertMarkerForActivity(element);
 		}

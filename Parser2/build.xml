@@ -19,10 +19,34 @@
         <mkdir dir="jar"/>
     </target>
 
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: remove_classes                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="delete_classes" depends="init">
+    	  <delete>
+    	    <fileset dir="bin" includes="**/*.class"/>
+    	  </delete>
+    </target>
+	
+	<!-- ================================= 
+          target: compile             
+         ================================= -->
+    <target name="compile" depends="delete_classes" description="--> description">
+		<javac srcdir="src" destdir="${temp-class-dir}">
+			<classpath>
+				<fileset dir="lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>   
+    </target>
+
+
+	
     <!-- - - - - - - - - - - - - - - - - - 
           target: buildCoverageJar                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="buildCoverageJar" depends="init">
+    <target name="buildCoverageJar" depends="compile">
     	<jar destfile="jar/coverage.jar" basedir="bin/" excludes="**/Mainclass.class">
     	</jar>
     </target>

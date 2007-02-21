@@ -2,7 +2,7 @@ package coverage.instrumentation.branchcoverage;
 
 import org.jdom.Element;
 
-import coverage.instrumentation.bpelxmltools.ActivityTools;
+import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.exception.BpelException;
 
@@ -26,11 +26,11 @@ public class ForEachActivityHandler implements IStructuredActivity {
 	}
 
 	private void insertMarkerForSequenceBranches(Element element) throws BpelException {
-		Element activity=element.getChild(StructuredActivity.SCOPE_ACTIVITY, ActivityTools.getBpelNamespace());
+		Element activity=element.getChild(StructuredActivity.SCOPE_ACTIVITY, BpelXMLTools.getBpelNamespace());
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		activity = ActivityTools.getFirstActivityChild(activity);
+		activity = BpelXMLTools.getFirstActivityChild(activity);
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
@@ -40,7 +40,7 @@ public class ForEachActivityHandler implements IStructuredActivity {
 
 	private void insertMarkerForParallelBranches(Element element,
 			String counterVariable) throws BpelException {
-		Element activity = ActivityTools.getFirstActivityChild(element);
+		Element activity = BpelXMLTools.getFirstActivityChild(element);
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}

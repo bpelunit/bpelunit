@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import coverage.instrumentation.bpelxmltools.ActivityTools;
+import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.exception.BpelException;
 
 /**
@@ -21,19 +21,19 @@ public class IfActivityHandler implements IStructuredActivity {
 
 	public void insertMarkerForBranchCoverage(Element element)
 			throws BpelException {
-		insertMarkerForIfBranch(ActivityTools.getFirstActivityChild(element));
+		insertMarkerForIfBranch(BpelXMLTools.getFirstActivityChild(element));
 		List elseif_branches = element.getChildren(ELSE_IF_ELEMENT,
-				ActivityTools.getBpelNamespace());
+				BpelXMLTools.getBpelNamespace());
 		for (int i = 0; i < elseif_branches.size(); i++) {
-			insertMarkerForElseIfBranches(ActivityTools
+			insertMarkerForElseIfBranches(BpelXMLTools
 					.getFirstActivityChild((Element) elseif_branches.get(i)));
 		}
 		Element else_el = element.getChild(ELSE_ELEMENT,
-				ActivityTools.getBpelNamespace());
+				BpelXMLTools.getBpelNamespace());
 		if (else_el == null) {
-			else_el = ActivityTools.insertElseBranch(element);
+			else_el = BpelXMLTools.insertElseBranch(element);
 		}
-		insertMarkerForElseBranch(ActivityTools.getFirstActivityChild(else_el));
+		insertMarkerForElseBranch(BpelXMLTools.getFirstActivityChild(else_el));
 	}
 
 	/**

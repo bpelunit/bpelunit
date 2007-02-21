@@ -10,7 +10,7 @@ import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
 import coverage.instrumentation.IMetric;
-import coverage.instrumentation.bpelxmltools.ActivityTools;
+import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.exception.BpelException;
 
 public class BranchMetric implements IMetric {
@@ -48,8 +48,8 @@ public class BranchMetric implements IMetric {
 
 	public static void insertMarkerBevorAllActivities(Element activity,
 			String additionalInfo) {
-		if (!ActivityTools.isSequence(activity)) {
-			activity = ActivityTools.ensureElementIsInSequence(activity);
+		if (!BpelXMLTools.isSequence(activity)) {
+			activity = BpelXMLTools.ensureElementIsInSequence(activity);
 		}
 		activity.addContent(0, new Comment(BranchMetric.getNextLabel()
 				+ additionalInfo));
@@ -57,8 +57,8 @@ public class BranchMetric implements IMetric {
 
 	public static void insertMarkerAfterAllActivities(Element activity,
 			String additionalInfo) {
-		if (!ActivityTools.isSequence(activity)) {
-			activity = ActivityTools.ensureElementIsInSequence(activity);
+		if (!BpelXMLTools.isSequence(activity)) {
+			activity = BpelXMLTools.ensureElementIsInSequence(activity);
 		}
 		activity.addContent(new Comment(BranchMetric.getNextLabel()
 				+ additionalInfo));
@@ -98,7 +98,7 @@ public class BranchMetric implements IMetric {
 		Iterator iterator2 = element.getDescendants(new ElementFilter());
 		while (iterator2.hasNext()) {
 			next_element = (Element) iterator2.next();
-			if (ActivityTools.isStructuredActivity(next_element)) {
+			if (BpelXMLTools.isStructuredActivity(next_element)) {
 				elements_to_log.add(next_element);
 			}
 		}

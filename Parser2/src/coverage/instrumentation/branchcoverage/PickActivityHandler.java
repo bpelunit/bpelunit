@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import coverage.instrumentation.bpelxmltools.ActivityTools;
+import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.exception.BpelException;
 
 public class PickActivityHandler implements IStructuredActivity {
@@ -20,11 +20,11 @@ public class PickActivityHandler implements IStructuredActivity {
 
 	private void identifyBranches(Element element, String name) throws BpelException {
 		List children = element.getChildren(name,
-				ActivityTools.getBpelNamespace());
+				BpelXMLTools.getBpelNamespace());
 		Element child;
 		for (int i = 0; i < children.size(); i++) {
 			child = (Element) children.get(i);
-			child = ActivityTools.getFirstActivityChild(child);
+			child = BpelXMLTools.getFirstActivityChild(child);
 			if (child == null) {
 				throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 			}

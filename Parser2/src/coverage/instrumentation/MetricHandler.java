@@ -24,7 +24,7 @@ import org.jdom.output.XMLOutputter;
 
 import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
-import coverage.instrumentation.bpelxmltools.ActivityTools;
+import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.branchcoverage.BranchMetric;
 import coverage.instrumentation.exception.BpelException;
 import coverage.instrumentation.exception.BpelVersionException;
@@ -52,6 +52,7 @@ public class MetricHandler implements IMetricHandler {
 		if (instance == null) {
 			instance = new MetricHandler();
 		}
+		System.out.println("!!!!!!!!!!!!!!!!HAT GEKLAPPT!!!!!!!!!!!!!");
 		return instance;
 	}
 
@@ -100,14 +101,14 @@ public class MetricHandler implements IMetricHandler {
 		Document doc = builder.build(file);
 		process_element = doc.getRootElement();
 		if (!process_element.getName().equalsIgnoreCase(
-				ActivityTools.PROCESS_ELEMENT)) {
+				BpelXMLTools.PROCESS_ELEMENT)) {
 			throw (new BpelException(BpelException.NO_VALIDE_BPEL));
 		}
 		if (!process_element.getNamespace().equals(
 				NAMESPACE_BPEL_2)) {
 			throw (new BpelVersionException(BpelVersionException.WRONG_VERSION));
 		}
-		ActivityTools.process_element=process_element;
+		BpelXMLTools.process_element=process_element;
 		IMetric metric;
 		for (Enumeration<IMetric> i = metrics.elements(); i.hasMoreElements();) {
 			metric = i.nextElement();

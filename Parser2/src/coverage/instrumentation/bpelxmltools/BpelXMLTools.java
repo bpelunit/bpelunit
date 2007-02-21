@@ -12,7 +12,7 @@ import org.jdom.Namespace;
  * 
  * @author Alex Salnikow
  */
-public class ActivityTools {
+public class BpelXMLTools {
 	
 	public static  Element process_element=null;
 	
@@ -272,15 +272,15 @@ public class ActivityTools {
 	 */
 	public static Element insertElseBranch(Element element) {
 		Element elseElement = new Element(ELSE_ELEMENT,
-				ActivityTools.getBpelNamespace());
-		elseElement.addContent(ActivityTools.createSequence());
+				BpelXMLTools.getBpelNamespace());
+		elseElement.addContent(BpelXMLTools.createSequence());
 		element.addContent(elseElement);
 		return elseElement;
 	}
 	public static Element createIfActivity(String conditionContent) {
 		Element if_element= new Element(IF_TAG, getBpelNamespace());
 		Element condition = new Element(CONDITION_TAG,
-				ActivityTools.getBpelNamespace());
+				BpelXMLTools.getBpelNamespace());
 		condition.setText(conditionContent);
 		if_element.addContent(condition);
 		return null;
