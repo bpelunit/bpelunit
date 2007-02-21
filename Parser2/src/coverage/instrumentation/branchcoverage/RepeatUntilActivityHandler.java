@@ -1,29 +1,30 @@
 package coverage.instrumentation.branchcoverage;
 
-import org.jdom.Comment;
 import org.jdom.Element;
 
-import coverage.instrumentation.activitytools.ActivityTools;
-import coverage.instrumentation.activitytools.StructuredActivity;
+import coverage.instrumentation.bpelxmltools.ActivityTools;
+import coverage.instrumentation.exception.BpelException;
 
 public class RepeatUntilActivityHandler implements IStructuredActivity {
-	
 
-	
-	private static final String IF_TAG="if";
-	private static final String CONDITION_TAG="condition";
 
-	public void insertMarkerForBranchCoverage(Element element) {
+	public void insertMarkerForBranchCoverage(Element element)
+			throws BpelException {
 		branchFromConditionToActivity(element);
 		branchFromActivityToCondition(element);
 	}
 
-	private void branchFromActivityToCondition(Element element) {
-		Element activity=ActivityTools.getFirstActivityChild(element);
+	private void branchFromActivityToCondition(Element element)
+			throws BpelException {
+		Element activity = ActivityTools.getFirstActivityChild(element);
+		if (element == null) {
+			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 		BranchMetric.insertMarkerAfterAllActivities(activity, "");
 	}
 
-	private void branchFromConditionToActivity(Element element) {
+	private void branchFromConditionToActivity(Element element)
+			throws BpelException {
 		Element countVariable = ActivityTools.createVariable(element
 				.getDocument());
 		ActivityTools.insertVariable(countVariable, element.getDocument()
@@ -31,31 +32,40 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 		Element initializeAssign = ActivityTools
 				.createInitializeAssign(countVariable);
 		insert(initializeAssign, element);
-		Element increesAssign = ActivityTools.createIncreesAssign(countVariable);
+		Element increesAssign = ActivityTools
+				.createIncreesAssign(countVariable);
 		insertIncreesAssign(increesAssign, element);
-		insertIfConstruct(element,countVariable);
+		insertIfConstruct(element, countVariable);
 	}
 
-	private void insertIfConstruct(Element element,Element countVariable) {
-		Element sequence=ActivityTools.getFirstActivityChild(element);
-		if(sequence!=null){
-			Element if_element=new Element(IF_TAG,element.getNamespace());
-			Element condition=new Element(CONDITION_TAG,ActivityTools.NAMESPACE_BPEL_2);
-			Element sequence2=new Element(StructuredActivity.SEQUENCE_ACTIVITY,element.getNamespace());
-			condition.setText("$"+countVariable.getName()+"=1");
-			if_element.addContent(condition);
-			if_element.addContent(sequence2);
-			sequence.addContent(0,if_element);
-			BranchMetric.insertMarkerBevorAllActivities(sequence2, "");
+	private void insertIfConstruct(Element element, Element countVariable) throws BpelException {
+		Element activity = ActivityTools.getFirstActivityChild(element);
+		if (activity == null) {
+			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		
+		if (!ActivityTools.isSequence(activity)) {
+			activity = ActivityTools.ensureElementIsInSequence(activity);
+		}
+		Element if_element=ActivityTools.createIfActivity("$" + countVariable.getName() + "=1");
+
+		Element sequence = ActivityTools.createSequence();
+		if_element.addContent(sequence);
+		activity.addContent(0, if_element);
+		BranchMetric.insertMarkerBevorAllActivities(sequence, "");
+
 	}
 
-	private void insertIncreesAssign(Element increesAssign, Element element) {
-		Element sequence=ActivityTools.getFirstActivityChild(element);
-		if(sequence!=null){
-			sequence.addContent(increesAssign);
+	private void insertIncreesAssign(Element increesAssign, Element element)
+			throws BpelException {
+		Element activity = ActivityTools.getFirstActivityChild(element);
+		if (activity == null) {
+			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
+		if (!ActivityTools.isSequence(activity)) {
+			activity = ActivityTools.ensureElementIsInSequence(activity);
+		}
+		activity.addContent(increesAssign);
+
 	}
 
 	private void insert(Element initializeAssign, Element element) {

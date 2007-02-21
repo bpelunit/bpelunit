@@ -2,7 +2,9 @@ package coverage.instrumentation.branchcoverage;
 
 import org.jdom.Element;
 
-import coverage.instrumentation.activitytools.ActivityTools;
+import coverage.instrumentation.bpelxmltools.ActivityTools;
+import coverage.instrumentation.bpelxmltools.StructuredActivity;
+import coverage.instrumentation.exception.BpelException;
 
 public class ForEachActivityHandler implements IStructuredActivity {
 
@@ -12,29 +14,36 @@ public class ForEachActivityHandler implements IStructuredActivity {
 
 	private static final String ATTRIBUTE_COUNTERNAME = "counterName";
 
-	public void insertMarkerForBranchCoverage(Element element) {
+	public void insertMarkerForBranchCoverage(Element element) throws BpelException {
 		boolean parallel = element.getAttributeValue(ATTRIBUTE_PARALLEL)
 				.equals(PARALLEL_VALUE_YES);
-		String counterVariable = element
-				.getAttributeValue(ATTRIBUTE_COUNTERNAME);
-
 		if (parallel) {
-			insertMarkerForParallelBranches(element, counterVariable);
+			insertMarkerForParallelBranches(element,element
+					.getAttributeValue(ATTRIBUTE_COUNTERNAME));
 		} else {
 			insertMarkerForSequenceBranches(element);
 		}
 	}
 
-	private void insertMarkerForSequenceBranches(Element element) {
-		Element activity = ActivityTools.getFirstActivityChild(element);
-		BranchMetric.insertMarkerForBranch(activity,"");
+	private void insertMarkerForSequenceBranches(Element element) throws BpelException {
+		Element activity=element.getChild(StructuredActivity.SCOPE_ACTIVITY, ActivityTools.getBpelNamespace());
+		if (activity == null) {
+			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
+		activity = ActivityTools.getFirstActivityChild(activity);
+		if (activity == null) {
+			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
+		BranchMetric.insertMarkerForBranch(activity, "");
 
 	}
 
 	private void insertMarkerForParallelBranches(Element element,
-			String counterVariable) {
-
+			String counterVariable) throws BpelException {
 		Element activity = ActivityTools.getFirstActivityChild(element);
+		if (activity == null) {
+			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 		BranchMetric.insertMarkerForBranch(activity, counterVariable);
 	}
 

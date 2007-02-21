@@ -2,18 +2,26 @@ package coverage.instrumentation.branchcoverage;
 
 import java.util.List;
 
-import org.jdom.Comment;
-import org.jdom.Content;
 import org.jdom.Element;
 
-import coverage.instrumentation.activitytools.ActivityTools;
-import coverage.instrumentation.activitytools.BasisActivity;
-import coverage.instrumentation.activitytools.StructuredActivity;
+import coverage.instrumentation.bpelxmltools.ActivityTools;
 
+/**
+ * Die Klasse ist für das Einfügen der Markierungen in der Sequence-Aktivität
+ * verantwortlich, die für die Messung der Zweigabdeckung verwendet werden.
+ * 
+ * @author Alex Salnikow
+ */
 public class SequenceActivityHandler implements IStructuredActivity {
 
-	public void insertMarkerForBranchCoverage(Element element) {
-		List children = element.getChildren();
+	/**
+	 * Fügt Markierungen in Sequence-Elemente ein, die später, um die Ausführung
+	 * der Zweige zu erfassen, durch Invoke-Aufrufe protokolliert werden.
+	 * 
+	 * @param sequence
+	 */
+	public void insertMarkerForBranchCoverage(Element sequence) {
+		List children = sequence.getChildren();
 		Element child;
 		Element previousActivity = null;
 		for (int i = 0; i < children.size(); i++) {

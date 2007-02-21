@@ -5,8 +5,10 @@ import java.io.IOException;
 
 import org.jdom.JDOMException;
 
+import coverage.instrumentation.branchcoverage.BranchMetric;
 import coverage.instrumentation.exception.BpelException;
 import coverage.instrumentation.exception.BpelVersionException;
+import coverage.instrumentation.statementcoverage.Statementmetric;
 
 /**
  * Dieses Interface wird von dem Handler implementiert, der dafür zuständig ist,
@@ -17,19 +19,24 @@ import coverage.instrumentation.exception.BpelVersionException;
  * 
  */
 public interface IMetricHandler {
+
+	public static final String STATEMENT_METRIC = Statementmetric.METRIC_NAME;
+
+	public static final String BRANCH_METRIC = BranchMetric.METRIC_NAME;
+
 	/**
 	 * Die übergebene Metrik wird bei der Ausführung der BPEL erhoben:
 	 * 
-	 * @param metric
+	 * @param metricName
 	 */
-	public void addMetric(IMetric metric);
+	public IMetric addMetric(String metricName);
 
 	/**
 	 * Die Metrik wird bei der Ausführung der BPEL nicht erhoben.
 	 * 
-	 * @param metric
+	 * @param metricName
 	 */
-	public void remove(IMetric metric);
+	public void remove(String metricName);
 
 	/**
 	 * Startet die Instrumentierung der BPEL-Datei.
@@ -40,7 +47,14 @@ public interface IMetricHandler {
 	 * @throws BpelException
 	 * @throws BpelVersionException
 	 */
-	public void startInstrumentation(File file) throws JDOMException,
+	public File startInstrumentation(File file) throws JDOMException,
 			IOException, BpelException, BpelVersionException;
+
+	/**
+	 * 
+	 * @param metricName
+	 * @return Metrik
+	 */
+	public IMetric getMetric(String metricName);
 
 }

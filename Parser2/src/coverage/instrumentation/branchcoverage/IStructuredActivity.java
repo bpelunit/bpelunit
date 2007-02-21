@@ -2,7 +2,18 @@ package coverage.instrumentation.branchcoverage;
 
 import org.jdom.Element;
 
-public interface IStructuredActivity {
+import coverage.instrumentation.exception.BpelException;
 
-	public void insertMarkerForBranchCoverage(Element element);
+/**
+ * @author Alex Salnikow
+ */
+public interface IStructuredActivity {
+	/**
+	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
+	 * um die Ausführung der Zweige zu erfassen.
+	 * 
+	 * @param structured_activity
+	 * @throws BpelException 
+	 */
+	public void insertMarkerForBranchCoverage(Element structured_activity) throws BpelException;
 }

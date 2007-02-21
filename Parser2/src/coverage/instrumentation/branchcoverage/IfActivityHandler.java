@@ -4,59 +4,87 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import coverage.instrumentation.activitytools.ActivityTools;
+import coverage.instrumentation.bpelxmltools.ActivityTools;
+import coverage.instrumentation.exception.BpelException;
 
+/**
+ * Die Klasse ist für das Einfügen der Markierungen in der If-Aktivität
+ * verantwortlich, die für die Messung der Zweigabdeckung verwendet werden.
+ * 
+ * @author Alex Salnikow
+ */
 public class IfActivityHandler implements IStructuredActivity {
 
 	private static final String ELSE_ELEMENT = "else";
 
 	private static final String ELSE_IF_ELEMENT = "elseif";
 
-	public void insertMarkerForBranchCoverage(Element element) {
-		if (element.getChild(ELSE_ELEMENT,ActivityTools.NAMESPACE_BPEL_2) == null) {
-			insertElseBranch(element);
-		}
-		insertMarkerForIfBranch(element);
-		insertMarkerForELSEIFBranches(element);
-		insertMarkerForElseBranch(element);
-	}
-
-	private void insertMarkerForElseBranch(Element element) {
-		Element branch_activity;
-		Element else_el=element.getChild(ELSE_ELEMENT,ActivityTools.NAMESPACE_BPEL_2);
-		branch_activity = ActivityTools.getFirstActivityChild(else_el);
-		if (branch_activity == null) {
-			branch_activity =ActivityTools.createSequence();
-			element.addContent(branch_activity);
-		}
-		BranchMetric.insertMarkerForBranch(branch_activity,"");
-
-	}
-
-	private void insertMarkerForELSEIFBranches(Element element) {
-		Element branch_activity;
-		List elseif_branches = element.getChildren(ELSE_IF_ELEMENT,ActivityTools.NAMESPACE_BPEL_2);
+	public void insertMarkerForBranchCoverage(Element element)
+			throws BpelException {
+		insertMarkerForIfBranch(ActivityTools.getFirstActivityChild(element));
+		List elseif_branches = element.getChildren(ELSE_IF_ELEMENT,
+				ActivityTools.getBpelNamespace());
 		for (int i = 0; i < elseif_branches.size(); i++) {
-			branch_activity = ActivityTools
-					.getFirstActivityChild((Element) elseif_branches.get(i));
-			if (branch_activity != null) {
-				BranchMetric.insertMarkerForBranch(ActivityTools
-						.ensureElementIsInSequence(branch_activity),"");
-			}
+			insertMarkerForElseIfBranches(ActivityTools
+					.getFirstActivityChild((Element) elseif_branches.get(i)));
 		}
+		Element else_el = element.getChild(ELSE_ELEMENT,
+				ActivityTools.getBpelNamespace());
+		if (else_el == null) {
+			else_el = ActivityTools.insertElseBranch(element);
+		}
+		insertMarkerForElseBranch(ActivityTools.getFirstActivityChild(else_el));
 	}
 
-	private void insertMarkerForIfBranch(Element element) {
-		Element branch_activity = ActivityTools.getFirstActivityChild(element);
-		if (branch_activity != null) {
-			BranchMetric.insertMarkerForBranch(ActivityTools
-					.ensureElementIsInSequence(branch_activity),"");
+	/**
+	 * 
+	 * @param branch_activity
+	 *            Aktivität aus dem Else-Zweig.
+	 * @throws BpelException
+	 *             Wenn keine Aktivität in dem Zweig vorhanden ist.
+	 */
+	private void insertMarkerForElseBranch(Element branch_activity)
+			throws BpelException {
+		if (branch_activity == null) {
+			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
+		BranchMetric.insertMarkerBevorAllActivities(branch_activity,
+				"!!!!!ELSE!!!!!");
+
 	}
 
-	private void insertElseBranch(Element element) {
-		Element elseElement = new Element(ELSE_ELEMENT,ActivityTools.NAMESPACE_BPEL_2);
-		element.addContent(element.getContentSize(), elseElement);
+	/**
+	 * 
+	 * @param branch_activity
+	 *            Aktivität aus dem ElseIf-Zweig.
+	 * @throws BpelException
+	 *             Wenn keine Aktivität in dem Zweig vorhanden ist.
+	 */
+	private void insertMarkerForElseIfBranches(Element branch_activity)
+			throws BpelException {
+		if (branch_activity == null) {
+			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
+		BranchMetric.insertMarkerBevorAllActivities(branch_activity, "");
+
 	}
+
+	/**
+	 * 
+	 * @param branch_activity
+	 *            Aktivität aus dem If-Zweig.
+	 * @throws BpelException
+	 *             Wenn keine Aktivität in dem Zweig vorhanden ist.
+	 */
+	private void insertMarkerForIfBranch(Element branch_activity)
+			throws BpelException {
+		if (branch_activity == null) {
+			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
+		BranchMetric.insertMarkerBevorAllActivities(branch_activity,
+				"!!!!!IFZweig");
+
+	}
+
 
 }

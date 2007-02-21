@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     20.02.2007 13:53:06                                                        
+
+     project    
+     description
+                   
+     Alex                                                                
+     ====================================================================== -->
+<project name="coverage" default="buildCoverageJar" >
+    <description>
+            description
+    </description>
+
+    <!-- ================================= 
+          target:               
+         ================================= -->
+    <target name="init"   description="--> description">
+        <mkdir dir="jar"/>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: buildCoverageJar                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="buildCoverageJar" depends="init">
+    	<jar destfile="jar/coverage.jar" basedir="bin/" excludes="**/Mainclass.class">
+    	</jar>
+    </target>
+
+</project>

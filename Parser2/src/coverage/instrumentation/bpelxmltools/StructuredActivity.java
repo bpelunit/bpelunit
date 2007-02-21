@@ -1,4 +1,4 @@
-package coverage.instrumentation.activitytools;
+package coverage.instrumentation.bpelxmltools;
 
 import java.util.Hashtable;
 

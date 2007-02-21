@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(tm) Designer Version 3.0.0 (http://www.active-endpoints.com)
+-->
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TestBpel2" suppressJoinFailure="yes" targetNamespace="http://TestBpel2">
+   <bpel:if>
+      <bpel:sequence>
+         <bpel:empty/>
+      </bpel:sequence>
+      <bpel:elseif>
+         <bpel:condition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">5=5</bpel:condition>
+         <bpel:sequence>
+            <bpel:empty/>
+         </bpel:sequence>
+      </bpel:elseif>
+      <bpel:elseif>
+         <bpel:condition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">5=5</bpel:condition>
+         <bpel:flow>
+            <bpel:empty/>
+         </bpel:flow>
+      </bpel:elseif>
+      <bpel:else>
+         <bpel:sequence>
+            <bpel:empty/>
+         </bpel:sequence>
+      </bpel:else>
+   </bpel:if>
+</bpel:process>

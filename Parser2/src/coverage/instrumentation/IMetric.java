@@ -2,6 +2,8 @@ package coverage.instrumentation;
 
 import org.jdom.Element;
 
+import coverage.instrumentation.exception.BpelException;
+
 /**
  * Dieses Interface wird von den Metriken implementiert.
  * 
@@ -17,6 +19,8 @@ public interface IMetric {
 	 * bestimmter Aktivitäten geloggt.
 	 * 
 	 * @param process_element
+	 * @throws BpelException 
 	 */
-	public void insertMarker(Element process_element);
+	public void insertMarker(Element process_element) throws BpelException;
+
 }

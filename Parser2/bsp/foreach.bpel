@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(tm) Designer Version 3.0.0 (http://www.active-endpoints.com)
+-->
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="foreach" suppressJoinFailure="yes" targetNamespace="http://foreach">
+   <bpel:forEach counterName="counter" parallel="no">
+      <bpel:startCounterValue/>
+      <bpel:finalCounterValue/>
+      <bpel:scope>
+         <bpel:empty/>
+      </bpel:scope>
+   </bpel:forEach>
+</bpel:process>

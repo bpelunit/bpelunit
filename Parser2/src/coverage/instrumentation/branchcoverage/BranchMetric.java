@@ -10,10 +10,12 @@ import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
 import coverage.instrumentation.IMetric;
-import coverage.instrumentation.activitytools.ActivityTools;
-import coverage.instrumentation.activitytools.StructuredActivity;
+import coverage.instrumentation.bpelxmltools.ActivityTools;
+import coverage.instrumentation.exception.BpelException;
 
 public class BranchMetric implements IMetric {
+
+	public static final String METRIC_NAME = "Branchmetric";
 
 	private static final String BRANCH_LABEL = "branch";
 
@@ -21,12 +23,21 @@ public class BranchMetric implements IMetric {
 
 	private static int count = 0;
 
+	private static BranchMetric instance = null;
+
 	public static String getNextLabel() {
 		return BRANCH_LABEL + (count++);
 	}
 
 	public static String getNextLinkLabel() {
 		return LINK_LABEL + getNextLabel();
+	}
+
+	public static BranchMetric getInstance() {
+		if (instance == null) {
+			instance = new BranchMetric();
+		}
+		return instance;
 	}
 
 	public static void insertMarkerForBranch(Element activity,
@@ -37,32 +48,38 @@ public class BranchMetric implements IMetric {
 
 	public static void insertMarkerBevorAllActivities(Element activity,
 			String additionalInfo) {
-		activity = ActivityTools.ensureElementIsInSequence(activity);
+		if (!ActivityTools.isSequence(activity)) {
+			activity = ActivityTools.ensureElementIsInSequence(activity);
+		}
 		activity.addContent(0, new Comment(BranchMetric.getNextLabel()
 				+ additionalInfo));
 	}
 
 	public static void insertMarkerAfterAllActivities(Element activity,
 			String additionalInfo) {
-		activity = ActivityTools.ensureElementIsInSequence(activity);
+		if (!ActivityTools.isSequence(activity)) {
+			activity = ActivityTools.ensureElementIsInSequence(activity);
+		}
 		activity.addContent(new Comment(BranchMetric.getNextLabel()
 				+ additionalInfo));
 	}
 
 	/**
 	 * 
-	 * @param activity muss innerhalb Sequence sein
+	 * @param activity
+	 *            muss innerhalb Sequence sein
 	 */
 	public static void insertMarkerAfterActivity(Element activity) {
-		Element parent=activity.getParentElement();
-		parent.addContent(parent.indexOf(activity)+1, new Comment(getNextLabel()));
+		Element parent = activity.getParentElement();
+		parent.addContent(parent.indexOf(activity) + 1, new Comment(
+				getNextLabel()));
 	}
 
 	private Hashtable<String, IStructuredActivity> structured_activity_handler = new Hashtable<String, IStructuredActivity>();
 
 	private List<Element> elements_to_log;
 
-	public BranchMetric() {
+	private BranchMetric() {
 		elements_to_log = new ArrayList<Element>();
 		structured_activity_handler.put("flow", new FlowActivityHandler());
 		structured_activity_handler.put("sequence",
@@ -76,7 +93,7 @@ public class BranchMetric implements IMetric {
 		structured_activity_handler.put("pick", new PickActivityHandler());
 	}
 
-	public void insertMarker(Element element) {
+	public void insertMarker(Element element) throws BpelException {
 		Element next_element;
 		Iterator iterator2 = element.getDescendants(new ElementFilter());
 		while (iterator2.hasNext()) {
@@ -94,7 +111,11 @@ public class BranchMetric implements IMetric {
 						.insertMarkerForBranchCoverage(next_element);
 			}
 		}
+	}
 
+	@Override
+	public String toString() {
+		return METRIC_NAME;
 	}
 
 }

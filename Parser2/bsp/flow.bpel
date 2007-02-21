@@ -1,0 +1,20 @@
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TestBpel2" suppressJoinFailure="yes" targetNamespace="http://TestBpel2">
+   <bpel:variables>
+      <bpel:variable name="V1"/>
+   </bpel:variables>
+   <bpel:flow>
+      <bpel:links>
+         <bpel:link name="L1"/>
+      </bpel:links>
+      <bpel:empty name="Source">
+         <bpel:sources>
+            <bpel:source linkName="L1"/>
+         </bpel:sources>
+      </bpel:empty>
+      <bpel:empty>
+         <bpel:targets>
+            <bpel:target linkName="L1"/>
+         </bpel:targets>
+      </bpel:empty>
+   </bpel:flow>
+</bpel:process>
