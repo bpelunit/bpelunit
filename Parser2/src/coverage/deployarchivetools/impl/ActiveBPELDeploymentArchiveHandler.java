@@ -3,6 +3,7 @@ package coverage.deployarchivetools.impl;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -15,9 +16,9 @@ import org.jdom.output.XMLOutputter;
 import coverage.deployarchivetools.IDeploymentArchiveHandler;
 
 import de.schlichtherle.io.ArchiveException;
-import de.schlichtherle.io.DefaultArchiveDetector;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
+import de.schlichtherle.io.FileOutputStream;
 import de.schlichtherle.io.FileWriter;
 import exception.ArchiveFileException;
 
@@ -55,6 +56,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	public void addWSDLFile(java.io.File wsdlFile) throws ArchiveFileException {
 		FileInputStream is = null;
 		FileWriter writer = null;
+		OutputStream out=null;
 		try {
 			File file = getWSDLCatalog();
 			is = new FileInputStream(file);
@@ -63,8 +65,6 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			Element wsdlCatalog = doc.getRootElement();
 			Element wsdlEntry = new Element("wsdlEntry", wsdlCatalog
 					.getNamespace());
-			// location="wsdl/_LogService_.wsdl"
-			// classpath="wsdl/_LogService_.wsdl"
 			wsdlEntry.setAttribute("location", "wsdl/_LogService_.wsdl");
 			wsdlEntry.setAttribute("classpath", "wsdl/_LogService_.wsdl");
 			wsdlCatalog.addContent(wsdlEntry);
@@ -72,7 +72,11 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			XMLOutputter xmlOutputter = new XMLOutputter(Format
 					.getPrettyFormat());
 			xmlOutputter.output(doc, writer);
+			out = new FileOutputStream(archiveFile.getName()+"/wsdl/"+wsdlFile.getName());
+			System.out.println(wsdlFile);
+			out.write(FileUtils.readFileToByteArray(wsdlFile));
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ArchiveFileException("", e);
 		} finally {
 			if (is != null) {
@@ -86,6 +90,14 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			if (writer != null) {
 				try {
 					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(out!=null){
+				try {
+					out.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -107,6 +119,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	}
 
 	public java.io.File getArchiveFile() {
+		archiveFile.renameTo(new File(FilenameUtils.getBaseName(archiveFile.getName())+".jar"));
 		return archiveFile;
 	}
 

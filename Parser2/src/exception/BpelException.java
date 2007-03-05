@@ -10,6 +10,10 @@ public class BpelException extends Exception {
 
 	public static final String MISSING_REQUIRED_ACTIVITY = "Missing required activity";
 
+	public BpelException(String message, Throwable e) {
+		super(message,e);
+	}
+	
 	public BpelException(String message) {
 		super(message);
 	}

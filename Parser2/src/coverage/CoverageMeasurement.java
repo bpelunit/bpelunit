@@ -12,6 +12,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 import coverage.deployarchivetools.IDeploymentArchiveHandler;
 import coverage.deployarchivetools.impl.ActiveBPELDeploymentArchiveHandler;
@@ -20,6 +22,7 @@ import coverage.instrumentation.metrics.IMetricHandler;
 import coverage.instrumentation.metrics.MetricHandler;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
 import de.schlichtherle.io.FileInputStream;
+import de.schlichtherle.io.FileWriter;
 import exception.ArchiveFileException;
 import exception.BpelException;
 import exception.BpelVersionException;
@@ -67,14 +70,14 @@ public class CoverageMeasurement {
 			ArchiveFileException, JDOMException {
 		// TODO configuration einlesen
 		archiveHandler.addWSDLFile(new File(
-				"C:/bpelunit/conf/LoggingService.wsdl"));
+				"C:/bpelunit/conf/_LogService_.wsdl"));
 		prepareDeploymentDescriptor(archiveHandler);
 	}
 
 	private static void prepareDeploymentDescriptor(
 			IDeploymentArchiveHandler archiveHandler)
 			throws ArchiveFileException {
-		File descriptor;
+		de.schlichtherle.io.File descriptor;
 		FileInputStream is = null;
 		try {
 			descriptor = archiveHandler.getDeploymentDescriptor();
@@ -84,6 +87,10 @@ public class CoverageMeasurement {
 			Element process = doc.getRootElement();
 			addPartnerLink(process);
 			addWSDLEntry(process);
+			FileWriter writer = new FileWriter(descriptor);
+			XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+			xmlOutputter.output(doc, writer);
+			writer.close();
 		} catch (ArchiveFileException e) {
 			throw e;
 		} catch (Exception e) {
@@ -152,6 +159,8 @@ public class CoverageMeasurement {
 		Element partnerLinks = process.getChild("partnerLinks", process
 				.getNamespace());
 		partnerLinks.addContent(partnerLink);
+		
+		
 	}
 
 }
