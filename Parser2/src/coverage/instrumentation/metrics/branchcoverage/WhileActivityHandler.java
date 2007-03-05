@@ -3,7 +3,7 @@ package coverage.instrumentation.metrics.branchcoverage;
 import org.jdom.Element;
 
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
-import coverage.instrumentation.exception.BpelException;
+import exception.BpelException;
 
 public class WhileActivityHandler implements IStructuredActivity {
 

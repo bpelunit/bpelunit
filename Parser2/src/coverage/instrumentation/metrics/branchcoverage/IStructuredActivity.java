@@ -2,7 +2,7 @@ package coverage.instrumentation.metrics.branchcoverage;
 
 import org.jdom.Element;
 
-import coverage.instrumentation.exception.BpelException;
+import exception.BpelException;
 
 /**
  * @author Alex Salnikow

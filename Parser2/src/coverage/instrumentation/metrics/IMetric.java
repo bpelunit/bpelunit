@@ -2,7 +2,7 @@ package coverage.instrumentation.metrics;
 
 import org.jdom.Element;
 
-import coverage.instrumentation.exception.BpelException;
+import exception.BpelException;
 
 /**
  * Dieses Interface wird von den Metriken implementiert.

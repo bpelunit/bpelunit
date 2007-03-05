@@ -69,8 +69,8 @@ public class Statementmetric implements IMetric {
 	 * @param process_element
 	 */
 	public void insertMarker(Element element) {
-		BasicActivitiesFilter filter = new BasicActivitiesFilter(
-				BpelXMLTools.getBpelNamespace(), activities_to_respekt);
+		BasicActivitiesFilter filter = new BasicActivitiesFilter(BpelXMLTools
+				.getBpelNamespace(), activities_to_respekt);
 		for (Iterator iter = element.getDescendants(filter); iter.hasNext();) {
 			elements_to_log.add((Element) iter.next());
 		}
@@ -84,8 +84,8 @@ public class Statementmetric implements IMetric {
 		for (int i = 0; i < elements_to_log.size(); i++) {
 			element = elements_to_log.get(i);
 			Element parent = element.getParentElement();
-			targetelement = element.getChild("targets",
-					BpelXMLTools.getBpelNamespace());
+			targetelement = element.getChild("targets", BpelXMLTools
+					.getBpelNamespace());
 			if (targetelement != null) {
 				Element sequence = BpelXMLTools.encloseInSequence(element);
 				sequence.addContent(0, targetelement.detach());
@@ -101,11 +101,37 @@ public class Statementmetric implements IMetric {
 		Element parent = element.getParentElement();
 		String element_name = element.getName();
 		Comment mark = new Comment(element_name + (count++));
+
+
+		Element from = new Element("from", BpelXMLTools.getBpelNamespace());
+		Element literal = new Element("literal", BpelXMLTools
+				.getBpelNamespace());
+		literal.setText("hallo");
+
+		Element to = new Element("to", BpelXMLTools.getBpelNamespace());
+		to.setAttribute("part", "logEntry");
+		to.setAttribute("variable", "logRequest");
+		Element assign = BpelXMLTools.createAssign(from, to);
+
+		Element invoke = new Element(BasisActivity.INVOKE_ACTIVITY,
+				BpelXMLTools.getBpelNamespace());
+		Element variable = BpelXMLTools.createVariable(element.getDocument());
+		BpelXMLTools.insertVariable(variable, element.getDocument()
+				.getRootElement());
+		invoke.setAttribute("inputVariable", "logRequest");
+		invoke.setAttribute("operation", "log");
+		invoke.setAttribute("partnerLink", "PLT_LogService_");
+		invoke.setAttribute("portType", "log:_LogService_");
+
 		int index = parent.indexOf(element);
 		if (logging_before_activity.contains(element_name)) {
 			parent.addContent(index, mark);
+			parent.addContent(index, invoke);
+			parent.addContent(index, assign);
 		} else {
 			parent.addContent(index + 1, mark);
+			parent.addContent(index + 1, invoke);
+			parent.addContent(index + 1, assign);
 		}
 
 	}

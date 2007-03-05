@@ -1,14 +1,14 @@
 package coverage.instrumentation.metrics;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.jdom.JDOMException;
 
-import coverage.instrumentation.exception.BpelException;
-import coverage.instrumentation.exception.BpelVersionException;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
+import de.schlichtherle.io.File;
+import exception.BpelException;
+import exception.BpelVersionException;
 
 /**
  * Dieses Interface wird von dem Handler implementiert, der dafür zuständig ist,
@@ -47,7 +47,7 @@ public interface IMetricHandler {
 	 * @throws BpelException
 	 * @throws BpelVersionException
 	 */
-	public File startInstrumentation(File file) throws JDOMException,
+	public void startInstrumentation(File file) throws JDOMException,
 			IOException, BpelException, BpelVersionException;
 
 	/**

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jdom.Element;
 
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
-import coverage.instrumentation.exception.BpelException;
+import exception.BpelException;
 
 /**
  * Die Klasse ist für das Einfügen der Markierungen in der If-Aktivität

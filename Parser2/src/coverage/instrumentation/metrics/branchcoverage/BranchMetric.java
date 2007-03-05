@@ -10,8 +10,8 @@ import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
-import coverage.instrumentation.exception.BpelException;
 import coverage.instrumentation.metrics.IMetric;
+import exception.BpelException;
 
 public class BranchMetric implements IMetric {
 

@@ -1,4 +1,4 @@
-package coverage.instrumentation.exception;
+package exception;
 
 public class BpelVersionException extends Exception {
 	

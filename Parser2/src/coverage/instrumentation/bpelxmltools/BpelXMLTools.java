@@ -285,5 +285,14 @@ public class BpelXMLTools {
 		if_element.addContent(condition);
 		return null;
 	}
+	
+	public static Element createAssign(Element from,Element to){
+		Element assign = new Element(ASSIGN_TAG, getBpelNamespace());
+		Element copy = new Element(COPY_TAG, getBpelNamespace());
+		copy.addContent(from);
+		copy.addContent(to);
+		assign.addContent(copy);
+		return assign;
+	}
 
 }
