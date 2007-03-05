@@ -159,8 +159,6 @@ public class CoverageMeasurement {
 		Element partnerLinks = process.getChild("partnerLinks", process
 				.getNamespace());
 		partnerLinks.addContent(partnerLink);
-		
-		
 	}
 
 }

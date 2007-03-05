@@ -1,0 +1,119 @@
+package coverage;
+
+/**
+ * This file belongs to the BPELUnit utility and Eclipse plugin set. See enclosed
+ * license file for more information.
+ * 
+ */
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeoutException;
+
+import org.bpelunit.framework.model.test.PartnerTrack;
+import org.bpelunit.framework.model.test.activity.Activity;
+import org.bpelunit.framework.model.test.activity.ActivityContext;
+import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
+import org.bpelunit.framework.model.test.report.ArtefactStatus;
+import org.bpelunit.framework.model.test.report.ITestArtefact;
+import org.bpelunit.framework.model.test.wire.IncomingMessage;
+import org.bpelunit.framework.model.test.wire.OutgoingMessage;
+
+/**
+ * A receive asynchronous activity is intended to receive a single incoming
+ * transmission which contains a SOAP body (a normal message, or a SOAP fault).
+ * 
+ * An asynchronous receive must always signal an "OK" back to the client (unless
+ * a severe server configuration error occurred). The specification does NOT
+ * allow to send back meaningful SOAP Faults.
+ * 
+ * Receive Async can be used inside an asynchronous send/receive, receive/send,
+ * or receive only block. There are two constructors to accomodate these usages;
+ * one for directly initializing the activiy as a child of a parent track, and
+ * one for initializing the activity as a child of another (asynchronous two
+ * way) activity.
+ * 
+ * @version $Id$
+ * @author Philip Mayer
+ * 
+ */
+public class ReceivePermanent extends Activity {
+
+	/**
+	 * The receive specification handling the actual receive
+	 */
+	private ReceiveLoggingDataSpecification fReceiveSpec;
+
+	// ************************** Initialization ************************
+
+	public ReceivePermanent(PartnerTrack partnerTrack) {
+		super(partnerTrack);
+	}
+
+	public void initialize(ReceiveLoggingDataSpecification spec) {
+		fReceiveSpec = spec;
+		fStatus = ArtefactStatus.createInitialStatus();
+	}
+
+	// ***************************** Activity **************************
+
+	@Override
+	public void run(ActivityContext context) {
+
+		while (true) {
+			IncomingMessage incoming;
+
+			try {
+				incoming = context.receiveMessage(this.getPartnerTrack());
+				fReceiveSpec.handle(context, incoming.getBody());
+				OutgoingMessage outgoing = new OutgoingMessage();
+				// always accept.
+				outgoing.setCode(202);
+				outgoing.setBody("");
+				context.postAnswer(this.getPartnerTrack(), outgoing);
+
+				// if (fReceiveSpec.hasProblems())
+				// fStatus= fReceiveSpec.getStatus();
+				// else
+				// fStatus= ArtefactStatus.createPassedStatus();
+
+			} catch (TimeoutException e) {
+				// fStatus= ArtefactStatus.createErrorStatus("Timeout occurred
+				// while waiting for ACK for asynchronous receive.", e);
+			} catch (InterruptedException e) {
+				// fStatus= ArtefactStatus.createAbortedStatus("Aborted while
+				// waiting for ACK for asynchronous receive to be sent.", e);
+			}
+		}
+	}
+
+	@Override
+	public String getActivityCode() {
+		return "ReceiveAsync";
+	}
+
+	@Override
+	public int getActivityCount() {
+		return 1;
+	}
+
+	// ************************** ITestArtefact ************************
+
+	@Override
+	public String getName() {
+		return "Receive Asynchronous";
+	}
+
+	@Override
+	public ITestArtefact getParent() {
+		return getPartnerTrack();
+	}
+
+	@Override
+	public List<ITestArtefact> getChildren() {
+		List<ITestArtefact> children = new ArrayList<ITestArtefact>();
+		children.add(fReceiveSpec);
+		return children;
+	}
+
+}

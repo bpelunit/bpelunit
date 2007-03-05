@@ -107,6 +107,7 @@ public class Statementmetric implements IMetric {
 		Element literal = new Element("literal", BpelXMLTools
 				.getBpelNamespace());
 		literal.setText("hallo");
+		from.addContent(literal);
 
 		Element to = new Element("to", BpelXMLTools.getBpelNamespace());
 		to.setAttribute("part", "logEntry");
