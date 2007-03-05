@@ -42,7 +42,7 @@ public class ReceivePermanent extends Activity {
 	/**
 	 * The receive specification handling the actual receive
 	 */
-	private ReceiveLoggingDataSpecification fReceiveSpec;
+	private ReceiveDataForLogSpecification fReceiveSpec;
 
 	// ************************** Initialization ************************
 
@@ -50,7 +50,7 @@ public class ReceivePermanent extends Activity {
 		super(partnerTrack);
 	}
 
-	public void initialize(ReceiveLoggingDataSpecification spec) {
+	public void initialize(ReceiveDataForLogSpecification spec) {
 		fReceiveSpec = spec;
 		fStatus = ArtefactStatus.createInitialStatus();
 	}
