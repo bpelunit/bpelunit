@@ -95,7 +95,8 @@ public class MetricHandler implements IMetricHandler {
 		logger.info("Die Instrumentierung der Datei " + file.getName()
 				+ " wird gestartet.");
 		SAXBuilder builder = new SAXBuilder();
-		Document doc = builder.build(new FileInputStream(file));
+		FileInputStream is=new FileInputStream(file);
+		Document doc = builder.build(is);
 		process_element = doc.getRootElement();
 		if (!process_element.getName().equalsIgnoreCase(
 				BpelXMLTools.PROCESS_ELEMENT)) {
@@ -166,9 +167,11 @@ public class MetricHandler implements IMetricHandler {
 		FileWriter writer = new FileWriter(instrumentation_file);
 		XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
 		xmlOutputter.output(doc, writer);
+		is.close();
 		writer = new FileWriter(file);
 		xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
 		xmlOutputter.output(doc, writer);
+		writer.close();
 	}
 
 	public IMetric getMetric(String metricName) {
