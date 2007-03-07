@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.io.FilenameUtils;
-import org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -17,7 +16,6 @@ import org.jdom.output.XMLOutputter;
 
 import coverage.deployarchivetools.IDeploymentArchiveHandler;
 import coverage.deployarchivetools.impl.ActiveBPELDeploymentArchiveHandler;
-import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.IMetricHandler;
 import coverage.instrumentation.metrics.MetricHandler;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
@@ -29,8 +27,8 @@ import exception.BpelVersionException;
 
 public class CoverageMeasurement {
 
-	public static String initializeCoverageMeasurement(File archive,
-			IBPELDeployer deployer, String pfad) throws FileNotFoundException,
+	public static String initializeCoverageMeasurement(String pathToArchive,String bprFile,
+			IBPELDeployer deployer) throws FileNotFoundException,
 			BpelException, BpelVersionException, ArchiveFileException {
 
 		IDeploymentArchiveHandler archiveHandler = null;
@@ -39,7 +37,7 @@ public class CoverageMeasurement {
 			// if (deployer instanceof ActiveBPELDeployer) {
 			archiveHandler = new ActiveBPELDeploymentArchiveHandler();
 			// }
-			archiveHandler.setArchiveFile(archive,pfad);
+			archiveHandler.setArchiveFile(FilenameUtils.concat(pathToArchive, bprFile));
 			prepareLoggingService(archiveHandler);
 			executeInstrumentationOfBPEL(archiveHandler);
 		} catch (JDOMException e) {

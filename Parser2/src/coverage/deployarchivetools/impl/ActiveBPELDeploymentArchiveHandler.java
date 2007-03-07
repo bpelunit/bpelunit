@@ -30,16 +30,17 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	private File archiveFile;
 
 	private int countOfBpelFiles;
+	
+	private String bprFile;
 
 	public File getBPELFile(int i) throws FileNotFoundException {
-		File bpelFile = new File(archiveFile.getName() + "/bpel/"
+		File bpelFile = new File(bprFile + "/bpel/"
 				+ bpelFiles[i]);
 		return bpelFile;
 	}
 
 	private File getWSDLCatalog() throws FileNotFoundException {
-		File wsdlCatalog = new File(archiveFile.getName()
-				+ "/META-INF/wsdlCatalog.xml");
+		File wsdlCatalog = new File(bprFile+"/META-INF/wsdlCatalog.xml");
 		return wsdlCatalog;
 	}
 
@@ -48,12 +49,15 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	}
 
 	private String[] searchBPELFiles() {
+		System.out.println("BpelFiles suche gestartet");
 		// String[] list=archiveFile.list(new BpelFileFilter());
-		String[] list = new File(archiveFile.getName() + "/bpel/").list();
+		String[] list = new File(bprFile+"/bpel/").list();
+		System.out.println("BpelFiles suche beendet");
 		return list;
 	}
 
 	public void addWSDLFile(java.io.File wsdlFile) throws ArchiveFileException {
+		System.out.println("WSDL-File wird hinzugefügt");
 		FileInputStream is = null;
 		FileWriter writer = null;
 		OutputStream out=null;
@@ -72,7 +76,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			XMLOutputter xmlOutputter = new XMLOutputter(Format
 					.getPrettyFormat());
 			xmlOutputter.output(doc, writer);
-			out = new FileOutputStream(archiveFile.getName()+"/wsdl/"+wsdlFile.getName());
+			out = new FileOutputStream(bprFile+"/wsdl/"+wsdlFile.getName());
 			System.out.println(wsdlFile);
 			out.write(FileUtils.readFileToByteArray(wsdlFile));
 		} catch (Exception e) {
@@ -123,24 +127,28 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		return archiveFile;
 	}
 
-	public void setArchiveFile(java.io.File archive,String pfad)
+	public void setArchiveFile(String archive)
 			throws ArchiveFileException {
 		try {
-			this.archiveFile = createCopy(archive,pfad);
-
+			this.archiveFile = createCopy(archive);
+			System.out.println("BPR-File kopiert");
 			bpelFiles = searchBPELFiles();
 			countOfBpelFiles = bpelFiles.length;
+			System.out.println("Suche der BPEL-Files abgeschlossen"+countOfBpelFiles);
 		} catch (ArchiveException e) {
 			throw new ArchiveFileException("", e);
 		}
 
 	}
 
-	private File createCopy(java.io.File file, String pfad) throws ArchiveException {
-		System.out.println("----------------"+FilenameUtils.concat(FilenameUtils.getFullPath(file.getName()), "_"+file.getName()));
-		java.io.File copyFile = new java.io.File(FilenameUtils.concat(pfad, "_"+file.getName()));
-		new File(file).copyAllTo(copyFile);
-		return new File(copyFile);
+	private File createCopy(String archive) throws ArchiveException {
+		String fileName=FilenameUtils.getName(archive);
+		String pfad=FilenameUtils.getFullPath(archive);
+		bprFile=FilenameUtils.concat(pfad,"_"+fileName );
+		File copyFile = new File(bprFile);
+		File file=new File(archive);
+		copyFile.copyAllFrom(file);
+		return copyFile;
 
 	}
 
@@ -156,7 +164,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			throw new ArchiveFileException(
 					"Process deployment descriptor in bpr-archive not found");
 		}
-		return new File(FilenameUtils.concat(archiveFile.getName(), name));
+		return new File(bprFile+ "/"+name);
 	}
 
 }

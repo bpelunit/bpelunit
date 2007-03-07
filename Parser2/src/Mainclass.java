@@ -48,7 +48,7 @@ public class Mainclass {
 		
 		filename=args[7];
 		try {
-			CoverageMeasurement.initializeCoverageMeasurement(new File(filename), null,"");
+			CoverageMeasurement.initializeCoverageMeasurement(filename,"",null);
 		} catch (ArchiveFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

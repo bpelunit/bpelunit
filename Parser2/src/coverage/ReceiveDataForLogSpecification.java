@@ -21,6 +21,7 @@ public class ReceiveDataForLogSpecification extends ReceiveDataSpecification {
 	@Override
 	public void handle(ActivityContext context, String incomingMessage) {
 		fLogger.info("----------------logMessage empfangen-----------");
+		fLogger.info("----------------incommingMessage"+incomingMessage+"-----------");
 		// Check content
 		setInWireFormat(incomingMessage);
 
@@ -39,12 +40,11 @@ public class ReceiveDataForLogSpecification extends ReceiveDataSpecification {
 		if (hasProblems())
 			return;
 
-//		extractMappingData(context);
-
 		if (hasProblems())
 			return;
 
-		fLogger.info("----------------"+fLiteralData+"-----------");
+		fLogger.info("----------------"+fLiteralData.getNodeName()+"-----------");
+		fLogger.info("----------------"+fLiteralData.getTextContent()+"-----------");
 
 	}
 	

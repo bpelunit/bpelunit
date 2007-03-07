@@ -1,6 +1,6 @@
 package coverage;
 
-import org.apache.log4j.Logger;
+
 import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.test.PartnerTrack;
 import org.bpelunit.framework.model.test.TestCase;
@@ -9,8 +9,6 @@ import org.bpelunit.framework.model.test.activity.ActivityContext;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
 
 public class LoggingPartnerTrack extends PartnerTrack {
-
-	private boolean interrupt = false;
 
 	private Activity activity;
 
@@ -31,6 +29,7 @@ public class LoggingPartnerTrack extends PartnerTrack {
 
 	public void run() {
 
+		fStatus = ArtefactStatus.createPassedStatus();
 		for (Activity activity : fActivities) {
 			this.activity=activity;
 			fLogger.info(getName() + " now starting activity " + activity);
@@ -45,7 +44,6 @@ public class LoggingPartnerTrack extends PartnerTrack {
 
 	public void interruptLoggingTrack() {
 		fLogger.info("LOGSERVICE wird interrupt");
-		interrupt = true;
 		((ReceivePermanent)activity).interruptActivity();
 	}
 
