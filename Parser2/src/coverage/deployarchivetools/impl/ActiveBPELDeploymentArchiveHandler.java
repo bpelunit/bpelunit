@@ -119,14 +119,14 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	}
 
 	public java.io.File getArchiveFile() {
-		archiveFile.renameTo(new File(FilenameUtils.getBaseName(archiveFile.getName())+".jar"));
+//		archiveFile.renameTo(new File(FilenameUtils.getBaseName(archiveFile.getName())+".jar"));
 		return archiveFile;
 	}
 
-	public void setArchiveFile(java.io.File archive)
+	public void setArchiveFile(java.io.File archive,String pfad)
 			throws ArchiveFileException {
 		try {
-			this.archiveFile = createCopy(archive);
+			this.archiveFile = createCopy(archive,pfad);
 
 			bpelFiles = searchBPELFiles();
 			countOfBpelFiles = bpelFiles.length;
@@ -136,10 +136,11 @@ public class ActiveBPELDeploymentArchiveHandler implements
 
 	}
 
-	private File createCopy(java.io.File file) throws ArchiveException {
-		File copyFile = new File("_"+file.getName());
-		copyFile.copyAllFrom(file);
-		return copyFile;
+	private File createCopy(java.io.File file, String pfad) throws ArchiveException {
+		System.out.println("----------------"+FilenameUtils.concat(FilenameUtils.getFullPath(file.getName()), "_"+file.getName()));
+		java.io.File copyFile = new java.io.File(FilenameUtils.concat(pfad, "_"+file.getName()));
+		new File(file).copyAllTo(copyFile);
+		return new File(copyFile);
 
 	}
 

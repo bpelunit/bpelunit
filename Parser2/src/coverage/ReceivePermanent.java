@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.log4j.Logger;
 import org.bpelunit.framework.model.test.PartnerTrack;
 import org.bpelunit.framework.model.test.activity.Activity;
 import org.bpelunit.framework.model.test.activity.ActivityContext;
-import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
 import org.bpelunit.framework.model.test.report.ITestArtefact;
 import org.bpelunit.framework.model.test.wire.IncomingMessage;
@@ -43,11 +43,17 @@ public class ReceivePermanent extends Activity {
 	 * The receive specification handling the actual receive
 	 */
 	private ReceiveDataForLogSpecification fReceiveSpec;
+	
+	private boolean interrupt;
+
+	private Logger fLogger;
 
 	// ************************** Initialization ************************
 
 	public ReceivePermanent(PartnerTrack partnerTrack) {
 		super(partnerTrack);
+		interrupt=false;
+		fLogger = Logger.getLogger(getClass());
 	}
 
 	public void initialize(ReceiveDataForLogSpecification spec) {
@@ -60,10 +66,11 @@ public class ReceivePermanent extends Activity {
 	@Override
 	public void run(ActivityContext context) {
 
-		while (true) {
+		while (!interrupt) {
 			IncomingMessage incoming;
 
 			try {
+				fLogger.info("--------LogService wartet auf Message ----------");
 				incoming = context.receiveMessage(this.getPartnerTrack());
 				fReceiveSpec.handle(context, incoming.getBody());
 				OutgoingMessage outgoing = new OutgoingMessage();
@@ -114,6 +121,10 @@ public class ReceivePermanent extends Activity {
 		List<ITestArtefact> children = new ArrayList<ITestArtefact>();
 		children.add(fReceiveSpec);
 		return children;
+	}
+	
+	public void interruptActivity(){
+		interrupt=true;
 	}
 
 }

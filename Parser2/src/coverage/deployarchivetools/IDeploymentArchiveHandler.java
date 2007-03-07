@@ -11,7 +11,7 @@ import exception.ArchiveFileException;
 
 public interface IDeploymentArchiveHandler {
 
-	public void setArchiveFile(java.io.File archive) throws ArchiveFileException;
+	public void setArchiveFile(java.io.File archive, String pfad) throws ArchiveFileException;
 	
 	public java.io.File getArchiveFile();
 	

@@ -29,8 +29,8 @@ import exception.BpelVersionException;
 
 public class CoverageMeasurement {
 
-	public static File initializeCoverageMeasurement(File archive,
-			IBPELDeployer deployer) throws FileNotFoundException,
+	public static String initializeCoverageMeasurement(File archive,
+			IBPELDeployer deployer, String pfad) throws FileNotFoundException,
 			BpelException, BpelVersionException, ArchiveFileException {
 
 		IDeploymentArchiveHandler archiveHandler = null;
@@ -39,7 +39,7 @@ public class CoverageMeasurement {
 			// if (deployer instanceof ActiveBPELDeployer) {
 			archiveHandler = new ActiveBPELDeploymentArchiveHandler();
 			// }
-			archiveHandler.setArchiveFile(archive);
+			archiveHandler.setArchiveFile(archive,pfad);
 			prepareLoggingService(archiveHandler);
 			executeInstrumentationOfBPEL(archiveHandler);
 		} catch (JDOMException e) {
@@ -48,7 +48,7 @@ public class CoverageMeasurement {
 			throw new ArchiveFileException("", e);
 		}
 
-		return archiveHandler.getArchiveFile();
+		return archiveHandler.getArchiveFile().getName();
 	}
 
 	private static void executeInstrumentationOfBPEL(
