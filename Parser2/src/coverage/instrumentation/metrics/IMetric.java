@@ -11,6 +11,9 @@ import exception.BpelException;
  * 
  */
 public interface IMetric {
+	
+	
+	public static final String MARKER_IDENTIFIRE = "@marker";
 
 	/**
 	 * Diese Methode fügt die Marker an den richtigen Stellen in

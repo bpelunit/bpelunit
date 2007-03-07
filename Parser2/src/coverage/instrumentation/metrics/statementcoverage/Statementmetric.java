@@ -27,6 +27,8 @@ public class Statementmetric implements IMetric {
 
 	public static final String METRIC_NAME = "Statementmetric";
 
+
+
 	private static Statementmetric instance = null;
 
 	private static int count = 0;
@@ -100,39 +102,13 @@ public class Statementmetric implements IMetric {
 	private void insertMarkerForActivity(Element element) {
 		Element parent = element.getParentElement();
 		String element_name = element.getName();
-		Comment mark = new Comment(element_name + (count++));
-
-
-		Element from = new Element("from", BpelXMLTools.getBpelNamespace());
-		Element literal = new Element("literal", BpelXMLTools
-				.getBpelNamespace());
-		literal.setText("hallo");
-		from.addContent(literal);
-
-		Element to = new Element("to", BpelXMLTools.getBpelNamespace());
-		to.setAttribute("part", "logEntry");
-		to.setAttribute("variable", "logRequest");
-		Element assign = BpelXMLTools.createAssign(from, to);
-
-		Element invoke = new Element(BasisActivity.INVOKE_ACTIVITY,
-				BpelXMLTools.getBpelNamespace());
-		Element variable = BpelXMLTools.createVariable(element.getDocument());
-		BpelXMLTools.insertVariable(variable, element.getDocument()
-				.getRootElement());
-		invoke.setAttribute("inputVariable", "logRequest");
-		invoke.setAttribute("operation", "log");
-		invoke.setAttribute("partnerLink", "PLT_LogService_");
-		invoke.setAttribute("portType", "log:_LogService_");
+		Comment mark = new Comment(MARKER_IDENTIFIRE + element_name + (count++));
 
 		int index = parent.indexOf(element);
 		if (logging_before_activity.contains(element_name)) {
 			parent.addContent(index, mark);
-			parent.addContent(index, invoke);
-			parent.addContent(index, assign);
 		} else {
 			parent.addContent(index + 1, mark);
-			parent.addContent(index + 1, invoke);
-			parent.addContent(index + 1, assign);
 		}
 
 	}

@@ -23,6 +23,8 @@ public interface IMetricHandler {
 	public static final String STATEMENT_METRIC = Statementmetric.METRIC_NAME;
 
 	public static final String BRANCH_METRIC = BranchMetric.METRIC_NAME;
+	
+	public static final String MARKER_IDENTIFIRE = "@marker";
 
 	/**
 	 * Die übergebene Metrik wird bei der Ausführung der BPEL erhoben:

@@ -17,9 +17,11 @@ import org.jdom.output.XMLOutputter;
 
 import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
+import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
+import coverage.loggingservice.LoggingServiceConfiguration;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
 import de.schlichtherle.io.FileWriter;
@@ -109,9 +111,7 @@ public class MetricHandler implements IMetricHandler {
 						BpelVersionException.WRONG_VERSION));
 			}
 			BpelXMLTools.process_element = process_element;
-
-			process_element.addNamespaceDeclaration(Namespace.getNamespace(
-					"log", "http://www.bpelunit.org/coverage/logService"));
+			
 			Element importElement = new Element("import", BpelXMLTools
 					.getBpelNamespace());
 			importElement.setAttribute("importType",
@@ -121,28 +121,8 @@ public class MetricHandler implements IMetricHandler {
 					"http://www.bpelunit.org/coverage/logService");
 			process_element.addContent(0, importElement);
 			//		
-			Element partnerLinks = process_element.getChild("partnerLinks",
-					BpelXMLTools.getBpelNamespace());
-			Element partnerLink = new Element("partnerLink", BpelXMLTools
-					.getBpelNamespace());
-			partnerLink.setAttribute("name", "PLT_LogService_");
-			partnerLink.setAttribute("partnerLinkType", "log:PLT_LogService_");
-			partnerLink.setAttribute("partnerRole", "Logger");
-			partnerLinks.addContent(partnerLink);
-			int index = process_element.indexOf(partnerLinks);
 
-			Element variable = new Element("variable", BpelXMLTools
-					.getBpelNamespace());
-			variable.setAttribute("messageType", "log:logRequest");
-			variable.setAttribute("name", "logRequest");
-			Element variables = process_element.getChild("variables",
-					BpelXMLTools.getBpelNamespace());
-			if (variables == null) {
-				variables = new Element("variables", BpelXMLTools
-						.getBpelNamespace());
-				process_element.addContent(index + 1, variables);
-			}
-			variables.addContent(variable);
+			
 
 			IMetric metric;
 			for (Enumeration<IMetric> i = metrics.elements(); i
@@ -159,13 +139,16 @@ public class MetricHandler implements IMetricHandler {
 			// logger.info("Die instrumentierte BPEL-Datei wird in
 			// "+instrumentation_file+" geschrieben.");
 
-			writer = new FileWriter(instrumentation_file);
+			// writer = new FileWriter(instrumentation_file);
+			// XMLOutputter xmlOutputter = new XMLOutputter(Format
+			// .getPrettyFormat());
+			// xmlOutputter.output(doc, writer);
+			is.close();
+
+			createInvokesForMarker();
+			writer = new FileWriter(file);
 			XMLOutputter xmlOutputter = new XMLOutputter(Format
 					.getPrettyFormat());
-			xmlOutputter.output(doc, writer);
-			is.close();
-			writer = new FileWriter(file);
-			xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
 			xmlOutputter.output(doc, writer);
 			writer.close();
 		} catch (BpelException e) {
@@ -197,7 +180,15 @@ public class MetricHandler implements IMetricHandler {
 				}
 			}
 		}
+	}
 
+
+
+
+	private void createInvokesForMarker() {
+		LoggingServiceConfiguration config=new LoggingServiceConfiguration("",process_element);
+		
+		
 	}
 
 	public IMetric getMetric(String metricName) {

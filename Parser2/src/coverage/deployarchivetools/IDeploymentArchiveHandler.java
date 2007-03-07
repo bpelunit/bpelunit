@@ -3,7 +3,6 @@ package coverage.deployarchivetools;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 import de.schlichtherle.io.File;
 
