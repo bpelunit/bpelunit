@@ -48,7 +48,7 @@ public class Mainclass {
 		
 		filename=args[7];
 		try {
-			CoverageMeasurement.initializeCoverageMeasurement(filename,"",null);
+			CoverageMeasurement.initializeCoverageMeasurement("D:/Alex/daten/Masterarbeit/workspaceBPELUnit/Parser2/bsp/",filename,null);
 		} catch (ArchiveFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

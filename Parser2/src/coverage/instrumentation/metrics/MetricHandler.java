@@ -1,16 +1,22 @@
 package coverage.instrumentation.metrics;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;
+import org.jdom.Comment;
+import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
+import org.jdom.filter.ContentFilter;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -45,6 +51,8 @@ public class MetricHandler implements IMetricHandler {
 	private Element process_element;
 
 	private Logger logger;
+
+	private LoggingServiceConfiguration configLogService;
 
 	public static IMetricHandler getInstance() {
 		if (instance == null) {
@@ -111,7 +119,7 @@ public class MetricHandler implements IMetricHandler {
 						BpelVersionException.WRONG_VERSION));
 			}
 			BpelXMLTools.process_element = process_element;
-			
+
 			Element importElement = new Element("import", BpelXMLTools
 					.getBpelNamespace());
 			importElement.setAttribute("importType",
@@ -121,8 +129,6 @@ public class MetricHandler implements IMetricHandler {
 					"http://www.bpelunit.org/coverage/logService");
 			process_element.addContent(0, importElement);
 			//		
-
-			
 
 			IMetric metric;
 			for (Enumeration<IMetric> i = metrics.elements(); i
@@ -145,7 +151,7 @@ public class MetricHandler implements IMetricHandler {
 			// xmlOutputter.output(doc, writer);
 			is.close();
 
-			createInvokesForMarker();
+			insertInvokesForMarker();
 			writer = new FileWriter(file);
 			XMLOutputter xmlOutputter = new XMLOutputter(Format
 					.getPrettyFormat());
@@ -182,13 +188,76 @@ public class MetricHandler implements IMetricHandler {
 		}
 	}
 
+	private void insertInvokesForMarker() {
+		configLogService = new LoggingServiceConfiguration("", process_element);
+		analyzeDirectChildren(process_element);
+	}
+
+	private void analyzeDirectChildren(Element element) {
+		List<Element> childElements = new ArrayList<Element>();
+		List children = element.getContent(new ContentFilter(
+				ContentFilter.ELEMENT));
+		for (int i = 0; i < children.size(); i++) {
+			childElements.add((Element) children.get(i));
+		}
+		children = element.getContent(new ContentFilter(ContentFilter.COMMENT));
+		int indexOfLastMarker = -1;
+		int index;
+		Comment comment;
+		String marker = "";
+		String commentText;
+		for (int i = children.size() - 1; i > -1; i--) {
+			comment = (Comment) children.get(i);
+			index = element.indexOf(comment);
+			commentText = comment.getText();
+			if (isMarker(commentText)) {
+				if (indexOfLastMarker - 1 == index) {
+					marker = marker + getMarker(commentText);
+				} else {
+					if (marker.length() > 0) {
+						insertInvokeForMarker(marker, indexOfLastMarker,
+								element);
+					}
+					marker = getMarker(commentText);
+				}
+				comment.detach();
+			}
+			indexOfLastMarker = index;
+			if (i == 0 && marker.length() > 0) {
+				insertInvokeForMarker(marker, indexOfLastMarker, element);
+			}
+
+		}
+		for (int i = 0; i < childElements.size(); i++) {
+			analyzeDirectChildren(childElements.get(i));
+		}
+
+	}
 
 
+	private void insertInvokeForMarker(String marker, int index, Element element) {
+		Element assign = configLogService.createAssignElement(marker);
+		Element invoke = configLogService.createInvokeElement();
+		element.addContent(index, invoke);
+		element.addContent(index, assign);
 
-	private void createInvokesForMarker() {
-		LoggingServiceConfiguration config=new LoggingServiceConfiguration("",process_element);
-		
-		
+	}
+
+	private String getMarker(String commentText) {
+		int startIndex = commentText.indexOf(IMetric.MARKER_IDENTIFIRE)
+				+ IMetric.MARKER_IDENTIFIRE.length();
+		return commentText.substring(startIndex);
+
+	}
+
+	private boolean isMarker(String commentText) {
+		if (commentText.startsWith(IMetric.MARKER_IDENTIFIRE)) {
+			System.out.println("isMarker " + commentText);
+			return true;
+		}
+
+		System.out.println("ist kein Marker " + commentText);
+		return false;
 	}
 
 	public IMetric getMetric(String metricName) {

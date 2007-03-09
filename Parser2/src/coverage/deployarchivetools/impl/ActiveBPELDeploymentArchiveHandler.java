@@ -131,7 +131,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			throws ArchiveFileException {
 		try {
 			this.archiveFile = createCopy(archive);
-			System.out.println("BPR-File kopiert");
+			System.out.println("BPR-File kopiert "+archive);
 			bpelFiles = searchBPELFiles();
 			countOfBpelFiles = bpelFiles.length;
 			System.out.println("Suche der BPEL-Files abgeschlossen"+countOfBpelFiles);
