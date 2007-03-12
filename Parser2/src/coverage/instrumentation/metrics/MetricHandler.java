@@ -3,9 +3,11 @@ package coverage.instrumentation.metrics;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
@@ -44,9 +46,7 @@ public class MetricHandler implements IMetricHandler {
 	private static final Namespace NAMESPACE_BPEL_2 = Namespace
 			.getNamespace("http://schemas.xmlsoap.org/ws/2003/03/business-process/");
 
-	private static IMetricHandler instance = null;
-
-	private Hashtable metrics;
+	private HashMap<String, IMetric> metrics;
 
 	private Element process_element;
 
@@ -54,56 +54,44 @@ public class MetricHandler implements IMetricHandler {
 
 	private LoggingServiceConfiguration configLogService;
 
-	public static IMetricHandler getInstance() {
-		if (instance == null) {
-			instance = new MetricHandler();
-		}
-		return instance;
-	}
-
-	private MetricHandler() {
-		metrics = new Hashtable();
+	public MetricHandler() {
+		metrics = new HashMap<String, IMetric>();
 		logger = Logger.getLogger(getClass());
-		SimpleLayout layout = new SimpleLayout();
-		ConsoleAppender consoleAppender = new ConsoleAppender(layout);
-		logger.addAppender(consoleAppender);
-		FileAppender fileAppender;
-		try {
-			fileAppender = new FileAppender(layout, "MeineLogDatei.log", false);
-			logger.addAppender(fileAppender);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// SimpleLayout layout = new SimpleLayout();
+		// ConsoleAppender consoleAppender = new ConsoleAppender(layout);
+		// logger.addAppender(consoleAppender);
+		// FileAppender fileAppender;
+		// try {
+		// fileAppender = new FileAppender(layout, "MeineLogDatei.log", false);
+		// logger.addAppender(fileAppender);
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 	}
 
 	public IMetric addMetric(String metricName) {
 		IMetric metric = null;
 		if (metricName.equals(STATEMENT_METRIC)) {
-			metric = Statementmetric.getInstance();
+			metric = new Statementmetric();
 			metrics.put(STATEMENT_METRIC, metric);
 		} else if (metricName.equals(BRANCH_METRIC)) {
-			metric = BranchMetric.getInstance();
+			metric = new BranchMetric();
 			metrics.put(BRANCH_METRIC, metric);
 		}
 		return metric;
 	}
 
 	public void remove(String metricName) {
-		if (metricName.equals(STATEMENT_METRIC)) {
-			metrics.remove(Statementmetric.getInstance());
-		} else if (metricName.equals(BRANCH_METRIC)) {
-			metrics.remove(Statementmetric.getInstance());
-		}
-
+		metrics.remove(metricName);
 	}
 
 	public void startInstrumentation(File file) throws BpelException {
 		FileWriter writer = null;
 		FileInputStream is = null;
 		try {
-			logger.info("Die Instrumentierung der Datei " + file.getName()
-					+ " wird gestartet.");
+			logger.info("Instrumentation of file " + file.getName()
+					+ " is started.");
 			SAXBuilder builder = new SAXBuilder();
 			is = new FileInputStream(file);
 			Document doc = builder.build(is);
@@ -120,46 +108,20 @@ public class MetricHandler implements IMetricHandler {
 			}
 			BpelXMLTools.process_element = process_element;
 
-			Element importElement = new Element("import", BpelXMLTools
-					.getBpelNamespace());
-			importElement.setAttribute("importType",
-					"http://schemas.xmlsoap.org/wsdl/");
-			importElement.setAttribute("location", "../wsdl/_LogService_.wsdl");
-			importElement.setAttribute("namespace",
-					"http://www.bpelunit.org/coverage/logService");
-			process_element.addContent(0, importElement);
-			//		
+			insertImportElementOfLogWSDL();
 
 			IMetric metric;
-			for (Enumeration<IMetric> i = metrics.elements(); i
-					.hasMoreElements();) {
-				metric = i.nextElement();
+			for (Iterator<IMetric> i = metrics.values().iterator(); i.hasNext();) {
+				metric = i.next();
 				logger.info(metric);
 				metric.insertMarker(process_element);
 			}
-			// String[] name_analyse = getFileName(file);
-			// File instrumentation_file=new
-			// File(name_analyse[0]+"_instr_"+name_analyse[1]);
-			File instrumentation_file = new File("ergebnis.bpel");
-			logger.info("Instrumentierung erfolgreich ausgeführt.");
-			// logger.info("Die instrumentierte BPEL-Datei wird in
-			// "+instrumentation_file+" geschrieben.");
-
-			// writer = new FileWriter(instrumentation_file);
-			// XMLOutputter xmlOutputter = new XMLOutputter(Format
-			// .getPrettyFormat());
-			// xmlOutputter.output(doc, writer);
-			is.close();
-
 			insertInvokesForMarker();
 			writer = new FileWriter(file);
 			XMLOutputter xmlOutputter = new XMLOutputter(Format
 					.getPrettyFormat());
 			xmlOutputter.output(doc, writer);
-			writer.close();
-		} catch (BpelException e) {
-			// TODO Auto-generated catch block
-			throw e;
+			logger.info("Instrumentation sucessfully completed.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			throw new BpelException("", e);
@@ -167,7 +129,9 @@ public class MetricHandler implements IMetricHandler {
 			// TODO Auto-generated catch block
 			throw new BpelException("", e);
 		} catch (JDOMException e) {
-			throw new BpelException("", e);
+			throw new BpelException("BPEL-file "
+					+ FilenameUtils.getName(file.getName())
+					+ " can not be parsed.", e);
 		} finally {
 			if (writer != null) {
 				try {
@@ -186,6 +150,17 @@ public class MetricHandler implements IMetricHandler {
 				}
 			}
 		}
+	}
+
+	private void insertImportElementOfLogWSDL() {
+		Element importElement = new Element("import", BpelXMLTools
+				.getBpelNamespace());
+		importElement.setAttribute("importType",
+				"http://schemas.xmlsoap.org/wsdl/");
+		importElement.setAttribute("location", "../wsdl/_LogService_.wsdl");
+		importElement.setAttribute("namespace",
+				"http://www.bpelunit.org/coverage/logService");
+		process_element.addContent(0, importElement);
 	}
 
 	private void insertInvokesForMarker() {
@@ -234,7 +209,6 @@ public class MetricHandler implements IMetricHandler {
 
 	}
 
-
 	private void insertInvokeForMarker(String marker, int index, Element element) {
 		Element assign = configLogService.createAssignElement(marker);
 		Element invoke = configLogService.createInvokeElement();
@@ -252,21 +226,13 @@ public class MetricHandler implements IMetricHandler {
 
 	private boolean isMarker(String commentText) {
 		if (commentText.startsWith(IMetric.MARKER_IDENTIFIRE)) {
-			System.out.println("isMarker " + commentText);
 			return true;
 		}
-
-		System.out.println("ist kein Marker " + commentText);
 		return false;
 	}
 
 	public IMetric getMetric(String metricName) {
-		IMetric metric = null;
-		if (metricName.equals(STATEMENT_METRIC)) {
-			metric = Statementmetric.getInstance();
-		} else if (metricName.equals(BRANCH_METRIC)) {
-			metric = BranchMetric.getInstance();
-		}
+		IMetric metric = metrics.get(metricName);
 		return metric;
 	}
 

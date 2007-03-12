@@ -14,19 +14,27 @@ public class ForEachActivityHandler implements IStructuredActivity {
 
 	private static final String ATTRIBUTE_COUNTERNAME = "counterName";
 
-	public void insertMarkerForBranchCoverage(Element element) throws BpelException {
+	public void insertMarkerForBranchCoverage(Element element)
+			throws BpelException {
 		boolean parallel = element.getAttributeValue(ATTRIBUTE_PARALLEL)
 				.equals(PARALLEL_VALUE_YES);
 		if (parallel) {
-			insertMarkerForParallelBranches(element,element
+			insertMarkerForParallelBranches(element, element
 					.getAttributeValue(ATTRIBUTE_COUNTERNAME));
 		} else {
 			insertMarkerForSequenceBranches(element);
 		}
 	}
 
-	private void insertMarkerForSequenceBranches(Element element) throws BpelException {
-		Element activity=element.getChild(StructuredActivity.SCOPE_ACTIVITY, BpelXMLTools.getBpelNamespace());
+	/**
+	 * 
+	 * @param element
+	 * @throws BpelException
+	 */
+	private void insertMarkerForSequenceBranches(Element element)
+			throws BpelException {
+		Element activity = element.getChild(StructuredActivity.SCOPE_ACTIVITY,
+				BpelXMLTools.getBpelNamespace());
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
@@ -38,6 +46,14 @@ public class ForEachActivityHandler implements IStructuredActivity {
 
 	}
 
+	/**
+	 * Fügt Markierung für parallele Zweige ein. Die Markierungen werden mit
+	 * Hilfe der Countervariable generiert.
+	 * 
+	 * @param element
+	 * @param counterVariable
+	 * @throws BpelException
+	 */
 	private void insertMarkerForParallelBranches(Element element,
 			String counterVariable) throws BpelException {
 		Element activity = BpelXMLTools.getFirstActivityChild(element);

@@ -1,4 +1,4 @@
-package coverage;
+package coverage.bpelunitext;
 
 
 import org.bpelunit.framework.model.Partner;
@@ -7,6 +7,7 @@ import org.bpelunit.framework.model.test.TestCase;
 import org.bpelunit.framework.model.test.activity.Activity;
 import org.bpelunit.framework.model.test.activity.ActivityContext;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
+
 
 public class LoggingPartnerTrack extends PartnerTrack {
 

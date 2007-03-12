@@ -1,4 +1,4 @@
-package coverage;
+package coverage.bpelunitext;
 
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.exception.HeaderProcessingException;

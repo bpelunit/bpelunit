@@ -1,7 +1,7 @@
 package coverage.instrumentation.metrics.branchcoverage;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,9 +10,16 @@ import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
+import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
 import exception.BpelException;
 
+/**
+ * Klasse instrumentiert ein BPEL-Prozess, um die Zweigabdeckung bei der
+ * Ausführung zu messen.
+ * 
+ * @author Alex Salnikow
+ */
 public class BranchMetric implements IMetric {
 
 	public static final String METRIC_NAME = "Branchmetric";
@@ -23,29 +30,46 @@ public class BranchMetric implements IMetric {
 
 	private static int count = 0;
 
-	private static BranchMetric instance = null;
-
+	/**
+	 * Generiert eine eindeutige Markierung.
+	 * 
+	 * @return eindeutige Markierung
+	 */
 	public static String getNextLabel() {
 		return BRANCH_LABEL + (count++);
 	}
 
+	/**
+	 * Generiert eindeutige Merkierung für die Links (in der Flow-Umgebung)
+	 * 
+	 * @return eindeutige Markierung
+	 */
 	public static String getNextLinkLabel() {
 		return LINK_LABEL + getNextLabel();
 	}
 
-	public static BranchMetric getInstance() {
-		if (instance == null) {
-			instance = new BranchMetric();
-		}
-		return instance;
-	}
-
+	/**
+	 * Fügt Markierung für einen Zweig, der durch eine Aktivität repräsentiert
+	 * ist. Es wird eine Markierung davor und eine danach eingefügt.
+	 * 
+	 * @param activity
+	 *            Aktivität, die einen Zweig repräsentiert
+	 * @param additionalInfo
+	 */
 	public static void insertMarkerForBranch(Element activity,
 			String additionalInfo) {
 		insertMarkerBevorAllActivities(activity, additionalInfo);
 		insertMarkerAfterAllActivities(activity, additionalInfo);
 	}
 
+	/**
+	 * Fügt eine Markierung vor allen Aktivitäten ein. Wenn es notwendig ist,
+	 * dann wird die Markierung ind die Aktivitäten in ein Sequence-Element
+	 * eingeschlossen.
+	 * 
+	 * @param activity
+	 * @param additionalInfo
+	 */
 	public static void insertMarkerBevorAllActivities(Element activity,
 			String additionalInfo) {
 		if (!BpelXMLTools.isSequence(activity)) {
@@ -55,6 +79,14 @@ public class BranchMetric implements IMetric {
 				+ additionalInfo));
 	}
 
+	/**
+	 * Fügt eine Markierung nach allen Aktivitäten ein. Wenn es notwendig ist,
+	 * dann wird die Markierung ind die Aktivitäten in ein Sequence-Element
+	 * eingeschlossen.
+	 * 
+	 * @param activity
+	 * @param additionalInfo
+	 */
 	public static void insertMarkerAfterAllActivities(Element activity,
 			String additionalInfo) {
 		if (!BpelXMLTools.isSequence(activity)) {
@@ -75,27 +107,31 @@ public class BranchMetric implements IMetric {
 				getNextLabel()));
 	}
 
-	private Hashtable<String, IStructuredActivity> structured_activity_handler = new Hashtable<String, IStructuredActivity>();
+	private HashMap<String, IStructuredActivity> structured_activity_handler = new HashMap<String, IStructuredActivity>();
 
-	private List<Element> elements_to_log;
+	public BranchMetric() {
 
-	private BranchMetric() {
-		elements_to_log = new ArrayList<Element>();
-		structured_activity_handler.put("flow", new FlowActivityHandler());
-		structured_activity_handler.put("sequence",
+		structured_activity_handler.put(StructuredActivity.FLOW_ACTIVITY,
+				new FlowActivityHandler());
+		structured_activity_handler.put(StructuredActivity.SEQUENCE_ACTIVITY,
 				new SequenceActivityHandler());
-		structured_activity_handler.put("if", new IfActivityHandler());
-		structured_activity_handler.put("while", new WhileActivityHandler());
-		structured_activity_handler.put("repeatUntil",
+		structured_activity_handler.put(StructuredActivity.IF_ACTIVITY,
+				new IfActivityHandler());
+		structured_activity_handler.put(StructuredActivity.WHILE_ACTIVITY,
+				new WhileActivityHandler());
+		structured_activity_handler.put(
+				StructuredActivity.REPEATUNTIL_ACTIVITY,
 				new RepeatUntilActivityHandler());
-		structured_activity_handler
-				.put("forEach", new ForEachActivityHandler());
-		structured_activity_handler.put("pick", new PickActivityHandler());
+		structured_activity_handler.put(StructuredActivity.FOREACH_ACTIVITY,
+				new ForEachActivityHandler());
+		structured_activity_handler.put(StructuredActivity.PICK_ACTIVITY,
+				new PickActivityHandler());
 	}
 
 	public void insertMarker(Element element) throws BpelException {
 		Element next_element;
 		Iterator iterator2 = element.getDescendants(new ElementFilter());
+		List<Element> elements_to_log = new ArrayList<Element>();
 		while (iterator2.hasNext()) {
 			next_element = (Element) iterator2.next();
 			if (BpelXMLTools.isStructuredActivity(next_element)) {

@@ -20,5 +20,5 @@ public interface IDeploymentArchiveHandler {
 
 	public void addWSDLFile(java.io.File wsdlFile) throws IOException, ArchiveFileException;
 	
-	public File getDeploymentDescriptor() throws ArchiveFileException;
+//	public File getDeploymentDescriptor() throws ArchiveFileException;
 }

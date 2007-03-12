@@ -7,7 +7,6 @@ import exception.BpelException;
 
 public class RepeatUntilActivityHandler implements IStructuredActivity {
 
-
 	public void insertMarkerForBranchCoverage(Element element)
 			throws BpelException {
 		branchFromConditionToActivity(element);
@@ -32,13 +31,22 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 		Element initializeAssign = BpelXMLTools
 				.createInitializeAssign(countVariable);
 		insert(initializeAssign, element);
-		Element increesAssign = BpelXMLTools
-				.createIncreesAssign(countVariable);
+		Element increesAssign = BpelXMLTools.createIncreesAssign(countVariable);
 		insertIncreesAssign(increesAssign, element);
 		insertIfConstruct(element, countVariable);
 	}
 
-	private void insertIfConstruct(Element element, Element countVariable) throws BpelException {
+	/**
+	 * Fügt Markierung für den Zweig von Aktivitäten zu der Condition. Dafür
+	 * wird eine If-Anfrage eingefügt, die anhand der Zählvariable überprüft, ob
+	 * die Aktivitäten in der Schleife ausgeführt wurden.
+	 * 
+	 * @param element
+	 * @param countVariable
+	 * @throws BpelException
+	 */
+	private void insertIfConstruct(Element element, Element countVariable)
+			throws BpelException {
 		Element activity = BpelXMLTools.getFirstActivityChild(element);
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
@@ -46,7 +54,8 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 		if (!BpelXMLTools.isSequence(activity)) {
 			activity = BpelXMLTools.ensureElementIsInSequence(activity);
 		}
-		Element if_element=BpelXMLTools.createIfActivity("$" + countVariable.getName() + "=1");
+		Element if_element = BpelXMLTools.createIfActivity("$"
+				+ countVariable.getName() + "=1");
 
 		Element sequence = BpelXMLTools.createSequence();
 		if_element.addContent(sequence);
@@ -55,6 +64,16 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 
 	}
 
+	/**
+	 * Fügt ein Assign Element an letzter Stelle innerhalb des
+	 * RepeatUntil-Konstrukts, das die Zaählvariable um eins erhöht und
+	 * registriert damit die Ausführung der Schleife.
+	 * 
+	 * @param increesAssign
+	 * @param element
+	 *            RepeatUntil-Element
+	 * @throws BpelException
+	 */
 	private void insertIncreesAssign(Element increesAssign, Element element)
 			throws BpelException {
 		Element activity = BpelXMLTools.getFirstActivityChild(element);
@@ -68,6 +87,13 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 
 	}
 
+	/**
+	 * 
+	 * @param initializeAssign
+	 *            Assign-Element, das die Variable initialisiert.
+	 * @param element
+	 *            RepeatUntil-Element
+	 */
 	private void insert(Element initializeAssign, Element element) {
 		Element sequence = BpelXMLTools.ensureElementIsInSequence(element);
 		sequence.addContent(sequence.indexOf(element), initializeAssign);
