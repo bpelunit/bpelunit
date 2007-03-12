@@ -55,17 +55,6 @@ public class MetricHandler implements IMetricHandler {
 	public MetricHandler() {
 		metrics = new HashMap<String, IMetric>();
 		logger = Logger.getLogger(getClass());
-		// SimpleLayout layout = new SimpleLayout();
-		// ConsoleAppender consoleAppender = new ConsoleAppender(layout);
-		// logger.addAppender(consoleAppender);
-		// FileAppender fileAppender;
-		// try {
-		// fileAppender = new FileAppender(layout, "MeineLogDatei.log", false);
-		// logger.addAppender(fileAppender);
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
 	}
 
 	public IMetric addMetric(String metricName) {
@@ -198,7 +187,6 @@ public class MetricHandler implements IMetricHandler {
 			if (i == 0 && marker.length() > 0) {
 				insertInvokeForMarker(marker, indexOfLastMarker, element);
 			}
-
 		}
 		for (int i = 0; i < childElements.size(); i++) {
 			analyzeDirectChildren(childElements.get(i));
@@ -211,7 +199,6 @@ public class MetricHandler implements IMetricHandler {
 		Element invoke = configLogService.createInvokeElement();
 		element.addContent(index, invoke);
 		element.addContent(index, assign);
-
 	}
 
 	private String getMarker(String commentText) {
@@ -232,5 +219,7 @@ public class MetricHandler implements IMetricHandler {
 		IMetric metric = metrics.get(metricName);
 		return metric;
 	}
+	
+
 
 }

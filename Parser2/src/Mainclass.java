@@ -1,6 +1,10 @@
 
 import java.io.IOException;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
 import org.jdom.JDOMException;
 
 import coverage.CoverageMeasurement;
@@ -48,6 +52,18 @@ public class Mainclass {
 		
 		filename=args[7];
 		try {
+			Logger logger = Logger.getLogger("test");
+			 SimpleLayout layout = new SimpleLayout();
+			 ConsoleAppender consoleAppender = new ConsoleAppender(layout);
+			 logger.addAppender(consoleAppender);
+			 FileAppender fileAppender;
+			 try {
+			 fileAppender = new FileAppender(layout, "MeineLogDatei.log", false);
+			 logger.addAppender(fileAppender);
+			 } catch (IOException e) {
+			 // TODO Auto-generated catch block
+			 e.printStackTrace();
+			 }
 			CoverageMeasurement.prepareForCoverageMeasurement("D:/Alex/daten/Masterarbeit/workspaceBPELUnit/Parser2/bsp/",filename,null);
 		} catch (ArchiveFileException e) {
 			// TODO Auto-generated catch block

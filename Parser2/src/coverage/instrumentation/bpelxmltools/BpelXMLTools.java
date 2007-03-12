@@ -17,7 +17,7 @@ public class BpelXMLTools {
 
 
 	public static final Namespace NAMESPACE_BPEL_2 = Namespace
-	.getNamespace("bpel","http://schemas.xmlsoap.org/ws/2003/03/business-process/");
+	.getNamespace("http://schemas.xmlsoap.org/ws/2003/03/business-process/");
 	
 	public static final String PROCESS_ELEMENT = "process";
 

@@ -34,14 +34,14 @@ public class LoggingServiceConfiguration {
 
 	private void insertVariable(Element process_element, int index) {
 		Element variable = new Element("variable", BpelXMLTools
-				.NAMESPACE_BPEL_2);
-		variable.setAttribute("messageType", "logRequest",LOG_SERVICE_NAMESPACE);
+				.getBpelNamespace());
+		variable.setAttribute("messageType", "log:logRequest");
 		variable.setAttribute("name", "logRequest");
 		Element variables = process_element.getChild("variables",
-				BpelXMLTools.NAMESPACE_BPEL_2);
+				BpelXMLTools.getBpelNamespace());
 		if (variables == null) {
 			variables = new Element("variables", BpelXMLTools
-					.NAMESPACE_BPEL_2);
+					.getBpelNamespace());
 			process_element.addContent(index + 1, variables);
 		}
 		variables.addContent(variable);
@@ -49,11 +49,11 @@ public class LoggingServiceConfiguration {
 
 	private int insertPartnerLink(Element process_element) {
 		Element partnerLinks = process_element.getChild("partnerLinks",
-				BpelXMLTools.NAMESPACE_BPEL_2);
+				BpelXMLTools.getBpelNamespace());
 		Element partnerLink = new Element("partnerLink", BpelXMLTools
-				.NAMESPACE_BPEL_2);
+				.getBpelNamespace());
 		partnerLink.setAttribute("name", "PLT_LogService_");
-		partnerLink.setAttribute("partnerLinkType", "PLT_LogService_",LOG_SERVICE_NAMESPACE);
+		partnerLink.setAttribute("partnerLinkType",LOG_SERVICE_NAMESPACE.getPrefix()+ ":PLT_LogService_");
 		partnerLink.setAttribute("partnerRole", "Logger");
 		partnerLinks.addContent(partnerLink);
 		int index = process_element.indexOf(partnerLinks);
@@ -63,7 +63,7 @@ public class LoggingServiceConfiguration {
 	public Element createInvokeElement() {
 
 		Element invoke = new Element(BasisActivity.INVOKE_ACTIVITY,
-				BpelXMLTools.NAMESPACE_BPEL_2);
+				BpelXMLTools.getBpelNamespace());
 		// Element variableElement =
 		// BpelXMLTools.createVariable(element.getDocument());
 		// BpelXMLTools.insertVariable(variable, element.getDocument()
@@ -74,20 +74,19 @@ public class LoggingServiceConfiguration {
 		invoke.setAttribute("partnerLink",
 				LoggingServiceConfiguration.LOGGING_SERVICE_PORTTYPE);
 		invoke.setAttribute("portType",
-				LoggingServiceConfiguration.LOGGING_SERVICE_PORT,
-				LoggingServiceConfiguration.LOG_SERVICE_NAMESPACE);
+				LOG_SERVICE_NAMESPACE.getPrefix()+":"+LoggingServiceConfiguration.LOGGING_SERVICE_PORT);
 		return invoke;
 	}
 
 	public Element createAssignElement(String content) {
-		Element from = new Element("from", BpelXMLTools.NAMESPACE_BPEL_2);
+		Element from = new Element("from", BpelXMLTools.getBpelNamespace());
 		Element literal = new Element("literal", BpelXMLTools
-				.NAMESPACE_BPEL_2);
+				.getBpelNamespace());
 		literal.setText(content);
 		from.addContent(literal);
-		Element to = new Element("to", BpelXMLTools.NAMESPACE_BPEL_2);
+		Element to = new Element("to", BpelXMLTools.getBpelNamespace());
 		to.setAttribute("part", "logEntry");
-		to.setAttribute("variable", "logEntry");
+		to.setAttribute("variable", "logRequest");
 		return BpelXMLTools.createAssign(from, to);
 	}
 

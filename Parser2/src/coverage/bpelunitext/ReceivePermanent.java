@@ -79,7 +79,6 @@ public class ReceivePermanent extends Activity {
 				outgoing.setCode(202);
 				outgoing.setBody("");
 				context.postAnswer(this.getPartnerTrack(), outgoing);
-
 				// if (fReceiveSpec.hasProblems())
 				// fStatus= fReceiveSpec.getStatus();
 				// else
