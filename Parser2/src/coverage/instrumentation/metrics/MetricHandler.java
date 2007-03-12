@@ -42,9 +42,7 @@ import exception.BpelVersionException;
  * @author Alex Salnikow
  */
 public class MetricHandler implements IMetricHandler {
-
-	private static final Namespace NAMESPACE_BPEL_2 = Namespace
-			.getNamespace("http://schemas.xmlsoap.org/ws/2003/03/business-process/");
+	
 
 	private HashMap<String, IMetric> metrics;
 
@@ -102,13 +100,12 @@ public class MetricHandler implements IMetricHandler {
 				throw (new BpelException(BpelException.NO_VALIDE_BPEL));
 
 			}
-			if (!process_element.getNamespace().equals(NAMESPACE_BPEL_2)) {
+			if (!process_element.getNamespace().equals(BpelXMLTools.NAMESPACE_BPEL_2)) {
 				throw (new BpelVersionException(
 						BpelVersionException.WRONG_VERSION));
 			}
-			BpelXMLTools.process_element = process_element;
-
-			insertImportElementOfLogWSDL();
+			BpelXMLTools.process_element=process_element;
+			insertImportElementForLogWSDL();
 
 			IMetric metric;
 			for (Iterator<IMetric> i = metrics.values().iterator(); i.hasNext();) {
@@ -152,7 +149,7 @@ public class MetricHandler implements IMetricHandler {
 		}
 	}
 
-	private void insertImportElementOfLogWSDL() {
+	private void insertImportElementForLogWSDL() {
 		Element importElement = new Element("import", BpelXMLTools
 				.getBpelNamespace());
 		importElement.setAttribute("importType",

@@ -14,7 +14,10 @@ import org.jdom.Namespace;
  */
 public class BpelXMLTools {
 	
-	public static  Element process_element=null;
+
+
+	public static final Namespace NAMESPACE_BPEL_2 = Namespace
+	.getNamespace("bpel","http://schemas.xmlsoap.org/ws/2003/03/business-process/");
 	
 	public static final String PROCESS_ELEMENT = "process";
 
@@ -22,6 +25,8 @@ public class BpelXMLTools {
 	private static int count = 0;
 
 	public static String namespacePrefix;
+
+	public static Element process_element;
 
 	private static final String VARIABLE_TAG = "variable";
 
@@ -135,8 +140,7 @@ public class BpelXMLTools {
 	public static Element encloseElementInFlow(Element activity) {
 		Element parent = activity.getParentElement();
 		int index = parent.indexOf(activity);
-		Element flow = new Element(StructuredActivity.FLOW_ACTIVITY,
-				getBpelNamespace());
+		Element flow = new Element(StructuredActivity.FLOW_ACTIVITY,getBpelNamespace());
 		activity.detach();
 		flow.addContent(activity);
 		parent.addContent(index, flow);
@@ -247,7 +251,7 @@ public class BpelXMLTools {
 	 */
 	public static Element createIncreesAssign(Element countVariable) {
 		Element assign = new Element(ASSIGN_TAG, getBpelNamespace());
-		Element copy = new Element(COPY_TAG, getBpelNamespace());
+		Element copy = new Element(COPY_TAG,getBpelNamespace());
 		Element from = new Element(FROM_TAG, getBpelNamespace());
 		Element to = new Element(TO_TAG, getBpelNamespace());
 		from.setText("$" + countVariable.getName() + " + 1");
@@ -272,7 +276,7 @@ public class BpelXMLTools {
 	 */
 	public static Element insertElseBranch(Element element) {
 		Element elseElement = new Element(ELSE_ELEMENT,
-				BpelXMLTools.getBpelNamespace());
+				getBpelNamespace());
 		elseElement.addContent(BpelXMLTools.createSequence());
 		element.addContent(elseElement);
 		return elseElement;
@@ -280,14 +284,14 @@ public class BpelXMLTools {
 	public static Element createIfActivity(String conditionContent) {
 		Element if_element= new Element(IF_TAG, getBpelNamespace());
 		Element condition = new Element(CONDITION_TAG,
-				BpelXMLTools.getBpelNamespace());
+				getBpelNamespace());
 		condition.setText(conditionContent);
 		if_element.addContent(condition);
 		return null;
 	}
 	
 	public static Element createAssign(Element from,Element to){
-		Element assign = new Element(ASSIGN_TAG, getBpelNamespace());
+		Element assign = new Element(ASSIGN_TAG,getBpelNamespace());
 		Element copy = new Element(COPY_TAG, getBpelNamespace());
 		copy.addContent(from);
 		copy.addContent(to);

@@ -18,8 +18,12 @@ import exception.BpelException;
 import exception.BpelVersionException;
 
 public class CoverageMeasurement {
+	
+	public void initializeCoverageMeasurement(){
+		
+	}
 
-	public static String initializeCoverageMeasurement(String pathToArchive,String bprFile,
+	public static String prepareForCoverageMeasurement(String pathToArchive,String bprFile,
 			IBPELDeployer deployer) throws FileNotFoundException,
 			BpelException, BpelVersionException, ArchiveFileException {
 

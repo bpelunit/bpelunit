@@ -34,14 +34,14 @@ public class LoggingServiceConfiguration {
 
 	private void insertVariable(Element process_element, int index) {
 		Element variable = new Element("variable", BpelXMLTools
-				.getBpelNamespace());
+				.NAMESPACE_BPEL_2);
 		variable.setAttribute("messageType", "logRequest",LOG_SERVICE_NAMESPACE);
 		variable.setAttribute("name", "logRequest");
 		Element variables = process_element.getChild("variables",
-				BpelXMLTools.getBpelNamespace());
+				BpelXMLTools.NAMESPACE_BPEL_2);
 		if (variables == null) {
 			variables = new Element("variables", BpelXMLTools
-					.getBpelNamespace());
+					.NAMESPACE_BPEL_2);
 			process_element.addContent(index + 1, variables);
 		}
 		variables.addContent(variable);
@@ -49,9 +49,9 @@ public class LoggingServiceConfiguration {
 
 	private int insertPartnerLink(Element process_element) {
 		Element partnerLinks = process_element.getChild("partnerLinks",
-				BpelXMLTools.getBpelNamespace());
+				BpelXMLTools.NAMESPACE_BPEL_2);
 		Element partnerLink = new Element("partnerLink", BpelXMLTools
-				.getBpelNamespace());
+				.NAMESPACE_BPEL_2);
 		partnerLink.setAttribute("name", "PLT_LogService_");
 		partnerLink.setAttribute("partnerLinkType", "PLT_LogService_",LOG_SERVICE_NAMESPACE);
 		partnerLink.setAttribute("partnerRole", "Logger");
@@ -63,7 +63,7 @@ public class LoggingServiceConfiguration {
 	public Element createInvokeElement() {
 
 		Element invoke = new Element(BasisActivity.INVOKE_ACTIVITY,
-				BpelXMLTools.getBpelNamespace());
+				BpelXMLTools.NAMESPACE_BPEL_2);
 		// Element variableElement =
 		// BpelXMLTools.createVariable(element.getDocument());
 		// BpelXMLTools.insertVariable(variable, element.getDocument()
@@ -80,12 +80,12 @@ public class LoggingServiceConfiguration {
 	}
 
 	public Element createAssignElement(String content) {
-		Element from = new Element("from", BpelXMLTools.getBpelNamespace());
+		Element from = new Element("from", BpelXMLTools.NAMESPACE_BPEL_2);
 		Element literal = new Element("literal", BpelXMLTools
-				.getBpelNamespace());
+				.NAMESPACE_BPEL_2);
 		literal.setText(content);
 		from.addContent(literal);
-		Element to = new Element("to", BpelXMLTools.getBpelNamespace());
+		Element to = new Element("to", BpelXMLTools.NAMESPACE_BPEL_2);
 		to.setAttribute("part", "logEntry");
 		to.setAttribute("variable", "logEntry");
 		return BpelXMLTools.createAssign(from, to);
