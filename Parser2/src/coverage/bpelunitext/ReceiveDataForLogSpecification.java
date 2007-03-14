@@ -3,6 +3,7 @@ package coverage.bpelunitext;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.exception.HeaderProcessingException;
 import org.bpelunit.framework.exception.SpecificationException;
+import org.bpelunit.framework.model.test.TestCase;
 import org.bpelunit.framework.model.test.activity.Activity;
 import org.bpelunit.framework.model.test.activity.ActivityContext;
 import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
@@ -14,7 +15,9 @@ public class ReceiveDataForLogSpecification extends ReceiveDataSpecification {
 
 	private Logger fLogger;
 
-//	private boolean lastMessageReceived = false;
+	private boolean lastMessageReceived = false;
+
+	private TestCase testCase;
 
 	public ReceiveDataForLogSpecification(Activity arg0)
 			throws SpecificationException {
@@ -37,13 +40,26 @@ public class ReceiveDataForLogSpecification extends ReceiveDataSpecification {
 		}
 
 		decodeMessage();
-		CoverageRegestry.getInstance().setCoverageStatusForAllMarker(fLiteralData.getTextContent(), "Testcase1");
-		fLogger.info("----------------"+fLiteralData.getTextContent()+"-----------");
+
+		String content = fLiteralData.getTextContent();
+		if (content.equals(MetricHandler.STOP_FLAG)) {
+			lastMessageReceived=true;
+		} else {
+			CoverageRegestry.getInstance().setCoverageStatusForAllMarker(
+					content, testCase.getName());
+		}
+		fLogger.info("----------------" + fLiteralData.getTextContent()
+				+ "-----------");
 
 	}
 
-//	public boolean isLastMessageReceived() {
-//		return lastMessageReceived;
-//	}
+	public boolean isLastMessageReceived() {
+		return lastMessageReceived;
+	}
+
+	public void setTestCase(TestCase testCase) {
+		this.testCase=testCase;
+		
+	}
 
 }

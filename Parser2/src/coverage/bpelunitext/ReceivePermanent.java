@@ -12,13 +12,13 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.model.test.PartnerTrack;
+import org.bpelunit.framework.model.test.TestCase;
 import org.bpelunit.framework.model.test.activity.Activity;
 import org.bpelunit.framework.model.test.activity.ActivityContext;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
 import org.bpelunit.framework.model.test.report.ITestArtefact;
 import org.bpelunit.framework.model.test.wire.IncomingMessage;
 import org.bpelunit.framework.model.test.wire.OutgoingMessage;
-
 
 /**
  * A receive asynchronous activity is intended to receive a single incoming
@@ -44,18 +44,16 @@ public class ReceivePermanent extends Activity {
 	 * The receive specification handling the actual receive
 	 */
 	private ReceiveDataForLogSpecification fReceiveSpec;
-	
+
 	private boolean interrupt;
 
 	private Logger fLogger;
-	
-	private boolean complete=false;
 
 	// ************************** Initialization ************************
 
 	public ReceivePermanent(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		interrupt=false;
+		interrupt = false;
 		fLogger = Logger.getLogger(getClass());
 	}
 
@@ -71,14 +69,38 @@ public class ReceivePermanent extends Activity {
 
 		while (!interrupt) {
 			IncomingMessage incoming;
-
 			try {
-				fLogger.info("--------LogService wartet auf Message ----------");
+				fLogger
+						.info("--------LogService wartet auf Message ----------");
 				incoming = context.receiveMessage(this.getPartnerTrack());
+				fReceiveSpec.setTestCase(((TestCase)getPartnerTrack().getParent()));
 				fReceiveSpec.handle(context, incoming.getBody());
-//				if(fReceiveSpec.isLastMessageReceived()){
-//					interrupt=true;
-//				}
+				if (fReceiveSpec.isLastMessageReceived()) {
+					interrupt = true;
+					fLogger.info("--------Last Message received");
+				}
+			} catch (TimeoutException e) {
+				fLogger.info("--------TimeoutException");
+				fStatus = ArtefactStatus
+						.createErrorStatus(
+								"Timeout while waiting for incoming asynchronous message",
+								e);
+				interrupt = true;
+				// fStatus= ArtefactStatus.createErrorStatus("Timeout occurred
+				// while waiting for ACK for asynchronous receive.", e);
+			} catch (InterruptedException e) {
+
+				fLogger.info("--------InterruptedException");
+				fStatus = ArtefactStatus
+						.createAbortedStatus(
+								"Aborted while waiting for incoming asynchronous messsage",
+								e);
+				interrupt = true;
+				// interrupt=true;
+				// fStatus= ArtefactStatus.createAbortedStatus("Aborted while
+				// waiting for ACK for asynchronous receive to be sent.", e);
+			}
+			try{
 				OutgoingMessage outgoing = new OutgoingMessage();
 				// always accept.
 				outgoing.setCode(202);
@@ -88,25 +110,21 @@ public class ReceivePermanent extends Activity {
 				// fStatus= fReceiveSpec.getStatus();
 				// else
 				// fStatus= ArtefactStatus.createPassedStatus();
-
 			} catch (TimeoutException e) {
-			fLogger.info("--------TimeoutException");
-				// fStatus= ArtefactStatus.createErrorStatus("Timeout occurred
-				// while waiting for ACK for asynchronous receive.", e);
+				fStatus= ArtefactStatus.createErrorStatus("Timeout occurred while waiting for ACK for asynchronous receive.", e);
+				interrupt = true;
 			} catch (InterruptedException e) {
-
-				fLogger.info("--------InterruptedException");
-				interrupt=true;
-				// fStatus= ArtefactStatus.createAbortedStatus("Aborted while
-				// waiting for ACK for asynchronous receive to be sent.", e);
+				fStatus= ArtefactStatus.createAbortedStatus("Aborted while waiting for ACK for asynchronous receive to be sent.", e);
+				interrupt = true;
 			}
+
+
 		}
-		complete=true;
 	}
 
 	@Override
 	public String getActivityCode() {
-		return "ReceiveAsync";
+		return "ReceivePermanent";
 	}
 
 	@Override
@@ -118,7 +136,7 @@ public class ReceivePermanent extends Activity {
 
 	@Override
 	public String getName() {
-		return "Receive Asynchronous";
+		return "Receive Permanent";
 	}
 
 	@Override
@@ -132,13 +150,10 @@ public class ReceivePermanent extends Activity {
 		children.add(fReceiveSpec);
 		return children;
 	}
-	
-	public void interruptActivity(){
-		interrupt=true;
+
+	public void interruptActivity() {
+		interrupt = true;
 	}
 
-	public boolean isComplete() {
-		return complete;
-	}
 
 }

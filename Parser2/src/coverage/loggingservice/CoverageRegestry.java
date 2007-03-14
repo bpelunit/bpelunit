@@ -76,7 +76,7 @@ public class CoverageRegestry {
 	}
 
 	private void setCoverageStatusForMarker(String string, String testCase) {
-		logger.info("!_!_!_!_!__-------!!!-11-1-1-!_!" + string);
+		logger.info("!_!_!_!_!__-------!!!-11-1-1-!_!" + string+"testCase="+testCase);
 		String prefix = string.substring(0, string.indexOf('_'));
 		MarkerStatus status = (MarkerStatus) ((Hashtable) allMetricsTable
 				.get(prefix)).get(string);

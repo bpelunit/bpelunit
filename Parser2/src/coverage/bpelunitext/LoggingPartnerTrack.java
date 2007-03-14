@@ -41,6 +41,7 @@ public class LoggingPartnerTrack extends PartnerTrack {
 			fLogger.info(getName() + " returned from activity " + activity);
 
 		}
+		fRunner.done(this);
 
 	}
 

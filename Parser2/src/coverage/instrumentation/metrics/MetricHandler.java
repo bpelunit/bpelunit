@@ -151,21 +151,14 @@ public class MetricHandler implements IMetricHandler {
 	private void insertInvokesForMarker() {
 		configLogService = new LoggingServiceConfiguration("", process_element);
 		analyzeDirectChildren(process_element);
-//		insertLastInvoke(process_element);
+		insertLastInvoke(process_element);
 
 	}
 
 	private void insertLastInvoke(Element process_element) {
 		Element sequenceElement = BpelXMLTools.createSequence();
-		List children = process_element.getContent();
-		List<Content> childList = new ArrayList<Content>();
-		for (Iterator iter = children.iterator(); iter.hasNext();) {
-			childList.add((Content) iter.next());
-		}
-
-		for (Iterator<Content> iter = childList.iterator(); iter.hasNext();) {
-			sequenceElement.addContent(iter.next().detach());
-		}
+		Element activity=BpelXMLTools.getFirstActivityChild(process_element);
+		sequenceElement.addContent(activity.detach());
 		insertInvokeForMarker(STOP_FLAG, sequenceElement.getContentSize(),
 				sequenceElement);
 		process_element.addContent(sequenceElement);
