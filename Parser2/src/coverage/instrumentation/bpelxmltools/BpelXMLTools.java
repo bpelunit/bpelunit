@@ -1,10 +1,13 @@
 package coverage.instrumentation.bpelxmltools;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 /**
  * Die Klasse stellt zur Verfügung Methoden, mit denen man neue Elemente der
@@ -297,6 +300,27 @@ public class BpelXMLTools {
 		copy.addContent(to);
 		assign.addContent(copy);
 		return assign;
+	}
+	
+	public static void sysout(Element element){
+		XMLOutputter xmlOutputter = new XMLOutputter(Format
+				.getPrettyFormat());
+		try {
+			xmlOutputter.output(element, System.out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void sysout(Document doc){
+		XMLOutputter xmlOutputter = new XMLOutputter(Format
+				.getPrettyFormat());
+		try {
+			xmlOutputter.output(doc, System.out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

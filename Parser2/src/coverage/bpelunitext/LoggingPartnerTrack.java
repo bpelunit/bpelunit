@@ -30,6 +30,7 @@ public class LoggingPartnerTrack extends PartnerTrack {
 
 	public void run() {
 
+
 		fStatus = ArtefactStatus.createPassedStatus();
 		for (Activity activity : fActivities) {
 			this.activity=activity;

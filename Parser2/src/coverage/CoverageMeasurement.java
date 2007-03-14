@@ -52,6 +52,7 @@ public class CoverageMeasurement {
 		Statementmetric metric = (Statementmetric) metricHandler
 				.addMetric(MetricHandler.STATEMENT_METRIC);
 		metric.addAllBasicActivities();
+		metricHandler.addMetric(MetricHandler.BRANCH_METRIC);
 		de.schlichtherle.io.File bpelFile;
 		for (int i = 0; i < archiveHandler.getCountOfBPELFiles(); i++) {
 			bpelFile = archiveHandler.getBPELFile(i);

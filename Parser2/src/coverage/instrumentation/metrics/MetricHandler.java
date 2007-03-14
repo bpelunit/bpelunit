@@ -2,33 +2,26 @@ package coverage.instrumentation.metrics;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
 import org.jdom.Comment;
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.Namespace;
 import org.jdom.filter.ContentFilter;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
-
-import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
+import coverage.loggingservice.CoverageRegestry;
 import coverage.loggingservice.LoggingServiceConfiguration;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
@@ -42,7 +35,10 @@ import exception.BpelVersionException;
  * @author Alex Salnikow
  */
 public class MetricHandler implements IMetricHandler {
-	
+
+	public static final String MARKER_SEPARATOR = "#";
+
+	public static final String STOP_FLAG = "STOP";
 
 	private HashMap<String, IMetric> metrics;
 
@@ -55,6 +51,7 @@ public class MetricHandler implements IMetricHandler {
 	public MetricHandler() {
 		metrics = new HashMap<String, IMetric>();
 		logger = Logger.getLogger(getClass());
+		;
 	}
 
 	public IMetric addMetric(String metricName) {
@@ -89,17 +86,19 @@ public class MetricHandler implements IMetricHandler {
 				throw (new BpelException(BpelException.NO_VALIDE_BPEL));
 
 			}
-			if (!process_element.getNamespace().equals(BpelXMLTools.NAMESPACE_BPEL_2)) {
+			if (!process_element.getNamespace().equals(
+					BpelXMLTools.NAMESPACE_BPEL_2)) {
 				throw (new BpelVersionException(
 						BpelVersionException.WRONG_VERSION));
 			}
-			BpelXMLTools.process_element=process_element;
+			BpelXMLTools.process_element = process_element;
 			insertImportElementForLogWSDL();
 
 			IMetric metric;
 			for (Iterator<IMetric> i = metrics.values().iterator(); i.hasNext();) {
 				metric = i.next();
 				logger.info(metric);
+				CoverageRegestry.getInstance().addMetric(metric);
 				metric.insertMarker(process_element);
 			}
 			insertInvokesForMarker();
@@ -152,6 +151,24 @@ public class MetricHandler implements IMetricHandler {
 	private void insertInvokesForMarker() {
 		configLogService = new LoggingServiceConfiguration("", process_element);
 		analyzeDirectChildren(process_element);
+//		insertLastInvoke(process_element);
+
+	}
+
+	private void insertLastInvoke(Element process_element) {
+		Element sequenceElement = BpelXMLTools.createSequence();
+		List children = process_element.getContent();
+		List<Content> childList = new ArrayList<Content>();
+		for (Iterator iter = children.iterator(); iter.hasNext();) {
+			childList.add((Content) iter.next());
+		}
+
+		for (Iterator<Content> iter = childList.iterator(); iter.hasNext();) {
+			sequenceElement.addContent(iter.next().detach());
+		}
+		insertInvokeForMarker(STOP_FLAG, sequenceElement.getContentSize(),
+				sequenceElement);
+		process_element.addContent(sequenceElement);
 	}
 
 	private void analyzeDirectChildren(Element element) {
@@ -173,13 +190,13 @@ public class MetricHandler implements IMetricHandler {
 			commentText = comment.getText();
 			if (isMarker(commentText)) {
 				if (indexOfLastMarker - 1 == index) {
-					marker = marker + getMarker(commentText);
+					marker = marker + getMarker(commentText) + MARKER_SEPARATOR;
 				} else {
 					if (marker.length() > 0) {
 						insertInvokeForMarker(marker, indexOfLastMarker,
 								element);
 					}
-					marker = getMarker(commentText);
+					marker = getMarker(commentText) + MARKER_SEPARATOR;
 				}
 				comment.detach();
 			}
@@ -219,7 +236,5 @@ public class MetricHandler implements IMetricHandler {
 		IMetric metric = metrics.get(metricName);
 		return metric;
 	}
-	
-
 
 }

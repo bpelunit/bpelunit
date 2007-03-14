@@ -48,6 +48,8 @@ public class ReceivePermanent extends Activity {
 	private boolean interrupt;
 
 	private Logger fLogger;
+	
+	private boolean complete=false;
 
 	// ************************** Initialization ************************
 
@@ -74,6 +76,9 @@ public class ReceivePermanent extends Activity {
 				fLogger.info("--------LogService wartet auf Message ----------");
 				incoming = context.receiveMessage(this.getPartnerTrack());
 				fReceiveSpec.handle(context, incoming.getBody());
+//				if(fReceiveSpec.isLastMessageReceived()){
+//					interrupt=true;
+//				}
 				OutgoingMessage outgoing = new OutgoingMessage();
 				// always accept.
 				outgoing.setCode(202);
@@ -85,13 +90,18 @@ public class ReceivePermanent extends Activity {
 				// fStatus= ArtefactStatus.createPassedStatus();
 
 			} catch (TimeoutException e) {
+			fLogger.info("--------TimeoutException");
 				// fStatus= ArtefactStatus.createErrorStatus("Timeout occurred
 				// while waiting for ACK for asynchronous receive.", e);
 			} catch (InterruptedException e) {
+
+				fLogger.info("--------InterruptedException");
+				interrupt=true;
 				// fStatus= ArtefactStatus.createAbortedStatus("Aborted while
 				// waiting for ACK for asynchronous receive to be sent.", e);
 			}
 		}
+		complete=true;
 	}
 
 	@Override
@@ -125,6 +135,10 @@ public class ReceivePermanent extends Activity {
 	
 	public void interruptActivity(){
 		interrupt=true;
+	}
+
+	public boolean isComplete() {
+		return complete;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.jdom.Comment;
 import org.jdom.Element;
@@ -13,6 +14,7 @@ import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
+import coverage.loggingservice.CoverageRegestry;
 
 /**
  * Klasse instrumentiert ein BPEL-Prozess, um die Abdeckung der BasicActivities
@@ -92,15 +94,15 @@ public class Statementmetric implements IMetric {
 	 */
 	private void insertMarkerForEachActivity(List<Element> elements_to_log) {
 		Element element;
-		Element targetelement;
+		Element targetElement;
 		for (int i = 0; i < elements_to_log.size(); i++) {
 			element = elements_to_log.get(i);
 			Element parent = element.getParentElement();
-			targetelement = element.getChild("targets", BpelXMLTools
+			targetElement = element.getChild("targets", BpelXMLTools
 					.getBpelNamespace());
-			if (targetelement != null) {
+			if (targetElement != null) {
 				Element sequence = BpelXMLTools.encloseInSequence(element);
-				sequence.addContent(0, targetelement.detach());
+				sequence.addContent(0, targetElement.detach());
 			} else if (!parent.getName().equals(
 					StructuredActivity.SEQUENCE_ACTIVITY)) {
 				BpelXMLTools.ensureElementIsInSequence(element);
@@ -121,13 +123,14 @@ public class Statementmetric implements IMetric {
 	private void insertMarkerForActivity(Element element) {
 		Element parent = element.getParentElement();
 		String element_name = element.getName();
-		Comment marker = new Comment(MARKER_IDENTIFIRE + element_name
-				+ (count++));
+		String marker=element_name + "_" + (count++);
+		CoverageRegestry.getInstance().addMarker(marker);
+		Comment comment = new Comment(MARKER_IDENTIFIRE + marker);
 		int index = parent.indexOf(element);
 		if (logging_before_activity.containsKey(element_name)) {
-			parent.addContent(index, marker);
+			parent.addContent(index, comment);
 		} else {
-			parent.addContent(index + 1, marker);
+			parent.addContent(index + 1, comment);
 		}
 
 	}
@@ -181,5 +184,9 @@ public class Statementmetric implements IMetric {
 			name = name + e.next() + ", ";
 		}
 		return name;
+	}
+
+	public Set<String> getBasisActivities() {
+		return activities_to_respekt.keySet();
 	}
 }

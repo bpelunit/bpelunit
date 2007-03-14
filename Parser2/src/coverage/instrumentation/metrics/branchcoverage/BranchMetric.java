@@ -12,6 +12,7 @@ import org.jdom.filter.ElementFilter;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
+import coverage.loggingservice.CoverageRegestry;
 import exception.BpelException;
 
 /**
@@ -24,7 +25,7 @@ public class BranchMetric implements IMetric {
 
 	public static final String METRIC_NAME = "Branchmetric";
 
-	private static final String BRANCH_LABEL = "branch";
+	public static final String BRANCH_LABEL = "branch";
 
 	private static final String LINK_LABEL = "link";
 
@@ -36,7 +37,9 @@ public class BranchMetric implements IMetric {
 	 * @return eindeutige Markierung
 	 */
 	public static String getNextLabel() {
-		return BRANCH_LABEL + (count++);
+		String marker=BRANCH_LABEL +"_"+ (count++);
+		CoverageRegestry.getInstance().addMarker(marker);
+		return MARKER_IDENTIFIRE+marker;
 	}
 
 	/**
@@ -44,9 +47,9 @@ public class BranchMetric implements IMetric {
 	 * 
 	 * @return eindeutige Markierung
 	 */
-	public static String getNextLinkLabel() {
-		return LINK_LABEL + getNextLabel();
-	}
+//	public static String getNextLinkLabel() {
+//		return LINK_LABEL + getNextLabel();
+//	}
 
 	/**
 	 * Fügt Markierung für einen Zweig, der durch eine Aktivität repräsentiert
