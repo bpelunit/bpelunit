@@ -25,5 +25,7 @@ public interface IMetric {
 	 * @throws BpelException 
 	 */
 	public void insertMarker(Element process_element) throws BpelException;
+	
+	public String getName();
 
 }

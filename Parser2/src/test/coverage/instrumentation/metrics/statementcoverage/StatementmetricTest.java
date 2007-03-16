@@ -20,7 +20,7 @@ import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
-import coverage.loggingservice.CoverageRegestry;
+import coverage.loggingservice.CoverageRegistry;
 
 public class StatementmetricTest {
 
@@ -35,7 +35,7 @@ public class StatementmetricTest {
 		metric = new Statementmetric();
 		metric.addAllBasicActivities();
 		ns = BpelXMLTools.NAMESPACE_BPEL_2;
-		CoverageRegestry.getInstance().addMetric(metric);
+		CoverageRegistry.getInstance().addMetric(metric);
 		process = Factory.createProzessElement();
 		BpelXMLTools.process_element = process;
 	}

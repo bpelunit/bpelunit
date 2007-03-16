@@ -3,10 +3,20 @@ package coverage.deployarchivetools.impl;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.wsdl.Definition;
+import javax.wsdl.Service;
+import javax.wsdl.WSDLException;
+import javax.wsdl.factory.WSDLFactory;
+import javax.wsdl.xml.WSDLReader;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.bpelunit.framework.exception.SpecificationException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -14,6 +24,9 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import com.ibm.wsdl.Constants;
+
+import coverage.CoverageConstants;
 import coverage.deployarchivetools.IDeploymentArchiveHandler;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
@@ -24,6 +37,8 @@ import exception.ArchiveFileException;
 public class ActiveBPELDeploymentArchiveHandler implements
 		IDeploymentArchiveHandler {
 
+	private static final String WSDL_DIRECTORY_IN_ARCHIVE="wsdl/";
+	private static String WSDL_FILE_IN_ARCHIVE;
 	private String[] bpelFiles;
 
 	private File archiveFile;
@@ -33,6 +48,8 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	private String bprFile;
 
 	private Logger fLogger;
+
+	private Definition fWSDLDefinition;
 
 	public ActiveBPELDeploymentArchiveHandler() {
 		fLogger = Logger.getLogger(getClass());
@@ -61,7 +78,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	}
 
 	public void addWSDLFile(java.io.File wsdlFile) throws ArchiveFileException {
-
+		WSDL_FILE_IN_ARCHIVE=WSDL_DIRECTORY_IN_ARCHIVE+wsdlFile.getName();
 		fLogger.info("CoverageTool: Adding WSDL-file "
 				+ FilenameUtils.getName(wsdlFile.getName())
 				+ " for CoverageLogging in bpr-archive");
@@ -69,13 +86,20 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		OutputStream out = null;
 		try {
 			adaptWsdlCatalog();
-			out = new FileOutputStream(bprFile + "/wsdl/" + wsdlFile.getName());
+			out = new FileOutputStream(bprFile + "/"+WSDL_FILE_IN_ARCHIVE);
 			out.write(FileUtils.readFileToByteArray(wsdlFile));
 			fLogger.info("CoverageTool: WSDL-file sucessfull added.");
 			prepareDeploymentDescriptor();
 
+				WSDLFactory factory= WSDLFactory.newInstance();
+				WSDLReader reader= factory.newWSDLReader();
+				reader.setFeature(Constants.FEATURE_VERBOSE, false);
+				fWSDLDefinition= reader.readWSDL(wsdlFile.getPath());
+				
 		} catch (IOException e) {
 			throw new ArchiveFileException("", e);
+		} catch (WSDLException e) {
+			throw new ArchiveFileException("Error while reading WSDL for LoggingService " + wsdlFile.getName() + " from file \"" + wsdlFile.getName() + "\".", e);
 		} finally {
 
 			if (out != null) {
@@ -102,8 +126,8 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			Element wsdlCatalog = doc.getRootElement();
 			Element wsdlEntry = new Element("wsdlEntry", wsdlCatalog
 					.getNamespace());
-			wsdlEntry.setAttribute("location", "wsdl/_LogService_.wsdl");
-			wsdlEntry.setAttribute("classpath", "wsdl/_LogService_.wsdl");
+			wsdlEntry.setAttribute("location",WSDL_FILE_IN_ARCHIVE);
+			wsdlEntry.setAttribute("classpath", WSDL_FILE_IN_ARCHIVE);
 			wsdlCatalog.addContent(wsdlEntry);
 			writer = new FileWriter(file);
 			XMLOutputter xmlOutputter = new XMLOutputter(Format
@@ -172,9 +196,9 @@ public class ActiveBPELDeploymentArchiveHandler implements
 
 	private void addWSDLEntry(Element process) {
 		Element wsdl = new Element("wsdl", process.getNamespace());
-		wsdl.setAttribute("location", "wsdl/_LogService_.wsdl");
+		wsdl.setAttribute("location", WSDL_FILE_IN_ARCHIVE);
 		wsdl.setAttribute("namespace",
-				"http://www.bpelunit.org/coverage/logService");
+				CoverageConstants.COVERAGETOOL_NAMESPACE.getURI());
 		Element references = process.getChild("references", process
 				.getNamespace());
 		references.addContent(wsdl);
@@ -228,17 +252,16 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	private void addPartnerLink(Element process) {
 
 		Namespace ns = Namespace.getNamespace("wsa",
-				"http://schemas.xmlsoap.org/ws/2003/03/addressing");
+				CoverageConstants.PARTNERLINK_NAMESPACE);
 		process.addNamespaceDeclaration(ns);
 		Element adress = new Element("Address", ns);
 		adress.setText("http://localhost:7777/ws/_LogService_");
 		Element serviceName = new Element("ServiceName", ns);
 		serviceName.setAttribute("PortName", "_LogService_SOAP");
-		serviceName.setText("s:_LogService_");
+		serviceName.setText(CoverageConstants.COVERAGETOOL_NAMESPACE.getPrefix()+":_LogService_");
 
 		Element endpointReference = new Element("EndpointReference", ns);
-		endpointReference.addNamespaceDeclaration(Namespace.getNamespace("s",
-				"http://www.bpelunit.org/coverage/logService"));
+		endpointReference.addNamespaceDeclaration(CoverageConstants.COVERAGETOOL_NAMESPACE);
 		endpointReference.addContent(adress);
 		endpointReference.addContent(serviceName);
 		Element partnerRole = new Element("partnerRole",
@@ -258,5 +281,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		fLogger
 				.info("CoverageTool:PartnerLink for Covergae_Logging_Service in BPEL added.");
 	}
+	
+
 
 }

@@ -13,7 +13,7 @@ public class MarkerStatus {
 		testcases.add(testcase);
 	}
 
-	public boolean isStatus() {
+	public boolean isTested() {
 		return status;
 	}
 

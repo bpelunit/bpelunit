@@ -51,8 +51,12 @@ public class BasisActivity {
 	 * @param element
 	 * @return
 	 */
-	static boolean isBasisActivity(Element element) {
-		return basis_activities.containsKey(element.getName()) ? true : false;
+	public static boolean isBasisActivity(Element element) {
+		return isBasisActivity(element.getName());
+	}
+	
+	public static boolean isBasisActivity(String name) {
+		return basis_activities.containsKey(name) ? true : false;
 	}
 
 }

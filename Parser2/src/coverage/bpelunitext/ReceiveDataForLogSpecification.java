@@ -9,7 +9,7 @@ import org.bpelunit.framework.model.test.activity.ActivityContext;
 import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 
 import coverage.instrumentation.metrics.MetricHandler;
-import coverage.loggingservice.CoverageRegestry;
+import coverage.loggingservice.CoverageRegistry;
 
 public class ReceiveDataForLogSpecification extends ReceiveDataSpecification {
 
@@ -45,7 +45,7 @@ public class ReceiveDataForLogSpecification extends ReceiveDataSpecification {
 		if (content.equals(MetricHandler.STOP_FLAG)) {
 			lastMessageReceived=true;
 		} else {
-			CoverageRegestry.getInstance().setCoverageStatusForAllMarker(
+			CoverageRegistry.getInstance().setCoverageStatusForAllMarker(
 					content, testCase.getName());
 		}
 		fLogger.info("----------------" + fLiteralData.getTextContent()

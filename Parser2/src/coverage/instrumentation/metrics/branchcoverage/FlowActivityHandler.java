@@ -146,8 +146,8 @@ public class FlowActivityHandler implements IStructuredActivity {
 		if (loggingMarker != null && !loggingMarker.equals("")) {
 			logging = loggingMarker;
 		} else {
-//			logging = new Comment(BranchMetric.getNextLinkLabel() + " flow");
-			logging = new Comment(BranchMetric.getNextLabel() + " flow");
+			logging = new Comment(BranchMetric.getNextLinkLabel());
+//			logging = new Comment(BranchMetric.getNextLabel() + " flow");
 		}
 		Element sequence = BpelXMLTools.createSequence();
 		Element targetElement = new Element(TARGET_TAG, BpelXMLTools

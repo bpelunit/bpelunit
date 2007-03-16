@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="_LogService_"
+	targetNamespace="http://www.bpelunit.org/coverage/logService"
+	xmlns:log="http://www.bpelunit.org/coverage/logService"
+	xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:types></wsdl:types>
+	<wsdl:message name="logRequest">
+		<wsdl:part name="logEntry" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:portType name="_LogService_">
+		<wsdl:operation name="log">
+			<wsdl:input message="log:logRequest" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="_LogService_SOAP" type="log:_LogService_">
+		<soap:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="log">
+			<soap:operation
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+				soapAction="http://www.bpelunit.org/coverage/logService/log" />
+			<wsdl:input>
+				<soap:body
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="_LogService_">
+		<wsdl:port name="_LogService_SOAP"
+			binding="log:_LogService_SOAP">
+			<soap:address
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+				location="http://localhost:7777/ws/_LogService_" />
+		</wsdl:port>
+	</wsdl:service>
+	<plnk:partnerLinkType
+		xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+		name="PLT_LogService_">
+		<plnk:role name="Logger" portType="log:_LogService_" />
+	</plnk:partnerLinkType>
+</wsdl:definitions>

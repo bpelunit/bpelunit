@@ -1,6 +1,7 @@
 package coverage.instrumentation.metrics;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.jdom.JDOMException;
 
@@ -31,7 +32,7 @@ public interface IMetricHandler {
 	 * 
 	 * @param metricName
 	 */
-	public IMetric addMetric(String metricName);
+	public void addMetric(IMetric metric);
 
 	/**
 	 * Die Metrik wird bei der Ausführung der BPEL nicht erhoben.

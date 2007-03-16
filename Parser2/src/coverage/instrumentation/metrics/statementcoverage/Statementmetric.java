@@ -14,7 +14,7 @@ import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
-import coverage.loggingservice.CoverageRegestry;
+import coverage.loggingservice.CoverageRegistry;
 
 /**
  * Klasse instrumentiert ein BPEL-Prozess, um die Abdeckung der BasicActivities
@@ -124,7 +124,7 @@ public class Statementmetric implements IMetric {
 		Element parent = element.getParentElement();
 		String element_name = element.getName();
 		String marker=element_name + "_" + (count++);
-		CoverageRegestry.getInstance().addMarker(marker);
+		CoverageRegistry.getInstance().addMarker(marker);
 		Comment comment = new Comment(MARKER_IDENTIFIRE + marker);
 		int index = parent.indexOf(element);
 		if (logging_before_activity.containsKey(element_name)) {
@@ -188,5 +188,9 @@ public class Statementmetric implements IMetric {
 
 	public Set<String> getBasisActivities() {
 		return activities_to_respekt.keySet();
+	}
+
+	public String getName() {
+		return METRIC_NAME;
 	}
 }

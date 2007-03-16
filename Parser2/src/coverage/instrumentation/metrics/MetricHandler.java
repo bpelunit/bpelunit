@@ -21,7 +21,7 @@ import org.jdom.output.XMLOutputter;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
-import coverage.loggingservice.CoverageRegestry;
+import coverage.loggingservice.CoverageRegistry;
 import coverage.loggingservice.LoggingServiceConfiguration;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
@@ -54,16 +54,8 @@ public class MetricHandler implements IMetricHandler {
 		;
 	}
 
-	public IMetric addMetric(String metricName) {
-		IMetric metric = null;
-		if (metricName.equals(STATEMENT_METRIC)) {
-			metric = new Statementmetric();
-			metrics.put(STATEMENT_METRIC, metric);
-		} else if (metricName.equals(BRANCH_METRIC)) {
-			metric = new BranchMetric();
-			metrics.put(BRANCH_METRIC, metric);
-		}
-		return metric;
+	public void addMetric(IMetric metric){
+		metrics.put(metric.getName(), metric);
 	}
 
 	public void remove(String metricName) {
@@ -93,12 +85,13 @@ public class MetricHandler implements IMetricHandler {
 			}
 			BpelXMLTools.process_element = process_element;
 			insertImportElementForLogWSDL();
-
+			CoverageRegistry registry=CoverageRegistry.getInstance();
+			registry.initialize();
 			IMetric metric;
 			for (Iterator<IMetric> i = metrics.values().iterator(); i.hasNext();) {
 				metric = i.next();
 				logger.info(metric);
-				CoverageRegestry.getInstance().addMetric(metric);
+				registry.addMetric(metric);
 				metric.insertMarker(process_element);
 			}
 			insertInvokesForMarker();
@@ -229,5 +222,7 @@ public class MetricHandler implements IMetricHandler {
 		IMetric metric = metrics.get(metricName);
 		return metric;
 	}
+
+
 
 }

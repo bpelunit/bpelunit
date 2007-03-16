@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverageToolConfiguration
+	xmlns="http://www.bpelunit.org/schema/coverageToolConfiguration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bpelunit.org/schema/coverageToolConfiguration">
+	<metric name="Statementmetric">
+		<property name="IncludeBasicActivities">
+			invoke,receive,reply,throw,rethrow,wait,assign,empty,compensate,compensateScope,exit
+		</property>
+	</metric>
+	<metric name="Branchmetric">
+		<property name="IncludeFlowLinks">yes</property>
+		<property name="IncludeTrueFalseTransitionCondition">
+			yes
+		</property>
+	</metric>
+</coverageToolConfiguration>

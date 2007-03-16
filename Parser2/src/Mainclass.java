@@ -8,10 +8,7 @@ import org.apache.log4j.SimpleLayout;
 import org.jdom.JDOMException;
 
 import coverage.CoverageMeasurement;
-import coverage.instrumentation.metrics.IMetricHandler;
-import coverage.instrumentation.metrics.MetricHandler;
 import de.schlichtherle.io.File;
-import exception.ArchiveFileException;
 import exception.BpelException;
 import exception.BpelVersionException;
 
@@ -64,8 +61,9 @@ public class Mainclass {
 			 // TODO Auto-generated catch block
 			 e.printStackTrace();
 			 }
-			CoverageMeasurement.prepareForCoverageMeasurement("D:/Alex/daten/Masterarbeit/workspaceBPELUnit/Parser2/bsp/",filename,null);
-		} catch (ArchiveFileException e) {
+			new CoverageMeasurement(new File("")).prepareForCoverageMeasurement("D:/Alex/daten/Masterarbeit/workspaceBPELUnit/Parser2/bsp/",filename,null);
+
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
