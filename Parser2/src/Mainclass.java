@@ -61,7 +61,7 @@ public class Mainclass {
 			 // TODO Auto-generated catch block
 			 e.printStackTrace();
 			 }
-			new CoverageMeasurement(new File("")).prepareForCoverageMeasurement("D:/Alex/daten/Masterarbeit/workspaceBPELUnit/Parser2/bsp/",filename,null);
+			new CoverageMeasurement(new File(""),"").prepareForCoverageMeasurement("D:/Alex/daten/Masterarbeit/workspaceBPELUnit/Parser2/bsp/",filename,null);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

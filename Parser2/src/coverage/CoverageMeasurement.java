@@ -38,17 +38,28 @@ public class CoverageMeasurement {
 	private static final String PROPERTY = "property";
 
 	private static final String BASIC_ACTIVITIES = "IncludeBasicActivities";
+
 	private static final String INCLUDE_FLOW_LINKS = "IncludeFlowLinks";
+
 	private static final String INCLUDE_TRUE_FALSE_TRANSITION_CONDITION = "IncludeTrueFalseTransitionCondition";
-	private static final Namespace NAMESPACE_CONFIGURATION =Namespace.getNamespace("http://www.bpelunit.org/schema/coverageToolConfiguration");
+
+	private static final String COVERAGE_SERVICE_WSDL = "_LogService_.wsdl";
+
+	private static final Namespace NAMESPACE_CONFIGURATION = Namespace
+			.getNamespace("http://www.bpelunit.org/schema/coverageToolConfiguration");
+
 	private Logger logger;
 
-	public CoverageMeasurement(File file) throws ConfigurationException{
-		logger=Logger.getLogger(getClass());
+	private String fConfigDirectory;
+
+	public CoverageMeasurement(File file, String fConfigDirectory)
+			throws ConfigurationException {
+		this.fConfigDirectory = fConfigDirectory;
+		logger = Logger.getLogger(getClass());
 		loadCoverageMeasurement(file);
 	}
-	
-	private  void loadCoverageMeasurement(File file)
+
+	private void loadCoverageMeasurement(File file)
 			throws ConfigurationException {
 		logger.info("Konfiguration für Coverage wird geladen");
 		SAXBuilder builder = new SAXBuilder();
@@ -56,22 +67,23 @@ public class CoverageMeasurement {
 		try {
 			Document doc = builder.build(file);
 			Element config = doc.getRootElement();
-			List children = config.getChildren("metric",NAMESPACE_CONFIGURATION);
+			List children = config.getChildren("metric",
+					NAMESPACE_CONFIGURATION);
 
 			for (Iterator iter = children.iterator(); iter.hasNext();) {
 				Element element = (Element) iter.next();
-				attribute=element.getAttributeValue("name");
+				attribute = element.getAttributeValue("name");
 
-				if (attribute.equalsIgnoreCase(
-						Statementmetric.METRIC_NAME)) {
+				if (attribute.equalsIgnoreCase(Statementmetric.METRIC_NAME)) {
 					metrics.add(createStatementmetric(element));
-				} else if (attribute.equalsIgnoreCase(
-						BranchMetric.METRIC_NAME)) {
+				} else if (attribute.equalsIgnoreCase(BranchMetric.METRIC_NAME)) {
 					metrics.add(createBranchmetric(element));
 				}
 			}
 
-			logger.info("Konfiguration für Coverage wurde erfolgreich geladen:Metriken="+metrics.size());
+			logger
+					.info("Konfiguration für Coverage wurde erfolgreich geladen:Metriken="
+							+ metrics.size());
 		} catch (JDOMException e) {
 			throw new ConfigurationException(
 					"An XML reading error occurred reading the deployment plug-ins from file "
@@ -84,27 +96,24 @@ public class CoverageMeasurement {
 
 	}
 
-	private  IMetric createStatementmetric(Element element) {
+	private IMetric createStatementmetric(Element element) {
 		Statementmetric metric = new Statementmetric();
-		List children = element.getChildren(PROPERTY,NAMESPACE_CONFIGURATION);
+		List children = element.getChildren(PROPERTY, NAMESPACE_CONFIGURATION);
 		Element child;
 		String name = null;
 		for (Iterator iter = children.iterator(); iter.hasNext();) {
 
-
-			
 			child = (Element) iter.next();
 			name = child.getAttributeValue("name");
 
-			
-			if (name != null&&name.equals(BASIC_ACTIVITIES)) {
+			if (name != null && name.equals(BASIC_ACTIVITIES)) {
 				analyzeString(child.getText(), metric);
 			}
 		}
 		return metric;
 	}
 
-	private  void analyzeString(String activities, Statementmetric metric) {
+	private void analyzeString(String activities, Statementmetric metric) {
 		if (!activities.endsWith(","))
 			activities = activities + ",";
 		Scanner scanner = new Scanner(activities);
@@ -112,38 +121,39 @@ public class CoverageMeasurement {
 		String activity;
 		while (scanner.hasNext()) {
 			activity = scanner.next().trim();
-			if (BasisActivity.isBasisActivity(activity)){
+			if (BasisActivity.isBasisActivity(activity)) {
 				metric.addBasicActivity(activity);
 			}
 		}
 	}
 
-	private  IMetric  createBranchmetric(Element element) {
-		IMetric metric=new BranchMetric();
-		List children = element.getChildren(PROPERTY,NAMESPACE_CONFIGURATION);
+	private IMetric createBranchmetric(Element element) {
+		IMetric metric = new BranchMetric();
+		List children = element.getChildren(PROPERTY, NAMESPACE_CONFIGURATION);
 		Element child;
-		boolean flowLinks=true;
-		boolean trueAndFalse=true;
+		boolean flowLinks = true;
+		boolean trueAndFalse = true;
 		String attribute;
 		for (Iterator iter = children.iterator(); iter.hasNext();) {
 			child = (Element) iter.next();
-			attribute=child.getAttributeValue("name");
-			if(attribute!=null){
-			if (attribute.equalsIgnoreCase(INCLUDE_FLOW_LINKS)) {
-				if(child.getTextTrim().equalsIgnoreCase("no")){
-					flowLinks=false;
+			attribute = child.getAttributeValue("name");
+			if (attribute != null) {
+				if (attribute.equalsIgnoreCase(INCLUDE_FLOW_LINKS)) {
+					if (child.getTextTrim().equalsIgnoreCase("no")) {
+						flowLinks = false;
+					}
+				} else if (attribute
+						.equalsIgnoreCase(INCLUDE_TRUE_FALSE_TRANSITION_CONDITION)) {
+					if (child.getTextTrim().equalsIgnoreCase("no")) {
+						trueAndFalse = false;
+					}
 				}
-			}else if(attribute.equalsIgnoreCase(INCLUDE_TRUE_FALSE_TRANSITION_CONDITION)){
-				if(child.getTextTrim().equalsIgnoreCase("no")){
-					trueAndFalse=false;
-				}
-			}
 			}
 		}
 		return metric;
 	}
 
-	public  String prepareForCoverageMeasurement(String pathToArchive,
+	public String prepareForCoverageMeasurement(String pathToArchive,
 			String archiveFile, IBPELDeployer deployer)
 			throws CoverageToolException {
 
@@ -168,12 +178,12 @@ public class CoverageMeasurement {
 		return archiveHandler.getArchiveFile().getName();
 	}
 
-	private  void executeInstrumentationOfBPEL(
+	private void executeInstrumentationOfBPEL(
 			IDeploymentArchiveHandler archiveHandler) throws JDOMException,
 			IOException, BpelException, BpelVersionException {
 		IMetricHandler metricHandler = new MetricHandler();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
-			metricHandler.addMetric(iter.next());		
+			metricHandler.addMetric(iter.next());
 		}
 
 		de.schlichtherle.io.File bpelFile;
@@ -183,11 +193,9 @@ public class CoverageMeasurement {
 		}
 	}
 
-	private void prepareLoggingService(
-			IDeploymentArchiveHandler archiveHandler) throws IOException,
-			ArchiveFileException, JDOMException {
-		// TODO configuration einlesen
-		archiveHandler.addWSDLFile(new File(
-				"C:/bpelunit/conf/_LogService_.wsdl"));
+	private void prepareLoggingService(IDeploymentArchiveHandler archiveHandler)
+			throws IOException, ArchiveFileException, JDOMException {
+		archiveHandler.addWSDLFile(new File(FilenameUtils.concat(
+				fConfigDirectory, COVERAGE_SERVICE_WSDL)));
 	}
 }

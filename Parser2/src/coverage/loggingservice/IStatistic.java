@@ -11,9 +11,8 @@ public interface IStatistic {
 	public List<IStatistic> getSubStatistics();
 
 	public void addSubStatistik(IStatistic statistic);
+	
+	public String getName();
 
-	public void setTestedNumber(int testedNumber);
-
-	public void setTotalNumber(int totalNumber);
 
 }

@@ -1,7 +1,9 @@
 package coverage.loggingservice;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -100,113 +102,87 @@ public class CoverageRegistry {
 		}
 		return statistic;
 	}
+	
+	public List<IStatistic> getStatistics(){
+		List<IStatistic> statistics=new ArrayList<IStatistic>();
+		statistics.add(getStatementmetricResults());
+		statistics.add(getBranchmetricResults());
+		return statistics;
+	}
 
 	private IStatistic getBranchmetricResults() {
 		IStatistic statistic = new Statistic(BranchMetric.BRANCH_LABEL);
-		int testedNumber = 0;
-		int totalNumber = 0;
+
 		int[] numbers = getNumbers(BranchMetric.BRANCH_LABEL);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BranchMetric.BRANCH_LABEL));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BranchMetric.LINK_LABEL);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BranchMetric.LINK_LABEL));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
-		statistic.setTotalNumber(totalNumber);
-		statistic.setTestedNumber(testedNumber);
 		return statistic;
 	}
 
 	private IStatistic getStatementmetricResults() {
 		IStatistic statistic = new Statistic(Statementmetric.METRIC_NAME);
-		int testedNumber = 0;
-		int totalNumber = 0;
 		int[] numbers = getNumbers(BasisActivity.EMPTY_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.EMPTY_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BasisActivity.ASSIGN_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.ASSIGN_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BasisActivity.COMPENSATE_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.COMPENSATE_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BasisActivity.COMPENSATESCOPE_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.COMPENSATESCOPE_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BasisActivity.EXIT_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.EXIT_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BasisActivity.INVOKE_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.INVOKE_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BasisActivity.RECEIVE_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.RECEIVE_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BasisActivity.REPLY_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.REPLY_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BasisActivity.RETHROW_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.RETHROW_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BasisActivity.THROW_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.THROW_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
 		numbers = getNumbers(BasisActivity.WAIT_ACTIVITY);
 		if (numbers != null) {
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.WAIT_ACTIVITY));
-			totalNumber = totalNumber + numbers[0];
-			testedNumber = testedNumber + numbers[1];
 		}
-		statistic.setTotalNumber(totalNumber);
-		statistic.setTestedNumber(testedNumber);
 		return statistic;
 	}
 

@@ -5,59 +5,71 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Statistic implements IStatistic {
-	
-	private int totalNumber;
-	
-	private int testedNumber;
-	
-	private String name;
-	
-	private List<IStatistic> subStatistics=new ArrayList<IStatistic>();
 
-	
-	public Statistic(String string){
-		this.name=string;
+	private int totalNumber;
+
+	private int testedNumber;
+
+	private String name;
+
+	private List<IStatistic> subStatistics = null;
+
+	public Statistic(String string) {
+		this.name = string;
 	}
-	
-	public Statistic(int totalNumber,int testedNamber,String name){
-		this.totalNumber=totalNumber;
-		this.testedNumber=testedNamber;
-		this.name=name;
+
+	public Statistic(int totalNumber, int testedNamber, String name) {
+		this.totalNumber = totalNumber;
+		this.testedNumber = testedNamber;
+		this.name = name;
 	}
-	
+
 	public List<IStatistic> getSubStatistics() {
-		// TODO Auto-generated method stub
 		return subStatistics;
 	}
-	
-	public void addSubStatistik(IStatistic statistic){
+
+	public void addSubStatistik(IStatistic statistic) {
+		if (subStatistics == null)
+			subStatistics = new ArrayList<IStatistic>();
 		subStatistics.add(statistic);
 	}
 
 	public int getTestedNumber() {
-		return totalNumber;
-	}
-
-	public int getTotalNumber() {
+		int testedNumber = this.testedNumber;
+		if (subStatistics != null) {
+			IStatistic statistic;
+			for (Iterator<IStatistic> iter = subStatistics.iterator(); iter
+					.hasNext();) {
+				statistic = iter.next();
+				testedNumber = testedNumber + statistic.getTestedNumber();
+			}
+		}
 		return testedNumber;
 	}
 
-	public void setTestedNumber(int testedNumber) {
-		this.testedNumber = testedNumber;
+	public int getTotalNumber() {
+		int totalNumber = this.totalNumber;
+		if (subStatistics != null) {
+			IStatistic statistic;
+			for (Iterator<IStatistic> iter = subStatistics.iterator(); iter
+					.hasNext();) {
+				statistic = iter.next();
+				totalNumber = totalNumber + statistic.getTotalNumber();
+			}
+		}
+		return totalNumber;
 	}
 
-	public void setTotalNumber(int totalNumber) {
-		this.totalNumber = totalNumber;
-	}
-	
 	@Override
 	public String toString() {
-		String result="Statistic: "+name+"\n";
-		result=result+"    Gesamtzahl: "+totalNumber+"\n";
-		result=result+"    Getestetzahl: "+testedNumber+"\n";
-		Iterator<IStatistic> iter=subStatistics.iterator();
-		while(iter.hasNext()){
-			result=result+"\n"+iter.next().toString();
+		String result = "Statistic: " + name + "\n";
+		result = result + "    Gesamtzahl: " + getTotalNumber() + "\n";
+		result = result + "    Getestetzahl: " + getTestedNumber() + "\n";
+		if (subStatistics != null) {
+			Iterator<IStatistic> iter = subStatistics.iterator();
+			while (iter.hasNext()) {
+				result = result + "\n" + iter.next().toString();
+			}
 		}
 		return result;
 	}

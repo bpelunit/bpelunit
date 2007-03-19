@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.jdom.Comment;
-import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -19,8 +18,6 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
-import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
-import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
 import coverage.loggingservice.CoverageRegistry;
 import coverage.loggingservice.LoggingServiceConfiguration;
 import de.schlichtherle.io.File;
