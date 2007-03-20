@@ -1,6 +1,5 @@
 package coverage.deploy.archivetools.activebpel;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -25,6 +24,11 @@ import de.schlichtherle.io.FileInputStream;
 import de.schlichtherle.io.FileOutputStream;
 import de.schlichtherle.io.FileWriter;
 
+/**
+ * 
+ * @author Alex Salnikow
+ * 
+ */
 public class ActiveBPELDeploymentArchiveHandler implements
 		IDeploymentArchiveHandler {
 
@@ -48,6 +52,11 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		fLogger = Logger.getLogger(getClass());
 	}
 
+	/**
+	 * @param i
+	 *            index der BPEL-Datei
+	 * @return file: BPEL-Datei
+	 */
 	public File getBPELFile(int i) {
 
 		File bpelFile = new File(bprFile + "/bpel/" + bpelFiles[i]);
@@ -59,6 +68,9 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		return wsdlCatalog;
 	}
 
+	/**
+	 * @return Anzahl der BPEL-Dateien im Archive
+	 */
 	public int getCountOfBPELFiles() {
 		return countOfBpelFiles;
 	}
@@ -71,6 +83,12 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		return list;
 	}
 
+	/**
+	 * Fügt WSDLFile in das Archive ein. Dabei wird WSDl-Catalog und
+	 * DeploymentDescriptor angepasst.
+	 * 
+	 * @param wsdlFile
+	 */
 	public void addWSDLFile(java.io.File wsdlFile) throws ArchiveFileException {
 		WSDL_FILE_IN_ARCHIVE = WSDL_DIRECTORY_IN_ARCHIVE + wsdlFile.getName();
 		fLogger.info("CoverageTool: Adding WSDL-file " + wsdlFile.getName()
@@ -94,22 +112,16 @@ public class ActiveBPELDeploymentArchiveHandler implements
 					"Could not add WSDL file for coverage measurement tool ("
 							+ wsdlFile.getName() + ") in deployment archive ",
 					e);
+		} finally {
+
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		// catch (WSDLException e) {
-		// throw new ArchiveFileException("Error while reading WSDL for
-		// LoggingService " + wsdlFile.getName() + " from file \"" +
-		// wsdlFile.getName() + "\".", e);
-		// } finally {
-		//
-		// if (out != null) {
-		// try {
-		// out.close();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// }
 	}
 
 	private void adaptWsdlCatalog() throws ArchiveFileException {
@@ -141,25 +153,23 @@ public class ActiveBPELDeploymentArchiveHandler implements
 
 			throw new ArchiveFileException(
 					"An I/O error occurred when writing the WSDL catalog.", e);
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+			}
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		// finally {
-		// if (is != null) {
-		// try {
-		// is.close();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// if (writer != null) {
-		// try {
-		// writer.close();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// }
 	}
 
 	private void prepareDeploymentDescriptor() throws ArchiveFileException {
@@ -181,6 +191,16 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			throw new ArchiveFileException(
 					"An XML reading error occurred when reading the deployment descriptor: "
 							+ descriptor.getName(), e);
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
 		}
 		Element process = doc.getRootElement();
 		addPartnerLink(process);
@@ -195,25 +215,16 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			throw new ArchiveFileException(
 					"An I/O error occurred when writing deployment descriptor: "
 							+ descriptor.getName(), e);
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
-		// finally {
-		// if (is != null) {
-		// try {
-		// is.close();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// if (writer != null) {
-		// try {
-		// writer.close();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// }
 
 	}
 
@@ -236,6 +247,10 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		return archiveFile;
 	}
 
+	/**
+	 * Erzeugt eine Kopie des Archives und unresucht das Archive nach
+	 * BPEL-Dateien
+	 */
 	public void setArchiveFile(String archive) {
 		this.archiveFile = createCopy(archive);
 		bpelFiles = searchBPELFiles();

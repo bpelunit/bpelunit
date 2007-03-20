@@ -29,6 +29,14 @@ import coverage.instrumentation.metrics.MetricHandler;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
 
+/**
+ * 
+ * Die Klasse bietet die Methode zum Einbinden des Coveragetools an. Außerdem
+ * ist die Klasse für das Einlesen der Konfigurationdatei verantwortlich .
+ * 
+ * @author Alex Salnikow
+ * 
+ */
 public class CoverageMeasurementTool {
 
 	private static List<IMetric> metrics = new ArrayList<IMetric>();
@@ -48,11 +56,18 @@ public class CoverageMeasurementTool {
 
 	private Logger logger;
 
-	private String fConfigDirectory;
+	private String fBpelunitConfigDirectory;
 
-	public CoverageMeasurementTool(File file, String fConfigDirectory)
+	/**
+	 * 
+	 * @param file
+	 *            Konfiguration für Coveragemessung
+	 * @param fBpelunitConfigDirectory
+	 * @throws ConfigurationException
+	 */
+	public CoverageMeasurementTool(File file, String fBpelunitConfigDirectory)
 			throws ConfigurationException {
-		this.fConfigDirectory = fConfigDirectory;
+		this.fBpelunitConfigDirectory = fBpelunitConfigDirectory;
 		logger = Logger.getLogger(getClass());
 		loadConfiguration(file);
 	}
@@ -150,6 +165,17 @@ public class CoverageMeasurementTool {
 		return metric;
 	}
 
+	/**
+	 * Prepariert das Deploymentarchive für die Messung der Abdeckung beim
+	 * Testen des BPEL-Prozesses. Für die Instrumentierung wird die Archivedate
+	 * kopiert.
+	 * 
+	 * @param pathToArchive
+	 * @param archiveFile
+	 * @param deployer
+	 * @return Name der preparierten Archivedatei
+	 * @throws CoverageMeasurmentException
+	 */
 	public String prepareArchiveForCoverageMeasurement(String pathToArchive,
 			String archiveFile, IBPELDeployer deployer)
 			throws CoverageMeasurmentException {
@@ -171,6 +197,12 @@ public class CoverageMeasurementTool {
 		return archiveHandler.getArchiveFile().getName();
 	}
 
+	/**
+	 * Startet die Instrumentierung aller BPEL-Dateien, die im Archive sind.
+	 * 
+	 * @param archiveHandler
+	 * @throws BpelException
+	 */
 	private void executeInstrumentationOfBPEL(
 			IDeploymentArchiveHandler archiveHandler) throws BpelException {
 		MetricHandler metricHandler = new MetricHandler();
@@ -185,9 +217,16 @@ public class CoverageMeasurementTool {
 		}
 	}
 
+	/**
+	 * Fügt die WSDL-Datei für Service, der die Log-Einträge empfängt. Diese
+	 * Log-Einträge dokumentieren die Ausführung bestimmter Codeteile.
+	 * 
+	 * @param archiveHandler
+	 * @throws ArchiveFileException
+	 */
 	private void prepareLoggingService(IDeploymentArchiveHandler archiveHandler)
 			throws ArchiveFileException {
 		archiveHandler.addWSDLFile(new File(FilenameUtils.concat(
-				fConfigDirectory, COVERAGE_SERVICE_WSDL)));
+				fBpelunitConfigDirectory, COVERAGE_SERVICE_WSDL)));
 	}
 }

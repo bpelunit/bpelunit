@@ -11,7 +11,6 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-
 public class XMLCoverageResultProducer {
 
 	private static final String STATISTIC_ELEMENT = "statistic";
@@ -24,9 +23,11 @@ public class XMLCoverageResultProducer {
 
 	private static final String TESTED_NUMBER_ATTRIBUT = "testedNumber";
 
-	private static final Namespace NAMESPACE = Namespace.getNamespace("http://www.bpelunit.org/schema/coverageResult");
+	private static final Namespace NAMESPACE = Namespace
+			.getNamespace("http://www.bpelunit.org/schema/coverageResult");
 
-	public static void writeResult(OutputStream out,List<IStatistic> statistics) throws IOException  {
+	public static void writeResult(OutputStream out, List<IStatistic> statistics)
+			throws IOException {
 		Document doc = new Document();
 
 		Element coverageStatisticElement = new Element(
@@ -35,23 +36,25 @@ public class XMLCoverageResultProducer {
 		for (Iterator<IStatistic> iter = statistics.iterator(); iter.hasNext();) {
 			addStatisticElement(coverageStatisticElement, iter.next());
 		}
-		XMLOutputter xmlOutputter = new XMLOutputter(Format
-				.getPrettyFormat());
+		XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
 
 		try {
 			xmlOutputter.output(doc, out);
 		} catch (IOException e) {
 			throw e;
+		} finally {
+			// HIER frage out schlieﬂen??
+			try {
+				out.close();
+			} catch (IOException e) {
+			}
 		}
-		//TODO out schlieﬂen oder nicht
 	}
-
-
 
 	private static void addStatisticElement(Element element,
 			IStatistic statistic) {
 		Element statisticElement;
-		statisticElement = new Element(STATISTIC_ELEMENT,NAMESPACE);
+		statisticElement = new Element(STATISTIC_ELEMENT, NAMESPACE);
 		statisticElement.setAttribute(NAME_ATTRIBUT, statistic.getName());
 		statisticElement.setAttribute(TOTAL_NUMBER_ATTRIBUT, Integer
 				.toString(statistic.getTotalNumber()));
