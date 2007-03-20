@@ -2,8 +2,8 @@ package coverage.instrumentation.metrics.branchcoverage;
 
 import org.jdom.Element;
 
+import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
-import exception.BpelException;
 
 public class RepeatUntilActivityHandler implements IStructuredActivity {
 

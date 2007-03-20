@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.jdom.Element;
 
+import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
-import exception.BpelException;
 
 public class PickActivityHandler implements IStructuredActivity {
 

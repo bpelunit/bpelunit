@@ -1,4 +1,4 @@
-package exception;
+package coverage.exception;
 
 public class CoverageMeasurmentException extends Exception {
 

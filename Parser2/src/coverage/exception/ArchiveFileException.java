@@ -1,4 +1,5 @@
-package exception;
+package coverage.exception;
+
 
 public class ArchiveFileException extends CoverageMeasurmentException {
 	public ArchiveFileException(String message) {

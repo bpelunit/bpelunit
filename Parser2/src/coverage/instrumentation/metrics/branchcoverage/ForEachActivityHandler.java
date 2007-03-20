@@ -2,9 +2,9 @@ package coverage.instrumentation.metrics.branchcoverage;
 
 import org.jdom.Element;
 
+import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
-import exception.BpelException;
 
 public class ForEachActivityHandler implements IStructuredActivity {
 

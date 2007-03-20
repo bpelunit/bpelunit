@@ -1,4 +1,5 @@
-package exception;
+package coverage.exception;
+
 
 public class BpelVersionException extends BpelException {
 	

@@ -19,15 +19,15 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
 import coverage.deploy.archivetools.IDeploymentArchiveHandler;
-import coverage.deploy.archivetools.impl.ActiveBPELDeploymentArchiveHandler;
+import coverage.deploy.archivetools.activebpel.ActiveBPELDeploymentArchiveHandler;
+import coverage.exception.ArchiveFileException;
+import coverage.exception.BpelException;
+import coverage.exception.CoverageMeasurmentException;
 import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.MetricHandler;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
-import exception.ArchiveFileException;
-import exception.BpelException;
-import exception.CoverageMeasurmentException;
 
 public class CoverageMeasurementTool {
 

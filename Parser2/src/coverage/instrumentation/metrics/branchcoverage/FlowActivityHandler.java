@@ -8,8 +8,8 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
+import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
-import exception.BpelException;
 
 public class FlowActivityHandler implements IStructuredActivity {
 

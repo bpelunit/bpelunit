@@ -9,11 +9,11 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
+import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
 import coverage.wstools.CoverageRegistry;
-import exception.BpelException;
 
 /**
  * Klasse instrumentiert ein BPEL-Prozess, um die Zweigabdeckung bei der

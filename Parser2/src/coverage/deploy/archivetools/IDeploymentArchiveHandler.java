@@ -4,9 +4,10 @@ package coverage.deploy.archivetools;
 
 import java.io.IOException;
 
+import coverage.exception.ArchiveFileException;
+
 import de.schlichtherle.io.File;
 
-import exception.ArchiveFileException;
 
 public interface IDeploymentArchiveHandler {
 

@@ -8,9 +8,9 @@ import org.apache.log4j.SimpleLayout;
 import org.jdom.JDOMException;
 
 import coverage.CoverageMeasurementTool;
+import coverage.exception.BpelException;
+import coverage.exception.BpelVersionException;
 import de.schlichtherle.io.File;
-import exception.BpelException;
-import exception.BpelVersionException;
 
 
 

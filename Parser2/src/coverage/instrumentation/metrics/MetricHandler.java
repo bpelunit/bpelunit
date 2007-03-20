@@ -16,6 +16,8 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import coverage.exception.BpelException;
+import coverage.exception.BpelVersionException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
@@ -24,8 +26,6 @@ import coverage.wstools.CoverageRegistry;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
 import de.schlichtherle.io.FileWriter;
-import exception.BpelException;
-import exception.BpelVersionException;
 
 /**
  * Dieses Interface wird von dem Handler implementiert, der dafür zuständig ist,

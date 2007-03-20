@@ -1,4 +1,5 @@
-package exception;
+package coverage.exception;
+
 
 /**
  * 

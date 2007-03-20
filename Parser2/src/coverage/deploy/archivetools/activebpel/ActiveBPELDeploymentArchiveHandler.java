@@ -1,4 +1,4 @@
-package coverage.deploy.archivetools.impl;
+package coverage.deploy.archivetools.activebpel;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,11 +19,11 @@ import org.jdom.output.XMLOutputter;
 
 import coverage.CoverageConstants;
 import coverage.deploy.archivetools.IDeploymentArchiveHandler;
+import coverage.exception.ArchiveFileException;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
 import de.schlichtherle.io.FileOutputStream;
 import de.schlichtherle.io.FileWriter;
-import exception.ArchiveFileException;
 
 public class ActiveBPELDeploymentArchiveHandler implements
 		IDeploymentArchiveHandler {
