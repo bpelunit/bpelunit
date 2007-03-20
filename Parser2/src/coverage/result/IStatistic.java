@@ -1,4 +1,4 @@
-package coverage.loggingservice;
+package coverage.result;
 
 import java.util.List;
 

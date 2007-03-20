@@ -1,33 +1,24 @@
-package coverage.deployarchivetools.impl;
+package coverage.deploy.archivetools.impl;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Iterator;
-import java.util.Map;
 
 import javax.wsdl.Definition;
-import javax.wsdl.Service;
-import javax.wsdl.WSDLException;
-import javax.wsdl.factory.WSDLFactory;
-import javax.wsdl.xml.WSDLReader;
-import javax.xml.namespace.QName;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.exception.SpecificationException;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import com.ibm.wsdl.Constants;
-
 import coverage.CoverageConstants;
-import coverage.deployarchivetools.IDeploymentArchiveHandler;
+import coverage.deploy.archivetools.IDeploymentArchiveHandler;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
 import de.schlichtherle.io.FileOutputStream;
@@ -37,8 +28,10 @@ import exception.ArchiveFileException;
 public class ActiveBPELDeploymentArchiveHandler implements
 		IDeploymentArchiveHandler {
 
-	private static final String WSDL_DIRECTORY_IN_ARCHIVE="wsdl/";
+	private static final String WSDL_DIRECTORY_IN_ARCHIVE = "wsdl/";
+
 	private static String WSDL_FILE_IN_ARCHIVE;
+
 	private String[] bpelFiles;
 
 	private File archiveFile;
@@ -55,12 +48,13 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		fLogger = Logger.getLogger(getClass());
 	}
 
-	public File getBPELFile(int i) throws FileNotFoundException {
+	public File getBPELFile(int i) {
+
 		File bpelFile = new File(bprFile + "/bpel/" + bpelFiles[i]);
 		return bpelFile;
 	}
 
-	private File getWSDLCatalog() throws FileNotFoundException {
+	private File getWSDLCatalog() {
 		File wsdlCatalog = new File(bprFile + "/META-INF/wsdlCatalog.xml");
 		return wsdlCatalog;
 	}
@@ -78,46 +72,52 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	}
 
 	public void addWSDLFile(java.io.File wsdlFile) throws ArchiveFileException {
-		WSDL_FILE_IN_ARCHIVE=WSDL_DIRECTORY_IN_ARCHIVE+wsdlFile.getName();
-		fLogger.info("CoverageTool: Adding WSDL-file "
-				+ FilenameUtils.getName(wsdlFile.getName())
+		WSDL_FILE_IN_ARCHIVE = WSDL_DIRECTORY_IN_ARCHIVE + wsdlFile.getName();
+		fLogger.info("CoverageTool: Adding WSDL-file " + wsdlFile.getName()
 				+ " for CoverageLogging in bpr-archive");
 
 		OutputStream out = null;
 		try {
 			adaptWsdlCatalog();
-			out = new FileOutputStream(bprFile + "/"+WSDL_FILE_IN_ARCHIVE);
+			out = new FileOutputStream(bprFile + "/" + WSDL_FILE_IN_ARCHIVE);
 			out.write(FileUtils.readFileToByteArray(wsdlFile));
 			fLogger.info("CoverageTool: WSDL-file sucessfull added.");
 			prepareDeploymentDescriptor();
 
-				WSDLFactory factory= WSDLFactory.newInstance();
-				WSDLReader reader= factory.newWSDLReader();
-				reader.setFeature(Constants.FEATURE_VERBOSE, false);
-				fWSDLDefinition= reader.readWSDL(wsdlFile.getPath());
-				
-		} catch (IOException e) {
-			throw new ArchiveFileException("", e);
-		} catch (WSDLException e) {
-			throw new ArchiveFileException("Error while reading WSDL for LoggingService " + wsdlFile.getName() + " from file \"" + wsdlFile.getName() + "\".", e);
-		} finally {
+			// WSDLFactory factory= WSDLFactory.newInstance();
+			// WSDLReader reader= factory.newWSDLReader();
+			// reader.setFeature(Constants.FEATURE_VERBOSE, false);
+			// fWSDLDefinition= reader.readWSDL(wsdlFile.getPath());
 
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+		} catch (IOException e) {
+			throw new ArchiveFileException(
+					"Could not add WSDL file for coverage measurement tool ("
+							+ wsdlFile.getName() + ") in deployment archive ",
+					e);
 		}
+		// catch (WSDLException e) {
+		// throw new ArchiveFileException("Error while reading WSDL for
+		// LoggingService " + wsdlFile.getName() + " from file \"" +
+		// wsdlFile.getName() + "\".", e);
+		// } finally {
+		//
+		// if (out != null) {
+		// try {
+		// out.close();
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		// }
 	}
 
 	private void adaptWsdlCatalog() throws ArchiveFileException {
 		FileInputStream is = null;
 		FileWriter writer = null;
+
+		File file = getWSDLCatalog();
 		try {
-			File file = getWSDLCatalog();
 
 			is = new FileInputStream(file);
 
@@ -126,79 +126,102 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			Element wsdlCatalog = doc.getRootElement();
 			Element wsdlEntry = new Element("wsdlEntry", wsdlCatalog
 					.getNamespace());
-			wsdlEntry.setAttribute("location",WSDL_FILE_IN_ARCHIVE);
+			wsdlEntry.setAttribute("location", WSDL_FILE_IN_ARCHIVE);
 			wsdlEntry.setAttribute("classpath", WSDL_FILE_IN_ARCHIVE);
 			wsdlCatalog.addContent(wsdlEntry);
 			writer = new FileWriter(file);
 			XMLOutputter xmlOutputter = new XMLOutputter(Format
 					.getPrettyFormat());
 			xmlOutputter.output(doc, writer);
-		} catch (Exception e) {
-			throw new ArchiveFileException("", e);
-		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+		} catch (JDOMException e) {
+			throw new ArchiveFileException(
+					"An XML reading error occurred when reading the WSDL catalog.",
+					e);
+		} catch (IOException e) {
+
+			throw new ArchiveFileException(
+					"An I/O error occurred when writing the WSDL catalog.", e);
 		}
+		// finally {
+		// if (is != null) {
+		// try {
+		// is.close();
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		// if (writer != null) {
+		// try {
+		// writer.close();
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		// }
 	}
 
 	private void prepareDeploymentDescriptor() throws ArchiveFileException {
 		de.schlichtherle.io.File descriptor;
 		FileInputStream is = null;
 		FileWriter writer = null;
+		descriptor = getDeploymentDescriptor();
+		Document doc;
 		try {
-			descriptor = getDeploymentDescriptor();
 			SAXBuilder builder = new SAXBuilder();
 			is = new FileInputStream(descriptor);
-			Document doc = builder.build(is);
-			Element process = doc.getRootElement();
-			addPartnerLink(process);
-			addWSDLEntry(process);
+			doc = builder.build(is);
+		} catch (IOException e) {
+
+			throw new ArchiveFileException(
+					"An I/O error occurred when reading deployment descriptor: "
+							+ descriptor.getName(), e);
+		} catch (JDOMException e) {
+			throw new ArchiveFileException(
+					"An XML reading error occurred when reading the deployment descriptor: "
+							+ descriptor.getName(), e);
+		}
+		Element process = doc.getRootElement();
+		addPartnerLink(process);
+		addWSDLEntry(process);
+		try {
 			writer = new FileWriter(descriptor);
 			XMLOutputter xmlOutputter = new XMLOutputter(Format
 					.getPrettyFormat());
 			xmlOutputter.output(doc, writer);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ArchiveFileException("", e);
-		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+		} catch (IOException e) {
+
+			throw new ArchiveFileException(
+					"An I/O error occurred when writing deployment descriptor: "
+							+ descriptor.getName(), e);
 		}
+		// finally {
+		// if (is != null) {
+		// try {
+		// is.close();
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		// if (writer != null) {
+		// try {
+		// writer.close();
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		// }
+
 	}
 
 	private void addWSDLEntry(Element process) {
 		Element wsdl = new Element("wsdl", process.getNamespace());
 		wsdl.setAttribute("location", WSDL_FILE_IN_ARCHIVE);
-		wsdl.setAttribute("namespace",
-				CoverageConstants.COVERAGETOOL_NAMESPACE.getURI());
+		wsdl.setAttribute("namespace", CoverageConstants.COVERAGETOOL_NAMESPACE
+				.getURI());
 		Element references = process.getChild("references", process
 				.getNamespace());
 		references.addContent(wsdl);
@@ -206,8 +229,6 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		fLogger
 				.info("CoverageTool:Reference of _LogService.wsdl in BPEL added.");
 	}
-
-
 
 	public java.io.File getArchiveFile() {
 		// archiveFile.renameTo(new
@@ -248,7 +269,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		}
 		return new File(bprFile + "/" + name);
 	}
-	
+
 	private void addPartnerLink(Element process) {
 
 		Namespace ns = Namespace.getNamespace("wsa",
@@ -258,30 +279,29 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		adress.setText("http://localhost:7777/ws/_LogService_");
 		Element serviceName = new Element("ServiceName", ns);
 		serviceName.setAttribute("PortName", "_LogService_SOAP");
-		serviceName.setText(CoverageConstants.COVERAGETOOL_NAMESPACE.getPrefix()+":_LogService_");
+		serviceName.setText(CoverageConstants.COVERAGETOOL_NAMESPACE
+				.getPrefix()
+				+ ":_LogService_");
 
 		Element endpointReference = new Element("EndpointReference", ns);
-		endpointReference.addNamespaceDeclaration(CoverageConstants.COVERAGETOOL_NAMESPACE);
+		endpointReference
+				.addNamespaceDeclaration(CoverageConstants.COVERAGETOOL_NAMESPACE);
 		endpointReference.addContent(adress);
 		endpointReference.addContent(serviceName);
-		Element partnerRole = new Element("partnerRole",
-				process.getNamespace());
+		Element partnerRole = new Element("partnerRole", process.getNamespace());
 		partnerRole.setAttribute("endpointReference", "static");
 		partnerRole.addContent(endpointReference);
 
-		Element partnerLink = new Element("partnerLink",
-				process.getNamespace());
+		Element partnerLink = new Element("partnerLink", process.getNamespace());
 		partnerLink.setAttribute("name", "PLT_LogService_");
 		partnerLink.addContent(partnerRole);
 
-		Element partnerLinks = process.getChild("partnerLinks",
-				process.getNamespace());
+		Element partnerLinks = process.getChild("partnerLinks", process
+				.getNamespace());
 		partnerLinks.addContent(partnerLink);
 
 		fLogger
 				.info("CoverageTool:PartnerLink for Covergae_Logging_Service in BPEL added.");
 	}
-	
-
 
 }

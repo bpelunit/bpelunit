@@ -1,6 +1,6 @@
 package exception;
 
-public class ArchiveFileException extends Exception {
+public class ArchiveFileException extends CoverageMeasurmentException {
 	public ArchiveFileException(String message) {
 		super(message);
 	}

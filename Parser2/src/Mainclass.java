@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;
 import org.jdom.JDOMException;
 
-import coverage.CoverageMeasurement;
+import coverage.CoverageMeasurementTool;
 import de.schlichtherle.io.File;
 import exception.BpelException;
 import exception.BpelVersionException;
@@ -61,7 +61,7 @@ public class Mainclass {
 			 // TODO Auto-generated catch block
 			 e.printStackTrace();
 			 }
-			new CoverageMeasurement(new File(""),"").prepareForCoverageMeasurement("D:/Alex/daten/Masterarbeit/workspaceBPELUnit/Parser2/bsp/",filename,null);
+			new CoverageMeasurementTool(new File(""),"").prepareArchiveForCoverageMeasurement("D:/Alex/daten/Masterarbeit/workspaceBPELUnit/Parser2/bsp/",filename,null);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

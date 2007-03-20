@@ -20,7 +20,7 @@ import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
-import coverage.loggingservice.CoverageRegistry;
+import coverage.wstools.CoverageRegistry;
 
 public class StatementmetricTest {
 

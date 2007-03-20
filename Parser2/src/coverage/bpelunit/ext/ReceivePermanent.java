@@ -1,4 +1,4 @@
-package coverage.bpelunitext;
+package coverage.bpelunit.ext;
 
 /**
  * This file belongs to the BPELUnit utility and Eclipse plugin set. See enclosed
@@ -19,6 +19,7 @@ import org.bpelunit.framework.model.test.report.ArtefactStatus;
 import org.bpelunit.framework.model.test.report.ITestArtefact;
 import org.bpelunit.framework.model.test.wire.IncomingMessage;
 import org.bpelunit.framework.model.test.wire.OutgoingMessage;
+
 
 /**
  * A receive asynchronous activity is intended to receive a single incoming
@@ -43,7 +44,7 @@ public class ReceivePermanent extends Activity {
 	/**
 	 * The receive specification handling the actual receive
 	 */
-	private ReceiveDataForLogSpecification fReceiveSpec;
+	private ReceivePermanentDataSpecification fReceiveSpec;
 
 	private boolean interrupt;
 
@@ -57,7 +58,7 @@ public class ReceivePermanent extends Activity {
 		fLogger = Logger.getLogger(getClass());
 	}
 
-	public void initialize(ReceiveDataForLogSpecification spec) {
+	public void initialize(ReceivePermanentDataSpecification spec) {
 		fReceiveSpec = spec;
 		fStatus = ArtefactStatus.createInitialStatus();
 	}

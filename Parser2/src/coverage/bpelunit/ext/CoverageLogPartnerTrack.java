@@ -1,4 +1,4 @@
-package coverage.bpelunitext;
+package coverage.bpelunit.ext;
 
 
 import org.bpelunit.framework.model.Partner;
@@ -9,16 +9,17 @@ import org.bpelunit.framework.model.test.activity.ActivityContext;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
 
 
-public class LoggingPartnerTrack extends PartnerTrack {
+
+public class CoverageLogPartnerTrack extends PartnerTrack {
 
 	private Activity activity;
 
-	public LoggingPartnerTrack(TestCase arg0, Partner partner) {
+	public CoverageLogPartnerTrack(TestCase arg0, Partner partner) {
 		super(arg0, partner);
 		fStatus = ArtefactStatus.createInitialStatus();
 	}
 
-	public LoggingPartnerTrack(Partner arg0) {
+	public CoverageLogPartnerTrack(Partner arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}

@@ -4,7 +4,7 @@ package exception;
  * 
  * @author Alex Salnikow
  */
-public class BpelException extends Exception {
+public class BpelException extends CoverageMeasurmentException {
 
 	public static final String NO_VALIDE_BPEL = "No valide BPEL";
 

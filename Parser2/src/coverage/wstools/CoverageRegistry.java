@@ -1,4 +1,4 @@
-package coverage.loggingservice;
+package coverage.wstools;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -15,6 +15,8 @@ import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.MetricHandler;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
+import coverage.result.IStatistic;
+import coverage.result.Statistic;
 
 public class CoverageRegistry {
 

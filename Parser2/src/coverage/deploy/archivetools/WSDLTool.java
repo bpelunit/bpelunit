@@ -1,4 +1,4 @@
-package coverage.deployarchivetools;
+package coverage.deploy.archivetools;
 
 import java.util.Iterator;
 import java.util.List;

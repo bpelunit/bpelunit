@@ -1,4 +1,4 @@
-package coverage.loggingservice;
+package coverage.wstools;
 
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -6,7 +6,7 @@ import org.jdom.Namespace;
 import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 
-public class LoggingServiceConfiguration {
+public class CMServiceFactory {
 
 	private static final Namespace LOG_SERVICE_NAMESPACE = Namespace
 			.getNamespace("log", "http://www.bpelunit.org/coverage/logService");
@@ -17,14 +17,10 @@ public class LoggingServiceConfiguration {
 
 	private static final String LOGGING_SERVICE_OPERATION = "log";
 
-	public LoggingServiceConfiguration(String file,Element process_element) {
-		loadConfiguration(file);
+	public CMServiceFactory(Element process_element) {
 		prepareBPELFile(process_element);
 	}
 
-	private void loadConfiguration(String file) {
-		
-	}
 
 	private void prepareBPELFile(Element process_element) {
 		process_element.addNamespaceDeclaration(LOG_SERVICE_NAMESPACE);
@@ -70,11 +66,11 @@ public class LoggingServiceConfiguration {
 		// .getRootElement());
 		invoke.setAttribute("inputVariable", "logRequest");
 		invoke.setAttribute("operation",
-				LoggingServiceConfiguration.LOGGING_SERVICE_OPERATION);
+				CMServiceFactory.LOGGING_SERVICE_OPERATION);
 		invoke.setAttribute("partnerLink",
-				LoggingServiceConfiguration.LOGGING_SERVICE_PORTTYPE);
+				CMServiceFactory.LOGGING_SERVICE_PORTTYPE);
 		invoke.setAttribute("portType",
-				LOG_SERVICE_NAMESPACE.getPrefix()+":"+LoggingServiceConfiguration.LOGGING_SERVICE_PORT);
+				LOG_SERVICE_NAMESPACE.getPrefix()+":"+CMServiceFactory.LOGGING_SERVICE_PORT);
 		return invoke;
 	}
 

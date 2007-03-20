@@ -1,4 +1,4 @@
-package coverage.bpelunitext;
+package coverage.bpelunit.ext;
 
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.exception.HeaderProcessingException;
@@ -9,9 +9,9 @@ import org.bpelunit.framework.model.test.activity.ActivityContext;
 import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 
 import coverage.instrumentation.metrics.MetricHandler;
-import coverage.loggingservice.CoverageRegistry;
+import coverage.wstools.CoverageRegistry;
 
-public class ReceiveDataForLogSpecification extends ReceiveDataSpecification {
+public class ReceivePermanentDataSpecification extends ReceiveDataSpecification {
 
 	private Logger fLogger;
 
@@ -19,7 +19,7 @@ public class ReceiveDataForLogSpecification extends ReceiveDataSpecification {
 
 	private TestCase testCase;
 
-	public ReceiveDataForLogSpecification(Activity arg0)
+	public ReceivePermanentDataSpecification(Activity arg0)
 			throws SpecificationException {
 		super(arg0);
 

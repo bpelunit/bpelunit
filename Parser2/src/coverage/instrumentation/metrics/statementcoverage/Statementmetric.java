@@ -14,7 +14,7 @@ import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
-import coverage.loggingservice.CoverageRegistry;
+import coverage.wstools.CoverageRegistry;
 
 /**
  * Klasse instrumentiert ein BPEL-Prozess, um die Abdeckung der BasicActivities

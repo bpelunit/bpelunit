@@ -18,20 +18,18 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
-import coverage.deployarchivetools.IDeploymentArchiveHandler;
-import coverage.deployarchivetools.impl.ActiveBPELDeploymentArchiveHandler;
+import coverage.deploy.archivetools.IDeploymentArchiveHandler;
+import coverage.deploy.archivetools.impl.ActiveBPELDeploymentArchiveHandler;
 import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.metrics.IMetric;
-import coverage.instrumentation.metrics.IMetricHandler;
 import coverage.instrumentation.metrics.MetricHandler;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
 import exception.ArchiveFileException;
 import exception.BpelException;
-import exception.BpelVersionException;
-import exception.CoverageToolException;
+import exception.CoverageMeasurmentException;
 
-public class CoverageMeasurement {
+public class CoverageMeasurementTool {
 
 	private static List<IMetric> metrics = new ArrayList<IMetric>();
 
@@ -52,15 +50,14 @@ public class CoverageMeasurement {
 
 	private String fConfigDirectory;
 
-	public CoverageMeasurement(File file, String fConfigDirectory)
+	public CoverageMeasurementTool(File file, String fConfigDirectory)
 			throws ConfigurationException {
 		this.fConfigDirectory = fConfigDirectory;
 		logger = Logger.getLogger(getClass());
-		loadCoverageMeasurement(file);
+		loadConfiguration(file);
 	}
 
-	private void loadCoverageMeasurement(File file)
-			throws ConfigurationException {
+	private void loadConfiguration(File file) throws ConfigurationException {
 		logger.info("Konfiguration für Coverage wird geladen");
 		SAXBuilder builder = new SAXBuilder();
 		String attribute;
@@ -86,11 +83,11 @@ public class CoverageMeasurement {
 							+ metrics.size());
 		} catch (JDOMException e) {
 			throw new ConfigurationException(
-					"An XML reading error occurred reading the deployment plug-ins from file "
+					"An XML reading error occurred reading the configuration of coverage tool from file "
 							+ file.getAbsolutePath(), e);
 		} catch (IOException e) {
 			throw new ConfigurationException(
-					"An I/O error occurred reading the deployment plug-ins from file "
+					"An I/O error occurred reading the configuration of coverage tool from file "
 							+ file.getAbsolutePath(), e);
 		}
 
@@ -153,9 +150,9 @@ public class CoverageMeasurement {
 		return metric;
 	}
 
-	public String prepareForCoverageMeasurement(String pathToArchive,
+	public String prepareArchiveForCoverageMeasurement(String pathToArchive,
 			String archiveFile, IBPELDeployer deployer)
-			throws CoverageToolException {
+			throws CoverageMeasurmentException {
 
 		IDeploymentArchiveHandler archiveHandler = null;
 
@@ -163,25 +160,20 @@ public class CoverageMeasurement {
 			archiveHandler = new ActiveBPELDeploymentArchiveHandler();
 		}
 		if (archiveHandler == null) {
-			throw new CoverageToolException(deployer.toString()
+			throw new CoverageMeasurmentException(deployer.toString()
 					+ " is by coverage tool not supported");
 		}
-		try {
-			archiveHandler.setArchiveFile(FilenameUtils.concat(pathToArchive,
-					archiveFile));
-			prepareLoggingService(archiveHandler);
-			executeInstrumentationOfBPEL(archiveHandler);
-		} catch (Exception e) {
-			throw new CoverageToolException("", e);
-		}
+		archiveHandler.setArchiveFile(FilenameUtils.concat(pathToArchive,
+				archiveFile));
+		prepareLoggingService(archiveHandler);
+		executeInstrumentationOfBPEL(archiveHandler);
 
 		return archiveHandler.getArchiveFile().getName();
 	}
 
 	private void executeInstrumentationOfBPEL(
-			IDeploymentArchiveHandler archiveHandler) throws JDOMException,
-			IOException, BpelException, BpelVersionException {
-		IMetricHandler metricHandler = new MetricHandler();
+			IDeploymentArchiveHandler archiveHandler) throws BpelException {
+		MetricHandler metricHandler = new MetricHandler();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			metricHandler.addMetric(iter.next());
 		}
@@ -194,7 +186,7 @@ public class CoverageMeasurement {
 	}
 
 	private void prepareLoggingService(IDeploymentArchiveHandler archiveHandler)
-			throws IOException, ArchiveFileException, JDOMException {
+			throws ArchiveFileException {
 		archiveHandler.addWSDLFile(new File(FilenameUtils.concat(
 				fConfigDirectory, COVERAGE_SERVICE_WSDL)));
 	}

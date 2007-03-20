@@ -1,4 +1,4 @@
-package coverage;
+package coverage.result;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,7 +11,6 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import coverage.loggingservice.IStatistic;
 
 public class XMLCoverageResultProducer {
 

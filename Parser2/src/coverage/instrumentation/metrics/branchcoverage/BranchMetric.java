@@ -12,7 +12,7 @@ import org.jdom.filter.ElementFilter;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
-import coverage.loggingservice.CoverageRegistry;
+import coverage.wstools.CoverageRegistry;
 import exception.BpelException;
 
 /**

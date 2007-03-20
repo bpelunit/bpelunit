@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.jdom.Comment;
 import org.jdom.Document;
@@ -18,8 +17,10 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
-import coverage.loggingservice.CoverageRegistry;
-import coverage.loggingservice.LoggingServiceConfiguration;
+import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
+import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
+import coverage.wstools.CMServiceFactory;
+import coverage.wstools.CoverageRegistry;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
 import de.schlichtherle.io.FileWriter;
@@ -27,15 +28,24 @@ import exception.BpelException;
 import exception.BpelVersionException;
 
 /**
- * Die Klasse implementiert das Interface IMetricHandler.
+ * Dieses Interface wird von dem Handler implementiert, der dafür zuständig ist,
+ * die Instrumentierung der BPEL-Datei zu starten und dabei nur die gewünschten
+ * Metriken zu berücksichtigen.
  * 
  * @author Alex Salnikow
+ * 
  */
-public class MetricHandler implements IMetricHandler {
+public class MetricHandler {
 
 	public static final String MARKER_SEPARATOR = "#";
 
 	public static final String STOP_FLAG = "STOP";
+
+	public static final String STATEMENT_METRIC = Statementmetric.METRIC_NAME;
+
+	public static final String BRANCH_METRIC = BranchMetric.METRIC_NAME;
+
+	public static final String MARKER_IDENTIFIRE = "@marker";
 
 	private HashMap<String, IMetric> metrics;
 
@@ -43,7 +53,7 @@ public class MetricHandler implements IMetricHandler {
 
 	private Logger logger;
 
-	private LoggingServiceConfiguration configLogService;
+	private CMServiceFactory cmServiceFactory;
 
 	public MetricHandler() {
 		metrics = new HashMap<String, IMetric>();
@@ -51,80 +61,105 @@ public class MetricHandler implements IMetricHandler {
 		;
 	}
 
-	public void addMetric(IMetric metric){
+	/**
+	 * Die übergebene Metrik wird bei der Ausführung der BPEL erhoben:
+	 * 
+	 * @param metricName
+	 */
+	public void addMetric(IMetric metric) {
 		metrics.put(metric.getName(), metric);
 	}
 
+	/**
+	 * Die Metrik wird bei der Ausführung der BPEL nicht erhoben.
+	 * 
+	 * @param metricName
+	 */
 	public void remove(String metricName) {
 		metrics.remove(metricName);
 	}
 
+	/**
+	 * Startet die Instrumentierung der BPEL-Datei.
+	 * 
+	 * @param file
+	 * @throws BpelException
+	 */
 	public void startInstrumentation(File file) throws BpelException {
 		FileWriter writer = null;
 		FileInputStream is = null;
+		// try {
+		logger.info("Instrumentation of file " + file.getName()
+				+ " is started.");
+		SAXBuilder builder = new SAXBuilder();
+		Document doc = null;
 		try {
-			logger.info("Instrumentation of file " + file.getName()
-					+ " is started.");
-			SAXBuilder builder = new SAXBuilder();
 			is = new FileInputStream(file);
-			Document doc = builder.build(is);
-			process_element = doc.getRootElement();
-			if (!process_element.getName().equalsIgnoreCase(
-					BpelXMLTools.PROCESS_ELEMENT)) {
 
-				throw (new BpelException(BpelException.NO_VALIDE_BPEL));
+			doc = builder.build(is);
+		} catch (IOException e) {
+			throw new BpelException(
+					"An I/O error occurred when reading the BPEL file: "
+							+ file.getName(), e);
+		} catch (JDOMException e) {
+			throw new BpelException(
+					"An XML reading error occurred reading the BPEL file "
+							+ file.getName(), e);
+		}
+		process_element = doc.getRootElement();
+		if (!process_element.getName().equalsIgnoreCase(
+				BpelXMLTools.PROCESS_ELEMENT)) {
 
-			}
-			if (!process_element.getNamespace().equals(
-					BpelXMLTools.NAMESPACE_BPEL_2)) {
-				throw (new BpelVersionException(
-						BpelVersionException.WRONG_VERSION));
-			}
-			BpelXMLTools.process_element = process_element;
-			insertImportElementForLogWSDL();
-			CoverageRegistry registry=CoverageRegistry.getInstance();
-			registry.initialize();
-			IMetric metric;
-			for (Iterator<IMetric> i = metrics.values().iterator(); i.hasNext();) {
-				metric = i.next();
-				logger.info(metric);
-				registry.addMetric(metric);
-				metric.insertMarker(process_element);
-			}
-			insertInvokesForMarker();
+			throw (new BpelException(BpelException.NO_VALIDE_BPEL));
+
+		}
+		if (!process_element.getNamespace().equals(
+				BpelXMLTools.NAMESPACE_BPEL_2)) {
+			throw (new BpelVersionException(BpelVersionException.WRONG_VERSION));
+		}
+		BpelXMLTools.process_element = process_element;
+		insertImportElementForLogWSDL();
+		CoverageRegistry registry = CoverageRegistry.getInstance();
+		registry.initialize();
+		IMetric metric;
+		for (Iterator<IMetric> i = metrics.values().iterator(); i.hasNext();) {
+			metric = i.next();
+			logger.info(metric);
+			registry.addMetric(metric);
+			metric.insertMarker(process_element);
+		}
+		insertInvokesForMarker();
+		try {
 			writer = new FileWriter(file);
+
 			XMLOutputter xmlOutputter = new XMLOutputter(Format
 					.getPrettyFormat());
 			xmlOutputter.output(doc, writer);
-			logger.info("Instrumentation sucessfully completed.");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			throw new BpelException("", e);
-		} catch (BpelVersionException e) {
-			// TODO Auto-generated catch block
-			throw new BpelException("", e);
-		} catch (JDOMException e) {
-			throw new BpelException("BPEL-file "
-					+ FilenameUtils.getName(file.getName())
-					+ " can not be parsed.", e);
-		} finally {
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+
+			throw new BpelException(
+					"An I/O error occurred when writing the BPEL file: "
+							+ file.getName(), e);
 		}
+		logger.info("Instrumentation sucessfully completed.");
+		// } finally {
+		// if (writer != null) {
+		// try {
+		// writer.close();
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		// if (is != null) {
+		// try {
+		// is.close();
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		// }
 	}
 
 	private void insertImportElementForLogWSDL() {
@@ -139,7 +174,7 @@ public class MetricHandler implements IMetricHandler {
 	}
 
 	private void insertInvokesForMarker() {
-		configLogService = new LoggingServiceConfiguration("", process_element);
+		cmServiceFactory = new CMServiceFactory(process_element);
 		analyzeDirectChildren(process_element);
 		insertLastInvoke(process_element);
 
@@ -147,7 +182,7 @@ public class MetricHandler implements IMetricHandler {
 
 	private void insertLastInvoke(Element process_element) {
 		Element sequenceElement = BpelXMLTools.createSequence();
-		Element activity=BpelXMLTools.getFirstActivityChild(process_element);
+		Element activity = BpelXMLTools.getFirstActivityChild(process_element);
 		sequenceElement.addContent(activity.detach());
 		insertInvokeForMarker(STOP_FLAG, sequenceElement.getContentSize(),
 				sequenceElement);
@@ -195,8 +230,8 @@ public class MetricHandler implements IMetricHandler {
 	}
 
 	private void insertInvokeForMarker(String marker, int index, Element element) {
-		Element assign = configLogService.createAssignElement(marker);
-		Element invoke = configLogService.createInvokeElement();
+		Element assign = cmServiceFactory.createAssignElement(marker);
+		Element invoke = cmServiceFactory.createInvokeElement();
 		element.addContent(index, invoke);
 		element.addContent(index, assign);
 	}
@@ -215,11 +250,14 @@ public class MetricHandler implements IMetricHandler {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param metricName
+	 * @return Metrik
+	 */
 	public IMetric getMetric(String metricName) {
 		IMetric metric = metrics.get(metricName);
 		return metric;
 	}
-
-
 
 }

@@ -1,4 +1,4 @@
-package coverage.loggingservice;
+package coverage.wstools;
 
 import java.util.HashSet;
 import java.util.Set;
