@@ -49,7 +49,7 @@ public class IfActivityHandler implements IStructuredActivity {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
 		BranchMetric.insertMarkerBevorAllActivities(branch_activity,
-				"!!!!!ELSE!!!!!");
+				"");
 
 	}
 
@@ -82,7 +82,7 @@ public class IfActivityHandler implements IStructuredActivity {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
 		BranchMetric.insertMarkerBevorAllActivities(branch_activity,
-				"!!!!!IFZweig");
+				"");
 
 	}
 

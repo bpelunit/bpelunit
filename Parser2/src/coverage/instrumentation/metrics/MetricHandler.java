@@ -17,8 +17,8 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
 import coverage.exception.BpelException;
-import coverage.exception.BpelVersionException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
+import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
 import coverage.wstools.CMServiceFactory;
@@ -54,6 +54,8 @@ public class MetricHandler {
 	private Logger logger;
 
 	private CMServiceFactory cmServiceFactory;
+	
+	private String assignVariable=BpelXMLTools.createVariableName();
 
 	public MetricHandler() {
 		metrics = new HashMap<String, IMetric>();
@@ -104,8 +106,8 @@ public class MetricHandler {
 			throw new BpelException(
 					"An XML reading error occurred reading the BPEL file "
 							+ file.getName(), e);
-		}finally{
-			if(is!=null){
+		} finally {
+			if (is != null) {
 				try {
 					is.close();
 				} catch (IOException e) {
@@ -121,10 +123,10 @@ public class MetricHandler {
 			throw (new BpelException(BpelException.NO_VALIDE_BPEL));
 
 		}
-//		if (!process_element.getNamespace().equals(
-//				BpelXMLTools.NAMESPACE_BPEL_2)) {
-//			throw (new BpelVersionException(BpelVersionException.WRONG_VERSION));
-//		}
+		// if (!process_element.getNamespace().equals(
+		// BpelXMLTools.NAMESPACE_BPEL_2)) {
+		// throw (new BpelVersionException(BpelVersionException.WRONG_VERSION));
+		// }
 		BpelXMLTools.process_element = process_element;
 		insertImportElementForLogWSDL();
 		CoverageRegistry registry = CoverageRegistry.getInstance();
@@ -148,8 +150,8 @@ public class MetricHandler {
 			throw new BpelException(
 					"An I/O error occurred when writing the BPEL file: "
 							+ file.getName(), e);
-		}finally{
-			if(writer!=null){
+		} finally {
+			if (writer != null) {
 				try {
 					writer.close();
 				} catch (IOException e) {
@@ -175,7 +177,7 @@ public class MetricHandler {
 
 	private void insertInvokesForMarker() {
 		cmServiceFactory = new CMServiceFactory(process_element);
-		analyzeDirectChildren(process_element);
+		analyzeDirectChildren(process_element, null);
 		insertLastInvoke(process_element);
 
 	}
@@ -185,16 +187,27 @@ public class MetricHandler {
 		Element activity = BpelXMLTools.getFirstActivityChild(process_element);
 		sequenceElement.addContent(activity.detach());
 		insertInvokeForMarker(STOP_FLAG, sequenceElement.getContentSize(),
-				sequenceElement);
+				sequenceElement, null);
 		process_element.addContent(sequenceElement);
 	}
 
-	private void analyzeDirectChildren(Element element) {
+	private void analyzeDirectChildren(Element element, String variable) {
 		List<Element> childElements = new ArrayList<Element>();
+		List<String> variables = null;
+		boolean isFlow = element.getName().equals(
+				StructuredActivity.FLOW_ACTIVITY);
+		if (isFlow) {
+			// Variablen für assign und Invoke in einer Flow
+			variables = new ArrayList<String>();
+		}
+
 		List children = element.getContent(new ContentFilter(
 				ContentFilter.ELEMENT));
 		for (int i = 0; i < children.size(); i++) {
 			childElements.add((Element) children.get(i));
+			if (isFlow) {
+				variables.add(BpelXMLTools.createVariableName());
+			}
 		}
 		children = element.getContent(new ContentFilter(ContentFilter.COMMENT));
 		int indexOfLastMarker = -1;
@@ -212,7 +225,7 @@ public class MetricHandler {
 				} else {
 					if (marker.length() > 0) {
 						insertInvokeForMarker(marker, indexOfLastMarker,
-								element);
+								element, variable);
 					}
 					marker = getMarker(commentText) + MARKER_SEPARATOR;
 				}
@@ -220,18 +233,28 @@ public class MetricHandler {
 			}
 			indexOfLastMarker = index;
 			if (i == 0 && marker.length() > 0) {
-				insertInvokeForMarker(marker, indexOfLastMarker, element);
+				insertInvokeForMarker(marker, indexOfLastMarker, element,
+						variable);
 			}
 		}
 		for (int i = 0; i < childElements.size(); i++) {
-			analyzeDirectChildren(childElements.get(i));
+			if (isFlow) {
+				analyzeDirectChildren(childElements.get(i), variables.get(i));
+			} else {
+
+				analyzeDirectChildren(childElements.get(i), null);
+			}
 		}
 
 	}
 
-	private void insertInvokeForMarker(String marker, int index, Element element) {
-		Element assign = cmServiceFactory.createAssignElement(marker);
-		Element invoke = cmServiceFactory.createInvokeElement();
+	private void insertInvokeForMarker(String marker, int index,
+			Element element, String variable) {
+		if(variable==null){
+			variable=assignVariable;
+		}
+		Element assign = cmServiceFactory.createAssignElement(marker, variable);
+		Element invoke = cmServiceFactory.createInvokeElement(variable);
 		element.addContent(index, invoke);
 		element.addContent(index, assign);
 	}

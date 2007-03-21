@@ -27,7 +27,8 @@ public class BranchMetric implements IMetric {
 
 	public static final String BRANCH_LABEL = "branch";
 
-	public static final String LINK_LABEL = "link";
+	public static final String NEGATIV_LINK_LABEL = "negativlink";
+	public static final String POSITIV_LINK_LABEL = "positivlink";
 	
 	public static final String MARKER_VARAIBLE_NAME="@variable=";
 
@@ -49,8 +50,19 @@ public class BranchMetric implements IMetric {
 	 * 
 	 * @return eindeutige Markierung
 	 */
-	public static String getNextLinkLabel() {
-		String marker=LINK_LABEL +"_"+ (count++);
+	public static String getNextPositivLinkLabel() {
+		String marker=POSITIV_LINK_LABEL +"_"+ (count++);
+		CoverageRegistry.getInstance().addMarker(marker);
+		return MARKER_IDENTIFIRE+marker;
+	}
+	
+	/**
+	 * Generiert eindeutige Merkierung für die Links (in der Flow-Umgebung)
+	 * 
+	 * @return eindeutige Markierung
+	 */
+	public static String getNextNegativLinkLabel() {
+		String marker=NEGATIV_LINK_LABEL +"_"+ (count++);
 		CoverageRegistry.getInstance().addMarker(marker);
 		return MARKER_IDENTIFIRE+marker;
 	}

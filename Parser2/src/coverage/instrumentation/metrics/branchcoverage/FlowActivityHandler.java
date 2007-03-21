@@ -7,6 +7,7 @@ import java.util.List;
 import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
+import sun.rmi.runtime.NewThreadAction;
 
 import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
@@ -83,13 +84,14 @@ public class FlowActivityHandler implements IStructuredActivity {
 		Element enclosedFlow = BpelXMLTools.encloseElementInFlow(sourceElement
 				.getParentElement().getParentElement());
 		Element new_link = insertPostivLink(enclosedFlow, sourceElement, link);
-		insertLoggingMarker(new_link, enclosedFlow, null);
+		insertLoggingMarker(new_link, enclosedFlow, null, false, true);
 
 		new_link = insertNegativLink(enclosedFlow, sourceElement, link);
 		Comment negativLinkLoggingMarker = (Comment) insertLoggingMarker(
-				new_link, enclosedFlow, null).clone();
-		new_link = insertDPELink(enclosedFlow, sourceElement, link);
-		insertLoggingMarker(new_link, enclosedFlow, negativLinkLoggingMarker);
+				new_link, enclosedFlow, null, false, false).clone();
+		// new_link = insertDPELink(enclosedFlow, sourceElement, link);
+		// insertLoggingMarker(new_link, enclosedFlow,
+		// negativLinkLoggingMarker,true);
 
 	}
 
@@ -134,27 +136,48 @@ public class FlowActivityHandler implements IStructuredActivity {
 				.getAttributeValue(ATTRIBUTE_NAME));
 		Element new_transConditEl = new Element(TRANSITION_CONDITION_TAG, flow
 				.getNamespace());
-		new_transConditEl.setText("false");
+		new_transConditEl.setAttribute("expressionLanguage",
+				"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
+		new_transConditEl.setText("true()");
+		new_source_element.addContent(new_transConditEl);
 		sourceElement.getParentElement().addContent(new_source_element);
+		// TODO zum Targetelement joinCondition hizufügen
 		return link_copy;
 	}
 
 	private Comment insertLoggingMarker(Element new_link, Element enclosedFlow,
-			Comment loggingMarker) {
+			Comment loggingMarker, boolean isDPE, boolean isPositivValueOfLink) {
 		Comment logging;
 		if (loggingMarker != null && !loggingMarker.equals("")) {
 			logging = loggingMarker;
 		} else {
-			logging = new Comment(BranchMetric.getNextLinkLabel());
-//			logging = new Comment(BranchMetric.getNextLabel() + " flow");
+			if (isPositivValueOfLink) {
+				logging = new Comment(BranchMetric.getNextPositivLinkLabel());
+			} else {
+				logging = new Comment(BranchMetric.getNextNegativLinkLabel());
+			}
+			// logging = new Comment(BranchMetric.getNextLabel() + " flow");
 		}
 		Element sequence = BpelXMLTools.createSequence();
 		Element targetElement = new Element(TARGET_TAG, BpelXMLTools
 				.getBpelNamespace());
 		targetElement.setAttribute(ATTRIBUTE_LINKNAME, new_link
 				.getAttributeValue(ATTRIBUTE_NAME));
-		sequence.addContent(new Element(TARGETS_TAG, BpelXMLTools
-				.getBpelNamespace()).addContent(targetElement));
+
+		Element targets = new Element(TARGETS_TAG, BpelXMLTools
+				.getBpelNamespace());
+		if (isDPE) {
+			Element joinCondition = new Element("joinCondition", BpelXMLTools
+					.getBpelNamespace());
+
+			joinCondition.setAttribute("expressionLanguage",
+					"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
+			joinCondition.setText("not($"
+					+ new_link.getAttributeValue(ATTRIBUTE_NAME) + ")");
+			targets.addContent(joinCondition);
+		}
+		targets.addContent(targetElement);
+		sequence.addContent(targets);
 		sequence.addContent(logging);
 		enclosedFlow.addContent(sequence);
 		return logging;
@@ -174,12 +197,17 @@ public class FlowActivityHandler implements IStructuredActivity {
 		Element new_transConditEl;
 		if (transConditionElement != null) {
 			new_transConditEl = (Element) transConditionElement.clone();
-			new_transConditEl.setText("!(" + new_transConditEl.getText() + ")");
+			new_transConditEl.setText("not(" + new_transConditEl.getText()
+					+ ")");
 		} else {
-			new_transConditEl = new Element(TRANSITION_CONDITION_TAG, flow
-					.getNamespace());
-			new_source_element.setText("false");
+			new_transConditEl = new Element(TRANSITION_CONDITION_TAG,
+					BpelXMLTools.getBpelNamespace());
+			new_transConditEl.setAttribute("expressionLanguage",
+					"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
+			new_transConditEl.setText("false()");
 		}
+
+		new_source_element.addContent(new_transConditEl);
 		sourceElement.getParentElement().addContent(new_source_element);
 		return link_copy;
 	}

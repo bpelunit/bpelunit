@@ -265,7 +265,7 @@ public class BpelXMLTools {
 		return assign;
 	}
 
-	private static String createVariableName() {
+	public static String createVariableName() {
 		return VARIABLE_NAME + (count++);
 	}
 	
