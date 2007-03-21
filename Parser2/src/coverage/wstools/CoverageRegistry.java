@@ -129,59 +129,81 @@ public class CoverageRegistry {
 	}
 
 	private IStatistic getStatementmetricResults() {
-		IStatistic statistic = new Statistic(Statementmetric.METRIC_NAME);
+		IStatistic statistic = null;
 		int[] numbers = getNumbers(BasisActivity.EMPTY_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+					 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.EMPTY_ACTIVITY));
 		}
 		numbers = getNumbers(BasisActivity.ASSIGN_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+				 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.ASSIGN_ACTIVITY));
 		}
 		numbers = getNumbers(BasisActivity.COMPENSATE_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+				 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.COMPENSATE_ACTIVITY));
 		}
 		numbers = getNumbers(BasisActivity.COMPENSATESCOPE_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+				 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.COMPENSATESCOPE_ACTIVITY));
 		}
 		numbers = getNumbers(BasisActivity.EXIT_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+				 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.EXIT_ACTIVITY));
 		}
 		numbers = getNumbers(BasisActivity.INVOKE_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+				 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.INVOKE_ACTIVITY));
 		}
 		numbers = getNumbers(BasisActivity.RECEIVE_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+				 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.RECEIVE_ACTIVITY));
 		}
 		numbers = getNumbers(BasisActivity.REPLY_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+				 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.REPLY_ACTIVITY));
 		}
 		numbers = getNumbers(BasisActivity.RETHROW_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+				 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.RETHROW_ACTIVITY));
 		}
 		numbers = getNumbers(BasisActivity.THROW_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+				 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.THROW_ACTIVITY));
 		}
 		numbers = getNumbers(BasisActivity.WAIT_ACTIVITY);
 		if (numbers != null) {
+			if(statistic==null)
+				 statistic=new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
 					BasisActivity.WAIT_ACTIVITY));
 		}

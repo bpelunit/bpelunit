@@ -28,6 +28,8 @@ public class BranchMetric implements IMetric {
 	public static final String BRANCH_LABEL = "branch";
 
 	public static final String LINK_LABEL = "link";
+	
+	public static final String MARKER_VARAIBLE_NAME="@variable=";
 
 	private static int count = 0;
 

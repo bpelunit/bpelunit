@@ -58,7 +58,6 @@ public class MetricHandler {
 	public MetricHandler() {
 		metrics = new HashMap<String, IMetric>();
 		logger = Logger.getLogger(getClass());
-		;
 	}
 
 	/**
@@ -105,6 +104,15 @@ public class MetricHandler {
 			throw new BpelException(
 					"An XML reading error occurred reading the BPEL file "
 							+ file.getName(), e);
+		}finally{
+			if(is!=null){
+				try {
+					is.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		process_element = doc.getRootElement();
 		if (!process_element.getName().equalsIgnoreCase(
@@ -113,10 +121,10 @@ public class MetricHandler {
 			throw (new BpelException(BpelException.NO_VALIDE_BPEL));
 
 		}
-		if (!process_element.getNamespace().equals(
-				BpelXMLTools.NAMESPACE_BPEL_2)) {
-			throw (new BpelVersionException(BpelVersionException.WRONG_VERSION));
-		}
+//		if (!process_element.getNamespace().equals(
+//				BpelXMLTools.NAMESPACE_BPEL_2)) {
+//			throw (new BpelVersionException(BpelVersionException.WRONG_VERSION));
+//		}
 		BpelXMLTools.process_element = process_element;
 		insertImportElementForLogWSDL();
 		CoverageRegistry registry = CoverageRegistry.getInstance();
@@ -140,26 +148,18 @@ public class MetricHandler {
 			throw new BpelException(
 					"An I/O error occurred when writing the BPEL file: "
 							+ file.getName(), e);
+		}finally{
+			if(writer!=null){
+				try {
+					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		logger.info("Instrumentation sucessfully completed.");
-		// } finally {
-		// if (writer != null) {
-		// try {
-		// writer.close();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// if (is != null) {
-		// try {
-		// is.close();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// }
+
 	}
 
 	private void insertImportElementForLogWSDL() {

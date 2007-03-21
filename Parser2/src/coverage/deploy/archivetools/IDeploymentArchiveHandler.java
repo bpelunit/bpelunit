@@ -2,6 +2,7 @@ package coverage.deploy.archivetools;
 
 import coverage.exception.ArchiveFileException;
 
+import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;
 
 /**
@@ -17,7 +18,7 @@ public interface IDeploymentArchiveHandler {
 	
 	public void setArchiveFile(String pfad);
 
-	public java.io.File getArchiveFile();
+	public java.io.File getArchiveFile() throws ArchiveFileException;
 
 	public int getCountOfBPELFiles();
 

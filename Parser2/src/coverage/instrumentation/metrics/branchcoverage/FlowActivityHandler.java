@@ -50,7 +50,6 @@ public class FlowActivityHandler implements IStructuredActivity {
 				BranchMetric.insertMarkerForBranch(child, "");
 			}
 		}
-
 	}
 
 	private void loggingOfLinks(Element element) throws BpelException {

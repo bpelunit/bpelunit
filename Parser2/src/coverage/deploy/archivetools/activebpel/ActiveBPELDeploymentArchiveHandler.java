@@ -19,6 +19,7 @@ import org.jdom.output.XMLOutputter;
 import coverage.CoverageConstants;
 import coverage.deploy.archivetools.IDeploymentArchiveHandler;
 import coverage.exception.ArchiveFileException;
+import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
 import de.schlichtherle.io.FileOutputStream;
@@ -129,43 +130,50 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		FileWriter writer = null;
 
 		File file = getWSDLCatalog();
+		Document doc = null;
 		try {
 
 			is = new FileInputStream(file);
 
 			SAXBuilder builder = new SAXBuilder();
-			Document doc = builder.build(is);
+			doc = builder.build(is);
 			Element wsdlCatalog = doc.getRootElement();
 			Element wsdlEntry = new Element("wsdlEntry", wsdlCatalog
 					.getNamespace());
 			wsdlEntry.setAttribute("location", WSDL_FILE_IN_ARCHIVE);
 			wsdlEntry.setAttribute("classpath", WSDL_FILE_IN_ARCHIVE);
 			wsdlCatalog.addContent(wsdlEntry);
-			writer = new FileWriter(file);
-			XMLOutputter xmlOutputter = new XMLOutputter(Format
-					.getPrettyFormat());
-			xmlOutputter.output(doc, writer);
 		} catch (JDOMException e) {
 			throw new ArchiveFileException(
 					"An XML reading error occurred when reading the WSDL catalog.",
 					e);
 		} catch (IOException e) {
-
 			throw new ArchiveFileException(
-					"An I/O error occurred when writing the WSDL catalog.", e);
+					"An I/O error occurred when reading the WSDL catalog.", e);
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
 				} catch (IOException e) {
-
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			if (writer != null) {
+		}
+		try {
+			writer = new FileWriter(file);
+			XMLOutputter xmlOutputter = new XMLOutputter(Format
+					.getPrettyFormat());
+			xmlOutputter.output(doc, writer);
+		} catch (IOException e) {
+			throw new ArchiveFileException(
+					"An I/O error occurred when writing the WSDL catalog.", e);
+		}finally{
+			if(writer!=null){
 				try {
 					writer.close();
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -241,9 +249,17 @@ public class ActiveBPELDeploymentArchiveHandler implements
 				.info("CoverageTool:Reference of _LogService.wsdl in BPEL added.");
 	}
 
-	public java.io.File getArchiveFile() {
+	public java.io.File getArchiveFile() throws ArchiveFileException {
 		// archiveFile.renameTo(new
 		// File(FilenameUtils.getBaseName(archiveFile.getName())+".jar"));
+		try {
+			File.umount(archiveFile, true);
+		} catch (ArchiveException e) {
+			e.printStackTrace();
+			throw new ArchiveFileException(
+					"Error occur when writing in archive file: "
+							+ archiveFile.getName(), e);
+		}
 		return archiveFile;
 	}
 

@@ -28,6 +28,7 @@ import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.MetricHandler;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
+import coverage.wstools.CoverageRegistry;
 
 /**
  * 
@@ -167,8 +168,8 @@ public class CoverageMeasurementTool {
 
 	/**
 	 * Prepariert das Deploymentarchive für die Messung der Abdeckung beim
-	 * Testen des BPEL-Prozesses. Für die Instrumentierung wird die Archivedate
-	 * kopiert.
+	 * Testen des BPEL-Prozesses. Die Instrumentierung wird auf einer Kopie
+	 * durchgeführt.
 	 * 
 	 * @param pathToArchive
 	 * @param archiveFile
@@ -193,7 +194,7 @@ public class CoverageMeasurementTool {
 				archiveFile));
 		prepareLoggingService(archiveHandler);
 		executeInstrumentationOfBPEL(archiveHandler);
-
+		
 		return archiveHandler.getArchiveFile().getName();
 	}
 
@@ -209,6 +210,7 @@ public class CoverageMeasurementTool {
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			metricHandler.addMetric(iter.next());
 		}
+		
 
 		de.schlichtherle.io.File bpelFile;
 		for (int i = 0; i < archiveHandler.getCountOfBPELFiles(); i++) {
