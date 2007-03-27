@@ -80,7 +80,7 @@ public class CoverageRegistry {
 	public void setCoverageStatusForAllMarker(String marker, String testCase) {
 		logger.info("---------!!!!!!--------" + marker);
 		Scanner scanner = new Scanner(marker);
-		scanner.useDelimiter(MetricHandler.MARKER_SEPARATOR);
+		scanner.useDelimiter(MetricHandler.SEPARATOR);
 		String marke;
 		while (scanner.hasNext()) {
 			marke = scanner.next().trim();
@@ -247,17 +247,17 @@ public class CoverageRegistry {
 	public void addMarkerForEach(String content) {
 		logger.info("---CONTENT " + content + " registriert.");
 		content = content.substring(content
-				.indexOf(MetricHandler.MARKER_IDENTIFIRE2)
-				+ MetricHandler.MARKER_IDENTIFIRE2.length());
+				.indexOf(IMetric.DYNAMIC_COVERAGE_LABEL_IDENTIFIER)
+				+ IMetric.DYNAMIC_COVERAGE_LABEL_IDENTIFIER.length());
 		int start, stop, index1, index2;
 		String prefix;
-		index1 = content.indexOf(MetricHandler.MARKER_SEPARATOR);
+		index1 = content.indexOf(MetricHandler.SEPARATOR);
 		start = Integer.parseInt(content.substring(0, index1));
-		index2 = content.indexOf(MetricHandler.MARKER_SEPARATOR, index1 + 1);
+		index2 = content.indexOf(MetricHandler.SEPARATOR, index1 + 1);
 		stop = Integer.parseInt(content.substring(index1
-				+ MetricHandler.MARKER_SEPARATOR.length(), index2));
+				+ MetricHandler.SEPARATOR.length(), index2));
 		prefix = content.substring(index2
-				+ MetricHandler.MARKER_SEPARATOR.length());
+				+ MetricHandler.SEPARATOR.length());
 		for (; start < stop + 1; start++) {
 			addMarker(prefix + start);
 		}

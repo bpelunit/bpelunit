@@ -8,6 +8,7 @@ import org.bpelunit.framework.model.test.activity.Activity;
 import org.bpelunit.framework.model.test.activity.ActivityContext;
 import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 
+import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.MetricHandler;
 import coverage.wstools.CoverageRegistry;
 
@@ -48,7 +49,7 @@ public class ReceivePermanentDataSpecification extends ReceiveDataSpecification 
 			lastMessageReceived=true;
 		} else {
 			CoverageRegistry covRegistry=CoverageRegistry.getInstance();
-			if(content.startsWith(MetricHandler.MARKER_IDENTIFIRE2)){
+			if(content.startsWith(IMetric.DYNAMIC_COVERAGE_LABEL_IDENTIFIER)){
 				covRegistry.addMarkerForEach(content);
 			}else{
 			covRegistry.setCoverageStatusForAllMarker(

@@ -13,8 +13,10 @@ import coverage.exception.BpelException;
  */
 public interface IMetric {
 	
-	
-	public static final String MARKER_IDENTIFIRE = "@marker";
+
+
+	public static final String COVERAGE_LABEL_IDENTIFIER = "@coverageLabel";
+	public static final String DYNAMIC_COVERAGE_LABEL_IDENTIFIER = "@ForEachCoverageLabel";
 
 	/**
 	 * Diese Methode fügt die Marker an den richtigen Stellen in
@@ -25,7 +27,7 @@ public interface IMetric {
 	 * @param process_element
 	 * @throws BpelException 
 	 */
-	public void insertMarker(Element process_element) throws BpelException;
+	public void insertCoverageLabels(Element process_element) throws BpelException;
 	
 	public String getName();
 

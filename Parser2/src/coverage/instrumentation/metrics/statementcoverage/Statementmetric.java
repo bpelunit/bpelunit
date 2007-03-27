@@ -57,7 +57,7 @@ public class Statementmetric implements IMetric {
 	 * @param process_element
 	 *            Prozess-Element der BPEL
 	 */
-	public void insertMarker(Element element) {
+	public void insertCoverageLabels(Element element) {
 		// BasicActivitiesFilter filter = new
 		// BasicActivitiesFilter(BpelXMLTools.getBpelNamespace(),
 		// activities_to_respekt);
@@ -125,7 +125,7 @@ public class Statementmetric implements IMetric {
 		String element_name = element.getName();
 		String marker=element_name + "_" + (count++);
 		CoverageRegistry.getInstance().addMarker(marker);
-		Comment comment = new Comment(MARKER_IDENTIFIRE + marker);
+		Comment comment = new Comment(IMetric.COVERAGE_LABEL_IDENTIFIER + marker);
 		int index = parent.indexOf(element);
 		if (logging_before_activity.containsKey(element_name)) {
 			parent.addContent(index, comment);

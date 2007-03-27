@@ -12,6 +12,8 @@ import org.jdom.filter.ContentFilter;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
+
 /**
  * Die Klasse stellt zur Verfügung Methoden, mit denen man neue Elemente der
  * BPEL Sprache erzeugen und in den BPEL-Prozess einfügen.
@@ -295,7 +297,7 @@ public class BpelXMLTools {
 		Element copy = new Element(COPY_TAG, getBpelNamespace());
 		Element from = new Element(FROM_TAG, getBpelNamespace());
 		Element to = new Element(TO_TAG, getBpelNamespace());
-		from.setText("$" + countVariable.getAttributeValue(ATTRIBUTE_NAME)
+		from.setText(XpathLanguage.valueOf(countVariable.getAttributeValue(ATTRIBUTE_NAME))
 				+ " + 1");
 		to.setAttribute(ATTRIBUTE_VARIABLE, countVariable
 				.getAttributeValue(ATTRIBUTE_NAME));
@@ -327,7 +329,7 @@ public class BpelXMLTools {
 		Element if_element = new Element(IF_TAG, getBpelNamespace());
 		Element condition = new Element(CONDITION_TAG, getBpelNamespace());
 		condition.setAttribute("expressionLanguage",
-				"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
+				XpathLanguage.LANGUAGE_SPEZIFIKATION);
 		condition.setText(conditionContent);
 		if_element.addContent(condition);
 		return if_element;
@@ -366,11 +368,11 @@ public class BpelXMLTools {
 		}
 	}
 
-	public static Element getScope(Content content) {
+	public static Element getSurroundScope(Content content) {
 		Element scope=null;
 		Element parent=content.getParentElement();
 		while(scope==null&&parent!=null){
-			if(parent.getName().equals("scope")){
+			if(parent.getName().equals("scope")||parent.getName().equals("process")){
 				scope=parent;
 				break;
 			}else{

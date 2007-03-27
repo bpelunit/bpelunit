@@ -44,7 +44,7 @@ public class BranchMetric implements IMetric {
 	public static String getNextLabelAndRegisterMarker() {
 		String marker = BRANCH_LABEL + "_" + (count++);
 		registerMarker(marker);
-		return MARKER_IDENTIFIRE + marker;
+		return IMetric.COVERAGE_LABEL_IDENTIFIER + marker;
 	}
 
 	public static String getNextLabel() {
@@ -64,7 +64,7 @@ public class BranchMetric implements IMetric {
 	public static String getNextPositivLinkLabel() {
 		String marker = POSITIV_LINK_LABEL + "_" + (count++);
 		CoverageRegistry.getInstance().addMarker(marker);
-		return MARKER_IDENTIFIRE + marker;
+		return IMetric.COVERAGE_LABEL_IDENTIFIER + marker;
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class BranchMetric implements IMetric {
 	public static String getNextNegativLinkLabel() {
 		String marker = NEGATIV_LINK_LABEL + "_" + (count++);
 		CoverageRegistry.getInstance().addMarker(marker);
-		return MARKER_IDENTIFIRE + marker;
+		return IMetric.COVERAGE_LABEL_IDENTIFIER + marker;
 	}
 
 	/**
@@ -113,8 +113,8 @@ public class BranchMetric implements IMetric {
 			activity = BpelXMLTools.ensureElementIsInSequence(activity);
 		}
 
-		Comment comment = new Comment(MetricHandler.MARKER_IDENTIFIRE2 + marker
-				+ MetricHandler.MARKER_SEPARATOR + counterVariable);
+		Comment comment = new Comment(IMetric.DYNAMIC_COVERAGE_LABEL_IDENTIFIER + marker
+				+ MetricHandler.SEPARATOR + counterVariable);
 
 		activity.addContent(0, comment);
 	}
@@ -167,7 +167,7 @@ public class BranchMetric implements IMetric {
 				new PickActivityHandler());
 	}
 
-	public void insertMarker(Element element) throws BpelException {
+	public void insertCoverageLabels(Element element) throws BpelException {
 		Element next_element;
 		Iterator iterator2 = element.getDescendants(new ElementFilter());
 		List<Element> elements_to_log = new ArrayList<Element>();

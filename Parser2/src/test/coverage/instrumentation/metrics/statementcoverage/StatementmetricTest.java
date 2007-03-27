@@ -19,6 +19,7 @@ import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
+import coverage.instrumentation.metrics.MetricHandler;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
 import coverage.wstools.CoverageRegistry;
 
@@ -68,7 +69,7 @@ public class StatementmetricTest {
 		process.addContent(sequence);
 		sequence.addContent(receive);
 
-		metric.insertMarker(process);
+		metric.insertCoverageLabels(process);
 		assertTrue("Kommentar mit der Markierung fehlt",
 				isCommentBevorActivity(throwElement));
 		assertTrue("Kommentar mit der Markierung fehlt",
@@ -87,7 +88,7 @@ public class StatementmetricTest {
 	private void testMarkerBeforActivity() {
 		Element throwElement = Factory.createThrowAktivity();
 		process.addContent(throwElement);
-		metric.insertMarker(process);
+		metric.insertCoverageLabels(process);
 		assertTrue("Enclosed sequence not inserted",
 				Factory.isElementInSequence(throwElement));
 		assertTrue("Kommentar mit der Markierung fehlt",
@@ -97,7 +98,7 @@ public class StatementmetricTest {
 	private Comment testMarkerAfterAktivity() {
 		Element receive = Factory.createReceiveAktivity();
 		process.addContent(receive);
-		metric.insertMarker(process);
+		metric.insertCoverageLabels(process);
 		assertTrue("Enclosed sequence not inserted",
 				Factory.isElementInSequence(receive));
 		Element sequence = process.getChild(
@@ -107,7 +108,7 @@ public class StatementmetricTest {
 		assertNotNull("Zu loggende Aktivität ist nicht vorhanden", receive);
 		Comment comment = (Comment) sequence.getContent(1);
 		assertTrue("Kommentar mit der Markierung fehlt", comment.getText()
-				.contains(IMetric.MARKER_IDENTIFIRE));
+				.contains(IMetric.COVERAGE_LABEL_IDENTIFIER));
 		return comment;
 	}
 
@@ -137,7 +138,7 @@ public class StatementmetricTest {
 		flow.addContent(throwElement);
 		process.addContent(flow);
 		BpelXMLTools.sysout(process);
-		metric.insertMarker(process);
+		metric.insertCoverageLabels(process);
 		Element parent = targets.getParentElement();
 		assertEquals("Das targets-Element wurde falsch platziert.", parent
 				.getName(), StructuredActivity.SEQUENCE_ACTIVITY);
@@ -154,7 +155,7 @@ public class StatementmetricTest {
 			Content child = parent.getContent(index + 1);
 			if (child instanceof Comment) {
 				Comment com = (Comment) child;
-				if (com.getText().contains(IMetric.MARKER_IDENTIFIRE)) {
+				if (com.getText().contains(IMetric.COVERAGE_LABEL_IDENTIFIER)) {
 					return true;
 				}
 			}
@@ -170,7 +171,7 @@ public class StatementmetricTest {
 			Content child = parent.getContent(index - 1);
 			if (child instanceof Comment) {
 				Comment com = (Comment) child;
-				if (com.getText().contains(IMetric.MARKER_IDENTIFIRE)) {
+				if (com.getText().contains(IMetric.COVERAGE_LABEL_IDENTIFIER)) {
 					return true;
 				}
 			}

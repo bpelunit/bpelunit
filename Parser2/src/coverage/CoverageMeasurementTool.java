@@ -215,7 +215,7 @@ public class CoverageMeasurementTool {
 		de.schlichtherle.io.File bpelFile;
 		for (int i = 0; i < archiveHandler.getCountOfBPELFiles(); i++) {
 			bpelFile = archiveHandler.getBPELFile(i);
-			metricHandler.startInstrumentation(bpelFile);
+			metricHandler.executeInstrumentation(bpelFile);
 		}
 	}
 
