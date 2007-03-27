@@ -42,14 +42,20 @@ public class ReceivePermanentDataSpecification extends ReceiveDataSpecification 
 		decodeMessage();
 
 		String content = fLiteralData.getTextContent();
+		fLogger.info("----------------" + fLiteralData.getTextContent()
+				+ "-----------");
 		if (content.equals(MetricHandler.STOP_FLAG)) {
 			lastMessageReceived=true;
 		} else {
-			CoverageRegistry.getInstance().setCoverageStatusForAllMarker(
+			CoverageRegistry covRegistry=CoverageRegistry.getInstance();
+			if(content.startsWith(MetricHandler.MARKER_IDENTIFIRE2)){
+				covRegistry.addMarkerForEach(content);
+			}else{
+			covRegistry.setCoverageStatusForAllMarker(
 					content, testCase.getName());
+			}
 		}
-		fLogger.info("----------------" + fLiteralData.getTextContent()
-				+ "-----------");
+
 
 	}
 

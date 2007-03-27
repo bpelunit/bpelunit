@@ -8,11 +8,11 @@ import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 public class WhileActivityHandler implements IStructuredActivity {
 
 	public void insertMarkerForBranchCoverage(Element element) throws BpelException {
-		Element activity=BpelXMLTools.getFirstActivityChild(element);
+		Element activity=BpelXMLTools.getFirstEnclosedActivity(element);
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetric.insertMarkerForBranch(activity, "");
+		BranchMetric.insertMarkerForBranch(activity);
 	}
 
 }

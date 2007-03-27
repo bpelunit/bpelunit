@@ -15,17 +15,16 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 
 	private void branchFromActivityToCondition(Element element)
 			throws BpelException {
-		Element activity = BpelXMLTools.getFirstActivityChild(element);
+		Element activity = BpelXMLTools.getFirstEnclosedActivity(element);
 		if (element == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetric.insertMarkerAfterAllActivities(activity, "");
+		BranchMetric.insertMarkerAfterAllActivities(activity);
 	}
 
 	private void branchFromConditionToActivity(Element element)
 			throws BpelException {
-		Element countVariable = BpelXMLTools.createVariable(element
-				.getDocument());
+		Element countVariable = BpelXMLTools.createIntVariable();
 		BpelXMLTools.insertVariable(countVariable, element.getDocument()
 				.getRootElement());
 		Element initializeAssign = BpelXMLTools
@@ -47,20 +46,24 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 	 */
 	private void insertIfConstruct(Element element, Element countVariable)
 			throws BpelException {
-		Element activity = BpelXMLTools.getFirstActivityChild(element);
+		Element activity = BpelXMLTools.getFirstEnclosedActivity(element);
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
 		if (!BpelXMLTools.isSequence(activity)) {
 			activity = BpelXMLTools.ensureElementIsInSequence(activity);
+
+
 		}
+
+
 		Element if_element = BpelXMLTools.createIfActivity("$"
-				+ countVariable.getName() + "=1");
+				+ countVariable.getAttributeValue("name") + "=1");
 
 		Element sequence = BpelXMLTools.createSequence();
 		if_element.addContent(sequence);
 		activity.addContent(0, if_element);
-		BranchMetric.insertMarkerBevorAllActivities(sequence, "");
+		BranchMetric.insertMarkerBevorAllActivities(sequence);
 
 	}
 
@@ -76,7 +79,7 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 	 */
 	private void insertIncreesAssign(Element increesAssign, Element element)
 			throws BpelException {
-		Element activity = BpelXMLTools.getFirstActivityChild(element);
+		Element activity = BpelXMLTools.getFirstEnclosedActivity(element);
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}

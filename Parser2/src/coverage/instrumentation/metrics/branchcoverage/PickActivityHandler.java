@@ -24,11 +24,11 @@ public class PickActivityHandler implements IStructuredActivity {
 		Element child;
 		for (int i = 0; i < children.size(); i++) {
 			child = (Element) children.get(i);
-			child = BpelXMLTools.getFirstActivityChild(child);
+			child = BpelXMLTools.getFirstEnclosedActivity(child);
 			if (child == null) {
 				throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 			}
-			BranchMetric.insertMarkerBevorAllActivities(child, "");
+			BranchMetric.insertMarkerBevorAllActivities(child);
 
 		}
 	}

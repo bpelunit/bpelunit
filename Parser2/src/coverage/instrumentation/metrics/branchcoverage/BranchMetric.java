@@ -13,6 +13,7 @@ import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
+import coverage.instrumentation.metrics.MetricHandler;
 import coverage.wstools.CoverageRegistry;
 
 /**
@@ -28,9 +29,10 @@ public class BranchMetric implements IMetric {
 	public static final String BRANCH_LABEL = "branch";
 
 	public static final String NEGATIV_LINK_LABEL = "negativlink";
+
 	public static final String POSITIV_LINK_LABEL = "positivlink";
-	
-	public static final String MARKER_VARAIBLE_NAME="@variable=";
+
+	public static final String COUNTER_VARIABLE_FOR_GENERATE_OF_MARKER = "@variable=";
 
 	private static int count = 0;
 
@@ -39,10 +41,19 @@ public class BranchMetric implements IMetric {
 	 * 
 	 * @return eindeutige Markierung
 	 */
+	public static String getNextLabelAndRegisterMarker() {
+		String marker = BRANCH_LABEL + "_" + (count++);
+		registerMarker(marker);
+		return MARKER_IDENTIFIRE + marker;
+	}
+
 	public static String getNextLabel() {
-		String marker=BRANCH_LABEL +"_"+ (count++);
+
+		return BRANCH_LABEL + "_" + (count++);
+	}
+
+	private static void registerMarker(String marker) {
 		CoverageRegistry.getInstance().addMarker(marker);
-		return MARKER_IDENTIFIRE+marker;
 	}
 
 	/**
@@ -51,20 +62,20 @@ public class BranchMetric implements IMetric {
 	 * @return eindeutige Markierung
 	 */
 	public static String getNextPositivLinkLabel() {
-		String marker=POSITIV_LINK_LABEL +"_"+ (count++);
+		String marker = POSITIV_LINK_LABEL + "_" + (count++);
 		CoverageRegistry.getInstance().addMarker(marker);
-		return MARKER_IDENTIFIRE+marker;
+		return MARKER_IDENTIFIRE + marker;
 	}
-	
+
 	/**
 	 * Generiert eindeutige Merkierung für die Links (in der Flow-Umgebung)
 	 * 
 	 * @return eindeutige Markierung
 	 */
 	public static String getNextNegativLinkLabel() {
-		String marker=NEGATIV_LINK_LABEL +"_"+ (count++);
+		String marker = NEGATIV_LINK_LABEL + "_" + (count++);
 		CoverageRegistry.getInstance().addMarker(marker);
-		return MARKER_IDENTIFIRE+marker;
+		return MARKER_IDENTIFIRE + marker;
 	}
 
 	/**
@@ -75,10 +86,9 @@ public class BranchMetric implements IMetric {
 	 *            Aktivität, die einen Zweig repräsentiert
 	 * @param additionalInfo
 	 */
-	public static void insertMarkerForBranch(Element activity,
-			String additionalInfo) {
-		insertMarkerBevorAllActivities(activity, additionalInfo);
-		insertMarkerAfterAllActivities(activity, additionalInfo);
+	public static void insertMarkerForBranch(Element activity) {
+		insertMarkerBevorAllActivities(activity);
+		insertMarkerAfterAllActivities(activity);
 	}
 
 	/**
@@ -89,13 +99,24 @@ public class BranchMetric implements IMetric {
 	 * @param activity
 	 * @param additionalInfo
 	 */
-	public static void insertMarkerBevorAllActivities(Element activity,
-			String additionalInfo) {
+	public static void insertMarkerBevorAllActivities(Element activity) {
 		if (!BpelXMLTools.isSequence(activity)) {
 			activity = BpelXMLTools.ensureElementIsInSequence(activity);
 		}
-		activity.addContent(0, new Comment(BranchMetric.getNextLabel()
-				+ additionalInfo));
+		activity.addContent(0, new Comment(BranchMetric
+				.getNextLabelAndRegisterMarker()));
+	}
+
+	public static void insertMarkerForParallelForEach(Element activity,
+			String marker, String counterVariable) {
+		if (!BpelXMLTools.isSequence(activity)) {
+			activity = BpelXMLTools.ensureElementIsInSequence(activity);
+		}
+
+		Comment comment = new Comment(MetricHandler.MARKER_IDENTIFIRE2 + marker
+				+ MetricHandler.MARKER_SEPARATOR + counterVariable);
+
+		activity.addContent(0, comment);
 	}
 
 	/**
@@ -106,13 +127,12 @@ public class BranchMetric implements IMetric {
 	 * @param activity
 	 * @param additionalInfo
 	 */
-	public static void insertMarkerAfterAllActivities(Element activity,
-			String additionalInfo) {
+	public static void insertMarkerAfterAllActivities(Element activity) {
 		if (!BpelXMLTools.isSequence(activity)) {
 			activity = BpelXMLTools.ensureElementIsInSequence(activity);
 		}
-		activity.addContent(new Comment(BranchMetric.getNextLabel()
-				+ additionalInfo));
+		activity.addContent(new Comment(BranchMetric
+				.getNextLabelAndRegisterMarker()));
 	}
 
 	/**
@@ -123,7 +143,7 @@ public class BranchMetric implements IMetric {
 	public static void insertMarkerAfterActivity(Element activity) {
 		Element parent = activity.getParentElement();
 		parent.addContent(parent.indexOf(activity) + 1, new Comment(
-				getNextLabel()));
+				getNextLabelAndRegisterMarker()));
 	}
 
 	private HashMap<String, IStructuredActivity> structured_activity_handler = new HashMap<String, IStructuredActivity>();
@@ -173,8 +193,8 @@ public class BranchMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-
 	public String getName() {
 		return METRIC_NAME;
 	}
+
 }

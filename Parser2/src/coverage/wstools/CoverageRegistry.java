@@ -70,12 +70,11 @@ public class CoverageRegistry {
 	public void addMarker(String marker) {
 		logger.info("---Es wird auf Marker " + marker + " registriert.");
 		String prefix = marker.substring(0, marker.indexOf('_'));
-		MarkerStatus status=new MarkerStatus();
-		if(prefix.equals(BranchMetric.NEGATIV_LINK_LABEL)){
-			status.setStatus(true, "");
-		}
-		((Hashtable) allMetricsTable.get(prefix)).put(marker,status
-				);
+		MarkerStatus status = new MarkerStatus();
+		// if(prefix.equals(BranchMetric.NEGATIV_LINK_LABEL)){
+		// status.setStatus(true, "");
+		// }
+		((Hashtable) allMetricsTable.get(prefix)).put(marker, status);
 	}
 
 	public void setCoverageStatusForAllMarker(String marker, String testCase) {
@@ -85,8 +84,8 @@ public class CoverageRegistry {
 		String marke;
 		while (scanner.hasNext()) {
 			marke = scanner.next().trim();
-			if (marke.length() > 0)
-				setCoverageStatusForMarker(marke, testCase);
+			 if (marke.length() > 0)
+			 setCoverageStatusForMarker(marke, testCase);
 		}
 
 	}
@@ -243,6 +242,25 @@ public class CoverageRegistry {
 			numbers = new int[] { totalNumber, testedNumber };
 		}
 		return numbers;
+	}
+
+	public void addMarkerForEach(String content) {
+		logger.info("---CONTENT " + content + " registriert.");
+		content = content.substring(content
+				.indexOf(MetricHandler.MARKER_IDENTIFIRE2)
+				+ MetricHandler.MARKER_IDENTIFIRE2.length());
+		int start, stop, index1, index2;
+		String prefix;
+		index1 = content.indexOf(MetricHandler.MARKER_SEPARATOR);
+		start = Integer.parseInt(content.substring(0, index1));
+		index2 = content.indexOf(MetricHandler.MARKER_SEPARATOR, index1 + 1);
+		stop = Integer.parseInt(content.substring(index1
+				+ MetricHandler.MARKER_SEPARATOR.length(), index2));
+		prefix = content.substring(index2
+				+ MetricHandler.MARKER_SEPARATOR.length());
+		for (; start < stop + 1; start++) {
+			addMarker(prefix + start);
+		}
 	}
 
 }

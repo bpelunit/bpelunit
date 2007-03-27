@@ -32,7 +32,6 @@ public class StructuredActivity {
 		structured_activities.put(REPEATUNTIL_ACTIVITY, REPEATUNTIL_ACTIVITY);
 		structured_activities.put(FOREACH_ACTIVITY, FOREACH_ACTIVITY);
 		structured_activities.put(PICK_ACTIVITY, PICK_ACTIVITY);
-		// structured_activities.put(SCOPE_ACTIVITY, SCOPE_ACTIVITY);
 		structured_activities.put(FLOW_ACTIVITY, FLOW_ACTIVITY);
 	}
 

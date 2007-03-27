@@ -19,14 +19,26 @@ public class CMServiceFactory {
 
 	private static final String LOGGING_SERVICE_PORTTYPE = "PLT_LogService_";
 
-	private static final String LOGGING_SERVICE_OPERATION = "log";
+	private static final String LOG_OPERATION = "log";
 
-	private Element process_element;
+	private static final String REGISTER_MARKER_OPERATION = "registerMarker";
 
-	public CMServiceFactory(Element process_element) {
-		this.process_element = process_element;
-		prepareBPELFile(process_element);
+	
+	private static CMServiceFactory instance=null;
+
+	
+	public static CMServiceFactory getInstance(){
+		if(instance==null){
+			instance=new CMServiceFactory();
+		}
+		return instance;
 	}
+	
+	private CMServiceFactory() {
+		prepareBPELFile(BpelXMLTools.process_element);
+	}
+	
+	
 
 	private void prepareBPELFile(Element process_element) {
 		process_element.addNamespaceDeclaration(LOG_SERVICE_NAMESPACE);
@@ -42,18 +54,24 @@ public class CMServiceFactory {
 		// insertVariable(process_element, index);
 	}
 
-	private void insertVariable(Element process_element, String variableName) {
-
-		Element variables = process_element.getChild("variables", BpelXMLTools
-				.getBpelNamespace());
-		if (!containVariable(variables, variableName)) {
+	private void insertVariable( String variableName) {
+		
 			Element variable = new Element("variable", BpelXMLTools
 					.getBpelNamespace());
 			variable.setAttribute("messageType", "log:logRequest");
 			variable.setAttribute("name", variableName);
-			variables.addContent(variable);
-		}
+			BpelXMLTools.insertVariable(variable);
+	
 	}
+	
+	public void insertVariableForRegisterMarker( Element scope, String variableName) {
+		Element variable = new Element("variable", BpelXMLTools
+				.getBpelNamespace());
+		variable.setAttribute("messageType", "log:registerMarkerRequest");
+		variable.setAttribute("name", variableName);
+		BpelXMLTools.insertVariable(variable,scope);
+
+}
 
 	private boolean containVariable(Element variables, String variableName) {
 		boolean result = false;
@@ -86,7 +104,7 @@ public class CMServiceFactory {
 		return index;
 	}
 
-	public Element createInvokeElement(String variable) {
+	public Element createInvokeElementForLog(String variable) {
 
 		Element invoke = new Element(BasisActivity.INVOKE_ACTIVITY,
 				BpelXMLTools.getBpelNamespace());
@@ -95,8 +113,24 @@ public class CMServiceFactory {
 		// BpelXMLTools.insertVariable(variable, element.getDocument()
 		// .getRootElement());
 		invoke.setAttribute("inputVariable", variable);
-		invoke.setAttribute("operation",
-				CMServiceFactory.LOGGING_SERVICE_OPERATION);
+		invoke.setAttribute("operation", CMServiceFactory.LOG_OPERATION);
+		invoke.setAttribute("partnerLink",
+				CMServiceFactory.LOGGING_SERVICE_PORTTYPE);
+		invoke.setAttribute("portType", LOG_SERVICE_NAMESPACE.getPrefix() + ":"
+				+ CMServiceFactory.LOGGING_SERVICE_PORT);
+		return invoke;
+	}
+
+	public Element createInvokeElementForRegisterMarker(String variable) {
+
+		Element invoke = new Element(BasisActivity.INVOKE_ACTIVITY,
+				BpelXMLTools.getBpelNamespace());
+		// Element variableElement =
+		// BpelXMLTools.createVariable(element.getDocument());
+		// BpelXMLTools.insertVariable(variable, element.getDocument()
+		// .getRootElement());
+		invoke.setAttribute("inputVariable", variable);
+		invoke.setAttribute("operation", CMServiceFactory.REGISTER_MARKER_OPERATION);
 		invoke.setAttribute("partnerLink",
 				CMServiceFactory.LOGGING_SERVICE_PORTTYPE);
 		invoke.setAttribute("portType", LOG_SERVICE_NAMESPACE.getPrefix() + ":"
@@ -105,7 +139,7 @@ public class CMServiceFactory {
 	}
 
 	public Element createAssignElement(String content, String variable) {
-		insertVariable(process_element, variable);
+		insertVariable(variable);
 		Element from = new Element("from", BpelXMLTools.getBpelNamespace());
 		Element literal = new Element("literal", BpelXMLTools
 				.getBpelNamespace());
@@ -115,6 +149,23 @@ public class CMServiceFactory {
 		to.setAttribute("part", "logEntry");
 		to.setAttribute("variable", variable);
 		return BpelXMLTools.createAssign(from, to);
+	}
+	
+	public Element createAssignElementForRegisterMarker(Element scope, String content, String variable){
+		insertVariableForRegisterMarker(scope,variable);
+		Element from = new Element("from", BpelXMLTools.getBpelNamespace());
+
+from.setText(content);
+//		from.addContent(literal);
+		Element to = new Element("to", BpelXMLTools.getBpelNamespace());
+		to.setAttribute("part", "registerMarker");
+		to.setAttribute("variable", variable);
+		return BpelXMLTools.createAssign(from, to);
+	}
+
+	public void insertVariableForRegisterMarker(String attributeValue) {
+		insertVariableForRegisterMarker(BpelXMLTools.process_element, attributeValue);
+		
 	}
 
 }

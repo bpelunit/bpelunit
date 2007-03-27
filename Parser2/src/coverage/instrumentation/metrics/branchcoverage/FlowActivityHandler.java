@@ -7,10 +7,10 @@ import java.util.List;
 import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
-import sun.rmi.runtime.NewThreadAction;
 
 import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
+import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
 
 public class FlowActivityHandler implements IStructuredActivity {
 
@@ -48,7 +48,8 @@ public class FlowActivityHandler implements IStructuredActivity {
 		for (int i = 0; i < children.size(); i++) {
 			child = (Element) children.get(i);
 			if (BpelXMLTools.isActivity(child)) {
-				BranchMetric.insertMarkerForBranch(child, "");
+//				BranchMetric.insertMarkerForBranch(child, "");
+				BranchMetric.insertMarkerBevorAllActivities(child);
 			}
 		}
 	}
@@ -137,7 +138,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 		Element new_transConditEl = new Element(TRANSITION_CONDITION_TAG, flow
 				.getNamespace());
 		new_transConditEl.setAttribute("expressionLanguage",
-				"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
+				XpathLanguage.LANGUAGE_SPEZIFIKATION);
 		new_transConditEl.setText("true()");
 		new_source_element.addContent(new_transConditEl);
 		sourceElement.getParentElement().addContent(new_source_element);
