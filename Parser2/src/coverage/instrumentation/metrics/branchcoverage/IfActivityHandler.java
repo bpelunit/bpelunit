@@ -1,11 +1,12 @@
 package coverage.instrumentation.metrics.branchcoverage;
 
+import static coverage.instrumentation.bpelxmltools.BpelXMLTools.*;
+
 import java.util.List;
 
 import org.jdom.Element;
 
 import coverage.exception.BpelException;
-import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 
 /**
  * Die Klasse ist für das Einfügen der Markierungen in der If-Aktivität
@@ -15,23 +16,20 @@ import coverage.instrumentation.bpelxmltools.BpelXMLTools;
  */
 public class IfActivityHandler implements IStructuredActivity {
 
-
-
 	public void insertMarkerForBranchCoverage(Element element)
 			throws BpelException {
-		insertMarkerForIfBranch(BpelXMLTools.getFirstEnclosedActivity(element));
-		List elseif_branches = element.getChildren(BpelXMLTools.ELSE_IF_ELEMENT,
-				BpelXMLTools.getBpelNamespace());
+		insertMarkerForIfBranch(getFirstEnclosedActivity(element));
+		List elseif_branches = element.getChildren(ELSE_IF_ELEMENT,
+				getBpelNamespace());
 		for (int i = 0; i < elseif_branches.size(); i++) {
-			insertMarkerForElseIfBranches(BpelXMLTools
-					.getFirstEnclosedActivity((Element) elseif_branches.get(i)));
+			insertMarkerForElseIfBranches(getFirstEnclosedActivity((Element) elseif_branches
+					.get(i)));
 		}
-		Element else_el = element.getChild(BpelXMLTools.ELSE_ELEMENT,
-				BpelXMLTools.getBpelNamespace());
+		Element else_el = element.getChild(ELSE_ELEMENT, getBpelNamespace());
 		if (else_el == null) {
-			else_el = BpelXMLTools.insertElseBranch(element);
+			else_el = insertElseBranch(element);
 		}
-		insertMarkerForElseBranch(BpelXMLTools.getFirstEnclosedActivity(else_el));
+		insertMarkerForElseBranch(getFirstEnclosedActivity(else_el));
 	}
 
 	/**
@@ -81,6 +79,5 @@ public class IfActivityHandler implements IStructuredActivity {
 		BranchMetric.insertLabelBevorAllActivities(branch_activity);
 
 	}
-
 
 }

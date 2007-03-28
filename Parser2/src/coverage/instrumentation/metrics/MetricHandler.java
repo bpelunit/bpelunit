@@ -1,5 +1,7 @@
 package coverage.instrumentation.metrics;
 
+import static coverage.instrumentation.bpelxmltools.BpelXMLTools.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +60,7 @@ public class MetricHandler {
 
 	private CMServiceFactory cmServiceFactory;
 
-	private String assignVariable = BpelXMLTools.createVariableName();
+	private String assignVariable = createVariableName();
 
 	public MetricHandler() {
 		metrics = new HashMap<String, IMetric>();
@@ -136,7 +138,7 @@ public class MetricHandler {
 	private void valideBPELDoc(Element process_element) throws BpelException,
 			BpelVersionException {
 		if (!process_element.getName().equalsIgnoreCase(
-				BpelXMLTools.PROCESS_ELEMENT)) {
+				PROCESS_ELEMENT)) {
 
 			throw (new BpelException(BpelException.NO_VALIDE_BPEL));
 
@@ -204,9 +206,8 @@ public class MetricHandler {
 	}
 
 	private void insertLastReportInvoke(Element process_element) {
-		Element sequenceElement = BpelXMLTools.createSequence();
-		Element activity = BpelXMLTools
-				.getFirstEnclosedActivity(process_element);
+		Element sequenceElement = createSequence();
+		Element activity = getFirstEnclosedActivity(process_element);
 		sequenceElement.addContent(activity.detach());
 		insertInvokeForLabels(STOP_FLAG, sequenceElement.getContentSize(),
 				sequenceElement, null);
@@ -226,7 +227,7 @@ public class MetricHandler {
 		for (int i = 0; i < childElements.size(); i++) {
 			if (isFlow) {
 				handleCoverageLabelsInElement(childElements.get(i),
-						BpelXMLTools.createVariableName());
+						createVariableName());
 			} else {
 
 				handleCoverageLabelsInElement(childElements.get(i), null);
@@ -280,8 +281,8 @@ public class MetricHandler {
 	private void insertInvokesForDynamicLabel(String content, Comment comment,
 			String variableName) {
 		String[] strings = parseLabel(content);
-		String variable = BpelXMLTools.createVariableName();
-		Element scope = BpelXMLTools.getSurroundScope((Content) comment);
+		String variable = createVariableName();
+		Element scope = getSurroundScope((Content) comment);
 		if (scope == null) {
 			// TODO new Exception
 		}

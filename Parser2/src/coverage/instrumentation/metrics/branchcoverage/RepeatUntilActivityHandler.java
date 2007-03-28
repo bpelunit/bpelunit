@@ -1,10 +1,11 @@
 package coverage.instrumentation.metrics.branchcoverage;
 
+import static coverage.instrumentation.bpelxmltools.BpelXMLTools.*;
+
 import org.jdom.Element;
 
 import coverage.CoverageConstants;
 import coverage.exception.BpelException;
-import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.exprlang.ExpressionLanguage;
 
 public class RepeatUntilActivityHandler implements IStructuredActivity {
@@ -17,7 +18,7 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 
 	private void branchFromActivityToCondition(Element element)
 			throws BpelException {
-		Element activity = BpelXMLTools.getFirstEnclosedActivity(element);
+		Element activity = getFirstEnclosedActivity(element);
 		if (element == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
@@ -26,11 +27,10 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 
 	private void branchFromConditionToActivity(Element element)
 			throws BpelException {
-		Element countVariable = BpelXMLTools.insertNewIntVariable(null, null);
-		Element initializeAssign = BpelXMLTools
-				.createInitializeAssign(countVariable);
+		Element countVariable = insertNewIntVariable(null, null);
+		Element initializeAssign = createInitializeAssign(countVariable);
 		insert(initializeAssign, element);
-		Element increesAssign = BpelXMLTools.createIncreesAssign(countVariable);
+		Element increesAssign = createIncreesAssign(countVariable);
 		insertIncreesAssign(increesAssign, element);
 		insertIfConstruct(element, countVariable);
 	}
@@ -46,24 +46,21 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 	 */
 	private void insertIfConstruct(Element element, Element countVariable)
 			throws BpelException {
-		Element activity = BpelXMLTools.getFirstEnclosedActivity(element);
+		Element activity = getFirstEnclosedActivity(element);
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		if (!BpelXMLTools.isSequence(activity)) {
-			activity = BpelXMLTools.ensureElementIsInSequence(activity);
+		if (!isSequence(activity)) {
+			activity = ensureElementIsInSequence(activity);
 
 		}
 
-		Element if_element = BpelXMLTools
-				.createIfActivity(ExpressionLanguage
-						.getInstance(CoverageConstants.EXPRESSION_LANGUAGE)
-						.valueOf(
-								countVariable
-										.getAttributeValue(BpelXMLTools.NAME_ATTRIBUTE))
-						+ "=1");
+		Element if_element = createIfActivity(ExpressionLanguage.getInstance(
+				CoverageConstants.EXPRESSION_LANGUAGE).valueOf(
+				countVariable.getAttributeValue(NAME_ATTRIBUTE))
+				+ "=1");
 
-		Element sequence = BpelXMLTools.createSequence();
+		Element sequence = createSequence();
 		if_element.addContent(sequence);
 		activity.addContent(0, if_element);
 		BranchMetric.insertLabelBevorAllActivities(sequence);
@@ -82,12 +79,12 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 	 */
 	private void insertIncreesAssign(Element increesAssign, Element element)
 			throws BpelException {
-		Element activity = BpelXMLTools.getFirstEnclosedActivity(element);
+		Element activity = getFirstEnclosedActivity(element);
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		if (!BpelXMLTools.isSequence(activity)) {
-			activity = BpelXMLTools.ensureElementIsInSequence(activity);
+		if (!isSequence(activity)) {
+			activity = ensureElementIsInSequence(activity);
 		}
 		activity.addContent(increesAssign);
 
@@ -101,7 +98,7 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 	 *            RepeatUntil-Element
 	 */
 	private void insert(Element initializeAssign, Element element) {
-		Element sequence = BpelXMLTools.ensureElementIsInSequence(element);
+		Element sequence = ensureElementIsInSequence(element);
 		sequence.addContent(sequence.indexOf(element), initializeAssign);
 	}
 

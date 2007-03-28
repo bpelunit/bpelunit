@@ -70,7 +70,7 @@ public class CoverageRegistry {
 	public void addMarker(String marker) {
 		logger.info("---Es wird auf Marker " + marker + " registriert.");
 		String prefix = marker.substring(0, marker.indexOf('_'));
-		MarkerStatus status = new MarkerStatus();
+		CoverageLabelStatus status = new CoverageLabelStatus();
 		// if(prefix.equals(BranchMetric.NEGATIV_LINK_LABEL)){
 		// status.setStatus(true, "");
 		// }
@@ -94,7 +94,7 @@ public class CoverageRegistry {
 		logger.info("!_!_!_!_!__-------!!!-11-1-1-!_!" + string + "testCase="
 				+ testCase);
 		String prefix = string.substring(0, string.indexOf('_'));
-		MarkerStatus status = (MarkerStatus) ((Hashtable) allMetricsTable
+		CoverageLabelStatus status = (CoverageLabelStatus) ((Hashtable) allMetricsTable
 				.get(prefix)).get(string);
 		status.setStatus(true, testCase);
 	}
@@ -232,9 +232,9 @@ public class CoverageRegistry {
 			Hashtable activityTable = (Hashtable) allMetricsTable.get(activity);
 			totalNumber = activityTable.size();
 			Enumeration e = activityTable.elements();
-			MarkerStatus status;
+			CoverageLabelStatus status;
 			while (e.hasMoreElements()) {
-				status = (MarkerStatus) e.nextElement();
+				status = (CoverageLabelStatus) e.nextElement();
 				if (status.isTested()) {
 					testedNumber++;
 				}

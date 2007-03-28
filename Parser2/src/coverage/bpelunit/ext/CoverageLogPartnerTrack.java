@@ -21,7 +21,6 @@ public class CoverageLogPartnerTrack extends PartnerTrack {
 
 	public CoverageLogPartnerTrack(Partner arg0) {
 		super(arg0);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

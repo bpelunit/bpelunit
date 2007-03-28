@@ -56,12 +56,23 @@ public class BpelXMLTools {
 	public static final String TARGETS_ELEMENT = "targets";
 
 	public static final String ELSE_IF_ELEMENT = "elseif";
+	public static final String PARTNERLINKS_ELEMENT = "partnerLinks";
+	public static final String PARTNERLINK_ELEMENT = "partnerLink";
+	public static final String PARTNERLINK_ATTRIBUTE =PARTNERLINK_ELEMENT ;
+	public static final String PARTNERLINKTYPE_ATTRIBUTE ="partnerLinkType" ;
+	public static final String OPERATION_ATTRIBUTE ="operation" ;
+	public static final String PORTTYPE_ATTRIBUTE ="portType" ;
 
 	public static final String INT_VARIABLE_TYPE = "xsd:int";
 
 	public static final String STRING_VARIABLE_TYPE = "xsd:string";
 
 	/* Attributes of BPEL */
+	
+
+	public static final String INPUTVARIABLE_ATTRIBUTE = "inputVariable";
+	public static final String PARTNERROLE_ATTRIBUTE = "partnerRole";
+	public static final String PART_ATTRIBUTE = "part";
 
 	public static final String VARIABLE_ATTRIBUTE = "variable";
 

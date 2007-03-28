@@ -1,5 +1,8 @@
 package coverage.instrumentation.metrics.statementcoverage;
 
+
+import static coverage.instrumentation.bpelxmltools.BpelXMLTools.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,7 +14,6 @@ import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
 import coverage.instrumentation.bpelxmltools.BasisActivity;
-import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
 import coverage.wstools.CoverageRegistry;
@@ -61,8 +63,7 @@ public class Statementmetric implements IMetric {
 		// BasicActivitiesFilter filter = new
 		// BasicActivitiesFilter(BpelXMLTools.getBpelNamespace(),
 		// activities_to_respekt);
-		ElementFilter filter = new ElementFilter(BpelXMLTools
-				.getBpelNamespace()) {
+		ElementFilter filter = new ElementFilter(getBpelNamespace()) {
 			@Override
 			public boolean matches(Object obj) {
 				boolean result = false;
@@ -98,14 +99,13 @@ public class Statementmetric implements IMetric {
 		for (int i = 0; i < elements_to_log.size(); i++) {
 			element = elements_to_log.get(i);
 			Element parent = element.getParentElement();
-			targetElement = element.getChild(BpelXMLTools.TARGETS_ELEMENT, BpelXMLTools
-					.getBpelNamespace());
+			targetElement = element.getChild(TARGETS_ELEMENT,getBpelNamespace());
 			if (targetElement != null) {
-				Element sequence = BpelXMLTools.encloseInSequence(element);
+				Element sequence = encloseInSequence(element);
 				sequence.addContent(0, targetElement.detach());
 			} else if (!parent.getName().equals(
 					StructuredActivity.SEQUENCE_ACTIVITY)) {
-				BpelXMLTools.ensureElementIsInSequence(element);
+				ensureElementIsInSequence(element);
 			}
 			insertMarkerForActivity(element);
 		}

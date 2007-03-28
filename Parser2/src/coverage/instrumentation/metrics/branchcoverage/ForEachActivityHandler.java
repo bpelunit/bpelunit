@@ -1,10 +1,11 @@
 package coverage.instrumentation.metrics.branchcoverage;
 
+import static coverage.instrumentation.bpelxmltools.BpelXMLTools.*;
+
 import org.jdom.Element;
 
 import coverage.CoverageConstants;
 import coverage.exception.BpelException;
-import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.bpelxmltools.exprlang.ExpressionLanguage;
 import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
@@ -43,12 +44,12 @@ public class ForEachActivityHandler implements IStructuredActivity {
 	private void insertMarkerForSequenceBranches(Element element)
 			throws BpelException {
 		Element activity = element.getChild(StructuredActivity.SCOPE_ACTIVITY,
-				BpelXMLTools.getBpelNamespace());
+				getBpelNamespace());
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ELEMENT
 					+ "(Scope) in ForEach activity.");
 		}
-		activity = BpelXMLTools.getFirstEnclosedActivity(activity);
+		activity = getFirstEnclosedActivity(activity);
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY
 					+ " in ForEach activity.");
@@ -68,12 +69,11 @@ public class ForEachActivityHandler implements IStructuredActivity {
 	private void insertMarkerForParallelBranches(Element forEach)
 			throws BpelException {
 
-		Element assign = BpelXMLTools
-				.createBPELElement(BpelXMLTools.ASSIGN_ELEMENT);
+		Element assign = createBPELElement(ASSIGN_ELEMENT);
 
 		Element startValueVariable = copyStartValue(forEach, assign);
 		Element stopValueVariable = copyStopValue(forEach, assign);
-		String targetVariable = BpelXMLTools.createVariableName();
+		String targetVariable = createVariableName();
 		String marker = BranchMetric.getNextLabel();
 		assign.addContent(createCopyForInvoke(startValueVariable,
 				stopValueVariable, targetVariable, marker));
@@ -83,14 +83,14 @@ public class ForEachActivityHandler implements IStructuredActivity {
 
 	private Element copyStopValue(Element element, Element assign) {
 		Element copy;
-		Element stopValue = BpelXMLTools.insertNewIntVariable(null, null);
+		Element stopValue = insertNewIntVariable(null, null);
 		copy = extractInfoFromFOREACH(element, stopValue, ATTRIBUTE_FINAL_VALUE);
 		assign.addContent(copy);
 		return stopValue;
 	}
 
 	private Element copyStartValue(Element element, Element assign) {
-		Element startValue = BpelXMLTools.insertNewIntVariable(null, null);
+		Element startValue = insertNewIntVariable(null, null);
 		Element copy = extractInfoFromFOREACH(element, startValue,
 				ATTRIBUTE_START_VALUE);
 		assign.addContent(copy);
@@ -103,7 +103,7 @@ public class ForEachActivityHandler implements IStructuredActivity {
 		cmFactory.insertVariableForRegisterMarker(inputVariable);
 		Element invoke = cmFactory
 				.createInvokeElementForRegisterMarker(inputVariable);
-		BpelXMLTools.ensureElementIsInSequence(element);
+		ensureElementIsInSequence(element);
 		Element parent = element.getParentElement();
 		int index = parent.indexOf(element);
 		parent.addContent(index, assign);
@@ -112,7 +112,7 @@ public class ForEachActivityHandler implements IStructuredActivity {
 
 	private void insertLabelsForBranches(Element element, String marker)
 			throws BpelException {
-		Element activity = BpelXMLTools.getFirstEnclosedActivity(element);
+		Element activity = getFirstEnclosedActivity(element);
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
@@ -124,26 +124,23 @@ public class ForEachActivityHandler implements IStructuredActivity {
 
 	private Element createCopyForInvoke(Element stopValue,
 			Element variableWithStopValue, String targetVariable, String label) {
-		Element from = BpelXMLTools
-				.createBPELElement(BpelXMLTools.FROM_ELEMENT);
-		// from.setAttribute(BpelXMLTools.EXPRESSION_LANGUAGE_ATTRIBUTE,
+		Element from = createBPELElement(FROM_ELEMENT);
+		// from.setAttribute(EXPRESSION_LANGUAGE_ATTRIBUTE,
 		// XpathLanguage.LANGUAGE_SPEZIFIKATION);
 		ExpressionLanguage expLang = ExpressionLanguage
 				.getInstance(CoverageConstants.EXPRESSION_LANGUAGE);
 		String[] strings = new String[] {
 				'\'' + IMetric.DYNAMIC_COVERAGE_LABEL_IDENTIFIER + '\'',
-				expLang.valueOf(stopValue
-						.getAttributeValue(BpelXMLTools.NAME_ATTRIBUTE)),
+				expLang.valueOf(stopValue.getAttributeValue(NAME_ATTRIBUTE)),
 				'\'' + MetricHandler.SEPARATOR + '\'',
 				expLang.valueOf(variableWithStopValue
-						.getAttributeValue(BpelXMLTools.NAME_ATTRIBUTE)),
+						.getAttributeValue(NAME_ATTRIBUTE)),
 				'\'' + MetricHandler.SEPARATOR + '\'', '\'' + label + '\'' };
 		from.setText(expLang.concat(strings));
-		Element to = BpelXMLTools.createBPELElement(BpelXMLTools.TO_ELEMENT);
-		to.setAttribute(BpelXMLTools.VARIABLE_ATTRIBUTE, targetVariable);
+		Element to = createBPELElement(TO_ELEMENT);
+		to.setAttribute(VARIABLE_ATTRIBUTE, targetVariable);
 		to.setAttribute("part", "registerEntries");
-		Element copy = BpelXMLTools
-				.createBPELElement(BpelXMLTools.COPY_ELEMENT);
+		Element copy = createBPELElement(COPY_ELEMENT);
 		copy.addContent(from);
 		copy.addContent(to);
 		return copy;
@@ -151,34 +148,30 @@ public class ForEachActivityHandler implements IStructuredActivity {
 
 	private Element extractInfoFromFOREACH(Element forEach,
 			Element variableWithStartValue, String childName) {
-		Element from = BpelXMLTools
-				.createBPELElement(BpelXMLTools.FROM_ELEMENT);
-		Element to = BpelXMLTools.createBPELElement(BpelXMLTools.TO_ELEMENT);
-		Element startValue = forEach.getChild(childName, BpelXMLTools
-				.getBpelNamespace());
+		Element from = createBPELElement(FROM_ELEMENT);
+		Element to = createBPELElement(TO_ELEMENT);
+		Element startValue = forEach.getChild(childName, getBpelNamespace());
 		// String expressionLang = startValue
-		// .getAttributeValue(BpelXMLTools.EXPRESSION_LANGUAGE_ATTRIBUTE);
+		// .getAttributeValue(EXPRESSION_LANGUAGE_ATTRIBUTE);
 		// if (expressionLang != null) {
-		// from.setAttribute(BpelXMLTools.EXPRESSION_LANGUAGE_ATTRIBUTE,
+		// from.setAttribute(EXPRESSION_LANGUAGE_ATTRIBUTE,
 		// expressionLang);
 		// from.setText(startValue.getText());
 		// } else {
-		Element literal = BpelXMLTools
-				.createBPELElement(BpelXMLTools.LITERAL_ELEMENT);
+		Element literal = createBPELElement(LITERAL_ELEMENT);
 		literal.setText(startValue.getText());
 		from.addContent(literal);
 		// }
-		to.setAttribute(BpelXMLTools.VARIABLE_ATTRIBUTE, variableWithStartValue
-				.getAttributeValue(BpelXMLTools.NAME_ATTRIBUTE));
-		// startValue.setAttribute(BpelXMLTools.EXPRESSION_LANGUAGE_ATTRIBUTE,
+		to.setAttribute(VARIABLE_ATTRIBUTE, variableWithStartValue
+				.getAttributeValue(NAME_ATTRIBUTE));
+		// startValue.setAttribute(EXPRESSION_LANGUAGE_ATTRIBUTE,
 		// XpathLanguage.LANGUAGE_SPEZIFIKATION);
-		startValue.setAttribute(BpelXMLTools.EXPRESSION_LANGUAGE_ATTRIBUTE,
+		startValue.setAttribute(EXPRESSION_LANGUAGE_ATTRIBUTE,
 				XpathLanguage.LANGUAGE_SPEZIFIKATION);
 		startValue.setText(ExpressionLanguage.getInstance(
 				CoverageConstants.EXPRESSION_LANGUAGE).valueOf(
-				variableWithStartValue
-						.getAttributeValue(BpelXMLTools.NAME_ATTRIBUTE)));
-		Element copy = new Element("copy", BpelXMLTools.getBpelNamespace());
+				variableWithStartValue.getAttributeValue(NAME_ATTRIBUTE)));
+		Element copy = new Element("copy", getBpelNamespace());
 		copy.addContent(from);
 		copy.addContent(to);
 		return copy;

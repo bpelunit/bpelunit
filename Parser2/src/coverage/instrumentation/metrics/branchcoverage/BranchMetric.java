@@ -1,5 +1,7 @@
 package coverage.instrumentation.metrics.branchcoverage;
 
+import static coverage.instrumentation.bpelxmltools.BpelXMLTools.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,7 +12,6 @@ import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
 import coverage.exception.BpelException;
-import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.MetricHandler;
@@ -98,8 +99,8 @@ public class BranchMetric implements IMetric {
 	 * @param additionalInfo
 	 */
 	public static void insertLabelBevorAllActivities(Element activity) {
-		if (!BpelXMLTools.isSequence(activity)) {
-			activity = BpelXMLTools.ensureElementIsInSequence(activity);
+		if (!isSequence(activity)) {
+			activity = ensureElementIsInSequence(activity);
 		}
 		activity.addContent(0, new Comment(BranchMetric
 				.getNextLabelAndRegister()));
@@ -107,8 +108,8 @@ public class BranchMetric implements IMetric {
 
 	public static void insertLabelsForParallelForEach(Element activity,
 			String marker, String counterVariable) {
-		if (!BpelXMLTools.isSequence(activity)) {
-			activity = BpelXMLTools.ensureElementIsInSequence(activity);
+		if (!isSequence(activity)) {
+			activity = ensureElementIsInSequence(activity);
 		}
 
 		Comment comment = new Comment(IMetric.DYNAMIC_COVERAGE_LABEL_IDENTIFIER + marker
@@ -126,8 +127,8 @@ public class BranchMetric implements IMetric {
 	 * @param additionalInfo
 	 */
 	public static void insertLabelAfterAllActivities(Element activity) {
-		if (!BpelXMLTools.isSequence(activity)) {
-			activity = BpelXMLTools.ensureElementIsInSequence(activity);
+		if (!isSequence(activity)) {
+			activity = ensureElementIsInSequence(activity);
 		}
 		activity.addContent(new Comment(BranchMetric
 				.getNextLabelAndRegister()));
@@ -171,7 +172,7 @@ public class BranchMetric implements IMetric {
 		List<Element> elements_to_log = new ArrayList<Element>();
 		while (iterator2.hasNext()) {
 			next_element = (Element) iterator2.next();
-			if (BpelXMLTools.isStructuredActivity(next_element)) {
+			if (isStructuredActivity(next_element)) {
 				elements_to_log.add(next_element);
 			}
 		}

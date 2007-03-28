@@ -3,7 +3,7 @@ package coverage.wstools;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MarkerStatus {
+public class CoverageLabelStatus {
 
 	private boolean status=false;
 	private Set<String> testcases=new HashSet<String>();

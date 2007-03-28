@@ -1,5 +1,7 @@
 package coverage.instrumentation.metrics.branchcoverage;
 
+import static coverage.instrumentation.bpelxmltools.BpelXMLTools.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +12,6 @@ import org.jdom.filter.ElementFilter;
 
 import coverage.CoverageConstants;
 import coverage.exception.BpelException;
-import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.bpelxmltools.exprlang.ExpressionLanguage;
 import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
 
@@ -49,7 +50,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 		Element child;
 		for (int i = 0; i < children.size(); i++) {
 			child = (Element) children.get(i);
-			if (BpelXMLTools.isActivity(child)) {
+			if (isActivity(child)) {
 				// BranchMetric.insertMarkerForBranch(child, "");
 				BranchMetric.insertLabelBevorAllActivities(child);
 			}
@@ -57,8 +58,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 	}
 
 	private void loggingOfLinks(Element element) throws BpelException {
-		Element linksElement = element.getChild(LINKS_TAG, BpelXMLTools
-				.getBpelNamespace());
+		Element linksElement = element.getChild(LINKS_TAG, getBpelNamespace());
 		if (linksElement != null) {
 			// List links = linksElement.getChildren(LINK_TAG,
 			// ActivityTools.NAMESPACE_BPEL_2);
@@ -67,7 +67,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 			// createMarkerForLink((Element) links.get(i), element);
 			// }
 			Iterator iter = linksElement.getDescendants(new ElementFilter(
-					LINK_TAG, BpelXMLTools.getBpelNamespace()));
+					LINK_TAG,getBpelNamespace()));
 			List<Element> links = new ArrayList<Element>();
 			while (iter.hasNext()) {
 				links.add((Element) iter.next());
@@ -84,7 +84,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 		if (sourceElement == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		Element enclosedFlow = BpelXMLTools.encloseElementInFlow(sourceElement
+		Element enclosedFlow = encloseElementInFlow(sourceElement
 				.getParentElement().getParentElement());
 		Element new_link = insertPostivLink(enclosedFlow, sourceElement, link);
 		insertLoggingMarker(new_link, enclosedFlow, null, false, true);
@@ -101,11 +101,11 @@ public class FlowActivityHandler implements IStructuredActivity {
 	private Element insertPostivLink(Element flow, Element sourceElement,
 			Element link) {
 		Element link_copy = createLinkCopy(link, flow, COPY_LINK_POSTFIX);
-		Element new_source_element = BpelXMLTools.createBPELElement(SOURCE_TAG);
+		Element new_source_element = createBPELElement(SOURCE_TAG);
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		Element transConditionElement = sourceElement.getChild(
-				TRANSITION_CONDITION_TAG, BpelXMLTools.getBpelNamespace());
+				TRANSITION_CONDITION_TAG, getBpelNamespace());
 		if (transConditionElement != null) {
 			new_source_element.addContent((Element) transConditionElement
 					.clone());
@@ -119,10 +119,9 @@ public class FlowActivityHandler implements IStructuredActivity {
 		link_copy.setAttribute(ATTRIBUTE_NAME, link
 				.getAttributeValue(ATTRIBUTE_NAME)
 				+ postfix);
-		Element links = flow.getChild(LINKS_TAG, BpelXMLTools
-				.getBpelNamespace());
+		Element links = flow.getChild(LINKS_TAG, getBpelNamespace());
 		if (links == null) {
-			links = BpelXMLTools.createBPELElement(LINKS_TAG);
+			links = createBPELElement(LINKS_TAG);
 			flow.addContent(0, links);
 		}
 		links.addContent(link_copy);
@@ -132,7 +131,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 	private Element insertDPELink(Element flow, Element sourceElement,
 			Element link) {
 		Element link_copy = createLinkCopy(link, flow, COPY_LINK_DPE_POSTFIX);
-		Element new_source_element = BpelXMLTools.createBPELElement(SOURCE_TAG);
+		Element new_source_element = createBPELElement(SOURCE_TAG);
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		Element new_transConditEl = new Element(TRANSITION_CONDITION_TAG, flow
@@ -159,18 +158,17 @@ public class FlowActivityHandler implements IStructuredActivity {
 			}
 			// logging = new Comment(BranchMetric.getNextLabel() + " flow");
 		}
-		Element sequence = BpelXMLTools.createSequence();
-		Element targetElement = BpelXMLTools.createBPELElement(TARGET_TAG);
+		Element sequence = createSequence();
+		Element targetElement = createBPELElement(TARGET_TAG);
 		targetElement.setAttribute(ATTRIBUTE_LINKNAME, new_link
 				.getAttributeValue(ATTRIBUTE_NAME));
 
-		Element targets = BpelXMLTools.createBPELElement(TARGETS_TAG);
+		Element targets = createBPELElement(TARGETS_TAG);
 		if (isDPE) {
-			Element joinCondition = BpelXMLTools
-					.createBPELElement("joinCondition");
+			Element joinCondition = createBPELElement("joinCondition");
 
 			joinCondition.setAttribute(
-					BpelXMLTools.EXPRESSION_LANGUAGE_ATTRIBUTE,
+					EXPRESSION_LANGUAGE_ATTRIBUTE,
 					XpathLanguage.LANGUAGE_SPEZIFIKATION);
 			ExpressionLanguage expLang = ExpressionLanguage
 					.getInstance(CoverageConstants.EXPRESSION_LANGUAGE);
@@ -190,11 +188,11 @@ public class FlowActivityHandler implements IStructuredActivity {
 			Element link) {
 		Element link_copy = createLinkCopy(link, flow,
 				COPY_LINK_NEGIERT_POSTFIX);
-		Element new_source_element = BpelXMLTools.createBPELElement(SOURCE_TAG);
+		Element new_source_element = createBPELElement(SOURCE_TAG);
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		Element transConditionElement = sourceElement.getChild(
-				TRANSITION_CONDITION_TAG, BpelXMLTools.getBpelNamespace());
+				TRANSITION_CONDITION_TAG, getBpelNamespace());
 		Element new_transConditEl;
 		if (transConditionElement != null) {
 			new_transConditEl = (Element) transConditionElement.clone();
@@ -202,7 +200,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 					+ ")");
 		} else {
 			new_transConditEl = new Element(TRANSITION_CONDITION_TAG,
-					BpelXMLTools.getBpelNamespace());
+					getBpelNamespace());
 			new_transConditEl.setAttribute("expressionLanguage",
 					"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
 			new_transConditEl.setText("false()");
@@ -215,7 +213,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 
 	private Element searchSourceElement(Element link, Element flow) {
 		Iterator sources = flow.getDescendants(new ElementFilter(SOURCE_TAG,
-				BpelXMLTools.getBpelNamespace()));
+				getBpelNamespace()));
 		Element source = null;
 		String linkName;
 		while (sources.hasNext()) {

@@ -1,10 +1,9 @@
 package coverage.instrumentation.metrics.branchcoverage;
 
+import static coverage.instrumentation.bpelxmltools.BpelXMLTools.*;
 import java.util.List;
 
 import org.jdom.Element;
-
-import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 
 /**
  * Die Klasse ist für das Einfügen der Markierungen in der Sequence-Aktivität
@@ -26,7 +25,7 @@ public class SequenceActivityHandler implements IStructuredActivity {
 		Element previousActivity = null;
 		for (int i = 0; i < children.size(); i++) {
 			child = (Element) children.get(i);
-			if (BpelXMLTools.isActivity(child))
+			if (isActivity(child))
 				if (previousActivity != null) {
 					BranchMetric.insertLabelAfterActivity(previousActivity);
 				}
