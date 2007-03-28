@@ -1,4 +1,4 @@
-package coverage.deploy.archivetools.activebpel;
+package coverage.instrumentation.deploy.archivetools.impl;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,8 +17,8 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
 import coverage.CoverageConstants;
-import coverage.deploy.archivetools.IDeploymentArchiveHandler;
 import coverage.exception.ArchiveFileException;
+import coverage.instrumentation.deploy.archivetools.IDeploymentArchiveHandler;
 import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
@@ -276,7 +276,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	private File createCopy(String archive) {
 		String fileName = FilenameUtils.getName(archive);
 		String pfad = FilenameUtils.getFullPath(archive);
-		String name = "_" + fileName;
+		String name = CoverageConstants.PREFIX_COPY_OF_ARCHIVEFILE + fileName;
 		bprFile = FilenameUtils.concat(pfad, name);
 		File copyFile = new File(bprFile);
 		File file = new File(archive);

@@ -1,6 +1,7 @@
-package coverage.instrumentation.bpelxmltools;
+package coverage.instrumentation.bpelxmltools.exprlang;
 
 import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
+
 
 public abstract class ExpressionLanguage {
 
@@ -13,6 +14,8 @@ public abstract class ExpressionLanguage {
 	abstract public String valueOf(String string);
 
 	abstract public String concat(String[] strings);
+	
+	abstract public String getLanguageSpecification();
 
 	public static ExpressionLanguage getInstance(int expressionLanguage) {
 		ExpressionLanguage language = null;

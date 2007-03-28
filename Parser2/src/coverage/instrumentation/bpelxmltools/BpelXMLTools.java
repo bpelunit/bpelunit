@@ -13,6 +13,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
 import coverage.CoverageConstants;
+import coverage.instrumentation.bpelxmltools.exprlang.ExpressionLanguage;
 import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
 
 /**

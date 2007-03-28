@@ -18,17 +18,16 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
-import coverage.deploy.archivetools.IDeploymentArchiveHandler;
-import coverage.deploy.archivetools.activebpel.ActiveBPELDeploymentArchiveHandler;
 import coverage.exception.ArchiveFileException;
 import coverage.exception.BpelException;
 import coverage.exception.CoverageMeasurmentException;
 import coverage.instrumentation.bpelxmltools.BasisActivity;
+import coverage.instrumentation.deploy.archivetools.IDeploymentArchiveHandler;
+import coverage.instrumentation.deploy.archivetools.impl.ActiveBPELDeploymentArchiveHandler;
 import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.MetricHandler;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
 import coverage.instrumentation.metrics.statementcoverage.Statementmetric;
-import coverage.wstools.CoverageRegistry;
 
 /**
  * 

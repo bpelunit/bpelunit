@@ -1,8 +1,7 @@
-package coverage.deploy.archivetools;
+package coverage.instrumentation.deploy.archivetools;
 
 import coverage.exception.ArchiveFileException;
 
-import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;
 
 /**

@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import com.ibm.wsdl.Constants;
 
-import coverage.deploy.archivetools.activebpel.ActiveBPELDeploymentArchiveHandler;
+import coverage.instrumentation.deploy.archivetools.impl.ActiveBPELDeploymentArchiveHandler;
 
 public class ActiveBPELDeploymentArchiveHandlerTest {
 

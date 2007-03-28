@@ -11,7 +11,7 @@ import org.jdom.filter.ElementFilter;
 import coverage.CoverageConstants;
 import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
-import coverage.instrumentation.bpelxmltools.ExpressionLanguage;
+import coverage.instrumentation.bpelxmltools.exprlang.ExpressionLanguage;
 import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
 
 public class FlowActivityHandler implements IStructuredActivity {

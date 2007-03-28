@@ -1,6 +1,7 @@
 package coverage.instrumentation.bpelxmltools.exprlang.impl;
 
-import coverage.instrumentation.bpelxmltools.ExpressionLanguage;
+import coverage.instrumentation.bpelxmltools.exprlang.ExpressionLanguage;
+
 
 
 
@@ -26,6 +27,11 @@ public class XpathLanguage extends ExpressionLanguage {
 		}
 		concat.append(")");
 		return concat.toString();
+	}
+
+	@Override
+	public String getLanguageSpecification() {
+		return LANGUAGE_SPEZIFIKATION;
 	}
 
 }
