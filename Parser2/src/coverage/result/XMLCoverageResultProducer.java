@@ -43,7 +43,6 @@ public class XMLCoverageResultProducer {
 		} catch (IOException e) {
 			throw e;
 		} finally {
-			// HIER frage out schlieﬂen??
 			try {
 				out.close();
 			} catch (IOException e) {

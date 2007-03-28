@@ -168,7 +168,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 			Element joinCondition = createBPELElement("joinCondition");
 
 			joinCondition.setAttribute(
-					EXPRESSION_LANGUAGE_ATTRIBUTE,
+					EXPRESSION_LANGUAGE_ATTR,
 					XpathLanguage.LANGUAGE_SPEZIFIKATION);
 			ExpressionLanguage expLang = ExpressionLanguage
 					.getInstance(CoverageConstants.EXPRESSION_LANGUAGE);

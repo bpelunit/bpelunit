@@ -49,8 +49,6 @@ public class CoverageMeasurementTool {
 
 	private static final String INCLUDE_TRUE_FALSE_TRANSITION_CONDITION = "IncludeTrueFalseTransitionCondition";
 
-	private static final String COVERAGE_SERVICE_WSDL = "_LogService_.wsdl";
-
 	private static final Namespace NAMESPACE_CONFIGURATION = Namespace
 			.getNamespace("http://www.bpelunit.org/schema/coverageToolConfiguration");
 
@@ -228,6 +226,6 @@ public class CoverageMeasurementTool {
 	private void prepareLoggingService(IDeploymentArchiveHandler archiveHandler)
 			throws ArchiveFileException {
 		archiveHandler.addWSDLFile(new File(FilenameUtils.concat(
-				fBpelunitConfigDirectory, COVERAGE_SERVICE_WSDL)));
+				fBpelunitConfigDirectory, CoverageConstants.COVERAGE_SERVICE_WSDL)));
 	}
 }

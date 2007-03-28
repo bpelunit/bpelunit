@@ -15,20 +15,11 @@ import coverage.wstools.CMServiceFactory;
 
 public class ForEachActivityHandler implements IStructuredActivity {
 
-	private static final String ATTRIBUTE_PARALLEL = "parallel";
-
-	private static final String PARALLEL_VALUE_YES = "yes";
-
-	private static final String ATTRIBUTE_COUNTERNAME = "counterName";
-
-	private static final String ATTRIBUTE_START_VALUE = "startCounterValue";
-
-	private static final String ATTRIBUTE_FINAL_VALUE = "finalCounterValue";
 
 	public void insertMarkerForBranchCoverage(Element element)
 			throws BpelException {
-		boolean parallel = element.getAttributeValue(ATTRIBUTE_PARALLEL)
-				.equals(PARALLEL_VALUE_YES);
+		boolean parallel = element.getAttributeValue(FOREACH_PARALLEL_ATTR)
+				.equals(FOREACH_PARALLEL_ATTR_VALUE_YES);
 		if (parallel) {
 			insertMarkerForParallelBranches(element);
 		} else {
@@ -84,7 +75,7 @@ public class ForEachActivityHandler implements IStructuredActivity {
 	private Element copyStopValue(Element element, Element assign) {
 		Element copy;
 		Element stopValue = insertNewIntVariable(null, null);
-		copy = extractInfoFromFOREACH(element, stopValue, ATTRIBUTE_FINAL_VALUE);
+		copy = extractInfoFromFOREACH(element, stopValue, FOREACH_COUNTER_FINALVALUE_ATTR);
 		assign.addContent(copy);
 		return stopValue;
 	}
@@ -92,7 +83,7 @@ public class ForEachActivityHandler implements IStructuredActivity {
 	private Element copyStartValue(Element element, Element assign) {
 		Element startValue = insertNewIntVariable(null, null);
 		Element copy = extractInfoFromFOREACH(element, startValue,
-				ATTRIBUTE_START_VALUE);
+				FOREACH_COUNTER_STARTVALUE_ATTR);
 		assign.addContent(copy);
 		return startValue;
 	}
@@ -117,7 +108,7 @@ public class ForEachActivityHandler implements IStructuredActivity {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
 		String counterVariable = element
-				.getAttributeValue(ATTRIBUTE_COUNTERNAME);
+				.getAttributeValue(FOREACH_COUNTERNAME_ATTR);
 		BranchMetric.insertLabelsForParallelForEach(activity, marker,
 				counterVariable);
 	}
@@ -131,15 +122,15 @@ public class ForEachActivityHandler implements IStructuredActivity {
 				.getInstance(CoverageConstants.EXPRESSION_LANGUAGE);
 		String[] strings = new String[] {
 				'\'' + IMetric.DYNAMIC_COVERAGE_LABEL_IDENTIFIER + '\'',
-				expLang.valueOf(stopValue.getAttributeValue(NAME_ATTRIBUTE)),
+				expLang.valueOf(stopValue.getAttributeValue(NAME_ATTR)),
 				'\'' + MetricHandler.SEPARATOR + '\'',
 				expLang.valueOf(variableWithStopValue
-						.getAttributeValue(NAME_ATTRIBUTE)),
+						.getAttributeValue(NAME_ATTR)),
 				'\'' + MetricHandler.SEPARATOR + '\'', '\'' + label + '\'' };
 		from.setText(expLang.concat(strings));
 		Element to = createBPELElement(TO_ELEMENT);
-		to.setAttribute(VARIABLE_ATTRIBUTE, targetVariable);
-		to.setAttribute("part", "registerEntries");
+		to.setAttribute(VARIABLE_ATTR, targetVariable);
+		to.setAttribute(PART_ATTR, CoverageConstants.PART_OF_REGISTER_MESSAGE);
 		Element copy = createBPELElement(COPY_ELEMENT);
 		copy.addContent(from);
 		copy.addContent(to);
@@ -162,16 +153,16 @@ public class ForEachActivityHandler implements IStructuredActivity {
 		literal.setText(startValue.getText());
 		from.addContent(literal);
 		// }
-		to.setAttribute(VARIABLE_ATTRIBUTE, variableWithStartValue
-				.getAttributeValue(NAME_ATTRIBUTE));
+		to.setAttribute(VARIABLE_ATTR, variableWithStartValue
+				.getAttributeValue(NAME_ATTR));
 		// startValue.setAttribute(EXPRESSION_LANGUAGE_ATTRIBUTE,
 		// XpathLanguage.LANGUAGE_SPEZIFIKATION);
-		startValue.setAttribute(EXPRESSION_LANGUAGE_ATTRIBUTE,
+		startValue.setAttribute(EXPRESSION_LANGUAGE_ATTR,
 				XpathLanguage.LANGUAGE_SPEZIFIKATION);
 		startValue.setText(ExpressionLanguage.getInstance(
 				CoverageConstants.EXPRESSION_LANGUAGE).valueOf(
-				variableWithStartValue.getAttributeValue(NAME_ATTRIBUTE)));
-		Element copy = new Element("copy", getBpelNamespace());
+				variableWithStartValue.getAttributeValue(NAME_ATTR)));
+		Element copy =createBPELElement(COPY_ELEMENT);
 		copy.addContent(from);
 		copy.addContent(to);
 		return copy;

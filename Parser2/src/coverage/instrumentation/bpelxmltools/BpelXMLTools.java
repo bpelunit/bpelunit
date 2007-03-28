@@ -56,33 +56,50 @@ public class BpelXMLTools {
 	public static final String TARGETS_ELEMENT = "targets";
 
 	public static final String ELSE_IF_ELEMENT = "elseif";
+
 	public static final String PARTNERLINKS_ELEMENT = "partnerLinks";
+
 	public static final String PARTNERLINK_ELEMENT = "partnerLink";
-	public static final String PARTNERLINK_ATTRIBUTE =PARTNERLINK_ELEMENT ;
-	public static final String PARTNERLINKTYPE_ATTRIBUTE ="partnerLinkType" ;
-	public static final String OPERATION_ATTRIBUTE ="operation" ;
-	public static final String PORTTYPE_ATTRIBUTE ="portType" ;
+
+	public static final String PARTNERLINK_ATTRIBUTE = PARTNERLINK_ELEMENT;
+
+	public static final String PARTNERLINKTYPE_ATTRIBUTE = "partnerLinkType";
+
+	public static final String OPERATION_ATTRIBUTE = "operation";
+
+	public static final String PORTTYPE_ATTRIBUTE = "portType";
 
 	public static final String INT_VARIABLE_TYPE = "xsd:int";
 
 	public static final String STRING_VARIABLE_TYPE = "xsd:string";
 
 	/* Attributes of BPEL */
-	
 
-	public static final String INPUTVARIABLE_ATTRIBUTE = "inputVariable";
-	public static final String PARTNERROLE_ATTRIBUTE = "partnerRole";
-	public static final String PART_ATTRIBUTE = "part";
+	public static final String FOREACH_PARALLEL_ATTR = "parallel";
 
-	public static final String VARIABLE_ATTRIBUTE = "variable";
+	public static final String FOREACH_COUNTERNAME_ATTR = "counterName";
 
-	public static final String TYPE_ATTRIBUTE = "type";
+	public static final String FOREACH_COUNTER_STARTVALUE_ATTR = "startCounterValue";
 
-	public static final String NAME_ATTRIBUTE = "name";
+	public static final String FOREACH_COUNTER_FINALVALUE_ATTR = "finalCounterValue";
 
-	public static final String MESSAGETYPE_ATTRIBUTE = "messageType";
+	public static final String FOREACH_PARALLEL_ATTR_VALUE_YES = "yes";
 
-	public static final String EXPRESSION_LANGUAGE_ATTRIBUTE = "expressionLanguage";
+	public static final String INPUTVARIABLE_ATTR = "inputVariable";
+
+	public static final String PARTNERROLE_ATTR_AND_ELEMENT = "partnerRole";
+
+	public static final String PART_ATTR = "part";
+
+	public static final String VARIABLE_ATTR = "variable";
+
+	public static final String TYPE_ATTR = "type";
+
+	public static final String NAME_ATTR = "name";
+
+	public static final String MESSAGETYPE_ATTR = "messageType";
+
+	public static final String EXPRESSION_LANGUAGE_ATTR = "expressionLanguage";
 
 	private static final String PREFIX_FOR_NEW_VARIABLE = "_ZXYYXZ_";
 
@@ -103,10 +120,10 @@ public class BpelXMLTools {
 		}
 		Element variable = createBPELElement(BpelXMLTools.VARIABLE_ELEMENT);
 		if (type != null)
-			variable.setAttribute(TYPE_ATTRIBUTE, type);
+			variable.setAttribute(TYPE_ATTR, type);
 		if (messageType != null)
-			variable.setAttribute(MESSAGETYPE_ATTRIBUTE, messageType);
-		variable.setAttribute(BpelXMLTools.NAME_ATTRIBUTE, name);
+			variable.setAttribute(MESSAGETYPE_ATTR, messageType);
+		variable.setAttribute(BpelXMLTools.NAME_ATTR, name);
 		return variable;
 	}
 
@@ -116,8 +133,8 @@ public class BpelXMLTools {
 			variableName = createVariableName();
 		}
 		Element variable = new Element(VARIABLE_ELEMENT, getBpelNamespace());
-		variable.setAttribute(NAME_ATTRIBUTE, variableName);
-		variable.setAttribute(TYPE_ATTRIBUTE, STRING_VARIABLE_TYPE);
+		variable.setAttribute(NAME_ATTR, variableName);
+		variable.setAttribute(TYPE_ATTR, STRING_VARIABLE_TYPE);
 		insertVariable(variable, scope);
 		return variable;
 	}
@@ -133,8 +150,8 @@ public class BpelXMLTools {
 			name = createVariableName();
 		}
 		Element variable = createBPELElement(VARIABLE_ELEMENT);
-		variable.setAttribute(NAME_ATTRIBUTE, name);
-		variable.setAttribute(TYPE_ATTRIBUTE, INT_VARIABLE_TYPE);
+		variable.setAttribute(NAME_ATTR, name);
+		variable.setAttribute(TYPE_ATTR, INT_VARIABLE_TYPE);
 		insertVariable(variable, scope);
 		return variable;
 	}
@@ -159,10 +176,10 @@ public class BpelXMLTools {
 		List allVariables = variables.getChildren(VARIABLE_ELEMENT,
 				BpelXMLTools.getBpelNamespace());
 		boolean exist = false;
-		String variableName = variable.getAttributeValue(NAME_ATTRIBUTE);
+		String variableName = variable.getAttributeValue(NAME_ATTR);
 		for (Iterator iter = allVariables.iterator(); iter.hasNext();) {
 			Element element = (Element) iter.next();
-			if (element.getAttributeValue(NAME_ATTRIBUTE).equals(variableName)) {
+			if (element.getAttributeValue(NAME_ATTR).equals(variableName)) {
 				exist = true;
 				break;
 			}
@@ -323,8 +340,8 @@ public class BpelXMLTools {
 		Element literal = createBPELElement(LITERAL_ELEMENT);
 		literal.setText("0");
 		from.addContent(literal);
-		to.setAttribute(VARIABLE_ATTRIBUTE, countVariable
-				.getAttributeValue(NAME_ATTRIBUTE));
+		to.setAttribute(VARIABLE_ATTR, countVariable
+				.getAttributeValue(NAME_ATTR));
 		copy.addContent(from);
 		copy.addContent(to);
 		assign.addContent(copy);
@@ -344,10 +361,10 @@ public class BpelXMLTools {
 		Element to = createBPELElement(TO_ELEMENT);
 		from.setText(ExpressionLanguage.getInstance(
 				CoverageConstants.EXPRESSION_LANGUAGE).valueOf(
-				countVariable.getAttributeValue(NAME_ATTRIBUTE))
+				countVariable.getAttributeValue(NAME_ATTR))
 				+ " + 1");
-		to.setAttribute(VARIABLE_ATTRIBUTE, countVariable
-				.getAttributeValue(NAME_ATTRIBUTE));
+		to.setAttribute(VARIABLE_ATTR, countVariable
+				.getAttributeValue(NAME_ATTR));
 		copy.addContent(from);
 		copy.addContent(to);
 		assign.addContent(copy);

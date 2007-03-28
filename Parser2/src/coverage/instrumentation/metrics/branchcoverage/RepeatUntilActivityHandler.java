@@ -57,7 +57,7 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 
 		Element if_element = createIfActivity(ExpressionLanguage.getInstance(
 				CoverageConstants.EXPRESSION_LANGUAGE).valueOf(
-				countVariable.getAttributeValue(NAME_ATTRIBUTE))
+				countVariable.getAttributeValue(NAME_ATTR))
 				+ "=1");
 
 		Element sequence = createSequence();

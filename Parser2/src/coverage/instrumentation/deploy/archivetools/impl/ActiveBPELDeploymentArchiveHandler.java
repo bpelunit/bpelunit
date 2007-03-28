@@ -1,5 +1,6 @@
 package coverage.instrumentation.deploy.archivetools.impl;
 
+import static coverage.CoverageConstants.*;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -16,8 +17,8 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import coverage.CoverageConstants;
 import coverage.exception.ArchiveFileException;
+import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 import coverage.instrumentation.deploy.archivetools.IDeploymentArchiveHandler;
 import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;
@@ -34,6 +35,30 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		IDeploymentArchiveHandler {
 
 	private static final String WSDL_DIRECTORY_IN_ARCHIVE = "wsdl/";
+
+	private static final String WSDLENTRY_ELEMENT = "wsdlEntry";
+
+	private static final String LOCATION_ATTR = "location";
+
+	private static final String CLASSPATH_ATTR = "classpath";
+
+	/* import WSDL in BPEL */
+	private static final String WSDL_ELEMENT = "wsdl";
+
+	private static final String LOCATION_OF_WSDL_ATTR = LOCATION_ATTR;
+
+	private static final String NAMESPACE_ATTR = "namespace";
+
+	// PartnerLink in PDD
+	private static final String PORTNAME_ATTR = "PortName";
+
+	private static final String ENDPOINT_REFERENCE_ATTR = "endpointReference";
+
+	private static final String ENDPOINT_REFERENCE_ATTR_VALUE = "static";
+
+	private static final String NAME_ATTR = "name";
+
+	private static final String SERVICENAME_ELEMENT = "ServiceName";
 
 	private static String WSDL_FILE_IN_ARCHIVE;
 
@@ -138,10 +163,10 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			SAXBuilder builder = new SAXBuilder();
 			doc = builder.build(is);
 			Element wsdlCatalog = doc.getRootElement();
-			Element wsdlEntry = new Element("wsdlEntry", wsdlCatalog
+			Element wsdlEntry = new Element(WSDLENTRY_ELEMENT, wsdlCatalog
 					.getNamespace());
-			wsdlEntry.setAttribute("location", WSDL_FILE_IN_ARCHIVE);
-			wsdlEntry.setAttribute("classpath", WSDL_FILE_IN_ARCHIVE);
+			wsdlEntry.setAttribute(LOCATION_ATTR, WSDL_FILE_IN_ARCHIVE);
+			wsdlEntry.setAttribute(CLASSPATH_ATTR, WSDL_FILE_IN_ARCHIVE);
 			wsdlCatalog.addContent(wsdlEntry);
 		} catch (JDOMException e) {
 			throw new ArchiveFileException(
@@ -168,8 +193,8 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		} catch (IOException e) {
 			throw new ArchiveFileException(
 					"An I/O error occurred when writing the WSDL catalog.", e);
-		}finally{
-			if(writer!=null){
+		} finally {
+			if (writer != null) {
 				try {
 					writer.close();
 				} catch (IOException e) {
@@ -237,10 +262,9 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	}
 
 	private void addWSDLEntry(Element process) {
-		Element wsdl = new Element("wsdl", process.getNamespace());
-		wsdl.setAttribute("location", WSDL_FILE_IN_ARCHIVE);
-		wsdl.setAttribute("namespace", CoverageConstants.COVERAGETOOL_NAMESPACE
-				.getURI());
+		Element wsdl = new Element(WSDL_ELEMENT, process.getNamespace());
+		wsdl.setAttribute(LOCATION_OF_WSDL_ATTR, WSDL_FILE_IN_ARCHIVE);
+		wsdl.setAttribute(NAMESPACE_ATTR, COVERAGETOOL_NAMESPACE.getURI());
 		Element references = process.getChild("references", process
 				.getNamespace());
 		references.addContent(wsdl);
@@ -276,7 +300,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	private File createCopy(String archive) {
 		String fileName = FilenameUtils.getName(archive);
 		String pfad = FilenameUtils.getFullPath(archive);
-		String name = CoverageConstants.PREFIX_COPY_OF_ARCHIVEFILE + fileName;
+		String name = PREFIX_COPY_OF_ARCHIVEFILE + fileName;
 		bprFile = FilenameUtils.concat(pfad, name);
 		File copyFile = new File(bprFile);
 		File file = new File(archive);
@@ -303,32 +327,33 @@ public class ActiveBPELDeploymentArchiveHandler implements
 
 	private void addPartnerLink(Element process) {
 
-		Namespace ns = Namespace.getNamespace("wsa",
-				CoverageConstants.PARTNERLINK_NAMESPACE);
+		Namespace ns = Namespace.getNamespace("wsa", PARTNERLINK_NAMESPACE);
 		process.addNamespaceDeclaration(ns);
 		Element adress = new Element("Address", ns);
-		adress.setText("http://localhost:7777/ws/_LogService_");
-		Element serviceName = new Element("ServiceName", ns);
-		serviceName.setAttribute("PortName", "_LogService_SOAP");
-		serviceName.setText(CoverageConstants.COVERAGETOOL_NAMESPACE
-				.getPrefix()
-				+ ":_LogService_");
+		adress.setText(ADDRESS_OF_SERVICE + SERVICE_NAME);
+		Element serviceName = new Element(SERVICENAME_ELEMENT, ns);
+		serviceName.setAttribute(PORTNAME_ATTR, PORT_OF_SERVICE);
+		serviceName.setText(COVERAGETOOL_NAMESPACE.getPrefix() + ":"
+				+ SERVICE_NAME);
 
 		Element endpointReference = new Element("EndpointReference", ns);
-		endpointReference
-				.addNamespaceDeclaration(CoverageConstants.COVERAGETOOL_NAMESPACE);
+		endpointReference.addNamespaceDeclaration(COVERAGETOOL_NAMESPACE);
 		endpointReference.addContent(adress);
 		endpointReference.addContent(serviceName);
-		Element partnerRole = new Element("partnerRole", process.getNamespace());
-		partnerRole.setAttribute("endpointReference", "static");
+		Element partnerRole = new Element(
+				BpelXMLTools.PARTNERROLE_ATTR_AND_ELEMENT, process
+						.getNamespace());
+		partnerRole.setAttribute(ENDPOINT_REFERENCE_ATTR,
+				ENDPOINT_REFERENCE_ATTR_VALUE);
 		partnerRole.addContent(endpointReference);
 
-		Element partnerLink = new Element("partnerLink", process.getNamespace());
-		partnerLink.setAttribute("name", "PLT_LogService_");
+		Element partnerLink = new Element(BpelXMLTools.PARTNERLINK_ELEMENT,
+				process.getNamespace());
+		partnerLink.setAttribute(NAME_ATTR, PARTNERLINK_NAME);
 		partnerLink.addContent(partnerRole);
 
-		Element partnerLinks = process.getChild("partnerLinks", process
-				.getNamespace());
+		Element partnerLinks = process.getChild(
+				BpelXMLTools.PARTNERLINKS_ELEMENT, process.getNamespace());
 		partnerLinks.addContent(partnerLink);
 
 		fLogger

@@ -40,7 +40,7 @@
 		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="_CoverageReportingService_">
-		<wsdl:port name="SOAP_SERVICE_PORT"
+		<wsdl:port name="Soap_service_port"
 			binding="cov:BindingServiceToSOAP">
 			<soap:address
 				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
@@ -49,7 +49,7 @@
 	</wsdl:service>
 	<plnk:partnerLinkType
 		xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
-		name="PLT_LogService_">
+		name="PLT_CoverageReportingService_">
 		<plnk:role name="ReportListener" portType="cov:_CoverageLabelHandler_" />
 	</plnk:partnerLinkType>
 </wsdl:definitions>
