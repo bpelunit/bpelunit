@@ -12,6 +12,7 @@ import org.jdom.filter.ContentFilter;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import coverage.CoverageConstants;
 import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
 
 /**
@@ -25,52 +26,137 @@ public class BpelXMLTools {
 	public static final Namespace NAMESPACE_BPEL_2 = Namespace
 			.getNamespace("http://schemas.xmlsoap.org/ws/2003/03/business-process/");
 
-	public static final String PROCESS_ELEMENT = "process";
-
-	private static int count = 0;
-
-	public static String namespacePrefix;
-
 	public static Element process_element;
 
-	public static final String VARIABLE_TAG = "variable";
+	/* Elements from namespace of BPEL */
 
-	public static final String ATTRIBUTE_VARIABLE = "variable";
+	public static final String PROCESS_ELEMENT = "process";
 
-	private static final String VARIABLES_TAG = "variables";
+	public static final String VARIABLE_ELEMENT = "variable";
 
-	private static final String ASSIGN_TAG = "assign";
+	private static final String VARIABLES_ELEMENT = "variables";
 
-	private static final String COPY_TAG = "copy";
+	public static final String ASSIGN_ELEMENT = "assign";
 
-	public static final String FROM_TAG = "from";
+	public static final String COPY_ELEMENT = "copy";
 
-	public static final String TO_TAG = "to";
+	public static final String FROM_ELEMENT = "from";
 
-	public static final String LITERAL_TAG = "literal";
+	public static final String TO_ELEMENT = "to";
 
-	private static final String INT_VARIABLE_TYPE = "xsd:int";
+	public static final String LITERAL_ELEMENT = "literal";
 
-	private static final String STRING_VARIABLE_TYPE = "xsd:string";
+	public static final String IF_ELEMENT = "if";
 
-	// TODO prefix
+	public static final String CONDITION_ELEMENT = "condition";
 
-	private static final String ATTRIBUTE_TYPE = "type";
+	public static final String ELSE_ELEMENT = "else";
 
-	public static final String ATTRIBUTE_NAME = "name";
+	public static final String TARGETS_ELEMENT = "targets";
 
-	private static final String VARIABLE_NAME = "_ZXYYXZ_";
+	public static final String ELSE_IF_ELEMENT = "elseif";
 
-	private static final String ELSE_ELEMENT = "else";
+	public static final String INT_VARIABLE_TYPE = "xsd:int";
 
-	private static final String IF_TAG = "if";
+	public static final String STRING_VARIABLE_TYPE = "xsd:string";
 
-	private static final String CONDITION_TAG = "condition";
+	/* Attributes of BPEL */
+
+	public static final String VARIABLE_ATTRIBUTE = "variable";
+
+	public static final String TYPE_ATTRIBUTE = "type";
+
+	public static final String NAME_ATTRIBUTE = "name";
+
+	public static final String MESSAGETYPE_ATTRIBUTE = "messageType";
 
 	public static final String EXPRESSION_LANGUAGE_ATTRIBUTE = "expressionLanguage";
 
+	private static final String PREFIX_FOR_NEW_VARIABLE = "_ZXYYXZ_";
+
+	private static int count = 0;
+
 	public static Namespace getBpelNamespace() {
 		return process_element.getNamespace();
+	}
+
+	public static String createVariableName() {
+		return PREFIX_FOR_NEW_VARIABLE + (count++);
+	}
+
+	public static Element createVariable(String name, String messageType,
+			String type) {
+		if (name == null) {
+			name = createVariableName();
+		}
+		Element variable = createBPELElement(BpelXMLTools.VARIABLE_ELEMENT);
+		if (type != null)
+			variable.setAttribute(TYPE_ATTRIBUTE, type);
+		if (messageType != null)
+			variable.setAttribute(MESSAGETYPE_ATTRIBUTE, messageType);
+		variable.setAttribute(BpelXMLTools.NAME_ATTRIBUTE, name);
+		return variable;
+	}
+
+	public static Element insertNewStringVariable(String variableName,
+			Element scope) {
+		if (variableName == null) {
+			variableName = createVariableName();
+		}
+		Element variable = new Element(VARIABLE_ELEMENT, getBpelNamespace());
+		variable.setAttribute(NAME_ATTRIBUTE, variableName);
+		variable.setAttribute(TYPE_ATTRIBUTE, STRING_VARIABLE_TYPE);
+		insertVariable(variable, scope);
+		return variable;
+	}
+
+	/**
+	 * Erzeugt ein Variable-Element ohne es in BPEL einzufügen.
+	 * 
+	 * @param document
+	 * @return
+	 */
+	public static Element insertNewIntVariable(Element scope, String name) {
+		if (name == null) {
+			name = createVariableName();
+		}
+		Element variable = createBPELElement(VARIABLE_ELEMENT);
+		variable.setAttribute(NAME_ATTRIBUTE, name);
+		variable.setAttribute(TYPE_ATTRIBUTE, INT_VARIABLE_TYPE);
+		insertVariable(variable, scope);
+		return variable;
+	}
+
+	/**
+	 * Fügt Variable in dem Scope ein. Wenn ein Varables-Element fehlt, dann
+	 * wird ein hinzugefügt.
+	 * 
+	 * @param variable
+	 * @param scope
+	 */
+	public static void insertVariable(Element variable, Element scope) {
+		if (scope == null) {
+			scope = process_element;
+		}
+		Element variables = scope.getChild(VARIABLES_ELEMENT,
+				getBpelNamespace());
+		if (variables == null) {
+			variables = new Element(VARIABLES_ELEMENT, getBpelNamespace());
+			scope.addContent(0, variables);
+		}
+		List allVariables = variables.getChildren(VARIABLE_ELEMENT,
+				BpelXMLTools.getBpelNamespace());
+		boolean exist = false;
+		String variableName = variable.getAttributeValue(NAME_ATTRIBUTE);
+		for (Iterator iter = allVariables.iterator(); iter.hasNext();) {
+			Element element = (Element) iter.next();
+			if (element.getAttributeValue(NAME_ATTRIBUTE).equals(variableName)) {
+				exist = true;
+				break;
+			}
+		}
+		if (!exist)
+			variables.addContent(variable);
 	}
 
 	/**
@@ -162,8 +248,7 @@ public class BpelXMLTools {
 	public static Element encloseElementInFlow(Element activity) {
 		Element parent = activity.getParentElement();
 		int index = parent.indexOf(activity);
-		Element flow = new Element(StructuredActivity.FLOW_ACTIVITY,
-				getBpelNamespace());
+		Element flow = createBPELElement(StructuredActivity.FLOW_ACTIVITY);
 		activity.detach();
 		flow.addContent(activity);
 		parent.addContent(index, flow);
@@ -213,73 +298,21 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Erzeugt ein Variable-Element ohne es in BPEL einzufügen.
-	 * 
-	 * @param document
-	 * @return
-	 */
-	public static Element createIntVariable() {
-		Element variable = new Element(VARIABLE_TAG, getBpelNamespace());
-		variable.setAttribute(ATTRIBUTE_NAME, createVariableName());
-		variable.setAttribute(ATTRIBUTE_TYPE, INT_VARIABLE_TYPE);
-		return variable;
-	}
-
-	public static Element createStringVariable() {
-		Element variable = new Element(VARIABLE_TAG, getBpelNamespace());
-		variable.setAttribute(ATTRIBUTE_NAME, createVariableName());
-		variable.setAttribute(ATTRIBUTE_TYPE, STRING_VARIABLE_TYPE);
-		return variable;
-	}
-
-	/**
-	 * Fügt Variable in dem Scope ein. Wenn ein Varables-Element fehlt, dann
-	 * wird ein hinzugefügt.
-	 * 
-	 * @param variable
-	 * @param scope
-	 */
-	public static void insertVariable(Element variable, Element scope) {
-		Element variables = scope.getChild(VARIABLES_TAG, getBpelNamespace());
-		if (variables == null) {
-			variables = new Element(VARIABLES_TAG, getBpelNamespace());
-			scope.addContent(0, variables);
-		}
-		List allVariables = variables.getChildren("variable", BpelXMLTools
-				.getBpelNamespace());
-		boolean exist = false;
-		String variableName = variable.getAttributeValue(ATTRIBUTE_NAME);
-		for (Iterator iter = allVariables.iterator(); iter.hasNext();) {
-			Element element = (Element) iter.next();
-			if (element.getAttributeValue(ATTRIBUTE_NAME).equals(variableName)) {
-				exist = true;
-				break;
-			}
-		}
-		if (!exist)
-			variables.addContent(variable);
-	}
-
-	public static void insertVariable(Element variable) {
-		insertVariable(variable, process_element);
-	}
-
-	/**
 	 * Erzeugt ein Assign-Element für eine Count-Variable und setzt auf 0.
 	 * 
 	 * @param countVariable
 	 * @return Assign-Element
 	 */
 	public static Element createInitializeAssign(Element countVariable) {
-		Element assign = new Element(ASSIGN_TAG, getBpelNamespace());
-		Element copy = new Element(COPY_TAG, getBpelNamespace());
-		Element from = new Element(FROM_TAG, getBpelNamespace());
-		Element to = new Element(TO_TAG, getBpelNamespace());
-		Element literal = new Element(LITERAL_TAG, getBpelNamespace());
+		Element assign = createBPELElement(ASSIGN_ELEMENT);
+		Element copy = createBPELElement(COPY_ELEMENT);
+		Element from = createBPELElement(FROM_ELEMENT);
+		Element to = createBPELElement(TO_ELEMENT);
+		Element literal = createBPELElement(LITERAL_ELEMENT);
 		literal.setText("0");
 		from.addContent(literal);
-		to.setAttribute(ATTRIBUTE_VARIABLE, countVariable
-				.getAttributeValue(ATTRIBUTE_NAME));
+		to.setAttribute(VARIABLE_ATTRIBUTE, countVariable
+				.getAttributeValue(NAME_ATTRIBUTE));
 		copy.addContent(from);
 		copy.addContent(to);
 		assign.addContent(copy);
@@ -293,22 +326,20 @@ public class BpelXMLTools {
 	 * @return Assign-Element
 	 */
 	public static Element createIncreesAssign(Element countVariable) {
-		Element assign = new Element(ASSIGN_TAG, getBpelNamespace());
-		Element copy = new Element(COPY_TAG, getBpelNamespace());
-		Element from = new Element(FROM_TAG, getBpelNamespace());
-		Element to = new Element(TO_TAG, getBpelNamespace());
-		from.setText(XpathLanguage.valueOf(countVariable.getAttributeValue(ATTRIBUTE_NAME))
+		Element assign = createBPELElement(ASSIGN_ELEMENT);
+		Element copy = createBPELElement(COPY_ELEMENT);
+		Element from = createBPELElement(FROM_ELEMENT);
+		Element to = createBPELElement(TO_ELEMENT);
+		from.setText(ExpressionLanguage.getInstance(
+				CoverageConstants.EXPRESSION_LANGUAGE).valueOf(
+				countVariable.getAttributeValue(NAME_ATTRIBUTE))
 				+ " + 1");
-		to.setAttribute(ATTRIBUTE_VARIABLE, countVariable
-				.getAttributeValue(ATTRIBUTE_NAME));
+		to.setAttribute(VARIABLE_ATTRIBUTE, countVariable
+				.getAttributeValue(NAME_ATTRIBUTE));
 		copy.addContent(from);
 		copy.addContent(to);
 		assign.addContent(copy);
 		return assign;
-	}
-
-	public static String createVariableName() {
-		return VARIABLE_NAME + (count++);
 	}
 
 	/**
@@ -319,15 +350,15 @@ public class BpelXMLTools {
 	 * @return Else-Element
 	 */
 	public static Element insertElseBranch(Element element) {
-		Element elseElement = new Element(ELSE_ELEMENT, getBpelNamespace());
+		Element elseElement = createBPELElement(ELSE_ELEMENT);
 		elseElement.addContent(BpelXMLTools.createSequence());
 		element.addContent(elseElement);
 		return elseElement;
 	}
 
 	public static Element createIfActivity(String conditionContent) {
-		Element if_element = new Element(IF_TAG, getBpelNamespace());
-		Element condition = new Element(CONDITION_TAG, getBpelNamespace());
+		Element if_element = createBPELElement(IF_ELEMENT);
+		Element condition = createBPELElement(CONDITION_ELEMENT);
 		condition.setAttribute("expressionLanguage",
 				XpathLanguage.LANGUAGE_SPEZIFIKATION);
 		condition.setText(conditionContent);
@@ -336,13 +367,13 @@ public class BpelXMLTools {
 	}
 
 	public static Element createAssign(Element from, Element to) {
-		Element assign = new Element(ASSIGN_TAG, getBpelNamespace());
+		Element assign = createBPELElement(ASSIGN_ELEMENT);
 		addCopyElement(assign, from, to);
 		return assign;
 	}
 
 	public static void addCopyElement(Element assign, Element from, Element to) {
-		Element copy = new Element(COPY_TAG, getBpelNamespace());
+		Element copy = createBPELElement(COPY_ELEMENT);
 		copy.addContent(from);
 		copy.addContent(to);
 		assign.addContent(copy);
@@ -369,17 +400,24 @@ public class BpelXMLTools {
 	}
 
 	public static Element getSurroundScope(Content content) {
-		Element scope=null;
-		Element parent=content.getParentElement();
-		while(scope==null&&parent!=null){
-			if(parent.getName().equals("scope")||parent.getName().equals("process")){
-				scope=parent;
+		Element scope = null;
+		Element parent = content.getParentElement();
+		String name;
+		while (scope == null && parent != null) {
+			name = parent.getName();
+			if (name.equals(StructuredActivity.SCOPE_ACTIVITY)
+					|| name.equals("process")) {
+				scope = parent;
 				break;
-			}else{
-				parent=parent.getParentElement();
+			} else {
+				parent = parent.getParentElement();
 			}
 		}
 		return scope;
+	}
+
+	public static Element createBPELElement(String name) {
+		return new Element(name, getBpelNamespace());
 	}
 
 }

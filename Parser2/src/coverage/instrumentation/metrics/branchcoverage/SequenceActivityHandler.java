@@ -28,7 +28,7 @@ public class SequenceActivityHandler implements IStructuredActivity {
 			child = (Element) children.get(i);
 			if (BpelXMLTools.isActivity(child))
 				if (previousActivity != null) {
-					BranchMetric.insertMarkerAfterActivity(previousActivity);
+					BranchMetric.insertLabelAfterActivity(previousActivity);
 				}
 			previousActivity = child;
 		}

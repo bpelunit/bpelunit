@@ -8,8 +8,10 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
+import coverage.CoverageConstants;
 import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
+import coverage.instrumentation.bpelxmltools.ExpressionLanguage;
 import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
 
 public class FlowActivityHandler implements IStructuredActivity {
@@ -48,8 +50,8 @@ public class FlowActivityHandler implements IStructuredActivity {
 		for (int i = 0; i < children.size(); i++) {
 			child = (Element) children.get(i);
 			if (BpelXMLTools.isActivity(child)) {
-//				BranchMetric.insertMarkerForBranch(child, "");
-				BranchMetric.insertMarkerBevorAllActivities(child);
+				// BranchMetric.insertMarkerForBranch(child, "");
+				BranchMetric.insertLabelBevorAllActivities(child);
 			}
 		}
 	}
@@ -99,8 +101,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 	private Element insertPostivLink(Element flow, Element sourceElement,
 			Element link) {
 		Element link_copy = createLinkCopy(link, flow, COPY_LINK_POSTFIX);
-		Element new_source_element = new Element(SOURCE_TAG, BpelXMLTools
-				.getBpelNamespace());
+		Element new_source_element = BpelXMLTools.createBPELElement(SOURCE_TAG);
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		Element transConditionElement = sourceElement.getChild(
@@ -121,7 +122,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 		Element links = flow.getChild(LINKS_TAG, BpelXMLTools
 				.getBpelNamespace());
 		if (links == null) {
-			links = new Element(LINKS_TAG, BpelXMLTools.getBpelNamespace());
+			links = BpelXMLTools.createBPELElement(LINKS_TAG);
 			flow.addContent(0, links);
 		}
 		links.addContent(link_copy);
@@ -131,8 +132,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 	private Element insertDPELink(Element flow, Element sourceElement,
 			Element link) {
 		Element link_copy = createLinkCopy(link, flow, COPY_LINK_DPE_POSTFIX);
-		Element new_source_element = new Element(SOURCE_TAG, BpelXMLTools
-				.getBpelNamespace());
+		Element new_source_element = BpelXMLTools.createBPELElement(SOURCE_TAG);
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		Element new_transConditEl = new Element(TRANSITION_CONDITION_TAG, flow
@@ -160,21 +160,22 @@ public class FlowActivityHandler implements IStructuredActivity {
 			// logging = new Comment(BranchMetric.getNextLabel() + " flow");
 		}
 		Element sequence = BpelXMLTools.createSequence();
-		Element targetElement = new Element(TARGET_TAG, BpelXMLTools
-				.getBpelNamespace());
+		Element targetElement = BpelXMLTools.createBPELElement(TARGET_TAG);
 		targetElement.setAttribute(ATTRIBUTE_LINKNAME, new_link
 				.getAttributeValue(ATTRIBUTE_NAME));
 
-		Element targets = new Element(TARGETS_TAG, BpelXMLTools
-				.getBpelNamespace());
+		Element targets = BpelXMLTools.createBPELElement(TARGETS_TAG);
 		if (isDPE) {
-			Element joinCondition = new Element("joinCondition", BpelXMLTools
-					.getBpelNamespace());
+			Element joinCondition = BpelXMLTools
+					.createBPELElement("joinCondition");
 
-			joinCondition.setAttribute("expressionLanguage",
-					"urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0");
-			joinCondition.setText("not($"
-					+ new_link.getAttributeValue(ATTRIBUTE_NAME) + ")");
+			joinCondition.setAttribute(
+					BpelXMLTools.EXPRESSION_LANGUAGE_ATTRIBUTE,
+					XpathLanguage.LANGUAGE_SPEZIFIKATION);
+			ExpressionLanguage expLang = ExpressionLanguage
+					.getInstance(CoverageConstants.EXPRESSION_LANGUAGE);
+			joinCondition.setText(expLang.negateExpression(expLang
+					.valueOf(new_link.getAttributeValue(ATTRIBUTE_NAME))));
 			targets.addContent(joinCondition);
 		}
 		targets.addContent(targetElement);
@@ -189,8 +190,7 @@ public class FlowActivityHandler implements IStructuredActivity {
 			Element link) {
 		Element link_copy = createLinkCopy(link, flow,
 				COPY_LINK_NEGIERT_POSTFIX);
-		Element new_source_element = new Element(SOURCE_TAG, BpelXMLTools
-				.getBpelNamespace());
+		Element new_source_element = BpelXMLTools.createBPELElement(SOURCE_TAG);
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		Element transConditionElement = sourceElement.getChild(

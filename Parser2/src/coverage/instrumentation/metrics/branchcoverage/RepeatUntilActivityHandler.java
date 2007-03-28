@@ -2,8 +2,10 @@ package coverage.instrumentation.metrics.branchcoverage;
 
 import org.jdom.Element;
 
+import coverage.CoverageConstants;
 import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
+import coverage.instrumentation.bpelxmltools.ExpressionLanguage;
 
 public class RepeatUntilActivityHandler implements IStructuredActivity {
 
@@ -19,14 +21,12 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 		if (element == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetric.insertMarkerAfterAllActivities(activity);
+		BranchMetric.insertLabelAfterAllActivities(activity);
 	}
 
 	private void branchFromConditionToActivity(Element element)
 			throws BpelException {
-		Element countVariable = BpelXMLTools.createIntVariable();
-		BpelXMLTools.insertVariable(countVariable, element.getDocument()
-				.getRootElement());
+		Element countVariable = BpelXMLTools.insertNewIntVariable(null, null);
 		Element initializeAssign = BpelXMLTools
 				.createInitializeAssign(countVariable);
 		insert(initializeAssign, element);
@@ -53,17 +53,20 @@ public class RepeatUntilActivityHandler implements IStructuredActivity {
 		if (!BpelXMLTools.isSequence(activity)) {
 			activity = BpelXMLTools.ensureElementIsInSequence(activity);
 
-
 		}
 
-
-		Element if_element = BpelXMLTools.createIfActivity("$"
-				+ countVariable.getAttributeValue("name") + "=1");
+		Element if_element = BpelXMLTools
+				.createIfActivity(ExpressionLanguage
+						.getInstance(CoverageConstants.EXPRESSION_LANGUAGE)
+						.valueOf(
+								countVariable
+										.getAttributeValue(BpelXMLTools.NAME_ATTRIBUTE))
+						+ "=1");
 
 		Element sequence = BpelXMLTools.createSequence();
 		if_element.addContent(sequence);
 		activity.addContent(0, if_element);
-		BranchMetric.insertMarkerBevorAllActivities(sequence);
+		BranchMetric.insertLabelBevorAllActivities(sequence);
 
 	}
 

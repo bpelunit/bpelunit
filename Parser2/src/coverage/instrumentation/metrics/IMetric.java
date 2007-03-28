@@ -17,6 +17,7 @@ public interface IMetric {
 
 	public static final String COVERAGE_LABEL_IDENTIFIER = "@coverageLabel";
 	public static final String DYNAMIC_COVERAGE_LABEL_IDENTIFIER = "@ForEachCoverageLabel";
+	public static final char COVERAGE_LABEL_INNER_SEPARATOR = '_';
 
 	/**
 	 * Diese Methode fügt die Marker an den richtigen Stellen in

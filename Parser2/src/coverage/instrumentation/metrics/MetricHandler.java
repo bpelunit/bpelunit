@@ -18,9 +18,11 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import coverage.CoverageConstants;
 import coverage.exception.BpelException;
 import coverage.exception.BpelVersionException;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
+import coverage.instrumentation.bpelxmltools.ExpressionLanguage;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
@@ -88,14 +90,14 @@ public class MetricHandler {
 	 * @param BPELFile
 	 * @throws BpelException
 	 */
-	public void executeInstrumentation(File BPELFile) throws BpelException {	
+	public void executeInstrumentation(File BPELFile) throws BpelException {
 		logger.info("Instrumentation of file " + BPELFile.getName()
 				+ " is started.");
 		Document doc = readBPELDocument(BPELFile);
 		process_element = doc.getRootElement();
 		valideBPELDoc(process_element);
 		BpelXMLTools.process_element = process_element;
-//		insertImportElementForLogWSDL();
+		// insertImportElementForLogWSDL();
 		executeInstrumentation();
 		createReportInvokesFromCoverageLabels();
 		writeBPELDocument(BPELFile, doc);
@@ -140,11 +142,11 @@ public class MetricHandler {
 			throw (new BpelException(BpelException.NO_VALIDE_BPEL));
 
 		}
-		//TODO
-//		if (!process_element.getNamespace().equals(
-//				BpelXMLTools.NAMESPACE_BPEL_2)) {
-//			throw (new BpelVersionException(BpelVersionException.WRONG_VERSION));
-//		}
+		// TODO
+		// if (!process_element.getNamespace().equals(
+		// BpelXMLTools.NAMESPACE_BPEL_2)) {
+		// throw (new BpelVersionException(BpelVersionException.WRONG_VERSION));
+		// }
 	}
 
 	private void executeInstrumentation() throws BpelException {
@@ -185,16 +187,16 @@ public class MetricHandler {
 		}
 	}
 
-//	private void insertImportElementForLogWSDL() {
-//		Element importElement = new Element("import", BpelXMLTools
-//				.getBpelNamespace());
-//		importElement.setAttribute("importType",
-//				"http://schemas.xmlsoap.org/wsdl/");
-//		importElement.setAttribute("location", "../wsdl/_LogService_.wsdl");
-//		importElement.setAttribute("namespace",
-//				"http://www.bpelunit.org/coverage/logService");
-//		process_element.addContent(0, importElement);
-//	}
+	// private void insertImportElementForLogWSDL() {
+	// Element importElement = new Element("import", BpelXMLTools
+	// .getBpelNamespace());
+	// importElement.setAttribute("importType",
+	// "http://schemas.xmlsoap.org/wsdl/");
+	// importElement.setAttribute("location", "../wsdl/_LogService_.wsdl");
+	// importElement.setAttribute("namespace",
+	// "http://www.bpelunit.org/coverage/logService");
+	// process_element.addContent(0, importElement);
+	// }
 
 	private void createReportInvokesFromCoverageLabels() {
 		cmServiceFactory = CMServiceFactory.getInstance();
@@ -224,7 +226,8 @@ public class MetricHandler {
 				StructuredActivity.FLOW_ACTIVITY);
 		for (int i = 0; i < childElements.size(); i++) {
 			if (isFlow) {
-				handleCoverageLabelsInElement(childElements.get(i), BpelXMLTools.createVariableName());
+				handleCoverageLabelsInElement(childElements.get(i),
+						BpelXMLTools.createVariableName());
 			} else {
 
 				handleCoverageLabelsInElement(childElements.get(i), null);
@@ -233,7 +236,8 @@ public class MetricHandler {
 
 	}
 
-	private void replaceCoverageLabelsWithReportInvokes(Element element, String variable) {
+	private void replaceCoverageLabelsWithReportInvokes(Element element,
+			String variable) {
 		List children;
 		children = element.getContent(new ContentFilter(ContentFilter.COMMENT));
 		int indexOfLastMarker = -1;
@@ -248,20 +252,23 @@ public class MetricHandler {
 			if (isCoverageLabel(commentText)) {
 				if (indexOfLastMarker - 1 == index) {
 					marker = marker
-							+ getLabel(commentText, IMetric.COVERAGE_LABEL_IDENTIFIER)
+							+ getLabel(commentText,
+									IMetric.COVERAGE_LABEL_IDENTIFIER)
 							+ SEPARATOR;
 				} else {
 					if (marker.length() > 0) {
 						insertInvokeForLabels(marker, indexOfLastMarker,
 								element, variable);
 					}
-					marker = getLabel(commentText, IMetric.COVERAGE_LABEL_IDENTIFIER)
+					marker = getLabel(commentText,
+							IMetric.COVERAGE_LABEL_IDENTIFIER)
 							+ SEPARATOR;
 				}
 				comment.detach();
 			} else if (isDynamicLabelInForEach(commentText)) {
 				insertInvokesForDynamicLabel(getLabel(commentText,
-						IMetric.DYNAMIC_COVERAGE_LABEL_IDENTIFIER), comment, variable);
+						IMetric.DYNAMIC_COVERAGE_LABEL_IDENTIFIER), comment,
+						variable);
 			}
 			indexOfLastMarker = index;
 			if (i == 0 && marker.length() > 0) {
@@ -271,8 +278,8 @@ public class MetricHandler {
 		}
 	}
 
-	private void insertInvokesForDynamicLabel(String content,
-			Comment comment, String variableName) {
+	private void insertInvokesForDynamicLabel(String content, Comment comment,
+			String variableName) {
 		String[] strings = parseLabel(content);
 		String variable = BpelXMLTools.createVariableName();
 		Element scope = BpelXMLTools.getSurroundScope((Content) comment);
@@ -280,7 +287,8 @@ public class MetricHandler {
 			// TODO new Exception
 		}
 		Element assign = cmServiceFactory.createAssignElementForRegisterMarker(
-				scope, XpathLanguage.concat(strings), variable);
+				scope, 
+				ExpressionLanguage.getInstance(CoverageConstants.EXPRESSION_LANGUAGE).concat(strings), variable);
 		Element invoke = cmServiceFactory
 				.createInvokeElementForRegisterMarker(variable);
 		Element parent = comment.getParentElement();
@@ -312,7 +320,7 @@ public class MetricHandler {
 		}
 		String[] strings = new String[2];
 		strings[0] = '\'' + marker + '\'';
-		strings[1] = XpathLanguage.valueOf(countVariable);
+		strings[1] = ExpressionLanguage.getInstance(CoverageConstants.EXPRESSION_LANGUAGE).valueOf(countVariable);
 		return strings;
 	}
 
@@ -335,7 +343,8 @@ public class MetricHandler {
 	}
 
 	private String getLabel(String complettLabel, String identifier) {
-		int startIndex = complettLabel.indexOf(identifier) + identifier.length();
+		int startIndex = complettLabel.indexOf(identifier)
+				+ identifier.length();
 		return complettLabel.substring(startIndex);
 
 	}

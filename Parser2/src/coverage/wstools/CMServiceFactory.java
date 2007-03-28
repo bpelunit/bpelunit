@@ -1,11 +1,7 @@
 package coverage.wstools;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.jdom.filter.ContentFilter;
 
 import coverage.instrumentation.bpelxmltools.BasisActivity;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
@@ -21,7 +17,7 @@ public class CMServiceFactory {
 
 	private static final String LOG_OPERATION = "log";
 
-	private static final String REGISTER_COVERAGE_LABELS_OPERATION = "registerMarker";
+	private static final String REGISTER_COVERAGE_LABELS_OPERATION = "registerCoverageLabels";
 
 	private static CMServiceFactory instance = null;
 
@@ -38,55 +34,17 @@ public class CMServiceFactory {
 
 	private void prepareBPELFile(Element process_element) {
 		process_element.addNamespaceDeclaration(LOG_SERVICE_NAMESPACE);
-		int index = insertPartnerLink(process_element);
-
-		Element variables = process_element.getChild("variables", BpelXMLTools
-				.getBpelNamespace());
-		if (variables == null) {
-			variables = new Element("variables", BpelXMLTools
-					.getBpelNamespace());
-			process_element.addContent(index + 1, variables);
-		}
-		// insertVariable(process_element, index);
-	}
-
-	private void insertVariable(String variableName) {
-
-		Element variable = new Element("variable", BpelXMLTools
-				.getBpelNamespace());
-		variable.setAttribute("messageType", "log:logRequest");
-		variable.setAttribute("name", variableName);
-		BpelXMLTools.insertVariable(variable);
-
+		insertPartnerLink(process_element);
 	}
 
 	public void insertVariableForRegisterMarker(Element scope,
 			String variableName) {
-		Element variable = new Element("variable", BpelXMLTools
-				.getBpelNamespace());
-		variable.setAttribute("messageType", "log:registerMarkerRequest");
-		variable.setAttribute("name", variableName);
-		BpelXMLTools.insertVariable(variable, scope);
+		BpelXMLTools.insertVariable(BpelXMLTools.createVariable(variableName,
+				LOG_SERVICE_NAMESPACE.getPrefix() + ":CoverageLabels",null), scope);
 
 	}
 
-	private boolean containVariable(Element variables, String variableName) {
-		boolean result = false;
-		List<Element> allVariables = variables.getContent(new ContentFilter(
-				ContentFilter.ELEMENT));
-		Element element;
-		for (Iterator<Element> iter = allVariables.iterator(); iter.hasNext();) {
-			element = iter.next();
-			String nameAttribute = element.getAttributeValue("name");
-			if (nameAttribute != null && nameAttribute.equals(variableName)) {
-				result = true;
-				break;
-			}
-		}
-		return result;
-	}
-
-	private int insertPartnerLink(Element process_element) {
+	private void insertPartnerLink(Element process_element) {
 		Element partnerLinks = process_element.getChild("partnerLinks",
 				BpelXMLTools.getBpelNamespace());
 		Element partnerLink = new Element("partnerLink", BpelXMLTools
@@ -97,8 +55,6 @@ public class CMServiceFactory {
 				+ ":PLT_LogService_");
 		partnerLink.setAttribute("partnerRole", "Logger");
 		partnerLinks.addContent(partnerLink);
-		int index = process_element.indexOf(partnerLinks);
-		return index;
 	}
 
 	public Element createInvokeElementForLog(String variable) {
@@ -137,7 +93,10 @@ public class CMServiceFactory {
 	}
 
 	public Element createAssignElement(String content, String variable) {
-		insertVariable(variable);
+
+		BpelXMLTools.insertVariable(BpelXMLTools.createVariable(variable,
+				LOG_SERVICE_NAMESPACE.getPrefix() + ":logRequest",null), null);
+
 		Element from = new Element("from", BpelXMLTools.getBpelNamespace());
 		Element literal = new Element("literal", BpelXMLTools
 				.getBpelNamespace());
@@ -157,15 +116,13 @@ public class CMServiceFactory {
 		from.setText(content);
 		// from.addContent(literal);
 		Element to = new Element("to", BpelXMLTools.getBpelNamespace());
-		to.setAttribute("part", "registerMarker");
+		to.setAttribute("part", "registerEntries");
 		to.setAttribute("variable", variable);
 		return BpelXMLTools.createAssign(from, to);
 	}
 
 	public void insertVariableForRegisterMarker(String attributeValue) {
-		insertVariableForRegisterMarker(BpelXMLTools.process_element,
-				attributeValue);
-
+		insertVariableForRegisterMarker(null, attributeValue);
 	}
 
 }

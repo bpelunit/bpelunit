@@ -28,7 +28,7 @@ public class PickActivityHandler implements IStructuredActivity {
 			if (child == null) {
 				throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 			}
-			BranchMetric.insertMarkerBevorAllActivities(child);
+			BranchMetric.insertLabelBevorAllActivities(child);
 
 		}
 	}

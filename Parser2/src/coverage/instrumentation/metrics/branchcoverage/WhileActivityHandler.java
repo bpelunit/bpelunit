@@ -12,7 +12,7 @@ public class WhileActivityHandler implements IStructuredActivity {
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetric.insertMarkerForBranch(activity);
+		BranchMetric.insertLabelsForBranch(activity);
 	}
 
 }

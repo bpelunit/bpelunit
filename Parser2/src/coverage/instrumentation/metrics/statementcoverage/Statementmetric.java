@@ -98,7 +98,7 @@ public class Statementmetric implements IMetric {
 		for (int i = 0; i < elements_to_log.size(); i++) {
 			element = elements_to_log.get(i);
 			Element parent = element.getParentElement();
-			targetElement = element.getChild("targets", BpelXMLTools
+			targetElement = element.getChild(BpelXMLTools.TARGETS_ELEMENT, BpelXMLTools
 					.getBpelNamespace());
 			if (targetElement != null) {
 				Element sequence = BpelXMLTools.encloseInSequence(element);
@@ -123,7 +123,7 @@ public class Statementmetric implements IMetric {
 	private void insertMarkerForActivity(Element element) {
 		Element parent = element.getParentElement();
 		String element_name = element.getName();
-		String marker=element_name + "_" + (count++);
+		String marker=element_name + COVERAGE_LABEL_INNER_SEPARATOR + (count++);
 		CoverageRegistry.getInstance().addMarker(marker);
 		Comment comment = new Comment(IMetric.COVERAGE_LABEL_IDENTIFIER + marker);
 		int index = parent.indexOf(element);

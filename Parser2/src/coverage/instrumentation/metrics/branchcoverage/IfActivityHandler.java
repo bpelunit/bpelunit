@@ -15,20 +15,18 @@ import coverage.instrumentation.bpelxmltools.BpelXMLTools;
  */
 public class IfActivityHandler implements IStructuredActivity {
 
-	private static final String ELSE_ELEMENT = "else";
 
-	private static final String ELSE_IF_ELEMENT = "elseif";
 
 	public void insertMarkerForBranchCoverage(Element element)
 			throws BpelException {
 		insertMarkerForIfBranch(BpelXMLTools.getFirstEnclosedActivity(element));
-		List elseif_branches = element.getChildren(ELSE_IF_ELEMENT,
+		List elseif_branches = element.getChildren(BpelXMLTools.ELSE_IF_ELEMENT,
 				BpelXMLTools.getBpelNamespace());
 		for (int i = 0; i < elseif_branches.size(); i++) {
 			insertMarkerForElseIfBranches(BpelXMLTools
 					.getFirstEnclosedActivity((Element) elseif_branches.get(i)));
 		}
-		Element else_el = element.getChild(ELSE_ELEMENT,
+		Element else_el = element.getChild(BpelXMLTools.ELSE_ELEMENT,
 				BpelXMLTools.getBpelNamespace());
 		if (else_el == null) {
 			else_el = BpelXMLTools.insertElseBranch(element);
@@ -48,7 +46,7 @@ public class IfActivityHandler implements IStructuredActivity {
 		if (branch_activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetric.insertMarkerBevorAllActivities(branch_activity);
+		BranchMetric.insertLabelBevorAllActivities(branch_activity);
 
 	}
 
@@ -64,7 +62,7 @@ public class IfActivityHandler implements IStructuredActivity {
 		if (branch_activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetric.insertMarkerBevorAllActivities(branch_activity);
+		BranchMetric.insertLabelBevorAllActivities(branch_activity);
 
 	}
 
@@ -80,7 +78,7 @@ public class IfActivityHandler implements IStructuredActivity {
 		if (branch_activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetric.insertMarkerBevorAllActivities(branch_activity);
+		BranchMetric.insertLabelBevorAllActivities(branch_activity);
 
 	}
 
