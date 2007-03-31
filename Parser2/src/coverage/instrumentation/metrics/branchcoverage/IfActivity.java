@@ -14,7 +14,7 @@ import coverage.exception.BpelException;
  * 
  * @author Alex Salnikow
  */
-public class IfActivityHandler implements IStructuredActivity {
+public class IfActivity implements IStructuredActivity {
 
 	public void insertMarkerForBranchCoverage(Element element)
 			throws BpelException {

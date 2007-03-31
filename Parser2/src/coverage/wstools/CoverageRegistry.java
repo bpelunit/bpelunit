@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
-import coverage.instrumentation.bpelxmltools.BasisActivity;
+import coverage.instrumentation.bpelxmltools.BasicActivity;
 import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.MetricHandler;
 import coverage.instrumentation.metrics.branchcoverage.BranchMetric;
@@ -144,82 +144,82 @@ public class CoverageRegistry {
 
 	private IStatistic getStatementmetricResults() {
 		IStatistic statistic = null;
-		int[] numbers = getNumbers(BasisActivity.EMPTY_ACTIVITY);
+		int[] numbers = getNumbers(BasicActivity.EMPTY_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.EMPTY_ACTIVITY));
+					BasicActivity.EMPTY_ACTIVITY));
 		}
-		numbers = getNumbers(BasisActivity.ASSIGN_ACTIVITY);
+		numbers = getNumbers(BasicActivity.ASSIGN_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.ASSIGN_ACTIVITY));
+					BasicActivity.ASSIGN_ACTIVITY));
 		}
-		numbers = getNumbers(BasisActivity.COMPENSATE_ACTIVITY);
+		numbers = getNumbers(BasicActivity.COMPENSATE_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.COMPENSATE_ACTIVITY));
+					BasicActivity.COMPENSATE_ACTIVITY));
 		}
-		numbers = getNumbers(BasisActivity.COMPENSATESCOPE_ACTIVITY);
+		numbers = getNumbers(BasicActivity.COMPENSATESCOPE_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.COMPENSATESCOPE_ACTIVITY));
+					BasicActivity.COMPENSATESCOPE_ACTIVITY));
 		}
-		numbers = getNumbers(BasisActivity.EXIT_ACTIVITY);
+		numbers = getNumbers(BasicActivity.EXIT_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.EXIT_ACTIVITY));
+					BasicActivity.EXIT_ACTIVITY));
 		}
-		numbers = getNumbers(BasisActivity.INVOKE_ACTIVITY);
+		numbers = getNumbers(BasicActivity.INVOKE_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.INVOKE_ACTIVITY));
+					BasicActivity.INVOKE_ACTIVITY));
 		}
-		numbers = getNumbers(BasisActivity.RECEIVE_ACTIVITY);
+		numbers = getNumbers(BasicActivity.RECEIVE_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.RECEIVE_ACTIVITY));
+					BasicActivity.RECEIVE_ACTIVITY));
 		}
-		numbers = getNumbers(BasisActivity.REPLY_ACTIVITY);
+		numbers = getNumbers(BasicActivity.REPLY_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.REPLY_ACTIVITY));
+					BasicActivity.REPLY_ACTIVITY));
 		}
-		numbers = getNumbers(BasisActivity.RETHROW_ACTIVITY);
+		numbers = getNumbers(BasicActivity.RETHROW_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.RETHROW_ACTIVITY));
+					BasicActivity.RETHROW_ACTIVITY));
 		}
-		numbers = getNumbers(BasisActivity.THROW_ACTIVITY);
+		numbers = getNumbers(BasicActivity.THROW_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.THROW_ACTIVITY));
+					BasicActivity.THROW_ACTIVITY));
 		}
-		numbers = getNumbers(BasisActivity.WAIT_ACTIVITY);
+		numbers = getNumbers(BasicActivity.WAIT_ACTIVITY);
 		if (numbers != null) {
 			if (statistic == null)
 				statistic = new Statistic(Statementmetric.METRIC_NAME);
 			statistic.addSubStatistik(new Statistic(numbers[0], numbers[1],
-					BasisActivity.WAIT_ACTIVITY));
+					BasicActivity.WAIT_ACTIVITY));
 		}
 		return statistic;
 	}

@@ -8,7 +8,7 @@ import org.jdom.Element;
 
 import coverage.exception.BpelException;
 
-public class PickActivityHandler implements IStructuredActivity {
+public class PickActivity implements IStructuredActivity {
 
 	private static final String ON_MESSAGE = "onMessage";
 

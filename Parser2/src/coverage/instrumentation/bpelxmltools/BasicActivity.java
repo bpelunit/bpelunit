@@ -4,7 +4,7 @@ import java.util.Hashtable;
 
 import org.jdom.Element;
 
-public class BasisActivity {
+public class BasicActivity {
 
 	public static final String INVOKE_ACTIVITY = "invoke";
 
@@ -27,6 +27,7 @@ public class BasisActivity {
 	public static final String COMPENSATESCOPE_ACTIVITY = "compensateScope";
 
 	public static final String EXIT_ACTIVITY = "exit";
+	public static final String VALIDATE_ACTIVITY = "validate";
 
 	private static Hashtable<String, String> basis_activities;
 
@@ -42,6 +43,7 @@ public class BasisActivity {
 		basis_activities.put(ASSIGN_ACTIVITY, ASSIGN_ACTIVITY);
 		basis_activities.put(EMPTY_ACTIVITY, EMPTY_ACTIVITY);
 		basis_activities.put(COMPENSATE_ACTIVITY, COMPENSATE_ACTIVITY);
+		basis_activities.put(VALIDATE_ACTIVITY, VALIDATE_ACTIVITY);
 		basis_activities
 				.put(COMPENSATESCOPE_ACTIVITY, COMPENSATESCOPE_ACTIVITY);
 	}

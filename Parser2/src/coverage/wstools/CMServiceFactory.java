@@ -6,7 +6,7 @@ import static coverage.CoverageConstants.*;
 import org.jdom.Element;
 
 
-import coverage.instrumentation.bpelxmltools.BasisActivity;
+import coverage.instrumentation.bpelxmltools.BasicActivity;
 import coverage.instrumentation.bpelxmltools.BpelXMLTools;
 
 public class CMServiceFactory {
@@ -50,7 +50,7 @@ public class CMServiceFactory {
 
 	public Element createInvokeElementForLog(String variable) {
 
-		Element invoke = createBPELElement(BasisActivity.INVOKE_ACTIVITY);
+		Element invoke = createBPELElement(BasicActivity.INVOKE_ACTIVITY);
 		invoke.setAttribute(INPUTVARIABLE_ATTR, variable);
 		invoke.setAttribute(OPERATION_ATTRIBUTE, REPORT_OPERATION);
 		invoke.setAttribute(PARTNERLINK_ATTRIBUTE, PARTNERLINK_NAME);
@@ -60,7 +60,7 @@ public class CMServiceFactory {
 
 	public Element createInvokeElementForRegisterMarker(String variable) {
 
-		Element invoke = createBPELElement(BasisActivity.INVOKE_ACTIVITY);
+		Element invoke = createBPELElement(BasicActivity.INVOKE_ACTIVITY);
 		invoke.setAttribute(INPUTVARIABLE_ATTR, variable);
 		invoke.setAttribute(OPERATION_ATTRIBUTE,
 				REGISTER_COVERAGE_LABELS_OPERATION);

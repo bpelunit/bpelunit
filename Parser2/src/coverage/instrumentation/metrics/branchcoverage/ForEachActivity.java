@@ -13,7 +13,7 @@ import coverage.instrumentation.metrics.IMetric;
 import coverage.instrumentation.metrics.MetricHandler;
 import coverage.wstools.CMServiceFactory;
 
-public class ForEachActivityHandler implements IStructuredActivity {
+public class ForEachActivity implements IStructuredActivity {
 
 
 	public void insertMarkerForBranchCoverage(Element element)

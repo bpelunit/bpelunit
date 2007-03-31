@@ -150,20 +150,20 @@ public class BranchMetric implements IMetric {
 	public BranchMetric() {
 
 		structured_activity_handler.put(StructuredActivity.FLOW_ACTIVITY,
-				new FlowActivityHandler());
+				new FlowActivity());
 		structured_activity_handler.put(StructuredActivity.SEQUENCE_ACTIVITY,
-				new SequenceActivityHandler());
+				new SequenceActivity());
 		structured_activity_handler.put(StructuredActivity.IF_ACTIVITY,
-				new IfActivityHandler());
+				new IfActivity());
 		structured_activity_handler.put(StructuredActivity.WHILE_ACTIVITY,
-				new WhileActivityHandler());
+				new WhileActivity());
 		structured_activity_handler.put(
 				StructuredActivity.REPEATUNTIL_ACTIVITY,
-				new RepeatUntilActivityHandler());
+				new RepeatUntilActivity());
 		structured_activity_handler.put(StructuredActivity.FOREACH_ACTIVITY,
-				new ForEachActivityHandler());
+				new ForEachActivity());
 		structured_activity_handler.put(StructuredActivity.PICK_ACTIVITY,
-				new PickActivityHandler());
+				new PickActivity());
 	}
 
 	public void insertCoverageLabels(Element element) throws BpelException {

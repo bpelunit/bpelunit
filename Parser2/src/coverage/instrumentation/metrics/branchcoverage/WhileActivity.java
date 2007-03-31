@@ -6,7 +6,7 @@ import org.jdom.Element;
 
 import coverage.exception.BpelException;
 
-public class WhileActivityHandler implements IStructuredActivity {
+public class WhileActivity implements IStructuredActivity {
 
 	public void insertMarkerForBranchCoverage(Element element)
 			throws BpelException {

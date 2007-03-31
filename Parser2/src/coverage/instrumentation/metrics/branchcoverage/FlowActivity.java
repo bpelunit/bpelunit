@@ -15,7 +15,7 @@ import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.exprlang.ExpressionLanguage;
 import coverage.instrumentation.bpelxmltools.exprlang.impl.XpathLanguage;
 
-public class FlowActivityHandler implements IStructuredActivity {
+public class FlowActivity implements IStructuredActivity {
 
 	private static final String LINK_TAG = "link";
 

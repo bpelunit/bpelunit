@@ -11,7 +11,7 @@ import org.jdom.Element;
  * 
  * @author Alex Salnikow
  */
-public class SequenceActivityHandler implements IStructuredActivity {
+public class SequenceActivity implements IStructuredActivity {
 
 	/**
 	 * Fügt Markierungen in Sequence-Elemente ein, die später, um die Ausführung

@@ -319,7 +319,7 @@ public class BpelXMLTools {
 	}
 
 	public static boolean isBasicActivity(Element activity) {
-		return BasisActivity.isBasisActivity(activity);
+		return BasicActivity.isBasisActivity(activity);
 	}
 
 	public static boolean isActivity(Element element) {

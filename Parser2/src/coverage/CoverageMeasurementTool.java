@@ -21,7 +21,7 @@ import org.jdom.input.SAXBuilder;
 import coverage.exception.ArchiveFileException;
 import coverage.exception.BpelException;
 import coverage.exception.CoverageMeasurmentException;
-import coverage.instrumentation.bpelxmltools.BasisActivity;
+import coverage.instrumentation.bpelxmltools.BasicActivity;
 import coverage.instrumentation.deploy.archivetools.IDeploymentArchiveHandler;
 import coverage.instrumentation.deploy.archivetools.impl.ActiveBPELDeploymentArchiveHandler;
 import coverage.instrumentation.metrics.IMetric;
@@ -131,7 +131,7 @@ public class CoverageMeasurementTool {
 		String activity;
 		while (scanner.hasNext()) {
 			activity = scanner.next().trim();
-			if (BasisActivity.isBasisActivity(activity)) {
+			if (BasicActivity.isBasisActivity(activity)) {
 				metric.addBasicActivity(activity);
 			}
 		}

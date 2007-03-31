@@ -8,7 +8,7 @@ import coverage.CoverageConstants;
 import coverage.exception.BpelException;
 import coverage.instrumentation.bpelxmltools.exprlang.ExpressionLanguage;
 
-public class RepeatUntilActivityHandler implements IStructuredActivity {
+public class RepeatUntilActivity implements IStructuredActivity {
 
 	public void insertMarkerForBranchCoverage(Element element)
 			throws BpelException {

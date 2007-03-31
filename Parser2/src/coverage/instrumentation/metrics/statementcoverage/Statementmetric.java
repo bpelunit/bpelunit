@@ -13,7 +13,7 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
-import coverage.instrumentation.bpelxmltools.BasisActivity;
+import coverage.instrumentation.bpelxmltools.BasicActivity;
 import coverage.instrumentation.bpelxmltools.StructuredActivity;
 import coverage.instrumentation.metrics.IMetric;
 import coverage.wstools.CoverageRegistry;
@@ -38,16 +38,16 @@ public class Statementmetric implements IMetric {
 	public Statementmetric() {
 		activities_to_respekt = new HashMap<String, String>();
 		logging_before_activity = new HashMap<String, String>();
-		logging_before_activity.put(BasisActivity.THROW_ACTIVITY,
-				BasisActivity.THROW_ACTIVITY);
-		logging_before_activity.put(BasisActivity.RETHROW_ACTIVITY,
-				BasisActivity.RETHROW_ACTIVITY);
-		logging_before_activity.put(BasisActivity.COMPENSATE_ACTIVITY,
-				BasisActivity.COMPENSATE_ACTIVITY);
-		logging_before_activity.put(BasisActivity.COMPENSATESCOPE_ACTIVITY,
-				BasisActivity.COMPENSATESCOPE_ACTIVITY);
-		logging_before_activity.put(BasisActivity.EXIT_ACTIVITY,
-				BasisActivity.EXIT_ACTIVITY);
+		logging_before_activity.put(BasicActivity.THROW_ACTIVITY,
+				BasicActivity.THROW_ACTIVITY);
+		logging_before_activity.put(BasicActivity.RETHROW_ACTIVITY,
+				BasicActivity.RETHROW_ACTIVITY);
+		logging_before_activity.put(BasicActivity.COMPENSATE_ACTIVITY,
+				BasicActivity.COMPENSATE_ACTIVITY);
+		logging_before_activity.put(BasicActivity.COMPENSATESCOPE_ACTIVITY,
+				BasicActivity.COMPENSATESCOPE_ACTIVITY);
+		logging_before_activity.put(BasicActivity.EXIT_ACTIVITY,
+				BasicActivity.EXIT_ACTIVITY);
 	}
 
 	/**
@@ -60,9 +60,6 @@ public class Statementmetric implements IMetric {
 	 *            Prozess-Element der BPEL
 	 */
 	public void insertCoverageLabels(Element element) {
-		// BasicActivitiesFilter filter = new
-		// BasicActivitiesFilter(BpelXMLTools.getBpelNamespace(),
-		// activities_to_respekt);
 		ElementFilter filter = new ElementFilter(getBpelNamespace()) {
 			@Override
 			public boolean matches(Object obj) {
@@ -147,16 +144,16 @@ public class Statementmetric implements IMetric {
 	}
 
 	public void addAllBasicActivities() {
-		addBasicActivity(BasisActivity.ASSIGN_ACTIVITY);
-		addBasicActivity(BasisActivity.COMPENSATE_ACTIVITY);
-		addBasicActivity(BasisActivity.COMPENSATESCOPE_ACTIVITY);
-		addBasicActivity(BasisActivity.EMPTY_ACTIVITY);
-		addBasicActivity(BasisActivity.INVOKE_ACTIVITY);
-		addBasicActivity(BasisActivity.RECEIVE_ACTIVITY);
-		addBasicActivity(BasisActivity.REPLY_ACTIVITY);
-		addBasicActivity(BasisActivity.RETHROW_ACTIVITY);
-		addBasicActivity(BasisActivity.THROW_ACTIVITY);
-		addBasicActivity(BasisActivity.WAIT_ACTIVITY);
+		addBasicActivity(BasicActivity.ASSIGN_ACTIVITY);
+		addBasicActivity(BasicActivity.COMPENSATE_ACTIVITY);
+		addBasicActivity(BasicActivity.COMPENSATESCOPE_ACTIVITY);
+		addBasicActivity(BasicActivity.EMPTY_ACTIVITY);
+		addBasicActivity(BasicActivity.INVOKE_ACTIVITY);
+		addBasicActivity(BasicActivity.RECEIVE_ACTIVITY);
+		addBasicActivity(BasicActivity.REPLY_ACTIVITY);
+		addBasicActivity(BasicActivity.RETHROW_ACTIVITY);
+		addBasicActivity(BasicActivity.THROW_ACTIVITY);
+		addBasicActivity(BasicActivity.WAIT_ACTIVITY);
 	}
 
 	public void removeBasicActivity(String activity_name) {
@@ -164,16 +161,16 @@ public class Statementmetric implements IMetric {
 	}
 
 	public void removeAllBasicActivities() {
-		removeBasicActivity(BasisActivity.ASSIGN_ACTIVITY);
-		removeBasicActivity(BasisActivity.COMPENSATE_ACTIVITY);
-		removeBasicActivity(BasisActivity.COMPENSATESCOPE_ACTIVITY);
-		removeBasicActivity(BasisActivity.EMPTY_ACTIVITY);
-		removeBasicActivity(BasisActivity.INVOKE_ACTIVITY);
-		removeBasicActivity(BasisActivity.RECEIVE_ACTIVITY);
-		removeBasicActivity(BasisActivity.REPLY_ACTIVITY);
-		removeBasicActivity(BasisActivity.RETHROW_ACTIVITY);
-		removeBasicActivity(BasisActivity.THROW_ACTIVITY);
-		removeBasicActivity(BasisActivity.WAIT_ACTIVITY);
+		removeBasicActivity(BasicActivity.ASSIGN_ACTIVITY);
+		removeBasicActivity(BasicActivity.COMPENSATE_ACTIVITY);
+		removeBasicActivity(BasicActivity.COMPENSATESCOPE_ACTIVITY);
+		removeBasicActivity(BasicActivity.EMPTY_ACTIVITY);
+		removeBasicActivity(BasicActivity.INVOKE_ACTIVITY);
+		removeBasicActivity(BasicActivity.RECEIVE_ACTIVITY);
+		removeBasicActivity(BasicActivity.REPLY_ACTIVITY);
+		removeBasicActivity(BasicActivity.RETHROW_ACTIVITY);
+		removeBasicActivity(BasicActivity.THROW_ACTIVITY);
+		removeBasicActivity(BasicActivity.WAIT_ACTIVITY);
 	}
 
 	@Override
