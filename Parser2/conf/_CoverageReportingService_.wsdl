@@ -13,9 +13,6 @@
 		<wsdl:operation name="reportExecution">
 			<wsdl:input message="cov:CoverageLabels" />
 		</wsdl:operation>
-		<wsdl:operation name="registerCoverageLabels">
-			<wsdl:input message="cov:CoverageLabels"/>
-		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="BindingServiceToSOAP" type="cov:_CoverageLabelHandler_">
 		<soap:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
@@ -24,15 +21,6 @@
 			<soap:operation
 				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 				soapAction="http://www.bpelunit.org/coverage/logService/reportExecution" />
-			<wsdl:input>
-				<soap:body
-					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal" />
-			</wsdl:input>
-		</wsdl:operation>
-		<wsdl:operation name="registerCoverageLabels">
-			<soap:operation
-				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-				soapAction="http://www.bpelunit.org/coverage/logService/registerCoverageLabels" />
 			<wsdl:input>
 				<soap:body
 					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal" />
