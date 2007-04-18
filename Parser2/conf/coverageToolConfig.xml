@@ -8,10 +8,8 @@
 			invoke,receive,reply,throw,rethrow,wait,assign,empty,compensate,compensateScope,exit
 		</property>
 	</metric>
-	<metric name="Branchmetric">
-		<property name="IncludeFlowLinks">yes</property>
-		<property name="IncludeTrueFalseTransitionCondition">
-			yes
-		</property>
-	</metric>
+	<metric name="Branchmetric"/>
+	<metric name="TransitionCondition"/>
+	<metric name="FaultHandlerMetric"/>
+	<metric name="CompensationHandlerMetric"/>
 </coverageToolConfiguration>
