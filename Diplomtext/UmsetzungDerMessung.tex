@@ -1,98 +1,160 @@
- In diesem Abschnitt wird die Umsetzung der besprochenen Abdeckungsmetriken durch vorgestellt.  Wie im Abschnitt ... bereits erläutert wurde, wird dabei der Instrumentierungsansatz verwendet. Zu beachten ist, dass es bei diesem Ansatz die Möglichkeit besteht, durch die Manipulation die interne Programmlogik zu verändern. Aus diesem Grund muss man bei allen Eingriffen in die Struktur der BPEL-Datei dafür sorgen, dass die Geschäftslogik unverändert bleibt. Die syntaktische Korrektheit darf natürlich auch nicht verletzt werden.
+ In diesem Abschnitt wird die Umsetzung der besprochenen Abdeckungsmetriken vorgestellt.  Dabei wird das Instrumentierungsverfahren verwendet. Zu beachten ist, dass es bei diesem Ansatz die Möglichkeit besteht, durch die Manipulation die interne Programmlogik zu verändern. Aus diesem Grund muss man bei allen Eingriffen in die Struktur der BPEL-Datei dafür sorgen, dass die Geschäftslogik unverändert bleibt. Die syntaktische Korrektheit darf natürlich auch nicht beeinträchtigt werden.
   \subsection{Statementabdeckung}
-  Fast alle strukturierenden Aktivitäten sind so konstruiert, dass sie in ihren Komponenten genau eine Aktivität erlauben. Die Ausnahmen sind  \textit{flow}- und \textbf{sequence}-Aktivität. Durch das Schachtelungsprinzip sind trotzdem beliebig komplexe Strukturen realisierbar. Wenn nur eine Basisaktivität an so einer Stellen  vorhanden ist, dann würde das Einfügen einer zusätzlichen Aktivität zur Verletzung der Syntaxregeln führen. Also muss man vor der Instrumentierung eine \textit{umschließende strukturierende} Aktivität hinzufügen. Da das Logging entweder direkt davor oder danach stattfinden soll, ist die Sequence-Aktivität zu diesem Zweck gut geeignet. 
+  Fast alle strukturierenden Aktivitäten sind so konstruiert, dass sie in ihren Komponenten genau eine Aktivität erlauben. Die Ausnahmen sind  \textit{flow}- und \textit{sequence}-Aktivität. Durch das Schachtelungsprinzip sind trotzdem beliebig komplexe Strukturen realisierbar. Wenn nur eine Basisaktivität an so einer Stellen  vorhanden ist, dann würde das Einfügen einer zusätzlichen Aktivität zur Verletzung der Syntaxregeln führen. Also muss man vor der Instrumentierung eine \textit{umschließende strukturierende} Aktivität hinzufügen. Da das Logging entweder direkt davor oder danach stattfinden soll, ist die \textit{sequence}-Aktivität zu diesem Zweck gut geeignet. 
   
-  Auch die Basisaktivitäten, die sich direkt in \textit{flow}-Umgebungen befinden, werden in \textit{sequence} eingeschlossen, obwohl die Syntaxregeln das Hinzufügen von zusätzlichen Aktivitäten erlauben. Sonst würde es zu einer parallelen Ausführung der Aktivität selbst und des Loggings führen. Das Link-Konzept macht die Instrumentierung innerhalb der flow-Aktivität zu einer nicht trivialen Aufgabe und erfordert eine besondere Betrachtung.
+  Auch die Basisaktivitäten, die sich direkt in \textit{flow}-Umgebungen befinden, werden in \textit{sequence} eingeschlossen, obwohl die Syntaxregeln das Hinzufügen von zusätzlichen Aktivitäten erlauben. Sonst würde es zu einer parallelen Ausführung der Aktivität selbst und des Loggings führen. Das Link-Konzept macht die Instrumentierung innerhalb der flow-Aktivität zu einer nicht trivialen Aufgabe.
   
 \textbf{\textit{Flow}-Aktivität}   
-  Innerhalb der Flow-Aktivitäten ermöglicht das Link-Konzept die Syn\-chro\-ni\-sa\-tions\-ab\-hän\-gig\-keit\-en zwischen den Aktivitäten zu definieren und durch die darauf aufbauenden Bedingungen die Ausführung der Aktivitäten zu steuern. So kann das einfache Einfügen der Protokollieranweisungen zu  falschen Aussagen über ausgeführte oder nicht ausgeführte Aktivitäten führen. Ist \textit{die zu protokollierende Aktivität Ziel eines oder mehreren Links}, so führen folgende Konstellationen zu falschen Aussagen:
+
+neue Variable für jeden Zweig!!!!!!!!!!!!!
+
+  Innerhalb der Flow-Aktivitäten ermöglicht das Link-Konzept die Syn\-chro\-ni\-sa\-tions\-ab\-hän\-gig\-keit\-en zwischen den Aktivitäten zu definieren und durch die darauf aufbauenden Bedingungen die Ausführung der Aktivitäten zu steuern. Befindet sich eine neu eingefügte Protokollieranweisung im Kontrollfluss direkt vor oder nach der Aktivität, so ist es möglich, dass die Ausführungen falsch erfasst werden. Ist \textit{die zu protokollierende Aktivität Ziel eines oder mehreren Links}, so führen folgende Konstellationen zu falschen Aussagen:
 \begin{itemize}
 	\item Protokollierung findet vor der Aktivität statt und die Aktivität wird aufgrund der \textit{transition-} oder \textit{joinCondition} nicht ausgeführt.
 	\item Protokollierung findet nach der Aktivität statt, die Aktivität wird aufgrund der \textit{transition-} oder \textit{joinCondition} nicht ausgeführt und die Variable suppressJoin ist mit dem Wert \textit{yes} belegt.
 \end{itemize}
-In den beiden Fällen wird eine Aktivität zu viel als "`ausgeführt"' registriert.
+In den beiden Fällen wird eine Aktivität zu viel registriert. Anders gesagt: die Aktivität wird fälschlicherweise als "`ausgeführt"' markiert.
 
-Um zu erreichen, dass die Aktivität und das Logging \textit{beide} entweder ausgeführt oder nicht ausgeführt werden, muss der Link sich auf beides beziehen. Zu beachten ist, dass ein Link nur eine Quelle und ein Ziel besitzen darf. Schließt man die zu protokollierende Aktivität und die Logginganweisung in eine \textit{sequence} ein und definiert diese als Ziel des Links (durch \textit{target}-Element), so ist das gewünschte Verhalten erreicht. Das gilt für beide Werte der \textit{suppressJoin}-Varaible. 
-Das ursprüngliche \textit{target}-Element muss entfernt werden. Die Definition und die Quelle des Links bleiben unverändert. Die Abbildung .. stellt die entsprechenden Änderungen des Quellcodes an einem Beispielauschnitt dar.
- 
-\lstset{emph={joinCondition,target }, emphstyle=\color{blue}}
-      \begin{lstlisting}[caption=Beispielcode]{Name}
-<flow>
-	 ...
-  <invoke ... joinCondition=...>
-    <target linkName="CtoD"/>
-  </invoke>
-</flow>      \end{lstlisting}
+Um zu erreichen, dass die Aktivität und das Logging (beide) entweder ausgeführt oder nicht ausgeführt werden, muss der Link sich auf beide beziehen. Zu beachten ist, dass ein Link nur eine Quelle und ein Ziel besitzen darf. Schließt man die zu protokollierende Aktivität und die Logginganweisung in eine \textit{sequence} ein und definiert diese als Ziel des Links (durch \textit{target}-Element), so ist das gewünschte Verhalten erreicht. Das gilt für beide Werte der \textit{suppressJoin}-Varaible. 
+Das ursprüngliche \textit{target}-Element muss entfernt werden. Die Definition und die Quelle des Links bleiben unverändert. In Listing \ref{Listing1} werden die entsprechenden Änderungen des Quellcodes an einem Beispielauschnitt dargestellt.
+%\setlength{\columnsep}{1cm}
+%\begin{multicols}{2}
+%\lstset{emph={joinCondition,target }, emphstyle=\color{blue}}
+%      \begin{lstlisting}[caption=\textit{Invoke}-Aktivität als Ziel\\ eines Links,numbers=none,label=Listing1]{Name}
+%<flow>
+%
+%	 ...
+%  <invoke ... joinCondition=...>
+%    <target linkName="CtoD"/>
+%  </invoke>  
+%  
+%  
+%</flow>    
+%  \end{lstlisting}
+%\lstset{emph={[2]sequence}, emphstyle=[2]\color{red}}
+%      \begin{lstlisting}[numbers=none]{Name}
+%      
+%      
+%<flow>
+%	 ...
+%  <sequence joinCondition=...>
+%    <target linkName="CtoD"/>
+%    <!--Logging-->
+%    <invoke .../>
+%    <!--Logging-->
+%  </sequence>
+%</flow>      \end{lstlisting}
+%\end{multicols}
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1\textwidth]{bilder/Listing2Designer.png}
+	\label{fig:Listing2Designer}
+\end{figure}
 
-\lstset{emph={[2]sequence}, emphstyle=[2]\color{red}}
-      \begin{lstlisting}[caption=Beispielcode][firstnumber=1]{Name}
-<flow>
-	 ...
-  <sequence joinCondition=...>
-    <target linkName="CtoD"/>
-    <!--Logging-->
-    <invoke .../>
-    <!--Logging-->
-  </sequence>
-</flow>      \end{lstlisting}
 Zu erwähnen ist noch, dass wenn der Link in dem Ausgangsprozess keine \textit{CrossingBoundary}-Bedingung verletzt hat, so ändert sich das durch diesen Eingriff nicht.
 
 \subsection{Zweigabdeckung}
-Bei der Erfassung der Zweigabdeckung müssen durch das Einfügen von \textit{sequence} an den richtigen Stellen die gleichen Vorbereitung wie bei der Statementabndeckung getroffen werden. In diesem Abschnitt wird auf die Besonderheiten einiger strukturierender Aktivitäten eingegangen.
+Die Registrierung der einzelnen Zweigen erfolgt im Wesentlichen nach dem Schema, das für die Erfassung der Statementabdeckung vorgestellt wurde. An den entsprechenden Stellen in der BPEL-Datei werden zusätzliche Logging-Anweisungen eingefügt, die das Aktivieren der entsprechenden Kanten registrieren. Damit die Datei bei diesen Manipulationen syntaktisch gültig bleibt, kann die umschließende sequence-Aktivität in den meisten Fällen in den meisten Fällen verwendet werden. 
+Auf die Besonderheiten einiger strukturierender Aktivitäten, die eine andere Herangehensweise erfordern, wird es im weiteren Verlauf dieses Abschnitts eingegangen.
 
 \textbf{\textit{If}-Aktivität.}
-Es muss bei diesem Konstrukt darauf geachtet werden, dass der \textit{else}-Zweig erfasst wird. Das heisst, falls dieser Zweig nicht vorhanden ist, muss er mit der Logging-Anweisung hinzugefügt werden.
+Es muss bei diesem Konstrukt darauf geachtet werden, dass der \textit{else}-Zweig erfasst wird. Wenn dieser Zweig nicht explizit im Quellcode vorhanden ist, dann muss er mit der Logging-Anweisung hinzugefügt werden.
 
 \textbf{\textit{Flow}-Aktivität.}
 Das Komplizierteste bei der Instrumentierung innerhalb der flow-Aktivität ist das Link-Konzept und die Restriktionen, die daraus entstehen:
 \begin{itemize}
 	\item \textit{boundary-crossing}-Restriktionen
-	\item Wertebelegung der \textit{suppressJoin}-Variable
-	\item Dreiwertige Status der Links
+	\item unterschiedliche Wertebelegung der \textit{suppressJoin}-Variable und daraus resultierendes Verhalten beim Auftreten von \textit{JoinFailure}
+	\item dreiwertiger Status der Links
 	\item \textit{Dead-Path-Elimination}
 \end{itemize}
-Es geht insbesondere darum, die Links mit dem zugehörigen Status zu erfassen. Es werden drei verschiedene Ansätze mit ihren Vor- und Nachteilen vorgestellt. Das Beispiel aus der Abbildung ... dient als Grundlage für die Erläuterung. 
+Es geht insbesondere darum, dass bei den Links sowohl der Status \textit{true} als auch \textit{false} erfasst werden müssen. Es werden drei verschiedene Ansätze mit ihren Vor- und Nachteilen vorgestellt. Das Beispiel aus der folgenden Abbildung dient als Grundlage für die Erläuterung. 
+%\begin{figure}[htbp]
+%	\centering
+%		\includegraphics{bilder/FlowBeispiel.png}
+%	\label{fig:FlowBeispiel}
+%\end{figure}
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.40\textwidth]{bilder/FlowBeispielDesigner.png}
+	\label{fig:FlowBeispielDesigner}
+\end{figure}
+
 
 \underline{Variante 1.}\\
-Zwei zusätzliche Links werden definiert (\textit{LinkACopy} und \textit{LinkACopyNegiert}). Dabei übernimmt der \textit{LinkACopyNegiert} die negierte  transitionCondition des Originallinks und  der \textit{LinkACopy} die unveränderte. Die Logging-Anweisungen werden bei diesem Ansatz direkt in der flow-Umgebung platziert. Dadurch sind sie bereit für die Ausführung, sobald die Ausführung der flow-Aktivität startet. Durch die am Anfang definierten Links, wird die Source-Aktivität des Originallinks mit den Logging-Anweisungen verlinkt. Für eine Logging-Anweisung ein Link. Sobald der Status der Links bekannt ist, wird eine Logging-Anweisung ausgeführt.
+Zwei zusätzliche Links werden definiert (\textit{LinkACopy} und \textit{LinkACopyNegiert}). Dabei übernimmt der \textit{LinkACopyNegiert} die negierte  transitionCondition des Originallinks und  der \textit{LinkACopy} die unveränderte. Die Logging-Anweisungen werden bei diesem Ansatz direkt in der flow-Umgebung platziert. Dadurch sind sie bereit für die Ausführung, sobald die Ausführung der flow-Aktivität startet. Durch die am Anfang definierten Links, wird die Quellaktivität des Originallinks mit den Logging-Anweisungen verlinkt. Für eine Logging-Anweisung ein Link. Sobald der Status der Links bekannt ist, wird eine Logging-Anweisung ausgeführt.
 
-Die \textit{Default-JoinCondition} der Logging-Aktivitäten (\textit{or}-Verknüpfung von Status aller eingehenden Links) und die gegenseitig negierten \textit{transitionCondition} garantieren, dass nur ein Logging gleichzeitig ausgeführt werden kann.
+Die \textit{Default-JoinCondition} der Logging-Aktivitäten (\textit{or}-Verknüpfung von Status aller eingehenden Links) und die gegenseitig negierten \textit{transitionCondition} garantieren, dass nur eine Logginganweisung gleichzeitig ausgeführt wird.
+%\begin{figure}[htbp]
+%	\centering
+%		\includegraphics{bilder/LinksAnsatz1.png}
+%	\label{fig:LinksAnsatz1}
+%\end{figure}
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.9\textwidth]{bilder/LinksAnsatz1Designer.png}
+	\label{fig:LinksAnsatz1Designer}
+\end{figure}
 
-Bei dieser Vorgehensweise kann aber der negative Status des Links, der aufgrund der \textit{Dead-Path-Elimination}(DPE) propagiert wird, nicht erfasst werden. Der Grund dafür ist, dass der Status aller Links auf \textit{false} gesetzt wird und aus diesem Grund keine von beiden Logging-Anweisungen ausgeführt wird. 
 
-Durch eine zusätzliche Logging-Anweisung und ein Link kann auch dieser Fall berücksichtigt werden. Als Quelle wird dieselbe Aktivität als bei den anderen Links verwendet. Die \textit{transitionCondition} wird auf den konstanten Wert \textit{true} und die joinCondition auf den negierten Status des Links gesetzt. In dieser Konstellation findet das Logging nur in einer Situation statt, und zwar genau dann, wenn der Status des Links auf \textit{false} gesetzt wurde, was in diesem Fall nur durch DPE möglich ist.
+Diese Maßnahmen reichen nicht aus um den negative Status des Links, der aufgrund der \textit{Dead-Path-Elimination}(DPE) propagiert wird, zu erfasst. Der Grund dafür ist, dass der Status aller Links auf \textit{false} gesetzt wird und aus diesem Grund keine von beiden Logging-Anweisungen ausgeführt wird. 
+
+Durch eine zusätzliche Logging-Anweisung und ein Link kann auch dieser Fall berücksichtigt werden. Als Quelle wird dieselbe Aktivität wie bei den anderen Links verwendet. Die \textit{transitionCondition} wird auf den konstanten Wert \textit{true} und die joinCondition auf den negierten Status des Links gesetzt. In dieser Konstellation findet das Logging nur in einer Situation statt, und zwar genau dann, wenn der Status des Links auf \textit{false} gesetzt wurde, was in diesem Fall nur durch DPE möglich ist.
 \begin{table}[h!]
 \begin{tabular}{p{6cm}p{0.5cm}p{6cm}}
 \textbf{Vorteile}&\ &\textbf{Nachteile}\\[0.1cm]
 \hline \\
-Logging der kann stattfinden, unabhängig davon, ob Activity2 ausgeführt wird&\ &\textit{boundary-crossing}-Restriktionen werden verletzt\\
+Logging kann stattfinden, unabhängig davon, ob Activity2 ausgeführt wird&\ &\textit{boundary-crossing}-Restriktionen können verletzt werden\\
 Links werden auch bei DPE erfasst&\ &
 \end{tabular}
 %\caption{Vergleich der Ansätze}
 \label{Vergleichstabelle}
 \end{table} 
-
+\FloatBarrier
 \underline{Variante 2.}\\
-Ziel dieses Ansatzes ist, die boundary-crossing restriction einzuhalten.
+Ziel dieses Ansatzes ist, die \textit{boundary-crossing}-Restriktionen einzuhalten.
 Bei dieser Variante wird die Aktivität, die das Ziel eines oder mehreren Links ist in eine flow-Aktivität eingeschlossen. Durch die Platzierung der Anweisungen in derselben flow-Umgebung wird erreicht, dass die \textit{boundary-crossing}-Restriktionen durch die neu-hinzugefügten Links nicht verletzt werden können.
 Die Konstruktion der neuen Links erfolgt nach derselben Schema (Varainte 1).  
-In der Tabelle werden die Vortele und Nachteile dieser Variante gegenübergestellt.
+%\begin{figure}[htbp]
+%	\centering
+%		\includegraphics{bilder/LinksAnsatz2.png}
+%	\label{fig:LinksAnsatz2}
+%\end{figure}
+\begin{figure}
+	\centering
+		\includegraphics[width=0.9\textwidth]{bilder/LinksAnsatz2Designer.png}
+	\label{fig:LinksAnsatz2Designer}
+\end{figure}
+
+
 \begin{table}[h!]
 \begin{tabular}{p{6cm}p{0.5cm}p{6cm}}
 \textbf{Vorteile}&\ &\textbf{Nachteile}\\[0.1cm]
 \hline \\
-\textit{boundary-crossing}-Restriktionen werden eingehalten&\ &Die Links können nur dann geloggt werden, wenn die Activity3 ausgeführt werden kann
+\textit{boundary-crossing}-Restriktionen werden eingehalten&\ &Die Links können nur dann geloggt werden, wenn die Activity2 ausgeführt werden kann
 \\
 Links werden auch bei DPE erfasst&\ &
 \\
 \end{tabular}
 %\caption{Vergleich der Ansätze}
 \label{Vergleichstabelle}
-\end{table} 
-Der Nachteil kommt zum Tragen, wenn Activity2 zum Beispiel aufgrund eines Fehlers nicht ausgeführt wird, die Links wurden aber bereits aktiviert und könnten damit geloggt werden.
-
-\underline{Variant3.}\\
+\end{table}
+In der Tabelle werden die Vortele und Nachteile dieser Variante gegenübergestellt. 
+Der Nachteil kommt zum Tragen, wenn Activity2 zum Beispiel in einem nicht aktiviertem Zweig der \textit{if}-Aktivität ist. Die Links können in dieser Situation bereits aktiviert sein und könnten damit registriert werden.
+\FloatBarrier
+\underline{Variante3.}\\
 Bei dieser Variante wird die Sourceaktivität des Links durch eine \textit{flow}-Umgebung umschlossen. Einerseits sorgt die Platzierung der Logging-Anweisungen in derselben \textit{flow}-Umgebung für die Einhaltung der \textit{boundary-crossing}-Restriktionen. Andererseits kann das Logging auch stattfinden, wenn die Zielaktivität nicht ausgeführt wird. Da der Status der Links normalerweise nach der Ausführung der Quellaktivität erfolgt, sind die Logging-Aktivitäten zu diesem Zeitpunkt startbereit und können gleich nach dem Setzen des Status ihre Aufgabe ausführen.
+%\begin{figure}[htbp]
+%	\centering
+%		\includegraphics{bilder/LinksAnsatz3.png}
+%	\label{fig:LinksAnsatz3}
+%\end{figure}
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.9\textwidth]{bilder/LinksAnsatz3Designer.png}
+	\label{fig:LinksAnsatz3Designer}
+\end{figure}
+
 
 In einer Situation funktioniert auch diese Variante nicht. Befindet sich die Quellaktivität zum Beispiel in einem Zweig einer \textit{If}-Aktivität, so kann es vorkommen, dass dieser Zweig nicht aktiviert wird. Die Logging-Aktivitäten können in dieser Konstellation genauso wie die Quellaktivität nicht ausgeführt werden. Damit kann die Propagation des \textit{false}-Status auf allen ausgehenden Links nicht registriert werden.
 
@@ -112,13 +174,20 @@ Logging kann stattfinden, unabhängig davon, ob Activity2 ausgeführt wird&\ &
 Als Lösung für die Abdeckungsmessung der Links eignet sich diese Variante am Besten. Um Konsistenz und Vollständigkeit der Abdeckungsangaben für alle BPEL-Prozesse zu gewährleisten, werden die DPE bei der Bestimmung der Zweigabdeckung nicht berücksichtigt.
 
 \textbf{\textit{ForEach}-Aktivität.}
+Da diese Aktivität unterschiedliches Verhalten abhängig von der Variable \textit{parallel} aufweist, werden diese zwei Fälle zunächst getrennt betrachtet.
 
-otherwise oder else einfügen
+!!!!!Man hat zwar Zugriff auf die Countervariable und kann diese Ändern, Der neue Wert gilt aber nur bis zum Ende dieser Iteration und hat keine Auswirkungen auf die Nächste.
 
-sequenzen Einfügen
+!!!!ExpressionLanguage wenn nicht gesetzt ist auch nicht schlimm denn die eingefügten assign Elemente sich in demselben Parent befinden und haben damit den gleichen default wert
 
- Flow: beim Fehler.
- 
- \subsection{Fault Handler Abdeckung}
+\textbf{Sequentielle Ausführung.}\\
+Die Abdeckung der beiden Zweigen erfolgt in diesem Fall sehr einfach. Die Protokollieranweisungen werden einmal vor und einmal nach der Aktivität platziert.
+\textbf{Sequentielle Ausführung.}\\
+Bei der parallelen Ausführung wird die Scope-Instanz mehrmals parallel ausgeführt. Die Zweige des Kontrollflusses, die zu jedem Scope (bzw. zu der eingeschlossenen Aktivität) führen, sind im Gegensatz zur sequenziellen Ausführung nicht identisch. Deswegen müssen diese Zweige einzeln protokolliert werden und dabei untereinander unterschieden werden. Zur Unterscheidung der einzelnen Zweige wird der interne Zähler der \textit{ForEach}-Aktivität verwendet.    
+\subsection{Fault und Compensation Handler}
 
-\subsection{Compensation Handler Abdeckung}
+
+
+
+!!!!!!!!Alles funktioniert mit beliebigen expressionLanguages
+....

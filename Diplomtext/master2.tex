@@ -13,6 +13,9 @@
 \usepackage{amssymb,amsmath}	% mathematische Symbole
 \usepackage{color}
 \usepackage{picins} 					%Bilder umfließen
+\usepackage{multicol}
+\usepackage{placeins}					%Gleitobjekte erzwingen \FloatBarrier 					
+\usepackage{pifont}  					%Symbole
 \usepackage{listings} \lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} \lstset{language=XML}
 
 
@@ -100,7 +103,9 @@
 \input{aufgabenstellung}
 \section{Aufbau der Arbeit}
 \input{struktur}
-\chapter{Grundlagen}\section{SOA}
+\chapter{Grundlagen}
+\section{SOA}
+\input{soa}
 \section{Web Services}
 \subsection{SOAP}
 \subsection{WSDL}
@@ -127,12 +132,15 @@
 \input{testabdeckung}
 \chapter{Testabdeckung in BPEL}
 \input{konzepte}
+\newpage
 \section{Definition der Abdeckungsmetriken für BPEL}
 \input{konventionelleMetriken}
 \section{Umsetzung der Abdeckungsmessung}
 \input{UmsetzungDerMessung}
 \chapter{Design und Implementierung}
 \section{Integration der Testabdeckungsmetriken in BPELUnit-Framework}
+\section{Optimierung}
+\input{optimierung}
 \chapter{Beispiele}\label{beispiele}
 \input{beispiele}
 \chapter{Zusammenfassung und Ausblick}
