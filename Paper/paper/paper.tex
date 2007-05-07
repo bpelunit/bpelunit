@@ -6,6 +6,8 @@
 \documentclass{llncs}
 \usepackage[latin1]{inputenc}
 %
+\usepackage{amsmath}
+
 \usepackage{makeidx}  % allows for indexgeneration
 %
 \begin{document}
@@ -28,10 +30,11 @@
 %
 %\mainmatter              % start of the contributions
 %
-\title{Hamiltonian Mechanics unter besonderer Ber\"ucksichtigung der
-h\"ohreren Lehranstalten}
+\title{Definition and Measurement of
+BPEL Process Test Coverage
+}
 %
-\titlerunning{Hamiltonian Mechanics}  % abbreviated title (for running head)
+\titlerunning{BPEL Process Test Coverage}  % abbreviated title (for running head)
 %                                     also used for the TOC unless
 %                                     \toctitle is used
 %
@@ -58,20 +61,21 @@ BPEL Processes are used to link Web services into service compositions. These co
 \section{BPEL Testing Foundations} [DL] [1 page]
 [1, 2]
 \section{Related Work}
+\newpage
 \section{Test Coverage Metrics}
-Bei der Analyse der Testabdeckung geht es darum festzustellen, wie gut die Codebereiche durch die Tests abgedeckt sind bzw. welche Bereiche gar nicht oder nicht ausreichend abgedeckt sind. Als Grundlage für die zugehörigen Metriken dient die Kontrollstruktur des Prozesses mit ihren Strukturmerkmalen: Zweigen und Anweisungen.
-Bei der Definition von Metriken wird darauf geachtet, dass 100% Abdeckung erreichbar ist.
-\subsection{BPEL Formalisation}
-\begin{definition}[WS-BPEL Process Model] A WS-BPEL Process Model is a tuple $\mathcal{W=(A,\ E,\ C,\ L,\ HR,\ }type_{\mathcal{A}},\ type_{\mathcal{E}},\ instance,\ name,\ <_{seq},\ <_{if},\ serialscp,\\ 
-\ process,\ trigger,\ scp_c,\ trigger_c,\ scp_t,\ trigger_{tf},\ \mathcal{LR},\ joincon,\  supjoinf,\\
-\ trigger_{jf})$ where: 
+Bei der Analyse der Testabdeckung geht es darum festzustellen, wie gut die Codebereiche durch die Tests abgedeckt sind.
+Nach der Vorstellung des formalen Modells der WS-BPEL im nächsten Abschnitt, werden zuerst die bekannten Metriken Statement- und Zweigabdeckung und anschließend BPEL-spezifischen Link- und Handler Abdeckung für WS-BPEL definiert. Es wird dabei darauf geachtet, dass 100\% Abdeckung für jede Metrik erreichbar ist.
+\subsection{BPEL Formalisation}\label{bpelformal}
+Die hier vorgestellte formale Beschreibung von WS-BPEL Process Model ist nicht vollständig und fasst nicht den gesamten Umfang von WS-BPEL um. Es werden nur für diese Arbeit relevante Teile des Modells beschrieben. Als Grundlage dient eine Definition aus  \cite{Ouyang}, die abgesehen von der Anpassung an den Standard WS-BPEL 2.0 und einigen Erweiterungen, unverändert übernommen wurde.  
+\begin{definition}[WS-BPEL Process Model ] A WS-BPEL Process Model is a tuple $\mathcal{W=(A,\ E,\ C,\ L,\ HR,\ }type_{\mathcal{A}},\ type_{\mathcal{E}},\ instance,\ name,\ <_{seq},\ <_{if},\\ serialscp,\ process,\ trigger,\ scp_c,\ trigger_c,\ scp_t,\ trigger_{tf},\ \mathcal{LR},\ joincon,\\
+transitionCondition,\  supjoinf,\ trigger_{jf})$ where: 
 \begin{itemize}
 	\item $\mathcal{A}$ is a set of activities,
 	\item $\mathcal{E}$ is a set of events,
 	\item $\mathcal{C}$ is a set of conditions,
 	\item $\mathcal{L}$ is a set of control links,
 	\item let $\mathcal{B=E\cup C} \cup\{\bot\} $ be a set of labels where $\bot$ denotes the empty label, then $\mathcal{HR\subseteq A\times B\times A}$ is a labeled tree which defines the relation between an activity and its direct sub-activities,
-	\item $\forall a\in \mathcal{A},\ let \mathcal{HR}_{p}=_{\pi 1,3}\mathcal{HR}$(the projection of $\mathcal{HR}$ on two activity sets), $children(a)=\{a'\in \mathcal{A}|\mathcal{HR}_p(a,a')\}$ is the set of immediate descendants of a, $descendants(a)=\{a'\in \mathcal{A}|\mathcal{HR}^{+}_{p}(a,a')\}$ is the set of all descendants of a, and $clan(a)=\{a\cup \}$ descendants(a) is the set constituting of a  and all its descendants,
+	\item $\forall a\in \mathcal{A},\ let\ \mathcal{HR}_{p}=_{\pi 1,3}\mathcal{HR}$(the projection of $\mathcal{HR}$ on two activity sets), $children(a)=\{a'\in \mathcal{A}|\mathcal{HR}_p(a,a')\}$ is the set of immediate descendants of $a$,
 	\item $type_\mathcal{A}:\mathcal{A\rightarrow T_A}$ is a function that assigns types to activities taken from the set of activity types 
 	
 \begin{itemize}
@@ -81,79 +85,189 @@ throw,\ rethrow,\\
 \ compensate,\ compensateScope,\ exit\}$
 \item $\mathcal{T_S}=\{sequence,\ flow,\ pick,\ if,\ while,\ repeatUntil,\ forEach,\ scope\}$
 \end{itemize}
-\item $\forall t\in \mathcal{T_A},\mathcal{A}_t=\{a\in \mathcal{A}|type_\mathcal{A}(a)=t\}$ is a set of all activities of type $t$,
+\item $\forall t\in \mathcal{T_A},\ \mathcal{A}_t=\{a\in \mathcal{A}|type_\mathcal{A}(a)=t\}$ is a set of all activities of type $t$,
 \item $type_\mathcal{E}:\mathcal{E\rightarrow T_E}$ is a function that assigns types to events taken from the set of event types $\mathcal{T_E}=\{message,\ alarm,\ fault,\ compensation,\ termination\}.$
-\item $\forall t\in \mathcal{T_E},\mathcal{E}_t=\{e\in \mathcal{E}|type_\mathcal{E}(e)=t\}$ is a set of all events of type t,
-\item $instance:\mathcal{A}_{receive}\cup \mathcal{A}_{pick}\rightarrow \mathcal{B}$ is a function which sddigns a boolean value to the createInstance attribete of a receive or a pick activity.
-\item $let \mathcal{A}^{structured}=\mathcal{A}_{sequense}\cup \mathcal{A}_{flow}\cup \mathcal{A}_{if}\cup \mathcal{A}_{while}\cup \mathcal{A}_{repeatUntil}\cup \mathcal{A}_{forEach}\cup \mathcal{A}_{pick}\cup \mathcal{A}_{scope}$ be a set of structured sctivities, $\forall_{s\in \mathcal{A}^{structured}}(children(s)\neq \emptyset)$, i.e., they are the internal nodes of the HR tree,
+\item $\forall t\in \mathcal{T_E},\ \mathcal{E}_t=\{e\in \mathcal{E}|type_\mathcal{E}(e)=t\}$ is a set of all events of type t,
+%\item $instance:\mathcal{A}_{receive}\cup \mathcal{A}_{pick}\rightarrow \mathcal{B}$ is a %function which sddigns a boolean value to the createInstance attribete of a receive or a %pick activity.
+\item $let\ \mathcal{A}^{structured}=\mathcal{A}_{sequense}\cup \mathcal{A}_{flow}\cup \mathcal{A}_{if}\cup \mathcal{A}_{while}\cup \mathcal{A}_{repeatUntil}\cup \mathcal{A}_{forEach}\cup \mathcal{A}_{pick}\cup \mathcal{A}_{scope}$ be a set of structured sctivities, $\forall_{s\in \mathcal{A}^{structured}}(children(s)\neq \emptyset)$, i.e., they are the internal nodes of the $\mathcal{HR}$ tree,
 \item let $\mathcal{A}^{basic}=\mathcal{A}_{invoke}\cup \mathcal{A}_{receive}\cup \mathcal{A}_{reply}\cup \mathcal{A}_{wait}\cup \mathcal{A}_{assign}\cup \mathcal{A}_{validate}\cup \mathcal{A}_{empty}\cup \mathcal{A}_{validate}\cup \mathcal{A}_{throw}\cup \mathcal{A}_{rethrow}\cup \mathcal{A}_{compensate}\cup \mathcal{A}_{compensateScope}$ be a set of basic activities, $\forall_{s\in \mathcal{A}^{basic}}(children(s)= \emptyset)$, i.e., they are the leaves of the $\mathcal{HR}$ tree,
-\item $given A'=A_{sequence}\cup A_{flow},H \cap (A'\times \{\bot\}\times A),$
-\item $\forall s\in A-{sequence},\exists an order <^s_{seq} which is strict total order over children(s),$
-\item $HR\cap (A_{pick}\times B\times A)=HR\cap (A_{pick}\times E^{normal}\times A), where E^{normal}=E_{message}\cup E_{alarm} provides a set of normal rvents,$
-\item $\forall s\in A_{pick},\left|HR\cap (\{s\}\times A'\times B\times A)\right|\geq 1, i.e., a pick activity has at least one message event,$
-\item $given A'=A_{switch}\cup A_{while}, HR\cap (A'\times B\times A=HR\cap (A'\times C\times A),) $
-\item $\forall s\in A{if}, \exists an order <^{s}_{if} which is a strict total order over children(s),$
-\item $\forall s\in A_{if}, let last(s)\in children(s) be  the sub-activity in the last branch evaluated in s such that \neg \exists_{a\in children(s)}(last(s)<^{s}_{if}a), let c\in C, HR(s,c,last(s))\Rightarrow \forall_{assign(c)\in Assign(C)}eval(c,assign(c))=true. Note that last(s) represent the else branch in if activity, which wnsures that at least one of the branches is taken in the activity,$
-\item $\forall s\in A_{while},\left| HR\cap (\{s\}\times C\times A)\right|=1, i.e., each while activity has exactly ine sub-activity,$
-\item $HR\cap (A_{scope}\times B\times A)=HR\cap (A_{scope} \times (E\times\{\bot \})\times A), where: \forall s \in A_{scope},$
+\item given $\mathcal{A'}=\mathcal{A}_{sequence}\cup \mathcal{A}_{flow},\ \mathcal{HR} \cap (\mathcal{A}'\times B\times A)\mathcal{HR} \cap (\mathcal{A'}\times \{\bot\}\times \mathcal{A}),$
+\item $\forall s\in \mathcal{A}_{sequence},\exists$ an order $<^s_{seq}$ which is strict total order over $children(s)$,
+\item $\mathcal{HR}\cap (\mathcal{A}_{pick}\times \mathcal{B}\times \mathcal{A})=\mathcal{HR}\cap (\mathcal{A}_{pick}\times \mathcal{E}^{normal}\times \mathcal{A})$, where $\mathcal{E}^{normal}=\mathcal{E}_{message}\cup \mathcal{E}_{alarm}$ provides a set of normal events,
+\item $given \mathcal{A'}=\mathcal{A}_{if}\cup \mathcal{A}_{while}\cup \mathcal{A}_{forEach},\ \mathcal{HR}\cap (\mathcal{A'}\times \mathcal{B}\times \mathcal{A}=\mathcal{HR}\cap (\mathcal{A'}\times \mathcal{C}\times \mathcal{A})),$
+\item $given \mathcal{A'}=\mathcal{A}_{repeatUntil},\ \mathcal{HR}\cap (\mathcal{A'}\times \mathcal{B}\times \mathcal{A}=\mathcal{HR}\cap (\mathcal{A'}\times \{\bot\}\times \mathcal{A})),$
+\item $\forall s\in \mathcal{A}_{if},\ \exists$ an order $<^{s}_{if}$ which is a strict total order over $children(s)$,
+\item $\forall s\in \mathcal{A}_{if}$, let $last(s)\in children(s)$ be  the sub-activity in the last branch evaluated in s such that $\neg \exists_{a\in children(s)}(last(s)<^{s}_{if}a)$, let $c\in \mathcal{C},\\
+\mathcal{HR}(s,c,last(s))\Rightarrow \forall_{assign(c)\in Assign(\mathcal{C})}eval(c,assign(c))=true$. Note that $last(s)$ represent the else branch in if activity, which wnsures that at least one of the branches is taken in the activity,
+\item $\forall s\in \mathcal{A}_{while},\ \left| \mathcal{HR}\cap (\{s\}\times \mathcal{C}\times \mathcal{A})\right|=1$, i.e., each while activity has exactly ine sub-activity,
+\item $\mathcal{HR}\cap (\mathcal{A}_{scope}\times \mathcal{B}\times \mathcal{A})=\mathcal{HR}\cap (\mathcal{A}_{scope} \times (\mathcal{E}\times\{\bot \})\times \mathcal{A})$, where: $\forall s \in \mathcal{A}_{scope}$,
 \begin{itemize}
-	\item $\left|HR\cap (\{s\}\times \{\bot\}\times A))\right|=1, i.e., each scope has one primary (or main) activity, and therefore A^{mainset}(s)=\{a\in A |\exists_{x \in A}(HR(s,\bot ,x)\wedge a \in clan(x))\} is the set constituting of the main axtivity x of scope s and all descendants of x,$
-	\item $\left|HR\cap (\{s\}\times \{E_{fault}\}\times A))\right|\geq 1, i.e., each scope provides at least one fault handler,$
-		\item $\left|HR\cap (\{s\}\times \{E_{compensation}\}\times A))\right|\\leq 1, i.e., each scope provides at most one compensation handler,$
-\item $\forall t \in T_E,A^{t}_{H}(s)=\{a\in A|\exists_{(e,x)\in E_t \times A}(HR(s,e,x)\wedge a\in clan(x))\} is the set constituting of the top lever activities (represented by x) used for handling all events pf type t for scope s and all descendants of these activities,$
-\item $A^{event}_{H}(s)=A^{message}_{H}(s)\cup A^{alarm}_{H}(s) is the set of activities used by all events handlers of scope s, and therefor A^{normal}(s)=A^{mainset}(s)\cup A^{event}_{H}(s) is the set of all acrivities that define the normal behaviour of scope s, $
-\item $A^{directenc}(s)=descendants(s)\\(\bigcup_{x\in A_{scope}\cap children(s)}descendants(x)) is the set of all activities that are directly enclosed in scope s,$
+	\item $\left|\mathcal{HR}\cap (\{s\}\times \{\bot\}\times \mathcal{A})\right|=1$, i.e., each scope has one primary (or main) activity,
+	\item $\left|\mathcal{HR}\cap (\{s\}\times \{\mathcal{E}_{fault}\}\times \mathcal{A})\right|\geq 1$, i.e., each scope provides at least one fault handler,
+		\item $\left|\mathcal{HR}\cap (\{s\}\times \{\mathcal{E}_{compensation}\}\times \mathcal{A})\right|\leq 1$, i.e., each scope provides at most one compensation handler,
 \end{itemize}
-\item $process\in A_{scope} is the root of the HR tree,$
-\item $trigger_{tf}:A_{throw}\cup A_{rethrow}\rightarrow E_{fault} is a function which maps each throw activity to a (process-defined) fault event triggered by that activity,$
-\item $scp_c:E_{compensation}\rightarrow A_{scope}\\\{process\} is an injective function mapping a compensation event to a (non-process) scope such that the occurrence of that event invokes the compensation of that scope,$
-\item $trigger_c:A_{compensate}\rightarrow E_{compensation} is an injective function which maps each compensate activity
-to a compensation event triggered by that activity,$
-\item $\forall s\in A_{scope}, A_{compensate}\cup (A^{normal}(s)\cap A^{directenc}(s))=\emptyset, i.e., a compensate activity cannot be
-used for the normal behaviour of a scope, that is, it may be used only for exception handling and
-termination,$
-\item $\forall s\in A_{scope}, let A^{fct}_H(s)=A^{fault}_H(s)\cup A^{compensation}_H(s)\cup A^{termination}_H(s), then (a\in A_{compensate}\cap (A^{fct}_H(s)\cap A^{directenc}(s)))\Rightarrow scp_c(trigger_c(a))\in A^{normal}(s) , i.e., a compensate activity is used to invoke compensation of a (descendant) scope nested in the normal process of scope s only,$
-
-\item $LR\subseteq A\times L\times A is a labeled acyclic graph which defines the relation between the source
-activity of a control link and the target activity of the link, $
-\item $The boundary crossing restrictions for a control link are defined as follows:$
-\begin{itemize}
-	\item $\forall_{(a,l,a')\in LR}(a\notin clan(a')), i.e., a control link cannot connect an activity to any of its ancestors,$
-	\item $\forall_{s \in A_{sequence}}\forall_{\{x,x'\}\subseteq children(a)}\forall_{a\in clan(x)}\forall_{a'\in clan(x')}(x<^s_{seq}x'\Rightarrow \neg \exists_{l\in L}LR(a',l,a))), i.e., in a se-
-quence activity a control link cannot connect a sub-activity or any of its descendants to any
-preceding sub-activity or any of its descendants,$
-\item $...$
-\end{itemize}
-\item $let A^{source}=\{a\in A|\exists_{l\in L}((a,l)\in\pi_{1,2}LR)\} be a set of source activities of all control links, and A^{target}=\{a\in A|\exists_{l\in L}((l,a)\in \pi_{2,3}LR)\} be a set of target activities of all control links, then \forall a\in A^{source},L_{out}(a)=\{l\in L|\exists_{a'\in A}LR(a,l,a')\} is a set of all outgoing control links from a,
-and \forall a\in A^{target}, L_{in}(a)=\{l\in L|\exists_{a'\in A}LR(a',l,a)\} is a set of all incoming control links to a,$
-\item $let a\in A^{target}, joincon(a), which expresses the join condition of incoming control links at a, is a
-boolean function over L_{in}(a)(i.e. Var(joincon(a))=L_{in}(a))$
+\item $process\in \mathcal{A}_{scope}$ is the root of the $\mathcal{HR}$ tree,
+\item $trigger_{tf}:\mathcal{A}_{throw}\cup \mathcal{A}_{rethrow}\rightarrow \mathcal{E}_{fault}$ is a function which maps each throw activity to a (process-defined) fault event triggered by that activity,
+\item $scp_c:\mathcal{E}_{compensation}\rightarrow \mathcal{A}_{scope}\backslash \{process\}$ is an injective function mapping a compensation event to a (non-process) scope such that the occurrence of that event invokes the compensation of that scope,
+\item $trigger_c:\mathcal{A}_{compensate}\rightarrow \mathcal{E}_{compensation}$ is an injective function which maps each compensate activity
+to a compensation event triggered by that activity,
+\item $\mathcal{LR}\subseteq \mathcal{A}\times \mathcal{L}\times \mathcal{A}$ is a labeled acyclic graph which defines the relation between the source
+activity of a control link and the target activity of the link,
+\item let $\mathcal{A}^{source}=\{a\in \mathcal{A}|\exists_{l\in \mathcal{L}}((a,l)\in\pi_{1,2}\mathcal{LR})\}$ be a set of source activities of all control links, and $\mathcal{A}^{target}=\{a\in \mathcal{A}|\exists_{l\in \mathcal{L}}((l,a)\in \pi_{2,3}\mathcal{LR})\}$ be a set of target activities of all control links, then $\forall a\in \mathcal{A}^{source},\mathcal{L}_{out}(a)=\\
+\{l\in \mathcal{L}|\exists_{a'\in \mathcal{A}}\mathcal{LR}(a,l,a')\}$ is a set of all outgoing control links from a,
+and $\forall a\in \mathcal{A}^{target}, \mathcal{L}_{in}(a)=\{l\in \mathcal{L}|\exists_{a'\in \mathcal{A}}\mathcal{LR}(a',l,a)\}$ is a set of all incoming control links to $a$,
+\item let $a\in \mathcal{A}^{target},\ joincon(a)$, which expresses the join condition of incoming control links at $a$, is a
+boolean function over $\mathcal{L}_{in}(a)$(i.e. $Var(joincon(a))=\mathcal{L}_{in}(a))$,
+\item let $l\in_{ \pi 2}\mathcal{LR},\ transitionCondition(l)$, which expresses the transition conditionm of links, is a boolean function,
+\item Dead-path-elimination (DPE). 
+Wird eine Aktivität aufgrund einer zu $false$ ausgewerteten $joinCondition$ oder eines nicht abgearbeiteten Zweiges einer $if-$ oder $pick-$Aktivität nicht ausgeführt, so wird für alle ausgehenden Links die $transitionCondition$ auf $false$ gesetzt. Dieses Verhalten wird als Dead-Path-Elimination bezeichnet. 
+\item ...
 \end{itemize}
 \end{definition}
 
+Betrachtet man die Kontrollstruktur eines WS-BPEL Prozesses, so kann die $\mathcal{HR}$-Relation als Übergabe der Kontrolle von einer Aktivität an ihre Subaktivitäten betrachtet werden. Damit entspricht ein Element dieser Relation einem Zweig des Kontrollflussgraphen. Allerdings deckt diese Relation nicht alle Zweige des Graphen ab, es fehlen nämlich die Zweige, die die Kontrolle innerhalb der Schleifen von der inneren Aktivität an die Schleife zurückgeben. Die folgende Relation $\mathcal{HBR}$ beschreibt genau solche Beziehungen: 
+\begin{itemize}
+	\item $\mathcal{HBR}\subseteq \mathcal{A}\times\{\mathcal{C}\cup \{\bot\}\times \mathcal{A}\}$ beschreibt die Beziehung einer Aktivität zu der umschließenden Aktivität,
+	\item $\forall a,a'\in \mathcal{A},\ \forall(a,a')\in_{\pi 1,3}\mathcal{HBR}\Rightarrow a\in children(a')$
+\end{itemize}
+Für die Schleifen gilt:
+\begin{itemize}
+	\item given $\mathcal{A'}=\mathcal{A}_{while}\cup \mathcal{A}_{forEach}\cup \mathcal{A}_{},\ \mathcal{HBR}\cap (\mathcal{A}\times \mathcal{B}\times \mathcal{A'}=\mathcal{HR}\cap (\mathcal{A}\times \{\bot \}\times \mathcal{A'})),$
+	\item given $\mathcal{A'}=\mathcal{A}_{repeatUntil},\ \mathcal{HBR}\cap (\mathcal{A}\times \mathcal{B}\times \mathcal{A'}=\mathcal{HR}\cap (\mathcal{A}\times \mathcal{C}\times \mathcal{A'})).$
+\end{itemize}
+
+Die Relationen $\mathcal{HR}$ und $\mathcal{HBR}$ beschreiben zusammen alle Kanten des Kontrollflussgraphen des zugehörigen WS-BPEL Prozesses.
+
 \subsection{Statement Coverage}
-Bei der Statementabdeckung geht es darum, festzustellen, wie viele der Statements beim Testen ausgeführt wurden. Die Basisaktivitäten der WS-BPEL entsprechen den Anweisungen der anderen Programmiersprachen. Aus diesem Grund kann die allgemein bekannte Definition der Statementabdeckung einfach für BPEL übernommen werden. Damit die Statistik etwas differenzierter ist,  wird Metrik für die einzelne Basisaktivitäten definiert:
-
+Bei der Statementabdeckung geht es darum, festzustellen, wie viele der Anweisungen beim Testen ausgeführt wurden. Die Basisaktivitäten der WS-BPEL ent\-spre\-chen den Anweisungen der anderen Programmiersprachen. Damit kann die allgemein bekannte Definition der Statementabdeckung einfach für WS-BPEL übernommen werden. 
+Damit die Statistik etwas differenzierter ist,  wird Metrik für die einzelne Basisaktivitäten definiert.
+\begin{itemize}
+	\item $\forall t\in \mathcal{T}_\mathcal{B},\ \mathcal{A}^{executed}_t$ ist die Menge der Basisaktivitäten vom Typ $t$, die beim Testen ausgeführt wurden, dann kann die Statementabdcekung für jeden Typ der Basisaktivitäten folgendermaßen definiert werden:
+\end{itemize}
+	\[
+	\mathcal{S}_t(\mathcal{W})=\frac{\left| \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}_t\right|},\ \forall t\in \mathcal{T}_\mathcal{B}
+\]
 Die gesamte Statementabdeckung bezieht sich auf alle Basisaktivitäten:
+	\[
+	\mathcal{S}(\mathcal{W})=\frac{\left|\bigcup_{t\in \mathcal{T}_\mathcal{B}} \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}^{basic}\right|}
+\]
+Die vorgestellten Anweisungsabdeckungsmetriken berücksichtigen nach Definition der Mengen $A_t$,$A^{executed}_t$ und $A^{basic}$  auch Basisaktivitäten, die in sämtlichen Handler verwendet werden. 
 
-Die vorgestellten Anweisungsabdeckungsmetriken berücksichtigen nach Definition von HR, HBR und der Funktion   auch Basisaktivitäten, die in sämtlichen Handler verwendet werden. 
-Es sollte beim Testen mindestens sichergestellt werden, dass alle Basisaktivitäten, die die elementaren Aktivitäten eines Prozesses sind, durch die Tests abgedeckt sind. Die Statementabdeckung ist dennoch ein schwaches Kriterium, weil dabei nur die einzelnen Anweisungen betrachtet, ohne Zusammenhänge zu berücksichtigen.
+%Es sollte beim Testen mindestens sichergestellt werden, dass alle Basisaktivitäten, die die elementaren Aktivitäten eines Prozesses sind, durch die Tests abgedeckt sind. Die Statementabdeckung ist dennoch ein schwaches Kriterium, weil dabei nur die einzelnen Anweisungen betrachtet, ohne Zusammenhänge zu berücksichtigen.
 \subsection{Branch Coverage}
-Die Zweigabdeckung betrachtet das Verhältnis von durchlaufenen Zweigen zu allen möglichen Zweigen des Testobjekts. Die strukturierten Aktivitäten bestimmen den Kontrollfluß in WS-BPEL und definieren damit die Zweige der Kontrollstruktur. 
-Um diese Metrik für WS-BPEL zu definieren, werden zwei Funktionen eingeführt:
+Die Zweigabdeckung beschreibt das Verhältnis von durchlaufenen Zweigen zu allen möglichen Zweigen des Testobjekts. Wie bereits im Abschnitt \ref{bpelformal} erklärt, werden die Zweige durch Relationen $\mathcal{HR}$ und $\mathcal{HBR}$ beschrieben. Die Funktion $branch\_executed$ bestimmt welche Zweige beim Testen durchlaufen wurden und wird wie folgt definiert:
+\begin{itemize}
+	\item $branch\_executed:\mathcal{HR}\cup \mathcal{HBR}\rightarrow \mathcal{B}$,
+	\item $\forall r\in \mathcal{HR}\cup \mathcal{HBR},\ branch\_executed(r)=true$ nur wenn die Relation r beim Testen verwendet wurde.
+\end{itemize}
+Außerdem werden folgende Funktionen eingeführt:
+\begin{itemize}
+\item 
+sei $\mathcal{A}_i\subseteq\mathcal{A},\ s\in \mathcal{A}_i,\ t=type_\mathcal{A}(s)$
+	\item $br\_number_{set}(\mathcal{A}_i)=\sum_{s\in\mathcal{A}_i}br\_number_t(s)$ berechnet für eine Menge von Aktivitäten, die Zweige in der Kontrollstruktur, die durch diese Aktivität beschrieben werden,
+	\item $ex\_br\_number_{set}(\mathcal{A}_i)=\sum_{s\in \mathcal{A}_i}ex\_br\_number_t(s)$ berechnet für eine Menge von Aktivitäten die Anzahl der Zweige, die beim Testen durchlaufen wurden.
+\end{itemize}
+Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivitäten:
+\begin{itemize}
+	\item sequence:
+	\begin{itemize}
+	\item $br\_number_{sequence}(s)=\left|children(s)\right|-1+	br\_number_{set}(children(s)),\ s \in \mathcal{A}_{sequence}$
+	\item $EX^{s}_{seq}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{sequence}\wedge \exists_{a_k\in children(s)}(a_k <^{s}_{seq}a)\wedge branch\_executed((s,b,a))=true \}$
+	\item $ex\_br\_number_{sequence}(s)=\left|EX^{s}_{seq}\right|+ex\_br\_number_{set}(children(s))$
+\end{itemize}
+\item if:
+	\begin{itemize}
+	\item $br\_number_{if}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{if}$
+	\item $EX^{s}_{if}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{if}\wedge branch\_executed((s,b,a))=true \}$
+		\item $ex\_br\_number_{if}(s)=\left|EX^{s}_{if}\right|+ex\_br\_number_{set}(children(s))$
+\end{itemize}
+\item pick:
+	\begin{itemize}
+	\item $br\_number_{pick}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{pick}$
+	\item $EX^{s}_{pick}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{pick}\wedge branch\_executed((s,b,a))=true \}$
+		\item $ex\_br\_number_{pick}(s)=\left|EX^{s}_{pick}\right|+ex\_br\_number_{set}(children(s))$
+\end{itemize}
+\item loops ($\forall t\in\{while,\ repeatUntil,\ forEach\}$):
+	\begin{itemize}
+	\item $br\_number_{t}(s)=2+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{t}$
+	\item $EX^{s}_{1}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{t}\wedge branch\_executed((s,b,a))=true \}$
+	\item $EX^{s}_{2}=\{(a,b,s)\in \mathcal{HBR}|s \in \mathcal{A}_{t}\wedge branch\_executed((s,b,a))=true \}$
+	\item $EX^{s}_{t}=EX^{s}_{1}+EX^{s}_{2}$
+		\item $ex\_br\_number_{t}(s)=\left|EX^{s}_{t}\right|+ex\_br\_number_{set}(children(s))$
+\end{itemize}
+\item flow:
+	\begin{itemize}
+	\item $br\_number_{flow}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{flow}$
+	\item $EX^{s}_{flow}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{flow}\wedge branch\_executed((s,b,a))=true \}$
+		\item $ex\_br\_number_{flow}(s)=\left|EX^{s}_{flow}\right|+ex\_br\_number_{set}(children(s))$
+\end{itemize}
+\item scope:
+	\begin{itemize}
+	\item $br\_number_{flow}(s)=br\_number_{set}(children(s)),\ s \in \mathcal{A}_{scope}$
+		\item $ex\_br\_number_{scope}(s)=ex\_br\_number_{set}(children(s))$\\
+	Bemerkung: alle Zweige innerhalb von Handlern gehen in die Rechnung ein, weil nach Definition von $\mathcal{A}_{scope}$ alle Handler in der Menge $children(scope)$ enthalten sind,
+\end{itemize}
+\item Basisaktivitäten ($\forall t\in \mathcal{T}_\mathcal{B}$):
+	\begin{itemize}
+	\item $br\_number_{t}(s)=0,\ s \in \mathcal{A}^{basic}$
+	\item $ex\_br\_number_{t}(s)=0,\ s \in \mathcal{A}^{basic}$
+\end{itemize}
+\end{itemize}
 
-ist die Scope-Aktivität an der Wurzel des Baumes, der durch die Schachtelung von Aktivitäten entsteht. Nach der Definition beinhaltet process-Aktivität alle Aktivitäten des WS-BPEL Prozesses. Dementsprechend kann die Zweigabdeckung für einen WS-BPEL Prozess folgendermaßen definiert werden:  
+$process$ ist die Scope-Aktivität an der Wurzel des Baumes, der durch die Schachtelung von Aktivitäten entsteht. Nach der Definition beinhaltet process-Aktivität alle Aktivitäten des WS-BPEL Prozesses. Dementsprechend kann die Zweigabdeckung für einen WS-BPEL Prozess folgendermaßen definiert werden:  
+\[
+\mathcal{B}=\frac{ex\_br\_number_{scope}(process)}{br\_number_{scope}(process)}
+\]
 
-Obwohl die Fehlererkennungsquote gegenüber der Anweisungsabdeckung steigt, werden nicht alle Aspekte des Kontrollflusses erfasst. Während jeder Zweig für sich alleine betrachtet wird, bleiben die Kombinationen von Zweigen unberücksichtigen.  
+%Obwohl die Fehlererkennungsquote gegenüber der Anweisungsabdeckung steigt, werden nicht alle Aspekte des Kontrollflusses erfasst. Während jeder Zweig für sich alleine betrachtet wird, bleiben die Kombinationen von Zweigen unberücksichtigt. 
+
+Ohne auf die weiteren bekannten  kontrollflußorientierten Abdeckungsmetriken einzugehen, die in einer ähnlichen Weise auf WS-BPEL übertragen werden können, werden in den nächsten beiden Abschnitten die für WS-BPEL spezifischen Testabdeckungsmetriken vorgestellt.  
 \subsection{Link Coverage}
-Das Link-Konzept ist in WS-BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen Aktivitäten und  können mit Hilfe von transition und joinConditions Bedingungen für die Ausführung der Zielaktivität festlegen. Die mit diesen Konstrukten umgesetzte Logik erfordert eine besondere Beachtung beim Testen. 
-Für die Definition einer entsprechenden Metrik muss die Auswertungsfunktion für transitionCondition etwas genauer betrachtet werden. Die Zuordnung des booleschen Wertes dem Link durch transitionCondition  kann auf zwei verschiedenen Weisen stattfinden: entweder ist der Wert konstant und schon vor der Ausführung bekannt, oder er wird zur Laufzeit durch die Auswertung des zugeordneten booleschen Ausdrucks bestimmt. Für die Tests sind insbesondere die Links relevant, deren transitionCondition erst zur Laufzeit ausgewertet wird. Es ist dabei wichtig, dass der Ausdruck sowohl zu true als auch zu false ausgewertet wird.
+Das Link-Konzept ist in WS-BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen Aktivitäten und  können mit Hilfe von transition und joinConditions Bedingungen für die Ausführung der Aktivitäten festlegen. Die mit diesen Konstrukten umgesetzte Logik erfordert eine besondere Beachtung beim Testen.
+ 
+Für die Definition einer entsprechenden Metrik wird eine Auswertungsfunktion definiert). Let $f$ be a boolean function (or propositional statement), $Var(f)$ yields all the propositional variables used in $f$ . Let $F$ be a set of boolean functions and $B$ be the boolean set (true, false), a variable assignment of $F$ is a mapping $assign: Var(F)\rightarrow B$, and the set of all possible variable assignments of $F$ is denoted by $Assign(F)$. An evaluation function is a mapping $eval: F \times Assign(F)\rightarrow B$ (\cite{Ouyang}.
+
+Für die Tests sind nur die Links relevant, deren transition condition nicht mit einem konstanten Wert belegt sind, sondern mit einem Ausdruck, der erst zur Laufzeit ausgewertet werden kann. Es ist dabei wichtig, dass der Ausdruck sowohl zu $true$ als auch zu $false$ ausgewertet wird.
+Die entsprechende Metrik heißt $Link\ Coverage$ und wird wie folgt definiert:
+\begin{itemize}
+	\item $l \in_{\pi 2}\mathcal{LR}$,
+	\item $f=transcon(l)$,
+	\item $Assign_{test}\subseteq Assign(f)$ die Menge der Kombinationen von Variablenbelegungen, die beim Testen stattgefunden sind,
+\end{itemize}
+\begin{equation*}
+\begin{split}
+\mathcal{L}=\frac{\{\left|l\in_{\pi 2}\mathcal{LR}|Var(f)\neq \emptyset\wedge eval(f,Assign_{test}(Var(f))=true)\right|
+}{2*\left|\{l\in_{\pi 2}\mathcal{LR}|Var(f)\neq \emptyset \}\right|}+
+\\\frac{\{\left|l\in_{\pi 2}\mathcal{LR}|Var(f)\neq \emptyset\wedge eval(f,Assign_{test}(Var(f))=false)\right|\}}{2*\left|\{l\in_{\pi 2}\mathcal{LR}|Var(f)\neq \emptyset \}\right|}
+\end{split}
+\end{equation*}
+	$Var(f)\neq \emptyset$ sorgt dafür, dass nur Links mit variablen transition condition berücksichtigt werden, und sichert, dass 100\% Abdeckung für diese Metrik erreichbar ist.
+	
+	Außerdem ist es wichtig, dass nur die Links beachtet werden, deren transition condition beim Testen ausgewertet wurde und nicht durch $DPE$ auf $false$ gesetzt wurde. Anderenfalls würde man mit wenigen Tests, die wenig testen, eine relativ große (maximal 50\%) Abdeckung erreichen können. So eine Metrik würde dem Ziel, eine möglichst gute Abdeckung zu erreichen, um möglichst viel Code zu testen, widersprechen. 
+
 
 \subsection{Handler Coverage}
-WS-BPEL Sprache hat ein Konzept zur strukturierten Behandlung von Laufzeitfehlern. Im Rahmen einer Fehlerbehandlung ist es möglich, die eigentlich in sich erfolgreichen Aktionen rückgängig zu machen. Dafür sind CompensationHandler in WS-BPEL vorgesehen. Da die Geschäftsprozesse in der Regel langlebig sind und sensitive Daten verarbeiten können, muss das Verhalten des Systems im Fehlerfall umfassend getestet werden. Die in diesem Abschnitt vorgestellten Metriken können dabei als Indikator für die Testqualität bezüglich der Fehlerbehandlung und Kompensation dienen.
-FaultHandler. 
-Eine wichtige Information ist zum Beispiel, ob alle durch den Programmierer vorgesehen Fehlerbehandlungen in Form von catch- bzw catchAll-Blöcken durch die Tests stimuliert werden. 
+WS-BPEL Sprache hat ein Konzept zur strukturierten Behandlung von Laufzeitfehlern. Im Rahmen einer Fehlerbehandlung ist es möglich, die eigentlich in sich erfolgreichen Aktionen rückgängig zu machen. Dafür sind in WS-BPEL die Compensation Handler vorgesehen. Die Tatsache, dass die Geschäftsprozesse in der Regel langlebig sind und oft sensitive Daten verarbeiten, verdeutlicht die Notwendigkeit, das Verhalten des Systems auch im Fehlerfall umfassend zu testen. Die in diesem Abschnitt vorgestellten Metriken können dabei als Indikator für die Testqualität bezüglich der Fehlerbehandlung und Kompensation dienen.
 
+\textbf{FaultHandler.} Eine wichtige Information beim Testen des Systems im Fehlerfall ist, ob alle  $catch$- bzw $catchAll$-Blöcken durch die Tests ausgeführt werden. 
+\begin{itemize}
+	\item $A_{catch}=\{a\in \mathcal{A}^{structured}\cup \mathcal{A}^{basic}|(s,f,a)\in \mathcal{HR}\wedge f\in \mathcal{E}_{fault}\wedge s\in \mathcal{A}_{scope}\}$ die Menge der top-level Aktivitäten in allen $catch$- und $catchAll$-Blöcken, 
+	\item $\left|A_{catch}\right|$ entspricht der Anzahl von catch- und catchall-Blöcken
+	\item $A^{executed}_{catch}=\{a\in A_{catch}|\exists (s,f,a)\in \mathcal{HR}\wedge branch\_executed((s,f,x))=true\}$ die Teilmenge der Aktivitäten aus $A_{catch}$, die getestet wurden,
+\end{itemize}
+\[
+FH=\frac{\left|A_{catch}\right|}{\left|A^{executed}_{catch}\right|}
+\]
+
+\textbf{Compensation Handler.}
+\begin{itemize}
+	\item $A_{compensate}=\{a\in \mathcal{A}^{structured}\cup \mathcal{A}^{basic}|(s,c,x)\in \mathcal{HR}\wedge c\in \mathcal{E}_{compensate}\wedge s\in \mathcal{A}_{scope}\}$ die Menge der top-level Aktivitäten in allen Compensation Handler
+	\item $\left|A_{compensate}\right|$ entspricht der Anzahl der Compensation Handler
+	\item $A^{executed}_{compensate}=\{a\in A_{compensate}|\exists (s,c,a)\in \mathcal{HR}\wedge branch\_executed((s,c,a))=true\}$ die Teilmenge der Aktivitäten aus $A_{compensate}$, die getestet wurden,
+\end{itemize}
+\[
+CH=\frac{\left|A^{executed}_{compensate}\right|}{\left|A_{compensate}\right|}
+\]
 \section{Example [AS+DL]} [1.5 pages]
 \section{Software Support} [DL] [1 page]
 \section{Conclusions and Outlook} [DL] [0.5 pages]
@@ -161,46 +275,13 @@ Eine wichtige Information ist zum Beispiel, ob alle durch den Programmierer vorg
 %
 % ---- Bibliography ----
 %
+
 \begin{thebibliography}{}
 %
-\bibitem[1980]{2clar:eke}
-Clarke, F., Ekeland, I.:
-Nonlinear oscillations and
-boundary-value problems for Hamiltonian systems.
-Arch. Rat. Mech. Anal. {\bf 78} (1982) 315--333
-
-\bibitem[1981]{2clar:eke:2}
-Clarke, F., Ekeland, I.:
-Solutions p\'{e}riodiques, du
-p\'{e}riode donn\'{e}e, des \'{e}quations hamiltoniennes.
-Note CRAS Paris {\bf 287} (1978) 1013--1015
-
-\bibitem[1982]{2mich:tar}
-Michalek, R., Tarantello, G.:
-Subharmonic solutions with prescribed minimal
-period for nonautonomous Hamiltonian systems.
-J. Diff. Eq. {\bf 72} (1988) 28--55
-
-\bibitem[1983]{2tar}
-Tarantello, G.:
-Subharmonic solutions for Hamiltonian
-systems via a $\bbbz_{p}$ pseudoindex theory.
-Annali di Matematica Pura (to appear)
-
-\bibitem[1985]{2rab}
-Rabinowitz, P.:
-On subharmonic solutions of a Hamiltonian system.
-Comm. Pure Appl. Math. {\bf 33} (1980) 609--633
-
+\bibitem{Ouyang}
+C. Ouyang, W.M.P. van der Aalst, S. Breutel, M. Dumas, A.H.M. ter Hofstede, and H.M.W. Verbeek. Formal Semantics and Analysis of Control Flow in WS-BPEL (Revised version). BPM Center Report BPM-05-15, BPMcenter.org, 2005. 20--23
 \end{thebibliography}
-\clearpage
-\addtocmark[2]{Author Index} % additional numbered TOC entry
-\renewcommand{\indexname}{Author Index}
-\printindex
-\clearpage
-\addtocmark[2]{Subject Index} % additional numbered TOC entry
-\markboth{Subject Index}{Subject Index}
-\renewcommand{\indexname}{Subject Index}
-\input{subjidx.ind}
+
 \end{document}
+
 
