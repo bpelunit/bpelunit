@@ -34,3 +34,1043 @@ Im Rahme dieser Arbeit ist der Kontrolfluß innerhalb des BPEL Prozesses
 
 Nur Sequence erlaubt beliebige Anzahl (>0) von Aktivitäten direkt im Container zu platzieren, ohne weitere strukturierende Aktivitäten zu verschachteln.
 
+
+%ComputerWoche
+
+Die Business Process Execution Language (BPEL oder WS-BPEL), vormals BPEL4WS, ist ein gemeinsamer Vorschlag von IBM und Microsoft um die Standardisierung für die Steuerung und Koordination von geschäftsbasierten Webservices voranzutreiben. 
+
+Die Web Services Business Process Execution Language, kurz WS-BPEL, liegt in Version 2.0 vor und steht kurz vor der Standardisierung durch Oasis. Sie vereinfacht die Entwicklung Service-orientierter Anwendungen erheblich.
+BPEL ist für Prozess- und Workflow-Techniken das, was SQL für die relationalen Datenbanken ist!", so steht es im aktuellen Präsentationsmaterial von Oasis. Ob die inzwischen von mehreren führenden Herstellern mit BPEL-Engines unterstützte Orchestrierungs- und Integrationssprache diesen Status erreichen wird, muss die Zukunft zeigen - mit den im März abgeschlossenen Spezifikationen der Version 2.0 dürfte der Standard diesem Ziel jedoch ein ganzes Stück näher kommen.
+
+Bei WS-BPEL handelt es sich um eine ausführbare, XML-basierende Sprache zur Beschreibung von Geschäftsprozessen, deren Aktivitäten durch Web-Services implementiert werden und deren Nachrichtenaustausch über XML-Dokumente erfolgt. Das Besondere daran: WS-BPEL bietet eine homogene Syntax für die Ablaufbeschreibung und den Datenzugriff auf XML-Dokumente. Und es enthält Elemente, die speziell auf die Ablaufproblematik langlaufender Geschäftsprozesse mit mehreren Partnern zugeschnitten sind. So können die Aktivitäten eines Geschäftsprozesses in Scopes, das heißt in kontextorientierten, transaktionalen Einheiten zusammengefasst werden. Für den Fehlerfall, bei dem bereits abgeschlossene Scopes zurückgesetzt werden müssen - man spricht von Kompensation - , enthält WS-BPEL mächtige syntaktische Konstrukte. Hier ist WS-BPEL anderen Programmiersprachen klar überlegen - in der Theorie.
+
+
+In der Praxis war die Semantik von WS-BPEL 1.1, deren Veröffentlichung fast vier Jahre zurückliegt, an vielen Stellen unscharf. Aus Sicht der Anwender war oft unklar, ob ihr BPEL-Code auf den BPEL-Engines verschiedener Hersteller zu gleichen Prozessabläufen führt. Oasis, die für die Standardisierung verantwortliche Organisation, hat diesen Bedarf erkannt: Die Spezifikation von WS-BPEL 2.0 ist doppelt so umfangreich wie die der Vorgängerversion. Neue Sprachkonzepte machen dabei nur einen Teil des Zuwachses aus. Vereinfachungen, aber vor allem die Präzisierung vorhandener Konzepte bilden den Kern der neuen Version. Betroffen ist davon auch der zentrale Ansatz der Kompensation.
+
+WS-BPEL 2.0 stellt klar, wie der Kompensationsmechanismus, der ohne die klassischen verteilten, atomaren Transaktionen auskommt, im Detail funktioniert. Das Update definiert, dass beim Abschluss aller Aktivitäten eines Scopes dessen aktueller Zustand als ein lokaler Schnappschuss festgehalten wird. Diese Momentaufnahme enthält unter anderem die aktuellen Variablen, Partnerverbindungen (Partner-Links) und die so genannten Correlation Sets des Scopes. Letztere sind Datenfelder, die zur Identifizierung von Prozessinstanzen dienen. Zur Kompensation eines Scopes erfolgt eine Kompensationsaktivität. Sie kann auf den Schnappschuss und die aktuellen Zustände der umschließenden Scopes zurückgreifen.
+
+Ergänzend zu der präziseren Formulierung des Kompensationsmechanismus werden in der neuen BPEL-Version mehrere komplexe Kompensationsszenarios behandelt: Klargestellt wird, wie die voreingestellte Fehlerbehandlung mit Kompensation abläuft. Definiert ist auch, welcher Datenzustand bei der Kompensation eingebetteter Scopes genutzt und in welcher Reihenfolge bei der Kompensation geschachtelter Scopes vorgegangen wird. Zudem hat Oasis die Kompensation isolierter Scopes neu geregelt. Hier handelt es sich um Scopes, die gemeinsame Ressourcen verwenden, wobei durch ihre als Isolation bezeichnete Eigenschaft ein kontrollierter konkurrierender Zugriff auf die Ressourcen gewährleistet wird.
+
+WS-BPEL beschreibt den Ablauf von Geschäftsprozessen als strukturierte Aktivitäten. Hier schafft die neue Version mehr Reichhaltigkeit und lehnt sich gleichzeitig stärker an die klassischen Programmiersprachen an: Jetzt gibt es eine <if>-<elseif>-<else>-Aktivität, vorher als <switch>-Aktivität bezeichnet. Die <while>-Aktivität für die bedingungsabhängige, wiederholte Ausführung von Aktivitäten wird durch die neuen Aktivitäten <repeatUntil> und <forEach> ergänzt, wobei <forEach> in zwei Varianten verwendet werden kann: zur Steuerung der seriellen und der parallelen Ausführung von Aktivitäten.
+
+Die genannten Beispiele sind nur einige von zahlreichen Klarstellungen und Erweiterungen im Bereich der Ablaufbeschreibung. Innovationen finden sich dagegen eher auf der Seite der Datenmanipulation, wie folgende Beispiele zeigen.
+
+Elegante Sprachmittel für Datenzugriffe
+
+Eine BPEL-Variable referenziert in Version 2.0 ein so genanntes XML-Infoset, das aus einem oder mehreren XML-Dokumenten besteht. Eine der häufigsten Aufgaben in einer BPEL-Anwendung ist es, im XML-Ergebnisdokument eines Serviceaufrufs spezielle Elemente zu finden und in das XML-Eingabedokument eines nachfolgenden Serviceaufrufs zu kopieren. Für die Suche in XML-Dokumenten gibt es mit XPath eine leistungsfähige Sprache.
+
+
+Nun lässt sich das Konzept der XPath-Variablen nutzen
+
+In WS-BPEL 2.0 wurde das Konzept der XPath-Variablen eingeführt. Eine XPath-Variable entsteht syntaktisch einfach dadurch, dass einer BPEL-Variablen ein \$-Zeichen vorangestellt wird. Das Ergebnis einer Suche kann damit direkt als Ausdruck weiterbenutzt werden. Variablenzuweisungen, die in WS-BPEL durch <assign>-Aktivitäten erfolgen, lassen sich nun ähnlich elegant formulieren wie Zuweisungen in objektorientierten Sprachen.
+
+Für Prozesse, in denen Suchen und Kopieren zum Aufbau von Nachrichten nicht ausreichen, bietet die neue BPEL-Version standardmäßig einen integrierten Ausdruck für die XSLT-Transformation einer XPath-Variablen.
+
+Vereinfachtes Handling von Serviceaufrufen
+
+In der Praxis werden Services oft als elementare EJB 3.0 Session Beans implementiert und das performante Nachrichtenformat Document/Literal verwendet. Nachrichten in diesem Format enthalten genau ein XML-Dokument. In WS-BPEL 2.0 kann eine Variable, die für ein einzelnes XML-Dokument definiert wurde, inline initialisiert und direkt als Ein- und Ausgabe für Serviceaufrufe benutzt werden. Damit entfällt die Auswahl eines einzelnen XML-Dokuments aus dem XML-Infoset einer BPEL-Variablen.
+
+Weitere syntaktische Ergänzungen sind implizite <assign>-Aktivitäten direkt im Aufruf einer Serviceoperation, eine neue explizite <validate>-Aktivität zur Validierung von Variablen gegen ihre XML-Definition und die Möglichkeit zur impliziten Validierung in einer <assign>-Aktivität. Durch Elemente wie die hier exemplarisch beschriebenen wird die Datenmanipulation mit WS-BPEL 2.0 deutlich einfacher.
+
+Auf dem Weg zum Industriestandard
+
+Die Aussichten für WS-BPEL, sich als Industriestandard durchzusetzen, sind aus heutiger Sicht viel versprechend. Treiber in dieser Richtung ist auch der Umstand, dass die Sprache auf einem rekursiven Aggregationsmodell für Web-Services basiert: Die mit WS-BPEL beschriebenen Prozesse verwenden Web-Services und können selbst als Web-Service benutzt werden. Dieses Modell bietet ein hohes Gestaltungspotenzial für Service-orientierte Architekturen. Damit ist die neue BPEL-Version klarer, einfacher, praktikabler, allerdings nicht voll aufwärtskompatibel.
+
+BPEL-Historie
+
+    
+
+      Dezember 2000: Microsoft veröffentlicht XLANG;
+    
+
+      März 2001: IBM veröffentlicht WSFL;
+    
+
+      Juli 2002: IBM, Microsoft und Bea integrieren WSFL und XLANG zu BPEL4WS 1.0;
+    
+
+      März 2003: BPEL4WS wird Oasis zur Standardisierung übergeben;
+    
+
+      Mai 2003: Oasis veröffentlicht BPEL4WS 1.1;
+    
+
+      September 2004: Der Name BPEL4WS wird in WS-BPEL geändert;
+    
+
+      März 2007: Abstimmung über WS-BPEL 2.0 endet;
+    
+
+      April 2007: Freigabe als Standard wird erwartet.
+%--
+
+
+OASIS hat die Web Services Business Process Execution Language (WS-BPEL) in Version 2.0 als neuen OASIS-Standard anerkannt. WS-BPEL nutzt Web-Services-Standards zur Beschreibung von Geschäftsprozess-Aktivitäten durch Web-Services, und definiert wie diese miteinander kombiniert werden können, um spezifische Aufgaben zu erfüllen.
+
+%ComputerZeitung
+Prozesssprache BPEL 2.0 löst komplexe Probleme
+
+
+
+Aktuelle SOA-Middleware zeichnet sich durch Kompatibilität aus
+
+Professor Frank Leymann, eine der treibenden Kräfte hinter der Business Execution Language (BPEL), verteidigt die Komplexität der Sprache. Der wesentliche Grund für die Vielschichtigkeit: Mit ihr können nichttriviale Probleme im Umfeld der Geschäftsprozesse auf IT-Seite eindeutig beschrieben werden.
+
+Leymann – Sehr häufig benötigt man mehr als nur einen Dienst, um sein geschäftliches Ziel zu erreichen. Die Orchestrierungssprache BPEL erlaubt es durch Geschäftsprozessmodelle vorzuschreiben, wie Services verwendet werden. Dabei sieht der Anwender die Komplexität der gleichzeitigen Verwendung mehrere Services nicht. Umgekehrt kann man einen BPEL-Prozess auch wieder als Service nach außen darstellen. Man kann also Geschäftsprozesse als Services anbieten. Der Benutzer merkt dabei gar nicht, ob es sich um einen Geschäftsprozess oder um ein implementiertes Programm handelt.
+
+Leymann – BPEL beschreibt im Stil einer serviceorientierten Architektur (SOA), wie in einer Firma die Geschäftsprozesse ausgeführt werden. Wenn man BPEL nutzt, wird es simpel, Spezifikationen von Geschäftsprozessen zu erstellen, die Services als Aktivitäten in die Geschäftsprozesse einbinden.
+
+Leymann – Mit BPEL 2.0 existiert eine standardisierte Modellierungssprache für Geschäftsprozesse, aber die Zielgruppe der Benutzer von BPEL sind IT-Benutzer – nicht die Mitarbeiter auf Business-Level. Ein riesengroßer Fortschritt, der durch BPEL erreicht wurde, ist, dass es nun ein einziges Runtime-Modell für Geschäftsprozesse gibt, eine feste operationale Semantik, die wohldefiniert ist. Abstrakt kann man sich das vorstellen als ein einziges logisches Tool das hilft, dass man eine einheitliche Schnittstelle zu den Prozessmaschinen auf IT-Ebene hat. Die Modellierungswerkzeuge auf der Business-Ebene müssen dazu BPEL exportieren.
+
+Leymann – Die konkreten Implementierungen der Prozessmaschinen sind bei den Herstellern unterschiedlich. Die meisten verstehen aber heute BPEL alle in einer sehr, sehr ähnlichen Form. Dadurch kann man auf IT-Ebene die Prozessmodelle wieder verwenden und über die verschiedenen Tools hinweg austauschen.
+
+Leymann – Ja, das klappt in der Praxis zu einem sehr hohen Prozentsatz. Wir haben mit mehreren BPEL-Maschinen experimentiert. Es rumpelt zwar noch ein wenig, da fast keine der von uns benutzten Maschinen BPEL komplett unterstützt – aber schließlich BPEL 2.0 erst jetzt als Standard verfügbar. Diese Probleme werden sich in ein oder zwei Jahren erledigt haben. Heute muss man noch ein wenig anpassen. Je nach Komplexität eines Prozesses muss man bei der Portierung von einigen Minuten bis einigen Stunden aufwenden.
+
+Leymann – Es stimmt, BPEL ist nicht trivial. Wir versuchen eine Sprache zur Verfügung zu stellen, mit der jede Art von Geschäftsprozess realisiert werden kann – und zwar quer zu allen IT-Plattformen. BPEL soll die grundlegenden IT-Probleme im Bereich Business Process Management (BPM) lösen. Deshalb ist die Sprache komplex: komplexe Probleme ziehen komplexe Lösungen nach sich. Es gibt übrigens auch die Möglichkeit, nur Teilmengen von BPEL zu nutzen. Einige Hersteller machen das. Für Teilbereiche des BPM reicht durchaus eine Teilmenge von BPEL aus.
+
+Leymann – Die Vorstände eines Unternehmens fokussieren sich darauf, wie ihr Unternehmen Geld verdient. Dazu haben sie bestimmte Ressourcen zur Verfügung, etwa Kapital, Arbeitskräfte, Organisationsstrukturen und Geschäftsprozesse. Und die IT-Leute müssen dies durch ihre IT-Infrastruktur unterstützten. Das Loch zwischen diesen beiden Welten nennt man seit vielen Jahren Business-IT-Gap. Die Brücke über diesen Gap bilden die Geschäftsprozesse. Geschäftsprozesse verstehen sowohl IT-Mitarbeiter als auch Vorstände und Leute aus den Fachabteilungen. In der IT-Infrastruktur hat man heute Prozessmaschinen von verschiedenen Anbietern. Und dann gibt es große Anzahl von Modellierungswerkzeugen für Geschäftsprozesse. Die Frage ist dann: Wie kann ich ein Modell aus einem Modellierungswerkzeug in eine Prozessmaschine überführen. Die Lösung heißt BPEL: Die Hersteller haben mit BPEL eine gemeinsame Sprache zu Verfügung. Die Modellierungswerkzeuge müssen nur noch BPEL generieren, dann kann das in den unterschiedlichen Prozessmaschinen importiert werden.
+
+Leymann – ... ist es aber nicht. Ein wesentliches Problem ist die große Anzahl an verschiedenen Methodologien und korrespondierende Werkzeuge auf Business-Ebene. Meiner Meinung nach wird das niemals verschwinden. Ich glaube, dass diese Tools auf der Business-Ebene immer unterschiedlich bleiben.
+
+Leymann – Dank BPEL existiert bei den Prozessmaschinen aber eine eindeutige operationale Semantik – bei den Werkzeugen für die Geschäftsprozessmodellierung nicht. Operationale Semantik heißt: Wenn ein Bild gemalt wird, wie der Geschäftsprozess aussieht, muss man eine Vorstellung davon haben, wie er abgearbeitet wird. Also: was ist die Bedeutung des Geschäftsprozesses zur Ausführungszeit. Der Anwender weiß bei BPEL genau, wie sich die Prozessmaschinen verhalten – unabhängig davon, von welchem Hersteller die kommen.
+
+Leymann – Es gibt dort oftmals keine. Mir ist es passiert, dass ich mit zwei Mitarbeitern eines Herstellers von Modellierungswerkzeugen über die konkrete Bedeutung eines Geschäftsprozessmodells gesprochen habe – und zwei unterschiedliche Antworten bekommen habe. Man weiss oft nicht, was die graphischen Element zur Darstellung eines Geschäftsprozesses genau bedeuten. Entsprechend gehen bei der Transformation vom Business- auf den IT-Level immer Informationen verloren. Das ist extrem ärgerlich, da muss man aufwändig nacharbeiten. Das Problem bei der Geschäftsprozessmodellierung auf der Business-Ebene ist, dass sie häufig mit einer ganzen Methodologie im Hintergrund verknüpft ist. Durch solche Methodologien wird Geschäftsprozessmodellierung meiner Ansicht nach fast eine Religion. Ich erlebe immer wieder in Unternehmen, die mehrere BPM-Werkzeuge im Einsatz haben, dass sich die Mitarbeiter nicht verstehen. Das geht bis hin zu Diskussionen, ob das rote rechteckige Icon jetzt besser sei als das grüne mit den abgerundeten Ecken. Das bezeichnet man auch passend als Method-War. Die Chancen sich auf Business-Ebene hier auf eine einzige Syntax und auf eine einzige operationale Semantik zu einigen, halte ich für minimal – bei BPEL hat man dies für die IT-Ebene geschafft, weil es weniger Prozessmaschinen gibt als Methoden zur Modellierung von Geschäftsprozessen.
+
+Leymann – Falls die IT-Mitarbeiter in ihren Tools etwas Wesentliches am Geschäftsprozess ändern, dann kommt es oft zum sogenannten Roundtrip-Problem, das heißt man kann die Änderungen oft gar nicht oder nur schwer zurück in die Werkzeuge der Business-Ebene bringen. Dann weiß man plötzlich nicht mehr, wie der ursprüngliche Prozess einmal ausgesehen hat. Man kommt extrem schwer von der IT- wieder auf die Business-Ebene zurück.
+
+Leymann – Ja, es gibt die Analogie. Analysten sagen etwa, was SQL für Datenbanken ist, sei BPEL für Prozesse. Allerdings ist SQL einfacher als BPEL, weil Tabellen und deren Manipulation einfachere Dinge sind wie komplette Geschäftsprozesse. Das macht aber auch nochmal verständlich, warum BPEL eine komplexe Sprache ist.
+
+Leymann – Ein großes Problem in der Praxis von BPEL 2.0 ist heute noch, dass BPEL keine menschliche Interaktion kennt. Also kann aus einem Geschäftsprozessmodell kein BPEL-File erzeugt werden, wenn in dem betreffenden Geschäftsprozess Menschen involviert sind, das heißt wenn Menschen Aktivitäten ausführen müssen. Falls es Geschäftsprozesse sind, in denen keine Menschen eingebunden sind, dann kann ein Business-Process-Modelling-Tool durchaus ein BPEL-File generieren. Aber auch da muss man aufpassen: Oft bieten Hersteller proprietäre Erweiterungen von BPEL an, die man benötigt, um bestimmte Funktionalitäten in Geschäftsprozessen zu realisieren. Damit bewegt man sich aber außerhalb des BPEL Standards und ist nicht mehr portabel zu einer standard-konformen BPEL-Maschine. Wenn man Portabilität will, muss man also aufpassen, welche Funktionen, die ein Modellierungswerkzeug anbietet, man tatsächlich nutzt. mr
+
+%----
+
+Members Approve Web Services Business Process Execution Language (WS-BPEL) as OASIS Standard
+
+Boston, MA, USA; 12 April 2007 -- OASIS, the international standards consortium, today announced that its members have approved the Web Services Business Process Execution Language (WS-BPEL) version 2.0 as an OASIS Standard, a status that signifies the highest level of ratification. WS-BPEL uses Web services standards to describe business process activities as Web services, defining how they can be composed to accomplish specific tasks.
+
+
+%--BPEL SQL
+Eine effiziente und flexible Umsetzung der in den Fachbereichen benö-
+tigten Geschäftsprozesse gehört zu den Kernzielen jeder IT-Abteilung.
+Neue Standards und Architekturkonzepte können dabei helfen. Eine
+service-orientierte Architektur (SOA) ist ein bekanntes Modell, welches
+durch entsprechende Produktunterstützung jetzt den Sprung von den
+Konzepten hin zum kommerziellen Einsatz macht. Es hilft, Anwen-
+dungen und Dienste kosteneffektiv zu entwickeln und zu betreiben.
+Web-Services-Technologien werden als Basis von SOA-Projekten immer
+wichtiger.
+
+Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist
+verschiedene Dienste zu einer Gesamtanwendung zu verknüpfen. Dies
+wird auch Orchestrierung genannt (s. Abb. 1). Es gibt also im Kern
+verschiedene Dienste, die mit Hilfe einer BPEL-basierten Prozessbe-
+schreibung zu einer neuen Softwareanwendung zusammengesetzt
+werden. Die Dienste sind lose gekoppelt und interagieren über die
+BPEL-Ablaufumgebung miteinander.
+
+%--
+
+%--Business Process Execution Language for Web services Axel Martens, Christian Stahl, Daniela Weinberg, Dirk Fahland, Thomas Heidinger
+AktivitÄaten
+Im Zentrum der Modellierung von GeschÄaftsprozessen stehen die AktivitÄaten und ihre kau-
+salen ZusammenhÄange. In BPEL4WS gibt es zwei Sorten von AktivitÄaten: Basic Activities
+und Structured Activities.
+Die einfachen AktivitÄaten reprÄasentieren atomare Einheiten und lassen sich erneut in
+zwei Gruppen teilen: FÄur die Kommunikation mit einem anderen Web Service sind die
+AktivitÄaten invoke, receive und reply zustÄandig. Mit invoke kann ein anderer Web Service
+aufgerufen werden, d. h. es wird eine Nachricht an diesen gesendet und gleich oder spÄater
+eine Antwort erwartet. Mit receive wird ein Aufruf (eine Nachricht) von einem anderen Web
+Service entgegen genommen und mit reply dieser beantwortet.
+Die zweite Gruppe der einfachen AktivitÄaten reprÄasentieren interne Schritte: assign ist
+eine Wertzuweisung, wait ist ein Timer und empty ist eine leere AktivitÄat. Teilweise steuern
+sie auch den weiteren Prozessverlauf: terminate bricht den Prozess ab, throw wirft einen
+Fehler und compensate veranlasst die RÄucksetzung eines Teils des Prozesses.
+Neben den einfachen AktivitÄaten gibt es in BPEL4WS auch fÄunf Klassen strukturierter
+AktivitÄaten. Mit diesen AktivitÄaten wird der Kontroll°uss abgebildet: Die einfachste ist se-
+quence, diese AktivitÄat de¯niert die sequentielle Ordnung einer Menge anderer AktivitÄaten.
+Die alternative Auswahl zwischen AktivitÄaten ist mit Hilfe von pick und switch mÄoglich, bei
+pick entscheidet eine Nachricht von au¼en, bei switch wird durch die Auswertung von Daten
+eine Entscheidung getro®en. Mit der AktivitÄat while ist es mÄoglich, zyklisches Verhalten
+zu de¯nieren. Letztlich dient die AktivitÄat °ow dazu, eine unabhÄangige Menge von Akti-
+vitÄaten zu spezi¯zieren. Innerhalb von °ow kÄonnen die AktivitÄaten durch zusÄatzliche links
+untereinander synchronisiert werden. Jede der strukturierten AktivitÄaten enthÄalt ihrerseits
+mindestens eine AktivitÄat. Auf diese Weise kÄonnen durch Schachtelung beliebig komplexe
+Kontroll°uss-Beziehungen gebildet werden.
+Ein Sonderrolle spielt die AktivitÄat scope.
+ÄU
+b
+e
+r
+w
+a
+c
+h
+t
+e
+A
+k
+t
+i
+v
+i
+t
+Äa
+t
+e
+n
+In BPEL4WS ist es mÄoglich, eine einzelne AktivitÄat unter besondere Beobachtung zu stel-
+len, d. h. auftretende Fehler abzufangen, auf externe Ereignisse zu reagieren und ggf. die
+AktivitÄat nach erfolgreicher AusfÄuhrung zu kompensieren, wenn es die Äau¼eren UmstÄan-
+de verlangen. Zu diesem Zweck gibt es das Konzept des scopes als Aggregation aus event
+handler, fault handler, compensation handler und einer Äuberwachten AktivitÄat. Auf der
+einen Seite kann die Äuberwachte AktivitÄat wiederum strukturiert sein, so dass der scope
+eine Menge von AktivitÄaten Äuberwachen kann. Auf anderen Seite kann der scope selbst als
+eine AktivitÄat aufgefasst werden und damit in einer strukturierten AktivitÄat vorkommen.
+Prozesse
+AktivitÄaten kÄonnen ineinander geschachtelt sein und bilden somit eine hierarchische Struk-
+tur { einen AktivitÄaten-Baum. DieWurzel dieses Baumes ist der Prozess: Ein Prozess besitzt
+genau eine AktivitÄat. Neben dieser AktivitÄat kann ein Prozess event handler, fault handler
+und compensation handler besitzen, d. h. ein Prozess ist auch gleichzeitig ein scope.
+In BPEL4WS gehÄort zu einem Web Service genau ein Prozess. Es ist mÄoglich, diesen Pro-
+zess prÄazise und vollstÄandig zu modellieren. Auf diese Weise gelangt man zu einem direkt
+ausfÄuhrbaren Prozessmodell (= Executable Process). DarÄuber hinaus gestattet BPEL4WS
+eine abstrakte Spezi¯kation des Verhaltens (= Business Protocol). Die abstrakte Spezi-
+¯kation ist ein wesentlicher Teil der verÄo®entlichten Beschreibung des Web Service. Ein
+potentieller Anwender entscheidet aufgrund dieser Spezi¯kation, ob der vorliegende Web
+Service mit seiner Komponente kompatibel ist. Im Rahmen dieser Arbeit werden wir die
+KompatibilitÄat zweier Web Services de¯nieren (siehe Abschnitt 3.1.4).
+Die De¯nition der Kommunikation innerhalb des Prozesses stÄutzt sich auf die De¯nition
+der Schnittstelle des Web Service mit WSDL ab.
+Kommunikation
+Ein Web Service ist ein o®enes System, dass mit anderen Komponenten (o. B. d. A. eben-
+falls Web Services) Äuber Nachrichtenaustausch kommuniziert. Jede Nachricht ist ein XML-
+Dokument, wobei die Typ der Dokumente bereits im WSDL-Modell des Web Service de¯-
+niert werden. Als konsequente WeiterfÄuhrung verwendet BPEL4WS fÄur interne Datenstruk-
+turen (variables) ebenfalls XML-Dokumente.
+Die Schnittstelle fÄur die Kommunikation wird in WSDL de¯niert: Eine Nachrichten ist
+ein XML-Dokument, das Senden und empfangen einer Nachricht (mit oder ohne Feedback)
+hei¼t Operation. Eine Menge von Operationen wird zu einem Porttype zusammengefasst.
+Jeder Web Service bietet eine Menge von Porttypen an.
+Die Kommunikation Äuber einen Porttypen kann man von zwei Seiten aus betrachten:
+Auf der einen Seite gibt es den Web Service, der diesen Porttypen anbietet und auf der
+anderen Seite gibt es einen Web Service, der diesen Porttypen von au¼en benutzt. Deshalb
+wird in BPEL4WS die Verbindung zwischen den Operationen eines Porttypen und den
+AktivitÄaten im Prozess durch PartnerLinks abgebildet: Die AktivitÄat receive und reply
+implementieren eine Operation an der Schnittstelle dieses Web Service und stellen damit
+einem anderem Web Service FunktionalitÄat zur VerfÄugung, die AktivitÄat invoke spezi¯ziert
+eine Operation an der Schnittstelle eines anderen Web Service und benutzt damit dessen
+FunktionalitÄat. Da ein anderer Web Service (d. h. ein Partner) in einem BPEL4WS-Modell
+sowohl FunktionalitÄat anbieten als auch benutzen kann, wird ein Partner durch eine Menge
+von PartnerLinks spezi¯ziert.
+%--
+
+%--BPEL 2.0 Neuerungen
+Als Ergebnis des Standardisierungsprozesses
+von BPEL wird demnächst die Version WS-BPEL 2.0 verabschiedet werden.
+Das Kernkonzept von BPEL ist die Aktivität. Ein BPEL-Prozess ist genau eine Aktivität, in
+der weitere Aktivitäten enthalten sind. BPEL unterscheidet dabei zwei Arten von Aktivitäten:
+Basisaktivitäten und Strukturierte Aktivitäten.
+Basisaktivitäten erfüllen die atomaren Aufgaben des Prozesses:
+ Kommunikation:
+ Empfang von Nachrichten, mit <receive>
+ Beantwortung empfangener Nachrichten, mit <reply>
+ Aufruf eines Web Service, mit <invoke>
+ Datenmanipulation:
+ Manipulation von Werten in Variablen, mit <assign>
+Sonstige Basisaktivitäten:
+Nichtstun, mit <empty>
+ Warten, mit <wait>
+ Signalisieren von Fehlern und Ausnahmen, mit <throw>
+ Beenden der Prozessinstanz, mit <terminate>
+ Kompensation von abgearbeiteten Aktivitäten, mit <compensate>
+
+Basisaktivitäten werden mit Hilfe von Strukturierten Aktivitäten in eine Reihenfolge der Ausführung
+gebracht:
+ Sequentielle Anordnung von Aktivitäten, mit <sequence>
+ Parallele Anordnung von Aktivitäten, mit <flow>
+ Auswahl von Alternativen (basierend auf Daten), mit <switch>
+ Auswahl von Alternativen (basierend auf Nachrichten oder zeitgesteuerten Ereignissen),
+mit <pick>
+ Definition von Schleifen, mit <while>
+ 
+ BPEL-Prozesse arbeiten nicht in Isolation, sondern interagieren mit anderen Web Services, die
+man als Partner oder Partner-Prozesse bezeichnet. Ein Partner ist oftmals sowohl Nutzer eines
+durch den BPEL-Prozess angebotenen Dienstes als auch selbst Anbieter eines vom BPELProzess
+benötigten Dienstes. Die Beziehung ist also zumeist bidirektional, insbesondere im Fall
+von asynchroner Kommunikation. In BPEL werden solche Inter-Prozess-Beziehungen mit Hilfe
+von so genannten Partner Links beschrieben, in denen z.B. die verwendeten Nachrichtentypen
+festgelegt werden.
+Ein BPEL-Prozess wird in Instanzen ausgeführt. Für jeden Partner wird eine neue Instanz erzeugt.
+Über das Konzept des Correlation Set können Anfragen eines Partners mit seiner entsprechenden
+BPEL-Prozessinstanz in Verbindung gebracht werden.
+Bei der Abarbeitung eines BPEL-Prozesses können Fehler auftreten. Um diese zu behandeln,
+lassen sich in BPEL Fault Handler definieren.Werden keine Fault Handler spezifiziert, behandelt
+ein minimaler vordefinierter Fault Handler die auftretenden Fehler.
+Oft müssen im Fehlerfall bereits abgeschlossene Aktivitäten in einem Prozess kompensiert werden,
+wenn sie zum Beispiel in einem transaktionalen Zusammenhang stehen. In BPEL kann
+dafür ein Compensation Handler definiert werden, mit dessen Hilfe sich diese Kompensationsaktivitäten
+an geeigneter Stelle spezifizieren lassen.
+BPEL-Prozesse lassen sich mit Hilfe von Scopes in Teilprozesse zerlegen. Jeder Scope verfügt
+dabei über einen eigenen Fault und Compensation Handler. Innerhalb eines Scope können zudem
+Event Handler definiert werden, über die auf eintreffende Nachrichten oder zeitgesteuerte
+Ereignisse reagiert werden kann.
+
+Probleme von BPEL
+Die XML-Syntax von BPEL macht es schwer, fehlerfreie Programme zu schreiben, ohne dabei
+auf die Unterstützung einer Entwicklungsumgebung zurückzugreifen. Eine einheitliche oder
+gar standardisierte grafische Notation gibt es bisher nicht. Allerdings hat die Business Process
+Modelling Notation (BPMN) [Whi06], die derzeit von der Object Management Group (OMG)
+standardisiert wird, gute Aussichten sich als Standard im Bereich der grafischen Notation von
+Geschäftsprozessen (und damit auch BPEL-Prozessen) zu etablieren.
+Als Resultat der Vereinigung der beiden grundlegend verschiedenen Konzepte hinter WSFL und
+XLANG, gibt es mitunter mehrere Repräsentationen für einen Geschäftsprozess in BPEL. Dies
+zeigt, dass BPEL über redundante Ausdruckmittel verfügt, was dem Betrachter das intuitive
+Verständnis eines BPEL-Prozesses erschwert.
+Ein weiteres Problem stellt die informelle Spezifikation von BPEL dar. Das heißt, das Dokument
+beschreibt die Sprache mehr oder weniger umfangreich mit englischem Text und einigen
+Beispielen. Mehrdeutigkeiten in der Spezifikation führen jedoch zu unterschiedlichem Verhalten
+von ein und dem selben Prozess in BPEL-Laufzeitumgebungen verschiedener Hersteller. Die
+mit BPEL beschriebenen Prozessmodelle sind somit bislang weder portabel noch interoperabel.
+Diesem Umstand soll jedoch mit der neuen erweiterten BPEL-Spezifikation WS-BPEL 2.0 in
+hohem Maße Rechnung getragen werden, obwohl auch diese rein informell sein wird.
+
+Neuerungen von WS-BPEL 2.0
+3.1 Ausdrücke und Anfragen
+WS-BPEL 2.0 lässt sich in Bezug auf Sprachen zur Definition von Ausdrücken und Anfragen
+erweitern. Daher besitzt nun jedes WS-BPEL-Sprachelement, in dessen Spezifikation Ausdrücke
+oder Anfragen definiert werden können, zusätzlich das optionale expressionLanguage- bzw.
+queryLanguage-Attribut. In diesem Attribut kann die zur Ausdrucksspezifikation verwendete
+Sprache angegeben werden.
+Im Falle von expressionLanguage betrifft dies die folgenden XML-Elemente:
+• <process>
+(generelle Spezifikation der verwendeten Sprache zur Definition von Ausdrücken)
+• <for>, <until>, <repeatEvery>
+(Definition von Zeitdauer bzw. Zeitpunkten)
+• <condition>, <joinCondition>, <transitionCondition>
+(Definition von booleschen Bedingungen)
+• <startCounterValue>. <finalCounterValue>, <branches>
+(Definition von Integer-Ausdrücken)
+• <from>
+(Definition von Ausdrücken zur Belegung von Variablen)
+Im Falle von queryLanguage betrifft dies die folgenden XML-Elemente:
+• <process>
+(generelle Spezifikation der verwendeten Anfragesprache)
+• <to>
+(Definition des Ziels einer Zuweisung)
+
+Correlation
+Das initiate-Attribut des <correlation>-Elements kann zusätzlich zu den Werten “yes”
+und “no” jetzt auch den Wert “join” annehmen. Die Semantik sieht dabei wie folgt aus: Ist das
+initiate-Attribut auf “join” gesetzt, muss die entsprechende Aktivität versuchen, das Correlation
+Set zu initialisieren, falls es noch nicht initialisiert worden ist. Ist das Correlation Set initialisiert,
+aber die Correlation-Konsistenzbedingung verletzt, wird der Fehler bpws:correlationViolation
+geworfen.
+Des Weiteren wurde die Semantik für die folgenden Fälle präzisiert:
+• Versucht eine Aktivität mit initiate="yes" ein Correlation Set zu initialisieren, das
+bereits initialisiert worden ist, wird ein bpws:correlationViolation Fehler geworfen.
+• Tritt ein bpws:correlationViolation Fehler bei der Abarbeitung einer <invoke>-Aktivität
+auf, so darf dieser erst geworfen werden, wenn die entsprechende Antwort empfangen
+wurde. In allen anderen Fällen, darf die den bpws:correlationViolation Fehler verursachende
+Nachricht nicht gesendet bzw. empfangen werden.
+Die zulässigen Werte für das pattern-Attribut des <correlation>-Elements wurden von “in”
+nach “response”, von “out” nach “request” und von “in-out” nach “request-response” umbenannt.
+
+Basisaktivitäten
+3.3.1 Kommunikation
+Im Gegensatz zu BPEL4WS 1.1 ist das portType-Attribut in WS-BPEL 2.0 optional. Der Wert
+des portType-Attributs ergibt sich (wie auch in BPEL4WS 1.1) implizit aus der Kombination
+des angegebenen partnerLink und der durch die Kommunikationsaktivität implizit spezifizierten
+Rolle.
+WS-BPEL 2.0 erleichtert den Umgang mit mehrteiligen WSDL-Nachrichten, durch eine Erweiterung
+der Kommunikationsaktivitäten um optionale <toPart>- und <fromPart>-Elemente.
+Diese dienen dazu,Werte aus BPEL-Variablen als Teile einer Nachricht zu versenden (<toPart>-
+Elemente) bzw. Teile einer empfangenen Nachricht direkt in BPEL-Variablen abzulegen (<fromPart>-
+Elemente). Allerdings gilt folgende Einschränkung: <receive>- und <invoke>-Aktivitäten, die
+<fromPart>-Elemente enthalten, dürfen kein variable- bzw. inputVariable-Attribut besitzen,
+und <reply>- und <invoke>-Aktivitäten, in denen <toPart>-Elemente verwendet werden,
+dürfen kein variable- bzw. outputVariable-Attribut besitzen.
+Die Syntax der <toPart>-Elemente sieht wie folgt aus:
+<toPart part="ncname" fromVariable="ncname"/>*
+Mit mehreren <toPart>-Elementen lässt sich so eine mehrteilige WSDL-Nachricht mit Daten
+aus BPEL-Variablen generieren. Dabei belegt jedes <toPart>-Element den im part-Attribut
+spezifizierten Teil der WSDL-Nachricht mit dem Inhalt der über das fromVariable-Attribut
+referenzierten BPEL-Variable.
+Die Syntax der <fromPart>-Elemente ist:
+<fromPart part="ncname" toVariable="ncname"/>*
+Die <fromPart>-Elemente werden verwendet, um Daten aus eingehenden mehrteiligen WSDLNachrichten
+in individuellen BPEL-Variablen abzulegen.Wird eine WSDL-Nachricht von einer
+Kommunikationsaktivität empfangen, die <fromPart>-Elemente enthält, so werden die einzelnen
+Teile dieser Nachricht in die entsprechenden BPEL-Variablen kopiert. Dabei belegt jedes
+<fromPart>-Element die im toVariable-Attribut spezifizierte BPEL-Variable mit dem Inhalt
+des über das part-Attribut referenzierten Teils der WSDL-Nachricht.
+Beispiel: <invoke>-Aktivität mit <toPart>-Elementen
+<invoke partnerLink="risikoErmittlung" portType="lns: "
+operation="check" outputVariable="risiko">
+<toPart part="vorname" fromVariable="kundenVorname"/>
+<toPart part="name" fromVariable="kundenName"/>
+<toPart part="betrag" fromVariable="kreditBetrag"/>
+</invoke>
+Die <invoke>-Aktivität im obigen Beispiel ist Teil eines Web Service zur Kreditvergabe und
+ruft einen Partner-Prozess auf, der das Risiko der Kreditvergabe in Bezug auf einen bestimmten
+Kunden ermittelt. Dieser Partner-Prozess erwartet eine mehrteilige WSDL-Nachricht (bestehend
+aus “vorname”, “name” und “betrag”), die hier mit Hilfe der <toPart>-Elemente aus Daten
+von BPEL-Variablen zusammengestellt wird. Die Antwort auf die Anfrage wird in der Variable
+“risiko” abgelegt und könnte alternativ zur Angabe des Attributs outputVariable auch mittels
+<fromPart>-Elementen einzelnen BPEL-Variablen zugewiesen werden.
+Aktivitäten, die Teil eines asynchronen Nachrichtenaustauschs sind, können in WS-BPEL 2.0
+per optionalem Attribut messageExchange mit einander assoziiert werden2. Dazu zählen: <receive>-
+und <reply>-Aktivitäten, sowie <onEvent>-Zweige eines Event Handlers bzw. <onMessage>-
+Zweige einer <pick>-Aktivität. Dies ist insbesondere dann erforderlich, wenn es während einer
+parallelen Ausführung (z.B. innerhalb einer <flow>-Aktivität) zu mehreren Antwortnachrichten
+für eine Kombination aus partnerLink und operation kommen kann. Anhand des Tupels
+partnerLink, operation und messageExchange kann so eine empfangene Anfrage mit einer
+<reply>-Aktivität assoziiert werden. DerWert des Attributs messageExchange muss dabei mit
+einem name-Attribut eines zuvor deklarierten <messageExchange>-Elements übereinstimmen.
+<messageExchange>-Elemente können innerhalb eines Scope bzw. auf Prozessebene deklariert
+werden und besitzen folgende Syntax:
+<messageExchanges>?
+<messageExchange name="ncname"/>+
+</messageExchanges>
+Es ist erlaubt, den gleichen Wert für das Attribut messageExchange in mehreren zum selben
+Zeitpunkt unbeantworteten Empfangsaktivitäten zu nutzen, solange sich deren Kombination aus
+partnerLink und operation jeweils von einander unterscheidet. Beim Start einer weiteren
+Kommunikationsaktivität, mit der selben Kombination aus messageExchange, partnerLink
+und operation, wird der Fehler bpws:conflictingRequest geworfen. Kann die, zu einer <reply>-
+Aktivität assoziierte, unbeantwortete Empfangsaktivität nicht ermittelt werden, wird der Fehler
+bpws:missingRequest geworfen.
+3.3.2 Datenmanipulation
+Variablen können mit Hilfe der <assign>-Aktivität mit neuenWerten belegt werden. DieseWerte
+können entweder aus anderen Variablen stammen oder Ergebnisse ausgewerteter Ausdrücke
+bzw. Literale sein. Abgesehen von der leicht veränderten Syntax der <assign>-Aktivität3 beschreibt
+die Spezifikation von WS-BPEL 2.0 genaue Anforderungen an die XML-Datenmanipulationen
+der <copy>-Elemente4. Zusätzlich zu den <copy>-Elementen lässt sich die <assign>-
+Aktivität über <extensibleAssign>-Elemente um weitere Operationen zur Datenmanipulation
+(aus anderen XML-Namensräumen) erweitern.
+Die <assign>-Aktivität ließe bei standardmäßiger Verwendung von XPath 1.0 zur Definition der
+Ausdrücke keine komplexen XML-Transformationen zu. Die Spezifikation von WS-BPEL 2.0
+beschreibt daher eine XPath 1.0 Erweiterungsfunktion bpws:doXslTransform(), die diesen Umstand
+behebt und von standardkonformen Implementationen unterstützt werden muss.5
+Beispiel: XML-Transformation mit bpws:doXslTransform()
+Im obigen Beispiel wird zuerst ein Web Service aufgerufen und das Resultat dieses Aufrufs in
+der Variable “A” gespeichert. Die Daten in der Variable “A” sollen nun als Eingabe für den Aufruf
+eines zweitenWeb Service dienen. Zuvor müssen diese Daten hier jedoch transformiert werden.
+Dies geschieht über den Aufruf von bpws:doXslTransform(). Der Funktion werden die Transformationsregeln
+(in Form eines XSLT-Dokuments) und die Daten aus Variable “A” übergeben.
+Das Ergebnis der Transformation wird der Variable “B” zugewiesen, die dann als Eingabe für
+den Aufruf des zweiten Web Service verwendet werden kann.
+Die neue Spezifikation verlangt, dass jede <assign>-Aktivität atomar abgearbeitet wird, d.h.
+für die Dauer der Ausführung muss eine <assign>-Aktivität behandelt werden, als wäre sie die
+einzige Aktivität im Prozess. Tritt während der Abarbeitung ein Fehler auf, müssen alle Zielvariablen
+in ihren Zustand vor Beginn der Aktivität zurückgesetzt werden. Dies gilt unabhängig
+davon, wieviele Zuweisungen die gesamte <assign>-Aktivität umfasst.
+WS-BPEL 2.0 stellt die neue Basisaktivität <validate> zur Verfügung, um explizit testen zu
+können, ob Variablen bezüglich ihrer XML-Definition mit zulässigen Werten belegt sind.
+Die Syntax der <validate>-Aktivität sieht wie folgt aus:
+
+Über das Attribut variables kann eine Liste der zu validierenden Variablen angegeben werden.
+Die einzelnen Bezeichner werden dabei durch Leerzeichen von einander getrennt. Schlägt die
+Validierung von mindestens einer der zu prüfenden Variablen fehl, wird der Fehler bpws:invalid-
+Variables geworfen.
+Die <assign>-Aktivität besitzt nun das optionale Attribut validate. Es bietet die Möglichkeit,
+die von der Aktivität durchgeführten Manipulationen an den betroffenen Variablen im Nachhinein
+zu validieren. Hierzu ist das Attribut validate mit “yes” zu belegen. Das Verhalten einer
+solchen <assign>-Aktivität entspricht der sequentiellen Ausführung einer <assign>-Aktivität
+ohne Angabe des validate-Attributs (bzw. eines mit “no” belegten validate-Attributs) und
+einem anschließenden <validate> der in den <to>-Knoten spezifizierten Variablen.
+
+Sonstige Basisaktivitäten
+Die Aktivität <wait> weist in WS-BPEL 2.0 eine leicht veränderte Syntax auf. Die Zeitspanne,
+die der Prozess warten soll, wird nicht mehr über ein Attribut spezifiziert, sondern in einem
+separaten Kindknoten der <wait>-Aktivität beschrieben.
+Beispiel: <wait>-Aktivität mit <until>-Bedingung
+<wait>
+<until>’2006-03-30T18:00+01:00’</until>
+</wait>
+Als Ergänzung zur Aktivität <throw>, gibt es in WS-BPEL 2.0 die Aktivität <rethrow>. Manchmal
+ist es erforderlich, einen Fehler weiterzureichen, z.B. wenn dieser nur unzureichend behandelt
+werden kann. Die <throw>-Aktivität benötigt jedoch die Attribute faultName und (optional)
+faultValue. So kann z.B. ein <catchAll>-Zweig eines Fault Handler nie den zu behandelnden
+Fehler mittels <throw> weiterreichen, da er keinen Zugriff auf dessen faultName bzw.
+faultValue hat. Deshalb kann jeder Fault Handler nun mittels der Aktivität <rethrow> den
+ursprünglichen Fehler erneut werfen. Eventuell vorgenommene Änderungen an den Fehlerdaten
+werden dabei jedoch verworfen.
+Die Syntax der <rethrow>-Aktivität sieht wie folgt aus:
+
+Die Aktivität <terminate> wurde in <exit> umbenannt.
+
+Auswahl von Alternativen
+Die aus BPEL4WS 1.1 bekannte Aktivität <switch> wurde in <if> umbenannt. Die <case>-
+und <otherwise>-Zweige werden nun entsprechend als <elseif> und <else> bezeichnet. Die
+Bedingungen werden nicht mehr in Attributen, sondern in separaten <condition>-Elementen
+beschrieben
+
+Schleifen
+Die Aktivität <while> wurde nur syntaktisch leicht verändert. Auch hier wird die boolesche
+Bedingung nicht mehr über ein Attribut, sondern über ein separates <condition>-Element spezifiziert
+(siehe 3.3.3).
+Die neue Aktivität <repeatUntil> bietet, ebenso wie <while>, die Möglichkeit zur wiederholten
+Ausführung einer beliebigen Aktivität. Allerdings wird im Gegensatz zu <while> die boolesche
+Bedingung erst nach der Ausführung des Schleifenkörpers überprüft. <repeatUntil>
+bietet sich also insbesondere dann an, wenn die Aktivität innerhalb der Schleife mindestens
+einmal ausgeführt werden soll.
+
+WS-BPEL 2.0 bietet mit der neuen <forEach>-Aktivität ein weiteres Konstrukt zur wiederholten
+Ausführung einer Scope-Aktivität.
+
+Beim Start der <forEach>-Aktivität werden die Ausdrücke in den <startCounterValue>- und
+<finalCounterValue>-Elementen einmalig ausgewertet und bleiben dann über die gesamte
+Laufzeit der Aktivität konstant. Die dort spezifizierten Ausdrücke müssen ein xs:unsignedint
+als Ergebnistyp haben, sonst wird der Fehler bpws:forEachCounterError geworfen. Sollte der
+Wert von <startCounterValue> größer sein, als der von <finalCounterValue>, wird keine
+Iteration durchgeführt.
+Über das Attribut parallel kann gesteuert werden, ob der Schleifenkörper sequentiell oder
+parallel abgearbeitet wird.
+
+Im Fall von parallel="no" wird die Schleife sequentiell abgearbeitet. Die eingebettete Scope-
+Aktivität wird N+1 Mal (wobei N die Differenz von <finalCounterValue> und <startCounterValue>
+ist) nach einander ausgeführt. Für jeden Durchlauf wird eine Variable vom Typ xs:unsignedint
+kreiert, die dann mit dem aktuellen Zählerwert initialisiert wird. Der Bezeichner dieser Variable
+wird über das Attribut counterName der <forEach>-Aktivität festgelegt. Im ersten Durchlauf
+wird sie auf denWert von <startCounterValue> initialisiert und bei jedem weiteren Durchlauf
+inkrementiert. Im letzten Durchlauf besitzt die Zählervariable denWert von <finalCounterValue>.
+Die Zählervariable ist lokal für den eingebetteten Scope, kann also von diesem gelesen und geschrieben
+werden. Nach einer Abarbeitung des Schleifenkörpers werden jedoch alle Änderungen
+an dieser Variable verworfen.
+Im Fall von parallel="yes" wird die Schleife parallel abgearbeitet. Es wird eine implizite
+Flow-Aktivität generiert, die N+1 Instanzen der eingebetteten Scope-Aktivität enthält. Für jede
+dieser Instanzen wird eine Zählervariable (wie im sequentiellen Fall) kreiert, die eindeutig mit
+einem Wert aus dem Intervall <startCounterValue> bis <finalCounterValue> initialisiert
+wird.
+Optional kann eine <forEach>-Aktivität ein <completionCondition>-Element enthalten.Wird
+die in diesem Element spezifizierte Bedingung während der Abarbeitung erfüllt, so kann die
+<forEach>-Aktivität vorzeitig beendet werden. Das <completionCondition>-Element enthält
+das Element <branches>, in dem ein Integer-Ausdruck angegeben wird. Dieser wird beim Start
+der <forEach>-Aktivität einmalig ausgewertet. Ist der Wert des Ausdrucks größer als die Anzahl
+der Schleifendurchläufe (bzw. parallelen Instanzen), wird der Fehler bpws:invalidBranch-
+Condition geworfen. Nach jeder Abarbeitung eines eingebetteten Scope wird die Anzahl der
+abgearbeiteten Scopes mit dem Wert dieses Ausdrucks verglichen. Ist die Anzahl der abgearbeiteten
+Scopes größer oder gleich dem Wert des Ausdrucks, gilt die Bedingung als erfüllt. Es
+lassen sich also Bedingungen nach dem Muster “mindestens M aus N”6 definieren. Über das
+optionale Attribut countCompletedBranchesOnly des <branches>-Elements kann festgelegt
+werden, ob dabei jede Abarbeitung oder nur jede erfolgreiche (fehlerfreie) Abarbeitung eines
+eingebetteten Scope gezählt wird.
+Die <completionCondition> wird immer dann ausgewertet, wenn ein eingebetteter Scope beendet
+wurde. Wenn feststeht, dass die Bedingung nicht mehr erfüllt werden kann, wird der Fehler
+bpws:completionConditionFailure geworfen. Ist die Bedingung erfüllt, wird die <forEach>-
+Aktivität erfolgreich beendet. Im sequentiellen Fall werden dann alle noch ausstehenden Scope-
+Aktivitäten nicht mehr ausgeführt. Im parallelen Fall werden alle noch aktiven Scope-Aktivitäten
+beendet.
+
+Link Semantik
+Die Spezifikation von WS-BPEL 2.0 beschreibt die Link Semantik genauer, als dies in BPEL4WS 1.1
+der Fall ist. Neu sind u.a. folgende explizit gestellte Restriktionen:
+• Je zwei Aktivitäten dürfen nur durch maximal einen Link verbunden sein.
+• Links, deren Quelle im XML-Teilbaum der dazugehörigen Zielaktivität definiert ist, sind
+nicht gestattet.
+• Für den Fall, dass zwei ineinander geschachtelte <flow>-Aktivitäten je einen Link mit
+dem gleichen Namen definieren, wird die Namensauflösung von innen nach außen betrieben,
+d.h. weiter außen stehende Links werden von weiter innen stehenden Links mit
+gleichem Namen überladen.
+• Ausgehende Links von Fault und Termination Handler (spezieller Handler für die erzwungene
+Terminierung von Aktivitäten, siehe 3.9), müssen auf “negative” gesetzt werden,
+sobald feststeht, dass diese nicht abgearbeitet werden.
+<source>- und <target>-Elemente können in WS-BPEL 2.0 in einem <sources>- bzw. <targets>-
+Element gekapselt werden. Die joinCondition bzw. transitionCondition wird nicht mehr
+über ein Attribut, sondern in einem separaten <joinCondition>- bzw. <transitionCondition>-
+Element definiert.
+Beispiel: <sources>-Element mit <transitionCondition>
+
+Scope
+Die Spezifikation von WS-BPEL 2.0 beschreibt das Verhalten von Scopes für den Fall der Initialisierung
+und Beendigung.
+Die Abarbeitung eines Prozesses bzw. Scopes beginnt mit der Initialisierung. Dabei werden
+die Fault und Termination Handler, Partner Links, Correlation Sets und die Variablen instanziiert
+und initialisiert. Die Partner Links müssen erstellt werden, bevor die im gleichen Scope
+definierten Variablen initialisiert werden können. Die Scope-Initialisierung verläuft nach dem
+Motto: alles oder nichts. Entweder alles wird erfolgreich initialisiert oder es wird der Fehler
+bpws:scopeInitializationFailure geworfen, der vom umgebenden Scope behandelt werden muss.
+Im Falle eines solchen Fehlers auf Prozessebene gilt der gesamte Prozess als “faulted”. Nachdem
+die Initialisierung abgeschlossen ist, werden die erste innere Aktivität und die Event Handler des
+Scope parallel instanziiert. Eine Ausnahme dazu stellen Scopes dar, die eine initial start activity
+enthalten (d.h. die Instanziierung einer weiteren Prozessinstanz bewirken). In diesem Fall muss
+zuerst die initial start activity beendet worden sein, bevor die Event Handler instanziiert werden
+können.
+Wird ein Scope vollständig abgearbeitet, müssen alle Interaktionen mitWeb Services, die abhängig
+von innerhalb des Scope definierten Partner Links und messageExchange-Definitionen sind,
+beendet sein. Bleiben Empfangsaktivitäten offen, die sich auf Partner Links oder messageExchange-
+Definitionen des Scope beziehen, kann der Fehler bpws:missingReply geworfen werden.8
+Ein Scope (bzw. Prozess) kann in WS-BPEL 2.0 das exitOnStandardFault-Attribut besitzen.
+Falls der Wert dieses Attributs auf “yes” gesetzt ist, muss der Prozess sofort beendet werden
+(äquivalent zum Erreichen der Aktivität <exit>), wenn ein anderer WS-BPEL Standardfehler
+als bpws:joinFailure auftritt. IstWert des Attributs hingegen “no”, so kann der Prozess den Standardfehler
+mittels eines Fault Handler behandeln. Der Standardwert des exitOnStandardFault-
+Attributs ist “no”. Wird dieses Attribut von einer Scope-Aktivität nicht spezifiziert, so wird der
+Wert vom umgebenden Scope bzw. Prozess geerbt.
+
+Isolierte Scopes
+Serialisierbare Scopes werden in WS-BPEL 2.0 als isolierte Scopes bezeichnet. Das Attribut
+variableAccessSerializable heißt nun entsprechend isolated. Neu ist auch, dass ein als
+isoliert markierter Scope weitere Scopes einbetten kann, die nicht als isoliert markiert sind.9 Der
+Zugriff auf gemeinsam genutzte Variablen durch die so eingebetteten Scopes wird dann über den
+isolierten Scope kontrolliert.
+Beachte, dass die Isolation eines Variablenzugriffs nicht zu einem internen Deadlock in einem
+BPEL-Prozess führen kann. Der Grund dafür liegt darin, dass ein isolierter Scope nicht eher
+gestartet wird, als bis er exklusiven Zugriff auf alle vom ihm benötigten nicht-lokalen Variablen
+hat.
+
+Event Handler
+Event Handler führen in WS-BPEL 2.0 grundsätzlich nur noch Scope-Aktivitäten aus, um eine
+saubere Scope-Snapshot- und Kompensationssemantik zu gewährleisten. Dies ist natürlich
+keine Einschränkung, da die Scope-Aktivität beliebige weitere Aktivitäten enthalten kann. Tritt
+während der Abarbeitung eines Event Handler ein Fehler auf, wird dieser also zuerst vom Fault
+Handler der eingebetteten Scope-Aktivität behandelt bzw. von ihm an den umgebenden Scope
+weiter gereicht.
+Sowohl von <onEvent>- als auch von <onAlarm>-Event-Handler können zu einem Zeitpunkt
+mehrere aktive Instanzen existieren. Jede Instanz erhält daher eine private Kopie der im eingebetteten
+Scope deklarierten Daten und Ressourcen (inkl. Links und Partner Links), um Zugriffskonflikte
+zu verhindern.
+
+Fault Handler
+Die WS-BPEL 2.0 Spezifikation beschreibt die optional zu einem Fehlernamen assoziierten Fehlerdaten
+weitaus konkreter, als dies bisher der Fall war.
+Fehlerdaten sind WSDL-Nachrichtentypen oder XML-Schema-Elemente. Jeder <catch>-Zweig,
+der einen faultName spezifiziert kann nur Fehler eines einziges Typs behandeln. Wenn die
+zu behandelnden Fehlerdaten von einem WSDL-Nachrichtentyp sind, dann muss dieser mittels
+des (neuen optionalen) faultMessageTyp-Attributs spezifiziert sein.Wenn die Fehlerdaten eine
+XML-Element-Definition sind, dann muss diese mittels des (neuen optionalen) faultElement-
+Attributs spezifiziert sein.
+Da das Attribut faultName optional ist, kann es vorkommen, dass eine spezifizierte faultVariable
+keinem konkreten Typ zugeordnet werden kann. Um dies zu verhindern, muss bei der Spezifikation
+des faultVariable-Attributs stets auch entweder ein faultMessageType- oder ein
+faultElement-Attribut mit angegeben werden. Zudem dürfen sowohl das faultMessageTypeals
+auch das faultElement-Attribut nie ohne ein begleitendes faultVariable-Attribut angegeben
+werden.
+Für die Behandlung eines Fehlers können mehrere Fault Handler zur Auswahl stehen. Die Regeln,
+nach denen ein Fault Handler zur Fehlerbehandlung ausgewählt wird, wurden in Anbetracht
+der erweiterten Möglichkeiten von WS-BPEL 2.0 entsprechend angepasst.1
+
+Termination Handler
+Scopes besitzen die Möglichkeit, auf den Ablauf einer erzwungenen Terminierung Einfluss zu
+nehmen. Was in BPEL4WS 1.1 als Forced-Termination-Zweig des Fault Handler definiert wurde,
+wird in WS-BPEL 2.0 innerhalb des Scope als Termination Handler definiert. Dieser kann
+die selben Aktivitäten verwenden, die auch in einem Fault Handler verwendet werden können.
+Es wird also nicht mehr der Fehler bpws:forcedTermination geworfen, auf den dann im Fault
+Handler reagiert werden kann, sondern im Falle einer erzwungenen Terminierung wird nach der
+Beendigung aller laufenden Aktivitäten des Scope der Termination Handler ausgeführt. Ist kein
+Termination Handler definiert, wird ein Standard-Termination-Handler aktiviert. Dieser kompensiert
+alle erfolgreich beendeten eingebetteten Scopes in der standardmäßigen Kompensationsreihenfolge
+(siehe 3.10.1). Er verhält sich also wie der Standard-Fault-Handler.
+
+Compensation Handler
+Der aktuelle Zustand des Prozesses setzt sich aus den aktuellen Zuständen aller gestarteten Scopes
+zusammen. Dies beinhaltet Scopes die erfolgreich abgearbeitet wurden, deren Compensation
+Handler aber noch nicht aufgerufen wurde. Der aktuelle Zustand eines erfolgreich abgearbeiteten
+Scope entspricht dessen Zustand zum Zeitpunkt der Beendigung der Abarbeitung. Ein Scope
+kann, möglicherweise als Teil eines Schleifendurchlaufs, mehrfach ausgeführt worden sein. In
+diesem Fall enthält der aktuelle Zustand des Prozesses den Zustand einer jeder erfolgreichen
+(nicht kompensierten) Ausführung eines solchen Scope. Dieser gesicherte Zustand eines erfolgreich
+abgearbeiteten unkompensierten Scope wird als Scope-Snapshot bezeichnet.
+Compensation Handler nutzen in WS-BPEL 2.0 immer den aktuellen Zustand des Scope, d.h.
+den Zustand des Scope, in dem sie definiert wurden und allen darin eingebetteten Scopes. Dies
+umfasst die dort deklarierten Variablen, Partner Links und Correlation Sets. Sie sind in der Lage,
+dieWerte all dieser Variablen zu lesen und zu setzen. Andere Teile des Prozesses können die
+Veränderung an gemeinsam genutzten Variablen sehen, genauso wie die Compensation Handler
+Veränderungen sehen können, die durch andere Teile des Prozesses an gemeinsam genutzten
+Variablen vorgenommen werden. Dies gilt auch für den Fall einer parallelen Abarbeitung. Um
+Konflikte im Falle von erwarteter gleichzeitiger Abarbeitung zu verhindern, müssen Compensation
+Handler isolierte Scopes (siehe 3.6.1) verwenden, wenn sie in den Zustand eines eingebetteten
+Scope eingreifen.
+Wie auch in BPEL4WS 1.1 steht ein Compensation Handler nur für Scopes zur Verfügung, die
+ordnungsgemäß abgearbeitet wurden. Wird ein Compensation Handler wiederholt aufgerufen,
+wird dies in WS-BPEL 2.0 ignoriert.11 Dabei spielt es keine Rolle, ob es sich um einen aktivierten
+oder deaktivierten Compensation Handler handelt.
+Die aus BPEL4WS 1.1 bekannte Aktivität <compensate> wurde in zwei Aktivitäten zur Kompensation
+aufgeteilt: <compensate>, zur Kompensation aller eingebetteten Scopes in der standardmäßigen
+Kompensationsreihenfolge (siehe 3.10.1) und <compensateScope> zur Kompensation
+eines speziellen Scope. Ist der zu kompensierende Scope in eine Schleife oder einen Event
+Handler eingebettet, müssen alle Iterationen der Schleife bzw. alle verarbeiteten Ereignisse des
+Event Handler kompensiert werden. Die für eine solche Aktivität im Laufe der Abarbeitung
+aktivierten Compensation Handler werden dabei als eine Einheit betrachtet, die als Compensation
+Handler Instance Group bezeichnet wird. Im Falle eines Aufrufs von <compensate>,
+umfasst diese Compensation Handler Instance Group alle Compensation-Handler-Instanzen der
+erfolgreich abgearbeiteten Scopes, die in der Aktivität eingebettet sind. Im Falle eines Aufrufs
+von <compensateScope>, jedoch nur die Compensation-Handler-Instanzen des spezifizierten
+Ziel-Scope. Sollte während der Abarbeitung einer dieser Compensation-Handler-Instanzen ein
+unbehandelter Fehler auftreten, wird die gesamte Compensation Handler Instance Group beendet
+und alle enthaltenen Compensation Handler werden deaktiviert.
+
+Standardmäßige Kompensationsreihenfolge
+Die Spezifikation von WS-BPEL 2.0 beschreibt zwei Regeln, die für eine standardmäßige Kompensationsreihenfolge
+gelten müssen. Um diese Regeln zu konkretisieren, werden formal einige
+Begriffe definiert.12 Wir wollen uns jedoch hier nur auf eine informelle Wiedergabe dieser Regeln
+beschränken:
+1. Die Kompensation muss sich nach der Reihenfolge der Abarbeitung der zu kompensierenden
+Scopes richten, soweit diese durch die Prozessdefinition vorgegeben ist.
+Prozesse, in denen es zu Zyklen durch Links kommen kann, sind nicht gestattet, d.h. wenn
+von einem Scope A ein Link in einen anderen Scope B führt, darf von Scope B kein Link
+in den Scope A zurückführen.
+Für den Fall von nebenläufig abgearbeiteten Scopes, die keine Kontrollflussabhängigkeiten durch
+Links aufweisen, wird durch diese Regeln keine konkrete Kompensationsreihenfolge festgelegt.
+Sie können also sowohl nebenläufig, als auch in strikter umgekehrter Reihenfolge ihrer Abarbeitung
+nach einander kompensiert werden.
+Kompensation und isolierte Scopes
+Compensation Handler eines isolierten Scope werden, anders als entsprechende Fault Handler,
+nicht innerhalb dessen isolierter Umgebung ausgeführt. Auch können diese Compensation
+Handler nicht selbst isolierte Scopes verwenden, da isolierte Scopes nicht in einander geschachtelt
+werden dürfen. Dies wirft jedoch Fragen in Bezug auf die Isolationssemantik der Compensation
+Handler von in isolierten Scopes eingebetteten Scopes auf. Wie sieht deren Umgebung
+im Falle eines Aufrufs durch einen Fault Handler (ausgeführt innerhalb der isolierten Umgebung
+des umgebenden Scope) bzw. im Falle eines Aufrufs durch einen Compensation Handler
+(ausgeführt außerhalb der isolierten Umgebung des umgebenden Scope) aus?
+Um konsistentes Verhalten sicher zu stellen, verlangt die Spezifikation von WS-BPEL 2.0 das
+Compensation Handler innerhalb eines isolierten Scope daher selbst implizit isoliertes Verhalten
+zeigen, obwohl dies eine separate isolierte Umgebung erfordert.
+
+Abstrakte Prozesse
+Die Möglichkeiten zur Definition abstrakter Prozesse wurden in WS-BPEL 2.0 deutlich erweitert.
+Die Spezifikation legt eine Common Base als syntaktische Basis abstrakter Prozesse fest
+und definiert, wie mit Hilfe von Profilen die Semantik dieser Prozesse beschrieben werden kann.
+Durch die Definition neuer Profile lässt sich das Einsatzfeld abstrakter Prozesse beliebig erweitern.
+%--
+
+%__Java Magazin
+IBM und Microsoft hatten mit WSFL und XLang
+zwei sehr ähnliche Prozesssprachen im Web-Services-
+Umfeld entwickelt und beschlossen, diese
+zu verschmelzen. Die Kombination wurde bei der
+OASIS eingereicht und bildete BPEL4WS 1.0, welche
+sich dann durch Erweiterungen von BEA, SAP
+und Siebel zu BPEL4WS 1.1 weiterentwickelte.
+Das OASIS WS-BPEL Technical Committee entschied
+im September 2004, nicht zuletzt wegen
+der durch die Klarstellungen,Veränderungen und
+Erweiterungen nicht mehr gegebenen Kompatibilität,
+nicht nur die Versionsnummer deutlich anzupassen,
+sondern auch den Namen in WS-BPEL zu
+ändern. Beispiele für solche Veränderungen/Anpassungen
+sind:
+• Initialisierung von Variablen
+• Vereinheitlichung derXPath-Syntax bezüglich
+Variablen (\$variable[.part])
+• Verwendung von XML-Schema-Variablen, um
+die (optionale) WS-I Compliance zu ermöglichen
+• Activities Semantik (if-then-else, until, validate)
+Eine Gesamtsicht der Unterschiede von WS-BPEL
+2.0 zu BPEL4WS 1.1 ist bis dato leider kein Bestandteil
+der Spezifikation, auch wenn eine solche
+Zusammenfassung auf derWS BPEL Issues
+List als wünschenswert geführt wird. Die vielfältigen
+Wurzeln des Standards, die unterschiedlichen
+Sichten auf die Verwendungsmöglichkeiten
+– BPEL als Execution Language (Oracle, IBM,
+FiveSight, OpenStorm ...) versus BPEL als Austauschformat
+(Microsoft, BEA) – und die inhärenten
+Interpretationsspielräume in Bezug auf einen
+formulierten Standard führen in der Praxis zu einem
+BPEL 1.1 gemäß Vendor A und zu einem anderen
+BPEL 1.1 bei Vendor B. So werden die verschiedenen
+Anbieter sicherlich Werkzeuge zur
+Migrationsunterstützung von ihrem BPEL 1.1 auf
+WS-BPEL 2.0 anbieten, die Unterstützung von
+Cross-Migrationen dürfte allerdings die Ausnahme
+sein.
+%-
+
+%--Prozess-Sprache BPEL kümmert sich im Detail um den Workflow
+Die Version 2.0 von BPEL (Business Process Execution Language) – die Geschäftsprozesse zur Handelsware machen kann – verfügt bereits über eine breite Unterstützung durch die Hersteller. Doch besitzt die Orchestrierungssprache noch nicht alle Fähigkeiten, um beliebige Geschäftsprozesse auszuführen.
+ 
+ 
+Anzeige
+
+Groß sind die Versprechungen der Hersteller im Umfeld des Geschäftsprozessmanagements, was die Fähigkeiten der Sprache BPEL angeht. Mit ihr würden beliebige Geschäftsprozesse in serviceorientierten Architekturen (SOA) über IT-Plattformen hinweg austauschbar, werben Anbieter wie IDS Scheer.
+
+Doch BPEL steht mit der vom Standardisierungsgremium OASIS freigegebenen Version 2.0 erst am Anfang seiner Karriere, wie Professor Frank Leymann von der Universität Stuttgart betont. Entsprechend erweisen sich heute viele Marketingaussagen als noch nicht erfüllbar. Beispielsweise unterstützt die Spezifikation keine menschliche Interaktion (siehe Interview unten) – einer der wesentlichen Bestandteile von Geschäftsprozessen in der Praxis.
+
+Auf einer der größten Missverständnisse weißt Leymann, Mitautor der Sprache, hin. BPEL sei eine Orchestrierungssprache, bei der es lediglich um das Zusammenfügen von Diensten zu einem Prozess aus der Sicht eines einzigen Unternehmens geht. Hingegen kümmere sich die Sprache nicht um die Verzahnung von mehreren Prozessen – was Aufgabe einer Choreografiesprache wäre. Gleiches gilt für den unternehmensübergreifenden Prozessfluss.
+Der Workflow wird zur Zeit noch egoistisch abgearbeitet
+
+Zugespitzt kann man einen BPEL-Prozess heute noch als egoistisch beschreiben: Hauptsache der eigene Workflow funktioniert, wie andere Prozesse oder Unternehmen damit fertig werden, ist ihm egal. Allerdings gibt es an der Uni Stuttgart Bestrebungen, eine Choreografieerweiterung zu entwickeln. Sie soll beispielsweise prüfen, ob mehrere BPEL-Prozesse zusammenpassen.
+
+Gedacht ist BPEL als Sprache, die die Schnittstelle zwischen der Geschäftsprozessmodellierung auf Business-Ebene und der IT-Middleware bildet. Die Modellierungswerkzeuge auf Business-Ebene generieren dabei ein BPEL-File, dass dann in die unterschiedlichen Prozessmaschinen der SOA-Plattformen importiert werden kann. Die primäre Zielgruppe der Sprache sind IT-Mitarbeiter und nicht ihre Kollegen aus den Fachabteilungen, wie Leymann betont.
+
+Für die Erstellung der Geschäfts-prozesse dienen Modellierungswerkzeuge wie Aris von IDS Scheer, von denen es allerdings mehr als einhundert gibt. Als wesentliches Problem für die IT stellt sich dabei die große Anzahl an verschiedenen Methodologien und korrespondierenden Werkzeugen auf Business-Ebene heraus: Sie unterscheiden sich in der operationalen Semantik – also in der Bedeutung der Geschäftsprozesse zur Ausführungszeit. Leymann spricht hier sogar von einem „Prozesskrieg“.
+
+Die Situation auf IT-Seite ist dank der detaillierten Sprache BPEL eine ungleich bessere. Aufgrund der sehr genauen Definition existiert in den Prozessmaschinen der SOA-Middleware eine eindeutige operationale Semantik – unabhängig davon, von welchem Hersteller sie stammen. Die von der Uni Stuttgart getesteten BPEL- 2.0-fähigen SOA-Tools der großen Anbieter wie etwa Bea, IBM, Microsoft, Oracle oder SAP haben sich als weitgehend standardkonform erwiesen. Allerdings unterstützen die meisten Anbieter BPEL 2.0 noch nicht hundertprozentig, mit Ausnahme weniger Spezialisten wie Active Endpoints. „Je nach Komplexität eines Prozesses muss man bei der Anpassung einige Minuten bis einige Stun- den aufwenden“, relativiert Leymann dieses Problem. Zudem würde für Teilbereiche des Geschäftsprozessmanagements bereits eine Teilmenge von BPEL ausreichen.
+
+Ein wesentliches Ziel der nun rund 320 Seiten umfassenden Spezifikation 2.0 war es, die in der Version 1.1 noch bestehenden Ungenauigkeiten auszubügeln. Obwohl der Umfang der aktuellen BPEL-Spezifikation um rund 60 Prozent gegenüber der Vorgängerversion zugenommen hat, gibt es kaum wirkliche Neuerungen – dagegen aber sehr viele Verfeinerungen. „Wer BPEL 1.1 kennt, muss nicht viel neu lernen“, beruhigt der Stuttgarter Professor. Die wesentlichen Veränderungen:
+
+Stark ausgefeilt worden ist in der Ausführung 2.0 das Konzept der abstrakten Prozesse. „Die gab es zwar schon vorher. Die haben viele Anwender in der Vergangenheit aber nicht richtig verstanden“, begründet Leymann. Ein abstrakter Prozess beschreibt durch das Auslassen von Informationen nur sein Verhalten, er muss aber nicht ausführbar sein. Durch das Hinzufügen der entsprechenden Daten kann er aber wieder zu einem ausführbaren File gemacht werden. Dadurch lässt sich ein abstrakter Prozess als Template nutzen, der Best Practices darstellt – etwa, wie eine Bank Kredite vergibt. In der Praxis erlaubt es das Konzept der abstrakten Prozesse, aus Geschäftsprozessen eine handelbare Ware zu machen. Sie decken meist rund 80 Prozent des Workflows ab. Die restlichen 20 Prozent wer- den unternehmensspezifisch angepasst.
+
+Das Ausnahmemodell (Exception Handling) ist wesentlich sauberer aufgeschrieben. In der Version 1.1 wurden viele implizite Definitionen genutzt, die nun explizit klargestellt worden sind. Das Exception Handling klärt, wie sich die IT-Plattform bei Abweichungen vom Normprozess verhalten.
+
+Es gibt viele Umbenennungen: Etwa lautet der Befehl Switch in BPEL 2.0 nun If-then-else. Aus der While-Loop wurde eine Until-Loop.
+
+Das einzig neue Konstrukt in BPEL 2.0 ist parallel for eatch. Eine Aktivität, die mehrmals ausgeführt werden soll – etwa die Benachrichtigung von Mitarbeitern –, musste früher in einer Schleife hintereinander abgearbeitet werden. Heute können die Aktivitäten parallel erledigt werden.
+%--
+
+
+%--
+
+%--http://www.php-deluxe.de/wiwimod+index.page+BPEL.htm
+Ziel von BPEL ist, das Programmieren im Großen zu ermöglichen. Dabei ist zu beachten, dass BPEL die direkte Interaktion Interaktionsbegriff in der Informatik mit Menschen nicht unterstützt. BPEL-Prozesse Kommunikation ausschließlich mit Web Services. Diese können eine Schnittstelle zu Menschen sein, jedoch nicht Menschen selbst.
+
+BPEL ist blockstrukturiert, d.h. bei der Definition von lokalen Umgebungen (Scopes) können Variable (Programmierung) eingeführt werden. Mit den Scopes können außerdem Fehlerbehandlung (Fault Handler), Kompensationsbehandlung (Compensation Handler) und Ereignisbehandlung (Event Handler) assoziiert werden.
+
+Der BPEL-Standard selbst definiert keine graphische Darstellung der modellierten Prozesse. Dafür ist die BPMN vorgesehen, die im Standard die Abbildung von BPMN nach BPEL beschreibt.
+
+Ausführbare BPEL-Prozesse können auf einer Workflowmaschine zum Einsatz gebracht werden (engl. deployed) und sind durch sie ausführbar. Abstrakte Prozesse dienen der Beschreibung des Verhaltens des Prozesses (behavioral interface). Sie werden als Sicht auf einen ausführbaren Prozess verwendet und dienen dazu, das interne Verhalten des Prozesses z.B. vor einem Geschäftspartner zu verbergen.
+
+BPEL selbst kennt keine Unterprozesse. Es ist so beispielsweise nicht immer möglich, einen Unterprozess zu terminieren, wenn der Hauptprozess terminiert wird. Diese Funktionalität kann durch explizite Operationen eines Web Services bereitgestellt werden, was jedoch nicht vom BPEL-Standard vorgeschrieben ist.
+
+Der Standard wurde im April 2003 an OASIS zur Standardisierung übergeben. as OASIS WS-BPEL Komitee beschloss am 14. September 2004, die Spezifikation WS-BPEL 2.0 zu nennen, um in Einklang mit den anderen WS-*-Standards wie WSDL, WS-Security usw. zu gelangen.
+
+Basic Activities - Dies sind die grundlegenden - sozusagen atomaren - Aktivitäten, welche nicht aus anderen Aktivitäten aufgebaut sind:
+ assign - Verändern des Inhalts einer Variablen.
+ invoke - Synchroner (request/response) oder asynchroner Aufruf eines Web Service
+ receive/reply - Anbieten einer synchronen oder asynchronen Web Service Schnittstelle
+ throw - Explizites Signalisieren eines Fehlers, welcher durch Fehlerbehandlungen aufgefangen werden kann. Wird ein Fehler nicht aufgefangen, erreicht er also den globalen Scope, so terminiert der Prozess.
+ wait - Warten auf einen Zeitpunkt oder für eine Zeitspanne
+ empty - Nichts tun, z.B. um in einer Fehlerbehandlung nichts zu tun und den Fehler so zu unterdrücken
+
+Structured Activities - Diese Aktivitäten beinhalten andere Aktivitäten und lassen so die rekursive Komposition von komplexen Prozessen zu.
+ sequence - In einer Sequence werden die Aktivitäten sequentiell abgearbeitet.
+ while - Ausführen von Aktivitäten solange eine boolesche Bedingung erfüllt ist
+ switch - Bedingte Ausführung von Aktivitäten
+ flow - Die Aktivitäten werden parallel oder in beliebiger Reihenfolge ausgeführt, wobei Abhängigkeiten durch links angegeben werden können.
+ pick - Aus Prozesssicht nicht deterministische Wahl durch externe Ereignisse
+
+Scopes  Mit Hilfe dieses Konstrukts können Aktivitäten gebündelt werden und zu einer transaktionalen Einheit zusammengefasst werden. Durch einen Scope kann einer Gruppe von Aktivitäten ein Fehlerbehandler (fault handler), Ereignis (Programmierung) (event handler) und ein Kompensationsbehandler (compensation handler) zugeordnet werden. Durch den Kompensationsbehandler werden lang-andauernde Transaktion (Informatik) ermöglicht.
+
+BPEL Engines erlauben das Ausführen von BPEL-Code. Hierzu müssen sie mit WSDL-Information gespeist werden und der BPEL-Prozess Deployment werden.
+%--
+
+%--
+ 	
+Mit BPEL in eine neue Entwicklungs-Ära
+Dipl.-Ing. Torsten Winterberg, Rolf Scheuch
+Moderne Anforderungen an Workflow, Transparenz und Kundenservice können auf Basis der traditionellen GroßrechnerDatenhaltung nicht mehr erfüllt werden. Deswegen sind zahlreiche Unternehmen  ein Vorreiter waren hier die Banken  aus der Mainframe in die Client-Server- beziehungsweise die Internet-Welt gewechselt und haben ihre Großrechner zugunsten von Server-Parks aufgegeben.
+Die unterschiedlichen Ebenen des Designs: vom Geschäftsprozess bis ins Detail der jeweiligen Klasse.
+Klicken zum Vergrößern
+Die unterschiedlichen Ebenen des Designs: vom Geschäftsprozess bis ins Detail der jeweiligen Klasse.
+Große Unternehmen müssen schnell und flexibel auf Input von außen reagieren. Dabei kann es sich um Serviceanfragen, Verkaufszahlen, neue Gesetze und Ähnliches handeln. Außerdem konzentrieren sich zahlreiche Unternehmen auf ihre Kernkompetenzen und lagern Dienstleistungen aus, kaufen Vorprodukte hinzu etc. Dieser Trend, auch als vertikale Desintegration bezeichnet, zwingt Firmen dazu, ihre Wertschöpfungsketten auf das Outsourcing von ganzen Prozessschritten auszurichten.
+Für die Softwareentwicklung bedeutet das: Sie muss Veränderungen kurzfristig abbilden und externe Elemente flexibel integrieren können. Große proprietäre Lösungen können dies heute kaum mehr leisten, ebenso wenig einzelne Softwareentwickler oder arbeitsteilige Ketten von Programmierern. Der Weg in die Zukunft ist deshalb klar vorgezeichnet: Möglichst viele Prozesse müssen automatisiert werden.
+Die IT-Architektur eines Unternehmens muss der Motor dieser Entwicklung sein. Unternehmen, die sich dem Workflow-Gedanken verschreiben und ihre IT bereits in Services organisieren, sind auf dem richtigen Weg, Business Process Management (BPM) Realität werden zu lassen. Wer noch nicht reagiert hat, ist dringend gefordert, jetzt in seine Infrastruktur zu investieren. Mit BPEL (Business Process Execution Language, siehe unten) zeichnet sich ein großer informationstechnischer Sprung ab.
+Arbeitsabläufe in IT abbilden
+BPEL ermöglicht Geschäftsprozess-Management. Arbeitsabläufe in Unternehmen können schnell und kostengünstig in IT abgebildet werden. Insbesondere Veränderungen von Arbeitsprozessen lassen sich problemlos in der IT-Struktur nachvollziehen. Die Standardisierungsorganisation Oasis (Organization for the Advancement of Structured Information Standards) wird im ersten Halbjahr 2006 die BPEL-Version 2.0 veröffentlichen. Ab dann wird BPEL der von allen großen Softwareanbietern unterstützte Standard im Bereich BPM sein.
+
+Geringere Marktdurchdringung
+BPEL ist also herstellerunabhängig. Deswegen hat diese Sprache auch gute Chancen, sich in diesem Bereich als Standard am Markt durchzusetzen. Anwendungen mit BPEL fehlte in Deutschland bislang noch die Marktdurchdringung. Doch das ändert sich gerade. Das Thema ist aus der Theorie in der Praxis angekommen.
+Ein näherer Blick auf die BPEL-Welt von Oracle ermöglicht einen ersten Eindruck des komplexen Hintergrunds: Technisch ausgedrückt ist BPEL eine normierte XML-Sprache für die Ablaufumgebungen (Process Engines), die in der Lage sind, BPEL-Files als Steuerungsinformation zu nutzen, um Geschäftsprozesse ablaufen zu lassen. Ausgangspunkt ist ein BPEL-Designwerkzeug, mit dem man den Prozessfluss modellieren kann. Das Ergebnis dieses Vorgangs ist dann ein bpel.xml-File. Dieses gibt man nun in die BPEL-Engine, die, wenn man sie von außen anstößt, den Prozess in der Engine ausführt. Über die BPEL-Konsole kann man zusätzlich mit verschiedenenen Funktionen die Prozesse überwachen und verbessern.
+
+Die IT-Architektur eines Unternehmens muss also entsprechende Services bereithalten, die genau definierte Anforderungen umsetzen. BPEL ist eine Sprache, mit deren Hilfe sich diese einzelnen Services in die gewünschte Ablaufreihenfolge bringen lassen. Diesen Vorgang nennt man orchestrieren. Die Ablaufreihenfolge entspricht letztlich dem zu unterstützenden Geschäftsprozess. Durch ein solches koordiniertes Zusammenspiel wird Business Process Management möglich  eine flexibel veränderbare Produktionsstraße entsteht.
+
+Variabel verkettete Services
+Sobald sich auf der Geschäftsprozessebene eine Änderung ergibt, verkettet man einfach die Services in einer anderen Art und Weise. Abstraktions-Frameworks sind in der BPEL-Engine so verallgemeinert angelegt, dass nicht nur Web-Services, sondern auch beliebige andere Technologien in den Ablauf der Prozesse integriert werden können: Java, J2EE, Enterprise Javabeans (EJBs), Messaging-Systeme, E-Mails, Datei- und Datenbankzugriffe etc. All diese Technologien kann man in der BPEL-Engine andocken. Für den Mitarbeiter des Fachbereichs, der einen Prozess verändern will, sieht jedoch jeder Service von oben immer so aus wie ein Web-Service. Das ist ein wichtiger Normierungsschritt.
+Um diesen Gedanken zu verdeutlichen, hilft eine Analogie zur Weiterentwicklung von neuen Rennwagen in der Formel 1: Vor jeder neuen Saison designen die Techniker eines Rennstalls neue Motorfunktionen. Sie implementieren diese in den aktuellen Boliden und gehen damit auf die Teststrecke. Unterwegs werden laufend Details wie Kurven- und Bremsverhalten oder Treibstoffverbrauch gemessen. Diese Daten werden anschließend ausgewertet und für die Verbesserung der Leistungsfähigkeit herangezogen.
+
+IT prüft nur noch das Design
+Übertragen auf das Design von Geschäftsprozessen bedeutet dies: Es gibt einen Kreislauf zwischen dem Design eines Prozesses, dessen Implementierung über eine BPEL-Engine und dem Monitoring. Am Ende steht das Optimieren des Prozesses. Die BPEL-Engine ist der Ort, an dem diese Änderungen vorgenommen werden.
+Dieser Ansatz ermöglicht es den Mitarbeitern, die sich mit der fachlichen Analyse von Geschäftsprozessen beschäftigen, tatsächlich ausführbare BPEL-Prozesse auf einer technisch abstrakten Ebene zu modellieren und anschließend über einen Generator an die IT zu übergeben. Hierdurch vermindert sich der   Engineering Gap erheblich, und die IT muss nur noch das Design prüfen, überarbeiten und den BPEL-Prozess ausführen. Sobald sich auf der Geschäftsprozessebene eine Änderung ergibt, verkettet man einfach die Services in einer anderen Art und Weise. So hat man sofort reagiert, ohne einen kompletten Lifecycle in der Softwareentwicklung einschieben zu müssen. Geeignete qualitätssichernde Maßnahmen werden selbstverständlich vorausgesetzt.
+Die Nutzung von BPEL fördert in zweierlei Weise die innerbetriebliche Innovation. Einerseits handelt es sich um eine informationstechnische Innovation: Mit BPEL entwickelt man automatisierte Prozesse besser und schneller und kann die fachlich notwendigen (Web-)Services effektiver identifizieren. Der zweite Innovationstreiber ist der Fachbereich: Wenn er den Arbeitsprozess anders organisieren möchte, modelliert er den Arbeitsfluss auf einer grafischen Ebene neu. Die BPEL-Engine ändert dann automatisch, basierend auf dem neuen BPEL-File, den auszuführenden Prozessfluss und nutzt die unterstützenden unterlagerten Services und Systeme.
+Dieser Ansatz begreift Software nicht mehr als ein in sich abgeschlossenes Werk; ein System besteht vielmehr nur noch aus einer Ablaufumgebung, die fertige, lose gekoppelte Komponenten nutzt, die wiederum flexibel und schnell einzelne Aufgaben erledigen.
+
+Der Aufwand schrumpft
+Erste Praxistests in Deutschland haben ergeben: Mit einer BPEL-Engine gesteuerte Prozesse funktionieren sehr stabil. Bei einem Lasttest der Oracle BPEL Engine mit 500 gleichzeitigen Usern lief die Prototyp-Anwendung stabil und sogar schneller als gefordert. Und dies sowohl im Oracle-eigenen Application Server als auch in einer zu Testzwecken aufgesetzten Bea-Umgebung.
+Die Hoffnung ist also berechtigt, dass durch den Einsatz von BPEL-Engines der Aufwand für das Programmieren neuer Services in Zukunft auf einen Bruchteil der heute benötigten Zeit schrumpfen könnte. Für Geschäftsprozesse bedeutet dies, dass Prozessveränderungen oder die Integration externer Services viel schneller als bislang realisiert werden können.
+
+BPEL
+Business Process Execution Language (BPEL) ist eine normierte XML-Sprache, die ursprünglich von Microsoft, Bea und IBM entwickelt wurde. Mit ihr lassen sich Geschäftsprozesse beschreiben und mit den für die Abläufe benötigten Services (zum Beispiel Web-Services) in Verbindung bringen. Aktuell ist die von der Organization for the Advancement of Structured Information Standards (Oasis) freigegebene Spezifikation BPEL4WS 1.1 verfügbar (BPEL for Webservices). Im ersten Halbjahr 2006 wird die finale Version von WS-BPEL 2.0 erwartet, die einige in der Praxis aufgetretene Unzulänglichkeiten beseitigt.
+%--
+
+%-- 	
+BPEL und SOA Architekturen
+Ralph Soika
+
+Grundlage
+Heute werden in Unternehmen Web Services eingesetzt, um eine einfache Softwarearchitektur zu realisieren: Funktionen sollen nur einmal im Unternehmen implementiert werden und als  Service  anderen Programmen zur Verfügung gestellt werden. Dadurch können Redundanzen in der Softwareentwicklung vermieden und somit Kosten gesenkt werden. Gleichzeitig steigert man durch serviceorientierte Architekturen die Qualität der Software, da jeder Service nur einmal implementiert oder bei sich ändernden Anforderungen angepasst werden muss. Dazu werden die eigentlichen Implementiertierungsdetails gekapselt - also vor dem Benutzer des Services verborgen, was wiederum zu einer einfacheren und damit schnelleren Anwendbarkeit der Funktion führt.
+
+Benötigt wird für diese Architektur eine Schnittstellendefinition. Die sogenannte Web Services Description Language (WSDL) stellt hier den passenden Standard bereit. WSDL beschreibt einen Service vollständig
+
+     Wo ist der Service zu finden
+     Wie wird der Service angesprochen
+     Welche Funktionen können aufgerufen werden
+     Welche Datenformate werden unterstützt
+
+Der Servicebenutzer und der Serviceanbieter sind  lose gekoppelt . Das heisst, beide müssen über die Schnittstellenbeschreibung hinaus nichts von einander wissen. Genau das macht das Prinzip der serviceorientierten Architektur so mächtig.
+BPEL als neuer Standard
+Die Idee der serviceorientierten Architektur ist im Grunde nicht neu. CORBA hatte vor Jahren denselben Ansatz entwickelt. Der wesentliche Unterschied liegt in den benutzten Standards. Während CORBA versucht hat selbst einen neuen Standard durchzusetzen, benutzen Web Services Standards, die durch die Verbreitung des Internets durchgesetzt sind: HTML(s) und XML.
+
+Eine serviceorientierte Architektur dient einer neuen Flexibilität bei der Einführung neuer Verfahren. Man kann neue Anwendungen wesentlich schneller entwickeln, da man nicht alle Business-Funktionen neu programmieren muss, sondern nur noch existierende Services neu zusammenstellt. Diese sogenannte Orchestrierung von Services ist die Kernaufgabe von BPEL.
+
+Somit lassen sich Design und Entwicklung einer Unternehmensanwendung modularisieren und in fachlich verschiedene Bereiche aufteilen. So können einzelne Fachbereiche ihre spezifischen Prozesse definieren und unabhängig von einander modellieren, um diese dann anderen Unternehmensbereichen als Service zur Verfügung zu stellen.
+
+Durch die Verwendung solcher querschnittlich genutzten Services wird sichergestellt, dass alle darauf zugreifenden Prozesse die gleiche Version nutzen. Ändert sich das Verfahren, weil zum Beispiel neue gesetzliche Bestimmungen oder Firmen interne Entscheidungen oder Änderungen mit sich bringen, muss der Service nur einmal geändert werden und steht dann automatisch allen Prozessen zur Verfügung. Damit kann eine durchgängigere Qualität der Software sichergestellt werden.
+Beispiel:
+Ein Bonitäts-Service, der die Bonität von Kunden prüft und in zahlreichen Anwendungen benutzt werden soll, muß nur einmal als Service bereitgestellt werden. Ändern sich die Anforderungen, zum Beispiel durch die Einführung eines weiteren Bonitätsprüfungsverfahren, kann der Service zentral angepasst werden und steht sofort in allen Anwendungen mit dem neuen Verfahren zur Verfügung. Die Anwendungen müssen nicht angepasst werden.
+
+Eine Hürde die im Unternehmen genommen werden muss, um erfolgreich serviceorientierte Architektur einzuführen, ist organisatorischer Natur. Die Art und Weise, wie neue Softwareprojekte im Unternehmen geplant, umgesetzt und finanziert werden, muss sich an einen serviceorientierten Ansatz erst anpassen. Heute wird ein typisches Softwareprojekt meist von einem Fachbericht finanziert und dementsprechend auch isoliert als  Silo-Anwendung  umgesetzt. Dabei werden auch meist nur die Anforderungen des Fachbereichs gesehen und unternehmensweite Anforderungen  ausgeblendet .
+
+Bei einer serviceorientierten Architektur müssen bei solchen Projekten unternehmensweite Anforderungen untersucht werden.
+
+     Welche existierenden Services im Unternehmen können genutzt werden
+     Welche neuen Services können unternehmensweit angeboten werden
+
+Es wird hier schnell ersichtlich, welches enorme Einsparungspotential bei konsequentem Einsatz dieser Technologie für ein Unternehmen erschließbar ist.
+BPEL - Technologie für SOA
+Es stellt sich nun die Frage, wie existierende und neue Services zu einem kompletten Geschäftsprozess zusammenstellt werden können. BPEL beantwortet genau dieses Frage. Die wesentliche Aufgabe des BPEL Standards besteht darin, aus vielen Services einen neuen  übergeordneten  Service zu erstellen.
+
+Die Entwicklung von BPEL begann bereits 2002 und heute wird BPEL von allen großen IT-Unternehmen wie IBM, Oracle, Sun, SAP oder Mircrosoft unterstützt. BPEL selbst ist dabei ein einfach strukturierter XML Dialekt, was bedeutet, dass jeder BPEL Prozess stets als XML Datei vorliegt. Der XML basierte Standard der Definition von Geschäftsprozessen, hat gegenüber bisherigen Verfahren den Vorteil, dass sich die einmal erstellten Prozesse leicht auf andere Prozessmanager portieren lassen, sofern diese den BPEL Standard unterstützen. Auch bei der Erstellung von Geschäftsprozessen im Team kann praktisch jedes Versionsverwaltungswerkzeug eingesetzt werden.
+
+Jeder BPEL Prozess ist stets selbst wieder ein Service im Sinne von SOA. Dadurch lassen sich einmal orchestrierte Prozesse selbst wieder in noch höhere Geschäftsprozesse einbinden. Der Art der so definierten Prozessebenen sind keine Grenzen gesetzt. Es können also stets, den fachlichen Anforderungen entsprechend, neue Funktionen zusammengestellt werden und so Geschäftsprozesse in jeder Unternehmensebene abgebildet werden. Die in einen BPEL Prozess eingebundenen Services können dabei technologiegetrieben sein, wie zum Beispiel eine technische Schnittstelle zu einem Hostsystem, oder organisatorischer Natur sein, wie beispielsweise ein Workflow-Service, um manuelle Prozesschritte in einem Genehmigungsverfahren abzuarbeiten. Wichtig ist es dabei stets die Charakteristik einer Service orientierten Architektur im Auge zu behalten und alle Services nach allgemein gültigen Funktionen im Unternehmen aufzubauen. Nur so kann gewährleistet werden, dass bei sich ändernden Geschäftsabläufen schnell und flexibel reagiert werden kann und nicht erst neue Services erstellt werden müssen.
+Hochverfügbare, skalierbare Prozessumgebungen
+BPEL ist eine relativ neue Sprache, welche sich durch ihren XML-Charakter zunächst einmal von anderen Programmiersprachen unterscheidet. Moderne Entwicklungsumgebungen bieten daher Modellierungswerkzeuge an, um das Erstellen von Geschäftsprozessen so transparent wie möglich zu machen. So kann ein Fachbereich oder auch eine übergeordnete Organisationsebene die Prozesse mit wenig Aufwand selbst modellieren. Der sogenannte Prozessmodellierer erstellt dabei mit einem grafischen Editor und der Benutzung von Wizards die einzelnen Abläufe. Durch den XML Standard können die Prozesse mit unterschiedlichsten Werkzeugen bearbeitet werden, ohne dass die Daten angepasst werden müssen.
+
+Die Entwicklungsumgebung generiert dann den entsprechenden BPEL Code, der auf einem BPEL Server übertragen wird. Dieses sogenannte Deployment des Prozesses erfolgt in einer J2EE Umgebung, welche die entsprechenden Container für eine Ablaufumgebung bereitstellt. Dazu zählt in der Regel auch eine Datenbank, in der die Prozessdaten gespeichert werden. Durch den J2EE Ansatz sind die Bedingungen an eine hochverfügbare und vor allem skalierbare Steuerungssoftware voll erfüllt. Durch die Transaktionsunterstützung solcher Systeme lassen sich auch lang laufende Prozesse, die beispielsweise mehrere Tage dauern, transparent abbilden.
+
+Somit existiert mit BPEL heute ein umfangreicher Standard, um Business Services entlang kompletter Prozesse mit einander zu verbinden. Durch den Einsatz entsprechender Tools können Geschäftsprozesse und fachliche Verfahren sehr schnell elektronisch implementiert werden. Durch den hohen Grad an Wiederverwendbarkeit innerhalb einer Service orientierten Systemlandschaft bietet BPEL entscheidende Kostenvorteile gegenüber anderen Architekturen.
+%--
+
+%--
+Grundlegende Konzepte von SOA
+Hinter Serviceorientierte Architekturen (SOA) steckt die Absicht, Geschäftsprozesse zu automatisieren und auf Maschine-zu Maschine-Kommunikation zu verlagern. Komplexe Anwendungen werden hierfür in standardisierte Services aufgebrochen und verteilt zur Verfügung gestellt.
+
+Derzeit ist die IT-Anwendungsentwicklung und der Betrieb von IT-Applikationen geprägt von monolithischen, siloartigen Systemlandschaften. Die beträchtlichen Investitionen in Wartung, Pflege und Betrieb der historisch gewachsenen Systeme nehmen mittlerweile bis zu 70 Prozent des IT-Budgets in Anspruch.
+
+
+Langfristig hat diese statische, teure IT kaum Zukunftschancen. Ein mögliches alternatives Konzept für eine dynamische, kostensenkende IT ist die serviceorientierte Architektur (SOA). SOAs sind ganz allgemein dadurch gekennzeichnet, dass sie die Flexibilität der IT erhöhen und somit die Kosten für Wartung, Pflege und Anpassung der IT an neue Anforderungen verringern. Viele Unternehmen beginnen zurzeit damit, ihre IT auf serviceorientierte Architekturen umzustellen. Sie haben den Hauptnutzen der deutlich höheren Flexibilität erkannt und versuchen, ihn für eigene Zwecke umzusetzen. 
+
+
+Das Internet hat sich in den letzten Jahren von einem reinen Kommunikationskanal hin zu
+einer Infrastruktur für verteilte Systeme aller Art entwickelt. Durch die weltweite Verfüg-
+barkeit und die einfache und standardisierte Architektur ist es Organisationen prinzipiell
+mÄoglich, ihre GeschÄaftsprozesse Äuber das Internet miteinander zu verzahnen. Zwei Beob-
+achtungen verdeutlichen die Probleme bei der praktischen Umsetzung dieser Idee.
+
+
+Das Kernkonzept von BPEL ist die Aktivität. Ein BPEL-Prozess ist genau eine Aktivität, in
+der weitere Aktivitäten enthalten sind. BPEL unterscheidet dabei zwei Arten von Aktivitäten:
+Basisaktivitäten und Strukturierte Aktivitäten.
+Basisaktivitäten erfüllen die atomaren Aufgaben des Prozesses:
+ Kommunikation:
+ Empfang von Nachrichten, mit <receive>
+ Beantwortung empfangener Nachrichten, mit <reply>
+ Aufruf eines Web Service, mit <invoke>
+ Datenmanipulation:
+ Manipulation von Werten in Variablen, mit <assign>
+Sonstige Basisaktivitäten:
+Nichtstun, mit <empty>
+ Warten, mit <wait>
+ Signalisieren von Fehlern und Ausnahmen, mit <throw>
+ Beenden der Prozessinstanz, mit <terminate>
+ Kompensation von abgearbeiteten Aktivitäten, mit <compensate>
+
+Basisaktivitäten werden mit Hilfe von Strukturierten Aktivitäten in eine Reihenfolge der Ausführung
+gebracht:
+ Sequentielle Anordnung von Aktivitäten, mit <sequence>
+ Parallele Anordnung von Aktivitäten, mit <flow>
+ Auswahl von Alternativen (basierend auf Daten), mit <switch>
+ Auswahl von Alternativen (basierend auf Nachrichten oder zeitgesteuerten Ereignissen),
+mit <pick>
+ Definition von Schleifen, mit <while>
+ 
+ BPEL-Prozesse arbeiten nicht in Isolation, sondern interagieren mit anderen Web Services, die
+man als Partner oder Partner-Prozesse bezeichnet. Ein Partner ist oftmals sowohl Nutzer eines
+durch den BPEL-Prozess angebotenen Dienstes als auch selbst Anbieter eines vom BPELProzess
+benötigten Dienstes. Die Beziehung ist also zumeist bidirektional, insbesondere im Fall
+von asynchroner Kommunikation. In BPEL werden solche Inter-Prozess-Beziehungen mit Hilfe
+von so genannten Partner Links beschrieben, in denen z.B. die verwendeten Nachrichtentypen
+festgelegt werden.
+Ein BPEL-Prozess wird in Instanzen ausgeführt. Für jeden Partner wird eine neue Instanz erzeugt.
+Über das Konzept des Correlation Set können Anfragen eines Partners mit seiner entsprechenden
+BPEL-Prozessinstanz in Verbindung gebracht werden.
+Bei der Abarbeitung eines BPEL-Prozesses können Fehler auftreten. Um diese zu behandeln,
+lassen sich in BPEL Fault Handler definieren.Werden keine Fault Handler spezifiziert, behandelt
+ein minimaler vordefinierter Fault Handler die auftretenden Fehler.
+Oft müssen im Fehlerfall bereits abgeschlossene Aktivitäten in einem Prozess kompensiert werden,
+wenn sie zum Beispiel in einem transaktionalen Zusammenhang stehen. In BPEL kann
+dafür ein Compensation Handler definiert werden, mit dessen Hilfe sich diese Kompensationsaktivitäten
+an geeigneter Stelle spezifizieren lassen.
+BPEL-Prozesse lassen sich mit Hilfe von Scopes in Teilprozesse zerlegen. Jeder Scope verfügt
+dabei über einen eigenen Fault und Compensation Handler. Innerhalb eines Scope können zudem
+Event Handler definiert werden, über die auf eintreffende Nachrichten oder zeitgesteuerte
+Ereignisse reagiert werden kann.
+
+Probleme von BPEL
+Die XML-Syntax von BPEL macht es schwer, fehlerfreie Programme zu schreiben, ohne dabei
+auf die Unterstützung einer Entwicklungsumgebung zurückzugreifen. Eine einheitliche oder
+gar standardisierte grafische Notation gibt es bisher nicht. Allerdings hat die Business Process
+Modelling Notation BPMN Whi06, die derzeit von der Object Management Group (OMG)
+standardisiert wird, gute Aussichten sich als Standard im Bereich der grafischen Notation von
+Geschäftsprozessen (und damit auch BPEL-Prozessen) zu etablieren.
+Als Resultat der Vereinigung der beiden grundlegend verschiedenen Konzepte hinter WSFL und
+XLANG, gibt es mitunter mehrere Repräsentationen für einen Geschäftsprozess in BPEL. Dies
+zeigt, dass BPEL über redundante Ausdruckmittel verfügt, was dem Betrachter das intuitive
+Verständnis eines BPEL-Prozesses erschwert.
+Ein weiteres Problem stellt die informelle Spezifikation von BPEL dar. Das heißt, das Dokument
+beschreibt die Sprache mehr oder weniger umfangreich mit englischem Text und einigen
+Beispielen. Mehrdeutigkeiten in der Spezifikation führen jedoch zu unterschiedlichem Verhalten
+von ein und dem selben Prozess in BPEL-Laufzeitumgebungen verschiedener Hersteller. Die
+mit BPEL beschriebenen Prozessmodelle sind somit bislang weder portabel noch interoperabel.
+Diesem Umstand soll jedoch mit der neuen erweiterten BPEL-Spezifikation WS-BPEL 2.0 in
+hohem Maße Rechnung getragen werden, obwohl auch diese rein informell sein wird.
+
+Neuerungen von WS-BPEL 2.0
+3.1 Ausdrücke und Anfragen
+WS-BPEL 2.0 lässt sich in Bezug auf Sprachen zur Definition von Ausdrücken und Anfragen
+erweitern. Daher besitzt nun jedes WS-BPEL-Sprachelement, in dessen Spezifikation Ausdrücke
+oder Anfragen definiert werden können, zusätzlich das optionale expressionLanguage- bzw.
+queryLanguage-Attribut. In diesem Attribut kann die zur Ausdrucksspezifikation verwendete
+Sprache angegeben werden.
+Im Falle von expressionLanguage betrifft dies die folgenden XML-Elemente:
+ <process>
+(generelle Spezifikation der verwendeten Sprache zur Definition von Ausdrücken)
+ <for>, <until>, <repeatEvery>
+(Definition von Zeitdauer bzw. Zeitpunkten)
+<condition>, <joinCondition>, <transitionCondition>
+(Definition von booleschen Bedingungen)
+ <startCounterValue>. <finalCounterValue>, <branches>
+(Definition von Integer-Ausdrücken)
+ <from>
+(Definition von Ausdrücken zur Belegung von Variablen)
+Im Falle von queryLanguage betrifft dies die folgenden XML-Elemente:
+ <process>
+(generelle Spezifikation der verwendeten Anfragesprache)
+<to>
+(Definition des Ziels einer Zuweisung)
+
+Correlation
+Das initiate-Attribut des <correlation>-Elements kann zusätzlich zu den Werten yes
+und no jetzt auch den Wert join annehmen. Die Semantik sieht dabei wie folgt aus: Ist das
+initiate-Attribut auf join gesetzt, muss die entsprechende Aktivität versuchen, das Correlation
+Set zu initialisieren, falls es noch nicht initialisiert worden ist. Ist das Correlation Set initialisiert,
+aber die Correlation-Konsistenzbedingung verletzt, wird der Fehler bpws:correlationViolation
+geworfen.
+Des Weiteren wurde die Semantik für die folgenden Fälle präzisiert:
+ Versucht eine Aktivität mit initiate= yes  ein Correlation Set zu initialisieren, das
+bereits initialisiert worden ist, wird ein bpws:correlationViolation Fehler geworfen.
+ Tritt ein bpws:correlationViolation Fehler bei der Abarbeitung einer <invoke>-Aktivität
+auf, so darf dieser erst geworfen werden, wenn die entsprechende Antwort empfangen
+wurde. In allen anderen Fällen, darf die den bpws:correlationViolation Fehler verursachende
+Nachricht nicht gesendet bzw. empfangen werden.
+Die zulässigen Werte für das pattern-Attribut des <correlation>-Elements wurden von in
+nach response, von out nach request und von in-out nach request-response umbenannt.
+
+Basisaktivitäten
+3.3.1 Kommunikation
+Im Gegensatz zu BPEL4WS 1.1 ist das portType-Attribut in WS-BPEL 2.0 optional. Der Wert
+des portType-Attributs ergibt sich (wie auch in BPEL4WS 1.1) implizit aus der Kombination
+des angegebenen partnerLink und der durch die Kommunikationsaktivität implizit spezifizierten
+Rolle.
+WS-BPEL 2.0 erleichtert den Umgang mit mehrteiligen WSDL-Nachrichten, durch eine Erweiterung
+der Kommunikationsaktivitäten um optionale <toPart>- und <fromPart>-Elemente.
+Diese dienen dazu,Werte aus BPEL-Variablen als Teile einer Nachricht zu versenden (<toPart>-
+Elemente) bzw. Teile einer empfangenen Nachricht direkt in BPEL-Variablen abzulegen (<fromPart>-
+Elemente). Allerdings gilt folgende Einschränkung: <receive>- und <invoke>-Aktivitäten, die
+<fromPart>-Elemente enthalten, dürfen kein variable- bzw. inputVariable-Attribut besitzen,
+und <reply>- und <invoke>-Aktivitäten, in denen <toPart>-Elemente verwendet werden,
+dürfen kein variable- bzw. outputVariable-Attribut besitzen.
+Die Syntax der <toPart>-Elemente sieht wie folgt aus:
+<toPart part= ncname  fromVariable= ncname /> 
+%--
+
+

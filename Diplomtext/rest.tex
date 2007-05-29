@@ -11,6 +11,71 @@ wieviel des zu untersuchenden Codes tatsächlichdurch die Tests ausgeführt wurde.
 
 
 
+\subsubsection{Normaler Kontrollfluss}
+Den Kontrollfluss bestimmen in BPEL, wie bereits mehrmals erwähnt, die strukturierten Aktivitäten. In den folgenden Bildern sind die entsprechenden Kontrollflussgraphen abgebildet. Die grauen Elementen deuten an, wie die einzelnen Graphen in den Gesamtfluss eingebunden werden. Für die Zweigabdeckung relevanten Kanten sind schwarz dargestellt.
+\begin{figure}[htbp!]
+	\centering
+		\includegraphics[width=0.65\textwidth]{bilder/h1.png}
+	\label{fig:h1}
+\end{figure}
+\begin{figure}[htbp!]
+	\centering
+		\includegraphics[width=0.65\textwidth]{bilder/h2.png}
+	\label{fig:h2}
+\end{figure}
+
+Bei den Aktivitäten, deren Graphen in der Abbildung vorhanden sind, entspricht der Kontrollfluss den Konstrukten, die aus vielen Programmiersprachen bekannt sind. Die Restlichen sind BPEL-spezifisch und müssen gesondert betrachtet werden.
+
+
+\parpic(6.5cm,5cm)[r]{\includegraphics[width=0.30\textwidth]{bilder/pick.png}} 
+\textbf{\textit{Pick}-Aktivität.}\\
+Bei dieser strukturierenden Aktivität wird ein Zweig aus mehreren anhand eines Ereignisses (Nachricht oder Alarm) ausgewählt. Wurde ein zutreffendes Ereignis empfangen, so wird die zugehörige Aktivität ausgeführt und alle nachfolgenden Ereignisse verworfen. Aus der Sicht des Kontrollflusses stimmt dieses Verhalten mit dem einer IF-\-Akti\-vi\-tät überein. Deswegen werden diese beiden Aktivitäten im Kontrollfluss durch gleiche Graphen repräsentiert.
+
+\textbf{\textit{Flow}-Aktivität.}\\
+  Mit der \textit{Flow}-Aktivität wird in BPEL paralleler Ablauf mehrerer Aktivitäten realisiert. Außerdem gibt es mit dem Link-Konzept, ein mächtiges Instrument, das ermöglicht, Syn\-chro\-ni\-sa\-tions\-ab\-hän\-gig\-keiten aufzustellen und damit komplexe Abläufe zu realisieren. Die rechte Abbildung zeigt den zugehörigen Kontrollfluss. 
+  \parpic(6.4cm,3.6cm)[r]{\includegraphics[width=0.33\textwidth]{bilder/flow.png}}
+  Die Links (gestrichelte Pfeile) unterscheiden sich semantisch von den normalen Kanten des Kontrollflussgraphes.
+  Wie es bereits im Abschnitt .. geschildert wurde, haben die Links trotzdem einen erheblichen Einfluss auf den Kontrollfluss und sind damit für die Zweigabdeckung relevant. 
+
+  Aus der Sicht der Abdeckungsmessung ist die Tatsache besonders, dass der Status der Links drei Werte annehmen kann: \textit{true}, \textit{false} und \textit{unset}  Die normalen Kontrollflusskanten können dagegen nur zwei Werte annehmen: entweder \textit{aktiviert} oder \textit{nicht aktiviert}(\textit{unset}). Für die Links bedeutet das, dass \textit{true}- und \textit{false}-Status bei der Messung der Abdeckung erfasst werden müssen. 
+
+\textbf{\textit{ForEach}-Aktivität.}
+Die \textit{ForEach}-Aktivität sorgt für mehrmaliges Ausführen des enthaltenen Scopes. Die Anzahl der Ausführungen wird durch Start- und Stopvariablen vorgegeben. Die Besonderheit dabei ist, dass die Ausführung entweder sequenziell oder parallel erfolgen kann. Die Ausführungsart wird durch den  Wert der Variable \textit{parallel} (\textit{yes}/\textit{no}) geregelt. 
+
+Dieses Verhalten kann durch zwei Graphen dargestellt werden. Die Abbildung ... repräsentiert sequentielle Ausführung, die einer for-Schleife aus den konventionellen Programmiersprachen entspricht. Der Graph daneben repräsentiert eine parallele Ausführung.
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.73\textwidth]{bilder/forEeach2.png}
+	\label{fig:forEeach2}
+\end{figure}\\
+
+Während der reguläre Kontrollfluss des Programms den Steuerfluss für alle reguläre Situationen vorgibt, gibt es in BPEL ein (\textit{FaultHandler})-Kontrollfluss, der für die Behandlung zur Laufzeit aufgetretener Fehler vorgesehen ist. Inwiefern dieses Verhalten in die Zweigabdeckung mit einfließen kann, wird im nächsten Abschnitt diskutiert. 
+\subsubsection{Kontrollfluss bei Ausnahmebehandlung}
+BPEL-Sprache hat wie viele moderne Programmiersprachen ein Konzept zur strukturierten Behandlung von Laufzeitfehlern. 
+Die Umschaltung von normalen auf \textit{FaultHandler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{FaultHandler} ausgeführt wird. Die Fehler können auch in den \textit{Compensation} und in den \textit{FaultHandler} selbst auftreten. In die Abbildung \ref{fig:ScopeFaultCompensation2} wird der Zusammenhang zwischen \textit{Handler} und \textit{Scopes} graphisch dargestellt und durch die Pfeile den möglichen Kontrollfluss zwischen diesen Einheiten gezeigt. 
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.35\textwidth]{bilder/ScopeFaultCompensation2.png}
+	\caption{Zusammenhang zwischen Scopes, Fault und Compensation Handler}
+	\label{fig:ScopeFaultCompensation2}
+\end{figure}
+
+Vor allem die vielfältige Fehlerquellen und die Möglichkeit die Fehler weiterzuleiten machen es schwierig alle möglichen Übergaben der Aus\-füh\-rungs\-kon\-tro\-lle an die FaultHandler zu berücksichtigen. Aus diesem Grund werden die Verbindungskanten zwischen den Scopes, Fault und Compensation Handler in dieser Arbeit bei der Zweigabdeckung nicht berücksichtigt. 
+
+Das Gleiche gilt für CompemsationHandler, die nur im Rahmen der Fehlerbehandlung ausgeführt werden.
+
+Dass die Fault- und Compensation Handler, sowie die interne Logik dieser Handler, trotzdem durch die Tests abgedeckt werden sollten, ist unumstritten. Demzufolge ist es sinnvoll den Kontrollfluss \textit{innerhalb} der Handler bei der Messung der Abdeckung zu berücksichtigen. In der Abbildung .. wird der Kontrollfluss des gesamten Prozesses angedeutet. Die rote Farbe markiert den aktuellen Durchlauf. Während alle durchgezogenen Kanten (auch in \textit{Fault}- und \textit{CompensationHandler}) für die Zweigabdeckung relevant sind, gehen die gestrichelten, wie bereits erläutert, nicht in die Rechnung ein.  
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.9\textwidth]{bilder/Fault_Compensation.png}
+	\label{fig:Fault_Compensation}
+\end{figure}
+ 
+ In den folgenden Abschnitten werden die Metriken vorgestellt, die den Grad der durch die Tests abgedeckten Fault- bzw. Compensation Handler wiedergeben.
+\\
+
+
+
 Anweisungs¨uberdeckung wird im allgemeinen nicht als hinreichendes Kriterium
 f¨ur die Vollst¨andigkeit eines Tests betrachtet, ihre Auswertung ergibt sich als
 Nebenprodukt der Auswertung umfassenderer ¨Uberdeckungskriterien. Empirische

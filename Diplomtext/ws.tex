@@ -1,0 +1,113 @@
+%--Business Process Execution Language for Web services
+De¯nition 2.1 (Web Service).
+Ein Web Service ist eine abgeschlossene, selbsterklÄarende und modulare Software-
+Komponente, die Äuber das Internet verÄo®entlicht, aufgefunden und benutzt werden kann.
+Ein Web Service stellt eine beliebig komplexe FunktionalitÄat zur VerfÄugung. Ein verÄo®ent-
+lichter Web Service wird mit einer anderen Anwendung (mÄoglicherweise ebenfalls ein Web
+Service) zu einem neuen System komponiert. Der Nachrichtenaustausch zwischen Web
+Service basiert zumeist auf dem XML-Format.
+
+Ein Web Service ist somit eine o®ene Komponente mit einer wohl de¯nierten Schnittstelle
+zur Au¼enwelt. Alle zur Benutzung notwendigen Informationen Äuber einen Web Service
+sind in der Äo®entlich zugÄanglichen Beschreibung seiner Schnittstellen enthalten.
+
+Web Service Technology Stack
+Nun beschÄaftigen wir uns detaillierter mit der Architektur von Web Services. Im Gegensatz
+zum monolithischen Stil frÄuherer AnsÄatze basieren Web Services auf einer Reihe zusammen-
+hÄangender Technologien. In diesem Zusammenhang fÄallt hÄau¯g der Begri® des Technology
+Stacks. Abbildung 2.2 veranschaulicht dessen Aufbau in Anlehnung an [Sle01].
+Den Kern (genannt Core Layers) bilden bereits etablierte Technologien. Durch den RÄuck-
+gri® auf weitgehend akzeptierte Standards gelingt es mit dieser Schicht, zu fast allen exis-
+tierenden Systemen kompatibel zu sein und eine Hard- und Software-unabhÄangige Basis fÄur
+die aufbauenden Schichten zu scha®en. Zu den Kern-Schichten zÄahlen:
+Transport
+DerWeb-Service-Ansatz ist an kein bestimmtes Transport-Protokoll gebunden, um die
+FlexibilitÄat nicht einzuschrÄanken. Doch die Verwendung weit verbreiteter Protokolle
+wie TCP/IP und HTTP ist Äublich, um Web Services in jedem Umfeld { vor allem
+auch Äuber Firewalls hinweg { zugÄanglich zu machen. [Kre01]
+Extensible Markup Language (XML)
+XML ist ein allgemein anerkanntes Datenformat zum Austausch von Informationen
+
+zwischen verschiedenen Anwendungen. Aufgrund seiner FlexibilitÄat und Erweiterbar-
+keit wird XML als Grundstock der meisten Schichten im Web Service Technology
+Stack verwendet. [BPMM00]
+Simple Object Access Protocol (SOAP)
+SOAP unterstÄutzt die Kodierung beliebiger Daten (normalerweise in XML) und deren
+Transfer (z. B. Äuber HTTP). Im Zusammenhang mit Web Services ist SOAP u. a. eine
+Programmiersprachen-unabhÄangige Version von RPC (Remote Procedure Call). Pa-
+rameter des Funktionsaufrufs und Antworten werden ebenfalls in der SOAP-Nachricht
+kodiert. [BEK+00]
+Die hÄoheren Schichten, hier als Emerging Layers bezeichnet, umfassen die neuen Technologien.
+Diese Technologien be¯nden sich teilweise noch im Entwicklungsstadium oder werden zur
+Zeit standardisiert. Als feste Bestandteile des Technology Stacks gelten:
+Web Services Description Language (WSDL)
+WSDL ist eine XML-basierte Sprache, mit der spezi¯ziert wird, welche Operationen
+der Web Service zur VerfÄugung stellt und wie die Verbindung mit dem Web Ser-
+vice ablaufen soll. Die Konzeption von WSDL sieht eine grobe Zweiteilung vor: Der
+abstrakte Teil de¯niert sprach- und plattformunabhÄangige Typen, Nachrichten, Ope-
+rationen und Port-Typen. Der konkrete Teil { genannt binding { bildet die abstrakten
+Elemente auf konkrete Datenstrukturen, Protokolle und Adressen ab. [CCMW01]
+Universal Description, Discovery, and Integration (UDDI)
+UDDI ist die globale Verzeichnisstruktur fÄur Web Services und gleichzeitig ein Pro-
+tokoll, um Web Services zu suchen und zu verÄo®entlichen. Eine UDDI-Registrierung
+besteht aus den Wei¼en, Gelben und GrÄunen Seiten:
+
+Mit WSDL lassen sich bereits einfacheWeb Services beschreiben, wie z. B. eine Fahrplanaus-
+kunft. Nach au¼en (zum Benutzer) spezi¯ziert WSDL die Schnittstelle, d. h. die Adresse des
+Web Service und das Nachrichtenformat. Nach innen (zur AusfÄuhrungskomponente) de¯-
+niert WSDL die Anbindung von realer Software an die Schnittstelle.
+Aus der De¯nition 2.1 geht jedoch explizit die Ausrichtung des Web-Service-Ansatzes
+auf beliebig komplexe FunktionalitÄat hervor. Aus diesem Grund bestreben allen voran IBM
+und Microsoft die Standardisierung weiterer wichtiger Technologien, mit denen sich quali-
+tative Aussagen Äuber Web Services formulieren lassen. DarÄuber hinaus soll es mÄoglich sein,
+zwischen den Operationen eines Web Service KausalitÄat zu de¯nieren. Erst auf diese Weise
+lassen sich GeschÄaftsprozesse beschreiben. Als Erweiterungen des Web Service Technology
+Stacks sind zu nennen:
+Quality of Service (QoS)
+Neben der syntaktischen KompatibilitÄat zweier Web Services { d. h. zueinander pas-
+sende Nachrichtentypen und Operationen { gibt es beim Zusammenspiel verteilter
+Komponenten in verschiedenen Organisationen eine Vielzahl weiterer Aspekte, die
+zueinander passen mÄussen. Ein Teil davon wird als Quality of Service bezeichnet.
+Zur Beschreibung und zum Abgleich dieser Aspekte, be¯nden sich zur Zeit etliche
+WS. . . -Sprachen im Prozess der Standardisierung. Exemplarisch seien hier genannt:
+WS-Security [ADLH+02] vereinigt die Mechanismen fÄur Sicherheit und Authenti¯zie-
+rung und soll ermÄoglichen, Informationen verschlÄusselt zwischen einzelnen Unterneh-
+men auszutauschen. WS-Security de¯niert Erweiterungen fÄur SOAP und stellt so die
+IntegritÄat und den Schutz der Daten in verteilten Anwendungen sicher.
+WS-Coordination [CCC+02a] dient zur Koordinierung von Web-Services unterschied-
+licher Unternehmen. ÄUber WS-Coordination kÄonnen sich Web Services einander be-
+kannt machen und ihre Kommunikation aufeinander abstimmen.
+WS-Transaction [CCC+02b] setzt auf WS-Coordination auf und erlaubt es, einen
+Web-Service-basierten GeschÄaftsprozess im laufenden Betrieb nach einem Transak-
+tionsprotokoll zu ÄuberprÄufen. Damit kann rechtzeitig auf StÄorungen oder Fehler im
+GeschÄaftsprozess reagiert werden.
+Business Process Execution Language
+Die Business Process Execution Language for Web Services (BPEL4WS [ACD+02])
+ist eine XML-basierte Sprache zur Beschreibung verteilter GeschÄaftsprozesse. Mit
+BPEL4WS kann sowohl der GeschÄaftsprozess innerhalb eines Web Service als auch
+die Interaktion mit seinen Partnern spezi¯ziert werden. Der GeschÄaftsprozess in ei-
+nem Web Service kann Web Services von Partnern einbinden. Im Gegenzug wiederum
+steht er als Baustein anderen zur VerfÄugung. BPEL4WS kombiniert die Sprachen WSFL
+von IBM [Ley01] und XLANG von Microsoft [Tha01], Äubernimmt deren Funktionen
+und ersetzt sie.
+Der hier vorgestellte Web Service Technology Stack ist bei weitem nicht der einzige Ansatz,
+eine Architektur fÄur Web Services zu de¯nieren, jedoch der am weitesten verbreitete und
+anerkannte. Ein konkurrierender Ansatz ist Electronic Business XML (ebXML) von OASIS.
+In dieser Arbeit befassen wir uns vor allem mit BPEL4WS und verzichten auf einen Vergleich
+der alternativen AnsÄatze. Der generelle Charakter vieler Resultate in den folgenden Kapiteln
+lÄasst eine einfache ÄUbertragung der Ergebnisse jedoch als mÄoglich erscheinen.
+
+%--
+
+%--Webservices werden Standard
+Kaum ein Unternehmen kann alle seine Prozesse mit einer einzigen betriebswirtschaftlichen Standardsoftware (ERP) ohne Anpassung erledigen. So individuell wie die Produkte und Dienstleistungen von mittelständischen Unternehmen sind, so heterogen sind oftmals deren IT-Landschaften. Dies bedingt meist auch die Notwendigkeit, Daten aus einem ERP Modul mit anderen Anwendungen auszutauschen. Ob nun durch eine Punkt-zu-Punkt-Verbindung durch Nachrichtenaustausch oder durch eine Geschäftsprozessmanagementlösung realisiert – das Problem bleibt die Integration der unterschiedlichen Schnittstellen. Webservices bieten die Möglichkeit, diese Schnittstellen zu vereinheitlichen und jedes Modul, jede Anwendung und jeden Dienst standardisiert anzusprechen.
+
+
+
+Der Datenaustausch vereinfacht sich dramatisch
+Standards wie SOAP, UDDI (Universal Description, Discovery and Integration) und XML garantieren eine Interaktion von Serviceanbieter und -konsument ohne dass sich beide Anfrage überhaupt kannten. Die Macht dieser Standards gepaart mit den globalen Möglichkeiten des Internets erlauben eine freie Auswahl des Serviceanbieters. Die Anbieter hingegen können andererseits ihre Dienste praktisch jedem Konsumenten anbieten.
+
+Eine Funktion oder einen Dienst mit einer Webservice-Schnittstelle zu versehen, bedeutet einen gewissen Mehraufwand. Besteht die Anforderung, ein ERP System mit einer anderen Anwendung zu verbinden, so mag eine einfache Punkt-zu-Punkt Verbindung sehr effizient in der Laufzeitumgebung sein. Aber schon bei minimalen Änderungen bei einem der involvierten Systeme wird die Unflexibilität dieser Methode offensichtlich.
+
+Eine bessere Lösung besteht darin, durch die Ausnutzung von Webservices eine Abstraktionsschicht zu generieren. Damit entkoppelt man die Integrationslogik von den Systemen und schafft Flexibilität und Austauschbarkeit von den darunterliegenden Diensten. Webservices bieten die Möglichkeit, Systeme verschiedener Herkunft miteinander zu verbinden und die Schnittstellen wiederzuverwenden. Für den Prozesskontext zählt dann nur noch, welche Services verwendet werden. Ob dahinter dann eine Java-Anwendung, eine Dotnet-Applikation oder ein komplettes ERP-System steht, ist zweitrangig.
+%--

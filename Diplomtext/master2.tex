@@ -4,9 +4,9 @@
 %\usepackage{ae}                 % interne 8bit Codierung für bessere Trennungen
 \usepackage[ngerman]{babel}           % deutsche Trennungen und Bezeichnungen
 %\usepackage{bibdbis}            % Literaturangaben aus der Datenbank mit bibtex
+\usepackage{amsmath,amsfonts,amssymb}
 \usepackage {natbib}
 \citestyle{dinat}
-\bibliographystyle{dinat}
 \usepackage{typearea}           % Satzspiegelberechnung: Texthöhe und -breite
 \typearea{12}                   % je höher das Argument, desto kleiner die Ränder
 \usepackage{graphicx}           % zur Graphikeinbindung
@@ -32,7 +32,7 @@
 %\addtolength{\evensidemargin}{-2cm}	% Ränder für gerade Seiten
 \textheight24cm						% Vertikale Texthöhe
 
-%\parskip4mm						%Abstand zwischen Absätzen
+\parskip3mm						%Abstand zwischen Absätzen
 \parindent0mm					%Einrückung bei Absatzbeginn
 
 
@@ -55,6 +55,7 @@
 \newenvironment{subproc}{\begin{itemize}}{\end{itemize}}
 \newenvironment{costtable}{\begin{center}\renewcommand{\arraystretch}{1.5}\begin{tabular}{l|c|c}}{\end{tabular}\end{center}}
 \newenvironment{formtable}[1]{\begin{center}\renewcommand{\arraystretch}{2}\begin{tabular}{#1}}{\end{tabular}\end{center}}
+\newtheorem{Def}{Definition}
 
 \date{\today \\[2cm]
 	Erstprüfer: Prof. Dr. Kurt Schneider\\
@@ -107,10 +108,11 @@
 \section{SOA}
 \input{soa}
 \section{Web Services}
+%\input{ws}
 \subsection{SOAP}
 \subsection{WSDL}
 \section{Komposition der Services mit BPEL}
-\input{bpel}
+%\input{bpel}
 \subsection{BPEL Prozess}
 \input{bpelprozess}
 \subsection{Geschäftslogik mit BPEL}
@@ -131,13 +133,15 @@
 \section{Abdeckung, als Maß für die Testqualität}
 \input{testabdeckung}
 \chapter{Testabdeckung in BPEL}
-\input{konzepte}
-\newpage
+\input{bpelformal}
 \section{Definition der Abdeckungsmetriken für BPEL}
 \input{konventionelleMetriken}
+\input{konzepte}
 \section{Umsetzung der Abdeckungsmessung}
 \input{UmsetzungDerMessung}
+
 \chapter{Design und Implementierung}
+\input{implementierung}
 \section{Integration der Testabdeckungsmetriken in BPELUnit-Framework}
 \section{Optimierung}
 \input{optimierung}
@@ -146,5 +150,6 @@
 \chapter{Zusammenfassung und Ausblick}
 \input{ausblick}
 \input{rest}
+\bibliographystyle{plain}
 \bibliography{referenzen}
 \end{document}

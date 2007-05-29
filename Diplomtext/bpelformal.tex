@@ -1,0 +1,78 @@
+Durch die Berechnung der Testabdeckung will der Tester erfahren, wieviel von dem Prüfling beim Testen ausgeführt wurde. Für die Definition des Prüflings, in diesem Fall BPEL-Prozesses, wird die BPEL Formalisierung von Ouyang in ??? verwendet. Nach der Präsentation der wichtigsten Punkten dieser Formalisierung folgen die Definition der  Aktivität- und Zweigabdeckung. Darüber hinaus werden zwei spezial für BPEL definierten Metriken vorgestellt: Link- und Handlerabdeckung.  Anschließend wird das Konzept für die Umsetzung und Integration in das BPELUnit- Framework vorgestellt.
+\section{Formale Definition von BPEL}
+Die hier vorgestellte formale Beschreibung von WS-BPEL Process Model ist nicht
+vollständig und fasst nicht den gesamten Umfang von WS-BPEL um. Es werden nur
+für diese Arbeit relevante Teile des Modells beschrieben. Als Grundlage dient
+eine Definition aus  \cite{Ouyang2005}, die abgesehen von der Anpassung an den
+Standard WS-BPEL 2.0 und einigen Erweiterungen, unverändert übernommen wurde.  
+
+\begin{Def}[WS-BPEL Process Model ] A WS-BPEL Process Model is a tuple $\mathcal{W=(A,\ E,\ C,\ L,\ HR,\ }type_{\mathcal{A}},\ type_{\mathcal{E}},\ instance,\ name,\ <_{seq},\ <_{if},\\ serialscp,\ process,\ trigger,\ scp_c,\ trigger_c,\ scp_t,\ trigger_{tf},\ \mathcal{LR},\ joincon,\\
+transitionCondition,\  supjoinf,\ trigger_{jf})$ where: 
+\begin{itemize}
+	\item $\mathcal{A}$ is a set of activities,
+	\item $\mathcal{E}$ is a set of events,
+	\item $\mathcal{C}$ is a set of conditions,
+	\item $\mathcal{L}$ is a set of control links,
+	\item let $\mathcal{B=E\cup C} \cup\{\bot\} $ be a set of labels where $\bot$ denotes the empty label, then $\mathcal{HR\subseteq A\times B\times A}$ is a labeled tree which defines the relation between an activity and its direct sub-activities,
+	\item $\forall a\in \mathcal{A},\ let\ \mathcal{HR}_{p}=_{\pi 1,3}\mathcal{HR}$(the projection of $\mathcal{HR}$ on two activity sets), $children(a)=\{a'\in \mathcal{A}|\mathcal{HR}_p(a,a')\}$ is the set of immediate descendants of $a$,
+	\item $type_\mathcal{A}:\mathcal{A\rightarrow T_A}$ is a function that assigns types to activities taken from the set of activity types 
+	
+\begin{itemize}
+	\item $\mathcal{T_A=T_B\cup T_S}$
+	\item $\mathcal{T_B}=\{receive,\ reply,\ wait,\ assign,\ validate,\ empty,\ 
+throw,\ rethrow,\\
+\ compensate,\ compensateScope,\ exit\}$
+\item $\mathcal{T_S}=\{sequence,\ flow,\ pick,\ if,\ while,\ repeatUntil,\ forEach,\ scope\}$
+\end{itemize}
+\item $\forall t\in \mathcal{T_A},\ \mathcal{A}_t=\{a\in \mathcal{A}|type_\mathcal{A}(a)=t\}$ is a set of all activities of type $t$,
+\item $type_\mathcal{E}:\mathcal{E\rightarrow T_E}$ is a function that assigns types to events taken from the set of event types $\mathcal{T_E}=\{message,\ alarm,\ fault,\ compensation,\ termination\}.$
+\item $\forall t\in \mathcal{T_E},\ \mathcal{E}_t=\{e\in \mathcal{E}|type_\mathcal{E}(e)=t\}$ is a set of all events of type t,
+%\item $instance:\mathcal{A}_{receive}\cup \mathcal{A}_{pick}\rightarrow \mathcal{B}$ is a %function which sddigns a boolean value to the createInstance attribete of a receive or a %pick activity.
+\item $let\ \mathcal{A}^{structured}=\mathcal{A}_{sequense}\cup \mathcal{A}_{flow}\cup \mathcal{A}_{if}\cup \mathcal{A}_{while}\cup \mathcal{A}_{repeatUntil}\cup \mathcal{A}_{forEach}\cup \mathcal{A}_{pick}\cup \mathcal{A}_{scope}$ be a set of structured sctivities, $\forall_{s\in \mathcal{A}^{structured}}(children(s)\neq \emptyset)$, i.e., they are the internal nodes of the $\mathcal{HR}$ tree,
+\item let $\mathcal{A}^{basic}=\mathcal{A}_{invoke}\cup \mathcal{A}_{receive}\cup \mathcal{A}_{reply}\cup \mathcal{A}_{wait}\cup \mathcal{A}_{assign}\cup \mathcal{A}_{validate}\cup \mathcal{A}_{empty}\cup \mathcal{A}_{validate}\cup \mathcal{A}_{throw}\cup \mathcal{A}_{rethrow}\cup \mathcal{A}_{compensate}\cup \mathcal{A}_{compensateScope}$ be a set of basic activities, $\forall_{s\in \mathcal{A}^{basic}}(children(s)= \emptyset)$, i.e., they are the leaves of the $\mathcal{HR}$ tree,
+\item given $\mathcal{A'}=\mathcal{A}_{sequence}\cup \mathcal{A}_{flow},\ \mathcal{HR} \cap (\mathcal{A}'\times B\times A)=\mathcal{HR} \cap (\mathcal{A'}\times \{\bot\}\times \mathcal{A}),$
+\item $\forall s\in \mathcal{A}_{sequence},\exists$ an order $<^s_{seq}$ which is strict total order over $children(s)$,
+\item $\mathcal{HR}\cap (\mathcal{A}_{pick}\times \mathcal{B}\times \mathcal{A})=\mathcal{HR}\cap (\mathcal{A}_{pick}\times \mathcal{E}^{normal}\times \mathcal{A})$, where $\mathcal{E}^{normal}=\mathcal{E}_{message}\cup \mathcal{E}_{alarm}$ provides a set of normal events,
+\item $given \mathcal{A'}=\mathcal{A}_{if}\cup \mathcal{A}_{while}\cup \mathcal{A}_{forEach},\ \mathcal{HR}\cap (\mathcal{A'}\times \mathcal{B}\times \mathcal{A}=\mathcal{HR}\cap (\mathcal{A'}\times \mathcal{C}\times \mathcal{A})),$
+\item $given \mathcal{A'}=\mathcal{A}_{repeatUntil},\ \mathcal{HR}\cap (\mathcal{A'}\times \mathcal{B}\times \mathcal{A})=\mathcal{HR}\cap (\mathcal{A'}\times \{\bot\}\times \mathcal{A})),$
+\item $\forall s\in \mathcal{A}_{if},\ \exists$ an order $<^{s}_{if}$ which is a strict total order over $children(s)$,
+\item $\forall s\in \mathcal{A}_{if}$, let $last(s)\in children(s)$ be  the sub-activity in the last branch evaluated in s such that $\neg \exists_{a\in children(s)}(last(s)<^{s}_{if}a)$, let $c\in \mathcal{C},\\
+\mathcal{HR}(s,c,last(s))\Rightarrow \forall_{assign(c)\in Assign(\mathcal{C})}eval(c,assign(c))=true$. Note that $last(s)$ represent the else branch in if activity, which wnsures that at least one of the branches is taken in the activity,
+\item $\forall s\in \mathcal{A}_{while},\ \left| \mathcal{HR}\cap (\{s\}\times \mathcal{C}\times \mathcal{A})\right|=1$, i.e., each while activity has exactly ine sub-activity,
+\item $\mathcal{HR}\cap (\mathcal{A}_{scope}\times \mathcal{B}\times \mathcal{A})=\mathcal{HR}\cap (\mathcal{A}_{scope} \times (\mathcal{E}\times\{\bot \})\times \mathcal{A})$, where: $\forall s \in \mathcal{A}_{scope}$,
+\begin{itemize}
+	\item $\left|\mathcal{HR}\cap (\{s\}\times \{\bot\}\times \mathcal{A})\right|=1$, i.e., each scope has one primary (or main) activity,
+	\item $\left|\mathcal{HR}\cap (\{s\}\times \{\mathcal{E}_{fault}\}\times \mathcal{A})\right|\geq 1$, i.e., each scope provides at least one fault handler,
+		\item $\left|\mathcal{HR}\cap (\{s\}\times \{\mathcal{E}_{compensation}\}\times \mathcal{A})\right|\leq 1$, i.e., each scope provides at most one compensation handler,
+\end{itemize}
+\item $process\in \mathcal{A}_{scope}$ is the root of the $\mathcal{HR}$ tree,
+\item $trigger_{tf}:\mathcal{A}_{throw}\cup \mathcal{A}_{rethrow}\rightarrow \mathcal{E}_{fault}$ is a function which maps each throw activity to a (process-defined) fault event triggered by that activity,
+\item $scp_c:\mathcal{E}_{compensation}\rightarrow \mathcal{A}_{scope}\backslash \{process\}$ is an injective function mapping a compensation event to a (non-process) scope such that the occurrence of that event invokes the compensation of that scope,
+\item $trigger_c:\mathcal{A}_{compensate}\rightarrow \mathcal{E}_{compensation}$ is an injective function which maps each compensate activity
+to a compensation event triggered by that activity,
+\item $\mathcal{LR}\subseteq \mathcal{A}\times \mathcal{L}\times \mathcal{A}$ is a labeled acyclic graph which defines the relation between the source
+activity of a control link and the target activity of the link,
+\item let $\mathcal{A}^{source}=\{a\in \mathcal{A}|\exists_{l\in \mathcal{L}}((a,l)\in\pi_{1,2}\mathcal{LR})\}$ be a set of source activities of all control links, and $\mathcal{A}^{target}=\{a\in \mathcal{A}|\exists_{l\in \mathcal{L}}((l,a)\in \pi_{2,3}\mathcal{LR})\}$ be a set of target activities of all control links, then $\forall a\in \mathcal{A}^{source},\mathcal{L}_{out}(a)=\\
+\{l\in \mathcal{L}|\exists_{a'\in \mathcal{A}}\mathcal{LR}(a,l,a')\}$ is a set of all outgoing control links from a,
+and $\forall a\in \mathcal{A}^{target}, \mathcal{L}_{in}(a)=\{l\in \mathcal{L}|\exists_{a'\in \mathcal{A}}\mathcal{LR}(a',l,a)\}$ is a set of all incoming control links to $a$,
+\item let $a\in \mathcal{A}^{target},\ joincon(a)$, which expresses the join condition of incoming control links at $a$, is a
+boolean function over $\mathcal{L}_{in}(a)$(i.e. $Var(joincon(a))=\mathcal{L}_{in}(a))$,
+\item let $l\in_{ \pi 2}\mathcal{LR},\ transitionCondition(l)$, which expresses the transition conditionm of links, is a boolean function,
+\item Dead-path-elimination (DPE). 
+Wird eine Aktivität aufgrund einer zu $false$ ausgewerteten $joinCondition$ oder eines nicht abgearbeiteten Zweiges einer $if-$ oder $pick-$Aktivität nicht ausgeführt, so wird für alle ausgehenden Links die $transitionCondition$ auf $false$ gesetzt. Dieses Verhalten wird als Dead-Path-Elimination bezeichnet. 
+\item ...
+\end{itemize}
+\end{Def}
+
+Betrachtet man die Kontrollstruktur eines WS-BPEL Prozesses, so kann die $\mathcal{HR}$-Relation als Übergabe der Kontrolle von einer Aktivität an ihre Subaktivitäten betrachtet werden. Damit entspricht ein Element dieser Relation einem Zweig des Kontrollflussgraphen. Allerdings deckt diese Relation nicht alle Zweige des Graphen ab, es fehlen nämlich die Zweige, die die Kontrolle innerhalb der Schleifen von der inneren Aktivität an die Schleife zurückgeben. Die folgende Relation $\mathcal{HBR}$ beschreibt genau solche Beziehungen: 
+\begin{itemize}
+	\item $\mathcal{HBR}\subseteq \mathcal{A}\times\{\mathcal{C}\cup \{\bot\}\times \mathcal{A}\}$ beschreibt die Beziehung einer Aktivität zu der umschließenden Aktivität,
+	\item $\forall a,a'\in \mathcal{A},\ \forall(a,a')\in_{\pi 1,3}\mathcal{HBR}\Rightarrow a\in children(a')$
+\end{itemize}
+Für die Schleifen gilt:
+\begin{itemize}
+	\item given $\mathcal{A'}=\mathcal{A}_{while}\cup \mathcal{A}_{forEach}\cup \mathcal{A}_{},\ \mathcal{HBR}\cap (\mathcal{A}\times \mathcal{B}\times \mathcal{A'}=\mathcal{HR}\cap (\mathcal{A}\times \{\bot \}\times \mathcal{A'})),$
+	\item given $\mathcal{A'}=\mathcal{A}_{repeatUntil},\ \mathcal{HBR}\cap (\mathcal{A}\times \mathcal{B}\times \mathcal{A'}=\mathcal{HR}\cap (\mathcal{A}\times \mathcal{C}\times \mathcal{A'})).$
+\end{itemize}
+
+Die Relationen $\mathcal{HR}$ und $\mathcal{HBR}$ beschreiben zusammen alle Kanten des Kontrollflussgraphen des zugehörigen WS-BPEL Prozesses.
