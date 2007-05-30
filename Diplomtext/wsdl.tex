@@ -1,0 +1,108 @@
+Die Beschreibung enthält Informationen darüber , woraus der Web Service besteht, welche Daten ausgetauscht werden und wie der Web Service aufgebaut ist.
+WSDL dient dem Webservice dazu, standardisiertbekannzugeben, welche Funktionen er besitzt, wie die Schnittstellen (Parameter) aussehen und über welche Protokolle Konsumenten ihn ansprechen können.
+ Seit März 2001 ist die Version 1.1 aktuell. Auch hier wurde eine Arbeitsgruppe im W3C zur
+Weiterentwicklung gegründet, WSDL 1.2 und 2.0 sind in Arbeit.
+Versionen 
+
+
+Damit das Format hinsichtlich zukünftiger Nachrichtenformate und Transportprotokolle erweiterbar
+ist, gliedert es sich in zwei Teile. Eine abstrakte und eine konkrete Definition.
+Die abstrakte Definition beschreibt die Datentypen, die Operationen und Nachrichten. Diese
+werden zu so genannten portTypes zusammen gefasst.
+Die konkrete Definition bindet die portTypes an ein Transportprotokoll und fasst diese
+ports zu services zusammen.
+Dokument Struktur
+Abstrakte Definition Konkrete Definitionen
+Operationen undMessageswerden erstabstrakt beschrieben und dannan das jeweilige Netzwerk-Protokoll undMessage-Format gebunden (SOAP, HTTP, MIME)
+Bild
+
+definitions ist das Wurzelelement des WSDL-Dokuments. Es enthält den Namen des Services, Namespaces für den Service selbst und für die verwendete Standards.
+
+types enthält Definitionen für eigene Datentypen. Standardmäßig werden die Datentypen aus der XML-Schema-Spezifikation verwendet.
+Datentypen dienen derInteroperabilitätvon Anwendungen und Diensten, um eine gemeinsame Austauschbasis für Daten zu gewährleisten
+
+Das Konzept der XML-Schemas ist
+plattformneutralundsprachunabhängig
+Die Flexibilitätder XML-Schemas erlaubt es in WSDL die Besonderheiten bestehender Programmiersprachen oder Datenaustauschstandards abzubilden
+
+
+message  fasst die definierten Typen zu abstrakten Nachrichten zusammen
+definiert nur unidirektionale Nachrichten
+
+portType Der portType beschreibt die Schnittstelle des Services. In ihm werden eine oder mehrere
+Operationen zusammen gefasst, ähnlich wie ein Java Interface. Diese ordnen der Operation
+die Ein- und Ausgabeparameter zu. Über diese Zuordnung wird das sogenannte Message
+Exchange Pattern der Schnittstelle festgelegt.
+
+binding die vom Web Service verwendeten Kommunikationsprotokolle und Nachrichten formate. definiert konkrete Nachrichtenformate und Protokoll-Einzelheiten
+Die meist benutzten Protokolle sind SOAP, HTTP GET/POST. 
+Eine Bindung muss exakt ein Protokoll spezifizieren. 
+Jede Bindung baut auf genau eine Port Type auf.
+
+
+service definiert die Endpunkte eines Dienstes. Der Endpunkt selbst steht mit einer URI im untergeordneten port-Element. 
+Das service-Element stellt aus einem oder mehreren ports einen Dienst zusammen.
+Ein port ordnet dem Binding einen bestimmten Endpunkt zu. Wie dieser definiert wird,
+hängt von dem verwendeten Transportprotokoll ab. Bei SOAP über HTTP ist dies beispielsweise
+die URL, über die der Service Provider erreichbar ist.
+
+
+
+
+
+
+  
+  
+  WSDL ist jedoch nicht allein an SOAP gebunden. Es gibt eine Vielzahl von vordefinierten Bindungen, zu denen auch SOAP 1.1 zählt. WSDL hält sich an eine abstrakte Beschreibung von Web Services. WSDL verfolgt somit unterschiedliche Ziele:
+
+		
+ 	Jeder Web-Service l¨aßt sich als Objekt verstehen, das verschiedene Methoden
+zur Verf¨ugung stellt, auf die zugegriffen werden kann. Um diese Zugriffe zu
+erm¨oglichen und zu automatisieren, ist eine standardisierte Beschreibung der
+Schnittstelle zum Web-Service notwendig. Hierf¨ur wird die Web-Service Description
+Language verwendet.
+WSDL ist eine XML-basierte Sprache zur Beschreibung von Web-Services.
+Sie beschreibt die Methodenschnittstelle desWeb-Services, nicht aber denWeb-
+Service selbst. Neben der Methodenspezifikation beinhaltet sie auch technische
+Daten, wie die eigentliche Lage des Dienstes und an welche Transportprotokolle
+er gebunden ist.
+DieWeiterentwicklung von WSDL wird durch das W3C kooridiniert. WSDL
+liegt aktuell in der Version 2.0 vor und gliedert sich in drei Teile.
+Die Core Language ([WSDL Pt. 1]) mit allen wesentlichen Strukturierungselementen,
+die Message Exchange Patterns ([WSDL Pt. 1]) mit der Definition der
+m¨oglichen Kommunikationsmuster und
+die Bindings, welche den Zugriff auf Operationen und den Transport der
+gesendeten Nachrichten beschreiben.
+
+Die Elemente in einem WSDL-Dokument lassen sich in abstrakte Definitionen
+und konkrete technische Beschreibungen zu diesen Definitionen unterteilen. Die
+abstrakten Elemente dienen dabei der detaillierten Beschreibung der Schnittstelle
+einer Softwarekomponente. Die technischen Elemente dagegen beschreiben,
+wo Endpunkte der Komponente im Netzwerk lokalisiert und ¨uber welche
+Protokolle sie angesprochen werden k¨onnen.
+Die Unterscheidung in abstrakte und konkrete Definitionen bedeutet dabei
+aus Sicht der Middleware eine Trennung zwischen Schnittstellenbeschreibung
+und Serialisierungs- und Transportdetails. Sie erh¨oht die Erweiterbarkeit, Wiederverwendbarkeit
+und Portabilit¨at von Web-Services.
+Die konkreten Definitionen referenzieren
+dabei stets abstrakte Definitionen. Das bedeutet, daß zu einer abstrakten
+Definition mehrere konkrete Implementierungen existieren k¨onnen.
+Abbildung 6 zeigt die allgemeine Struktur eines WSDL-Dokuments und
+die Verkn¨upfungen der einzelnen Teilkomponenten. Jedes WSDL-Dokument
+wird von einem definitions-Element eingeleitet. Das Element definiert den
+Namensraum des WSDL-Dokuments und ¨offnet alle weiteren ben¨otigten Namensr
+¨aume.
+Abstrakte Definition
+Die abstrakte Definition beinhaltet die sprach- und plattformunabh¨angige Beschreibung
+der Schnittstelle des Web-Service. Zu den abstrakten Definitionen
+z¨ahlen die types- und interface-Elemente.
+Innerhalb des types-Elements werden die verwendeten Typen definiert. 
+Der konkrete Definitionsteil beinhaltet, an welcher Stelle ein Web-Service ¨uberhaupt
+zu finden und durch welche Transportmechanismen er abrufbar ist. Die
+Definition umfaßt die binding- und service-Elemente.
+Das binding-Element ist ein Container f¨ur Elemente zur Beschreibung der konkreten
+Serialisierungs- und Transportdetails f¨ur ein deklariertes Interface.
+
+
+
+

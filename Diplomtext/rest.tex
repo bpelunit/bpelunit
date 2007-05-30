@@ -191,3 +191,436 @@ Protokolliert man eine Aktivität, die das Ziel eines oder mehreren Links ist, da
 </flow>      \end{lstlisting}
 
 Für die Messung heisst es, während es bei normalen Kanten ausreichend ist, die aktivierten Kanten zu erfassen, muss es bei den Links zusätzlich zwischen \textit{true}- und \textit{false}-Status unterschieden werden. 
+
+
+Drei Elemente bilden die Grundlage von Web Services:
+Die Übermittlung: Die Kommunikation zwischen Service-Anbieter, Service-Konsument und ggf. Service-Verzeichnisdienst erfordert die Übermittlung von Nachrichten. 
+Es hat sich SOAP durchgesetzt.  Dieser von W3C verwaltete Standard basiert auf XML und liegt in der Version 1.2 vor.
+
+
+
+  Die
+Nutzung etablierter und standardisierter Internetstandards f¨ur Transport undDatenstrukturierung stellt dabei die Interoperabilit¨at bei der Kommunikation
+zwischen Softwarekomponenten sicher.
+Die Entwicklung der eingesetzten Standards wird vom W3C und anderen
+Standardisierungsgremien geleitet, wobei die Aufgabe haupts¨achlich in der Definition
+und Pflege bereits etablierter Standards der Web-Servicearchitektur
+besteht. Die Web-Servicearchitektur des W3C ist dabei kein fest vorgegebener
+Rahmen, sondern definiert lediglich die minimalen Anforderungen welche eine
+Softwarekomponente erf¨ullen muß, um als Web-Service zu gelten.
+Trotz der Offenheit der Web-Servicearchitektur haben sich die Beschreibunsstandards
+Simple Object Access Protocoll (SOAP), Web-Service Description
+Language (WSDL) und Universal Description, Discovery and Integration
+(UDDI) als Kern dieser Architektur etabliert.
+Diese Standards basieren auf XML und XML-Schema, so daß XML-f¨ahige
+Applikationen Dokumente welche auf diesen Standards beruhen verarbeiten
+k¨onnen. Zusammen mit der Nutzung von etablierten Netzwerk¨ubertragungsprotokollen
+ergeben sich somit gute Kommunikationseigenschaften.
+Mit SOAP steht dabei eine Beschreibungssprache zur strukturierten Daten-
+¨ubertragung zur Verf¨ugung. Es wird heute haupts¨achlich zur strukturierten
+Beschreibung von Nachrichten und ihren Parametern eingesetzt. WSDL ist
+ein plattformunabh¨angiger Standard zur Beschreibung der Schnittstellen von
+Softwarekomponenten. UDDI ist ein Beschreibungsstandard zur Kategorisierung
+und Beschreibung von Eintr¨agen in einem Verzeichnissystem für Dienste
+im Allgemeinen. UDDI erlaubt es dabei neben allgemeinen Informationen zur
+ver¨offentlichenden Institution, technische Daten zur Beschreibung der angebotenen
+Dienste zu publizieren. Diese drei Standards werden in den folgenden
+Abschnitten eingehend behandelt.Den Kern der Architektur bilden die zentral dargestellten Komponenten zum
+Nachrichtenaustausch (Messages), zur Schnittstellenbeschreibung von Services
+(Descriptions) und zur Komposition von Services zu komplexen Gesch¨aftsprozessen
+(Processes). Aus der Abbildung ist ersichtlich, daß die genannten Komponenten
+auf XML und XML-Schema basieren, was eine plattform¨ubergreifende
+Nutzbarkeit garantiert.
+Die vom W3C definierte Web-Servicearchitektur soll in erster Linie die Interoperabilit
+¨at der angebotenen Dienste sicherstellen. Details zur Implementierung
+oder zu Transport und Strukturierung der Daten werden dabei bewußt
+nicht definiert. Die Unterstützung des Nachrichtenaustausches von Softwarekomponenten
+¨uber Netzwerke charakterisieren Web-Services als Middleware für
+verteilte Systeme. Wichtigste Eigenschaften von Web-Services sind dabei ihre
+lose Kopplung, ihre Programmierbarkeit über selbstbeschreibende Schnittstellen,
+sowie Orts- und Protokolltransparenz.
+
+
+Die Beschreibung:  Der Service und die von ihm zur Verfügung gestellten Methoden müssen beschrieben werde, damit der Service-Konsument weiß, was der Dienst ihm bietet. WSDL ist der Standard. wird wie SOAP von W3C verwaltet. Version 1.2 ...
+
+Der Verzeichnisdienst:
+
+Die Standards für diese drei Grundelemente bilden das Fundament für Web Services.
+
+\begin{itemize}
+	\item SOAP ein standardisiertes, XML-basiertes
+Protokoll zum Verpacken von Nachrichten, die zwischen Applikationen ausgetauscht
+werden. setzt SOAP
+auf die Netzwerk- und Transportschichten auf. Es ist also irrelevant, welche
+Transportmechanismen f¨ur den eigentlichen Versand verwendet werden.Die gebr¨auchlichste Form des Austausches von SOAP-Nachrichten ist die ¨Ubertragung
+¨uber HTTP.
+\item UDDI
+dient zur Lokalisierung und Veröffentlichung
+von Web-Services im Internet
+UDDI = Register für Diensteund ihre Beschreibungen+ Suchmethoden+ Publishingmethoden
+UDDI-Daten enthalten Kontakt-Informationen, Listen von Business Services und Infos, wie einService via Protokoll angesprochen werden kann
+Um einen Web-Service im Internet zu finden, ist ein Verzeichnisdienst notwendig.
+F¨ur diese Zwecke wurde der Universal Description, Discovery and Integration-
+Standard geschaffen. UDDI bietet Standardfunktionen zum Klassifizieren,
+Katalogisieren und Verwalten von Daten und Metadaten ¨uber Web-
+Services, so daß diese einfach gefunden und verwendet werden k¨onnen.
+\item WSDL (Web Services Defnition Language) ist eine funktionale, XML-basierte Beschreibungssprache
+für die Schnittstellen eines Web Services.
+\end{itemize}
+
+
+Web S basieren, zumindestens in der Grundfunktionalität (Nachrichtenübermittlung, Beschreibung und Verzeichnisdienste) auf anerkannten standards. 
+Web Services können folgendermaßen definiert werden:
+
+
+Drei Grundlegende Standards.
+SOAP
+Die SOAP-Spezifikation definiert ein Rahmenwerk für die Übertragung von XML-Nachrichten über ein standardisiertes und anerkanntes Transportprotokoll.
+  Nachrichtenaustausch
+Anwendungen können Nachrichten (z.B. Aktienkurse, Warenbestellungen) in XML codieren undviaSOAP-Dokumenten austauschen
+Durch XML liefert SOAP eineplattformunabhängigesProtokoll
+für den Nachrichtenaustausch
+SOAP stellt Konventionen für eine standardisierte Darstellungsweiseder Informationen in XML für den Datenaustausch in heterogenen Systemen zur Verfügung
+SOAP liefert zwei Ansätze für den Nachrichtenaustausch:
+Remote Procedure Calls
+Funktionsaufrufe entfernter Prozeduren im Sinne verteilter Architekturen
+ElectronicDocument Interchange
+Dokument-basiertes SOAP, bei dem fachliche Dokumente z.B. Steuererklärung, Warenbestellungen ausgetauscht werden
+ Bei der Entwicklung legte man
+großen Wert auf Erweiterbarkeit, Offenheit und Heterogenität des Protokolls.
+SOAP besteht im Wesentlichen aus vier Teilen:
+ der Spezifikation für einen Umschlag (Envelope). Für ihn ist definiert, was in einer
+Nachricht enthalten ist, von wem es wie verarbeitet werden soll und ob einzelne Daten
+optional sind oder enthalten sein müssen.
+ ein Satz von Regeln, die vorschreiben, wie Daten in dem Umschlag repräsentiert werden
+sollen (Serialisierung)
+ eine Konvention, um Remote Procedure Calls und eventuelle Antworten auf diese zu
+repräsentieren
+ eine Vorschrift, wie SOAP via HTTP übertragen werden soll. Dank des erweiterbaren
+Entwurfs können aber beliebige Transportprotokolle verwendet werden.
+Eine SOAP-Nachricht muss nicht zwangsläufig direkt vom Sender (initial sender) an den
+Empfänger (ultimate receiver) geschickt werden, sondern kann über mehrere Relay-Stationen
+(intermediaries) geleitet werden. Den Weg, dem sie dabei folgt, nennt man Message Path.
+SOAP macht jedoch keine Angaben dazu, in welcher Reihenfolge die Stationen abgearbeitet
+werden. Es gibt aber einige SOAP-Erweiterungen, die diese Lücke zu füllen versuchen.
+Der SOAP-spezifische Teil einer Nachricht wird über die Zuordnung zu bestimmten Namensräumen
+erkennbar.
+Das Simple Object Access Protocol bietet ein standardisiertes, XML-basiertes
+Protokoll zum Verpacken von Nachrichten, die zwischen Applikationen ausgetauscht
+werden. Es bietet einen Mechanismus zum Austausch typisierter Daten
+in einem dezentralen, verteilten Umfeld und l¨aßt sich leicht mit verschiedenen
+¨Ubertragungsprotokollen nutzen. Die Grundidee ist, daß zwei Anwendungen
+Informationen ¨ubertragen k¨onnen, ohne daß auf das Betriebssystem, die Programmiersprache
+oder andere technische Implementierungsdetails R¨ucksicht genommen
+werden muß. F¨ur diesen Informationsaustausch wird dabei nichts weiter
+ben¨otigt als eine Nachricht, die so codiert ist, daß beide Anwendungen sie
+verstehen k¨onnen. Eine versendete Nachricht kann dabei jede beliebige Information
+enthalten: eine Suchanfrage an eine Suchmaschine oder ein Warenhaus,
+die Suche oder Buchung eines Fluges oder einer Zugfahrt, die Abfrage eines
+Aktienkurses, eine Warenbestellung etc.
+Urspr¨unglich begann Microsoft 1998 mit der Entwicklung von SOAP. Sp¨ater
+beteiligten sich andere Firmen wie IBM und SAP an der Standardisierung. Seit
+September 2000 wird die Weiterentwicklung des Standards durch eine Arbeitsgruppe
+des W3C koordiniert, wodurch Offenheit und Herstellerunabh¨angigkeit
+gew¨ahrleistet ist. Die aktuelle Version ist SOAP 1.2 ([SOAP Pt. 1] und
+[SOAP Pt. 2]).Als standardisiertes Protokoll zum Verpacken von Nachrichten 
+
+WSDL 
+
+Web Service Technologie Stack
+basieren Web Services auf einer Reihe zusammen-
+hÄangender Technologien.
+
+
+XML Schema: Der Standard beschreibt die Struktur
+oder das Format von XML-Daten. Auf diese Weise
+kann ein Programm, welches die Daten zur
+Bearbeitung erhält, erkennen, ob es sich dabei
+beispielsweise um Zahlenwerte oder
+Aufzählungstypen handelt.
+SOAP (Simple Access Protocol): Dieser Standard
+sorgt für die zuverlässige Übermittlung elektronischer
+Nachrichten zwischen Geschäftsanwendungen über
+das Internet. SOAP wurde von IBM, Lotus und
+Microsoft entwickelt.
+WSDL (Web Services Describtion Language):
+Dieser Standard beschreibt, wie Programme über das
+Internet oder andere Netze miteinander
+kommunizieren. WSDL dient der eindeutigen
+Definition von Nachrichtenformaten und Protokollen.
+WSDL wurde von IBM und Microsoft entwickelt.
+UDDI (Universal Description Discovery and
+Integration): Mit dem Standard können
+Unternehmen eigene technische Spezifikationen über
+E-Business-Regeln untereinander austauschen.
+UDDI wurde von IBM, Microsoft und Ariba entwickelt.
+
+
+  Die SOAP-Spezifikation definiert ein Rahmenwerk für die Übertragung von XML-Nachrichten über ein standardisiertes und anerkanntes Transportprotokoll.
+  
+  WSDL ist ein XML-Dialekt, der fehlende, aber oft notwendigen Metadaten für Web Services beschreibt. WSDL ist jedoch nicht allein an SOAP gebunden. Es gibt eine Vielzahl von vordefinierten Bindungen, zu denen auch SOAP 1.1 zählt. WSDL hält sich an eine abstrakte Beschreibung von Web Services. WSDL verfolgt somit unterschiedliche Ziele:
+
+	Erweiterbarkeit: Neue Codierungsvarianten und Transportmechanismen können definiert werden.
+ 	Abstrakte Definitionen: Nachrichten und Dienste werden abstrakt beschrieben, können aber auf eine oder mehrere konkrete Implementierungen abgebildet werden.
+ 	Wiederverwendung von Definitionen: Vorhandene Definitionen von Endpunkten können für neue Definitionen wiederverwendet werden.
+
+
+Grundlegendes
+   Eine WSDL-Datei besteht aus mehreren XML-Elementen und entsprechenden Kindelementen. Abbildung 2 enthält die grafische Darstellung der einzelnen Elemente von WSDL. Diese werden in den folgenden Abschnitten näher erläutert. Eine WSDL-Beschreibung beginnt immer mit dem Element definitions. Direkt in diesem Element werden die im Dokument verwendeten Namensräume als Attribute definiert. Sämtliche anderen in der WSDL-Beschreibung vorkommenden Elemente sind Kinder dieses Wurzelelements.
+   
+
+
+
+
+
+aaaaaaaaaaaaaaaaa
+
+
+
+
+
+
+
+
+
+
+
+
+Wichtig:
+Web Service realisierung von SOA
+
+basiert auf mehreren Standards
+
+Unterstützt von großen Insustrie .. IBM Microsoft Sun
+
+
+
+Definition von W3C
+
+
+Daraus: Web Service Software anwendung, beliebiger Größe
+
+Selbstbeschreibend, XML
+
+Web Services interagieren mit mit anderen Software agenten, nicht mit Menschen
+
+Web intenet basierte Protokolle
+
+
+Die wcihtigsten Standards:
+
+
+SOAP WSDl UDDI
+
+Stack
+
+Diese Arbeit hat mit Web Service Composition (speziell BPEL) zu tun ganz oben auf dem Stack 
+BPEL setzt auf WSDl und SOAP.
+
+Web Services sind nicht zur menschlichen Informationsverarbeitung geschaffen,
+sondern für die Kommunikation zwischen Anwendungen und Computern.
+
+Web Services sind durch begleitende Metadaten (Beschreibungsmerkmale:
+Name, Version, Beschreibung, etc.) selbstbeschreibend und bieten somit
+zur Laufzeit Auswertungsmöglichkeiten für weitere Services. Web Services
+sind in sich gekapselte und abgeschlossene, unabhängige Anwendungen, die
+für eine genau definierte Aufgabe geschaffen wurden.
+Web Services sind lose gekoppelt. Die Kommunikation zwischen den Anwendungen
+geschieht ausschließlich über den Nachrichtenaustausch, wobei
+dem Nutzer Implementierungsdetails verborgen bleiben. Es erfolgt keine Festlegung
+bezüglich konkreter Implementierung und verwendetem Kommunikationsprotokoll.
+Web Service sind ortstransparent und können somit jederzeit von jedem
+Ort aus angesprochen und verwendet werden.
+Web Services sind protokolltransparent und unterstützen mehrere Protokolle
+für die Übertragung und Verarbeitung von Nachrichten.
+
+
+
+Eine Defnition zu Web Services findet man bei Pera und Rintelmann.
+Defnition: Der Begrif Service oder Dienst meint eine Software-Einheit, die in sich abgeschlossen
+ist und, auf eine Kommunikationsplattform und einen Namensraum bezogen, frei
+verteilbar und auch wieder lokalisierbar ist. Ein solcher Service ist nur lose mit anderen Services
+gekoppelt deren Schnittstellen über XML-Artefakte definiert sind. Web Services sind
+Services mit der Besonderheit, dass sie sich der Kommunikationsmechanismen des Web bedienen. [PR05]
+Web Services sind zurzeit die beste Lösung für die Integration von verschiedenen, autonomen EBusiness-
+Systemen. Diese werden in Unternehmen eingesetzt, um eine flexible Software-Architektur
+zu gewährleisten. Die immer wiederkehrenden Funktionen im Unternehmen werden nur einmal implementiert
+und anderen Programmen als Services zur Verfügung gestellt. Diese Vorgehensweise erlaubt
+es den Unternehmen   fexibel den Prozessablauf an die geänderten Anforderungen anzupassen, um auf
+die Marktveränderungen schnell reagieren zu können. Dadurch können Redundanzen vermieden und
+Kosten in der Entwicklung gesenkt werden. Die Implementierungsdetails bleiben vor dem Benutzer
+verborgen, denn die beiden Teilnehmer müssen nur die Schnittstellendefinition kennen. Die Trennung
+des Designs und der Entwicklung erlaubt eine fachliche Aufteilung der zu erstellenden Geschäftsprozesse.
+Unabhängig voneinander können die Fachbereiche auf ihre Aufgabe abgestimmte Prozesse
+defnieren und anderen Fachbereichen diese als Service zur Verfügung stellen. Bei Änderungen muss
+anschlieÿend nur der Service geändert werden, wenn es keine so gravierenden Änderungen gab, die
+sich bis auf die Schnittstelle auswirken konnten. Nach der durchgeführten Änderung steht der Service
+wieder allen anderen Geschäftsprozessen zur Verfügung. Dadurch wird allen Geschäftspartnern
+eine hohe Qualität der Software bereitgestellt, was sich auch in den niedrigeren Gesamtkosten eines
+Projektes widerspiegelt.
+
+
+Web Services Defnition Language (WSDL)1 ist eine funktionale, XML-basierte Beschreibungssprache
+für die Schnittstellen eines Web Services. Ein Web Service repräsentiert sich nach auÿen
+über seine WSDL-Dokumentstruktur, die zunächst jedem Web Service vorgegeben werden muss. Eine
+WSDL-Datei beschreibt nichts anderes als die abstrakten Eigenschaften eines Web Services. Sie
+stellt die Grundlage für die spätere Definition des Geschäftsprozesses dar, da diese die Informationen
+sowohl zu Messagetypen als auch zu Schnittstellendefnitionen der beteiligten Prozesse enthält. Es
+beschreibt eine Sicht auf ein Web Service und aller darin beteiligten Rollen. In den Ports werden alle
+aufrufbaren Operationen defniert.
+Die WSDL-Dokumentstruktur ist eine Menge von Defnitionen, die folgende Elemente beinhaltet.
+Das Wurzelelement eines WSDL-Dokumentes bildet das <definitions>-Element. Es enthält den
+Namen des Services, Namespaces für den Service und verwendete Standards. Jedes WSDL-Dokument
+besteht immer aus zwei folgenden Teilen, dem mehrfach verwendeten abstrakten und dem konkreten
+Teil. Im abstrakten Teil werden die <types>-, <message>- und <portType>-Elemente und in dem
+konkreten Teil die <binding>- und <service>-Elemente defniert. Im konkreten Teil wird also
+beschrieben, wie und wo auf einen Web Service zugegrifen werden soll, und im abstrakten Teil,
+welche Typen und Nachrichten daran beteiligt sind.
+Das nächst folgende Listing zeigt die Grundstruktur eines WSDL-Dokumentes. Die Web Services
+werden hauptsächlich über folgende Elemente beschrieben.
+
+
+
+Im Folgenden werden die Elemente eines WSDL-Dokumentes einzeln beschrieben und näher erl
+äutert. Die dazu entsprechende WSDL-Instanz kann im Anhang A nachgeschlagen werden.
+<types> - Dieses Element kapselt die Defnition von Datentypen eines Web Services ein, die für
+die auszutauschenden Nachrichten benötigt werden. Zur Defnition der Datentypen greift WSDL auf
+das XML-Schema zurück. Die Defnition der Typen wird in Verbindung mit Ein- und Ausgabedaten
+in EPK eine besondere Rolle spielen.
+<message> - Dieses Element defniert Nachrichten, die zwischen den Partnern verschickt werden.
+Die Parameter werden durch das Kind-Element <part> beschrieben. Jede Nachricht kann aus
+einem oder mehreren <part>-Elementen bestehen. Das Element <part> ist vergleichbar mit dem
+Parameter eines Funktionsaufrufs und wird durch den Namen und seinen Datentypen eindeutig festgelegt.
+Das <message>-Element legt somit eindeutig fest, welche Eingaben ein Web Service benötigt
+und welche Ausgaben dieser erzeugt.
+<portTypes> - ist eines der wichtigsten Elemente in einem WSDL-Dokument. Ein BPEL-Prozess
+kommuniziert mit anderen Web Services über dieses Element. Es beschreibt ein Web Service mit
+seinen Operationen, die an einem Port ausgeführt werden. Dieses darf eine beliebige Anzahl die
+an diesem Port unterstützenden Operationen defnieren. Es bündelt alle Operationen mit seinen
+beteiligten Nachrichten und stellt somit die abstrakte Schnittstelle eines Web Services dar. Es können
+entweder eingehende oder ausgehende Operationen verwendet werden.
+<operation> - Dieses Element wird in <portTypes> und in <binding> verwendet und kapselt
+in sich die Funktionalität eines Web Services. Eine Operation kann folgende Eigenschaften haben. Die
+Namen, die in der Spezifikation verwendet werden, lauten <wsdl:one-way-operation>, <wsdl:requestresponse-
+operation>, <wsdl:solicit-response-operation> oder auch
+<wsdl:notification-operation>. Die beiden Typen <wsdl:one-way-operation> und <wsdl:requestresponse-
+operation> werden als inbound operations definiert, weil diese von Web Services angeboten
+werden, in dem diese von den eingehenden Nachrichten getriggert werden. Die letzten beiden
+Operationenarten werden outbound operations genannt.
+<binding> - ist die Defnition des Kommunikationsprotokolls für jeden Port und des Nachrichtenformats.
+Die abstrakte <portType>-Schnittstelle wird über das Binding-Element an konkrete
+Protokolle angebunden.
+<port> - Ein konkreter Web-Service-Endpunkt wird über das <port>-Element eindeutig identi-
+fiziert.
+<service> - Dieses Element enthält alle <port>-Elemente und beschreibt somit die Menge der
+Ports zu jedem einzelnen Service. Es fasst alle Endpunkte eines Web Services zusammen.
+<ExtensibilityElements> - werden im Zusammenhang mit BPEL-Prozessen verwendet. Es werden
+hier BPEL-Elemente wie <partnerLinkTypes> definiert. Die <partnerLinkTypes> werden
+über ihre <role> und ihre <portTypes> identifiziert. Das heißt, dass die Charakterisierung über
+<partnerLinkType> erfolgt, indem jedem Web Service eine bestimmte Rolle zugeordnet wird. EineRolle repräsentiert eine Ressource und kapselt eine Berechtigung in sich ein. Die bereitgestellten Ports
+von beiden Partnern legen eindeutig die Endpunkte für die benutzten <partnerLinks> fest. Diese
+sind für Basis-Aktivitäten relevant, die Web-Service-Requests auslösen können und charakterisiert
+damit zugleich eine Beziehung zwischen zwei oder mehreren Web Services.
+
+
+
+
+
+
+
+
+
+
+
+%--Business Process Execution Language for Web services
+De¯nition 2.1 (Web Service).
+Ein Web Service ist eine abgeschlossene, selbsterklÄarende und modulare Software-
+Komponente, die Äuber das Internet verÄo®entlicht, aufgefunden und benutzt werden kann.
+Ein Web Service stellt eine beliebig komplexe FunktionalitÄat zur VerfÄugung. Ein verÄo®ent-
+lichter Web Service wird mit einer anderen Anwendung (mÄoglicherweise ebenfalls ein Web
+Service) zu einem neuen System komponiert. Der Nachrichtenaustausch zwischen Web
+Service basiert zumeist auf dem XML-Format.
+
+Ein Web Service ist somit eine o®ene Komponente mit einer wohl de¯nierten Schnittstelle
+zur Au¼enwelt. Alle zur Benutzung notwendigen Informationen Äuber einen Web Service
+sind in der Äo®entlich zugÄanglichen Beschreibung seiner Schnittstellen enthalten.
+
+Web Service Technology Stack
+Nun beschÄaftigen wir uns detaillierter mit der Architektur von Web Services. Im Gegensatz
+zum monolithischen Stil frÄuherer AnsÄatze  In diesem Zusammenhang fÄallt hÄau¯g der Begri® des Technology
+Stacks. Abbildung 2.2 veranschaulicht dessen Aufbau in Anlehnung an [Sle01].
+Den Kern (genannt Core Layers) bilden bereits etablierte Technologien. Durch den RÄuck-
+gri® auf weitgehend akzeptierte Standards gelingt es mit dieser Schicht, zu fast allen exis-
+tierenden Systemen kompatibel zu sein und eine Hard- und Software-unabhÄangige Basis fÄur
+die aufbauenden Schichten zu scha®en. Zu den Kern-Schichten zÄahlen:
+Transport
+DerWeb-Service-Ansatz ist an kein bestimmtes Transport-Protokoll gebunden, um die
+FlexibilitÄat nicht einzuschrÄanken. Doch die Verwendung weit verbreiteter Protokolle
+wie TCP/IP und HTTP ist Äublich, um Web Services in jedem Umfeld { vor allem
+auch Äuber Firewalls hinweg { zugÄanglich zu machen. [Kre01]
+Extensible Markup Language (XML)
+XML ist ein allgemein anerkanntes Datenformat zum Austausch von Informationen
+
+zwischen verschiedenen Anwendungen. Aufgrund seiner FlexibilitÄat und Erweiterbar-
+keit wird XML als Grundstock der meisten Schichten im Web Service Technology
+Stack verwendet. [BPMM00]
+Simple Object Access Protocol (SOAP)
+SOAP unterstÄutzt die Kodierung beliebiger Daten (normalerweise in XML) und deren
+Transfer (z. B. Äuber HTTP). Im Zusammenhang mit Web Services ist SOAP u. a. eine
+Programmiersprachen-unabhÄangige Version von RPC (Remote Procedure Call). Pa-
+rameter des Funktionsaufrufs und Antworten werden ebenfalls in der SOAP-Nachricht
+kodiert. [BEK+00]
+Die hÄoheren Schichten, hier als Emerging Layers bezeichnet, umfassen die neuen Technologien.
+Diese Technologien be¯nden sich teilweise noch im Entwicklungsstadium oder werden zur
+Zeit standardisiert. Als feste Bestandteile des Technology Stacks gelten:
+Web Services Description Language (WSDL)
+WSDL ist eine XML-basierte Sprache, mit der spezi¯ziert wird, welche Operationen
+der Web Service zur VerfÄugung stellt und wie die Verbindung mit dem Web Ser-
+vice ablaufen soll. Die Konzeption von WSDL sieht eine grobe Zweiteilung vor: Der
+abstrakte Teil de¯niert sprach- und plattformunabhÄangige Typen, Nachrichten, Ope-
+rationen und Port-Typen. Der konkrete Teil { genannt binding { bildet die abstrakten
+Elemente auf konkrete Datenstrukturen, Protokolle und Adressen ab. [CCMW01]
+Universal Description, Discovery, and Integration (UDDI)
+UDDI ist die globale Verzeichnisstruktur fÄur Web Services und gleichzeitig ein Pro-
+tokoll, um Web Services zu suchen und zu verÄo®entlichen. Eine UDDI-Registrierung
+besteht aus den Wei¼en, Gelben und GrÄunen Seiten:
+
+
+
+
+Die Web Services Description Language (WSDL) ist eine Schnittstellenbeschreibungssprache
+für Web Services und wurde im September 2000 in der
+Version 1.0 vorgestellt. Seit März 2006 liegt die Version 2.0 als W3C Candidate
+Recommendation vor.
+Mit WSDL können Web Services formal beschrieben werden, damit Applikationen
+automatisiert auf die angebotenen Dienste zugreifen und diese
+einbinden können. Innerhalb des WSDL-Dokuments werden die angebotenen
+Funktionen, die verwendeten Datentypen, die Struktur der Aufrufnachricht
+und des Ergebnisses und das Austauschprotokoll spezifiziert. Im Wesentlichen
+werden die von außen zugänglichen Operationen definiert, sowie deren
+Parameter und Rückgabewerte. (vgl. Wik06)
+In WSDL gibt es sechs Hauptelemente, die sich in zwei Gruppen aufteilen
+lassen - die abstrakten und die konkreten Definitionen.
+
+Kritikpunkte von WSDL sind die fehlenden semantischen Spezifikationen
+eines Web Services. WSDL spezifiziert lediglich die syntaktischen Elemente eines Web Services, d.h. wie ein Client auf den entsprechenden Web
+Service zugreifen kann. Darüber hinausgehende semantische Spezifikationen
+eines Web Services sind allerdings oft wünschenswert [...]. (Wik06) Mit
+WSDL können keine Informationen über die Antwortzeit, Kosten des Services,
+Security-Bestimmungen und genauen Effekte einer Operation definiert
+werden. Diese werden allerdings zur automatischen Auffindung und Orchestrierung
+(siehe Kapitel 5.2, S.23) von Services benötigt.
+
+
+An WSDL wurden hohe Anforderungen geknüpft. Es soll die Service-Schnittstellen
+Programmiersprachen- und Programmierparadigmen-neutral definieren, darüber
+hinaus abstrakt und erweiterbar sein.
+
+%ebigo
+
+   
+   Web Services sind eine Realisierung einer SOA, mit der sich Informationsdienste im WWW automatisieren lassen. Es handelt sich dabei um funktionale Dienste, die über Internetprotokolle und die Internet-Infrastruktur übertragen werden können. In den meisten Fällen sind Web Services Software-Komponenten, die mittels Applikationsserver im Internet nutzbar gemacht werden. Um Daten miteinander auszutauschen, werden XML-basierte Standards verwendet.
+   
+    	
+
+Web Services sind funktionale Dienste, die über Internetprotokolle und damit der Internet-Infrastruktur übertragen werden können. Die mit Web Service Diensten verbundenen Protokolle und Standards wie SOAP, WSDL und UDDI bilden den technologischen Rahmen für die Realisierung anspruchsvoller Szenarien in verteilten Anwendungen.
