@@ -1,3 +1,9 @@
+ \subsection{Grundlagen}
+Im Rahmen der Forschung um Institut SE wurde BPELUnit Framework entwickelt. Das Framework versucht die Lücke in der xUnit Familie der Unit-testing Frameworks. 
+Testen von BPEL ist besonders weil BPEL Prozess externale Abhängigkeiten in Form von Web Services. Das macht das Testen schwieriger  Kompletter Systemtest kann nur durchgeführt werden wenn alle Web Services erreichbar reproduzierbare Ergebnisse liefern. Das ist schwer zu erreichen bei externen Service Anbietern. Im schlechtesten Fall das führt zu wenigen hauptsächlich am Ende des entwicklungprojekts.Als Ergebnis werden Fehler entdeckt nur vor der Auslieferung, was exposes hohe Fixkosten und das Risiko verzögerter Ablaufplan. Anderes Problem ist das Testen gegen Fehlerbedingungen, das heißt wenn Web Service antortet Fehler oder ist nicht erreichbar.  Solche Fehlerbedingunmgen müssen simuliert werden  als Teil des Tests.
+
+Unit Kann bedeutend reduzieren dieses Problem beim Testen von von BPELProzessen ohne der correspondirenden Web Services. Als Seiteneffekt die Tests sind sind normalerweise schneller ausgeführt weil Web Services Simulation ist schneller als reale Services.
+ 
  Testen ist ein in der konventionellen Softwareentwicklung unentbehrliches Mittel zur Qualitätssicherung.
 Selbst wenn das Testen nur die Anwesenheit von Fehlern, nicht aber deren
 Abwesenheit zeigen kann (sinngemäß nach Dijkstra (1969)), ist das Auffinden jedes einzelnen

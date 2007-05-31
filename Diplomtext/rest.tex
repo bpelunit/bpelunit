@@ -50,27 +50,6 @@ Dieses Verhalten kann durch zwei Graphen dargestellt werden. Die Abbildung ... r
 \end{figure}\\
 
 Während der reguläre Kontrollfluss des Programms den Steuerfluss für alle reguläre Situationen vorgibt, gibt es in BPEL ein (\textit{FaultHandler})-Kontrollfluss, der für die Behandlung zur Laufzeit aufgetretener Fehler vorgesehen ist. Inwiefern dieses Verhalten in die Zweigabdeckung mit einfließen kann, wird im nächsten Abschnitt diskutiert. 
-\subsubsection{Kontrollfluss bei Ausnahmebehandlung}
-BPEL-Sprache hat wie viele moderne Programmiersprachen ein Konzept zur strukturierten Behandlung von Laufzeitfehlern. 
-Die Umschaltung von normalen auf \textit{FaultHandler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{FaultHandler} ausgeführt wird. Die Fehler können auch in den \textit{Compensation} und in den \textit{FaultHandler} selbst auftreten. In die Abbildung \ref{fig:ScopeFaultCompensation2} wird der Zusammenhang zwischen \textit{Handler} und \textit{Scopes} graphisch dargestellt und durch die Pfeile den möglichen Kontrollfluss zwischen diesen Einheiten gezeigt. 
-\begin{figure}[h!]
-	\centering
-		\includegraphics[width=0.35\textwidth]{bilder/ScopeFaultCompensation2.png}
-	\caption{Zusammenhang zwischen Scopes, Fault und Compensation Handler}
-	\label{fig:ScopeFaultCompensation2}
-\end{figure}
-
-Vor allem die vielfältige Fehlerquellen und die Möglichkeit die Fehler weiterzuleiten machen es schwierig alle möglichen Übergaben der Aus\-füh\-rungs\-kon\-tro\-lle an die FaultHandler zu berücksichtigen. Aus diesem Grund werden die Verbindungskanten zwischen den Scopes, Fault und Compensation Handler in dieser Arbeit bei der Zweigabdeckung nicht berücksichtigt. 
-
-Das Gleiche gilt für CompemsationHandler, die nur im Rahmen der Fehlerbehandlung ausgeführt werden.
-
-Dass die Fault- und Compensation Handler, sowie die interne Logik dieser Handler, trotzdem durch die Tests abgedeckt werden sollten, ist unumstritten. Demzufolge ist es sinnvoll den Kontrollfluss \textit{innerhalb} der Handler bei der Messung der Abdeckung zu berücksichtigen. In der Abbildung .. wird der Kontrollfluss des gesamten Prozesses angedeutet. Die rote Farbe markiert den aktuellen Durchlauf. Während alle durchgezogenen Kanten (auch in \textit{Fault}- und \textit{CompensationHandler}) für die Zweigabdeckung relevant sind, gehen die gestrichelten, wie bereits erläutert, nicht in die Rechnung ein.  
-\begin{figure}[htbp]
-	\centering
-		\includegraphics[width=0.9\textwidth]{bilder/Fault_Compensation.png}
-	\label{fig:Fault_Compensation}
-\end{figure}
- 
  In den folgenden Abschnitten werden die Metriken vorgestellt, die den Grad der durch die Tests abgedeckten Fault- bzw. Compensation Handler wiedergeben.
 \\
 

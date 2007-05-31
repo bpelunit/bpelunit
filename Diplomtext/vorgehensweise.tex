@@ -1,0 +1,32 @@
+ 
+
+
+
+
+ 
+ 
+
+Ein BPEL-Prozess kann nach außen grundsätzlich nur mit Web Services kommunizieren. Demzufolge müsste der Dienst für den Empfang der Nachrichten als Web Service realisiert und während des Testens erreichbar sein.  Das BPELUnit Framework bringt Funktionalitäten mit, die es möglich machen, diesen Dienst einfacher zu implementiert. Während die entsprechende Lösung im Abschnitt genau vorgestellt wird, reicht es zunächst aus zu wissen, dass die Schnittstelle des Dienstes mit WSDL beschrieben ist, und für den PUT aus der Ablaufumgebung genau wie alle anderen Web Services erreichbar ist. 
+ Die folgende stellt die Funktionsweise
+ 
+ 
+
+ Wie bereits im Abschnitt erklärt wurde, wird die Geschäftslogik in BPEL durch Aktivitäten realisiert.  Die Instrumentierung eines BPEL-Prozessen kann demnach nur durch Hinzufügen von Aktivitäten realisiert werden. Der Ablauf bei der Messung der  Testabdeckung: 
+ 
+\begin{itemize}
+\item Instrumentierung
+\begin{itemize}
+\item den BPEL-Prozess analysieren
+\item die statischen Daten über den Prozess sammeln
+\item Für jede Metrik: den BPEL-Prozess mit Marken annotieren und diese Daten für die Auswertung speichern
+	\item die Marken von allen Metriken , die im Kontrollfluß unmittelbar hintereinanderliegen, werden zusammengefasst
+	\item Neue Variablen im Prozess definieren und die Marken an die Variablen zuordnen (assign-Aktivitäten)
+	\item Invoke-Aktivitäten, die die Marken an den Empfänger schicken.		
+\end{itemize}
+\item die Daten bei der Ausführung des Prozesses sammeln (Nachrichten mit Marken empfangen) und den statischen Daten zuordnen
+\item die Daten auswerten und die Metriken ermitteln
+\end{itemize}
+
+
+Die ersten drei Aufgaben können zusammen in einem Schritt durchgeführt werden. Im nächsten Abschnitt wird dieser Schritt "`Annotation des Prozesses"' genau für jede Metrik erläutert. 
+

@@ -1,11 +1,49 @@
+BPEL ist eine XML-basierte, ausführbare Sprache zur Modellierung und Beschreibung
+von Geschäftsprozessen. BPEL ist 2002 aus IBMs WSFL und Microsofts XLANG entstanden und liegt aktuell in der Version 2.0  als OASIS Standard vor. Durch breite Produktunterstützung hat sich die Sprache mittlerweile auch als Industriestandard etablert.
+
+Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist
+verschiedene Dienste zu einer Gesamtanwendung zu verknüpfen.
+
+BPEL-Prozesse können in abstrakte und ausführbare Prozesse unterteilt werden, wobei die ersteren
+zur Beschreibung des Verhaltens des betrachteten Prozesses und die letzteren zur Ausführung auf
+einer BPEL-Engine eingesetzt werden. Diese Arbeit beschäftigt sich mit Testen von BPEL-Kompositionen also mit ausführbaren Prozessen. Die abstrakten Prozesse werden aus disem Grund nicht weiter betrachtet.
+
+Bevor auf einige Details der Sprache eingegangen wird, werden einige wichtige Eigenschaften vorgestellt:
+\begin{itemize}
+	\item rekursiv
+	\item Unterstütz langlebige und zustandsbehaftete Prozesse
+	\item scopes?
+	\item erlaubt Fehlerbehandlung und Kompensation
+\end{itemize}
+
+Nachteile doppelte aufgrund zwei Sprachen und keine Interaktion mit Menschen.
+
+\subsection{Partners}
+\subsection{Geschätslogik}
+%basisaktivitäten Strukturierten Aktivitäten, Scopes
+\subsection{Fault Handling und Kompensation}
+\subsubsection{Kontrollfluss bei Ausnahmebehandlung}
+BPEL-Sprache hat wie viele moderne Programmiersprachen ein Konzept zur strukturierten Behandlung von Laufzeitfehlern. 
+Die Umschaltung von normalen auf \textit{FaultHandler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{FaultHandler} ausgeführt wird. Die Fehler können auch in den \textit{Compensation} und in den \textit{FaultHandler} selbst auftreten. In die Abbildung \ref{fig:ScopeFaultCompensation2} wird der Zusammenhang zwischen \textit{Handler} und \textit{Scopes} graphisch dargestellt und durch die Pfeile den möglichen Kontrollfluss zwischen diesen Einheiten gezeigt. 
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.35\textwidth]{bilder/ScopeFaultCompensation2.png}
+	\caption{Zusammenhang zwischen Scopes, Fault und Compensation Handler}
+	\label{fig:ScopeFaultCompensation2}
+\end{figure}
+
+ 
+Die Fehler können auch in den \textit{Compensation} und in den \textit{FaultHandler} selbst auftreten.
+\subsection{Prozessinstance}
+\subsection{Link-Konzept}%DPE
+
   Die Business Process Execution Language (BPEL oder WS-BPEL), vormals BPEL4WS, ist ein gemeinsamer Vorschlag von IBM und Microsoft um die Standardisierung für die Steuerung und Koordination von geschäftsbasierten Webservices voranzutreiben. 
   
   Bei WS-BPEL handelt es sich um eine ausführbare, XML-basierende Sprache zur Beschreibung von Geschäftsprozessen, deren Aktivitäten durch Web-Services implementiert werden und deren Nachrichtenaustausch über XML-Dokumente erfolgt.
   
   Mit BPEL 2.0 existiert eine standardisierte Modellierungssprache für Geschäftsprozesse
   
-  Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist
-verschiedene Dienste zu einer Gesamtanwendung zu verknüpfen. Dies
+   Dies
 wird auch Orchestrierung genannt (s. Abb. 1). Es gibt also im Kern
 verschiedene Dienste, die mit Hilfe einer BPEL-basierten Prozessbe-
 schreibung zu einer neuen Softwareanwendung zusammengesetzt
@@ -199,13 +237,6 @@ dungen und Dienste kosteneffektiv zu entwickeln und zu betreiben.
 Web-Services-Technologien werden als Basis von SOA-Projekten immer
 wichtiger.
 
-Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist
-verschiedene Dienste zu einer Gesamtanwendung zu verknüpfen. Dies
-wird auch Orchestrierung genannt (s. Abb. 1). Es gibt also im Kern
-verschiedene Dienste, die mit Hilfe einer BPEL-basierten Prozessbe-
-schreibung zu einer neuen Softwareanwendung zusammengesetzt
-werden. Die Dienste sind lose gekoppelt und interagieren über die
-BPEL-Ablaufumgebung miteinander.
 
 %--
 
