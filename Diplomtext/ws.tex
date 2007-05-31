@@ -1,4 +1,4 @@
-Web Services sind aktuell die wichtigste Realisierung einer SOA und werden in der Software Industrie anerkannt. Mittlerweile setzen viele große Softwarekonzerne auf Web Services und haben ihre Produktstrategien entsprechend ausgerichtet.
+Web Services sind aktuell die wichtigste Realisierung einer SOA und sind in der Software Industrie anerkannt. Mittlerweile setzen viele große Softwarekonzerne auf Web Services und haben ihre Produktstrategien entsprechend ausgerichtet.
 
 Als Web-Service bezeichnet man im Allgemeinen eine Softwarekomponente, die
 ihre Funktionalit¨at ¨uber Standardinternetprotokolle zur Verf¨ugung stellt.
@@ -30,37 +30,34 @@ der Nachrichtenaustausch wesentliche Aufgaben. SOAP, WSDL und UDDI sind die dafü
 \begin{itemize}
 	\item SOAP ein standardisiertes, XML-basiertes
 Protokoll zum Verpacken von Nachrichten, die zwischen Applikationen ausgetauscht
-werden. setzt SOAP
-auf die Netzwerk- und Transportschichten auf. Es ist also irrelevant, welche
-Transportmechanismen f¨ur den eigentlichen Versand verwendet werden.Die gebr¨auchlichste Form des Austausches von SOAP-Nachrichten ist die ¨Ubertragung
-¨uber HTTP.
-\item UDDI
-dient zur Lokalisierung und Veröffentlichung
-von Web-Services im Internet
-UDDI = Register für Diensteund ihre Beschreibungen+ Suchmethoden+ Publishingmethoden
-UDDI-Daten enthalten Kontakt-Informationen, Listen von Business Services und Infos, wie einService via Protokoll angesprochen werden kann
-Um einen Web-Service im Internet zu finden, ist ein Verzeichnisdienst notwendig.
-F¨ur diese Zwecke wurde der Universal Description, Discovery and Integration-
-Standard geschaffen. UDDI bietet Standardfunktionen zum Klassifizieren,
-Katalogisieren und Verwalten von Daten und Metadaten ¨uber Web-
-Services, so daß diese einfach gefunden und verwendet werden k¨onnen.
+werden. SOAP setzt auf Transportschicht auf und ist von dem verwendetetn Transportprotokoll unabhängig. Am Häufigsten werden die SOAP-Nachrichten über HTTP ausgetauscht.
+\item UDDI (Universal Description, Discovery and Integration) dient zur Lokalisierung und Veröffentlichung
+von Web-Services im Internet. UDDI bietet Standardfunktionen zum Klassifizieren,
+Katalogisieren und Verwalten von Metadaten über Web-
+Services.
 \item WSDL (Web Services Defnition Language) ist eine funktionale, XML-basierte Beschreibungssprache
 für die Schnittstellen eines Web Services.(siehe nächsten Abschnitt)
 \end{itemize}
 
+Der Zusammenhang dieser Standards und die grundlegende Funktionsweise ist in der Abbildung \ref{fig:WSFunktionsweise} dargestellt.
 \begin{figure}[htbp]
 	\centering
 		\includegraphics{bilder/Webservice.png}
 		\caption{Kontrollfluss eines BPEL Prozesses}
-	\label{fig:ExamlpleBPELProzess}
+	\label{fig:WSFunktionsweise}
 \end{figure}
 
-Bei Web Services handelt es sich nicht um eine bestimmte Technik, sondern um ein Bündel von verschiedenen Standards und Spezifikationen.
-Web Service Stack ...
+Zu betonen ist, dass es bei  Web Services sich nicht um eine bestimmte Technik handelt, sondern um eine Menge von verschiedenen Standards und Spezifikationen.
+Nun beschÄaftigen wir uns detaillierter mit der Architektur von Web Services. Im Gegensatz
+zum monolithischen Stil frÄuherer AnsÄatze basieren Web Services auf einer Reihe zusammen-
+hÄangender Technologien. In diesem Zusammenhang fÄallt hÄau¯g der Begri® des Technology
+Stacks. Abbildung 2.2 veranschaulicht dessen Aufbau in Anlehnung an [Sle01].
+Den Kern (genannt Core Layers) bilden bereits etablierte Technologien. Durch den RÄuck-
+gri® auf weitgehend akzeptierte Standards gelingt es mit dieser Schicht, zu fast allen exis-
+tierenden Systemen kompatibel zu sein und eine Hard- und Software-unabhÄangige Basis fÄur
+die aufbauenden Schichten zu scha®en. 
 
 Bild
-
-Im nächsten Abschnitt wird WSDL etwas genauer vorgestellt.
 
 Ein Web Service ist ein durch einen URI eindeutige
 identifizierte Softwareanwendung, deren Schnittstellen als
@@ -71,4 +68,8 @@ Nachrichten, die über Internetprotokolle
 ausgetauscht werden.W3C 
 Web Services bieten eine auf Standards basierende
 Technologie, um SOAs zu realisieren
+
+
+
+
 

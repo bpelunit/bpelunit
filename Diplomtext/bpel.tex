@@ -1,8 +1,49 @@
+  Die Business Process Execution Language (BPEL oder WS-BPEL), vormals BPEL4WS, ist ein gemeinsamer Vorschlag von IBM und Microsoft um die Standardisierung für die Steuerung und Koordination von geschäftsbasierten Webservices voranzutreiben. 
+  
+  Bei WS-BPEL handelt es sich um eine ausführbare, XML-basierende Sprache zur Beschreibung von Geschäftsprozessen, deren Aktivitäten durch Web-Services implementiert werden und deren Nachrichtenaustausch über XML-Dokumente erfolgt.
+  
+  Mit BPEL 2.0 existiert eine standardisierte Modellierungssprache für Geschäftsprozesse
+  
+  Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist
+verschiedene Dienste zu einer Gesamtanwendung zu verknüpfen. Dies
+wird auch Orchestrierung genannt (s. Abb. 1). Es gibt also im Kern
+verschiedene Dienste, die mit Hilfe einer BPEL-basierten Prozessbe-
+schreibung zu einer neuen Softwareanwendung zusammengesetzt
+werden. Die Dienste sind lose gekoppelt und interagieren über die
+BPEL-Ablaufumgebung miteinander.
+  
+  Die Aussichten für WS-BPEL, sich als Industriestandard durchzusetzen, sind aus heutiger Sicht viel versprechend.
+
+Die Web Services Business Process Execution Language, kurz WS-BPEL, liegt in Version 2.0 vor und steht kurz vor der Standardisierung durch Oasis.
+  
+  BPEL-Prozesse arbeiten nicht in Isolation, sondern interagieren mit anderen Web Services, die
+man als Partner oder Partner-Prozesse bezeichnet. Ein Partner ist oftmals sowohl Nutzer eines
+durch den BPEL-Prozess angebotenen Dienstes als auch selbst Anbieter eines vom BPELProzess
+benötigten Dienstes. Die Beziehung ist also zumeist bidirektional, insbesondere im Fall
+von asynchroner Kommunikation. In BPEL werden solche Inter-Prozess-Beziehungen mit Hilfe
+von so genannten Partner Links beschrieben, in denen z.B. die verwendeten Nachrichtentypen
+festgelegt werden.
+Ein BPEL-Prozess wird in Instanzen ausgeführt. Für jeden Partner wird eine neue Instanz erzeugt.
+Über das Konzept des Correlation Set können Anfragen eines Partners mit seiner entsprechenden
+BPEL-Prozessinstanz in Verbindung gebracht werden.
+Bei der Abarbeitung eines BPEL-Prozesses können Fehler auftreten. Um diese zu behandeln,
+lassen sich in BPEL Fault Handler definieren.Werden keine Fault Handler spezifiziert, behandelt
+ein minimaler vordefinierter Fault Handler die auftretenden Fehler.
+Oft müssen im Fehlerfall bereits abgeschlossene Aktivitäten in einem Prozess kompensiert werden,
+wenn sie zum Beispiel in einem transaktionalen Zusammenhang stehen. In BPEL kann
+dafür ein Compensation Handler definiert werden, mit dessen Hilfe sich diese Kompensationsaktivitäten
+an geeigneter Stelle spezifizieren lassen.
+BPEL-Prozesse lassen sich mit Hilfe von Scopes in Teilprozesse zerlegen. Jeder Scope verfügt
+dabei über einen eigenen Fault und Compensation Handler. Innerhalb eines Scope können zudem
+Event Handler definiert werden, über die auf eintreffende Nachrichten oder zeitgesteuerte
+Ereignisse reagiert werden kann.
+
+  
    !!!!!!!The ActiveBPEL(tm) Engine 3.0 Final Release provides comprehensive support for the forthcoming WS-BPEL 2.0 Standard, which will be officially published early in 2007. This release also retains side-by-side execution compatibility with processes based on BPEL4WS 1.1, allowing phased migration to WS-BPEL 2.0. Additional features include enhanced message routing based on WS-Addressing and BPEL sub-process execution.
 
 
   Neues Standard in Web Service Komposition. Service Komposition ist rekursiv. 
-  effiziente und flexible Modellierung von Bussines Processen
+  effiziente und flexible s von Bussines Processen
   
 \begin{itemize}
 	\item Choreography
@@ -37,12 +78,10 @@ Nur Sequence erlaubt beliebige Anzahl (>0) von Aktivitäten direkt im Container z
 
 %ComputerWoche
 
-Die Business Process Execution Language (BPEL oder WS-BPEL), vormals BPEL4WS, ist ein gemeinsamer Vorschlag von IBM und Microsoft um die Standardisierung für die Steuerung und Koordination von geschäftsbasierten Webservices voranzutreiben. 
-
-Die Web Services Business Process Execution Language, kurz WS-BPEL, liegt in Version 2.0 vor und steht kurz vor der Standardisierung durch Oasis. Sie vereinfacht die Entwicklung Service-orientierter Anwendungen erheblich.
+ Sie vereinfacht die Entwicklung Service-orientierter Anwendungen erheblich.
 BPEL ist für Prozess- und Workflow-Techniken das, was SQL für die relationalen Datenbanken ist!", so steht es im aktuellen Präsentationsmaterial von Oasis. Ob die inzwischen von mehreren führenden Herstellern mit BPEL-Engines unterstützte Orchestrierungs- und Integrationssprache diesen Status erreichen wird, muss die Zukunft zeigen - mit den im März abgeschlossenen Spezifikationen der Version 2.0 dürfte der Standard diesem Ziel jedoch ein ganzes Stück näher kommen.
 
-Bei WS-BPEL handelt es sich um eine ausführbare, XML-basierende Sprache zur Beschreibung von Geschäftsprozessen, deren Aktivitäten durch Web-Services implementiert werden und deren Nachrichtenaustausch über XML-Dokumente erfolgt. Das Besondere daran: WS-BPEL bietet eine homogene Syntax für die Ablaufbeschreibung und den Datenzugriff auf XML-Dokumente. Und es enthält Elemente, die speziell auf die Ablaufproblematik langlaufender Geschäftsprozesse mit mehreren Partnern zugeschnitten sind. So können die Aktivitäten eines Geschäftsprozesses in Scopes, das heißt in kontextorientierten, transaktionalen Einheiten zusammengefasst werden. Für den Fehlerfall, bei dem bereits abgeschlossene Scopes zurückgesetzt werden müssen - man spricht von Kompensation - , enthält WS-BPEL mächtige syntaktische Konstrukte. Hier ist WS-BPEL anderen Programmiersprachen klar überlegen - in der Theorie.
+ Das Besondere daran: WS-BPEL bietet eine homogene Syntax für die Ablaufbeschreibung und den Datenzugriff auf XML-Dokumente. Und es enthält Elemente, die speziell auf die Ablaufproblematik langlaufender Geschäftsprozesse mit mehreren Partnern zugeschnitten sind. So können die Aktivitäten eines Geschäftsprozesses in Scopes, das heißt in kontextorientierten, transaktionalen Einheiten zusammengefasst werden. Für den Fehlerfall, bei dem bereits abgeschlossene Scopes zurückgesetzt werden müssen - man spricht von Kompensation - , enthält WS-BPEL mächtige syntaktische Konstrukte. Hier ist WS-BPEL anderen Programmiersprachen klar überlegen - in der Theorie.
 
 
 In der Praxis war die Semantik von WS-BPEL 1.1, deren Veröffentlichung fast vier Jahre zurückliegt, an vielen Stellen unscharf. Aus Sicht der Anwender war oft unklar, ob ihr BPEL-Code auf den BPEL-Engines verschiedener Hersteller zu gleichen Prozessabläufen führt. Oasis, die für die Standardisierung verantwortliche Organisation, hat diesen Bedarf erkannt: Die Spezifikation von WS-BPEL 2.0 ist doppelt so umfangreich wie die der Vorgängerversion. Neue Sprachkonzepte machen dabei nur einen Teil des Zuwachses aus. Vereinfachungen, aber vor allem die Präzisierung vorhandener Konzepte bilden den Kern der neuen Version. Betroffen ist davon auch der zentrale Ansatz der Kompensation.
@@ -74,7 +113,7 @@ Weitere syntaktische Ergänzungen sind implizite <assign>-Aktivitäten direkt im A
 
 Auf dem Weg zum Industriestandard
 
-Die Aussichten für WS-BPEL, sich als Industriestandard durchzusetzen, sind aus heutiger Sicht viel versprechend. Treiber in dieser Richtung ist auch der Umstand, dass die Sprache auf einem rekursiven Aggregationsmodell für Web-Services basiert: Die mit WS-BPEL beschriebenen Prozesse verwenden Web-Services und können selbst als Web-Service benutzt werden. Dieses Modell bietet ein hohes Gestaltungspotenzial für Service-orientierte Architekturen. Damit ist die neue BPEL-Version klarer, einfacher, praktikabler, allerdings nicht voll aufwärtskompatibel.
+ Treiber in dieser Richtung ist auch der Umstand, dass die Sprache auf einem rekursiven Aggregationsmodell für Web-Services basiert: Die mit WS-BPEL beschriebenen Prozesse verwenden Web-Services und können selbst als Web-Service benutzt werden. Dieses Modell bietet ein hohes Gestaltungspotenzial für Service-orientierte Architekturen. Damit ist die neue BPEL-Version klarer, einfacher, praktikabler, allerdings nicht voll aufwärtskompatibel.
 
 BPEL-Historie
 
@@ -120,7 +159,7 @@ Leymann  Sehr häufig benötigt man mehr als nur einen Dienst, um sein geschäftlic
 
 Leymann  BPEL beschreibt im Stil einer serviceorientierten Architektur (SOA), wie in einer Firma die Geschäftsprozesse ausgeführt werden. Wenn man BPEL nutzt, wird es simpel, Spezifikationen von Geschäftsprozessen zu erstellen, die Services als Aktivitäten in die Geschäftsprozesse einbinden.
 
-Leymann  Mit BPEL 2.0 existiert eine standardisierte Modellierungssprache für Geschäftsprozesse, aber die Zielgruppe der Benutzer von BPEL sind IT-Benutzer  nicht die Mitarbeiter auf Business-Level. Ein riesengroßer Fortschritt, der durch BPEL erreicht wurde, ist, dass es nun ein einziges Runtime-Modell für Geschäftsprozesse gibt, eine feste operationale Semantik, die wohldefiniert ist. Abstrakt kann man sich das vorstellen als ein einziges logisches Tool das hilft, dass man eine einheitliche Schnittstelle zu den Prozessmaschinen auf IT-Ebene hat. Die Modellierungswerkzeuge auf der Business-Ebene müssen dazu BPEL exportieren.
+Leymann  , aber die Zielgruppe der Benutzer von BPEL sind IT-Benutzer  nicht die Mitarbeiter auf Business-Level. Ein riesengroßer Fortschritt, der durch BPEL erreicht wurde, ist, dass es nun ein einziges Runtime-Modell für Geschäftsprozesse gibt, eine feste operationale Semantik, die wohldefiniert ist. Abstrakt kann man sich das vorstellen als ein einziges logisches Tool das hilft, dass man eine einheitliche Schnittstelle zu den Prozessmaschinen auf IT-Ebene hat. Die Modellierungswerkzeuge auf der Business-Ebene müssen dazu BPEL exportieren.
 
 Leymann  Die konkreten Implementierungen der Prozessmaschinen sind bei den Herstellern unterschiedlich. Die meisten verstehen aber heute BPEL alle in einer sehr, sehr ähnlichen Form. Dadurch kann man auf IT-Ebene die Prozessmodelle wieder verwenden und über die verschiedenen Tools hinweg austauschen.
 
@@ -293,28 +332,7 @@ gebracht:
 mit <pick>
  Definition von Schleifen, mit <while>
  
- BPEL-Prozesse arbeiten nicht in Isolation, sondern interagieren mit anderen Web Services, die
-man als Partner oder Partner-Prozesse bezeichnet. Ein Partner ist oftmals sowohl Nutzer eines
-durch den BPEL-Prozess angebotenen Dienstes als auch selbst Anbieter eines vom BPELProzess
-benötigten Dienstes. Die Beziehung ist also zumeist bidirektional, insbesondere im Fall
-von asynchroner Kommunikation. In BPEL werden solche Inter-Prozess-Beziehungen mit Hilfe
-von so genannten Partner Links beschrieben, in denen z.B. die verwendeten Nachrichtentypen
-festgelegt werden.
-Ein BPEL-Prozess wird in Instanzen ausgeführt. Für jeden Partner wird eine neue Instanz erzeugt.
-Über das Konzept des Correlation Set können Anfragen eines Partners mit seiner entsprechenden
-BPEL-Prozessinstanz in Verbindung gebracht werden.
-Bei der Abarbeitung eines BPEL-Prozesses können Fehler auftreten. Um diese zu behandeln,
-lassen sich in BPEL Fault Handler definieren.Werden keine Fault Handler spezifiziert, behandelt
-ein minimaler vordefinierter Fault Handler die auftretenden Fehler.
-Oft müssen im Fehlerfall bereits abgeschlossene Aktivitäten in einem Prozess kompensiert werden,
-wenn sie zum Beispiel in einem transaktionalen Zusammenhang stehen. In BPEL kann
-dafür ein Compensation Handler definiert werden, mit dessen Hilfe sich diese Kompensationsaktivitäten
-an geeigneter Stelle spezifizieren lassen.
-BPEL-Prozesse lassen sich mit Hilfe von Scopes in Teilprozesse zerlegen. Jeder Scope verfügt
-dabei über einen eigenen Fault und Compensation Handler. Innerhalb eines Scope können zudem
-Event Handler definiert werden, über die auf eintreffende Nachrichten oder zeitgesteuerte
-Ereignisse reagiert werden kann.
-
+ 
 Probleme von BPEL
 Die XML-Syntax von BPEL macht es schwer, fehlerfreie Programme zu schreiben, ohne dabei
 auf die Unterstützung einer Entwicklungsumgebung zurückzugreifen. Eine einheitliche oder

@@ -624,3 +624,208 @@ hinaus abstrakt und erweiterbar sein.
     	
 
 Web Services sind funktionale Dienste, die über Internetprotokolle und damit der Internet-Infrastruktur übertragen werden können. Die mit Web Service Diensten verbundenen Protokolle und Standards wie SOAP, WSDL und UDDI bilden den technologischen Rahmen für die Realisierung anspruchsvoller Szenarien in verteilten Anwendungen.
+
+
+SOA
+Mehr Argumente für SOA: SOA-Expertenforum der Computerwoche
+Jeder der oben genannten Punkte hat mehrere konkrete Vorteile für ein Unternehmen:
+
+Business Innovation
+
+- Schnellere Umsetzung von Fusionen und Übernahmen
+
+- Neue Produkte und Angebote durch Neubündelung vorhandener Leistungen
+
+- Verbesserte Kundenzufriedenheit durch innovative Angebote
+
+Anwenderproduktivität
+
+- Gesteigerte Produktivität durch intuitive Benutzeroberflächen auf Basis von AJAX führen zu mehr Transaktionen pro Zeiteinheit
+
+- Reduzierter Trainingsaufwand
+
+- Weniger operative Fehler durch Vermeidung manueller Datenübertragung
+
+Prozesseffizienz
+
+- Gesteigerte Prozessautomatisierung
+
+- Verbesserte interne Prozesse, wie zum Beispiel für Compliance und Genehmigungsverfahren
+
+- Verbesserte externe Prozesse, beispielsweise im Vertrieb oder im Einkauf
+
+IT-Projekte beschleunigen
+
+- Wiederverwendung vorhandener Funktionen
+
+- Redundante IT-Anwendungen verringern
+
+- Schnellere Reaktion auf neue Anforderungen aus den Geschäftsbereichen
+
+- Geringerer Wartungsaufwand
+
+Entkopplung von Architektur-
+Bestandteilen
+
+Reduzierte Komplexität der
+Architektur insgesamt
+
+Schnellere Reaktionsfähigkeit der
+IT auf neue Anforderungen
+
+mehr
+Flexibilität und Effizienz
+(Kosten, Geschwindigkeit)
+in der Bereitstellung und im
+Betrieb von Funktionalität
+
+Technologie neutral:
+SoA-Services müssen mithilfe minimalen standardisierten Technologien nutzbar sein,
+welche fast alle IT-Umgebungen mitbringen. Das hat zur Folge, dass die Aufrufmechanismen,
+wie Protokolle, Beschreibungen und die Servicesuche/-entdeckung, weit
+verbreitete und akzeptierte Standards nutzen, wie z.B. HTTP, SOAP und WSDL.
+Locker verbunden:
+Services der SoA dürfen keine Informationen, interne Strukturen oder Konventionen
+erfordern und zwar weder auf der Nutzer- noch auf der Serviceseite.
+Lokalitätstransparent:
+SoA-Services sollen ihre Definitions- und Lokalitätsinformation, der Ort an dem der
+Service gespeichert ist, in einem Verzeichnisdienst wie zum Beispiel UDDI gespeichert
+haben. Das ermöglicht dem Servicenutzer den Service zu lokalisieren und aufzurufen
+unabhängig von dessen wirklichem Speicherort.
+  unabhängig -> autonome Software
+(= black box)
+
+aufrufbaren -> intern
+ auf anderem
+Rechner
+ extern
+ nachrichtenbasiert
+ lose
+gekoppelt
+
+Geschäftsprozess
+steht im Vordergrund
+
+Workflow Steuerung
+
+Der entscheidende Vorteil der serviceorientierten Architektur liegt darin, dass SoA
+die Implementierung eines Service von dessen Schnittstelle trennt. Das heißt es wird
+das was vom wie getrennt. Der Servicenutzer braucht nicht zu wissen wie der
+Service funktioniert und implementiert ist, für ihn ist nur interessant, dass er ihm zur
+Verfügung steht und dass er ihm die Serviceleistung liefert die er benötigt. 
+ man den Service als eine
+isolierte Einheit einer Unternehmensfunktion ansehen kann. Diese sind nach einer
+gemeinsamen Vorschrift locker miteinander zu einem Standard Kommunikations-
+Framework, einer serviceorientierten Architektur, verbunden. Durch die Unabhängigkeit,
+welche die Services in diesem Framework haben und die entkapselte Programmierlogik,
+die sie mitbringen, sind sie nicht an irgendeine Plattform oder Technologie
+gebunden.
+
+Eine serviceorientierte Architektur ist im wesentlichen eine Sammlung von Services.
+Diese kommunizieren miteinander indem sie sich Daten schicken oder gemeinsam eine Aktivität koordinieren. Dazu wird ein Mechanismus benötigt, mit dem Services
+zusammengefügt werden können.
+
+Grundlegend neu am SOA Ansatz ist die Idee, den Geschäftsprozess in den Vordergrund zu stellen. Im Gegensatz zur eher monolithischen IT-Anwendung, die unterschiedliche Funktionalitäten kapseln, ermöglicht SOA die Verfügbarkeit und Vernetzung unterschiedlicher Dienste von unterschiedlichen Anbietern im gesamten Unternehmen
+  Die bekannteste Implementierung einer serviceorientierten Architektur sind Webservices,
+da diese mit einem Minimum an standardisierten Protokollen auskommen.
+Der Datenaustausch wird, nach [9], meist mit Hilfe von SOAP, einem XML basierten
+Datenaustauschprotokoll, über das Transportprotokoll HTTP durchgeführt. Dabei ist
+es bemerkenswert, wie die verschiedensten Protokolle zusammenarbeiten. SOAP beispielsweise
+ist unabhängig vom Transportprotokoll definiert und kann daher auch über
+andere Transportprotokolle wie HTTPS, FTP oder SMTP arbeiten. Alternativ zu
+SOAP kann der Datenaustausch auch über XML-RPC erfolgen.
+Im Folgenden werden die Kernentitäten des SoA-Paradigmas aufgeführt und beschrieben
+welcher Teil eines Webservices für diese Aufgabe zuständig ist:
+    
+  
+  "Web Services" beschreiben sich selbst über eine so genannte WSDL Datei. Diese Datei enthält eine Dokumentation der verfügbaren Dienste und Anleitungen und erklärt, wie diese Dienste angesprochen werden können. Der Web Service meldet sich bei einem Service Broker an. Den Broker kann man sich als Verzeichnisdienst, als "Gelbe Seiten" der Dienste vorstellen. Ein Anwender kann in diesem Verzeichnisdienst einen geeigneten Dienst suchen und die WSDL Beschreibung anfordern. Über ein von W3C definiertes Protokoll (SOAP) können Anwender und Anbieter miteinander kommunizieren.
+  die Web Service Description Language. Sie definiert, was für Nachrichten mit einem Web-Service auszutauschen und welche seiner Operationen auszuführen sind. Außerdem beschreibt WSDL, wie die fachlichen Nachrichten als technische Soap-Messages aufgebaut sind und wo im Internet ein Server zur Nutzung des Service bereitgestellt ist.
+
+Definition: Service
+.. Ein Service ist eine definierte Leistung, einer im Systemzusammenhang definierten
+fachlichen Funktion, die von Anwendungsbausteinen erbracht und genutzt wird.
+.. Die Serviceschnittstelle (Signatur und funktionale Spezifikation) ist ein Vertrag
+zwischen Nutzer und Anbieter.
+.. Die Serviceimplementierung ist nicht Teil dieser Abstimmung, bleibt in der
+Verantwortung des Service-Anbieters und ist unter Einhaltung des Schnittstellen-
+Vertrages austauschbar.   
+
+Steigende Anforderungen
+an Integrationsprojekte
+.. Steigende Zahl der
+Anwendungen im
+Unternehmen
+.. Steigende Komplexität
+der Anwendungen
+.. Zunehmende
+Schnittstellenkomplexität
+.. Zunehmende
+Technologievielfalt
+.. Zunehmende
+Integrationstiefe
+
+
+Allerdings kann mithilfe der Schnittstellentechnologie Webservices eine SOA umgesetzt werden.Ein Dienst ist entsprechend eine logische Einheit von oft hoher Komplexität  eine Anwendung, Hardware oder eine Kombination aus beiden, die zusätzlich noch menschliche Leistungen umfassen kann.
+Die SOA koppelt derartige Dienste lose: Sie werden nur bei Bedarf gebunden. Ist die Aufgabe erledigt, wird die Bindung wieder aufgehoben.
+
+
+%Computerwoche
+
+
+
+
+
+
+
+
+
+
+%Java MagazinSOA ist die Abkürzung für Service-
+
+Die Systemlandschaft von Unternehmen ist oftmals sehr heterogen: SAP-Systeme, Nicht-SAP-Systeme, Eigenentwicklungen und Systeme von externen Partnern und Lieferanten müssen untereinander über Schnittstellen kommunizieren. Verschiedene Systeme arbeiten jedoch mit unterschiedlichen Programmiersprachen. Schnittstellen müssen deshalb erst aufwendig erstellt und später gewartet und gepflegt werden. An dieser Stelle setzt SOA an. SOA nutzt standardisierte WebServices als Schnittstellentechnik.
+
+Ein Prozess, z.B. die Anlegung eines Kundenauftrages, setzt sich aus vielen einzelnen Services zusammen. Ein Service ist z.B. der Aufruf eines Kundenstammes. Der Auftrag wird z.B. in einem SAP-System eingegeben, der Kundenstamm liegt in einem Nicht-SAP CRM-System, zusätzlich wird der Kundenstamm für die Rechnungsverbuchung benötigt.  Da die Systemlandschaften der renommierten Hersteller WebServices unterstützen, entfällt mit SOA die zeit- und kostenaufwändige Anpassung von Schnittstellen zwischen den Programmen.
+
+SOA ist zudem flexibler. Ohne SOA werden bei einer Änderung der Geschäftsprozesse einzelne Module oftmals um zusätzliche Funktionen erweitert. Die Komplexität steigt. SOA dagegen benutzt die einzelnen Services wie einen Baukasten, einzelnen Services können beliebig zu genau dem Prozess kombiniert werden, wie es das Geschäftsmodell des Unternehmens erfordert, egal in welchem System der Service vorhanden ist.
+
+
+
+
+%---Barry & Associates Inc, Service-oriented architecture (SOA) definition
+Definition der SoA [14]:
+A service-oriented architecture is essentially a collection of services. These services
+communicate with each other. The communication can involve either simple data
+passing or it could involve two or more services coordinating some activity. Some
+means of connecting services to each other is needed.
+Serviceorientierte Architektur ist zwar ein recht neuer Begriff in der
+Softwareentwicklung, aber der Begriff Service wird in der Softwareentwicklung
+schon länger benutzt.
+Sun definierte die SoA strenger, um Jini zu beschreiben. Jini ist ein System, um Services,
+Geräte und Anwendungen in einer dynamischen Umgebung zu vernetzen [6].
+In letzter Zeit gibt es neue Bemühungen SoA umzustrukturieren, um den Gedanken
+von Webservices, in der serviceorientierten Struktur, aufzugreifen. Die folgende Abbildung
+zeigt, wie Technologien benutzt werden können, um die serviceorientierte
+Architektur zu implementieren.
+
+
+Eine SoA ist ein Softwareentwurfsmodell mit dem elementaren Konzept der Abkapselung
+von Anwendungslogik innerhalb der Services. Die Services können über ein
+vereinbartes Kommunikationsprotokoll miteinander kommunizieren.
+Da die Services serviceorientiert sind, gibt es keine Trennung zwischen Client und
+Server. In der SoA gibt es nur noch Services, die unabhängig von ihrer Umwelt sind
+und wenn, dann nur in einer lockeren Beziehung zueinander stehen. Versucht man die
+serviceorientierte Architektur mit der Client-Server Architektur zu verstehen, dann
+würde die Abbildung (Fig. 3) die Interaktion zweier Services am besten wiedergeben.
+
+
+Eine SOA ist eine Methode zur Konzeption
+und Realisierung von Unternehmensanwendungen, die es verschiedenen
+Applikationen unabhängig vom zugrunde liegenden Betriebssystem und
+der gewählten Programmiersprache erlaubt, Daten auszutauschen und zu
+verarbeiten. Zur Realisierung werden vollständige Anwendungen, oder Teile
+daraus, als Dienste angeboten, die ohne Codierungsaufwände genutzt werden
+können. (vgl. Jec03)
+Komplexere Geschäftsprozesse werden durch die Kombination mehrerer
+Services realisiert. Die Programmlogik wird übere diverse, voneinander unabhängige
+Dienste verteilt und ist nicht in einem einzigen Programm implementiert.
+
