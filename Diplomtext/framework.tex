@@ -1,3 +1,22 @@
+ Als Teil der Forschung ist am Institut für Praktische Informatik (Fachgebiet Software Engeeniring) ist im Rahmen einer Masterarbeit BPELUnit Framework entstanden..
+ BPELUnit ist unter http:....... unter open source lizenze verfügbar.
+ 
+ Der Kern ist unabhängig von der Präsentationsschicht implementiert und bietet eine Schnittstelle für die Implementierung der Cliens an. Drei Clients gehören gehören zum Framework:
+ 
+\begin{itemize}
+	\item command line
+	\item ant
+	\item Eclipse plug-in mit integrierter Darstellung der Ergebnissen und einem Editor für die Erstellung der Tests 
+\end{itemize}
+
+Unterschiedliche BPEL Engines werden durch das Framework unterstützt und weitere können durch Erstellen entsprechender Adapter integriert werden. Tests in BPELUnit werden in XML spezifiziert. Die Überprüfung der angekommenen Daten kann mit Hilfe von XPath erfolgen. Die Interaktionsmuster zwischen Partnern und BPEL-Komposition wird in der Testspezifikation gespeichert. Folgende Interaktionsmuster werden unterstützt: 
+\begin{itemize}
+	\item eine Richtung receive oder reply
+	\item beide Richtungen synchron 
+	\item beide Richtungen asynchron (send-receive und receive-send)
+\end{itemize}
+   
+ 
   BPELUnit richtet sich primär an die Entwickler, die das Testen und Programmieren während des Entwicklungsprozesses abwechseln machen. Also bietet das  Framework schnelles Testen: Erzeugen und Ausführen sind einfach und schnell. 
    Testansatz von BPELUnit 
    
@@ -13,6 +32,8 @@
  Unit Testen ist das Testen von Komponenten in der Isolation. Das erreicht BPELUnit durch Mocks , die die Partner des Prozesse mit spezieller für den Test erzeugter Implementierung ersetzen. Testgeschirr ersetzt die Partner des BPEL Prozesses und den Client.
  
  BPELUnit Testing Architektur
+ 
+ Der erste von unten Schicht ist für die Testspezifikation zuständig: wie die Testdaten und das Verhalten formuliert. Darauf afbauend werden die Tests in der Test Suiten organisiert, für die die Test Organisation -Schicht verantwortlich ist. Der Test muss ausgeführt werden. Das ist die Aufgabe der dritten Schicht. Während der Tests müssen die Daten und Statistiken gesammelt und dem Benutzer repräsentiert werden.   
  
 \begin{itemize}
 	\item eindeutig
@@ -34,12 +55,16 @@ Bei synchronem Aufruf können Operationen Faults verschicken. BPELUnit ist fähig 
 PUT hat ein Client und eine beliebige Anzahl von Partner . Alle diese Web Services laufen Parallel und interagieren mit PUT.
 
 Testorganisation  
+Die Testspezifikation ist als Menge von Interaktionsthreads organisiert. Jeder Thread (Faden) beschreibt erwartete Kommunikation von und zu Partner von BPEL-Komposition. Die Thrads werden in suiten gruppiert.  Suite referenziert alle für den Test notwendigen Elemente: WSDL Beschreibung der Services, XML-Schemata usw. Außerdem definiert die Suite auch die Testumgebung: alle setup Info wie server und URLs. Für die Vereinfachung der Erstellung von Tests können die TestCases vererbt werden. So können gemeinsam genutzte Interaktionssequenzen können einmal definiert und in weiteren Testcases genutzt werden.
 
 Wie bei einem konventionelem Ansatz sind die Testcases in einer suite organisiert. Zusätzlich ist jede Suite mit einem bestimmten BPEL Prozess verknüpft. Die Fixture ist in Suite spezifiziert und ist für jedem Testcase.
 
 BPELUnit kombiniert TEstcases mit a setup/shutdown (für Partner und Client müssen deployt und undeployt werden ) Teil und referenziert externe Artefakte (BPELProzess,WSDL-Beschreibungen) 
 
 Test Ausführung 
+Der Ausführungsschicht sorgt für automatisches Deployen und undeployen, sowie startet für alle Partner threads, die das Verhalten des jeweiligen Partners, das im Test spezifiziert ist, simulieren. Die Engine, die für die Simulation der Partner verantwortlich ist, simuliert den Kompleten Web Service Stack und kommt zurecht mit den allen wichtigen SOAP Konstrukts
+
+und übernimmt damit dem Entwickler viel Arbeit. 
 
 BPEL Kompositions Testen braucht Ausführung des BPEL Prozesses innerhalb von Testgeschirr die die Input und Output Daten entsprechend des Testspezifikation behandelt.
 Real-Life Testen heißt deployen PUT in einer Engine und Aufrufen mittels Web Service Aufruf. Die Partner werden durch Mocks Web Services ersetzt, die Aufgerufen werden können und selbst Web Service Aufrufe starten kann. Dabei muss das Deployment von PUT so erfolgen, dass alle Partner URIs ersetzt durch URIs des Mocks werden. Die Engine beruhen auf anbieterspezifischen Deployment descriptors, die nicht standarfisiert sind . 
@@ -56,10 +81,28 @@ Die SOAP Daten müssen korrekt kodiert und dekodiert werden. Alle Aktivitäten sin
 
 Test Results
 
+Weil BPELUnit eine BPEL-Server für die Ausführung benutzt ist es schwierig Informationen über die Ausführung zu sammeln. BPELUnit kann nnur berichten, ob der TestCase erfolgreich, Failures und Errors. Für die Darstellung der Ergebnissen sind die Clients verantwortlich.   
+
 Real Life schwierig die Ergebnisse zu sammeln
 \begin{itemize}
 	\item Failure Fehler auf der Anwendungsebene : zum Beispiel eine erwartete Nachricht von BPEL ist nicht angekommen , oder enthält falsche Informationen oder zu viele Nachrichten sind angekommen.
 	\item Error Problem mit dem Web Service Stack. Problemen auf Kommunikationsebene.
 \end{itemize}
+
+Mocking Architektur
+
+Eine sehr wichtige Eigenschaft des Frameworks ist die Fähigkeit die Prozesspartners zu emulieren. Pro Test muss mindestens ein Partner, der den BPEL-Prozess initiiert, simuliert. Das Verhalten der Partner wird durch die Partner Tracks festgelegt. Ein Partner Track beschreibt erwartete Nachrichten und zugehörige Antwortnachrichten an BPEL-Prozess. Die relevanten Informationen der eingehenden Nachrichten können mit XPath überprüft werden. Anhand solcher Überprüfungen, vor allem die Antwortnachricht an Client-Partner (das Ergebnis der Anfrage), wird festgestellt, ob der Test erfolgreich war. 
+
+Beim Start des Tests wird für jeden Partner ein Thread gestartet, der die Informationen des ensprechenden Partner Tracks konfiguriert wird.Der Web Service stack dekodiert die ankommenden Nachrichten und leitet sie an den passenden Mock. Der Mock validiert die Nachricht und überprüft, ob die Nachricht bei Partner Track erwartet wird und ob sie die richtigen Daten enthält. Anschließend wird eine Antwort verschickt.
+
+Das Framework kodiert und dekodiert die SOAP Nachrichten so, dass die Mocks brauchen sich darum nicht mehr kümmern. 
+
+Erweiterung von BPEL
+
+BPELUnit unterstützt SOAP über HTTP Nachrichten mit literal style. Das Framework bietet aber Erweiterungspunkte, die ermöglichen Unterstützung für weitere Protokollen und Header Prozessoren. 
+
+Außerdem gibt es eine Erweiterungsschnittstelle für die Unterstützung weiterer  BPEL-Server .
+Die Unterstützung der ActiveBPEL und OracleBPEL Engine ist bei der aktu  
+  
  
  Grundlegendes Resultat eines Unit Tests ist ob der Test gellungen ist
