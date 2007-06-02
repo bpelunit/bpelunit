@@ -1,0 +1,65 @@
+  BPELUnit richtet sich primär an die Entwickler, die das Testen und Programmieren während des Entwicklungsprozesses abwechseln machen. Also bietet das  Framework schnelles Testen: Erzeugen und Ausführen sind einfach und schnell. 
+   Testansatz von BPELUnit 
+   
+   BPELUnit für wiederholbare white-box automatisierbare BPEL Kompositionen Testen
+   mit Konzentration auf:
+   
+\begin{itemize}
+	\item Unterstützung von BPEL-spezifischen Eigenschaften: parallelen Aktivitäten, Kompositionen und asynchronen Eigenschaften
+	\item einfache Benutzung durch Entwickler
+	\item realistische Sicht auf das Ausführen des BPEL Prozesses.
+\end{itemize}
+ 
+ Unit Testen ist das Testen von Komponenten in der Isolation. Das erreicht BPELUnit durch Mocks , die die Partner des Prozesse mit spezieller für den Test erzeugter Implementierung ersetzen. Testgeschirr ersetzt die Partner des BPEL Prozesses und den Client.
+ 
+ BPELUnit Testing Architektur
+ 
+\begin{itemize}
+	\item eindeutig
+	\item maschienenlesbar
+	\item ausführbar 
+\end{itemize}
+ 
+ BPELUnit   enthält alle relevanten Daten für das Testen eines bestimmten Pfades in BPEL prozess.
+ 
+ Die Daten, die bei der Interaktion mit PUT verschickt werden, sind in XML spezifiziert. Bei der Überprüfung der ankommenden Daten kann XPath eingesetzt werden um die relevanten Daten auszuwählen. 
+ 
+ 
+Testen von BPEL bedeutet überprüfen die Korrektheit des implementierten Geschäftsprozesses. Dafür müssen die Geschäftsprotokolle des Clienten und der Partner simuliert werden. Geschäftsprotokoll basiert auf Interaktion . Die Tester müssen die Interaktionssequenzen für die Partner und den Client in jedem Testcase festlegen. Sequenzen werden Tracks genannt und bestehen aus atomaren Interaktionen (Aktivitäten)
+
+Fault Handling
+
+Bei synchronem Aufruf können Operationen Faults verschicken. BPELUnit ist fähig die Faults zu empfangen und zu versenden. Behandlung von den Fehlern ist sehr wichtig für ein Testframework weil es ermöglicht dem Tester die Kompensation zu veranlassen. So kann die Korrektheit von Kompensationsaktivitäten getestet werden.
+
+PUT hat ein Client und eine beliebige Anzahl von Partner . Alle diese Web Services laufen Parallel und interagieren mit PUT.
+
+Testorganisation  
+
+Wie bei einem konventionelem Ansatz sind die Testcases in einer suite organisiert. Zusätzlich ist jede Suite mit einem bestimmten BPEL Prozess verknüpft. Die Fixture ist in Suite spezifiziert und ist für jedem Testcase.
+
+BPELUnit kombiniert TEstcases mit a setup/shutdown (für Partner und Client müssen deployt und undeployt werden ) Teil und referenziert externe Artefakte (BPELProzess,WSDL-Beschreibungen) 
+
+Test Ausführung 
+
+BPEL Kompositions Testen braucht Ausführung des BPEL Prozesses innerhalb von Testgeschirr die die Input und Output Daten entsprechend des Testspezifikation behandelt.
+Real-Life Testen heißt deployen PUT in einer Engine und Aufrufen mittels Web Service Aufruf. Die Partner werden durch Mocks Web Services ersetzt, die Aufgerufen werden können und selbst Web Service Aufrufe starten kann. Dabei muss das Deployment von PUT so erfolgen, dass alle Partner URIs ersetzt durch URIs des Mocks werden. Die Engine beruhen auf anbieterspezifischen Deployment descriptors, die nicht standarfisiert sind . 
+
+PUT ist deployt in eine Engine vor dem Testen ind wird undeployt nach dem testen . Es werden Adapter für jede Engine gebraucht Also die Aufrufe des Prozesses ind empfangene Aufrufe sind in SOAP kodiert. Simulation der Partners muss die WSDL Beschreibung beachten. Die Adressierung der Antworten bei asynchronen Aufrufen muss beachtet werden.
+
+BILD
+
+SOAP Calls und Encoding 
+
+real life Für die Kommunikation mit BPEL Prozess die Standards (WSDl -Beschreibung beachten und Kommunikation findet über SOAP Nachrichten statt)
+Die SOAP Daten müssen korrekt kodiert und dekodiert werden. Alle Aktivitäten sind an WSDL Operation zu binden.
+
+
+Test Results
+
+Real Life schwierig die Ergebnisse zu sammeln
+\begin{itemize}
+	\item Failure Fehler auf der Anwendungsebene : zum Beispiel eine erwartete Nachricht von BPEL ist nicht angekommen , oder enthält falsche Informationen oder zu viele Nachrichten sind angekommen.
+	\item Error Problem mit dem Web Service Stack. Problemen auf Kommunikationsebene.
+\end{itemize}
+ 
+ Grundlegendes Resultat eines Unit Tests ist ob der Test gellungen ist

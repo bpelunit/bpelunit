@@ -5,3 +5,7 @@
 		\caption{Kontrollfluss eines BPEL Prozesses}
 	\label{fig:ExamlpleBPELProzess}
 \end{figure}
+
+BPELUnit Framework wird erweitert durch hinzufügen einer Phase vor dem tatsächlichen Testen. In dieser Phase wird der BPEL Prozess annotiert , invoke-Aktivitäten werdenhnzugefügt. Diese Aktivitäteb sind Markierungen für jede Aktivität und jede Möglichkeit des Kontrollflusses. Die Marken haben eindeutige Identifizierungen, die verwendet werden umd die Relation zwischen Marken und Aktivitäten bzw. dem Kontrollfluß 
+
+Zur Laufzeit diese Aktivitöäten rufen ein Web Service des BPELUnit Frameworks . Bei diesen Aufrufen werden die Marken transportiert. , die signalisieren den Asführungspfad zum BPELUnit Framework. Diesse Marken werden auf den BPEL Prozess abgebildet. Nach der Ausführung können mit Hilfe der Marken und statischen Informationen über BPEL Prozess die Abdeckungsmetriken berechnet werden. Es ist ein neuer Modul hinzugekommen, der alle Aufgaben, die mit der Messung der Abdeckung zu tun haben, managt. So enthält dieser Modul einen Instrumentierer der den BPEL file analysiert und Annotationen hinzufügt. Der alte File wird durch den neuen ersetzt.  Zusätzlich ist ein Web Service für das Empfangen von Marken in diesem Modul enhalten

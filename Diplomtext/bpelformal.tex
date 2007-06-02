@@ -81,7 +81,7 @@ boolean function over $\mathcal{L}_{in}(a)$(i.e. $Var(joincon(a))=\mathcal{L}_{i
 Wird eine Aktivität aufgrund einer zu $false$ ausgewerteten $joinCondition$ oder eines nicht abgearbeiteten Zweiges einer $if-$ oder $pick-$Aktivität nicht ausgeführt, so wird für alle ausgehenden Links die $transitionCondition$ auf $false$ gesetzt. Dieses Verhalten wird als Dead-Path-Elimination bezeichnet. 
 \end{itemize}
 
-Betrachtet man die Kontrollstruktur eines WS-BPEL Prozesses, so kann die $\mathcal{HR}$-Relation als Übergabe der Kontrolle von einer Aktivität an ihre Subaktivitäten betrachtet werden. Damit entspricht ein Element dieser Relation einem Zweig des Kontrollflussgraphen. Allerdings deckt diese Relation nicht alle Zweige des Graphen ab, es fehlen nämlich die Zweige, die die Kontrolle innerhalb der Schleifen von der inneren Aktivität an die Schleife zurückgeben. Die folgende Relation $\mathcal{HBR}$ beschreibt genau solche Beziehungen:\begin{itemize}
+Betrachtet man die Kontrollstruktur eines WS-BPEL Prozesses, so kann die $\mathcal{HR}$-Relation als Übergabe der Kontrolle von einer Aktivität an ihre Subaktivitäten interpretiert werden. Damit entspricht ein Element dieser Relation einem Zweig des Kontrollflussgraphen. Allerdings deckt diese Relation nicht alle Zweige des Graphen ab, es fehlen nämlich die Zweige, die die Kontrolle innerhalb der Schleifen von der inneren Aktivität an die Schleife zurückgeben. Die folgende Relation $\mathcal{HBR}$ beschreibt genau solche Beziehungen:\begin{itemize}
 	\item $\mathcal{HBR}\subseteq \mathcal{A}\times(\mathcal{C}\cup
 	\{\bot\})\times \mathcal{A}$ describes the relation of an activity to its
 	parent activity,

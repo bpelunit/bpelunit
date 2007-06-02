@@ -1,4 +1,12 @@
- In diesem Abschnitt wird die Umsetzung der besprochenen Abdeckungsmetriken vorgestellt.  Dabei wird das Instrumentierungsverfahren verwendet. Zu beachten ist, dass es bei diesem Ansatz die Möglichkeit besteht, durch die Manipulation die interne Programmlogik zu verändern. Aus diesem Grund muss man bei allen Eingriffen in die Struktur der BPEL-Datei dafür sorgen, dass die Geschäftslogik unverändert bleibt. Die syntaktische Korrektheit darf natürlich auch nicht beeinträchtigt werden.
+ In diesem Abschnitt wird die Umsetzung der besprochenen Abdeckungsmetriken vorgestellt.  Dabei wird das Instrumentierungsverfahren verwendet. Zu beachten ist, dass es bei diesem Ansatz die Möglichkeit besteht, durch die Manipulation die interne Programmlogik zu verändern. Aus diesem Grund muss man bei allen Eingriffen in die Struktur der BPEL-Datei dafür sorgen, dass die Geschäftslogik unverändert bleibt. Die syntaktische Korrektheit darf natürlich auch nicht beeinträchtigt werden. Außerdem stellt das Link-Konzept einige zusätzliche Anforderungen, die Beachtete werden müssen. 
+ 
+\begin{itemize}
+	\item joinFailure und DPE
+	\item Boundary Crossing
+\end{itemize}
+ 
+ zu beachten create Instance
+ 
   \subsection{Statementabdeckung}
   Fast alle strukturierenden Aktivitäten sind so konstruiert, dass sie in ihren Komponenten genau eine Aktivität erlauben. Die Ausnahmen sind  \textit{flow}- und \textit{sequence}-Aktivität. Durch das Schachtelungsprinzip sind trotzdem beliebig komplexe Strukturen realisierbar. Wenn nur eine Basisaktivität an so einer Stellen  vorhanden ist, dann würde das Einfügen einer zusätzlichen Aktivität zur Verletzung der Syntaxregeln führen. Also muss man vor der Instrumentierung eine \textit{umschließende strukturierende} Aktivität hinzufügen. Da das Logging entweder direkt davor oder danach stattfinden soll, ist die \textit{sequence}-Aktivität zu diesem Zweck gut geeignet. 
   
@@ -13,7 +21,7 @@ neue Variable für jeden Zweig!!!!!!!!!!!!!
 	\item Protokollierung findet vor der Aktivität statt und die Aktivität wird aufgrund der \textit{transition-} oder \textit{joinCondition} nicht ausgeführt.
 	\item Protokollierung findet nach der Aktivität statt, die Aktivität wird aufgrund der \textit{transition-} oder \textit{joinCondition} nicht ausgeführt und die Variable suppressJoin ist mit dem Wert \textit{yes} belegt.
 \end{itemize}
-In den beiden Fällen wird eine Aktivität zu viel registriert. Anders gesagt: die Aktivität wird fälschlicherweise als "`ausgeführt"' markiert.
+In den beiden Fällen wird die Ausführung einer Aktivität registriert, obwohl die Aktivität gar nicht ausgeführt wurde. Anders gesagt: die Aktivität wird fälschlicherweise als "`ausgeführt"' markiert.
 
 Um zu erreichen, dass die Aktivität und das Logging (beide) entweder ausgeführt oder nicht ausgeführt werden, muss der Link sich auf beide beziehen. Zu beachten ist, dass ein Link nur eine Quelle und ein Ziel besitzen darf. Schließt man die zu protokollierende Aktivität und die Logginganweisung in eine \textit{sequence} ein und definiert diese als Ziel des Links (durch \textit{target}-Element), so ist das gewünschte Verhalten erreicht. Das gilt für beide Werte der \textit{suppressJoin}-Varaible. 
 Das ursprüngliche \textit{target}-Element muss entfernt werden. Die Definition und die Quelle des Links bleiben unverändert. In Listing \ref{Listing1} werden die entsprechenden Änderungen des Quellcodes an einem Beispielauschnitt dargestellt.
@@ -68,6 +76,12 @@ Das Komplizierteste bei der Instrumentierung innerhalb der flow-Aktivität ist da
 	\item dreiwertiger Status der Links
 	\item \textit{Dead-Path-Elimination}
 \end{itemize}
+
+zu Beachten createInstance.
+
+
+
+
 Es geht insbesondere darum, dass bei den Links sowohl der Status \textit{true} als auch \textit{false} erfasst werden müssen. Es werden drei verschiedene Ansätze mit ihren Vor- und Nachteilen vorgestellt. Das Beispiel aus der folgenden Abbildung dient als Grundlage für die Erläuterung. 
 %\begin{figure}[htbp]
 %	\centering
