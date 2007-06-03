@@ -1,0 +1,15 @@
+
+----------------------------------------------------------
+
+BPELUnit - A BPEL testing framework
+www.bpelunit.org
+
+----------------------------------------------------------
+
+This project belongs to the BPELUnit suite of tools and Eclipse plugins. Please
+see the enclosed license file for licensing information.
+
+----------------------------------------------------------
+
+This project contains the build script for the BPELUnit Standalone package. To
+build the package, execute the build.xml file in the root directory.

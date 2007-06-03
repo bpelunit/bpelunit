@@ -1,0 +1,46 @@
+
+----------------------------------------------------------
+
+BPELUnit - A BPEL testing framework
+www.bpelunit.org
+
+----------------------------------------------------------
+
+= Configuration =
+
+In order to keep the test suite documents free from platform-specific settings,
+the registered deployers of BPELUnit may be configured by using the conf/configuration.xml
+file. In this XML file, each deployer may be parameterized with a number of options.
+
+BPELUnit contains two deployers: The Oracle Deployer and the ActiveBPEL deployer. To
+configure one of these deployers (or a deployer you have added yourself), create a section
+for it in the configuration.xml file:
+
+	<configuration deployer="oracle">
+		...
+	</configuration>
+	
+Inside of this block, you can parameterize the deployer with the set of keys it provides, for example:
+
+		<property name="OracleDomainPassword">bpel</property>
+		
+The options for the Oracle and ActiveBPEL Deployers are as follows:
+
+Oracle
+======
+
+Key								Value
+
+OracleDirectory					The absolute file path to the Oracle BPEL server directory.
+OracleDomain					The name of the Oracle Domain to deploy to.
+OracleDomainPassword			The password for the specified domain.
+
+
+ActiveBPEL
+======
+
+Key								Value
+ActiveBPELDeploymentDirectory	The directory of the ActiveBPEL Tomcat installation containing the .bpr files
+ActiveBPELDeploymentServiceURL	The URL to the ActiveBPEL deployment web service.
+
+

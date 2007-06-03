@@ -1,0 +1,105 @@
+
+----------------------------------------------------------
+
+BPELUnit - A BPEL testing framework
+www.bpelunit.org
+
+----------------------------------------------------------
+
+= EXTENSION =
+
+BPELUnit has three extension points, and offers an API which can be used to create new BPELUnit clients. 
+Additionally, the XML Schema of the test suite is available, which makes it possible to write a new, or 
+enhance the existing tool support. The three extension points can be used to add the following components to 
+BPELUnit:
+
+BPEL Deployers:
+	BPELUnit employs a real-life testing approach, i.e. the BPEL process under test is 
+	actually deployed into an engine before the test, and undeployed afterwards. The 
+	first extension point can be used to add a new BPEL deployer for a BPEL engine.
+
+SOAP Encoders/Decoders:
+	BPELUnit uses web service calls to talk to the BPEL process, but allows specification of 
+	conditions, data copy operations, and data to be sent in plain, literal XML. To 
+	create a web service call, a SOAP Encoder/Decoder must convert the literal XML 
+	into SOAP XML. The SOAP Encoder/Decoder extension point can be used to add new 
+	SOAP Encoders for a certain format (for example, rpc/encoded).
+
+Header Processors: 
+	Asynchronous messaging requires certain fields in the SOAP header to contain Message IDs, 
+	Reply-To addresses, or other mechanisms which allow for asynchronous callbacks. The 
+	Header Processor extension point can be used to add new Header Processors, implementing 
+	new callback styles.
+
+
+ADDING A NEW BPEL DEPLOYER
+==========================================================
+
+BPELUnit comes with four BPEL deployers. Two of them are actual deployers, one deploying to the Oracle BPEL 
+Server, and one to the ActiveBPEL engine. If you wish to add a new deployer, add an extension 
+to the conf/extensions.xml file, as follows:
+
+		<deployer 
+			type="activebpel"
+			extensionClass="org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer" 
+			/>
+
+The options are as follows:
+
+type: 				An ID for this deployer (for use in the test suite document) 
+extensionClass: 	A class implementing the interface IBPELDeployer. The class contains the actual deployment code.
+
+
+ADDING A NEW SOAP ENCODER/DECODER
+==========================================================
+
+BPELUnit comes with two SOAP Encoder/Decoders - one for document/literal, and one for rpc/literal style. 
+If you wish to add a new SOAP Encoder/Decoder, add an extension to the conf/extensions.xml file, as follows:
+
+		<encoder 
+			type="document/literal" 
+			extensionClass="org.bpelunit.framework.control.soap.DocumentLiteralEncoder" 
+			/>
+
+The options are as follows:
+
+type: 				An ID for this SOAP Encoder/Decoder. The ID must be in the format style/encoding and 
+					identifies the format encoded or decoded by this encoder.
+
+extensionClass: 	A class implementing the interface ISOAPEncoder. The class contains the actual encoding 
+					and decoding code.
+
+
+ADDING A NEW HEADER PROCESSOR
+==========================================================
+
+BPELUnit comes with one Header Processor, implementing the WS-Addressing protocol. If you wish 
+to add a new Header Processor, add an extension to your plugin.xml, like the following code:
+
+		<headerProcessor 
+			type="wsa" 
+			extensionClass="org.bpelunit.framework.control.soap.WSAHeaderProcessor" 
+			/>
+
+The options are as follows:
+
+type: 				An ID for this header processor, identifying it in the test suite document
+
+encoderClass: 		A class implementing the interface IHeaderProcessor. The class contains the actual processing code.
+
+
+WRITING NEW CLIENTS
+==========================================================
+
+If you intend to write a new client for BPELUnit, have look at the API Documentation. It is also a 
+good idea to download the source of the existing clients (command line, Ant, Eclipse) and have a look at that code.
+
+
+WRITING NEW TOOLS
+==========================================================
+
+The fastest way of creating new tools for writing test suites is directly coding against 
+the XML Schema of the test suite, which is located in the schema directory.
+
+
+
