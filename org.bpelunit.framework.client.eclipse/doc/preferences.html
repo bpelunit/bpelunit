@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Preferences</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="main.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>&nbsp;</h3>
+<h3>Preferences</h3>
+<p>The BPELUnit framework can be configured by using the Preferences Pane. To 
+  display it, select <em>Window &gt; Preferences...</em> in the main menu, then 
+  select <em>BPELUnit</em>. The following page is displayed:</p>
+<p><img src="images/preferences_general.gif" width="561" height="434"></p>
+<p>On this page, you may configure the logging mechanism of BPELUnit and the global 
+  timeout:</p>
+<ul>
+  <li><strong>Logging</strong>: BPELUnit uses log4j to log its internal progress. 
+    To display these messages in the Console view, click the Send log messages 
+    to console check box. Additionally, you can configure the log level, ranging 
+    from OFF (no logging) to ALL (log everything). A sensible log level is INFO.</li>
+  <li><strong>Global timeout</strong>: BPELUnit receives and sends its messages 
+    over HTTP connections from and to the BPEL process. Such operations may fail 
+    for a number of reasons. BPELUnit waits for the given number of milliseconds 
+    before giving up on such operations. The default is 25 seconds.</li>
+</ul>
+<p>The second page of the preferences can be reached by selecting <em>Deployment</em>. 
+  On this page, you may configure the deployers registered in BPELUnit:</p>
+<p><img src="images/preferences_deployment.gif" width="561" height="434"></p>
+<p>Each deployer may have different setup requirements. Pressing<em> Add...</em> 
+  allows creating new options for the selected deployer and provides help on which 
+  options are available. The options for the two standard deployers of BPELUnit 
+  (Oracle and ActiveBPEL) are as follows:</p>
+<h4>Oracle</h4>
+<table width="75%" border="0">
+  <tr> 
+    <td width="32%"><strong>Key</strong></td>
+    <td width="68%"><strong>Value</strong></td>
+  </tr>
+  <tr> 
+    <td>OracleDirectory</td>
+    <td>The absolute file path to the Oracle BPEL server directory.</td>
+  </tr>
+  <tr> 
+    <td>OracleDomain</td>
+    <td>The name of the Oracle Domain to deploy to.</td>
+  </tr>
+  <tr> 
+    <td>OracleDomainPassword</td>
+    <td>The password for the specified domain.</td>
+  </tr>
+</table>
+<h4>ActiveBPEL</h4>
+<table width="75%" border="0">
+  <tr> 
+    <td><strong>Key</strong></td>
+    <td><strong>Value</strong></td>
+  </tr>
+  <tr> 
+    <td>ActiveBPELDeploymentDirectory</td>
+    <td>The directory of the ActiveBPEL Tomcat installation containing the .bpr 
+      files</td>
+  </tr>
+  <tr> 
+    <td>ActiveBPELDeploymentServiceURL</td>
+    <td>The URL to the ActiveBPEL deployment web service.</td>
+  </tr>
+</table>
+<p>&nbsp; </p>
+</body>
+</html>

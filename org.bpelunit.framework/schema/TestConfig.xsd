@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns="http://www.bpelunit.org/schema/testConfiguration" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bpelunit.org/schema/testConfiguration" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="testConfiguration" type="TestConfiguration">
+		<xs:annotation>
+			<xs:documentation>Configuration root element</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="TestConfiguration">
+		<xs:sequence>
+			<xs:element name="configuration" type="Configuration" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Configuration">
+		<xs:sequence>
+			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="deployer" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Property">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

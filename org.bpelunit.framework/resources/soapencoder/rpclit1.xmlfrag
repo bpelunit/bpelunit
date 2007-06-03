@@ -1,0 +1,5 @@
+<someFirstPart>
+	<tns:me name="Phil" xmlns:tns="http://xxx" />
+</someFirstPart>
+
+<someSecondPart>directStringPart</someSecondPart>

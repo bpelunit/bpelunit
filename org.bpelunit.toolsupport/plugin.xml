@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="BPELUnit TestSuite Editor"
+            extensions="bpts"
+            icon="icons/bpel.gif"
+            contributorClass="org.bpelunit.toolsupport.editors.BPELUnitEditorContributor"
+            class="org.bpelunit.toolsupport.editors.BPELUnitEditor"
+            id="org.bpelunit.toolsupport.editors.BPELUnitEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="BPELUnit"
+            id="org.bpelunit.toolsupport">
+      </category>
+      <wizard
+            name="BPELUnit TestSuite"
+            icon="icons/bpel.gif"
+            category="org.bpelunit.toolsupport"
+            class="org.bpelunit.toolsupport.wizards.BPELUnitNewWizard"
+            id="org.bpelunit.toolsupport.wizards.BPELUnitNewWizard">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            extradir="doc"
+            file="doc/main.xml"
+            primary="true"/>
+      <toc
+            extradir="doc"
+            file="doc/tasks.xml"
+            primary="false"/>
+      <toc
+            extradir="doc"
+            file="doc/editor.xml"
+            primary="false"/>
+   </extension>
+
+</plugin>

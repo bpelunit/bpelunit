@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BPELunit Doc Build" default="all" basedir=".">
+	
+	<!--
+	
+		Note that in order to use the Eclipse functionality, this ant script
+		must run within the same JRE as Eclipse. See the run options.
+		
+	-->
+
+	<target name="all">
+		<antcall target="convertSchemaToHtml" />
+		<antcall target="generateJavadoc" />
+		<eclipse.refreshLocal resource="org.bpelunit.framework.client.eclipse/doc" depth="infinite"/>
+	</target>
+
+	<!-- Converts all the manifest files referenced by the plugin.xml to HTML -->
+	<target name="convertSchemaToHtml" if="eclipse.running">
+		
+		<delete dir="doc/reference/extension-points" includes="org*" />
+		
+		
+		<property name="dest" value="doc/reference/extension-points" />
+		<pde.convertSchemaToHTML manifest="plugin.xml" destination="${dest}" />
+
+	</target>
+
+
+	<target name="generateJavadoc">
+
+		<delete dir="doc/reference/api" />
+		<mkdir dir="doc/reference/api" />
+		
+		<javadoc destdir="doc/reference/api/">
+		    <packageset dir="../org.bpelunit.framework/src" defaultexcludes="yes">
+		      	<include name="org/bpelunit/framework"/>		    	
+		    	<include name="org/bpelunit/framework/control/ext"/>		    	
+		    	<include name="org/bpelunit/framework/control/result"/>		    	
+		    </packageset>
+		</javadoc>
+		
+	</target>
+
+
+</project>
+

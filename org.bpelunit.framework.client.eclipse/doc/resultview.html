@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>The Result View</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="main.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>&nbsp;</h3>
+<h3>The Result View</h3>
+<p>After a test suite has been launched, the Result View comes up, which displays 
+  information about the current test run. The view is updated as the test progresses. 
+  Depending on the current run, the view will look something like this:</p>
+<p><img src="images/resultview.gif" width="453" height="676"></p>
+<p>The view contains two JUnit-like bars. The first bar shows the test case progress; 
+  the second bar shows the activity progress inside the current test case. As 
+  expected, the bar turns red and stays red if any failure or error occurs.</p>
+<p>The tree view immediately below the bars displays the structure of the current 
+  test suite. Each top-level node represents a test case, which contains partners, 
+  which in turn contain activities. Initially, are nodes are displayed in gray, 
+  as they have not been executed yet. When executed, they will turn green in case 
+  of a successful execution, or red in case of a failure or error. </p>
+<p>Each node may be selected to display more information about the node in the 
+  detail pane at the bottom of the view. For example, selecting a Send activity 
+  will yield information on where the data was sent:</p>
+<p><img src="images/detail_send.gif" width="444" height="253"></p>
+<p>Selecting an XML node beneath a Send or Receive activity displays the actual 
+  data that was sent:</p>
+<p><img src="images/detail_xml.gif" width="445" height="253"></p>
+<p>The BPELUnit Result View also allows users to stop the test at any time (red 
+  stop button at the top), and re-launch the test (green/yellow re-run button 
+  at the top)</p>
+<p>&nbsp;</p>
+</body>
+</html>

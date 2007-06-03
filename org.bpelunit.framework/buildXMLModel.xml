@@ -1,0 +1,70 @@
+<project name="Any" default="build">
+	
+	<!--
+	
+		This script builds the framework JAR file. The environment variable
+		${xmlbeans.home} must be specified and point to the XMLBeans home directory.
+	
+	-->
+    
+	<property name="xmlbeans.home" location="c:/Programme/java/xmlbeans-2.2.0"/>
+	
+	<property name="src-dir" location="src"/>
+	<property name="bin-dir" location="bin"/>
+
+    <path id="Any.path">
+        <path refid="xmlbeans.path"/>
+        <fileset dir="build/lib" includes="*.jar"/>
+        <pathelement path="build/classes"/>
+    </path>
+
+    <target name="init">
+
+        <echo message="xmlbeans.home: ${xmlbeans.home}"/>
+
+        <!-- check for xbean.jar from binary distribution -->
+        <available
+            property="xmlbeans.lib"
+            value="${xmlbeans.home}/lib"
+            file="${xmlbeans.home}/lib/xbean.jar" />
+
+        <!-- check for xbean.jar compiled from source -->
+        <available
+            property="xmlbeans.lib"
+            value="${xmlbeans.home}/build/lib"
+            file="${xmlbeans.home}/build/lib/xbean.jar" />
+
+        <fail message="Set XMLBEANS_HOME in your environment."
+            unless="xmlbeans.lib"/>
+
+        <echo message="xmlbeans.lib: ${xmlbeans.lib}"/>
+    	
+        <path id="xmlbeans.path">
+            <fileset dir="${xmlbeans.lib}" includes="*.jar"/>
+        </path>
+
+        <taskdef name="xmlbean"
+            classname="org.apache.xmlbeans.impl.tool.XMLBean"
+            classpathref="xmlbeans.path"/>
+    </target>
+
+    <!-- ========================== clean ==== -->
+
+    <target name="clean">
+		<deltree dir="${src-dir}/org/bpelunit/framework/xml/"/>
+    </target>
+
+    <!-- ========================== build ==== -->
+
+    <target name="build" depends="init, clean">
+    	<!-- srconly="true" -->
+
+        <xmlbean schema="schema"
+            srcgendir="${src-dir}"
+    		classgendir="${bin-dir}"
+            classpathref="xmlbeans.path"
+        	javasource="1.5"
+            />
+    </target>
+
+</project>

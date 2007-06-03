@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="bpelDeployer" name="BPEL Deployer" schema="schema/BPELDeployer.exsd"/>
+   <extension-point id="headerProcessor" name="HeaderProcessor" schema="schema/HeaderProcessor.exsd"/>
+   <extension-point id="soapEncoder" name="SOAPEncoder" schema="schema/SOAPEncoder.exsd"/>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="BPELUnit"
+            class="org.bpelunit.framework.client.eclipse.preferences.BPELUnitPreferencePage"
+            id="org.bpelunit.framework.client.eclipse.preferences.BPELUnit">
+      </page>
+      <page
+            category="org.bpelunit.framework.client.eclipse.preferences.BPELUnit"
+            class="org.bpelunit.framework.client.eclipse.preferences.BPELUnitDeploymentPreferencePage"
+            id="org.bpelunit.framework.client.eclipse.preferences.BPELUnit.config"
+            name="Deployment"/>
+      <page
+            category="org.bpelunit.framework.client.eclipse.preferences.BPELUnit"
+            class="org.bpelunit.framework.client.eclipse.preferences.BPELUnitCoveragePreferencePage"
+            id="org.bpelunit.framework.client.eclipse.preferences.BPELUnit.coverage"
+            name="Coverage"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.bpelunit.framework.client.eclipse.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="BPEL Category"
+            id="org.bpelunit.framework.client.eclipse">
+      </category>
+      <view
+            name="BPELUnit"
+            icon="icons/bpel.gif"
+            category="org.bpelunit.framework.client.eclipse"
+            class="org.bpelunit.framework.client.eclipse.views.BPELUnitView"
+            id="org.bpelunit.framework.client.eclipse.views.BPELUnitView">
+      </view>
+      <view
+            category="org.bpelunit.framework.client.eclipse"
+            class="org.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView"
+            id="org.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView"
+            name="Coverage"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               id="org.bpelunit.framework.client.eclipse.views.BPELUnitView"
+               relationship="stack"
+               relative="org.eclipse.ui.views.ResourceNavigator"
+               visible="false">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="org.bpelunit.framework.client.eclipse.views.BPELUnitView"
+               relationship="stack"
+               relative="org.eclipse.jdt.ui.PackageExplorer"
+               visible="false">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="org.bpelunit.framework.client.eclipse.launch.BPELLaunchConfigurationDelegate"
+            id="org.bpelunit.framework.client.eclipse.testSuiteLauncher"
+            modes="run"
+            name="BPELUnit TestSuite"
+            public="true"/>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.bpelunit.framework.client.eclipse.testSuiteLauncher"
+            icon="icons/bpel.gif"
+            id="org.bpelunit.framework.client.eclipse.testSuiteLauncher.image"/>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.bpelunit.framework.client.eclipse.launch.BPELLaunchGroup"
+            id="org.bpelunit.framework.client.eclipse.testSuiteLauncher.tabGroup"
+            type="org.bpelunit.framework.client.eclipse.testSuiteLauncher"/>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.bpelunit.framework.client.eclipse.launch.BPELLaunchShortCut"
+            icon="icons/bpel.gif"
+            id="BPELUnit Test Suite"
+            label="BPELUnit TestSuite"
+            modes="run">
+  <contextualLaunch>
+      <contextLabel
+         label="BPELUnit TestSuite"
+         mode="run"/>
+      <enablement>
+        <with
+	  variable="selection">
+        <count
+          value="1">
+        </count>
+        <iterate>
+          <and>
+          <test property="org.eclipse.debug.ui.matchesPattern" value="*.bpts"/>
+          <instanceof value="org.eclipse.core.resources.IFile"/>
+          </and>
+          </iterate>
+        </with>
+      </enablement>
+    </contextualLaunch>
+      </shortcut>
+   </extension>
+   <extension
+         point="org.bpelunit.framework.client.eclipse.bpelDeployer">
+      <bpelDeployer
+            deployerClass="org.bpelunit.framework.control.deploy.oracle.OracleDeployer"
+            id="oracle"
+            name="Oracle Deployer"
+            general_options="OracleDirectory,OracleDomain,OracleDomainPassword"
+            suite_options="BPELJARFile"
+            />
+      <bpelDeployer
+            deployerClass="org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer"
+            id="activebpel"
+            name="ActiveBPEL Deployer"
+            general_options="ActiveBPELDeploymentDirectory,ActiveBPELDeploymentServiceURL"
+            suite_options="BPRFile"
+            />
+      <bpelDeployer
+            deployerClass="org.bpelunit.framework.control.deploy.simple.TestModeDeployer"
+            id="testmode"
+            name="Test Mode Deployer"/>
+      <bpelDeployer
+            deployerClass="org.bpelunit.framework.control.deploy.simple.FixedDeployer"
+            id="fixed"
+            name="Fixed Deployer"/>
+   </extension>
+   <extension
+         point="org.bpelunit.framework.client.eclipse.soapEncoder">
+      <soapProcessor
+            encoderClass="org.bpelunit.framework.control.soap.DocumentLiteralEncoder"
+            id="document/literal"
+            name="Document/Literal Encoder"/>
+      <soapProcessor
+            encoderClass="org.bpelunit.framework.control.soap.RPCLiteralEncoder"
+            id="rpc/literal"
+            name="RPC/Literal Encoder"/>
+   </extension>
+   <extension
+         point="org.bpelunit.framework.client.eclipse.headerProcessor">
+      <headerProcessor
+            id="wsa"
+            name="WS-Adressing Header Processor"
+            processorClass="org.bpelunit.framework.control.soap.WSAHeaderProcessor"/>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            extradir="doc"
+            file="doc/main.xml"
+            primary="true"/>
+      <toc
+            extradir="doc"
+            file="doc/tasks.xml"
+            primary="false"/>
+      <toc
+            extradir="doc"
+            file="doc/reference.xml"
+            primary="false"/>
+   </extension>
+
+</plugin>

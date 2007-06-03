@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/MyPartner/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MyPartner" targetNamespace="http://www.example.org/MyPartner/">
+<wsdl:types>
+<xsd:schema targetNamespace="http://www.example.org/MyPartner/">
+<xsd:element name="NewOperationResponse" type="xsd:string"/>
+<xsd:element name="NewOperationRequest" type="xsd:string"/>
+</xsd:schema>
+</wsdl:types>
+<wsdl:message name="NewOperationResponse">
+<wsdl:part element="tns:NewOperationResponse" name="NewOperationResponse"/>
+</wsdl:message>
+<wsdl:message name="NewOperationRequest">
+<wsdl:part element="tns:NewOperationRequest" name="NewOperationRequest"/>
+</wsdl:message>
+<wsdl:portType name="MyPartner">
+<wsdl:operation name="NewOperation">
+<wsdl:input message="tns:NewOperationRequest"/>
+<wsdl:output message="tns:NewOperationResponse"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="MyPartnerSOAP" type="tns:MyPartner">
+<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="NewOperation">
+<soap:operation soapAction="http://www.example.org/MyPartner/NewOperation"/>
+<wsdl:input>
+<soap:body parts="tns:NewOperationRequest" />
+</wsdl:input>
+<wsdl:output>
+<soap:body parts="tns:NewOperationResponse" />
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="MyPartner">
+<wsdl:port binding="tns:MyPartnerSOAP" name="MyPartnerSOAP">
+<soap:address location="http://www.example.org/"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

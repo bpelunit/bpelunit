@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="BPELUnit Eclipse Client" topic="doc/overview.html">
+
+	<topic label="Overview" href="doc/overview.html" />
+	<topic label="Installation" href="doc/installation.html" />	
+	<topic label="Tasks">
+		<link toc="doc/tasks.xml" />
+	</topic>
+	
+	<topic label="Extending BPELUnit">
+		<link toc="doc/reference.xml" />
+	</topic>
+	
+</toc>  

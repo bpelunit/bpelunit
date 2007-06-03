@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns="http://www.bpelunit.org/schema/testSuite" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+		   xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing" 
+		   targetNamespace="http://www.bpelunit.org/schema/testSuite" 
+		   elementFormDefault="qualified" attributeFormDefault="unqualified">
+		   
+	<xs:element name="testSuite" type="TestSuite">
+		<xs:annotation>
+			<xs:documentation>The testSuite root element</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="TestSuite">
+		<xs:annotation>
+			<xs:documentation>The testSuite root type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>A name for this suite</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="baseURL" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The base URL of the simulated partners and client. The framework will extract a port from this URL; it will also be used for asynchronous callbacks. The URL should end with a slash; partnerTrack names will be appended. Default is http://localhost:7777/ws/</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="deployment" type="DeploymentSection">
+				<xs:annotation>
+					<xs:documentation>Deployment section of this test suite. Specifies the PUT and partners</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="testCases" type="TestCasesSection">
+				<xs:annotation>
+					<xs:documentation>Test case section of this test suite. Specifies test cases</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DeploymentSection">
+		<xs:annotation>
+			<xs:documentation>The deployment section type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="put" type="PUTDeploymentInformation">
+				<xs:annotation>
+					<xs:documentation>The Process Under Test, which will be tested in this suite.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="partner" type="PartnerDeploymentInformation" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The test partners of the PUT (this section is not strictly required but considered good practise to keep track of things).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PUTDeploymentInformation">
+		<xs:annotation>
+			<xs:documentation>The PUT deployment information type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="wsdl" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>WSDL file of the PUT</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of the put</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="type" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The type of the put - must be one of the types registered in BPELUnit through the extensions.xml file</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="PartnerDeploymentInformation">
+		<xs:annotation>
+			<xs:documentation>A partner deployment information</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>A name for this partner, to be used in the testCase section. This name forms the partner URL $baseURL/name.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="wsdl" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Location of the defining WSDL file</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="TestCasesSection">
+		<xs:annotation>
+			<xs:documentation>The testCase section</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="testCase" type="TestCase" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>One test case represents one interaction sequence with the PUT</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TestCase">
+		<xs:annotation>
+			<xs:documentation>A testCase</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="clientTrack" type="Track"/>
+			<xs:element name="partnerTrack" type="PartnerTrack" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="vary" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="basedOn" type="xs:string" use="optional"/>
+		<xs:attribute name="abstract" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="Track">
+		<xs:annotation>
+			<xs:documentation>An activity track</xs:documentation>
+		</xs:annotation>
+		<xs:sequence maxOccurs="unbounded">
+			<xs:choice>
+				<xs:element name="sendOnly" type="SendActivity">
+					<xs:annotation>
+						<xs:documentation>Send a message and wait for an ACK.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="receiveOnly" type="ReceiveActivity">
+					<xs:annotation>
+						<xs:documentation>Receive a message, send an ACK.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sendReceive" type="TwoWayActivity">
+					<xs:annotation>
+						<xs:documentation>Send a message and wait for a qualified response.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="receiveSend" type="TwoWayActivity">
+					<xs:annotation>
+						<xs:documentation>Receive a message, and answer with a qualified response.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="receiveSendAsynchronous" type="TwoWayActivity">
+					<xs:annotation>
+						<xs:documentation>Receive a message, send an ACK, and then send a qualified asynchronous response and expect an ACK.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="sendReceiveAsynchronous" type="TwoWayActivity">
+					<xs:annotation>
+						<xs:documentation>Send a message, expect an ACK, and then wait for a qualified asynchronous messageand send an ACK.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartnerTrack">
+		<xs:annotation>
+			<xs:documentation>An activity track for a partner</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="Track">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SendActivity">
+		<xs:annotation>
+			<xs:documentation>A send activity</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="Activity">
+				<xs:annotation>
+					<xs:documentation>A send operation</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="data" type="AnyElement"/>
+				</xs:sequence>
+				<xs:attribute name="fault" type="xs:boolean" use="optional"/>
+				<xs:attribute name="delaySequence" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ReceiveActivity">
+		<xs:annotation>
+			<xs:documentation>A receive activity</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="Activity">
+				<xs:annotation>
+					<xs:documentation>A receive operation</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="condition" type="Condition" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="fault" type="xs:boolean" use="optional" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TwoWayActivity">
+		<xs:annotation>
+			<xs:documentation>A two-way activity</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="Activity">
+				<xs:annotation>
+					<xs:documentation>A (sync or async) two-way operation</xs:documentation>
+				</xs:annotation>
+				<xs:all>
+					<xs:element name="receive" type="ReceiveActivity"/>
+					<xs:element name="send" type="SendActivity"/>
+					<xs:element name="mapping" type="Mapping" minOccurs="0"/>
+					<xs:element name="headerProcessor" type="HeaderProcessor" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Header processor. Can add addressing info to outgoing calls and extract it from incoming calls.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:all>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HeaderProcessor">
+		<xs:annotation>
+			<xs:documentation>A header processor</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Arbitrary data passed to the header processor</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Name to look the processor up in the configuration.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="Property">
+		<xs:annotation>
+			<xs:documentation>A simple property/value type</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="AnyElement">
+		<xs:annotation>
+			<xs:documentation>Wrapper for the XML Any Element</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:any namespace="##any" processContents="skip" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Activity">
+		<xs:annotation>
+			<xs:documentation>A single activity</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="service" type="xs:QName" use="optional"/>
+		<xs:attribute name="port" type="xs:string" use="optional"/>
+		<xs:attribute name="operation" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="Mapping">
+		<xs:annotation>
+			<xs:documentation>Mapping type for data copy operations</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="copy" type="Copy" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Copies an input element from the input message to an output element from the output message. Only makes sense in rcv/send operations.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Copy">
+		<xs:annotation>
+			<xs:documentation>A copy operation</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="from" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>XPath expression on raw XML data</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="to" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>XPath expression on raw XML data</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="Condition">
+		<xs:sequence>
+			<xs:element name="expression" type="xs:string"/>
+			<xs:element name="value" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

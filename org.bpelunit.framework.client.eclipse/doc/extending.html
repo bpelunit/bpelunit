@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Extending BPELUnit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="main.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>&nbsp;</h3>
+<h3>Extending BPELUnit</h3>
+<h4>&nbsp;</h4>
+<p>BPELUnit has<strong> three extension points</strong>, and offers an <strong>API</strong> 
+  which can be used to create new BPELUnit clients. Additionally, the <strong>XML 
+  Schema</strong> of the test suite is available, which makes it possible to write 
+  a new, or enhance the existing tool support.</p>
+<p>The <strong>three extension points</strong> can be used to add the following 
+  components to BPELUnit:</p>
+<ul>
+  <li><strong>BPEL Deployers</strong>. BPELUnit employs a real-life testing approach, 
+    i.e. the BPEL process under test is actually deployed into an engine before 
+    the test, and undeployed afterwards. The first extension point can be used 
+    to add a new BPEL deployer for a BPEL engine.</li>
+  <li><strong>SOAP Encoders/Decoders</strong>. BPELUnit uses web service calls 
+    to talk to the BPEL process, but allows specification of conditions, data 
+    copy operations, and data to be sent in plain, literal XML. To create a web 
+    service call, a SOAP Encoder/Decoder must convert the literal XML into SOAP 
+    XML. The SOAP Encoder/Decoder extension point can be used to add new SOAP 
+    Encoders for a certain format (for example, rpc/encoded).</li>
+  <li><strong>Header Processors</strong>. Asynchronous messaging requires certain 
+    fields in the SOAP header to contain Message IDs, Reply-To addresses, or other 
+    mechanisms which allow for asynchronous callbacks. The Header Processor extension 
+    point can be used to add new Header Processors, implementing new callback 
+    styles.</li>
+</ul>
+<p>&nbsp;</p>
+<h4>Adding a new BPEL Deployer</h4>
+<p> Extension Point: <font face="Courier New, Courier, mono">org.bpelunit.framework.client.eclipse.bpelDeployer</font>.</p>
+<p>BPELUnit comes with four BPEL deployers. Two of them are actual deployers, 
+  one deploying to the Oracle BPEL Server, and one to the ActiveBPEL engine. If 
+  you wish to add a new deployer, add an extension to your <font face="Courier New, Courier, mono">plugin.xml</font>, 
+  like the following code:</p>
+<pre>&lt;extension
+   point=&quot;org.bpelunit.framework.client.eclipse.bpelDeployer&quot;&gt;
+   &lt;bpelDeployer
+		id=&quot;oracle&quot;
+		name=&quot;Oracle Deployer&quot;
+		deployerClass=&quot;org.bpelunit.framework.control.deploy.oracle.OracleDeployer&quot;
+		general_options=&quot;OracleDirectory,OracleDomain,OracleDomainPassword&quot;
+		suite_options=&quot;BPELJARFile&quot;
+   /&gt;
+&lt;/extension&gt;</pre>
+<p>The options are as follows:</p>
+<ul>
+  <li><strong>id</strong>: An ID for this deployer (for use in the test suite 
+    document) </li>
+  <li><strong>name</strong>: Human-readable name of the deployer (wil be presented 
+    to the user)</li>
+  <li><strong>deployerClass</strong>: A class implementing the interface <a href="reference/api/org/bpelunit/framework/control/ext/IBPELDeployer.html">IBPELDeployer</a>. 
+    The class contains the actual deployment code.</li>
+  <li><strong>general_options</strong>: Options for this deployer, which are to 
+    be configured globally, i.e. for the whole BPELUnit installation (comma-separated 
+    keyword list).</li>
+  <li><strong>suite_options</strong>: Options for this deployer, which are to 
+    be configured in the test suite itself, i.e. for just one process (comma-separated 
+    keyword list).</li>
+</ul>
+<p>&nbsp;</p>
+<h4>Adding a new SOAP Encoder/Decoder</h4>
+<p> Extension Point: <font face="Courier New, Courier, mono">org.bpelunit.framework.client.eclipse.soapEncoder</font>.</p>
+<p>BPELUnit comes with two SOAP Encoder/Decoders - one for document/literal, and 
+  one for rpc/literal style. If you wish to add a new SOAP Encoder/Decoder, add 
+  an extension to your <font face="Courier New, Courier, mono">plugin.xml</font>, 
+  like the following code:</p>
+<pre>&lt;extension<br>    point=&quot;org.bpelunit.framework.client.eclipse.soapEncoder&quot;&gt;<br>  &lt;soapProcessor<br>		id=&quot;document/literal&quot;
+		name=&quot;Document/Literal Encoder&quot;
+		encoderClass=&quot;org.bpelunit.framework.control.soap.DocumentLiteralEncoder&quot;<br>	/&gt;<br>&lt;/extension&gt;</pre>
+<p>The options are as follows:</p>
+<ul>
+  <li><strong>id</strong>: An ID for this SOAP Encoder/Decoder. The ID must be 
+    in the format style/encoding and identifies the format encoded or decoded 
+    by this encoder.</li>
+  <li><strong>name</strong>: Human-readable name of the SOAP encoder/decoder (wil 
+    be presented to the user)</li>
+  <li><strong>encoderClass</strong>: A class implementing the interface <a href="reference/api/org/bpelunit/framework/control/ext/ISOAPEncoder.html">ISOAPEncoder</a>. 
+    The class contains the actual encoding and decoding code.</li>
+</ul>
+<p>&nbsp;</p>
+<h4>Adding a new Header Processor</h4>
+<p> Extension Point: <font face="Courier New, Courier, mono">org.bpelunit.framework.client.eclipse.headerProcessor</font>.</p>
+<p>BPELUnit comes with one Header Processor, implementing the WS-Addressing protocol. 
+  If you wish to add a new Header Processor, add an extension to your <font face="Courier New, Courier, mono">plugin.xml</font>, 
+  like the following code:</p>
+<pre>&lt;extension<br>    point=&quot;org.bpelunit.framework.client.eclipse.headerProcessor&quot;&gt;<br>  &lt;headerProcessor<br>		id=&quot;wsa&quot;<br>		name=&quot;WS-Adressing Header Processor&quot;<br>		processorClass=&quot;org.bpelunit.framework.control.soap.WSAHeaderProcessor&quot;/&gt;<br>&lt;/extension&gt;</pre>
+<p>The options are as follows:</p>
+<ul>
+  <li><strong>id</strong>: An ID for this header processor, identifying it in 
+    the test suite document</li>
+  <li><strong>name</strong>: Human-readable name of the header processor (wil 
+    be presented to the user)</li>
+  <li><strong>encoderClass</strong>: A class implementing the interface <a href="reference/api/org/bpelunit/framework/control/ext/IHeaderProcessor.html">IHeaderProcessor</a>. 
+    The class contains the actual processing code.</li>
+</ul>
+<p>&nbsp;</p>
+<h4>Writing new Clients</h4>
+<p>If you intend to write a new client for BPELUnit, have look at the <a href="reference/api/index.html">API 
+  Documentation</a>. It is also a good idea to download the source of the existing 
+  clients (command line, Ant, Eclipse) and have a look at that code.</p>
+<p>&nbsp;</p>
+<h4>Writing new Tools</h4>
+<p>The fastest way of creating new tools for writing test suites is directly coding 
+  against the XML Schema of the test suite, which is located <a href="reference/xmlschema/TestSuite.xsd">here</a>.</p>
+<p>&nbsp;</p>
+</body>
+</html>

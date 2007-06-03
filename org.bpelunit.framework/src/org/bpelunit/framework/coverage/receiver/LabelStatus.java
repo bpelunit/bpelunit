@@ -1,0 +1,32 @@
+package org.bpelunit.framework.coverage.receiver;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class LabelStatus {
+
+	private boolean status=false;
+	private Set<String> testcases=new HashSet<String>();
+	
+	public void setStatus(boolean tested,String testcase){
+		status=tested;
+		testcases.add(testcase);
+	}
+
+	public boolean isTested() {
+		return status;
+	}
+
+	public Set<String> getTestcases() {
+		return testcases;
+	}
+	
+	public boolean isTestedWithTestcase(String testcaseName){
+		if(testcases.contains(testcaseName)){
+			return true;
+		}
+		return false;
+	}
+	
+	
+}

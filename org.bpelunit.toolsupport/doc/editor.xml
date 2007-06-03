@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Editing a test suite" topic="doc/editor.html">
+	<topic label="Editor overview" href="doc/editor.html" />	
+	<topic label="Configuring the test suite" href="doc/configure.html" />	
+	<topic label="Adding test cases" href="doc/testcases.html" />	
+	<topic label="Adding activities" href="doc/activities.html" />	
+
+</toc>  

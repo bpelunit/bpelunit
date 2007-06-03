@@ -1,0 +1,12 @@
+  
+  <emp:employee xmlns:emp="http://packtpub.com/service/employee/">
+    <emp:FirstName>Phil</emp:FirstName>
+    <emp:LastName myName="Huhu">Mayer</emp:LastName>
+  <emp:Department>SE</emp:Department></emp:employee>
+  
+  <aln:flightData xmlns:aln="http://packtpub.com/service/airline/">
+    <aln:OriginFrom>Hannover</aln:OriginFrom>
+    <aln:DestinationTo>Stuttgart</aln:DestinationTo>
+    <aln:DesiredDepartureDate>2006-05-05</aln:DesiredDepartureDate>
+    <aln:DesiredReturnDate>2006-06-06</aln:DesiredReturnDate>
+  </aln:flightData>
