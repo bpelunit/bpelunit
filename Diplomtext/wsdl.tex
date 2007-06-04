@@ -40,87 +40,13 @@ Ein port ordnet dem Binding einen bestimmten Endpunkt zu. Die genaue Definition 
 
 
 
-Ahnlich wie SOA bleibt auch der Begriff
-
-Web Services schwer fassbar und es gibt keine
-allgemein anerkannte Definition dieses Begriffs (Foster et al., 2004b; Kossmann und Leymann,
-2004). Eine wesentliche  und bis dato h¨aufig zitierte  Definition wurde in den
-Anf¨angen von Doug Tidwell gegeben
-
-Web services are a new breed of Web application. They are self-contained,
-self-describing, modular applications that can be published, located, and invoked
-across the Web. Web services perform functions, which can be anything from
-simple requests to complicated business processes. [...] Once a Web service is
-deployed, other applications (and other Web services) can discover and invoke
-the deployed service.
-Diese Definition bleibt recht unspezifisch und beschreibt nicht die heute g¨angigen Protokolle,
-die der Web Services Technologie angeh¨oren und den so genannten Basistechnologie
-Stack bilden. Web Services sind auf eine Maschinen-zu-Maschinen Kommunikation ausgerichtet.
-Ein weiteres angestrebtes Ziel ist eine hohe Interoperabilit¨at der Dienste. Web
-Services sollen miteinander kommunizieren k¨onnen, unabh¨angig von der eingesetzten Web
-Services Plattform, der verwendeten Programmiersprache oder des Betriebssystems (Keidl
-et al., 2003). Hinsichtlich der standardisierten Protokolle, durch die Interoperabilit¨at erreicht
-werden soll, wird die Definition aus der Web Services Architecture (WSA) (Booth
-et al., 2003), wie sie derzeit auch in dem W3C Web Services Glossar4 zu finden ist, weitaus
-konkreter. Denn es wird sowohl auf die Ziele als auch auf Protokolle wie SOAP und WSDL
-hingewiesen:
-
-A Web service is a software system designed to support interoperable machineto
-machine interaction over a network. It has an interface described in a machine
-processable format (specifically WSDL). Other systems interact with the Web
-service in a manner prescribed by its description using SOAP-messages, typically
-conveyed using HTTP with an XML serialization in conjunction with other
-Web-related standards.
-
-In Abbildung 2.2 werden die aufeinander aufbauenden und geschichteten Technologien, die
-mit der Web Services Technologie im Zusammenhang stehen, illustriert (nach Booth et al.
-(2003)). Wesentlich f¨ur Web Services sind dabei XML und Technologien wie XML Schema
-oder DTD sowie XML-Namespaces. Der so genannte Basistechnologie-Stack umfasst die
-Protokolle SOAP  fr¨uher das Simple Object Access Protocol, heute nur SOAP genannt 
-die Web Services Description Language (WSDL) und das Universal Description, Discovery
-and Integration (UDDI) Protokoll.
-
-Um Interoperabilit¨at bei der Kommunikation zu erreichen, wird ein einheitliches Nachrichtenformat
-ben¨otigt. Die Kodierung der Nachrichten geschieht im wesentlichen durch
-SOAP (Box et al., 2000). Dieses erlaubt neben dem RPC-Style (Remote Procedure Calls)
-auch asynchrones Messaging. SOAP ist sehr einfach aufgebaut und flexibel erweiterbar.
-Auf diese Weise k¨onnen spezielle Anforderungen jederzeit integriert werden.
-Die Beschreibung der Schnittstelle ¨uber eine standardisierte Sprache ist von entscheidender
-Bedeutung, um Interoperabilit¨at zwischen heterogenen Serviceanbietern und -konsumenten
-zu erm¨oglichen. WSDL erlaubt Dienstanbietern, das Format der Anfragen und Resultate
-¨uber verschiedene Protokolle und Kodierungen zu beschreiben, d.h. es wird ausgesagt, was
-ein Service ausf¨uhren kann, wo er liegt und wie man ihn anspricht (vgl. Abbildung 2.3
-nach Kossmann und Leymann (2004)).
 
 Die vorliegende Arbeit setzt auf WSDL auf, daher hier eine kurze Einf¨uhrung. Derzeit ist
 die Version 1.1 g¨ultiger Standard, es wird aber bereits an der Version 2.0 gearbeitet. Die
 wesentlichen Konzepte einer WSDL-Schnittstellenbeschreibung in der Version 1.1 sind in
 Abbildung 2.3 dargelegt. Diese lassen sich prinzipiell in drei Kategorien einteilen: Schnittstelle,
 Bindung und Services.
-Die erste Kategorie beschreibt die Schnittstelle des Service abstrakt. Hier wird spezifiziert,
-welche ein- und ausgehenden Nachrichten (messages) eine Operation (operation) dem Client
-anbietet. Jedes Nachrichtenelement ist eine Zusammenfassung von mehreren Teilen
-(parts), denen je ein Name und ein Typ eines Typsystems zugeordnet ist. Als Typsystem
-wird h¨aufig XML Schema Datatypes (XSD) (Biron und Malhotra, 2001) eingesetzt. Ein
-Port-Typ (portType) beschreibt nun eine Menge von Operationen, die kollektiv von einem
-Service zur Verf¨ugung gestellt werden. Das heißt, der Port-Typ spezifiziert die eigentliche
-Schnittstelle des Web Service.
-Wie eine Operation angesprochen wird, wird in der so genannten Bindung (binding) festgelegt.
-Die Bindung spezifiziert die Protokolle, die zum Nachrichtenaustausch benutzt werden,
-und die Kodierung der Nachrichten. Die Menge der m¨oglichen Bindungsprotokolle wird
-von WSDL nicht fixiert. Stattdessen ist es m¨oglich jederzeit neue Bindungen zu definieren.
-Beispielsweise wurden im Rahmen des Web Services Invocation Frameworks (WSIF)6
-Bindungen f¨ur Java, EJB und JMS definiert.
-Der letzte Teil der WSDL-Schnittstellenbeschreibung beinhaltet die konkrete Internetadresse,
-unter der die abstrakte Schnittstelle implementiert wird und ansprechbar ist.Hierzu wird ein Port (port) innerhalb der WSDL-Beschreibung als eine Kombination einer
-Bindung und einer Netzwerkadresse definiert (Curbera et al., 2002). Ein Dienst (service)
-vereinigt abschließend eine Menge von konkreten Ports.Es f¨allt auf, dass WSDL-Dokumente lediglich die Syntax der Dienste abbilden k¨onnen, d.h.
-es werden die Signaturen der Nachrichten und deren Datentypen spezifiziert. Zus¨atzlich
-kann jedes Element durch eine inhaltliche Beschreibung (documentation) ausgezeichnet
-werden.
 
-Diese Definition l¨aßt offen, welche Protokolle zur Interaktion bzw. welche Sprachen zur Beschreibung
-der Schnittstellen von Web Services verwendet werden. Prinzipiell sind alle Sprachen, die die
-in der Definition genannten Anforderungen erf¨ullen, daf¨ur geeignet. Mittlerweile haben sich jedoch
-in diesem Umfeld Standards, wie WSDL oder SOAP, etabliert, die zur Beschreibung und Interaktion
-mit Web Services genutzt werden und die im Folgenden kurz erl¨autert werden.
+
+
+Wie das W3C bekannt gegeben hat, ist die Version 2 der Web Services Description Language (WSDL) als vorgeschlagene Empfehlung (Proposed Recommendation) in drei Teilen veröffentlicht worden: Teil 0: Primer, Teil 1: Core Language und Teil 2: Adjuncts. Anmerkungen und Kommentare können bis 20. Juni abgegeben werden. WSDL modelliert und beschreibt modulare Web Services und wird verwendet zur Dokumentation von verteilten Systemen und zur Automatisierung der Kommunikation zwischen Anwendungen. Folgende Arbeitsentwürfe wurden in dem Zusammenhang aktualisiert und veröffentlicht: WSDL Additional MEPs, RDF Mapping und SOAP 1.1 Binding.

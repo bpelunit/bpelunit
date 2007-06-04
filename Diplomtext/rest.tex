@@ -808,3 +808,479 @@ Komplexere Geschäftsprozesse werden durch die Kombination mehrerer
 Services realisiert. Die Programmlogik wird übere diverse, voneinander unabhängige
 Dienste verteilt und ist nicht in einem einzigen Programm implementiert.
 
+
+Zusammenfassung
+
+Business Process Execution Language (BPEL) hat sich als ein Quasi-Standard für die Komposition mehrerer Web Services zu einem Geschäftsprozess etabliert. Trotz der breiten Akzeptanz dieser Sprache existieren noch sehr wenige Werkzeuge, die das Testen von BPEL-Prozessen unterstützen. Mit \textit{BPELUnit} wurde ein Framework entwickelt, der das strukturierte Testen einer BPEL-Komposition in Isolation (unabhängig von zusammengestellten Diensten) ermöglicht. Die Testabdeckungsanalyse, als Mittel zur Qualitätskontrolle von Tests, wird durch das Framework nicht durchgeführt. Genau an dieser Stelle knüpft diese Masterarbeit an.  
+
+Es wird in der Arbeit untersucht, inwiefern die bekannten Testabdeckungsmetriken, die in konventionellen Programmiersprachen zur Bewertung der Tests eingesetzt werden, auf die BPEL-Sprache übertragen werden können. Außerdem werden neue für BPEL sinnvolle Metriken ausgearbeitet. Anschließend soll ein Konzept für die Integration dieser Metriken in das BPELUnit-Framework erarbeitet und implementiert werden.
+
+
+
+%ComputerWoche
+
+Die letzten beiden BPEL-Elemente <flow> und <link> werden an dieser Stelle ausführlicher
+behandelt, da diese das graph-ähnliche Verhalten des Kontrollflusses beschreiben können.
+Flow - Die strukturierte <flow>-Aktivität wird für die parallele Ausführung elementarer Aktivitä-
+ten benutzt. Des Weiteren kann dieses Element auch für die Synchronisation verschiedener Zweige in
+einem BPEL-Prozess verwendet werden. Wichtig dabei ist, dass alle die zu konkurrierenden und zu
+synchronisierenden Aktivitäten in einem <flow>-Element definiert werden. Die Reihenfolge der Ausf
+ührung der enthaltenen elementaren und der strukturierten Aktivitäten wird durch Links eindeutig
+festgelegt.
+
+ Das Schlüsselwort activity stellt symbolisch die erlaubte Menge einzelner
+Aktivitäten in einem Geschäftsprozess dar. Es wird nachfolgend im Zusammenhang mit elementaren
+und strukturierten Aktivitäten verwendet. Es beschreibt, was ein Prozess macht.
+Für die Transformation spielt das Element <activity/> eine besondere Rolle. Hier werden
+elementare Aktivitäten, die in dem EPK-Diagramm der Funktion entsprechen sollen, und strukturierte
+Aktivitäten, die aus dem Kontrollfluss eines EPK-Diagramms abgeleitet werden sollen,
+definiert.
+Im Folgenden werden die wichtigsten Elemente des BPEL-Schemas näher untersucht. Die dazu
+entsprechenden Listings, die die Definition von BPEL-Instanzen näher beschreiben, können in Anhang
+B nachgelesen werden. Zur vollständigen Definition der BPEL-Elemente wird auf die Spezifikation
+[ACD+03] verwiesen.
+PartnerLink - identifiziert einen Partner-Web Service, der mit dem betrachteten Business-Prozess
+Nachrichten austauscht. Über die Rollen myRole und partnerRole wird der Nachrichtenaustausch
+spezifiziert. Es ist ein bilateraler Nachrichtenaustausch zwischen den betrachteten Partnern, wenn
+beide Attribute myRole und partnerRole definiert sind. Wird dagegen nur eine Rolle definiert, so
+handelt es sich dabei um eine asynchrone Nachricht. Die partnerLinks spielen mit den elementaren
+Aktivitäten Receive, Reply und Invoke eine bedeutende Rolle, die Web Services auslösen können.
+Partner - In dem Element <partners> werden die einzelnen Partner mit ihren dazu gehörigen
+<partnerLinks> gekapselt. In diesem Fall bedeutet es, dass einzelne oder mehrere Web Services,
+die über die <partnerLinks> verbunden werden, hier zusammengefasst werden können.
+Variables - Wenn Web Services ausgeführt und zwischen diesen Nachrichten oder Daten ausgetauscht
+werden, dann müssen diese in Variablen gehalten werden. Eine Variable in einem BPELProzess
+ist an ihrem Namen und dem verwendeten Datentyp aus dem XML-Schema eindeutig identi
+fizierbar.
+
+
+
+
+ 
+Invoke - Mit <invoke> wird ein Geschäftsprozess des Partners aktiviert, indem eine Nachricht
+zum Partner-Web Service gesendet wird. Ein Invoke kann eine Operation in nur eine (request) oder
+bidirektionale Richtung (request-response) auf dem <portType> eines Partners auslösen. Bei einer
+request-Operation handelt es sich um einen asynchronen und bei der request/response-Operation
+um einen synchronen Aufruf. Die entsprechende Operation wird in der WSDL-Datei des Partners
+definiert. Beim asynchronen Auslösen des Prozesses wird nur die inputVariable benutzt. Beim
+synchronen Auslösen wird zusätzlich die outputVariable verwendet.
+Receive - veranlasst den Prozess zu warten, bis eine passende Nachricht vom Partner-Service
+ankommt. In einem solchen Fall kann der Prozess nicht fortfahren oder sich beenden, bis die Nachricht
+eintritt. <receive> führt beim <partnerLink> an einem <portType> eine <operation> aus
+und bindet die erwartete Nachricht an die entsprechende <variable>.
+Reply - veranlasst den Prozess, eine Beantwortung auf die Partner-Nachricht zu senden. Der
+Prozess sendet an dem entsprechenden <partnerLink> über den dazu gehörigen <portType> eine
+bestimmte <operation>. In dem Fall, dass der Partner nicht empfangen kann, wird ein <fault-
+Name> zur Fehlerbehandlung definiert.
+Empty - Das <empty>-Element führt keine Aktivität durch. Diese Aktivität kann aufgrund ihrer
+Eigenschaft in beliebigen Kontexten verwendet werden. 
+Assign - Beim Nachrichtenaustausch ist es erforderlich, dass zwischen den verschiedenen Aktivit
+äten Manipulationen an Variablen vorgenommen werden. Eine solche Manipulation der Variablen
+in BPEL erfolgt über die <assign>-Aktivität. Diese kopiert Daten von der Quelle (from) zum Ziel
+(to). Eine Ausführliche Behandlung dieser Aktivität wird in Abschnitt 4.5 und 5.4.2 gegeben.
+Link - Die oben vorgestellten Kontrollstrukturen erlauben, viele typische Arbeitsabläufe zu modellieren.
+Es ist jedoch nicht möglich, noch weitere Sequenzen zu definieren, wenn die Aktivitä-
+ten innerhalb dieser Sequenzen einer bestimmten Reihenfolge unterliegen. Die verwendete XMLDatenstruktur,
+die nur hierarchische Modellierung erlaubt, bringt das auf XML-basierte Konzept schnell an seine Grenzen. Um dieses Problem zu umgehen, wurden hierfür die Links in dem <flow>-
+Block eingeführt. Die Links erlauben bei der Modellierung Verknüpfungen zwischen einzelnen Aktivit
+äten herzustellen. Somit stellt ein <flow>-Element mit den dazugehörigen <links> graphentheoretisch
+nichts anderes als eine Kante zwischen zwei Aktivitäten dar.
+Jeder Link wird über seinen Namen in der <links>-Definition eindeutig identifiziert. Um die
+Links benutzen zu können, müssen hierfür in jeder Aktivität, die mit den Links verbunden werden
+soll, zwei weitere optionale Elemente <source> und <target> definiert werden. Der Kontrollfluss
+verläuft von der Aktivität mit dem <source>-Element zu der Aktivität mit dem <target>-Element.
+Anhand der Definition der linkNames wird die auszuführende Reihenfolge identifiziert. Somit können
+die Aktivitäten beliebig viele <source>- oder <target>-Einträge2 enthalten, wobei man beachten
+sollte, dass die Definitionen eindeutig sind und nicht doppelt vorkommen dürfen.
+Beim Synchronisieren der Links an der Target-Aktivität muss das Attribut joinCondition, welches
+als optionale Attribut in allen Aktivitäten belegt werden kann, gesetzt werden. Wenn das Attribut
+joinCondition nicht gesetzt ist, so ist der Default-Wert vom Linkstatus aller eingehender Links der
+betrachteten Aktivität eine logische Disjunktion (logical or ). Der Status des Links kann mit get-
+LinkStatus('linkName') abgefragt werden. Für die richtige Verwendung der Links sorgt die in BPEL
+eingeführte Dead-Path-Elemination (DPE). Auf die ausführlichere Definition der Link-Semantik und
+der DPE wird in diesem Zusammenhang auf die BPEL-Spezifikation [ACD+03] verwiesen.
+Die Links ermöglichen, die hierarchische Struktur der XML-Struktur zu sprengen und erlauben
+somit zwei Aktivitäten auszuführen, die sich in unterschiedlichen Verschachtelungsebenen der XMLDatenstruktur
+befinden. Dieser Zusammenhang ist in der nächsten Abbildung zu erkennen. Ein solcher
+Fall wäre mit anderen strukturierten Aktivitäten ohne die Links in BPEL nicht modellierbar.
+
+AktivitÄaten
+Im Zentrum der Modellierung von GeschÄaftsprozessen stehen die AktivitÄaten und ihre kau-
+salen ZusammenhÄange. In BPEL4WS gibt es zwei Sorten von AktivitÄaten: Basic Activities
+und Structured Activities.
+Die einfachen AktivitÄaten reprÄasentieren atomare Einheiten und lassen sich erneut in
+zwei Gruppen teilen: FÄur die Kommunikation mit einem anderen Web Service sind die
+AktivitÄaten invoke, receive und reply zustÄandig. Mit invoke kann ein anderer Web Service
+aufgerufen werden, d. h. es wird eine Nachricht an diesen gesendet und gleich oder spÄater
+eine Antwort erwartet. Mit receive wird ein Aufruf (eine Nachricht) von einem anderen Web
+Service entgegen genommen und mit reply dieser beantwortet.
+Die zweite Gruppe der einfachen AktivitÄaten reprÄasentieren interne Schritte: assign ist
+eine Wertzuweisung, wait ist ein Timer und empty ist eine leere AktivitÄat. Teilweise steuern
+sie auch den weiteren Prozessverlauf: terminate bricht den Prozess ab, throw wirft einen
+Fehler und compensate veranlasst die RÄucksetzung eines Teils des Prozesses.
+Neben den einfachen AktivitÄaten gibt es in BPEL4WS auch fÄunf Klassen strukturierter
+AktivitÄaten. Mit diesen AktivitÄaten wird der Kontroll°uss abgebildet: Die einfachste ist se-
+quence, diese AktivitÄat de¯niert die sequentielle Ordnung einer Menge anderer AktivitÄaten.
+Die alternative Auswahl zwischen AktivitÄaten ist mit Hilfe von pick und switch mÄoglich, bei
+pick entscheidet eine Nachricht von au¼en, bei switch wird durch die Auswertung von Daten
+eine Entscheidung getro®en. Mit der AktivitÄat while ist es mÄoglich, zyklisches Verhalten
+zu de¯nieren. Letztlich dient die AktivitÄat °ow dazu, eine unabhÄangige Menge von Akti-
+vitÄaten zu spezi¯zieren. Innerhalb von °ow kÄonnen die AktivitÄaten durch zusÄatzliche links
+untereinander synchronisiert werden. Jede der strukturierten AktivitÄaten enthÄalt ihrerseits
+mindestens eine AktivitÄat. Auf diese Weise kÄonnen durch Schachtelung beliebig komplexe
+Kontroll°uss-Beziehungen gebildet werden.
+Ein Sonderrolle spielt die AktivitÄat scope.
+
+Das Kernkonzept von BPEL ist die Aktivität. Ein BPEL-Prozess ist genau eine Aktivität, in
+der weitere Aktivitäten enthalten sind. BPEL unterscheidet dabei zwei Arten von Aktivitäten:
+Basisaktivitäten und Strukturierte Aktivitäten.
+Basisaktivitäten erfüllen die atomaren Aufgaben des Prozesses:
+ Kommunikation:
+ Empfang von Nachrichten, mit <receive>
+ Beantwortung empfangener Nachrichten, mit <reply>
+ Aufruf eines Web Service, mit <invoke>
+ Datenmanipulation:
+ Manipulation von Werten in Variablen, mit <assign>
+Sonstige Basisaktivitäten:
+Nichtstun, mit <empty>
+ Warten, mit <wait>
+ Signalisieren von Fehlern und Ausnahmen, mit <throw>
+ Beenden der Prozessinstanz, mit <terminate>
+ Kompensation von abgearbeiteten Aktivitäten, mit <compensate>
+
+Basisaktivitäten werden mit Hilfe von Strukturierten Aktivitäten in eine Reihenfolge der Ausführung
+gebracht:
+ Sequentielle Anordnung von Aktivitäten, mit <sequence>
+ Parallele Anordnung von Aktivitäten, mit <flow>
+ Auswahl von Alternativen (basierend auf Daten), mit <switch>
+ Auswahl von Alternativen (basierend auf Nachrichten oder zeitgesteuerten Ereignissen),
+mit <pick>
+ Definition von Schleifen, mit <while>
+
+ktivitÄaten kÄonnen ineinander geschachtelt sein und bilden somit eine hierarchische Struk-
+tur { einen AktivitÄaten-Baum. DieWurzel dieses Baumes ist der Prozess: Ein Prozess besitzt
+genau eine AktivitÄat. Neben dieser AktivitÄat kann ein Prozess event handler, fault handler
+und compensation handler besitzen, d. h. ein Prozess ist auch gleichzeitig ein scope.
+
+WS-BPEL 2.0 bietet mit der neuen <forEach>-Aktivität ein weiteres Konstrukt zur wiederholten
+Ausführung einer Scope-Aktivität.
+
+Beim Start der <forEach>-Aktivität werden die Ausdrücke in den <startCounterValue>- und
+<finalCounterValue>-Elementen einmalig ausgewertet und bleiben dann über die gesamte
+Laufzeit der Aktivität konstant. Die dort spezifizierten Ausdrücke müssen ein xs:unsignedint
+als Ergebnistyp haben, sonst wird der Fehler bpws:forEachCounterError geworfen. Sollte der
+Wert von <startCounterValue> größer sein, als der von <finalCounterValue>, wird keine
+Iteration durchgeführt.
+Über das Attribut parallel kann gesteuert werden, ob der Schleifenkörper sequentiell oder
+parallel abgearbeitet wird.
+
+Im Fall von parallel=no wird die Schleife sequentiell abgearbeitet. Die eingebettete Scope-
+Aktivität wird N+1 Mal (wobei N die Differenz von <finalCounterValue> und <startCounterValue>
+ist) nach einander ausgeführt. Für jeden Durchlauf wird eine Variable vom Typ xs:unsignedint
+kreiert, die dann mit dem aktuellen Zählerwert initialisiert wird. Der Bezeichner dieser Variable
+wird über das Attribut counterName der <forEach>-Aktivität festgelegt. Im ersten Durchlauf
+wird sie auf denWert von <startCounterValue> initialisiert und bei jedem weiteren Durchlauf
+inkrementiert. Im letzten Durchlauf besitzt die Zählervariable denWert von <finalCounterValue>.
+Die Zählervariable ist lokal für den eingebetteten Scope, kann also von diesem gelesen und geschrieben
+werden. Nach einer Abarbeitung des Schleifenkörpers werden jedoch alle Änderungen
+an dieser Variable verworfen.
+Im Fall von parallel=yes wird die Schleife parallel abgearbeitet. Es wird eine implizite
+Flow-Aktivität generiert, die N+1 Instanzen der eingebetteten Scope-Aktivität enthält. Für jede
+dieser Instanzen wird eine Zählervariable (wie im sequentiellen Fall) kreiert, die eindeutig mit
+einem Wert aus dem Intervall <startCounterValue> bis <finalCounterValue> initialisiert
+wird.
+Optional kann eine <forEach>-Aktivität ein <completionCondition>-Element enthalten.Wird
+die in diesem Element spezifizierte Bedingung während der Abarbeitung erfüllt, so kann die
+<forEach>-Aktivität vorzeitig beendet werden. Das <completionCondition>-Element enthält
+das Element <branches>, in dem ein Integer-Ausdruck angegeben wird. Dieser wird beim Start
+der <forEach>-Aktivität einmalig ausgewertet. Ist der Wert des Ausdrucks größer als die Anzahl
+der Schleifendurchläufe (bzw. parallelen Instanzen), wird der Fehler bpws:invalidBranch-
+Condition geworfen. Nach jeder Abarbeitung eines eingebetteten Scope wird die Anzahl der
+abgearbeiteten Scopes mit dem Wert dieses Ausdrucks verglichen. Ist die Anzahl der abgearbeiteten
+Scopes größer oder gleich dem Wert des Ausdrucks, gilt die Bedingung als erfüllt. Es
+lassen sich also Bedingungen nach dem Muster mindestens M aus N 6 definieren.
+
+Scope
+Die Spezifikation von WS-BPEL 2.0 beschreibt das Verhalten von Scopes für den Fall der Initialisierung
+und Beendigung.
+Die Abarbeitung eines Prozesses bzw. Scopes beginnt mit der Initialisierung. Dabei werden
+die Fault und Termination Handler, Partner Links, Correlation Sets und die Variablen instanziiert
+und initialisiert. Die Partner Links müssen erstellt werden, bevor die im gleichen Scope
+definierten Variablen initialisiert werden können. Die Scope-Initialisierung verläuft nach dem
+Motto: alles oder nichts. Entweder alles wird erfolgreich initialisiert oder es wird der Fehler
+bpws:scopeInitializationFailure geworfen, der vom umgebenden Scope behandelt werden muss.
+Im Falle eines solchen Fehlers auf Prozessebene gilt der gesamte Prozess als faulted. Nachdem
+die Initialisierung abgeschlossen ist, werden die erste innere Aktivität und die Event Handler des
+Scope parallel instanziiert. Eine Ausnahme dazu stellen Scopes dar, die eine initial start activity
+enthalten (d.h. die Instanziierung einer weiteren Prozessinstanz bewirken). In diesem Fall muss
+zuerst die initial start activity beendet worden sein, bevor die Event Handler instanziiert werden
+können.
+Wird ein Scope vollständig abgearbeitet, müssen alle Interaktionen mitWeb Services, die abhängig
+von innerhalb des Scope definierten Partner Links und messageExchange-Definitionen sind,
+beendet sein. Bleiben Empfangsaktivitäten offen, die sich auf Partner Links oder messageExchange-
+Definitionen des Scope beziehen, kann der Fehler bpws:missingReply geworfen werden.8
+Ein Scope (bzw. Prozess) kann in WS-BPEL 2.0 das exitOnStandardFault-Attribut besitzen.
+Falls der Wert dieses Attributs auf yes gesetzt ist, muss der Prozess sofort beendet werden
+(äquivalent zum Erreichen der Aktivität <exit>), wenn ein anderer WS-BPEL Standardfehler
+als bpws:joinFailure auftritt. IstWert des Attributs hingegen no, so kann der Prozess den Standardfehler
+mittels eines Fault Handler behandeln. Der Standardwert des exitOnStandardFault-
+Attributs ist no. Wird dieses Attribut von einer Scope-Aktivität nicht spezifiziert, so wird der
+Wert vom umgebenden Scope bzw. Prozess geerbt.
+
+Isolierte Scopes
+Serialisierbare Scopes werden in WS-BPEL 2.0 als isolierte Scopes bezeichnet. Das Attribut
+variableAccessSerializable heißt nun entsprechend isolated. Neu ist auch, dass ein als
+isoliert markierter Scope weitere Scopes einbetten kann, die nicht als isoliert markiert sind.9 Der
+Zugriff auf gemeinsam genutzte Variablen durch die so eingebetteten Scopes wird dann über den
+isolierten Scope kontrolliert.
+Beachte, dass die Isolation eines Variablenzugriffs nicht zu einem internen Deadlock in einem
+BPEL-Prozess führen kann. Der Grund dafür liegt darin, dass ein isolierter Scope nicht eher
+gestartet wird, als bis er exklusiven Zugriff auf alle vom ihm benötigten nicht-lokalen Variablen
+hat.
+
+Event Handler
+Event Handler führen in WS-BPEL 2.0 grundsätzlich nur noch Scope-Aktivitäten aus, um eine
+saubere Scope-Snapshot- und Kompensationssemantik zu gewährleisten. Dies ist natürlich
+keine Einschränkung, da die Scope-Aktivität beliebige weitere Aktivitäten enthalten kann. Tritt
+während der Abarbeitung eines Event Handler ein Fehler auf, wird dieser also zuerst vom Fault
+Handler der eingebetteten Scope-Aktivität behandelt bzw. von ihm an den umgebenden Scope
+weiter gereicht.
+Sowohl von <onEvent>- als auch von <onAlarm>-Event-Handler können zu einem Zeitpunkt
+mehrere aktive Instanzen existieren. Jede Instanz erhält daher eine private Kopie der im eingebetteten
+Scope deklarierten Daten und Ressourcen (inkl. Links und Partner Links), um Zugriffskonflikte
+zu verhindern.
+
+Fault Handler
+Die WS-BPEL 2.0 Spezifikation beschreibt die optional zu einem Fehlernamen assoziierten Fehlerdaten
+weitaus konkreter, als dies bisher der Fall war.
+Fehlerdaten sind WSDL-Nachrichtentypen oder XML-Schema-Elemente. Jeder <catch>-Zweig,
+der einen faultName spezifiziert kann nur Fehler eines einziges Typs behandeln. Wenn die
+zu behandelnden Fehlerdaten von einem WSDL-Nachrichtentyp sind, dann muss dieser mittels
+des (neuen optionalen) faultMessageTyp-Attributs spezifiziert sein.Wenn die Fehlerdaten eine
+XML-Element-Definition sind, dann muss diese mittels des (neuen optionalen) faultElement-
+Attributs spezifiziert sein.
+Da das Attribut faultName optional ist, kann es vorkommen, dass eine spezifizierte faultVariable
+keinem konkreten Typ zugeordnet werden kann. Um dies zu verhindern, muss bei der Spezifikation
+des faultVariable-Attributs stets auch entweder ein faultMessageType- oder ein
+faultElement-Attribut mit angegeben werden. Zudem dürfen sowohl das faultMessageTypeals
+auch das faultElement-Attribut nie ohne ein begleitendes faultVariable-Attribut angegeben
+werden.
+Für die Behandlung eines Fehlers können mehrere Fault Handler zur Auswahl stehen. Die Regeln,
+nach denen ein Fault Handler zur Fehlerbehandlung ausgewählt wird, wurden in Anbetracht
+der erweiterten Möglichkeiten von WS-BPEL 2.0 entsprechend angepasst.1
+
+Termination Handler
+Scopes besitzen die Möglichkeit, auf den Ablauf einer erzwungenen Terminierung Einfluss zu
+nehmen. Was in BPEL4WS 1.1 als Forced-Termination-Zweig des Fault Handler definiert wurde,
+wird in WS-BPEL 2.0 innerhalb des Scope als Termination Handler definiert. Dieser kann
+die selben Aktivitäten verwenden, die auch in einem Fault Handler verwendet werden können.
+Es wird also nicht mehr der Fehler bpws:forcedTermination geworfen, auf den dann im Fault
+Handler reagiert werden kann, sondern im Falle einer erzwungenen Terminierung wird nach der
+Beendigung aller laufenden Aktivitäten des Scope der Termination Handler ausgeführt. Ist kein
+Termination Handler definiert, wird ein Standard-Termination-Handler aktiviert. Dieser kompensiert
+alle erfolgreich beendeten eingebetteten Scopes in der standardmäßigen Kompensationsreihenfolge
+(siehe 3.10.1). Er verhält sich also wie der Standard-Fault-Handler.
+
+Compensation Handler
+Der aktuelle Zustand des Prozesses setzt sich aus den aktuellen Zuständen aller gestarteten Scopes
+zusammen. Dies beinhaltet Scopes die erfolgreich abgearbeitet wurden, deren Compensation
+Handler aber noch nicht aufgerufen wurde. Der aktuelle Zustand eines erfolgreich abgearbeiteten
+Scope entspricht dessen Zustand zum Zeitpunkt der Beendigung der Abarbeitung. Ein Scope
+kann, möglicherweise als Teil eines Schleifendurchlaufs, mehrfach ausgeführt worden sein. In
+diesem Fall enthält der aktuelle Zustand des Prozesses den Zustand einer jeder erfolgreichen
+(nicht kompensierten) Ausführung eines solchen Scope. Dieser gesicherte Zustand eines erfolgreich
+abgearbeiteten unkompensierten Scope wird als Scope-Snapshot bezeichnet.
+Compensation Handler nutzen in WS-BPEL 2.0 immer den aktuellen Zustand des Scope, d.h.
+den Zustand des Scope, in dem sie definiert wurden und allen darin eingebetteten Scopes. Dies
+umfasst die dort deklarierten Variablen, Partner Links und Correlation Sets. Sie sind in der Lage,
+dieWerte all dieser Variablen zu lesen und zu setzen. Andere Teile des Prozesses können die
+Veränderung an gemeinsam genutzten Variablen sehen, genauso wie die Compensation Handler
+Veränderungen sehen können, die durch andere Teile des Prozesses an gemeinsam genutzten
+Variablen vorgenommen werden. Dies gilt auch für den Fall einer parallelen Abarbeitung. Um
+Konflikte im Falle von erwarteter gleichzeitiger Abarbeitung zu verhindern, müssen Compensation
+Handler isolierte Scopes (siehe 3.6.1) verwenden, wenn sie in den Zustand eines eingebetteten
+Scope eingreifen.
+Wie auch in BPEL4WS 1.1 steht ein Compensation Handler nur für Scopes zur Verfügung, die
+ordnungsgemäß abgearbeitet wurden. Wird ein Compensation Handler wiederholt aufgerufen,
+wird dies in WS-BPEL 2.0 ignoriert.11 Dabei spielt es keine Rolle, ob es sich um einen aktivierten
+oder deaktivierten Compensation Handler handelt.
+Die aus BPEL4WS 1.1 bekannte Aktivität <compensate> wurde in zwei Aktivitäten zur Kompensation
+aufgeteilt: <compensate>, zur Kompensation aller eingebetteten Scopes in der standardmäßigen
+Kompensationsreihenfolge (siehe 3.10.1) und <compensateScope> zur Kompensation
+eines speziellen Scope. Ist der zu kompensierende Scope in eine Schleife oder einen Event
+Handler eingebettet, müssen alle Iterationen der Schleife bzw. alle verarbeiteten Ereignisse des
+Event Handler kompensiert werden. Die für eine solche Aktivität im Laufe der Abarbeitung
+aktivierten Compensation Handler werden dabei als eine Einheit betrachtet, die als Compensation
+Handler Instance Group bezeichnet wird. Im Falle eines Aufrufs von <compensate>,
+umfasst diese Compensation Handler Instance Group alle Compensation-Handler-Instanzen der
+erfolgreich abgearbeiteten Scopes, die in der Aktivität eingebettet sind. Im Falle eines Aufrufs
+von <compensateScope>, jedoch nur die Compensation-Handler-Instanzen des spezifizierten
+Ziel-Scope. Sollte während der Abarbeitung einer dieser Compensation-Handler-Instanzen ein
+unbehandelter Fehler auftreten, wird die gesamte Compensation Handler Instance Group beendet
+und alle enthaltenen Compensation Handler werden deaktiviert.
+Standardmäßige Kompensationsreihenfolge
+Die Spezifikation von WS-BPEL 2.0 beschreibt zwei Regeln, die für eine standardmäßige Kompensationsreihenfolge
+gelten müssen. Um diese Regeln zu konkretisieren, werden formal einige
+Begriffe definiert.12 Wir wollen uns jedoch hier nur auf eine informelle Wiedergabe dieser Regeln
+beschränken:
+1. Die Kompensation muss sich nach der Reihenfolge der Abarbeitung der zu kompensierenden
+Scopes richten, soweit diese durch die Prozessdefinition vorgegeben ist.
+Prozesse, in denen es zu Zyklen durch Links kommen kann, sind nicht gestattet, d.h. wenn
+von einem Scope A ein Link in einen anderen Scope B führt, darf von Scope B kein Link
+in den Scope A zurückführen.
+Für den Fall von nebenläufig abgearbeiteten Scopes, die keine Kontrollflussabhängigkeiten durch
+Links aufweisen, wird durch diese Regeln keine konkrete Kompensationsreihenfolge festgelegt.
+Sie können also sowohl nebenläufig, als auch in strikter umgekehrter Reihenfolge ihrer Abarbeitung
+nach einander kompensiert werden.
+Kompensation und isolierte Scopes
+Compensation Handler eines isolierten Scope werden, anders als entsprechende Fault Handler,
+nicht innerhalb dessen isolierter Umgebung ausgeführt. Auch können diese Compensation
+Handler nicht selbst isolierte Scopes verwenden, da isolierte Scopes nicht in einander geschachtelt
+werden dürfen. Dies wirft jedoch Fragen in Bezug auf die Isolationssemantik der Compensation
+Handler von in isolierten Scopes eingebetteten Scopes auf. Wie sieht deren Umgebung
+im Falle eines Aufrufs durch einen Fault Handler (ausgeführt innerhalb der isolierten Umgebung
+des umgebenden Scope) bzw. im Falle eines Aufrufs durch einen Compensation Handler
+(ausgeführt außerhalb der isolierten Umgebung des umgebenden Scope) aus?
+Um konsistentes Verhalten sicher zu stellen, verlangt die Spezifikation von WS-BPEL 2.0 das
+Compensation Handler innerhalb eines isolierten Scope daher selbst implizit isoliertes Verhalten
+zeigen, obwohl dies eine separate isolierte Umgebung erfordert.
+
+Im Zentrum der Modellierung von GeschÄaftsprozessen stehen die AktivitÄaten und ihre kau-
+salen ZusammenhÄange. In BPEL4WS gibt es zwei Sorten von AktivitÄaten: Basic Activities
+und Structured Activities.
+Die einfachen AktivitÄaten reprÄasentieren atomare Einheiten und lassen sich erneut in
+zwei Gruppen teilen: FÄur die Kommunikation mit einem anderen Web Service sind die
+AktivitÄaten invoke, receive und reply zustÄandig. Mit invoke kann ein anderer Web Service
+aufgerufen werden, d. h. es wird eine Nachricht an diesen gesendet und gleich oder spÄater
+eine Antwort erwartet. Mit receive wird ein Aufruf (eine Nachricht) von einem anderen Web
+Service entgegen genommen und mit reply dieser beantwortet.
+Die zweite Gruppe der einfachen AktivitÄaten reprÄasentieren interne Schritte: assign ist
+eine Wertzuweisung, wait ist ein Timer und empty ist eine leere AktivitÄat. Teilweise steuern
+sie auch den weiteren Prozessverlauf: terminate bricht den Prozess ab, throw wirft einen
+Fehler und compensate veranlasst die RÄucksetzung eines Teils des Prozesses.
+Neben den einfachen AktivitÄaten gibt es in BPEL4WS auch fÄunf Klassen strukturierter
+AktivitÄaten. Mit diesen AktivitÄaten wird der Kontroll°uss abgebildet: Die einfachste ist se-
+quence, diese AktivitÄat de¯niert die sequentielle Ordnung einer Menge anderer AktivitÄaten.
+Die alternative Auswahl zwischen AktivitÄaten ist mit Hilfe von pick und switch mÄoglich, bei
+pick entscheidet eine Nachricht von au¼en, bei switch wird durch die Auswertung von Daten
+eine Entscheidung getro®en. Mit der AktivitÄat while ist es mÄoglich, zyklisches Verhalten
+zu de¯nieren. Letztlich dient die AktivitÄat °ow dazu, eine unabhÄangige Menge von Akti-
+vitÄaten zu spezi¯zieren. Innerhalb von °ow kÄonnen die AktivitÄaten durch zusÄatzliche links
+untereinander synchronisiert werden. Jede der strukturierten AktivitÄaten enthÄalt ihrerseits
+mindestens eine AktivitÄat. Auf diese Weise kÄonnen durch Schachtelung beliebig komplexe
+Kontroll°uss-Beziehungen gebildet werden.
+Ein Sonderrolle spielt die AktivitÄat scope.
+ÄU
+b
+e
+r
+w
+a
+c
+h
+t
+e
+A
+k
+t
+i
+v
+i
+t
+Äa
+t
+e
+n
+In BPEL4WS ist es mÄoglich, eine einzelne AktivitÄat unter besondere Beobachtung zu stel-
+len, d. h. auftretende Fehler abzufangen, auf externe Ereignisse zu reagieren und ggf. die
+AktivitÄat nach erfolgreicher AusfÄuhrung zu kompensieren, wenn es die Äau¼eren UmstÄan-
+de verlangen. Zu diesem Zweck gibt es das Konzept des scopes als Aggregation aus event
+handler, fault handler, compensation handler und einer Äuberwachten AktivitÄat. Auf der
+einen Seite kann die Äuberwachte AktivitÄat wiederum strukturiert sein, so dass der scope
+eine Menge von AktivitÄaten Äuberwachen kann. Auf anderen Seite kann der scope selbst als
+eine AktivitÄat aufgefasst werden und damit in einer strukturierten AktivitÄat vorkommen.
+Prozesse
+AktivitÄaten kÄonnen ineinander geschachtelt sein und bilden somit eine hierarchische Struk-
+tur { einen AktivitÄaten-Baum. DieWurzel dieses Baumes ist der Prozess: Ein Prozess besitzt
+genau eine AktivitÄat. Neben dieser AktivitÄat kann ein Prozess event handler, fault handler
+und compensation handler besitzen, d. h. ein Prozess ist auch gleichzeitig ein scope.
+In BPEL4WS gehÄort zu einem Web Service genau ein Prozess. Es ist mÄoglich, diesen Pro-
+zess prÄazise und vollstÄandig zu modellieren. Auf diese Weise gelangt man zu einem direkt
+ausfÄuhrbaren Prozessmodell (= Executable Process). DarÄuber hinaus gestattet BPEL4WS
+eine abstrakte Spezi¯kation des Verhaltens (= Business Protocol). Die abstrakte Spezi-
+¯kation ist ein wesentlicher Teil der verÄo®entlichten Beschreibung des Web Service. Ein
+potentieller Anwender entscheidet aufgrund dieser Spezi¯kation, ob der vorliegende Web
+Service mit seiner Komponente kompatibel ist. Im Rahmen dieser Arbeit werden wir die
+KompatibilitÄat zweier Web Services de¯nieren (siehe Abschnitt 3.1.4).
+Die De¯nition der Kommunikation innerhalb des Prozesses stÄutzt sich auf die De¯nition
+der Schnittstelle des Web Service mit WSDL ab.
+Kommunikation
+Ein Web Service ist ein o®enes System, dass mit anderen Komponenten (o. B. d. A. eben-
+falls Web Services) Äuber Nachrichtenaustausch kommuniziert. Jede Nachricht ist ein XML-
+Dokument, wobei die Typ der Dokumente bereits im WSDL-Modell des Web Service de¯-
+niert werden. Als konsequente WeiterfÄuhrung verwendet BPEL4WS fÄur interne Datenstruk-
+turen (variables) ebenfalls XML-Dokumente.
+Die Schnittstelle fÄur die Kommunikation wird in WSDL de¯niert: Eine Nachrichten ist
+ein XML-Dokument, das Senden und empfangen einer Nachricht (mit oder ohne Feedback)hei¼t Operation. Eine Menge von Operationen wird zu einem Porttype zusammengefasst.
+Jeder Web Service bietet eine Menge von Porttypen an.
+Die Kommunikation Äuber einen Porttypen kann man von zwei Seiten aus betrachten:
+Auf der einen Seite gibt es den Web Service, der diesen Porttypen anbietet und auf der
+anderen Seite gibt es einen Web Service, der diesen Porttypen von au¼en benutzt. Deshalb
+wird in BPEL4WS die Verbindung zwischen den Operationen eines Porttypen und den
+AktivitÄaten im Prozess durch PartnerLinks abgebildet: Die AktivitÄat receive und reply
+implementieren eine Operation an der Schnittstelle dieses Web Service und stellen damit
+einem anderem Web Service FunktionalitÄat zur VerfÄugung, die AktivitÄat invoke spezi¯ziert
+eine Operation an der Schnittstelle eines anderen Web Service und benutzt damit dessen
+FunktionalitÄat. Da ein anderer Web Service (d. h. ein Partner) in einem BPEL4WS-Modell
+sowohl FunktionalitÄat anbieten als auch benutzen kann, wird ein Partner durch eine Menge
+von PartnerLinks spezi¯ziert.
+PEL4WS (kurz BPEL) unterscheidet zwischen ausführbaren und abstrakten Prozessen, wobei
+die Unterscheidung für diese Arbeit irrelevant ist. Ein BPEL4WS Prozess selbst kann als
+ein Ablaufdiagramm angesehen werden, wobei jeder Knoten eine Aktivität darstellt. Hierbei
+wird zwischen primitiven und strukturierten Aktivitäten unterschieden. Die primitiven Aktivitäten
+ermöglichen es: Operationen auf anderen Web Services aufzurufen (invoke), auf
+Nachrichten von externen Partnern zu warten (receive), Antworten auf eine Anfrage zu verschicken
+(reply), eine bestimmte Zeit zu warten (wait), den Variablen Werte zuzuweisen
+(assign), Fehler zu generieren (throw), den gesamten Service explizit zu beenden (terminate)
+oder auch nichts zu tun (empty). Die strukturierten Aktivitäten ermöglichen es die
+primitiven zu einer komplexeren Einheit zu kombinieren. Es ist möglich, folgendes mit strukturierten
+Aktivitäten zu realisieren: Eine geordnete Sequenz der Aktivitäten zu definieren
+(sequence), Verzweigungen innerhalb eines Prozesses zu bilden (switch), Schleifen zu
+definieren (while), Entscheidungen nach Ablauf bestimmter Zeit oder anhand externer
+Trigger zu treffen (pick) und Aktivitäten parallel auszuführen (flow). Außerdem können
+mit Hilfe des control links Konstrukts Ausführabhängigkeiten zwischen parallelen Aktivitäten
+definiert werden.
+
+
+
+ Das Besondere daran: WS-BPEL bietet eine homogene Syntax für die Ablaufbeschreibung und den Datenzugriff auf XML-Dokumente. Und es enthält Elemente, die speziell auf die Ablaufproblematik langlaufender Geschäftsprozesse mit mehreren Partnern zugeschnitten sind. So können die Aktivitäten eines Geschäftsprozesses in Scopes, das heißt in kontextorientierten, transaktionalen Einheiten zusammengefasst werden. Für den Fehlerfall, bei dem bereits abgeschlossene Scopes zurückgesetzt werden müssen - man spricht von Kompensation - , enthält WS-BPEL mächtige syntaktische Konstrukte. Hier ist WS-BPEL anderen Programmiersprachen klar überlegen - in der Theorie.
+
+
+Nun lässt sich das Konzept der XPath-Variablen nutzen
+
+In WS-BPEL 2.0 wurde das Konzept der XPath-Variablen eingeführt. Eine XPath-Variable entsteht syntaktisch einfach dadurch, dass einer BPEL-Variablen ein \$-Zeichen vorangestellt wird. Das Ergebnis einer Suche kann damit direkt als Ausdruck weiterbenutzt werden. Variablenzuweisungen, die in WS-BPEL durch <assign>-Aktivitäten erfolgen, lassen sich nun ähnlich elegant formulieren wie Zuweisungen in objektorientierten Sprachen.
+
+Für Prozesse, in denen Suchen und Kopieren zum Aufbau von Nachrichten nicht ausreichen, bietet die neue BPEL-Version standardmäßig einen integrierten Ausdruck für die XSLT-Transformation einer XPath-Variablen.
+
+
+
+
+Grundlegende Konzepte von SOA
+Hinter Serviceorientierte Architekturen (SOA) steckt die Absicht, Geschäftsprozesse zu automatisieren und auf Maschine-zu Maschine-Kommunikation zu verlagern. Komplexe Anwendungen werden hierfür in standardisierte Services aufgebrochen und verteilt zur Verfügung gestellt.
+
+BPEL ist blockstrukturiert, d.h. bei der Definition von lokalen Umgebungen (Scopes) können Variable (Programmierung) eingeführt werden. Mit den Scopes können außerdem Fehlerbehandlung (Fault Handler), Kompensationsbehandlung (Compensation Handler) und Ereignisbehandlung (Event Handler) assoziiert werden.
+ 
+Man unterscheidet zwischen einer synchronen und asynchronen invoke-Aktivität.
+Bei der synchronen Variante wird der Inhalt der Eingabevariable (inputVariable) an den entfernten Web Service geschickt und das Ergebnis in der Ausgabevariable (outputVariable) gespeichert. Für einen asynchronen Aufruf wird keine Ausgabevariable deklariert und der Prozess kann sofort nach dem Aufruf weiter ablaufen.
+Aufruf einer Operation eines Dienstes. Kann synchron
+oder asynchron sein.  als Folge auf eine <receive>-Aktion. Ein <reply> bezieht sich immer auf einen bestimmten Partnerlink und eine bestimmte Variable.
+
+     invoke  Synchroner (requestresponse) oder asynchroner Aufruf eines Web Service
+     receivereply  Anbieten einer synchronen oder asynchronen Web Service Schnittstelle
+
+
+
+
+
+
+
