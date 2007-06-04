@@ -1,3 +1,4 @@
+Eine Möglichkeit, die Qualität zu sichern, besteht in der Ausführung der Software mit dem Ziel Fehler zu finden -- das Testen der Software.
  Testen ist ein in der konventionellen Softwareentwicklung unentbehrliches Mittel zur Qualitätssicherung.
 Testen ist die in der Anwendung einfachste und wahrscheinlich verbreitetste
 Methode der Verifikation und existiert in vielen Ausprägungen (Riedermann (1997), Seite
@@ -8,15 +9,21 @@ Testen von BPEL ist besonders weil BPEL Prozess externale Abhängigkeiten in Form
 
 Unit Kann bedeutend reduzieren dieses Problem beim Testen von von BPELProzessen ohne der correspondirenden Web Services. Als Seiteneffekt die Tests sind sind normalerweise schneller ausgeführt weil Web Services Simulation ist schneller als reale Services.
 Im Rahmen der Forschung um Institut SE wurde BPELUnit Framework entwickelt. Das Framework versucht die Lücke in der xUnit Familie der Unit-testing Frameworks. 
-Framework: obwohl Simulation eine bessere Kontrolle über BPEL Prozess ermöglicht hätte, hat man sich entschieden ..., weil eine Simulation 
 
+BPELUnit erreicht Isolation des Prozesses durch die Verwendung von Mocks, die die Partner des Prozesses durch eine Implementierung ersetzen, die für den Test erzeugt wurde.  Erzeugt tharness um den BPEL Prozess (PUT), das die Daten vom Test empfangen und schicken Daten zurück. Der Client wird ebenfalls ersetzt.
+
+BILD...
+ 
+  Der Prozess wird getestet dadurch, dass Daten an den Prozess geschickt und von dem Prozess empfangen werden. 
+ 
+ 
 Als Teil der Forschung ist am Institut für Praktische Informatik (Fachgebiet Software Engeeniring) ist im Rahmen einer Masterarbeit BPELUnit Framework entstanden..
  BPELUnit ist unter http:....... unter open source lizenze verfügbar.
+ 
+ 
 
 Um BPEL Prozess zu isolieren müssen die Web Services durch Mocks ersetzt werden.  Die Mocks können die Testdaten versenden und Fehlermeldungen  
   Unit Testen ist das Testen von Komponenten in der Isolation. Das erreicht BPELUnit durch Mocks , die die Partner des Prozesse mit spezieller für den Test erzeugter Implementierung ersetzen. Testgeschirr ersetzt die Partner des BPEL Prozesses und den Client.
- 
- 
  
   Der Kern ist unabhängig von der Präsentationsschicht implementiert und bietet eine Schnittstelle für die Implementierung der Cliens an. Drei Clients gehören gehören zum Framework:
  
@@ -26,12 +33,7 @@ Um BPEL Prozess zu isolieren müssen die Web Services durch Mocks ersetzt werden.
 	\item Eclipse plug-in mit integrierter Darstellung der Ergebnissen und einem Editor für die Erstellung der Tests 
 \end{itemize}
  
- Unterschiedliche BPEL Engines werden durch das Framework unterstützt und weitere können durch Erstellen entsprechender Adapter integriert werden. Tests in BPELUnit werden in XML spezifiziert. Die Überprüfung der angekommenen Daten kann mit Hilfe von XPath erfolgen. Die Interaktionsmuster zwischen Partnern und BPEL-Komposition wird in der Testspezifikation gespeichert. Folgende Interaktionsmuster werden unterstützt: 
-\begin{itemize}
-	\item eine Richtung receive oder reply
-	\item beide Richtungen synchron 
-	\item beide Richtungen asynchron (send-receive und receive-send)
-\end{itemize}
+ Unterschiedliche BPEL Engines werden durch das Framework unterstützt und weitere können durch Erstellen entsprechender Adapter integriert werden. Tests in BPELUnit werden in XML spezifiziert. Die Überprüfung der angekommenen Daten kann mit Hilfe von XPath erfolgen. Die Interaktionsmuster zwischen Partnern und BPEL-Komposition wird in der Testspezifikation gespeichert. 
    
  
   BPELUnit richtet sich primär an die Entwickler, die das Testen und Programmieren während des Entwicklungsprozesses abwechseln machen. Also bietet das  Framework schnelles Testen: Erzeugen und Ausführen sind einfach und schnell. 
@@ -49,6 +51,7 @@ Um BPEL Prozess zu isolieren müssen die Web Services durch Mocks ersetzt werden.
  
   
   PELUnit Testing Architektur
+ Das Framework basiert auf einer Schichtarchitektur, die in der Abbildung dargestellt.
  
  Der erste von unten Schicht ist für die Testspezifikation zuständig: wie die Testdaten und das Verhalten formuliert. Darauf afbauend werden die Tests in der Test Suiten organisiert, für die die Test Organisation -Schicht verantwortlich ist. Der Test muss ausgeführt werden. Das ist die Aufgabe der dritten Schicht. Während der Tests müssen die Daten und Statistiken gesammelt und dem Benutzer repräsentiert werden.   
  
@@ -57,6 +60,9 @@ Um BPEL Prozess zu isolieren müssen die Web Services durch Mocks ersetzt werden.
 	\item maschienenlesbar
 	\item ausführbar 
 \end{itemize}
+ 
+ 
+ Testspezifikation
  
  BPELUnit   enthält alle relevanten Daten für das Testen eines bestimmten Pfades in BPEL prozess.
  
@@ -68,10 +74,17 @@ Um BPEL Prozess zu isolieren müssen die Web Services durch Mocks ersetzt werden.
   Outgoing data : mit dem Ziel bestimmte Zweige auszuführen, Fault oder compensation handler auszulösen.  
   
   Der Format der Daten die ausgetauscht werden, ist literal XML, beschrieben als WSDL Nachrichten Typ, XML Schema Element oder XML Schema simple type. Die gesendeten durch PUT Nachrichten werden auf Korrektheit überprüft. Die relevanten für den Test Daten werden durch XPath-Ausdrücke spezifiziert.
-  Interaktionsdetails:
+
+  Folgende Interaktionsmuster werden unterstützt: 
+\begin{itemize}
+	\item eine Richtung receive oder reply
+	\item beide Richtungen synchron 
+	\item beide Richtungen asynchron (send-receive und receive-send)
+\end{itemize}
   Die Client und Partner müssen simuliert werden, um die Reaktionen des BPEL Prozesses auszulösen und zu testen.
   Interaktionsequenzen .....Tracks Sequenzen Parallel für jeden Partner und Client
-  
+
+Bild  
 
 
 Testen von BPEL bedeutet überprüfen die Korrektheit des implementierten Geschäftsprozesses. Dafür müssen die Geschäftsprotokolle des Clienten und der Partner simuliert werden. Geschäftsprotokoll basiert auf Interaktion . Die Tester müssen die Interaktionssequenzen für die Partner und den Client in jedem Testcase festlegen. Sequenzen werden Tracks genannt und bestehen aus atomaren Interaktionen (Aktivitäten)
