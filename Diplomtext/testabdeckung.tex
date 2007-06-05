@@ -4,8 +4,10 @@ Unit-Tests spielen eine sehr wichtige Rolle bei der Qualitätssicherung in der So
 Abdeckung auf Basis einer Spezifikation, die angibt, inwieweit die Testfälle alle Anforderungen abdecken. Diese Metrik wird meist im Zusammenhang mit \textit{Black-Box-Tests} verwendet. 
 	\item \textbf{Codeabdeckung}(\textit{eng. code coverage}). Die Codeabdeckung ist eine Metrik für das Verhältnis zwischen
 zu testenden und tatsächlich getesteten Elementen des Prüflings. Die Tests, die auf der Codeabdeckung basieren, gehören zur Gruppe der strukturorientierten Testtechniken und zielen darauf ab, die innere Struktur der Software zu testen (\textit{Glass-Box-Test}). 
+\item Data Coverage Metrics measure how and when variables have been used in
+a certain manner
 \end{itemize}
-Die \textit{Anforderungs}- und \textit{Codeabdeckung} sind Mittel zur Messung der Qualität bzw. Voll"-stän"-dig"-keit der Tests. Die beiden Testarten (\textit{Black-Box} und \textit{Glass-Box}) ergänzen sich gegenseitig und werden in der Regel kombiniert angewendet. Damit werden die beiden Arten der Abdeckungsmetriken auch gemeinsam verwendet. Da für diese Arbeit nur die Codeabdeckung relevant ist, geht es im weiteren Verlauf des Dokuments nur um diesen Aspekt. Der Begriff \textit{Testabdeckung} wird auch in diesem Sinne verwendet. 
+Die \textit{Anforderungs}- und \textit{Codeabdeckung} sind Mittel zur Messung der Qualität bzw. Voll"-stän"-dig"-keit der Tests. Die beiden Testarten (\textit{Black-Box} und \textit{Glass-Box}) ergänzen sich gegenseitig und werden in der Regel kombiniert angewendet. Da für diese Arbeit nur die Codeabdeckung relevant ist, geht es im weiteren Verlauf des Dokuments nur um diesen Aspekt. Der Begriff \textit{Testabdeckung} wird ausschließlich als Synonym zu diesem Begriff verwendet. 
 
 Die Unit-Tests werden verwendet, um sicherzustellen, dass der erstellte Code korrekt funktioniert. Jedoch lassen sich dabei nur Aussagen über die Codebereiche machen, die im Test aufgerufen oder, anders gesagt, durch den Test abgedeckt wurden. Das Ausführen aller potentiell fehlerhaften Stellen des Programms ist ein notwendiges Kriterium für das Finden der Fehler im Code. Deswegen ist die Angabe der erreichten Codeabdeckung aus der Sicht der Qualitätssicherung nicht nur sinnvoll sondern unabdingbar.
 
@@ -48,31 +50,8 @@ Das heißt, dass die hundertprozentige Zweigabdeckung dann erreicht ist, wenn all
 
 Obwohl die Fehlererkennungsquote gegenüber der Anweisungsabdeckung steigt, werden nicht alle Aspekte des Kontrollflusses erfasst. Bei den Schleifen wird nur ermittelt, ob diese durchlaufen werden können.
 Obwohl bei der vollständigen Zweigabdeckung jede Entscheidung (komplexe Bedingungen), die Verzweigungen im Kontrollfluss auslösen, insgesamt die Wahrheitswerte $wahr$ und $falsch$ mindestens einmal annehmen muss, bleiben die Werte der einzelnen Bedingungen unberücksichtigt. Außerdem wird jeder Zweig für sich alleine betrachtet, ohne die Kombinationen von Zweigen zu berücksichtigen. 
-\subsubsection{Pfadabdeckung}
-Die Pfadüberdeckung (\textit{engl. path coverage}) konzentriert sich auf die einzelnen Pfade
-des zu testenden Programms. Pfadabdeckung wird folgendermaßen definiert:
-\[
-Pfadabdeckung=\frac{\text{\textit{Anzahl durchlaufene Pfade}}}{\text{\textit{Gesamtzahl Pfade}}}
-\]
-Die vollständige Pfadabdeckung verlangt die Ausführung aller vorhandene Pfade durch die Tests. Das heißt, dass die Schleifen auch getestet werden. Bei komplexeren Programmen aus der Praxis  ist die vollständige Pfadabdeckung aufgrund der großen Anzahl von Pfaden nicht relevant. Aus diesem Grund existieren andere Varianten neben der vollständigen Pfadabdeckung.
 
-Bei dem so genannten strukturierten Pfadtest wird ein Schleifenrumpf maximal k-mal ausgeführt. Bei k=2 spricht man von einer \textit{Grenze-Inneres-Abdeckung} (\textit{eng. boundary interior coverage}). Dabei muss der Schleifenrumpf kein Mal, ein Mal und mindestens zwei Mal ausgeführt werden. Aufgrund möglicher Abhängigkeiten zwischen den Variablen vor, in und hinter der Schleife hat sich diese Abdeckung als besonders sinnvoll erwiesen.
-\subsubsection{Bedinungsabdeckung}
-Die Prüfung der Verarbeitungslogik besonders mit kompliziert aufgebauten Entscheidungen ist auch sehr wichtig. Die geeignete Metrik für die Abdeckung der Bedingungen ist die Bedinungsabdeckung (\textit{eng. condition coverage}). Sie beachtet die logische Struktur von Entscheidungen des zu testenden Programms. Die zugehörigen Tests haben als Ziel die Überprüfung zusammengesetzter Entscheidungen. Es gibt mehrere Versionen der Bedingungsabdeckung:
-\begin{itemize}
-	\item \textbf{einfache Bedingungsabdeckung} (\textit{simple condition coverage}). Bei der \textit{einfachen Bedingungsüberdeckung} muss jede Teilbedingung einmal
-den Wert \textit{wahr} und einmal den Wert \textit{falsch} annehmen. Der Wert der gesamten Bedingung spielt dabei keine Rolle.
-	\item \textbf{mehrfache Bedingungsabdeckung} (\textit{multiple condition coverage}). Bei der \textit{mehrfachen Bedingungsüberdeckung} müssen dagegen alle Kombinationen von \textit{wahr} und \textit{falsch} berücksichtigt werden.
-	\item \textbf{minimale Mehrfach-Bedingungsabdeckung} (\textit{minimal multiple condition coverage}). Die \textit{minimale Mehrfach-Bedingungsüberdeckung} fordert, dass bei zusammengesetzten logischen Ausdrücken nicht nur alle atomaren Entscheidungen
-einmal zu \textit{wahr} und einmal zu \textit{falsch} ausgewertet werden, sondern auch jeder auftretende zusammengesetzte
-Teilausdruck  ebenfalls jeweils den Wer \textit{wahr} und \textit{falsch} annimmt.
-\end{itemize}
-
-\ \\[1cm]Im nächsten Kapitel werden die Abdeckungsmetriken im Kontext mit BPEL besprochen.
-
-
-Wie bereits erwähnt spielen Unit-Tests eine sehr wichtige Rolle bei der Qualitätssicherung in der Softwareentwicklung.  
-
+Es gibt viele weitere Abdeckungsmaße, die in dieser Arbeit nicht betrachtet werden. Eine Übersicht der Metriken wird in ... gegeben
 
 \nocite{Liggesmeyer2002}
 \nocite{Winkler2003}

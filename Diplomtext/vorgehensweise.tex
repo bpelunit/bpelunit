@@ -6,27 +6,70 @@
  
  
 
-Ein BPEL-Prozess kann nach außen grundsätzlich nur mit Web Services kommunizieren. Demzufolge müsste der Dienst für den Empfang der Nachrichten als Web Service realisiert und während des Testens erreichbar sein.  Das BPELUnit Framework bringt Funktionalitäten mit, die es möglich machen, diesen Dienst einfacher zu implementiert. Während die entsprechende Lösung im Abschnitt genau vorgestellt wird, reicht es zunächst aus zu wissen, dass die Schnittstelle des Dienstes mit WSDL beschrieben ist, und für den PUT aus der Ablaufumgebung genau wie alle anderen Web Services erreichbar ist. 
- Die folgende stellt die Funktionsweise
+Ein BPEL-Prozess kann nach außen grundsätzlich nur mit Web Services kommunizieren. Demzufolge muss der Dienst für den Empfang der Nachrichten als Web Service realisiert und während des Testens erreichbar sein.  Das BPELUnit Framework bringt Funktionalitäten mit, die es möglich machen, diesen Dienst einfacher zu implementiert. Während die entsprechende Lösung im Abschnitt genau vorgestellt wird, reicht es zunächst aus zu wissen, dass die Schnittstelle des Dienstes mit WSDL beschrieben ist, und für den PUT aus der Ablaufumgebung genau wie alle anderen Web Services erreichbar ist. 
+ Die Abbildung \ref{fig:loggingservice} stellt die Funktionsweise dar.
  
+ \begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.90\textwidth]{bilder/loggingservice.pdf}
+		\caption{Service}
+	\label{fig:loggingservice}
+\end{figure}
  
 
  Wie bereits im Abschnitt erklärt wurde, wird die Geschäftslogik in BPEL durch Aktivitäten realisiert.  Die Instrumentierung eines BPEL-Prozessen kann demnach nur durch Hinzufügen von Aktivitäten realisiert werden. Der Ablauf bei der Messung der  Testabdeckung: 
+
+\begin{itemize}
+\item Annotation des PBPEL-Prozesses durch Marken. Diese Marken sind eindeutig und signalisieren je nach Metrik entweder die Ausführung der Aktivitäten oder Aktivierung bestimmter Kontrollflusse. Gleichzeitig müssen die Daten für die spätere Auswertung gespeichert werden.
+\item Hinzufügen von Aktivitäten, die die Marken an den Service verschicken.		
+\item Sammlung der Daten während der Ausführung des Prozesses.
+\item Auswertung der Daten und Ermittlung von Metriken.
+\end{itemize} 
+
+Die ersten beiden Schritte gehören zu der Instrumentierung und werden im folgenden Abschnitt genauer erläutert.
+
+\section{Instrumentierung}
+Die Instrumentierung eines BPEL-Prozesses besteht aus mehreren Aufgaben:
+\begin{itemize}
+\item Analyse des BPEL-Prozesses.
+\item Sammlung und Speicherung der statischen Daten (für die spätere Auswertung).
+\item Annotation des BPEL Prozesses mit Marken. Jede Marke identifiziert ein relevantes für die jeweilige Metrik Aspekt (entweder eine Aktivität oder Kontrollflussänderung). Erreicht der Kontrollfluß beim Testen die Stelle, an der die Marke positioniert ist, so ist der zugehörige Aspekt durch den Test abgedeckt.
+\item die Marken von allen Metriken , die im Kontrollfluß unmittelbar hintereinanderliegen, werden zusammengefasst (Optimierung).
+\item Hinzufügen der BPEL-Aktivitäten, für die Übertragung der Marken an den Web Service für Empfang von Marken (Protokollierung).	
+\end{itemize}
+Die Ausführung der Aufgaben erfolgt in drei Phasen, die sequentiell abgearbeitet werden können. 
+
+Bild ....
+
+\textbf{Phase 1.} Während der ersten Phase wird der BPEL-Prozess analysiert. Dabei werden für jede Metrik alle für sie relevanten Elemente des Prozesse bestimmt und gespeichert. Die Definitionen der Metriken(siehe Abschnitt ..) legen die relevanten Elemente des Prozesses für die jeweilige Metrik fest:
+\begin{itemize}
+	\item Aktivität Abdeckung \- alle Basisaktivitäten.
+	\item Zweigabdeckung \- alle strukturierten Aktivitäten.
+	\item Link Abdeckung \- alle Links.
+	\item Fault Handler Abdeckung \- alle catch- und catchAll-Elemente.
+	\item Compensation Handler Abdeckung \- alle Compensation Handler. 
+\end{itemize}
+
+\textbf{Phase 2.} Diese Phase wird ausführlich in den folgenden 4 Abschnitten für jede Metrik vorgestellt. An dieser Stelle werden lediglich einige Bemerkungen gemacht, die für jede Metrik gelten. 
+
+In dieser Phase werden die statische Daten des Prozesses, die für die Ermittlung der Metriken notwendig sind, gesammelt und gespeichert. Gleichzeitig  erfolgt die Annotation durch die Marken des Prozesses. Der Kontrollfluss muss die Marke genau dann erreichen, wenn der zugehörige Aspekt bei der aktuellen Ausführung ebenfalls erreicht wird. Logischerweise ist das die wichtigste Anforderung an die Platzierung der Marken.  Zu betonen ist, dass es  bei der Messung der Testabdeckung nicht darum geht, ob die Aktivität \textit{erfolgreich} ausgeführt wurde, sondern darum ob es zur Ausführung der Aktivität kommt. Wie die einzelnen Metriken bei der Annotation des Prozesses genau vorgehen, wird in den folgenden Abschnitten erläutert.  
+
+
+
+
+Bei der Instrumentierung ist zu beachten, dass es grundsätzlich möglich ist, durch die Manipulation die interne Programmlogik zu verändern. Die syntaktische Korrektheit darf natürlich auch nicht beeinträchtigt werden. Obwohl die Marken als Kommentare eingefügt werden und damit weder Prohrammlogik noch die syntaktische Struktur des Programmes ändern, werden diese Aspekte bereits in dieser Phase beachtet. Der Grund dafür ist, dass jede Metrik um bestimmte Aspekte zu erfassen zusätzliche Logik braucht (insbesondere im Zusammenhang mit dem Link-Konzept).  Also ist es sinnvoll bereits bei der Platzierung der Marken für die semantische und syntaktische Korrektheit des Prozesses zu sorgen, so dass die Marken in der letzten Phase einfach durch entsprechende Aktivitäten ersetzt werden können.
+Aus diesem Grund muss man bei allen Eingriffen in die Struktur des BPEL-Prozesses dafür sorgen, dass die Geschäftslogik unverändert bleibt. 
+
+
+  Dadurch dass in der ersten Phase alle benötigten Elemente des Originalprozesses für alle Metriken gespeichert wurde, können
+die Metriken in beliebigen Reihenfolge abgearbeitet werden. 
+
+\textbf{Phase 3.} In dieser Phase werden die Marken, die im Kontrollfluß hintereinander liegen,  zusammengefasst. Anschließend werden alle entstandenen Markengruppen  durch BPEL-Aktivitäten ersetzt, die die Marken an den Web Service verschicken. Die Tatsache, dass der Prozess in der zweiten Phase so aufbereitet wurde, dass die Marken einfach durch Aktivitäten ersetzt werden können, vereinfacht diese Phase wesentlich.       
+
+
+
+
+
+Zu beachten ist dabei, dass manche Aktivitäten (exit, throw, usw.) sowie einige andere Sprachkonzepte (Fehlerbehandlung, Link-Konzept) den Kontrollfluss ändern können, so dass die folgende Markierung nicht erreicht wird. Die Details und die entsprechenden Lösungen werden in den folgenden Abschnitten mit der Umsetzung der jeweiligen Metriken vorgestellt. 
+
  
-\begin{itemize}
-\item Instrumentierung
-\begin{itemize}
-\item den BPEL-Prozess analysieren
-\item die statischen Daten über den Prozess sammeln
-\item Für jede Metrik: den BPEL-Prozess mit Marken annotieren und diese Daten für die Auswertung speichern
-	\item die Marken von allen Metriken , die im Kontrollfluß unmittelbar hintereinanderliegen, werden zusammengefasst
-	\item Neue Variablen im Prozess definieren und die Marken an die Variablen zuordnen (assign-Aktivitäten)
-	\item Invoke-Aktivitäten, die die Marken an den Empfänger schicken.		
-\end{itemize}
-\item die Daten bei der Ausführung des Prozesses sammeln (Nachrichten mit Marken empfangen) und den statischen Daten zuordnen
-\item die Daten auswerten und die Metriken ermitteln
-\end{itemize}
-
-
-Die ersten drei Aufgaben können zusammen in einem Schritt durchgeführt werden. Im nächsten Abschnitt wird dieser Schritt "`Annotation des Prozesses"' genau für jede Metrik erläutert. 
-
