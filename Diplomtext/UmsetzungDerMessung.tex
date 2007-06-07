@@ -1,8 +1,8 @@
  
   \subsection{Aktivitätabdeckung}
-  Die Marken, die die Ausführung der Basisaktivitäten signalisieren sollen, werden im Kontrollfluß direkt vor der jeweiligen Aktivität platziert. Die Ausnahmen sind receive-Aktivitäten, die die Erzeugung einer BPEL-Instance initiieren können (\textit{createInstance}=\textit{"'yes"'}) und aus diesem Grund im Kontrollfluß als erste Basisaktivität vorkommen müssen.   
+  Zu betonen ist, dass es  bei der Messung der Testabdeckung nicht darum geht, ob die Aktivität \textit{erfolgreich} ausgeführt wurde, sondern lediglich darum, ob es zur Ausführung der Aktivität kommt. Die Marken, die die Ausführung der Basisaktivitäten signalisieren sollen, werden im Kontrollfluß direkt vor der jeweiligen Aktivität platziert. Die Ausnahmen sind receive-Aktivitäten, die durch Aufrufe von außen aktiviert werden.   
   
-  Befindet sich eine Basisaktivität in einer sequence, so kann die zugehörige Marke direkt davor (bzw. danach) eingefügt. Die Semantik der sequence-Aktivität sorgt dafür, dass die Marken im Kontrollfluß nur "`gleichzeitig"' erreicht werden können. Ist eine Basisaktivität in einer anderen strukturierten Aktivität eingebettet, so wird eine sequence eingefügt, die diese Aktivität und die zugehörige Marke umschließt. Durch das Schachtelungsprinzip der strukturierten Aktivitäten ist diese Vorgehensweise an jeder Stelle des Prozesses möglich.
+  Befindet sich eine Basisaktivität in einer sequence, so kann die zugehörige Marke direkt davor oder danach eingefügt. Die Semantik der sequence-Aktivität sorgt dafür, dass die Marken im Kontrollfluß direkt hintereinander erreicht werden können. Ist eine Basisaktivität in einer anderen strukturierten Aktivität eingebettet, so wird eine sequence eingefügt, die diese Aktivität und die zugehörige Marke umschließt. Durch das Schachtelungsprinzip der strukturierten Aktivitäten ist diese Vorgehensweise an jeder Stelle des Prozesses möglich.
   
   Das Link-Konzept, wie bereits angekündigt, braucht eine  besondere Betrachtung. 
   Innerhalb der Flow-Aktivitäten ermöglicht das Link-Konzept die Syn\-chro\-ni\-sa\-tions\-ab\-hän\-gig\-keit\-en zwischen den Aktivitäten zu definieren und durch die darauf aufbauenden Bedingungen die Ausführung der Aktivitäten zu steuern. Befindet sich eine eingefügte Marke im Kontrollfluss direkt vor oder nach der Aktivität, so ist es möglich, dass die Ausführungen falsch erfasst werden. Ist \textit{die zu protokollierende Aktivität Ziel eines oder mehreren Links}, so führen folgende Konstellationen zu falschen Aussagen:
@@ -10,9 +10,9 @@
 	\item Protokollierung findet vor der Aktivität statt und die Aktivität wird aufgrund der \textit{transition-} oder \textit{joinCondition} nicht ausgeführt.
 	\item Protokollierung findet nach der Aktivität statt, die Aktivität wird aufgrund der \textit{transition-} oder \textit{joinCondition} nicht ausgeführt und die Variable suppressJoin ist mit dem Wert \textit{yes} belegt.
 \end{itemize}
-In den beiden Fällen wird die Ausführung einer Aktivität registriert, obwohl die Aktivität gar nicht ausgeführt wurde. Anders gesagt: die Aktivität wird fälschlicherweise als "`ausgeführt"' markiert.
+In den beiden Fällen wird die Ausführung einer Aktivität registriert, obwohl die Aktivität gar nicht ausgeführt wurde.
 
-Um zu erreichen, dass die Aktivität und das Logging (beide) entweder ausgeführt oder nicht ausgeführt werden, muss der Link sich auf beide beziehen. Zu beachten ist, dass ein Link nur eine Quelle und ein Ziel besitzen darf. Schließt man die zu protokollierende Aktivität und die Logginganweisung in eine \textit{sequence} ein und definiert diese als Ziel des Links (durch \textit{target}-Element), so ist das gewünschte Verhalten erreicht. Das gilt für beide Werte der \textit{suppressJoin}-Varaible. 
+Um zu erreichen, dass die Aktivität und das Logging (beide) entweder ausgeführt oder nicht ausgeführt werden, muss der Link sich auf beide beziehen. Schließt man die zu protokollierende Aktivität und die Logginganweisung in eine \textit{sequence} ein und definiert diese als Ziel des Links (durch \textit{target}-Element), so ist das gewünschte Verhalten erreicht. Das gilt für beide Werte der \textit{suppressJoin}-Varaible. 
 Das ursprüngliche \textit{target}-Element muss entfernt werden. Die Definition und die Quelle des Links bleiben unverändert. In Listing \ref{Listing1} werden die entsprechenden Änderungen des Quellcodes an einem Beispielauschnitt dargestellt.
 %\setlength{\columnsep}{1cm}
 %\begin{multicols}{2}
@@ -48,41 +48,43 @@ Das ursprüngliche \textit{target}-Element muss entfernt werden. Die Definition u
 	\label{fig:Listing2Designer}
 \end{figure}
 
-Zu erwähnen ist noch, dass wenn der Link in dem Ausgangsprozess keine \textit{CrossingBoundary}-Bedingung verletzt hat, so ändert sich das durch diesen Eingriff nicht.
-
 \subsection{Zweigabdeckung}
-Die Registrierung der einzelnen Zweigen erfolgt im Wesentlichen nach dem Schema, das für die Erfassung der Statementabdeckung vorgestellt wurde. An den entsprechenden Stellen in der BPEL-Datei werden Marken eingefügt, die das Aktivieren der entsprechenden Kanten markieren. Damit die Datei bei diesen Manipulationen syntaktisch gültig bleibt, kann die umschließende sequence-Aktivität in den meisten Fällen verwendet werden. Ausführlicher werden einige strukturierten Aktivitäten vorgestellt, die eine andere  Herangehensweise erfordern.
+Die strukturierten Aktivitäten bestimmen in BPEL den Kontrollfluss und spielen damit eine entscheidende Rolle für die Ermittlung der Zweigabdeckung. Die einzelnen Zweige werden nämlich bei der Analyse der strukturierten Aktivitäten des Prozesses identifiziert. Die Registrierung der Zweigen erfolgt im Wesentlichen nach dem Schema, das für die Erfassung der Aktivitätsabdeckung vorgestellt wurde. An den entsprechenden Stellen in der BPEL-Datei werden Marken eingefügt, die das Aktivieren der entsprechenden Kanten markieren. Damit die Datei bei diesen Manipulationen syntaktisch gültig bleibt, wird 
+eine umschließende sequence-Aktivität eingefügt. 
+
+Ausführlicher werden einige strukturierten Aktivitäten vorgestellt, die im Bezug auf die Zweigabdeckung die eine oder die andere Besonderheit aufweisen.
 
 \textbf{\textit{If}-Aktivität.}
-Es muss bei diesem Konstrukt darauf geachtet werden, dass der \textit{else}-Zweig erfasst wird. Ist der Zweig nicht explizit im Quellcode vorhanden, dann muss er mit der hinzugefügt werden und annotiert werden.
+Es muss bei diesem Konstrukt darauf geachtet werden, dass der \textit{else}-Zweig erfasst wird. Ist der Zweig nicht explizit im Quellcode vorhanden, dann muss er hinzugefügt und wie alle anderen Zweige annotiert werden.
 
 \textbf{\textit{Flow}-Aktivität.}
+Innerhalb der Flow-Aktivität können Synchronisationslinks definiert werden. Die Abbildung \ref{} zeigt anhand eines kleinen Beispiels, wieso im Zusammenhang mit der Zweigabdeckung eine Rolle spielen.
 
+Bild...
 
-
-
-\textbf{\textit{ForEach}-Aktivität.}
-Da diese Aktivität unterschiedliches Verhalten abhängig von der Variable \textit{parallel} aufweist, werden diese zwei Fälle zunächst getrennt betrachtet.
-
-!!!!!Man hat zwar Zugriff auf die Countervariable und kann diese Ändern, Der neue Wert gilt aber nur bis zum Ende dieser Iteration und hat keine Auswirkungen auf die Nächste.
-
-!!!!ExpressionLanguage wenn nicht gesetzt ist auch nicht schlimm denn die eingefügten assign Elemente sich in demselben Parent befinden und haben damit den gleichen default wert
-
-\textbf{Sequentielle Ausführung.}\\
-Die Abdeckung der beiden Zweigen erfolgt in diesem Fall sehr einfach. Die Protokollieranweisungen werden einmal vor und einmal nach der Aktivität platziert.
-\textbf{Sequentielle Ausführung.}\\
-Bei der parallelen Ausführung wird die Scope-Instanz mehrmals parallel ausgeführt. Die Zweige des Kontrollflusses, die zu jedem Scope (bzw. zu der eingeschlossenen Aktivität) führen, sind im Gegensatz zur sequenziellen Ausführung nicht identisch. Deswegen müssen diese Zweige einzeln protokolliert werden und dabei untereinander unterschieden werden. Zur Unterscheidung der einzelnen Zweige wird der interne Zähler der \textit{ForEach}-Aktivität verwendet.    
+ Fügt man zusätzliche Aktivitäten, die die Aktivierung des zweiten Zweigs melden sollen, vor dem Synchronisationslink ein, so kann dieser Prozess nicht ausgeführt werden. Der Grund dafür ist: dadurch, dass die eingefügten Aktivitäten nicht durch das Link synchronisiert sind, können diese bereits vor der receive-Aktivität (bzw. gleichzeitig mit der receive-Aktivität)  ausgeführt werden. In jedem BPEL-Prozess muss vor der Ausführung einer Basisaktivität (ausgenommen receive-Aktivitäten mit dem Attribut createInstance=yes) eine receive- oder pick-Aktivität ausgeführt werden, die eine Prozessinstanz erzeugen können. Diese Forderung wird in dem Beispiel nicht erfüllt.
+ 
+ Werden die eingefügten Links ebenfalls mit der receive-Aktivität synchronisiert, so tritt dieses Problem nicht auf. Dadurch wird sichergestellt, dass ein Zweig nur dann als "`abgedeckt"' gilt, wenn die Zielaktivität dieses Zweigs zur Ausführung kommt. Die entsprechende Lösung ist in der Abbildung \ref{} vorgestellt. 
+ 
+ Bild..
+ 
+ \textbf{\textit{RepeatUntil}-Aktivität.} Für die Bestimmung des zweiten Zweiges Zähler If Abfrage
+ Die Auswertung der Bedingung erfolgt in dieser Wiederholungsschleife erst nach der Ausführung des Schleifenkörpers. Bei der Ausführung der Aktivität in der Schleife kann man ohne weiteren Logik nicht feststellen, ob es die erste Ausführung ist oder wiederholte. Ist das eine wiederholte Ausführung, so muss die Aktivierung des Zweigs von der Bedingung zur Aktivität signalisiert werde. 
+ 
+ Die entsprechende Überprüfung kann mit Hilfe eines Zählers, der bei jedem Schleifendurchlauf hochgezählt wird, und einer if-Abfrage realisiert werden.
+ 
+  
+   
 \subsection{Link Abdeckung}
-Das Komplizierteste bei der Instrumentierung innerhalb der flow-Aktivität ist das Link-Konzept und die Restriktionen, die daraus entstehen:
+Es geht bei dieser Metrik um Links mit einer \textit{transition condition}, die nicht mit einem konstante Wert \textit{true} oder \textit{false} belegt ist.  Das Link-Konzept von BPEL ist sehr mächtig und komplex. Durch  \textit{transition} und \textit{join condition} und das Attribut \textit{suppressJoin}  können komplizierten Bedingungen aufgestellt und damit der Kontrollfluß beeinflusst. Die BPEL-Spezifikation definiert die Auswertung dieser Bedingungen genau. Das Ziel diser Metrik ist, den Tester dazu zu bewegen, dass die \textit{transition condition} während der Tests mindestens einmal auf \textit{true} und einmal auf \textit{false} gesetzt wird. 
+
+Für die Erfassung dieser Werte während der Ausführung werden ebenfalls Links verwendet. Folgende Aspekte müssen bei der Realisierung beachtete werden:
 \begin{itemize}
-	\item \textit{boundary-crossing}-Restriktionen
+	\item boundary-crossing Restriktionen
 	\item unterschiedliche Wertebelegung der \textit{suppressJoin}-Variable und daraus resultierendes Verhalten beim Auftreten von \textit{JoinFailure}
-	\item dreiwertiger Status der Links
-	\item \textit{Dead-Path-Elimination}
+	\item textit{Dead-Path-Elimination}
 \end{itemize}
-
-zu Beachten createInstance.
-
+ 
 
 Es geht insbesondere darum, dass bei den Links sowohl der Status \textit{true} als auch \textit{false} erfasst werden müssen. Es werden drei verschiedene Ansätze mit ihren Vor- und Nachteilen vorgestellt. Das Beispiel aus der folgenden Abbildung dient als Grundlage für die Erläuterung. 
 %\begin{figure}[htbp]
@@ -98,9 +100,9 @@ Es geht insbesondere darum, dass bei den Links sowohl der Status \textit{true} a
 
 
 \underline{Variante 1.}\\
-Zwei zusätzliche Links werden definiert (\textit{LinkACopy} und \textit{LinkACopyNegiert}). Dabei übernimmt der \textit{LinkACopyNegiert} die negierte  transitionCondition des Originallinks und  der \textit{LinkACopy} die unveränderte. Die Logging-Anweisungen werden bei diesem Ansatz direkt in der flow-Umgebung platziert. Dadurch sind sie bereit für die Ausführung, sobald die Ausführung der flow-Aktivität startet. Durch die am Anfang definierten Links, wird die Quellaktivität des Originallinks mit den Logging-Anweisungen verlinkt. Für eine Logging-Anweisung ein Link. Sobald der Status der Links bekannt ist, wird eine Logging-Anweisung ausgeführt.
+Zwei zusätzliche Links werden definiert (\textit{LinkACopy} und \textit{LinkACopyNegiert}). Dabei übernimmt der \textit{LinkACopyNegiert} die negierte  transitionCondition des Originallinks und  der \textit{LinkACopy} die unveränderte. Die Logging-Anweisungen werden bei diesem Ansatz direkt in der flow-Umgebung platziert. Die source- und target-Aktivitäten können sich dabei beliebig tief in strukturierten Aktivitäten befinden. Durch die am Anfang definierten Links, wird die Quellaktivität des Originallinks mit den Logging-Anweisungen verlinkt. Für eine Logging-Anweisung ein Link. Sobald der Status der Links bekannt ist, wird eine Logging-Anweisung ausgeführt.
 
-Die \textit{Default-JoinCondition} der Logging-Aktivitäten (\textit{or}-Verknüpfung von Status aller eingehenden Links) und die gegenseitig negierten \textit{transitionCondition} garantieren, dass nur eine Logginganweisung gleichzeitig ausgeführt wird.
+Die \textit{Default-JoinCondition} der Logging-Aktivitäten (\textit{or}-Verknüpfung von Status aller eingehenden Links) und die gegenseitig negierten \textit{transitionCondition} garantieren, dass nur eine Logginganweisung gleichzeitig ausgeführt werden kann.
 %\begin{figure}[htbp]
 %	\centering
 %		\includegraphics{bilder/LinksAnsatz1.png}
@@ -113,19 +115,16 @@ Die \textit{Default-JoinCondition} der Logging-Aktivitäten (\textit{or}-Verknüpf
 \end{figure}
 
 
-Diese Maßnahmen reichen nicht aus um den negative Status des Links, der aufgrund der \textit{Dead-Path-Elimination}(DPE) propagiert wird, zu erfasst. Der Grund dafür ist, dass der Status aller Links auf \textit{false} gesetzt wird und aus diesem Grund keine von beiden Logging-Anweisungen ausgeführt wird. 
-
-Durch eine zusätzliche Logging-Anweisung und ein Link kann auch dieser Fall berücksichtigt werden. Als Quelle wird dieselbe Aktivität wie bei den anderen Links verwendet. Die \textit{transitionCondition} wird auf den konstanten Wert \textit{true} und die joinCondition auf den negierten Status des Links gesetzt. In dieser Konstellation findet das Logging nur in einer Situation statt, und zwar genau dann, wenn der Status des Links auf \textit{false} gesetzt wurde, was in diesem Fall nur durch DPE möglich ist.
 \begin{table}[h!]
 \begin{tabular}{p{6cm}p{0.5cm}p{6cm}}
 \textbf{Vorteile}&\ &\textbf{Nachteile}\\[0.1cm]
 \hline \\
 Logging kann stattfinden, unabhängig davon, ob Activity2 ausgeführt wird&\ &\textit{boundary-crossing}-Restriktionen können verletzt werden\\
-Links werden auch bei DPE erfasst&\ &
 \end{tabular}
 %\caption{Vergleich der Ansätze}
 \label{Vergleichstabelle}
 \end{table} 
+  Dadurch sind sie bereit für die Ausführung, sobald die Ausführung der flow-Aktivität startet.
 \FloatBarrier
 \underline{Variante 2.}\\
 Ziel dieses Ansatzes ist, die \textit{boundary-crossing}-Restriktionen einzuhalten.
@@ -148,8 +147,6 @@ Die Konstruktion der neuen Links erfolgt nach derselben Schema (Varainte 1).
 \textbf{Vorteile}&\ &\textbf{Nachteile}\\[0.1cm]
 \hline \\
 \textit{boundary-crossing}-Restriktionen werden eingehalten&\ &Die Links können nur dann geloggt werden, wenn die Activity2 ausgeführt werden kann
-\\
-Links werden auch bei DPE erfasst&\ &
 \\
 \end{tabular}
 %\caption{Vergleich der Ansätze}
@@ -178,7 +175,7 @@ In einer Situation funktioniert auch diese Variante nicht. Befindet sich die Que
 \begin{tabular}{p{6cm}p{0.5cm}p{6cm}}
 \textbf{Vorteile}&\ &\textbf{Nachteile}\\[0.1cm]
 \hline \\
-\textit{boundary-crossing}-Restriktionen werden eingehalten&\ &Links  bei DPE können nicht immer erfasst
+\textit{boundary-crossing}-Restriktionen werden eingehalten&\ &
 \\
 Logging kann stattfinden, unabhängig davon, ob Activity2 ausgeführt wird&\ &
 \\
@@ -187,18 +184,35 @@ Logging kann stattfinden, unabhängig davon, ob Activity2 ausgeführt wird&\ &
 \label{Vergleichstabelle}
 \end{table} 
 
-Als Lösung für die Abdeckungsmessung der Links eignet sich diese Variante am Besten. Um Konsistenz und Vollständigkeit der Abdeckungsangaben für alle BPEL-Prozesse zu gewährleisten, werden die DPE bei der Bestimmung der Zweigabdeckung nicht berücksichtigt.
-\subsection{Fault und Compensation Handler}
+Als Lösung für die Abdeckungsmessung der Links eignet sich diese Variante am Besten. 
 
+\subsection{Fault und Compensation Handler}
+Für die Fault und Compensation Handler werden die Marken auf dieselbe Weise (mit Hilfe einer umschließenden sequence-Aktivität) in den catch und catchAll-Blöcken bzw. in Compensation Handler platziert. Vor der Platzierung der Marken müssen allerdings die so genannten inline-Handler durch explizite Scopes mit expliziten Fault und Compensation Hanler ersetzt werden (siehe Abbildung \ref{}).
  
- 
+\subsection{Realisierung der Kommunikation mit Web Service}
+Mit Hilfe von Invoke-Aktivitäten kann ein BPEL-Prozess mit einem Web Service kommunizieren. Die invoke-Aktivität hat folgende Attributen:
 \begin{itemize}
-	\item joinFailure und DPE
-	\item Boundary Crossing
+	\item \textbf{partnerLink} enthält des Partner Links. 
+\item \textbf{portType} gibt WSDL-Porttype des Zielservices an.
+\item \textbf{operation} gibt die WSDL-Operation an.
+\item \textbf{inputVariable} gibt Variable an, die die zu sendenden Daten enthält.
+\item \textbf{outputVariable} gibt Variable an, die die Antwort des Services speichert.
 \end{itemize}
- 
- zu beachten create Instance
- 
- \subsection{Realisierung der Kommunikation mit Web Service}
- Variable für jeden paralleleln Zweig
+
+Soll eine asynchrone Kommunikation realisiert werden oder eine Operation aufgerufen werden, die keine Rückgabedaten erzeugt, so wird der Attribut \textit{outputVariable} weggelassen. Die Listing \ref{} zeigt eine invoke-Aktivität, die die Marken an den Service transportiert.
+
+Zuvor muss die Variable .. natürlich deklariert werden. Damit die Variable im ganzen Prozess benutzt werden kann, wird sie als globale Variable (im \textit{variables}-Element des Prozesses) definiert. Zur Vermeidung der Namenskonflikten werden kryptische namen generiert.
+
+Bild...
+
+Die Zuordnung der Marken erfolgt mit Hilfe einer assign-Aktivität(siehe Listing \ref{} ).
+
+Bild... 
+   
+Da in BPEL durch flow-Aktivität die nebenläufige Ausführung der Aktivitäten möglich ist,    
+ Variable für jeden parallelen Zweig
 \section{Auswertung der Daten und Ermittlung der Metriken}
+Beim Instrumentieren des BPEL-Prozesses werden Marken generiert, die die entsprechenden Aspekte des Kontrollflusses eindeutig identifizieren und zu einer bestimmten Metrik gehören. Alle Marken, die in den Kontrollfluß eingefügt wurden, werden gespeichert und stehen während und nach der Ausführung des Prozesses zur Verfügung.
+Während der BPEL-Prozess zum Testen ausgeführt wird, werden die Marken an den Web Service gesendet. 
+Die empfangenen Marken liegen auf dem Ausführungspfad und wurden damit durch die Tests abgedeckt. 
+Anhand der bei der Instrumentierung gespeicherten und während der Ausführung gesammelten Daten können die Statistiken ermittelt werden. Dabei gibt es die Möglichkeit sowohl die Statistik einer ganzen Testsuite als auch der einzelnen Testcases zu ermitteln.
