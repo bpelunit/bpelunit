@@ -1,4 +1,7 @@
- In diesem Abschnitt werden die Metriken für die Messung der Testabdeckung in BPEL definiert. Dabei werden die in Abschnitt \ref{Abdeckungsmetriken} beschrieben Abdeckungsmetriken an BPEL-Kontext angepasst und neue spezifische Metriken eingeführt.  Bei allen Metriken wurde darauf geachtet, dass die 100\% Abdeckung beim Testen erreicht werden kann. ... die Metriken die Qualität der Tests im bezug auf einen bestimmten Aspekt des Kontrollflußes wiederspiegeln Die Relation größere Wert bessere Tests.
+ In diesem Abschnitt werden die Metriken für die Messung der Testabdeckung in BPEL definiert. Dabei werden die Statement- und Zweigabdeckung (siehe Abschnitt \ref{Abdeckungsmetriken}) an BPEL-Kontext angepasst und neue BPEL-spezifische Metriken eingeführt.  
+ Die Metriken dienen als Mittel für die Bestimmung der Qualität und des Fortschritts der Tests. Dabei bezieht sich jede Metrik auf bestimmte Aspekte des Kontrollflusses.
+ 
+ Bei allen Metriken wurde darauf geachtet, dass die 100\% Abdeckung beim Testen erreicht werden kann. ... die Metriken die Qualität der Tests im bezug auf einen bestimmten Aspekt des Kontrollflußes wiederspiegeln Die Relation größere Wert bessere Tests.
 
   \subsection{Aktivitätabdeckung}
   Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist, verschiedene Dienste (Web SerServices) zu einer Gesamtanwendung zu verknüpfen. Die Kommunikation mit den Diensten wird durch Basisaktivitäten realisiert. Die Basisaktivitäten sind die elementaren Aktivitäten eines Prozesses, die keine weiteren Aktivitäten enthalten. 
@@ -22,12 +25,12 @@ Die gesamte Statementabdeckung bezieht sich auf alle Basisaktivitäten:
 \end{itemize}
 \end{Def}
 
-Zu bemerken ist, dass die Basisaktivitäten, die in sämtlichen Handler verwendet werden, nach Definition der Mengen $\mathcal{A}_t$, $\mathcal{A}^{executed}_t$ und $\mathcal{A}^{basic}$ in den Anweisungsabdeckungsmetriken berücksichtigt werden. 
+Zu bemerken ist, dass die Basisaktivitäten, die in sämtlichen Handler verwendet werden, nach Definition der Mengen $\mathcal{A}_t$, $\mathcal{A}^{executed}_t$ und $\mathcal{A}^{basic}$ durch die Aktivitätsabdeckungsmetriken berücksichtigt werden. 
 
 Es sollte beim Testen mindestens sichergestellt werden, dass alle
 Basisaktivitäten, die die elementaren Aktivitäten eines Prozesses sind, durch
-die Tests abgedeckt sind. Die Anweisungsabdeckung ist dennoch ein schwaches
-Kriterium, weil dabei nur die einzelnen Anweisungen betrachtet, ohne
+die Tests abgedeckt sind. Die Aktivitätsabdeckung ist dennoch ein schwaches
+Kriterium, weil dabei nur die einzelnen Basisaktivitäten betrachtet werden, ohne
 Zusammenhänge zu berücksichtigen.    
 
 
@@ -56,7 +59,7 @@ sei $\mathcal{A}_i\subseteq\mathcal{A},\ s\in \mathcal{A}_i,\ t=type_\mathcal{A}
 \end{itemize}
 
 
-Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivitäten:
+Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivitäten. Die Abbildung \ref{} stellt die Kontrollflussgraphen der strukturierten Aktivitäten dar und soll dem Verständnis der Formel beitragen.
 \begin{itemize}
 	\item Sequence:
 		\begin{itemize}
@@ -85,7 +88,8 @@ Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivit
 	\item $EX^{s}_{pick}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{pick}\wedge BE((s,b,a))=true \}$
 		\item $br\_number^{executed}_{pick}(s)=\left|EX^{s}_{pick}\right|+br\_number^{executed}_{set}(children(s))$
 \end{itemize}
-\item Loops ($\forall t\in\{while,\ repeatUntil,\ forEach\}$):
+\item Loops ($\forall t\in\{while,\ repeatUntil,\ forEach\footnote{
+Das Besondere an dieser Aktivität ist die Fähigkeit, den enthaltenen Scope nicht mehrmals hintereinander sondern parallel auszuführen (gesteuert mit Attribute \textit{parallel}). Diese Option bietet eine Möglichkeit die Abarbeitung des Prozesses zu beschleunigen. Diese Optimierungsmöglichkeit wird bei der Definition der Zweigabdeckung nicht berücksichtigt.}\}$):
 	\begin{itemize}
 	\item $br\_number_{t}(s)=2+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{t}$
 	\item $EX^{s}_{\mathcal{HR}}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{t}\wedge BE((s,b,a))=true \}$
@@ -125,29 +129,28 @@ Die Abbildung \ref{fig:ExamlpleBPELProzess} verdeutlicht an einem Beispiel welch
 	\label{fig:ExamlpleBPELProzess}
 \end{figure}
 
+?????Die Zweigabdeckung als Standard in der Insudtrie
+
 Obwohl die Fehlererkennungsquote gegenüber der Anweisungsabdeckung steigt, werden nicht alle Aspekte des Kontrollflusses erfasst. Während jeder Zweig für sich alleine betrachtet wird, bleiben die Kombinationen von Zweigen unberücksichtigt. 
 
 In den nächsten beiden Abschnitten werden die für WS-BPEL spezifischen
 Testabdeckungsmetriken vorgestellt: Link- und Handlerabdeckung. 
 
 \subsection{Link Abdeckung}
-Das Link-Konzept ist in WS-BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{joinCondition}das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit die Links und deren Verhalten zu testen. 
+Das Link-Konzept ist in WS-BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{join condition}das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit die Links und deren Verhalten zu testen. 
  
 Für die Definition einer entsprechenden Metrik wird eine Auswertungsfunktion
-definiert). Let $f$ be a boolean function (or propositional statement),
-$Var(f)$ yields all the propositional variables used in $f$ . Let $F$ be a set
-of boolean functions and $B$ be the boolean set (true, false), a variable
-assignment of $F$ is a mapping $assign: Var(F)\rightarrow B$, and the set of
-all possible variable assignments of $F$ is denoted by $Assign(F)$. An
-evaluation function is a mapping $eval: F \times Assign(F)\rightarrow B$
+definiert). Sei $f$ eine boolsche Funktion (oder ein boolscher Ausdruck),
+$Var(f)$ enthält aussagenlogische Variablen, die in $f$ vorkommen. Sei $F$ die Menge
+der boolschen Funktionen und $B$ die Menge (\textit{true}, \textit{false}), dann ist die Variablenzuordnung von $F$ ist die Abbildung $assign: Var(F)\rightarrow B$, und eine Menge aller möglichen Variablenzuordnungen von $F$ ist $Assign(F)$. Die Auswertungsfunktion ist $eval: F \times Assign(F)\rightarrow B$
 (\cite{Ouyang2005}).
 
-Für die Tests sind nur die Links relevant, deren transition condition nicht mit
+Für die Tests sind nur die Links relevant, deren \textit{transition condition} nicht mit
 einem konstanten Wert belegt sind, sondern mit einem Ausdruck, der erst zur
-Laufzeit ausgewertet werden kann. Es ist dabei wichtig, dass der Ausdruck
+Laufzeit ausgewertet werden kann. Es ist dabei wichtig, dass der Ausdruck während der Ausführung
 sowohl zu $true$ als auch zu $false$ ausgewertet wird, um das Verhalten in beiden Fällen zu testen.
 
-Die entsprechende Metrik heißt $Link\ Coverage$ und wird wie folgt definiert:
+Die entsprechende Metrik heißt \textit{Linkabdeckung} ($Link\ Coverage$) und wird wie folgt definiert:
 \begin{itemize}
 	\item $l \in_{\pi 2}\mathcal{LR}$,
 	\item $f=transcon(l)$,
@@ -162,7 +165,9 @@ Die entsprechende Metrik heißt $Link\ Coverage$ und wird wie folgt definiert:
 \end{equation*}
 	Damit es möglich ist, die 100\%  Abdeckung dieser Metrik zu erreichen, werden nur die Links berücksichtigt, derenn transition condition mindestenns eine Variable enthält ($Var(f)\neq \emptyset$). Ansonsten wäre es nicht möglich durch die Eingabedaten dafür zu sorgen, dass die \textit{transition}-Bedingung beim Testen sowohl \textit{true} als auch \textit{false}-Wert annimmt.
 	
-	Außerdem ist es wichtig, dass nur die Links beachtet werden, deren transition condition beim Testen ausgewertet wurde und nicht durch $DPE$ auf $false$ gesetzt wurde. Anderenfalls können sehr einfache Tests, die die zugehörige Logik nicht testen, sehr schnell 50\% Abdeckung dieser Metrik erreichen. So eine Metrik würde dem Verhältnis zwischen Abdeckung und Testqualität (siehe Abschnitt ) widersprechen.
+	Sobald das Link gesetzt ist ..................
+	
+	Außerdem ist es wichtig, dass nur die Links beachtet werden, deren \textit{transition condition} beim Testen ausgewertet wurde und nicht durch $DPE$ auf $false$ gesetzt wurde. Anderenfalls können sehr einfache Tests, die die zugehörige Logik nicht testen, sehr schnell 50\% Abdeckung dieser Metrik erreichen. Mit so einer Metrik sind keine zutreffenden Aussagen über die Testqualität möglich.
 
 \subsection{Fault und Compensation Handler Abdeckung}
 WS-BPEL Sprache hat ein Konzept zur strukturierten Behandlung von
@@ -202,11 +207,5 @@ CH=\frac{\left|A^{executed}_{compensation}\right|}{\left|A_{compensation}\right|
 Damit die 100\% auch für diese Metriken erreichbar sind, werden die impliziten \textit{Fault-} und \textbf{Compensation-Handler} nicht berücksichtigt. Die sogenannten \textit{Inline-Handler}, die direkt in die \textit{invoke}-Aktivitäten integriert sind, müssen dagegen in die Berechnung einfließen.
 
 
-
-Vor allem die vielfältige Fehlerquellen und die Möglichkeit die Fehler weiterzuleiten machen es schwierig alle möglichen Übergaben der Aus\-füh\-rungs\-kon\-tro\-lle an die FaultHandler zu berücksichtigen. Aus diesem Grund werden die Verbindungskanten zwischen den Scopes, Fault und Compensation Handler in dieser Arbeit bei der Zweigabdeckung nicht berücksichtigt. 
-
-Das Gleiche gilt für CompemsationHandler, die nur im Rahmen der Fehlerbehandlung ausgeführt werden.
-
-Dass die Fault- und Compensation Handler, sowie die interne Logik dieser Handler, trotzdem durch die Tests abgedeckt werden sollten, ist unumstritten. Demzufolge ist es sinnvoll den Kontrollfluss \textit{innerhalb} der Handler bei der Messung der Abdeckung zu berücksichtigen. In der Abbildung .. wird der Kontrollfluss des gesamten Prozesses angedeutet. Die rote Farbe markiert den aktuellen Durchlauf. Während alle durchgezogenen Kanten (auch in \textit{Fault}- und \textit{CompensationHandler}) für die Zweigabdeckung relevant sind, gehen die gestrichelten, wie bereits erläutert, nicht in die Rechnung ein.  
 
 

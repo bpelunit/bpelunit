@@ -12,18 +12,24 @@ Die Verfahren, die in konventionellen Sprachen für die Messung der Abdeckung ver
 
 Es gibt mehrere Möglichkeiten die Informationen über Ablauf eines BPEL-Prozesses zu sammeln: 
 \begin{itemize} 
-	\item \textbf{Instrumentierung}. Der Quellcode wird vor dem dem Deployen und Ausführen modifiziert, indem bestimmte Aktivitäten hinzugefügt werden, die die Ausführung des entsprechenden Codebereichen signalisiert. 
-	\item \textbf{Tracing}. Der Ablauf des Programms wird über eine Debug-API der entsprechenden Ablaufumgebung  mitverfolgt.
-	\item \textbf{Web Service-Mock's des BPELUnit-Frameworks}(\cite{Mayer2006}). Während der Ausführung können aufgerufene Mock-Partner (Web Services, die durch Mock's ersetzt wurden) können ihre Interaktionen mit dem BPEL-Prozess protokollieren. 
-	\item \textbf{Log-Dateien der BPEL-Ausführungsumgebung}(\cite{Mayer2006}). Aus den Log-Dateien der Ausführungsumgebung kann Information über den Ablauf des BPEL-Prozesses extrahiert werden. 
+	\item \textbf{Instrumentierung}. Der Quellcode wird vor dem Deployen und Ausführen modifiziert, indem bestimmte Aktivitäten hinzugefügt werden, die die Ausführung der entsprechenden Codebereichen signalisiereb. 
+	\item \textbf{Tracing}. Der Ablauf des Programms wird über eine Debug-API der Ablaufumgebung  mitverfolgt.
+	\item \textbf{Web Service-Mock's}(\cite{Mayer2006}). Während der Ausführung können aufgerufene Mock-Partner (Web Services, die durch Mock's ersetzt wurden) ihre Interaktionen mit dem BPEL-Prozess protokollieren. 
+	\item \textbf{Log-Dateien der BPEL-Ausführungsumgebung}(\cite{Li2005}). Aus den Log-Dateien der Ausführungsumgebung kann Information über den Ablauf des BPEL-Prozesses extrahiert werden. 
 \end{itemize}
 
     
-Da die dritte und vierte Möglichkeit sich für die Messung der Abdeckung nicht besonders gut eignen und daher keine wirkliche Alternative darstellen, werden sie an dieser Stelle nur ganz kurz behandelt. Die Web Service-Mock's können die Interaktionen mit BPEL-Prozess protokollieren. Zum einen muss zusätzliche Logik in die Mock's eingebaut werden. Der größte Nachteil, der diesen Ansatz für die Messung der Abdeckung unbrauchbar macht, ist aber, dass nur die Aktivitäten dokumentiert werden können, die nach außen kommunizieren. Die Log-Dateien der Ablaufumgebungen, wenn diese überhaupt existieren, sind anbieterabhängig und nicht standardisiert, was diese Möglichkeit auch ausschließt. 
+Da die dritte und vierte Möglichkeit sich für die Messung der Abdeckung nicht besonders gut eignen und daher keine wirkliche Alternative darstellen, werden sie an dieser Stelle nur ganz kurz behandelt. Durch eine Erweiterung der Logik von Web Service-Mock's ist es möglich, die Interaktionen der Mock's mit dem BPEL-Prozess zu protokollieren. Aus dise Weise lassen sich nur Auusagen über externes Verhalten des Prozesses (Kommunikation mit anderen Web Services) machen. Die interne Logik und der Kontrollfluss bleiben während der Laufzeit verborgen. Zur Ermittlung von Metriken fehlt damit die Information über die Ausführung des Prozesses. Die Log-Dateien der Ablaufumgebungen, wenn diese überhaupt existieren, sind anbieterabhängig und nicht standardisiert, was diese Möglichkeit auch ausschließt. 
 
-Der Instrumentierungs- und Tracingansatz sind als Verfahren für die Messung der Codeabdeckung aus dem Bereich der konventionellen Programmiersprachen bekannt. Die beiden Ansätze wurde von P.Dul in \cite{Dul2005} im Bezug auf Programmiersprache Java detailliert untersucht und verglichen.
+Der Instrumentierungs- und Tracingansatz sind als Verfahren für die Messung der Codeabdeckung aus dem Bereich der konventionellen Programmiersprachen bekannt. Die beiden Ansätze wurden in der Masterarbeit von P.Dul \cite{Dul2005} im Bezug auf Programmiersprache Java detailliert untersucht und verglichen.
  
 \paragraph{Instrumentierungsansatz.}
+
+\begin{wrapfigure}[14]{r}{6cm}
+\centering%
+\includegraphics[width=0.3\textwidth]{bilder/Instrumentierung.png}%
+\label{}
+\end{wrapfigure}
 Bei der Instrumentierung handelt es sich um ein einfaches Verfahren zur Messung der Testabdeckung, das von vielen Werkzeugen eingesetzt wird. Dabei werden in den Quellcode zusätzliche Anweisungen eingefügt, die die Ausführung bestimmter Codebereiche dokumentieren. Damit der Originalcode unverändert bleibt, wird die Instrumentierung auf einer Kopie durchgeführt. 
 
 Während der Instrumentierung werden die relevanten statistischen Daten des Quellcodes, die für die Auswertung der Ergebnisse notwendig sind, gesammelt und gespeichert. Anhand dieser Daten und der Information, die während der Ausführung gesammelt wird, kann die Auswertung erfolgen und die Codeabdeckung ermittelt werden. Der Instrumentierungsansatz führt zu einer erheblichen Vergrößerung des Programms.  
@@ -36,7 +42,7 @@ Dabei wird z.B. bei jedem Einsprung in eine Funktion, sowie bei jedem Verlassen 
 \end{quotation}
 Diese Funktionalität erlaubt den Ablauf des Programms zu verfolgen und kann zur Messung der Testabdeckung genutzt werden. Auch bei diesem Ansatz wird der Quellcode im Vorfeld analysiert, um alle relevanten statischen Informationen zu sammeln. 
 
-Der Vergleich der beiden Ansätze aus \cite{Dul2005} gilt im Wesentlichen auch für BPEL. Die Tabelle \ref{Vergleichstabelle} beruht auf seinen Ergebnissen und stellt die beiden Verfahren im BPEL-Context gegenüber.
+Die Tabelle \ref{Vergleichstabelle} beruht auf Ergebnissen aus \cite{Dul2005} und stellt die beiden Verfahren im BPEL-Context gegenüber.
 \begin{table}[h!]
 \begin{tabular}{p{6cm}p{0.5cm}p{6cm}}
 \textbf{Instrumentierungsansatz}&\ &\textbf{Tracingansatz}\\[0.1cm]
@@ -53,8 +59,7 @@ Programm zu erhalten.\\
  Es besteht grundsätzlich die
 Gefahr den Programmablauf oder
 die Programmlogik durch das
-Hinzufügen von Instrumentierungs-
-anweisungen zu
+Hinzufügen von Instrumentierungsanweisungen zu
 verändern.&\ &
  Es besteht keine Gefahr, dass der
 Programmablauf oder die Programmlogik
@@ -92,15 +97,11 @@ Die Messung ist nur möglich, wenn der Anbieter der Ablaufumgebung eine Tracing-F
 
 Zahlenmäßig weist der Tracingansatz weniger Nachteile auf. Jedoch fehlt es teilweise Unterstützung der BPEL-Ablaufumgebungen für Debugging bzw. es gibt keine Tracing-Funktionalität, die die Verfolgung des Ablaufs ermöglichen würde. Noch größeres Problem ist, dass diese Schnittstelle in keinster Weise standardisiert ist. Alle Nachteile des Instrumentierungsansatzes entstehen aus der Tatsache, dass die Manipulation des Quellcodes stattfindet. 
 
-Bei der Fallstudie in der oben erwähnten Masterarbeit wurde festgestellt, dass die Messung beim Tracingansatz wesentlich langsamer ist, als beim Instrumentierungsansatz. Diese Aussage hat aber für den BPEL-Prozess, der die Dienste über Netzwerk anspricht, keine Gültigkeit. Der Grund dafür ist der Netzwerkzugriff, der für die Kommunikation notwendig ist. Auch wenn BPELUnit-Framework die Möglichkeit anbietet, den BPEL-Prozess isoliert von den einzelnen Web Servives zu testen, werden die Mock's, die Web Services simulieren, immer noch über Netzwerkschicht angesprochen. Die Programmeinheit, die die Meldungen über Ausführung bestimmter Codeteile empfängt,muss ebenfalls über Netzwerkschicht angesprochen werden (siehe Abschnitt). Außerdem muss die Zeit für die Instrumentierung berücksichtigt werden. Im Abschnitt .. werden für die vorgestellten Beispiele gemessene Zeitdifferenzen angegeben. 
+Bei der Fallstudie in der oben erwähnten Masterarbeit wurde festgestellt, dass die Messung beim Tracingansatz wesentlich langsamer ist, als beim Instrumentierungsansatz. Diese Aussage hat aber für den BPEL-Prozess, der die Dienste über Netzwerk anspricht, keine Gültigkeit. Der Grund dafür ist der Netzwerkzugriff, der für die Kommunikation notwendig ist. Auch wenn BPELUnit-Framework die Möglichkeit anbietet, den BPEL-Prozess isoliert von den einzelnen Web Servives zu testen, werden die Mock's, die Web Services simulieren, immer noch über Netzwerkschicht angesprochen. Die Programmeinheit, die die Meldungen über Ausführung bestimmter Codeteile empfängt, muss ebenfalls über Netzwerkschicht angesprochen werden. Außerdem muss die Zeit für die Instrumentierung berücksichtigt werden. Im Kapitel \ref{chap:fallstudie} werden für die vorgestellten Beispiele gemessene Zeitdifferenzen angegeben. 
 
 
 \paragraph{Auswahl des Ansatzes für die Realisierung der Abdeckungsmessung in BPEL}\ \\
 Da nur die ersten beiden Ansätze (Instrumentierungs- und Tracingansatz) die Realisierung der Abdeckungsmessung für alle definierten Abdeckungsmetriken (siehe Abschnitt \ref{metrikdefinition}) im nötigen Umfang ermöglichen, reduziert sich die Auswahl auf diese Beiden.
 
 Aufgrund der vorgesehenen Integration der Lösung in das BPELUnit Framework muss bei der Auswahl des Verfahrens auf die Kompatibilität zum Framework und den darunterliegenden Konzepten geachtet werden.  Eine der zentralen Ziele bei der Konzeption des BPELUnit Frameworks war die Anbieterunabhängigkeit. In dieser Hinsicht hat man sich entschieden, den Ansatz \textit{real-life Testen} zu verwenden und damit auf die Verwendung von Debug-API zu verzichten. Das Deployment ist zwar immer noch anbieterspezifisch, die Abhängigkeit wurde aber mit dieser Entscheidung auf einen Minimum reduziert. 
-Der Einsatz der Tracing-Funktionalität für die Messung der Testabdeckung würde einen großen Rückschritt in der Anbieterunabhängigkeit bedeuten. Die Verwendung des Frameworks mit BPEL-Ablaufumgebungen, die keine Traicing-Funktionalität unterstützen, wäre ausgeschlossen. Demzufolge eignet sich für die Messung der Abdeckung im BPELUnit Framework der Instrumentierungsansatz am Besten. 
-
-
-
-NOCH real Life schwer die Metriken zu sammeln!!!!!!!!
+Der Einsatz der Tracing-Funktionalität für die Messung der Testabdeckung würde  die Verwendung des Frameworks mit BPEL-Ablaufumgebungen ausschließen, die keine Traicing-Funktionalität unterstützen. Außerdem müsste das Framework an jede einzelne \textit{Engine} angepasst werden. Demzufolge eignet sich für die Messung der Abdeckung im BPELUnit Framework der Instrumentierungsansatz am Besten. 

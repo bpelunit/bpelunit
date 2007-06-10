@@ -2,9 +2,7 @@ BPEL ist eine XML-basierte, ausführbare Sprache zur Modellierung und Beschreibun
 von Geschäftsprozessen. BPEL ist 2002 aus IBMs WSFL und Microsofts XLANG entstanden und liegt aktuell in der Version 2.0  als OASIS Standard vor. Durch breite Produktunterstützung ist die Sprache auf dem Weg, sich auch als Industriestandard zu etabliert.
 
 
-?????
-Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist
-verschiedene Dienste zu einer Gesamtanwendung zu verknüpfen.Web Services können auf zwei Arten kombiniert werden:
+Mit BPEL lässt sich ein Prozess beschreiben, der verschiedene Dienste zu einer Gesamtanwendung verknüpft. Web Services können auf zwei Arten kombiniert werden:
 \begin{itemize}
 	\item \textbf{Orchestration:} Ein zentraler Prozess koordiniert die
 Operationen der Web Services, die in den Prozess
@@ -18,25 +16,23 @@ in einem öffentlichen Prozess.
 
 BPEL unterstützt Orchestration und Choreography durch
 \begin{itemize}
-	\item \textbf{Executable Processes:} Spezifikation eines
-Geschäftsprozesses, der durch eine Orchestration Engine
-ausgeführt wird. Spezifikation des intenen Verahaltens. Beschreiben die für die Prozessausführung notwendige Informationen bis auf die tatsächlichen Endpunkte der Web Services.
+	\item \textbf{Executable Processes:} Spezifikation des intenen Verahaltens eines
+Geschäftsprozesses, der durch eine Engine
+ausgeführt werden kann. Enthält alle für die Prozessausführung notwendige Informationen bis auf die tatsächlichen Endpunkte der Web Services.
 \item \textbf{Abstract Business Processes:} Spezifikation des
-Nachrichtenaustauschs zwischen Partnern folgt dem
-Choreographie Paradigma Beschreibung des nach außen sichbaren Verhaltens des Prozesses. Keine Aussagen über interne Logik.
+Nachrichtenaustauschs zwischen Partnern. Beschreibung des nach außen sichbaren Verhaltens des Prozesses. Keine Aussagen über interne Logik.
 \end{itemize}
 
-Während abstrakte Prozesse nur der Beschreibung des Verhaltens des Prozesses dienen,  können ausführbare BPEL-Prozesse, wie der Name schon sagt, in einer BPEL-Engine ausgeführt werden. Da der Kontext dieser Arbeit das Testen von BPEL-Prozessen ist, und das Testen die Ausführung voraussetzt, sind dementsprechend auch nur die ausführbaren Prozesse relevant. Aus diesem Grund werden die abstarkten Prozessen nicht weiter betrachtet.
+Während abstrakte Prozesse nur der Beschreibung des Verhaltens des Prozesses dienen,  können ausführbare BPEL-Prozesse, wie der Name schon sagt, in einer BPEL-Engine ausgeführt werden. Da der Kontext dieser Arbeit das Testen von BPEL-Prozessen ist, und das Testen die Ausführung voraussetzt, sind dementsprechend auch nur die ausführbaren Prozesse relevant. Die weiteren Betrachtungen in dieser Arbeit beschränken sich aus diesem Grund ausschließlich auf die ausführbaren Prozesse.
 
+
+Mit BPEL können langlebige und zustandsbehaftete Prozesse modelliert werden. Es ist dabei möglich, eine sehr flexible Fehlerbehandlung mit Kompensationsmöglichkeiten zu realisieren. Durch die strikte Trennung der Geschäftslogik (BPEL-Prozess) und Implementierung (einzelnen Web Services) ist die Anpassung bei Änderungen des zugehörigen Geschäftsprozesses einfach durchzuführen. Bei ausreichend kleiner Granularität der einzelnen Services betreffen die Auswirkungen einer Änderung ausschließlich den BPEL-Prozess selbst.
 
 Die Schnittstelle nach außen eines BPEL-Prozesses wird ebenfalls in WSDl beschrieben und kann wiederum als Web Service in andere Prozesse eingebunden werden.
 Die damit gegebene Rekursivität ermöglicht durch hierarchische Aufbau der Prozessen die Abstraktionsschichten einzuführen und damit die Komplexität besser beherrschen.
-Mit BPEL können langlebige und zustandsbehaftete Prozesse modelliert werden. Es ist dabei möglich, eine sehr flexible Fehlerbehandlung mit Kompensationsmöglichkeiten zu realisieren. Durch die strikte Trennung der Geschäftslogik (BPEL-Prozess) und Implementierung (einzelnen Web Services) ist die Anpassung bei Änderungen des zugehörigen Geschäftsprozesses einfach durchzuführen. Bei ausreichend kleiner Granularität der einzelnen Services muss nämlich nur der BPEL-Prozess angepasst werden.
 
+Allerdings bring BPEL auch einige Nachteile mit sich. Als Erstes ist die Komplexität der Sprache zu nennen. Jedoch ist diese Komplexität in dem Anspruch begründet, jede Art von Geschäftsprozessen realisieren zu können und zwar quer zu allen IT-Plattformen. Auch zu nennen sind die redundanten Ausdrucksmittel der Sprache, die aufgrund der Vereinigung zwei Sprachen entstanden sind, und oft das Verständnis der Prozessen erschweren. Als letztes ist noch das Fehlen einer standardisierten grafischen Notation zu erwähnen.
 
-BPEL ist eine komplexe Sprache. Der Grund dafür liegt in dem Anspruch, jede Art von Geschäftsprozess realisiert zu können und zwar quer zu allen IT-Plattformen.
-Das Fehlen einer standardisierten grafischen Notation ist eine weiter Schwäche von BPEL. Außerdem hat die Tatsache, dass BPEL als Vereinigung aus zwei Sprachen (WSFL und XLANG) entstanden ist, zu redundanten Ausdrucksmittel geführt. Alle diese Aspekte erschweren in einer oder anderen Weise die Entwicklung von BPEL-Prozessen.
- 
 In den folgenden Abschnitten wird auf einige für diese Arbeit relevanten Aspekte der BPEL eingegangen.
 
 \subsection{Partners}
@@ -46,9 +42,15 @@ man als Partner oder Partner-Prozesse bezeichnet. Ein
 BPEL-Prozess benutzt Dienste von Partnern und bietet selbst Dienste nach außen an. Die Beziehung zwischen den möglichen Partner und dem Prozess selbst wird zuerst abstrakt durch die Rollen in einem Partner Link Type beschrieben. In jedem solchen Element werden mindestens eine und maximal zwei Rollen definiert. Die Rollen können dabei entweder vom Prozess oder vom Partner übernommen werden.  Derjenige der diese Rolle übernimmt muss den PortType, der zu der Rolle zugeordnet ist, in seiner WSDL-Schnittstelle anbieten.
 
 Die Beziehung zwischen dem BPEL-Prozess und einem konkreten Partner wird letztendlich in Partner Link durch die Zuweisung der Rollen definiert.
-Die Bindung an einen konkreten Web Service kann entweder statisch zum Zeitpunkt des Deployments oder dynamisch zur Laufzeit erfolgen.
-\subsection{BPEL Prozess}
+Die Bindung an einen konkreten Web Service kann entweder statisch zum Zeitpunkt des Deployments oder dynamisch zur Laufzeit erfolgen. Die Abbildung \ref{fig:partnerLink} stellt den ganzen Zusammenhang grafisch dar.
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.7\textwidth]{bilder/partnerLink.png}
+		\caption{Partner Link}
+	\label{fig:partnerLink}
+\end{figure}
 
+\subsection{BPEL Prozess}
 BPEL-Prozess ist definiert in Form eines XML-Dokuments. Die Wurzel eines BPEL-Dokuments ist das Element <process>, welches die Struktur und den
 Kontrollfluss eines Geschäftsprozesses in sich kapselt. Das Prozess-Element enthält drei wichtige Abschnitte:
 
@@ -101,12 +103,6 @@ evtl Invoke genauer
 
 
 
-
-
- 
- <pick>: 
-Strukturierten Aktivitäten
-
 Strukturierte Aktivitäten bestimmen die Reihenfolge in der die eingeschloßene Aktivitäten ausgeführt werden. Können geschachtelt werden.
 WS-BPEL beschreibt den Ablauf von Geschäftsprozessen als strukturierte Aktivitäten.
 \begin{itemize}
@@ -120,8 +116,8 @@ is performed.
 ist. Es ist die einzige Möglichkeit
 \item repeatUntil \-
 \item forEach \-
-\item pick \- Blockierendes Warten auf  Eintreffen eines von mehreren Ereignissen. Ereignisse können dabei entweder spezifizierten Nachrichten oder zeitbasiserte Ereignisse sein.
-\item flow \- ermöglicht parallele Ausführung von Aktivitäten mit Synchronisationsmöglichkit (siehe ..).
+\item pick \- Blockierendes Warten auf  Eintreffen eines von mehreren Ereignissen. Ereignisse können dabei entweder spezifizierten Nachrichten oder zeitbasiserte Ereignisse sein.Bei dieser strukturierenden Aktivität wird ein Zweig aus mehreren anhand eines Ereignisses (Nachricht oder Alarm) ausgewählt. Wurde ein zutreffendes Ereignis empfangen, so wird die zugehörige Aktivität ausgeführt und alle nachfolgenden Ereignisse verworfen. Aus der Sicht des Kontrollflusses stimmt dieses Verhalten mit dem einer IF-\-Akti\-vi\-tät überein. Deswegen werden diese beiden Aktivitäten im Kontrollfluss durch gleiche Graphen repräsentiert.
+\item flow \- ermöglicht parallele Ausführung von Aktivitäten mit Synchronisationsmöglichkit (siehe ..).  Mit der \textit{Flow}-Aktivität wird in BPEL paralleler Ablauf mehrerer Aktivitäten realisiert. Außerdem gibt es mit dem Link-Konzept, ein mächtiges Instrument, das ermöglicht, Syn\-chro\-ni\-sa\-tions\-ab\-hän\-gig\-keiten aufzustellen und damit komplexe Abläufe zu realisieren. Die rechte Abbildung zeigt den zugehörigen Kontrollfluss. 
 \item scope \- Dient zur Strukturierung von BPEL-Prozessen.  Ist ein Ausfuhrungskontext für Aktivitäten mit der Möglichkeit,  eigene Fault Handler zu definieren.  transaktionalen Einheit zusammengefasst werden. Durch einen Scope kann einer Gruppe von Aktivitäten ein Fehlerbehandler (fault handler), Ereignisbehandler (event handler) und ein Kompensationsbehandler (compensation handler) zugeordnet werden. Durch den Kompensationsbehandler werden lang-andauernde Transaktionen ermöglicht.
 Bettet eine Aktivit¨at ein und bindet sie an einen FaultHandler,
 einen CompensationHandler und optional einen EventHandler an. Ein
@@ -246,7 +242,8 @@ Aktivit¨at zur explizit Beendigung ausgef¨uhrt wurde.
 
 
 
-
+Ein BPEL-Prozess besteht aus der Geschäftslogik (definiert in BPEL), Servicebeschreibung (WSDL) und optional aus weiteren Datentypen (XML Schema). Diese Informationen werden zusammengefasst und in eine BPEL Engine deployt. Die Engine ist unter anderem dafür verantwortlich, die \textit{Endpoints} der Partner des BPEL Prozesses zu spezifizieren. Für jeden Link muss bekannt sein, welche WSDL service und port und welche Addresse für die Kommunikation benutzt werden sollen. Diese Information wird in so genannten Deployment descriptoren festgelegt.
+   Das Deployment und die Syntax der Deploymentdescriptoren ist nicht spezifiziert.
 
 
 

@@ -1,13 +1,7 @@
- 
 
 
+Ein BPEL-Prozess kann nach außen grundsätzlich nur mit Web Services kommunizieren. Demzufolge muss der Dienst für den Empfang der Nachrichten als Web Service realisiert und während des Testens erreichbar sein. 
 
-
- 
- 
-
-Ein BPEL-Prozess kann nach außen grundsätzlich nur mit Web Services kommunizieren. Demzufolge muss der Dienst für den Empfang der Nachrichten als Web Service realisiert und während des Testens erreichbar sein.  Der Web Service kann dabei auf die Funktionalitäten, die das BPELUnit Framework für die Mocks zur Verfügung stellt, zugreifen. 
-Die Abbildung \ref{fig:loggingservice} stellt die Funktionsweise dar. 
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.90\textwidth]{bilder/loggingservice.pdf}
@@ -37,7 +31,7 @@ Für die Kommunikation des BPEL-Prozess mit dem WS sind für den Prozess selbst od
 	\item die konkrete Adresse, unter der der service erreicht werden kann.
 \end{itemize}
 
-\textbf{WSDL Beschreibung}.Die einzige Funktionalität, die der Service öffentlich anbieten muss, ist der Empfang von Marken in Form von Strings. Dementsprechend einfach sieht die Schnittstelle dieses Services aus. Der \textit{Port Type} hat nur eine Funktion \textit{receiveCoverageLabels}, die String empfangen kann. Der Service ist unter einer festen Addresse "`http:\/\/localhost:7777\/ws\/\_CoverageReportingService\_"' erreichbar.  Die Abbildung \ref{fig:webserrvice} zeigt die grafische Darstellung der Schnittstelle.
+\textbf{WSDL Beschreibung}. Die einzige Funktionalität, die der Service öffentlich anbieten muss, ist der Empfang von Marken in Form von Strings. Dementsprechend einfach sieht die Schnittstelle dieses Services aus. Der \textit{Port Type} hat nur eine Funktion \textit{receiveMarkers}, die die String empfangen kann. Der Service ist unter einer festen Addresse "`http:\/\/localhost:7777\/ws\/\_CoverageMarkersReceiver\_"' erreichbar.  Die Abbildung \ref{fig:webserrvice} zeigt die grafische Darstellung der Schnittstelle.
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.7\textwidth]{bilder/WebServiceWSDL.png}
@@ -47,11 +41,36 @@ Für die Kommunikation des BPEL-Prozess mit dem WS sind für den Prozess selbst od
 
 \textbf{PartnerlinkType}. Die einfachste Möglichkeit in disem Fall ist, den PartnerLink direkt in der WSDL-Datei zu platzieren.
 
+\begin{verbatim}
+<plnk:partnerLinkType
+     xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+     name="PLT_CoverageMarkersReceiver_">
+   <plnk:role name="MarkersReceiver" 
+                     portType="_CoverageMarkersReceiver_" />
+</plnk:partnerLinkType>
+\end{verbatim}
+
 \textbf{PartnerLink}. PartnerLink spezifiziert die in PartnerLinkType festgelegten  Rollen und wird in BPEL-Datei definiert. 
+\begin{verbatim}
+<partnerLink name="PL_CoverageMarkersReceiver_" 
+             partnerLinkType="PLT_CoverageMarkersReceiver_" 
+             partnerRole="MarkersReceiver" />
+\end{verbatim}
 
-\textbf{Adresse}. Für den PartnerlinkType müssen WSDL service und port sowie konkrette Adresse des Partners festgelegt werden. Diese Information muss der Engine zur Verfügung stehen und wird in Deployment Descriptor festgelegt.
 
-Der Web service wird steht lokal zur Verfügung.
+\textbf{Adresse}. Für den PartnerlinkType müssen WSDL service und port sowie konkrette Adresse des Partners festgelegt werden. Diese Information muss der Engine zur Verfügung stehen und wird in Deployment Descriptor festgelegt. 
+\begin{verbatim}
+<partnerLink name="PL_CoverageMarkersReceiver_">
+  <partnerRole endpointReference="static">
+    <wsa:EndpointReference 
+    				xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing" 
+    				xmlns:cov="http://www.bpelunit.org/coverage/CoverageMarkersReceiver">
+      <wsa:Address>http://localhost:7777/ws/_CoverageMarkersReceiver_</wsa:Address>
+      <wsa:ServiceName PortName="Soap_service_port">cov:_CoverageReportingService_</wsa:ServiceName>
+    </wsa:EndpointReference>
+  </partnerRole>
+</partnerLink>
+\end{verbatim}
 
 
 \section{Instrumentierung}\label{sec:instrumentierung}
@@ -61,7 +80,7 @@ Die Instrumentierung eines BPEL-Prozesses besteht aus mehreren Aufgaben:
 \item Sammlung und Speicherung der statischen Daten (für die spätere Auswertung).
 \item Annotation des BPEL Prozesses mit Marken. Jede Marke identifiziert ein relevantes für die jeweilige Metrik Aspekt (entweder eine Aktivität oder Kontrollflussänderung). Erreicht der Kontrollfluß beim Testen die Stelle, an der die Marke positioniert ist, so ist der zugehörige Aspekt durch den Test abgedeckt.
 \item die Marken von allen Metriken , die im Kontrollfluß unmittelbar hintereinanderliegen, werden zusammengefasst (Optimierung).
-\item Hinzufügen der BPEL-Aktivitäten, für die Übertragung der Marken an den Web Service für Empfang von Marken (Protokollierung).	
+\item Hinzufügen der BPEL-Aktivitäten, für die Übertragung der Marken an den Web Service für Empfang von Marken.	
 \end{itemize}
 Die Ausführung der Aufgaben erfolgt in drei Phasen, die sequentiell abgearbeitet werden können. 
 
@@ -73,22 +92,26 @@ Die Ausführung der Aufgaben erfolgt in drei Phasen, die sequentiell abgearbeitet
 	\label{fig:phasen}
 \end{figure}
 
-\textbf{Phase 1.} Während der ersten Phase wird der BPEL-Prozess analysiert. Dabei werden für jede Metrik alle für sie relevanten Elemente des Prozesse bestimmt und gespeichert. Die Definitionen der Metriken(siehe Abschnitt ..) legen die relevanten Elemente des Prozesses für die jeweilige Metrik fest:
+\textbf{Phase 1.} Während der ersten Phase wird der BPEL-Prozess analysiert. Dabei werden für jede Metrik alle für sie relevanten Elemente des Prozesse bestimmt und gespeichert. Dadurch wird gesichert, dass die Elemente, die während der Instrumentierung in den Prozess eingefügt werden, bei der Besimmung der Metriken unberücksichtigt bleiben. Die Definitionen der Metriken (siehe Abschnitt \ref{sec:metrikdefinition}) legen die relevanten Elemente des Prozesses für die jeweilige Metrik fest:
 \begin{itemize}
-	\item Aktivität Abdeckung \- alle Basisaktivitäten.
-	\item Zweigabdeckung \- alle strukturierten Aktivitäten.
-	\item Link Abdeckung \- alle Links mit \textit{transition condition}, die nicht kostant \textit{true} oder \textit{false} ist.
-	\item Fault Handler Abdeckung \- alle catch- und catchAll-Elemente.
-	\item Compensation Handler Abdeckung \- alle Compensation Handler. 
+	\item Aktivität Abdeckung - alle Basisaktivitäten.
+	\item Zweigabdeckung - alle strukturierten Aktivitäten.
+	\item Link Abdeckung - alle Links mit \textit{transition condition}, die nicht kostant \textit{true} oder \textit{false} ist.
+	\item Fault Handler Abdeckung - alle \textit{catch}- und \textit{catchAll}-Elemente.
+	\item Compensation Handler Abdeckung - alle Compensation Handler. 
 \end{itemize}
 
-\textbf{Phase 2.} Diese Phase wird ausführlich in den folgenden 4 Abschnitten für jede Metrik vorgestellt. An dieser Stelle werden lediglich einige Bemerkungen gemacht, die für jede Metrik gelten. 
+\textbf{Phase 2.} Diese Phase wird ausführlich in den folgenden vier Abschnitten für jede Metrik einzeln vorgestellt. An dieser Stelle werden lediglich einige Bemerkungen gemacht, die für jede Metrik gelten. 
 
-In dieser Phase werden die statische Daten des Prozesses, die für die Ermittlung der Metriken notwendig sind, gesammelt und gespeichert. Gleichzeitig  erfolgt die Annotation des Prozesses mit speziellen Marken. Die Platzierung des Marken im Kontrollfluß muss so erfolgen, dass sowohl die Marke als auch der zugehörige Aspekt  bei der Ausführung erreicht werden  oder beide nicht. Das ist die wichtigste Anforderung an die Platzierung der Marken.   Wie die einzelnen Metriken bei der Annotation des Prozesses genau vorgehen, wird in den folgenden Abschnitten erläutert.  
+In dieser Phase werden die statische Daten des Prozesses, die für die Ermittlung der Metriken notwendig sind, gesammelt und gespeichert. Gleichzeitig  erfolgt die Annotation des Prozesses mit speziellen Marken. Jede Marke ist eindeutig identifizierbar und gehört zu einer bestimmten Metrik. Außerdem identifiziert jede Marke ein Element des Kontrollflusses, das für die Abdeckungsmessung relevant ist.
 
-Bei der Instrumentierung ist zu beachten, dass es grundsätzlich möglich ist, die interne Programmlogik durch die Manipulation zu verändern. Die syntaktische Korrektheit darf natürlich auch nicht beeinträchtigt werden. Obwohl die Marken als Kommentare eingefügt werden und damit weder Programmlogik noch die syntaktische Struktur des Programmes ändern, werden diese Aspekte bereits in dieser Phase beachtet. Der Grund dafür ist, dass jede Metrik um bestimmte Aspekte zu erfassen zusätzliche Logik braucht (insbesondere im Zusammenhang mit dem Link-Konzept).  Also ist es sinnvoll bereits bei der Platzierung der Marken für die semantische und syntaktische Korrektheit des Prozesses zu sorgen, so dass die Marken in der letzten Phase einfach durch entsprechende Aktivitäten ersetzt werden können.
+Die Marken werden, wie bereits erläutert, in der nächsten Phase durch invoke-Aktivitäten ersetzt. Daher bedeutet eine in den Kontrollfluss eingefügte Marke, dass ein Aspekt des Kontrollflusses an dieser Stelle während der Ausführung als "`abgedeckt"' markiert wird. Jede Marke repräsentiert damit die Protokollierung eines Aspekts. Daher wird im weiteren Verlauf der Arbeit bei einer Marke auch von einer \textit{Loggingaktivität} oder kurz \textit{Logging} gesprochen. Graphisch werden die Marken ebenfalls als invoke-Aktivitäten dargestellt. 
 
-Dadurch dass in der ersten Phase alle benötigten Elemente des Originalprozesses für alle Metriken gespeichert wurde, können
+Für die korrekte Ermittlung der Testabdeckung ist die richtige Platzierung der Marken entscheidend. Die entsprechenden Verfahren werden in den folgenden vier Abschnitten für jede Metrik einzeln vorgestellt. 
+
+Bei der Instrumentierung ist zu beachten, dass es grundsätzlich möglich ist, die interne Programmlogik des Prozesses  durch die Manipulation zu verändern. Die syntaktische Korrektheit darf natürlich auch nicht beeinträchtigt werden. Obwohl die Marken zunächst als Kommentare eingefügt werden und damit weder Programmlogik noch die syntaktische Struktur des Programmes ändern, werden diese Aspekte bereits in dieser Phase beachtet. Der Grund dafür ist, dass jede Metrik, um bestimmte Aspekte zu erfassen, zusätzliche Logik braucht (insbesondere im Zusammenhang mit dem Link-Konzept).  Also ist es sinnvoll bereits bei der Platzierung der Marken für die semantische und syntaktische Korrektheit des Prozesses zu sorgen, so dass die Marken in der letzten Phase einfach durch entsprechende Aktivitäten ersetzt werden können.
+
+Dadurch dass in der ersten Phase alle benötigten Elemente des Originalprozesses für alle Metriken gespeichert wurden, können
 die Metriken in beliebigen Reihenfolge abgearbeitet werden. 
 
 \textbf{Phase 3.} In dieser Phase werden die Marken, die im Kontrollfluß hintereinander liegen,  zusammengefasst. Anschließend werden alle entstandenen Markengruppen  durch BPEL-Aktivitäten ersetzt, die die Marken an den Web Service verschicken. Die Tatsache, dass der Prozess in der zweiten Phase so aufbereitet wurde, dass die Marken einfach durch Aktivitäten ersetzt werden können, vereinfacht diese Phase wesentlich.       

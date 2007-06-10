@@ -3,50 +3,46 @@ Sie beschreibt die Schnittstelle des Web-Services, nicht aber den Web-
 Service selbst. Neben der Methodenspezifikation beinhaltet sie auch technische
 Daten, wie die eigentliche Lage des Dienstes und an welche Transportprotokolle
 er gebunden ist.
-Seit März 2001 ist die Version 1.1 aktuell. Auch hier wurde eine Arbeitsgruppe im W3C zur
-Weiterentwicklung gegründet, WSDL 1.2 und 2.0 sind in Arbeit.
 
+Obwohl das W3C WSDL 2.0 als vorgeschlagene Empfehlung (Proposed Recommendation) am 23 May 2007  veröffentlicht hat, wird in dieser Arbeit WSDL 1.1 verwendet.  
+Der Grund hierfür ist, dass die BPEL 2.0 auch noch auf WSDL 1.1 aufsetzt.
 
-Die Struktur eines WSDL-Dokuments ist in ... abgebildet.
-Bild..
+Die Struktur eines WSDL-Dokuments ist in \ref{fig:wsdlStructur} abgebildet.
 Die Elemente in einem WSDL-Dokument lassen sich in abstrakte Definitionen
 und konkrete technische Beschreibungen zu diesen Definitionen unterteilen. 
-Die sprach- und plattformunabhängige Beschreibung
-der Schnittstelle (Datentypen, Operationen und Nachrichten) finden in den abstrakten Elemente statt: types-, message und portType-Elemente.
+Für die sprach- und plattformunabhängige Beschreibung
+der Schnittstelle (Datentypen, Operationen und Nachrichten) sind die abstrakten Elemente zuständig: types-, message und portType-Elemente.
 Die konkreten technischen Details (wo die Services sich befinden und wie sie aufgerufen werden können) werden durch die Elemente binding und service definiert.  Die konkreten Definitionen referenzieren
 dabei stets abstrakte Definitionen. Das bedeutet, daß zu einer abstrakten
-Definition mehrere konkrete Implementierungen  existieren können. Damit besteht die Möglichkeit ein Service an mehreren location verfügbar zu machen und die Verwendung verschiedenen Kommunikations- und Transportprotokollen zu ermöglichen.
-
+Definition mehrere konkrete Implementierungen  existieren können. Damit besteht die Möglichkeit ein Service an mehreren Stellen verfügbar zu machen und die Verwendung verschiedenen Kommunikations- und Transportprotokollen zu ermöglichen.
 Die Elemente
 
-definitions ist das Wurzelelement des WSDL-Dokuments. Es enthält den Namen des Services, Namespaces für den Service selbst und für die verwendeten Standards.
 
-types enthält Definitionen für eigene Datentypen. Standardmäßig werden die Datentypen aus der XML-Schema-Spezifikation verwendet. Das Konzept der XML-Schemas ist
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.4\textwidth]{bilder/wsdlStructur.pdf}
+		\caption{WSDL Dokumentformat}
+	\label{fig:wsdlStructur}
+\end{figure}
+
+$<definitions>$ ist das Wurzelelement des WSDL-Dokuments. Es enthält den Namen des Services, Namespaces für den Service selbst und für die verwendeten Standards.
+
+$<types>$ enthält Definitionen für eigene Datentypen. Standardmäßig werden die Datentypen aus der XML-Schema-Spezifikation verwendet. Das Konzept der XML-Schemas ist
 plattformneutral und sprachunabhängig
-Die Flexibilitätder XML-Schemas erlaubt es in WSDL die Besonderheiten bestehender Programmiersprachen oder Datenaustauschstandards abzubilden
+Die Flexibilität der XML-Schemas erlaubt es in WSDL die Besonderheiten bestehender Programmiersprachen oder Datenaustauschstandards abzubilden
 
 
-message  fasst die definierten Typen zu abstrakten Nachrichten zusammen
-definiert nur unidirektionale Nachrichten
+$<message>$  fasst die definierten Typen zu abstrakten unidirektionalen Nachrichten zusammen.
 
-portType Der portType beschreibt die Schnittstelle des Services, die eine oder mehrere
+$<portType>$ beschreibt die Schnittstelle des Services, die eine oder mehrere
 Operationen zusammenfasst. Diese ordnen der Operation
 die Ein- und Ausgabeparameter zu. Über diese Zuordnung wird das Nachrichtenaustauschmuster der Schnittstelle festgelegt.
 
-binding definiert die vom Web Service verwendeten Kommunikationsprotokolle und Nachrichten formate. Die meist benutzten Protokolle sind SOAP, HTTP GET/POST. 
+$<binding>$ definiert die vom Web Service verwendeten Kommunikationsprotokolle und Nachrichten formate. Die meist benutzten Protokolle sind SOAP, HTTP GET/POST. 
 
-service Das service-Element stellt aus einem oder mehreren ports einen Dienst zusammen.
+$<service>$ Das service-Element stellt aus einem oder mehreren ports einen Dienst zusammen.
 Ein port ordnet dem Binding einen bestimmten Endpunkt zu. Die genaue Definition hängt vom verwendeten Transportprotokoll ab.
 
 
 
 
-Die vorliegende Arbeit setzt auf WSDL auf, daher hier eine kurze Einf¨uhrung. Derzeit ist
-die Version 1.1 g¨ultiger Standard, es wird aber bereits an der Version 2.0 gearbeitet. Die
-wesentlichen Konzepte einer WSDL-Schnittstellenbeschreibung in der Version 1.1 sind in
-Abbildung 2.3 dargelegt. Diese lassen sich prinzipiell in drei Kategorien einteilen: Schnittstelle,
-Bindung und Services.
-
-
-
-Wie das W3C bekannt gegeben hat, ist die Version 2 der Web Services Description Language (WSDL) als vorgeschlagene Empfehlung (Proposed Recommendation) in drei Teilen veröffentlicht worden: Teil 0: Primer, Teil 1: Core Language und Teil 2: Adjuncts. Anmerkungen und Kommentare können bis 20. Juni abgegeben werden. WSDL modelliert und beschreibt modulare Web Services und wird verwendet zur Dokumentation von verteilten Systemen und zur Automatisierung der Kommunikation zwischen Anwendungen. Folgende Arbeitsentwürfe wurden in dem Zusammenhang aktualisiert und veröffentlicht: WSDL Additional MEPs, RDF Mapping und SOAP 1.1 Binding.

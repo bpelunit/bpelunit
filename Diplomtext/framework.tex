@@ -12,6 +12,7 @@ Im Rahmen der Forschung um Institut SE wurde BPELUnit Framework entwickelt. Das 
 
 BPELUnit erreicht Isolation des Prozesses durch die Verwendung von Mocks, die die Partner des Prozesses durch eine Implementierung ersetzen, die für den Test erzeugt wurde.  Erzeugt tharness um den BPEL Prozess (PUT), das die Daten vom Test empfangen und schicken Daten zurück. Der Client wird ebenfalls ersetzt.
 
+\vspace*{4cm}
 BILD...
  
   Der Prozess wird getestet dadurch, dass Daten an den Prozess geschickt und von dem Prozess empfangen werden. 
@@ -51,7 +52,15 @@ Um BPEL Prozess zu isolieren müssen die Web Services durch Mocks ersetzt werden.
  
   
   PELUnit Testing Architektur
- Das Framework basiert auf einer Schichtarchitektur, die in der Abbildung dargestellt.
+ Das Framework basiert auf einer Schichtarchitektur, die in der Abbildung \ref{fig:schichtarchitektur} dargestellt.
+ 
+ 
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.4\textwidth]{bilder/FrameworkLayer.png}
+		\caption{Schichtarchitektur des BPELUnit Frameworks}
+	\label{fig:schichtarchitektur}
+\end{figure}
  
  Der erste von unten Schicht ist für die Testspezifikation zuständig: wie die Testdaten und das Verhalten formuliert. Darauf afbauend werden die Tests in der Test Suiten organisiert, für die die Test Organisation -Schicht verantwortlich ist. Der Test muss ausgeführt werden. Das ist die Aufgabe der dritten Schicht. Während der Tests müssen die Daten und Statistiken gesammelt und dem Benutzer repräsentiert werden.   
  
@@ -124,7 +133,7 @@ BPEL Kompositions Testen braucht Ausführung des BPEL Prozesses innerhalb von Tes
 Real-Life Testen heißt deployen PUT in einer Engine und Aufrufen mittels Web Service Aufruf. Die Partner werden durch Mocks Web Services ersetzt, die Aufgerufen werden können und selbst Web Service Aufrufe starten kann. Dabei muss das Deployment von PUT so erfolgen, dass alle Partner URIs ersetzt durch URIs des Mocks werden. Die Engine beruhen auf anbieterspezifischen Deployment descriptors, die nicht standarfisiert sind . 
 
 PUT ist deployt in eine Engine vor dem Testen ind wird undeployt nach dem testen . Es werden Adapter für jede Engine gebraucht Also die Aufrufe des Prozesses ind empfangene Aufrufe sind in SOAP kodiert. Simulation der Partners muss die WSDL Beschreibung beachten. Die Adressierung der Antworten bei asynchronen Aufrufen muss beachtet werden.
-
+\vspace*{4cm}
 BILD
 
 SOAP Calls und Encoding 
