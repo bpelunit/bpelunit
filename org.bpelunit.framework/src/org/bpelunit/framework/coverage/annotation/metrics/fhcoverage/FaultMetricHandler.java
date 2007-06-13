@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.Annotator;
+import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
@@ -31,14 +31,14 @@ public class FaultMetricHandler implements  IMetricHandler {
 		String label = FAULT_HANDLER_LABEL + "_" + (count++);
 
 		LabelsRegistry.getInstance().addMarker(label);
-		return Annotator.COVERAGE_LABEL_IDENTIFIER + label;
+		return Instrumenter.COVERAGE_LABEL_IDENTIFIER + label;
 	}
 
 	public String getName() {
 		return METRIC_NAME;
 	}
 
-	public void insertCoverageLabels(List<Element> activities)
+	public void insertMarkersForMetric(List<Element> activities)
 			throws BpelException {
 
 			Iterator<Element> iter = activities.iterator();

@@ -21,6 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.coverage.CoverageMeasurementTool;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.bpelunit.framework.exception.DeploymentException;
@@ -51,7 +52,6 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	private String fDeploymentAdminServiceURL;
 
 	public void deploy(String pathToTest, ProcessUnderTest put) throws DeploymentException {
-
 		fLogger.info("ActiveBPEL deployer got request to deploy " + put);
 
 		fBPRFile= put.getDeploymentOption(fsBPRFile);
@@ -65,13 +65,15 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
 				.getFullPath(fBPRFile));
 		fBPRFile = FilenameUtils.getName(fBPRFile);
-		
-		if (BPELUnitRunner.coverageMeasurmentTool!=null) {
+		boolean fileReplaced=false;
+		CoverageMeasurementTool coverageTool=BPELUnitRunner.getCoverageMeasurmentTool();
+		if (coverageTool!=null) {
 			try {
 				String newFile;
-				newFile = BPELUnitRunner.coverageMeasurmentTool.prepareArchiveForCoverageMeasurement(
+				newFile = coverageTool.prepareArchiveForCoverageMeasurement(
 						pathToArchive, FilenameUtils.getName(fBPRFile), this);
 				fBPRFile=newFile;
+				fileReplaced=true;
 			} catch (Exception e) {
 				LabelsRegistry.getInstance().addInfo("Coverage can not ... An error occurred when annotation for coverage: "+e.getMessage());
 				e.printStackTrace();
@@ -124,6 +126,9 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 			throw new DeploymentException("Problem contacting the ActiveBPEL Server: " + e.getMessage(), e);
 		} finally {
 			method.releaseConnection();
+			if(fileReplaced &&uploadingFile.exists()){
+				uploadingFile.delete();
+			}
 		}
 
 	}

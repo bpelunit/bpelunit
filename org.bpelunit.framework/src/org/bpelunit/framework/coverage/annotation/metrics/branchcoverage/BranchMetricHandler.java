@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.Annotator;
+import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.FlowHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.ForEachHandler;
@@ -17,7 +17,7 @@ import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.Re
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.SequenceHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.SwitchHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.WhileHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivity;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Comment;
@@ -46,14 +46,14 @@ public class BranchMetricHandler implements IMetricHandler {
 	 * @return eindeutige Markierung
 	 */
 	public static String getAndRegisterNextLabel() {
-		String label = BRANCH_LABEL + Annotator.COVERAGE_LABEL_INNER_SEPARATOR
+		String label = BRANCH_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
 				+ (count++);
 		registerCoverageLabel(label);
-		return Annotator.COVERAGE_LABEL_IDENTIFIER + label;
+		return Instrumenter.COVERAGE_LABEL_IDENTIFIER + label;
 	}
 
 	public static String getNextLabel() {
-		return BRANCH_LABEL + Annotator.COVERAGE_LABEL_INNER_SEPARATOR
+		return BRANCH_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
 				+ (count++);
 	}
 
@@ -151,26 +151,26 @@ public class BranchMetricHandler implements IMetricHandler {
 
 	public BranchMetricHandler() {
 
-		structured_activity_handler.put(StructuredActivity.FLOW_ACTIVITY,
+		structured_activity_handler.put(StructuredActivities.FLOW_ACTIVITY,
 				new FlowHandler());
-		structured_activity_handler.put(StructuredActivity.SEQUENCE_ACTIVITY,
+		structured_activity_handler.put(StructuredActivities.SEQUENCE_ACTIVITY,
 				new SequenceHandler());
-		structured_activity_handler.put(StructuredActivity.IF_ACTIVITY,
+		structured_activity_handler.put(StructuredActivities.IF_ACTIVITY,
 				new IfHandler());
-		structured_activity_handler.put(StructuredActivity.WHILE_ACTIVITY,
+		structured_activity_handler.put(StructuredActivities.WHILE_ACTIVITY,
 				new WhileHandler());
 		structured_activity_handler.put(
-				StructuredActivity.REPEATUNTIL_ACTIVITY,
+				StructuredActivities.REPEATUNTIL_ACTIVITY,
 				new RepeatUntilHandler());
-		structured_activity_handler.put(StructuredActivity.FOREACH_ACTIVITY,
+		structured_activity_handler.put(StructuredActivities.FOREACH_ACTIVITY,
 				new ForEachHandler());
-		structured_activity_handler.put(StructuredActivity.PICK_ACTIVITY,
+		structured_activity_handler.put(StructuredActivities.PICK_ACTIVITY,
 				new PickHandler());
-		structured_activity_handler.put(StructuredActivity.SWITCH_ACTIVITY,
+		structured_activity_handler.put(StructuredActivities.SWITCH_ACTIVITY,
 				new SwitchHandler());
 	}
 
-	public void insertCoverageLabels(List<Element> activities) throws BpelException {
+	public void insertMarkersForMetric(List<Element> activities) throws BpelException {
 		Element next_element;
 		for (Iterator<Element> iter = activities.iterator(); iter
 				.hasNext();) {
@@ -178,7 +178,7 @@ public class BranchMetricHandler implements IMetricHandler {
 			String next_element_name = next_element.getName();
 			if (structured_activity_handler.containsKey(next_element_name)) {
 				structured_activity_handler.get(next_element_name)
-						.insertMarkerForBranchCoverage(next_element);
+						.insertBranchMarkers(next_element);
 			}
 		}
 	}

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.coverage.annotation.Annotator;
+import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 
 
@@ -49,7 +49,7 @@ public class LabelsRegistry {
 	public void setCoverageStatusForAllMarker(String marker, String testCase) {
 		System.out.println("TESTCASE ANGEKOMMEN "+testCase);
 		Scanner scanner = new Scanner(marker);
-		scanner.useDelimiter(Annotator.SEPARATOR);
+		scanner.useDelimiter(Instrumenter.SEPARATOR);
 		String marke;
 		while (scanner.hasNext()) {
 			marke = scanner.next().trim();
@@ -95,6 +95,7 @@ public class LabelsRegistry {
 	
 	public void addInfo(String info){
 		infos.add(info);
+		System.out.println("INFO "+ info);
 	}
 	
 	public List<String> getInfo(){

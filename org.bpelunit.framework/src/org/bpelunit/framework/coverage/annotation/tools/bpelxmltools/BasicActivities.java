@@ -8,7 +8,7 @@ import java.util.Hashtable;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-public class BasicActivity {
+public class BasicActivities {
 
 	public static final String INVOKE_ACTIVITY = "invoke";
 

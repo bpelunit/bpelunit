@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.Annotator;
+import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivity;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Comment;
@@ -30,14 +30,14 @@ public class CompensationMetricHandler implements IMetricHandler {
 		String label = COMPENS_HANDLER_LABEL + "_" + (count++);
 
 		LabelsRegistry.getInstance().addMarker(label);
-		return Annotator.COVERAGE_LABEL_IDENTIFIER + label;
+		return Instrumenter.COVERAGE_LABEL_IDENTIFIER + label;
 	}
 
 	public String getName() {
 		return METRIC_NAME;
 	}
 
-	public void insertCoverageLabels(List<Element> activities)
+	public void insertMarkersForMetric(List<Element> activities)
 			throws BpelException {
 		Element handler;
 		for (Iterator<Element> iter = activities.iterator(); iter.hasNext();) {
@@ -45,7 +45,7 @@ public class CompensationMetricHandler implements IMetricHandler {
 			Element activity = getFirstEnclosedActivity(handler);
 
 			if (!activity.getName()
-					.equals(StructuredActivity.SEQUENCE_ACTIVITY)) {
+					.equals(StructuredActivities.SEQUENCE_ACTIVITY)) {
 				activity = encloseInSequence(activity);
 			}
 			Comment comment = new Comment(getAndRegisterNextLabel());

@@ -23,7 +23,7 @@ public class FaultMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-	public List<String> getPrefix4CovLabeles() {
+	public List<String> getMetriclabelsIds() {
 		List<String> list = new ArrayList<String>();
 		list.add(FaultMetricHandler.FAULT_HANDLER_LABEL);
 		return list;

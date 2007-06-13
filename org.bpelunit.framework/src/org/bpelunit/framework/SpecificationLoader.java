@@ -111,17 +111,21 @@ public class SpecificationLoader {
 
 			fLogger.info("Loaded test suite with name \"" + testSuite.getName() + "\" and " + testSuite.getTestCaseCount() + " test cases.");
 
-			if (BPELUnitRunner.coverageMeasurmentTool!=null) {
+			if (BPELUnitRunner.getCoverageMeasurmentTool()!=null) {
+				System.out.println("Spezifikationloader:BPELUnitRunner.coverageMeasurmentTool!=NULL");
 				try {
 					CoverageMessageReceiver.getInstance().inizialize(fRunner);
 				} catch (Exception e) {
 					e.printStackTrace();
-					BPELUnitRunner.coverageMeasurmentTool=null;
+					BPELUnitRunner.setCoverageMeasurmentTool(null);
 					LabelsRegistry.getInstance().addInfo("CoverageTool: "+e.getMessage());
 					//TODO Fehler 
 					//HIER
 				}
 
+			}else{
+
+				System.out.println("Spezifikationloader:BPELUnitRunner.coverageMeasurmentTool==NULL");
 			}
 			return testSuite;
 

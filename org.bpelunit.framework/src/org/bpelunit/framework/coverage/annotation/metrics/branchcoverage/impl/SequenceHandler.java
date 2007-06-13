@@ -27,7 +27,7 @@ public class SequenceHandler implements IStructuredActivityHandler {
 	 * 
 	 * @param sequence
 	 */
-	public void insertMarkerForBranchCoverage(Element sequence) {
+	public void insertBranchMarkers(Element sequence) {
 		List<Element> children = sequence.getContent(new ElementFilter(getProcessNamespace()));
 		Element child;
 		List<Element> activities=new ArrayList<Element>();

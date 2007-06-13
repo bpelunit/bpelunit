@@ -6,6 +6,9 @@
 package org.bpelunit.framework.base;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.bpelunit.framework.BPELUnitRunner;
@@ -13,6 +16,9 @@ import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.ExtensionRegistry;
+import org.bpelunit.framework.coverage.CoverageConstants;
+import org.bpelunit.framework.coverage.CoverageMeasurementTool;
+import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
 
@@ -32,6 +38,7 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	public static final String EXTENSIONS_FILE_NAME= "extensions.xml";
 	public static final String DEPLOYER_CONFIG_FILE_NAME= "configuration.xml";
 
+	public static final String COVERAGETOOL_CONFIG_FILE_NAME= "coverageToolConfig.xml";
 	private String fHomeDirectory;
 
 	public BPELUnitBaseRunner() {
@@ -98,6 +105,28 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	@Override
 	public ISOAPEncoder createNewSOAPEncoder(String styleEncoding) throws SpecificationException {
 		return ExtensionRegistry.createNewEncoderForType(styleEncoding);
+	}
+	
+	@Override
+	//HIER
+	public void configureCoverageTool() throws ConfigurationException {
+		System.out.println("BPELUnitBaseRunner: configuration for CoverageToo loaded");
+		String coverageFile= FilenameUtils.concat(fHomeDirectory, FilenameUtils.concat(CONFIG_DIR, COVERAGETOOL_CONFIG_FILE_NAME));
+		if ( (coverageFile == null) || ! (new File(coverageFile).exists())){
+			setCoverageMeasurmentTool(null);
+			System.out.println("BPELUnitBaseRunner: ccoverageMeasurmentTool==NULL");
+			throw new ConfigurationException("BPELUnit was expecting a coverage configuration file at location " + coverageFile);
+		}
+		CoverageMessageReceiver.ABSOLUT_CONFIG_PATH=FilenameUtils.concat(FilenameUtils.concat(fHomeDirectory,CONFIG_DIR),CoverageConstants.COVERAGE_SERVICE_WSDL);
+		CoverageMeasurementTool coverageTool=new CoverageMeasurementTool();
+		setCoverageMeasurmentTool(coverageTool);
+		System.out.println("BPELUnitBaseRunner: ccoverageMeasurmentTool!=NULL");
+		Map<String, List<String>> configMap = ExtensionRegistry.loadCoverageToolConfiguration(new File(coverageFile));
+		List<String> directory=new ArrayList<String>();
+		directory.add(FilenameUtils.concat(fHomeDirectory,CONFIG_DIR));
+		coverageTool.setConfig(configMap);
+//		FilenameUtils.concat(fHomeDirectory,CONFIG_DIR) wichtig argument an CoverageTools
+
 	}
 
 

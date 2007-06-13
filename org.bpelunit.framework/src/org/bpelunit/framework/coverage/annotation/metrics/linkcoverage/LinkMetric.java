@@ -22,7 +22,7 @@ public class LinkMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-	public List<String> getPrefix4CovLabeles() {
+	public List<String> getMetriclabelsIds() {
 		List<String> list=new ArrayList<String>(2);
 		list.add(LinkMetricHandler.POSITIV_LINK_LABEL);
 		list.add(LinkMetricHandler.NEGATIV_LINK_LABEL);

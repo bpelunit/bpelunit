@@ -38,7 +38,7 @@ public class ActivityMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-	public List<String> getPrefix4CovLabeles() {
+	public List<String> getMetriclabelsIds() {
 		return activities_to_respekt;
 	}
 

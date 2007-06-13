@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.Annotator;
+import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
@@ -66,9 +66,9 @@ public class LinkMetricHandler implements  IMetricHandler {
 	 * @return eindeutige Markierung
 	 */
 	public static String getNextPositivLinkLabel() {
-		String marker = POSITIV_LINK_LABEL + Annotator.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+		String marker = POSITIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
 		LabelsRegistry.getInstance().addMarker(marker);
-		return Annotator.COVERAGE_LABEL_IDENTIFIER + marker;
+		return Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker;
 	}
 
 	/**
@@ -77,12 +77,12 @@ public class LinkMetricHandler implements  IMetricHandler {
 	 * @return eindeutige Markierung
 	 */
 	public static String getNextNegativLinkLabel() {
-		String marker = NEGATIV_LINK_LABEL + Annotator.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+		String marker = NEGATIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
 		LabelsRegistry.getInstance().addMarker(marker);
-		return Annotator.COVERAGE_LABEL_IDENTIFIER + marker;
+		return Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker;
 	}
 
-	public void insertCoverageLabels(List<Element> activities)
+	public void insertMarkersForMetric(List<Element> activities)
 			throws BpelException {
 		// Iterator<Element> flowElemensIter = process_element
 		// .getDescendants(new ElementFilter(

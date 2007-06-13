@@ -91,7 +91,7 @@ public abstract class BPELUnitRunner {
 	private static boolean fMeasureCoverage = false;
 
 	// HIER
-	public static CoverageMeasurementTool coverageMeasurmentTool = null;
+	private static CoverageMeasurementTool coverageMeasurmentTool = null;
 
 	/**
 	 * Indicates whether the runner has been properly initialized
@@ -170,8 +170,10 @@ public abstract class BPELUnitRunner {
 
 		if (fMeasureCoverage) {
 			try {
+				System.out.println("BPELUnitRunner: MEASURECOVERAGE=TRUE");
 				configureCoverageTool();
 			} catch (ConfigurationException e) {
+				e.printStackTrace();
 				LabelsRegistry.getInstance().addInfo(e.getMessage());
 			}
 		}
@@ -311,6 +313,14 @@ public abstract class BPELUnitRunner {
 
 	public static boolean isMeasureTestCoverage() {
 		return fMeasureCoverage;
+	}
+	
+	public static void setCoverageMeasurmentTool(CoverageMeasurementTool tool){
+		coverageMeasurmentTool=tool;
+	}
+	
+	public static CoverageMeasurementTool getCoverageMeasurmentTool(){
+		return coverageMeasurmentTool;
 	}
 
 	// ******************** internals ******************

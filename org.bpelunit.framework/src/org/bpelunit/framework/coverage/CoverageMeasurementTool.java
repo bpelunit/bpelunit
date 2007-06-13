@@ -9,7 +9,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.coverage.annotation.Annotator;
+import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
@@ -92,7 +92,7 @@ public class CoverageMeasurementTool {
 	public String prepareArchiveForCoverageMeasurement(String pathToArchive,
 			String archiveFile, IBPELDeployer deployer)
 			throws CoverageMeasurmentException {
-
+		//PFAD==NULL oder falsch behandeln
 		IDeploymentArchiveHandler archiveHandler = null;
 		if (deployer instanceof ActiveBPELDeployer) {
 			archiveHandler = new ActiveBPELDeploymentArchiveHandler();
@@ -103,11 +103,12 @@ public class CoverageMeasurementTool {
 			throw new CoverageMeasurmentException(deployer.toString()
 					+ " is by coverage tool not supported");
 		}
-		archiveHandler.setArchiveFile(FilenameUtils.concat(pathToArchive,
+		String newArchiveFile=archiveHandler.createArchivecopy(FilenameUtils.concat(pathToArchive,
 				archiveFile));
 		prepareLoggingService(archiveHandler);
 		executeInstrumentationOfBPEL(archiveHandler);
-		return archiveHandler.getArchiveFile().getName();
+		archiveHandler.closeArchive();
+		return newArchiveFile;
 	}
 
 	/**
@@ -121,7 +122,7 @@ public class CoverageMeasurementTool {
 	private void executeInstrumentationOfBPEL(
 			IDeploymentArchiveHandler archiveHandler) throws BpelException, ArchiveFileException {
 		logger.info("CoverageTool: Instrumentation gestartet.");
-		Annotator annotator = new Annotator();
+		Instrumenter annotator = new Instrumenter();
 		Document doc;
 		BpelXMLTools.count = 0;
 		String bpelFile;
@@ -130,7 +131,7 @@ public class CoverageMeasurementTool {
 			bpelFile = iter.next();
 			LabelsRegistry.getInstance().addRegistryForFile(bpelFile);
 				doc = archiveHandler.getDocument(bpelFile);
-				doc = annotator.insertAnnotation(doc);
+				doc = annotator.insertAnnotations(doc);
 				archiveHandler.writeDocument(doc, bpelFile);
 
 		}

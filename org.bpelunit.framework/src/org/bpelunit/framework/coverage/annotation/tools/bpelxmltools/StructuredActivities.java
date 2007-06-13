@@ -8,7 +8,7 @@ import java.util.Hashtable;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-public class StructuredActivity {
+public class StructuredActivities {
 
 	public static final String SEQUENCE_ACTIVITY = "sequence";
 

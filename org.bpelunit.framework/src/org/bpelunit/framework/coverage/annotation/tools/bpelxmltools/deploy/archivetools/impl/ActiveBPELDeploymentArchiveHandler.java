@@ -84,17 +84,17 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		bpelFiles=new Hashtable<String, File>();
 	}
 
-	public java.io.File getArchiveFile() throws ArchiveFileException {
-		try {
-			File.umount(archiveFile, true);
-		} catch (ArchiveException e) {
-			e.printStackTrace();
-			throw new ArchiveFileException(
-					"Error occur when writing in archive file: "
-							+ archiveFile.getName(), e);
-		}
-		return archiveFile;
-	}
+//	public java.io.File getArchiveFile() throws ArchiveFileException {
+//		try {
+//			File.umount(archiveFile, true);
+//		} catch (ArchiveException e) {
+//			e.printStackTrace();
+//			throw new ArchiveFileException(
+//					"Error occur when writing in archive file: "
+//							+ archiveFile.getName(), e);
+//		}
+//		return archiveFile;
+//	}
 
 	/**
 	 * Erzeugt eine Kopie des Archives und unresucht das Archive nach
@@ -102,9 +102,10 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	 * 
 	 * @throws ArchiveFileException
 	 */
-	public void setArchiveFile(String archive) throws ArchiveFileException {
-		this.archiveFile = createCopy(archive);
+	public String createArchivecopy(String archive) throws ArchiveFileException {
+		File copyFile=this.archiveFile = createCopy(archive);
 		searchBPELFiles();
+		return copyFile.getName();
 	}
 
 	private File createCopy(String archive) throws ArchiveFileException {
@@ -269,7 +270,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 				is = new FileInputStream(descriptor);
 				doc = builder.build(is);
 				Element process = doc.getRootElement();
-				addPartnerLink(process);
+				addPartnerLinkEndpoint(process);
 				addWSDLEntry(process);
 				writer = new FileWriter(descriptor);
 				XMLOutputter xmlOutputter = new XMLOutputter(Format
@@ -342,7 +343,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 
 	}
 
-	private void addPartnerLink(Element process) {
+	private void addPartnerLinkEndpoint(Element process) {
 
 		Namespace ns = Namespace.getNamespace("wsa", PARTNERLINK_NAMESPACE);
 		process.addNamespaceDeclaration(ns);

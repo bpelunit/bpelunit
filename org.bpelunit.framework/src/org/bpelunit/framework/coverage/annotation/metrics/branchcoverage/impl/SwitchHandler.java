@@ -12,7 +12,7 @@ import org.jdom.Element;
 
 
 public class SwitchHandler implements IStructuredActivityHandler {
-	public void insertMarkerForBranchCoverage(Element element)
+	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		List case_branches = element.getChildren(SWITCH_CASE_ELEMENT,
 				getProcessNamespace());

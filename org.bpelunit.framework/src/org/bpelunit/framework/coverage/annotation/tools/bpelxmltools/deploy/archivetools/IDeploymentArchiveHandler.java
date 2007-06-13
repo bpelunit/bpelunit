@@ -1,5 +1,6 @@
 package org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools;
 
+
 import java.io.File;
 import java.util.Set;
 
@@ -17,9 +18,7 @@ import org.jdom.Document;
 
 public interface IDeploymentArchiveHandler {
 
-	public void setArchiveFile(String pfad) throws ArchiveFileException;
-
-	public File getArchiveFile() throws ArchiveFileException;
+	public String createArchivecopy(String pfad) throws ArchiveFileException;
 
 	public Set<String> getAllBPELFileNames();
 
@@ -27,7 +26,7 @@ public interface IDeploymentArchiveHandler {
 
 	public void writeDocument(Document doc, String fileName) throws ArchiveFileException;
 
-	public void addWSDLFile(java.io.File wsdlFile) throws ArchiveFileException;
+	public void addWSDLFile(File wsdlFile) throws ArchiveFileException;
 
 	public void closeArchive();
 

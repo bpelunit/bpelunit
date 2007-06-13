@@ -18,7 +18,7 @@ public class PickHandler implements IStructuredActivityHandler {
 
 	private static final String ON_ALARM = "onAlarm";
 
-	public void insertMarkerForBranchCoverage(Element element)
+	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		identifyBranches(element, ON_MESSAGE);
 		identifyBranches(element, ON_ALARM);

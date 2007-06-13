@@ -26,8 +26,8 @@ public class CoverageMessageReceiver {
 
 
 
-	public static String ABSOLUT_CONFIG_PATH="";
-//	public static String ABSOLUT_CONFIG_PATH="C:\\bpelunit\\conf\\";
+//	public static String ABSOLUT_CONFIG_PATH="";
+	public static String ABSOLUT_CONFIG_PATH="C:\\bpelunit\\conf\\CoverageReportingService.wsdl";
 
 
 	private ISOAPEncoder encoder;
@@ -64,7 +64,7 @@ public class CoverageMessageReceiver {
 	public void inizialize(BPELUnitRunner runner) throws SpecificationException {
 		System.out.println("WS INITIALIZIERT");
 		WSDLReader reader;
-		if(ABSOLUT_CONFIG_PATH==null){
+		if(ABSOLUT_CONFIG_PATH==null||ABSOLUT_CONFIG_PATH.equals("")){
 			throw new SpecificationException(
 					"ABSOLUT_CONFIG_DIR=null ");
 		}
@@ -103,8 +103,7 @@ public class CoverageMessageReceiver {
 	}
 
 	public void initialize() {
-		instance=null;
-		
+		instance=null;	
 	}
 
 

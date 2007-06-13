@@ -18,5 +18,5 @@ public interface IStructuredActivityHandler {
 	 * @param structured_activity
 	 * @throws BpelException 
 	 */
-	public void insertMarkerForBranchCoverage(Element structured_activity) throws BpelException;
+	public void insertBranchMarkers(Element structured_activity) throws BpelException;
 }

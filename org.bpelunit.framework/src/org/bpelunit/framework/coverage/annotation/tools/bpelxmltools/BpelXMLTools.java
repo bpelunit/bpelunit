@@ -228,7 +228,7 @@ public class BpelXMLTools {
 	 */
 	public static Element ensureElementIsInSequence(Element activity) {
 		Element parent = activity.getParentElement();
-		if (parent.getName().equals(StructuredActivity.SEQUENCE_ACTIVITY)) {
+		if (parent.getName().equals(StructuredActivities.SEQUENCE_ACTIVITY)) {
 			activity = parent;
 		} else {
 			activity = encloseInSequence(activity);
@@ -245,7 +245,7 @@ public class BpelXMLTools {
 	 * @return Sequence-Element
 	 */
 	public static boolean isSequence(Element activity) {
-		return activity.getName().equals(StructuredActivity.SEQUENCE_ACTIVITY);
+		return activity.getName().equals(StructuredActivities.SEQUENCE_ACTIVITY);
 	}
 
 	/**
@@ -301,7 +301,7 @@ public class BpelXMLTools {
 	public static Element encloseElementInFlow(Element activity) {
 		Element parent = activity.getParentElement();
 		int index = parent.indexOf(activity);
-		Element flow = createBPELElement(StructuredActivity.FLOW_ACTIVITY);
+		Element flow = createBPELElement(StructuredActivities.FLOW_ACTIVITY);
 		activity.detach();
 		flow.addContent(activity);
 		parent.addContent(index, flow);
@@ -318,14 +318,14 @@ public class BpelXMLTools {
 	public static Element ensureElementIsInFlow(Element activity) {
 
 		Element parent = activity.getParentElement();
-		if (!parent.getName().equals(StructuredActivity.FLOW_ACTIVITY)) {
+		if (!parent.getName().equals(StructuredActivities.FLOW_ACTIVITY)) {
 			activity = encloseElementInFlow(activity);
 		}
 		return activity;
 	}
 
 	public static boolean isFlow(Element activity) {
-		return activity.getName().equals(StructuredActivity.FLOW_ACTIVITY);
+		return activity.getName().equals(StructuredActivities.FLOW_ACTIVITY);
 	}
 
 	/**
@@ -334,16 +334,16 @@ public class BpelXMLTools {
 	 * @return
 	 */
 	public static Element createSequence() {
-		return new Element(StructuredActivity.SEQUENCE_ACTIVITY,
+		return new Element(StructuredActivities.SEQUENCE_ACTIVITY,
 				getProcessNamespace());
 	}
 
 	public static boolean isStructuredActivity(Element activity) {
-		return StructuredActivity.isStructuredActivity(activity);
+		return StructuredActivities.isStructuredActivity(activity);
 	}
 
 	public static boolean isBasicActivity(Element activity) {
-		return BasicActivity.isBasisActivity(activity);
+		return BasicActivities.isBasisActivity(activity);
 	}
 
 	public static boolean isActivity(Element element) {
@@ -458,7 +458,7 @@ public class BpelXMLTools {
 		String name;
 		while (scope == null && parent != null) {
 			name = parent.getName();
-			if (name.equals(StructuredActivity.SCOPE_ACTIVITY)
+			if (name.equals(StructuredActivities.SCOPE_ACTIVITY)
 					|| name.equals("process")) {
 				scope = parent;
 				break;

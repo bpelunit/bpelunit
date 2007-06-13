@@ -21,10 +21,10 @@ import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.Compensatio
 import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetricHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivity;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.CMServiceFactory;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivity;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.exceptions.BpelVersionException;
 import org.bpelunit.framework.exception.ConfigurationException;
@@ -43,7 +43,7 @@ import org.jdom.filter.ElementFilter;
  * @author Alex Salnikow
  * 
  */
-public class Annotator {
+public class Instrumenter {
 
 	public static final String COVERAGE_LABEL_IDENTIFIER = "@coverageLabel";
 
@@ -51,7 +51,6 @@ public class Annotator {
 
 	public static final String SEPARATOR = "#";
 
-	public static final String STOP_FLAG = "STOP";
 
 
 
@@ -61,7 +60,7 @@ public class Annotator {
 
 	private String assignVariable = createVariableName();
 
-	public Annotator() {
+	public Instrumenter() {
 		logger = Logger.getLogger(getClass());
 	}
 
@@ -73,7 +72,7 @@ public class Annotator {
 	 * @throws BpelException
 	 * @throws ConfigurationException
 	 */
-	public Document insertAnnotation(Document document) throws BpelException {
+	public Document insertAnnotations(Document document) throws BpelException {
 		Element process_element = document.getRootElement();
 		checkVersion(process_element);
 		initializeBPELTools(process_element);
@@ -198,8 +197,8 @@ public class Annotator {
 	private void initializeBPELTools(Element process_element)
 			throws BpelVersionException {
 		BpelXMLTools.process_element=process_element;
-		BasicActivity.initialize();
-		StructuredActivity.initialize();
+		BasicActivities.initialize();
+		StructuredActivities.initialize();
 	}
 
 	// *********************** ****************************************
@@ -213,7 +212,7 @@ public class Annotator {
 			metric = i.next();
 			activities = getActivitiesForMetric(process_element, metric);
 			if (activities != null) {
-				metric.getHandler().insertCoverageLabels(activities);
+				metric.getHandler().insertMarkersForMetric(activities);
 			}
 		}
 	}
@@ -237,7 +236,7 @@ public class Annotator {
 		}
 		replaceCoverageLabelsWithReportInvokes(element, variable);
 		boolean isFlow = element.getName().equals(
-				StructuredActivity.FLOW_ACTIVITY);
+				StructuredActivities.FLOW_ACTIVITY);
 		for (int i = 0; i < childElements.size(); i++) {
 			if (isFlow) {
 				handleCoverageLabelsInElement(childElements.get(i),

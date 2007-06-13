@@ -5,7 +5,7 @@ import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivity;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.jdom.Element;
 
@@ -14,7 +14,7 @@ import org.jdom.Element;
 public class ForEachHandler implements IStructuredActivityHandler {
 
 
-	public void insertMarkerForBranchCoverage(Element element)
+	public void insertBranchMarkers(Element element)
 			throws BpelException {
 			insertMarkerForSequenceBranches(element);
 	}
@@ -26,7 +26,7 @@ public class ForEachHandler implements IStructuredActivityHandler {
 	 */
 	private void insertMarkerForSequenceBranches(Element element)
 			throws BpelException {
-		Element activity = element.getChild(StructuredActivity.SCOPE_ACTIVITY,
+		Element activity = element.getChild(StructuredActivities.SCOPE_ACTIVITY,
 				BpelXMLTools.getProcessNamespace());
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ELEMENT

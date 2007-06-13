@@ -23,7 +23,7 @@ public class CoverageConstants {
 	public static final String ADDRESS_OF_SERVICE = "http://localhost:7777/ws/";
 
 	public static final String COVERAGE_SERVICE_WSDL = "CoverageReportingService.wsdl";
-	public static final String PARTNERLINK_TYPE = "PLT_CoverageReportingService_";
+//	public static final String PARTNERLINK_TYPE = "PLT_CoverageReportingService_";
 	public static final String PARTNERLINK_NAME = "PL_CoverageReportingService_";
 
 	public static final String REPORTING_SERVICE_PORT = COVERAGETOOL_NAMESPACE

@@ -21,7 +21,7 @@ public class CompensationMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-	public List<String> getPrefix4CovLabeles() {
+	public List<String> getMetriclabelsIds() {
 		List<String> list = new ArrayList<String>();
 		list.add(CompensationMetricHandler.COMPENS_HANDLER_LABEL);
 		return list;

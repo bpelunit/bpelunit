@@ -327,7 +327,7 @@ public class TestSuite implements ITestArtefact {
 		return "TestSuite \"" + getName() + "\" (" + getTestCaseCount() + " test cases)";
 	}
 
-	//HIER
+//	//HIER
 	public List<String> getTestCases(){
 		List<String> testCases=new ArrayList<String>();
 		for (Iterator<TestCase> iter = fTestCaseMap.values().iterator(); iter.hasNext();) {

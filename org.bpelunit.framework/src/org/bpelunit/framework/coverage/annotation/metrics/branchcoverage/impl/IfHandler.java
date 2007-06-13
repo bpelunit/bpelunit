@@ -24,7 +24,7 @@ import org.jdom.Element;
  */
 public class IfHandler implements IStructuredActivityHandler {
 
-	public void insertMarkerForBranchCoverage(Element element)
+	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		insertMarkerForIfBranch(getFirstEnclosedActivity(element));
 		List elseif_branches = element.getChildren(ELSE_IF_ELEMENT,

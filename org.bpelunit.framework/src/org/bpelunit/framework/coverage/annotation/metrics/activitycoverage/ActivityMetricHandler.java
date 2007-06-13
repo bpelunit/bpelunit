@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.coverage.annotation.Annotator;
+import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivity;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Comment;
@@ -44,18 +44,18 @@ public class ActivityMetricHandler implements IMetricHandler {
 	static {
 
 		logging_before_activity = new HashMap<String, String>();
-		logging_before_activity.put(BasicActivity.THROW_ACTIVITY,
-				BasicActivity.THROW_ACTIVITY);
-		logging_before_activity.put(BasicActivity.RETHROW_ACTIVITY,
-				BasicActivity.RETHROW_ACTIVITY);
-		logging_before_activity.put(BasicActivity.COMPENSATE_ACTIVITY,
-				BasicActivity.COMPENSATE_ACTIVITY);
-		logging_before_activity.put(BasicActivity.COMPENSATESCOPE_ACTIVITY,
-				BasicActivity.COMPENSATESCOPE_ACTIVITY);
-		logging_before_activity.put(BasicActivity.EXIT_ACTIVITY,
-				BasicActivity.EXIT_ACTIVITY);
-		logging_before_activity.put(BasicActivity.TERMINATE_ACTIVITY,BasicActivity.TERMINATE_ACTIVITY);
-		logging_before_activity.put(BasicActivity.REPLY_ACTIVITY,BasicActivity.REPLY_ACTIVITY);
+		logging_before_activity.put(BasicActivities.THROW_ACTIVITY,
+				BasicActivities.THROW_ACTIVITY);
+		logging_before_activity.put(BasicActivities.RETHROW_ACTIVITY,
+				BasicActivities.RETHROW_ACTIVITY);
+		logging_before_activity.put(BasicActivities.COMPENSATE_ACTIVITY,
+				BasicActivities.COMPENSATE_ACTIVITY);
+		logging_before_activity.put(BasicActivities.COMPENSATESCOPE_ACTIVITY,
+				BasicActivities.COMPENSATESCOPE_ACTIVITY);
+		logging_before_activity.put(BasicActivities.EXIT_ACTIVITY,
+				BasicActivities.EXIT_ACTIVITY);
+		logging_before_activity.put(BasicActivities.TERMINATE_ACTIVITY,BasicActivities.TERMINATE_ACTIVITY);
+		logging_before_activity.put(BasicActivities.REPLY_ACTIVITY,BasicActivities.REPLY_ACTIVITY);
 	}
 
 	public ActivityMetricHandler() {
@@ -72,7 +72,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 	 * @param process_element
 	 *            Prozess-Element der BPEL
 	 */
-	public void insertCoverageLabels(List<Element> activities) {
+	public void insertMarkersForMetric(List<Element> activities) {
 		Element element;
 		for (int i = 0; i < activities.size(); i++) {
 			element = activities.get(i);
@@ -170,10 +170,10 @@ public class ActivityMetricHandler implements IMetricHandler {
 	private void insertMarkerForActivity(Element element) {
 		Element parent = element.getParentElement();
 		String element_name = element.getName();
-		String marker = element_name + Annotator.COVERAGE_LABEL_INNER_SEPARATOR
+		String marker = element_name + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
 				+ (count++);
 		LabelsRegistry.getInstance().addMarker(marker);
-		Comment comment = new Comment(Annotator.COVERAGE_LABEL_IDENTIFIER
+		Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
 				+ marker);
 		int index = parent.indexOf(element);
 		if (logging_before_activity.containsKey(element_name)) {

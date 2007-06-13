@@ -23,7 +23,7 @@ public class BranchMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-	public List<String> getPrefix4CovLabeles() {
+	public List<String> getMetriclabelsIds() {
 		List<String> list = new ArrayList<String>();
 		list.add(BranchMetricHandler.BRANCH_LABEL);
 		return list;

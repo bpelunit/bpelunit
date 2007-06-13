@@ -11,8 +11,8 @@ import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivity;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivity;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Element;
@@ -23,7 +23,7 @@ import org.jdom.filter.ContentFilter;
 
 public class FlowHandler implements IStructuredActivityHandler {
 
-	public void insertMarkerForBranchCoverage(Element element)
+	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		loggingOfBranches(element);
 	}
@@ -63,8 +63,8 @@ public class FlowHandler implements IStructuredActivityHandler {
 	private List<Element> getCreateInstanceActivity(Element activity) {
 		List<Element> list=new ArrayList<Element>();
 		String name = activity.getName();
-		if (name.equals(StructuredActivity.PICK_ACTIVITY)
-				|| name.equals(BasicActivity.RECEIVE_ACTIVITY)) {
+		if (name.equals(StructuredActivities.PICK_ACTIVITY)
+				|| name.equals(BasicActivities.RECEIVE_ACTIVITY)) {
 			if (canCreateInstance(activity)) {
 				list.add(activity);
 				return list;

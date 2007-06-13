@@ -17,6 +17,6 @@ public interface IMetricHandler {
 	 * @param process_element
 	 * @throws BpelException 
 	 */
-	public void insertCoverageLabels(List<Element> activities) throws BpelException;
+	public void insertMarkersForMetric(List<Element> activities) throws BpelException;
 	
 }

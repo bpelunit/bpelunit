@@ -11,7 +11,7 @@ import org.jdom.Element;
 
 public class WhileHandler implements IStructuredActivityHandler {
 
-	public void insertMarkerForBranchCoverage(Element element)
+	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		Element activity = getFirstEnclosedActivity(element);
 		if (activity == null) {

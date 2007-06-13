@@ -4,7 +4,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.Annotator;
+import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
@@ -27,7 +27,7 @@ public class LabelsRegistryForBPELFile {
 
 	public void addMarker(String marke, LabelStatus status) {
 		String prefix = marke.substring(0, marke
-				.indexOf(Annotator.COVERAGE_LABEL_INNER_SEPARATOR));
+				.indexOf(Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR));
 		allMetricsTable.get(prefix).put(marke, status);
 	}
 
@@ -37,7 +37,7 @@ public class LabelsRegistryForBPELFile {
 		allMetricsTable = new Hashtable<String, Hashtable<String, LabelStatus>>();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			IMetric metric = iter.next();
-			for (Iterator<String> iterator = metric.getPrefix4CovLabeles()
+			for (Iterator<String> iterator = metric.getMetriclabelsIds()
 					.iterator(); iterator.hasNext();) {
 				allMetricsTable.put(iterator.next(),
 						new Hashtable<String, LabelStatus>());

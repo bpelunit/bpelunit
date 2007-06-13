@@ -21,7 +21,7 @@ import org.jdom.Element;
 
 public class RepeatUntilHandler implements IStructuredActivityHandler {
 
-	public void insertMarkerForBranchCoverage(Element element)
+	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		branchFromConditionToActivity(element);
 		branchFromActivityToCondition(element);

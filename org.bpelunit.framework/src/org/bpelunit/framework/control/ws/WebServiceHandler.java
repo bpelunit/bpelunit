@@ -85,6 +85,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 			HttpRequest request, HttpResponse response) throws HttpException,
 			IOException {
 
+		System.out.println("MESSAGE FOR PARTNER ");
 		wsLogger.info("Incoming request for path " + pathInContext);
 
 		if (fRunner == null) {
@@ -103,7 +104,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 		}
 		// find target according to path in context
 		String partnerName = getPartnerName(pathInContext);
-		System.out.println("MESSAGE FOR PRTNER "+partnerName);
+		System.out.println("MESSAGE FOR PARTNER "+partnerName);
 		if (partnerName.equals(CoverageConstants.SERVICE_NAME)) {
 			sendResponse(response, 202, "");
 

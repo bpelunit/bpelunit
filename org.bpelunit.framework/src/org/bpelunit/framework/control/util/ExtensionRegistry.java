@@ -7,15 +7,24 @@ package org.bpelunit.framework.control.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
+import org.bpelunit.framework.coverage.CoverageConstants;
+import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
+import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
+import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
+import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
+import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.xml.config.XMLConfiguration;
@@ -25,6 +34,10 @@ import org.bpelunit.framework.xml.config.XMLTestConfigurationDocument;
 import org.bpelunit.framework.xml.extension.XMLBPELUnitCoreExtensions;
 import org.bpelunit.framework.xml.extension.XMLExtension;
 import org.bpelunit.framework.xml.extension.XMLExtensionRegistryDocument;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 
 
 /**
@@ -228,6 +241,86 @@ public class ExtensionRegistry {
 			options= new HashMap<String, String>();
 		}
 		deployer.setConfiguration(options);
+	}
+
+	public static Map<String, List<String>> loadCoverageToolConfiguration(
+			File file) throws ConfigurationException {
+		// TODO
+		// HIER
+		// homeDirectoryBPELUnit
+		Map<String, List<String>> map = loadConfiguration(file);
+		return map;
+	}
+
+	/**
+	 * Read configuration data from file.
+	 * 
+	 * @param file
+	 * @throws ConfigurationException
+	 */
+	private static Map<String, List<String>> loadConfiguration(File file)
+			throws ConfigurationException {
+		SAXBuilder builder = new SAXBuilder();
+		Map<String, List<String>> map = null;
+		try {
+			Document doc = builder.build(file);
+			Element config = doc.getRootElement();
+			map = handleMetricElements(config);
+		} catch (JDOMException e) {
+			throw new ConfigurationException(
+					"An XML reading error occurred reading the configuration of coverage tool from file "
+							+ file.getAbsolutePath(), e);
+		} catch (IOException e) {
+			throw new ConfigurationException(
+					"An I/O error occurred reading the configuration of coverage tool from file "
+							+ file.getAbsolutePath(), e);
+		}
+		return map;
+	}
+
+	private static Map<String, List<String>> handleMetricElements(Element config) {
+		String attribute;
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		List children = config.getChildren("metric",
+				CoverageConstants.NAMESPACE_CONFIGURATION);
+		for (Iterator iter = children.iterator(); iter.hasNext();) {
+			Element element = (Element) iter.next();
+			attribute = element.getAttributeValue("name");
+			if (attribute.equalsIgnoreCase(ActivityMetric.METRIC_NAME)) {
+				map.put(ActivityMetric.METRIC_NAME, null);
+				Element child2 = element.getChild("property",
+						CoverageConstants.NAMESPACE_CONFIGURATION);
+				String name = child2.getAttributeValue("name");
+				if (name != null && name.equals("IncludeBasicActivities")) {
+					List<String> list = new ArrayList<String>();
+					list.addAll(analyzeString(child2.getText()));
+					map.put(ActivityMetric.METRIC_NAME, list);
+				}
+			} else if (attribute.equalsIgnoreCase(BranchMetric.METRIC_NAME)) {
+				map.put(BranchMetric.METRIC_NAME,null);
+			} else if (attribute.equalsIgnoreCase(LinkMetric.METRIC_NAME)) {
+				map.put(LinkMetric.METRIC_NAME,null);
+			} else if (attribute
+					.equalsIgnoreCase(FaultMetric.METRIC_NAME)) {
+				map.put(FaultMetric.METRIC_NAME,null);
+			} else if (attribute
+					.equalsIgnoreCase(CompensationMetric.METRIC_NAME)) {
+				map.put(CompensationMetric.METRIC_NAME,null);
+			}
+		}
+		return map;
+	}
+
+	private static List<String> analyzeString(String activities) {
+		List<String> basicActivities = new ArrayList<String>();
+		if (!activities.endsWith(","))
+			activities = activities + ",";
+		Scanner scanner = new Scanner(activities);
+		scanner.useDelimiter(",");
+		while (scanner.hasNext()) {
+			basicActivities.add(scanner.next().trim());
+		}
+		return basicActivities;
 	}
 
 }

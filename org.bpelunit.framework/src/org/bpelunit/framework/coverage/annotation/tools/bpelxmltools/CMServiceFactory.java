@@ -49,7 +49,7 @@ public class CMServiceFactory {
 
 	public Element createInvokeElementForLog(String variable) {
 
-		Element invoke = createBPELElement(BasicActivity.INVOKE_ACTIVITY);
+		Element invoke = createBPELElement(BasicActivities.INVOKE_ACTIVITY);
 		invoke.setAttribute(INPUTVARIABLE_ATTR, variable);
 		invoke.setAttribute(OPERATION_ATTRIBUTE, REPORT_OPERATION);
 		invoke.setAttribute(PARTNERLINK_ATTRIBUTE, PARTNERLINK_NAME);
@@ -59,7 +59,7 @@ public class CMServiceFactory {
 
 	public Element createInvokeElementForRegisterMarker(String variable) {
 
-		Element invoke = createBPELElement(BasicActivity.INVOKE_ACTIVITY);
+		Element invoke = createBPELElement(BasicActivities.INVOKE_ACTIVITY);
 		invoke.setAttribute(INPUTVARIABLE_ATTR, variable);
 		invoke.setAttribute(OPERATION_ATTRIBUTE,
 				REGISTER_COVERAGE_LABELS_OPERATION);

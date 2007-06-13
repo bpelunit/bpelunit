@@ -13,7 +13,7 @@ public interface IMetric {
 
 	public String getName();
 
-	public List<String> getPrefix4CovLabeles();
+	public List<String> getMetriclabelsIds();
 
 	public List<String> getConfigInfo();
 
