@@ -23,7 +23,9 @@ Da die dritte und vierte Möglichkeit sich für die Messung der Abdeckung nicht be
 
 Der Instrumentierungs- und Tracingansatz sind als Verfahren für die Messung der Codeabdeckung aus dem Bereich der konventionellen Programmiersprachen bekannt. Die beiden Ansätze wurden in der Masterarbeit von P.Dul \cite{Dul2005} im Bezug auf Programmiersprache Java detailliert untersucht und verglichen.
  
-\paragraph{Instrumentierungsansatz.}
+\section{Instrumentierungsansatz.}
+
+Weirverbreitet Cobertura für Java
 
 \begin{wrapfigure}[14]{r}{6cm}
 \centering%
@@ -34,7 +36,7 @@ Bei der Instrumentierung handelt es sich um ein einfaches Verfahren zur Messung 
 
 Während der Instrumentierung werden die relevanten statistischen Daten des Quellcodes, die für die Auswertung der Ergebnisse notwendig sind, gesammelt und gespeichert. Anhand dieser Daten und der Information, die während der Ausführung gesammelt wird, kann die Auswertung erfolgen und die Codeabdeckung ermittelt werden. Der Instrumentierungsansatz führt zu einer erheblichen Vergrößerung des Programms.  
 
-\paragraph{Tracingansatz.}
+\section{Tracingansatz}
 Die modernen Entwicklungsumgebungen verfügen über Debugger, die unter anderem eine Tracing-Funktionalität mit sich mitbringen.
 \begin{quotation}
 	\textit{Tracing bezeichnet man in der Programmierung eine Funktion zur Analyse von Fehlersuche von Programmen.
@@ -42,6 +44,7 @@ Dabei wird z.B. bei jedem Einsprung in eine Funktion, sowie bei jedem Verlassen 
 \end{quotation}
 Diese Funktionalität erlaubt den Ablauf des Programms zu verfolgen und kann zur Messung der Testabdeckung genutzt werden. Auch bei diesem Ansatz wird der Quellcode im Vorfeld analysiert, um alle relevanten statischen Informationen zu sammeln. 
 
+\section{Vergleich der Verfahren und Auswahl des Ansatzes für die Realisierung der Abdeckungsmessung in BPEL}
 Die Tabelle \ref{Vergleichstabelle} beruht auf Ergebnissen aus \cite{Dul2005} und stellt die beiden Verfahren im BPEL-Context gegenüber.
 \begin{table}[h!]
 \begin{tabular}{p{6cm}p{0.5cm}p{6cm}}
@@ -100,7 +103,7 @@ Zahlenmäßig weist der Tracingansatz weniger Nachteile auf. Jedoch fehlt es teilw
 Bei der Fallstudie in der oben erwähnten Masterarbeit wurde festgestellt, dass die Messung beim Tracingansatz wesentlich langsamer ist, als beim Instrumentierungsansatz. Diese Aussage hat aber für den BPEL-Prozess, der die Dienste über Netzwerk anspricht, keine Gültigkeit. Der Grund dafür ist der Netzwerkzugriff, der für die Kommunikation notwendig ist. Auch wenn BPELUnit-Framework die Möglichkeit anbietet, den BPEL-Prozess isoliert von den einzelnen Web Servives zu testen, werden die Mock's, die Web Services simulieren, immer noch über Netzwerkschicht angesprochen. Die Programmeinheit, die die Meldungen über Ausführung bestimmter Codeteile empfängt, muss ebenfalls über Netzwerkschicht angesprochen werden. Außerdem muss die Zeit für die Instrumentierung berücksichtigt werden. Im Kapitel \ref{chap:fallstudie} werden für die vorgestellten Beispiele gemessene Zeitdifferenzen angegeben. 
 
 
-\paragraph{Auswahl des Ansatzes für die Realisierung der Abdeckungsmessung in BPEL}\ \\
+\textbf{Auswahl des Ansatzes für die Realisierung der Abdeckungsmessung in BPEL}\ \\
 Da nur die ersten beiden Ansätze (Instrumentierungs- und Tracingansatz) die Realisierung der Abdeckungsmessung für alle definierten Abdeckungsmetriken (siehe Abschnitt \ref{metrikdefinition}) im nötigen Umfang ermöglichen, reduziert sich die Auswahl auf diese Beiden.
 
 Aufgrund der vorgesehenen Integration der Lösung in das BPELUnit Framework muss bei der Auswahl des Verfahrens auf die Kompatibilität zum Framework und den darunterliegenden Konzepten geachtet werden.  Eine der zentralen Ziele bei der Konzeption des BPELUnit Frameworks war die Anbieterunabhängigkeit. In dieser Hinsicht hat man sich entschieden, den Ansatz \textit{real-life Testen} zu verwenden und damit auf die Verwendung von Debug-API zu verzichten. Das Deployment ist zwar immer noch anbieterspezifisch, die Abhängigkeit wurde aber mit dieser Entscheidung auf einen Minimum reduziert. 

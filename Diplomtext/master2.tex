@@ -17,8 +17,7 @@
 \usepackage{placeins}					%Gleitobjekte erzwingen \FloatBarrier 					
 \usepackage{pifont}  					%Symbole
 \usepackage{listings} \lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} \lstset{language=XML}
-
-
+\usepackage{wrapfig}
 \usepackage{pdftricks}			% Zeichnen von Bäumen
 %\begin{psinputs}
 %\usepackage{pst-all}
@@ -114,31 +113,37 @@
 \section{Komposition der Services mit BPEL}
 \input{bpel}
 \section{BPEL Testen}
-\subsection{BPELUnit Framework}
 \input{framework}
 \section{Abdeckung, als Maß für die Testqualität}
 \input{testabdeckung}
+\section{Zusammenfassung}
 \chapter{Testabdeckung in BPEL}
 \input{bpelformal}
 \section{Definition der Abdeckungsmetriken für BPEL}\label{sec:metrikdefinition}
 \input{konventionelleMetriken}
+
+\section{Zusammenfassung}
+In diesem Abschnitt wurden Konzepte, Technologien und Werkzeuge beschrieben, die für diese Arbeit relevant sind. Besonders ausführlich wurde die BPEL-Sprache behandelt, die im Fokus dieser Arbeit steht. Die detaillierte Beschreibung der Konzepten der Sprache dient dem Verständnis der formalen Definition der Metriken (\ref{}) und Umsetzung der Abdeckungsmessung (\ref{}).
+
+ImAbschnitt Design und Implementierung  
 \chapter{Verfahren für die Messung der Testabdeckung}
 \input{konzepte}
 \chapter{Umsetzung der Abdeckungsmessung}
-\input{vorgehensweise}
-\input{UmsetzungDerMessung}
+\input{umsetzung}
+
+\section{Zusammenfassung}
+%\input{vorgehensweise}
+%\input{UmsetzungDerMessung}
 \chapter{Design und Implementierung}
-\input{implementierung}
-\section{Integration der Testabdeckungsmetriken in BPELUnit-Framework}
 \input{integration}
-\section{Optimierung}
-\input{optimierung}
+\section{Zusammenfassung}
+%\input{integrationrest}
 \chapter{Beispiele}\label{beispiele}
 \input{beispiele}
-\chapter{Fallstudie}
+\chapter{Fallstudie}\label{chap:fallstudie}
 \chapter{Zusammenfassung und Ausblick}
-\input{ausblick}
-\input{rest}
+%\input{ausblick}
+%\input{rest}
 \bibliographystyle{plain}
 \bibliography{referenzen}
 \end{document}

@@ -1,122 +1,88 @@
-Aufgrund der späteren Integration der Testabdeckungsmessung in das BPELUnit Framework kann die Implementierung vom \textit{Markers Receiver} vereinfacht werden. Dabei kann die Fähigkeit des Frameworks verwendet werden, die Web Services durch Mock's zu ersetzen. 
-
-Die Abbildung \ref{fig:loggingservice} stellt die Funktionsweise dar. 
- \begin{figure}[htbp]
-	\centering
-		\includegraphics[width=0.90\textwidth]{bilder/loggingservice.pdf}
-		\caption{Service}
-	\label{fig:loggingservice}
-\end{figure}
 
 In disem Abschnitt werden einige interessante Aspekte des Designs und der Implementierung vorgestellt. Anschließend wird die Integration des Moduls für die Messung der Testabdeckung in das BPELUnit Framework präsentiert und die implementierten Clients beschrieben. 
 \section{Referenzierung des Web Services}
 
-Das Framework übernimmt die folgende Aufgaben:
-\begin{itemize}
-	\item das Deployen von \textit{Markers Receiver},
-	\item den Transport der Nachrichten an den Markers Receiver und Dekodierung der SOAP-Nachtichten .
-\end{itemize}
-
 Für das Deployen eines BPEL-Prozesses werden außer der BPEL-Datei selbst weitere Daten benötigt: WSDL Beschreibungen, Datentypen (XML Schema) und Deployment descriptoren mit zusätzlichen Informationen für BPEL Engine. Diese Daten werden üblicherweise zu einem Archive zusammengefasst und an die BPELEngine zur Ausführung übergeben.
- Der Syntax der Deployment descriptoren ist nicht durch BPEL spezifiziert und ist von Engine zu Engine verschieden. Die Messung der Testabdeckung kann wie das Framework verschiedene BPEL Engines unterstützen. Für die zu unterstützende Engine ist folgende Schnittstelle zu implementieren. 
+ Der Syntax der Deployment descriptoren ist nicht durch BPEL spezifiziert und ist von Engine zu Engine verschieden. Das Modul für die Messung der Testabdeckung kann, wie das BPELUnit Framework, verschiedene BPEL Engines unterstützen. Für die zu unterstützende Engine ist folgende Schnittstelle zu implementieren. 
  \begin{figure}[htbp]
-		\includegraphics[width=0.3\textwidth]{bilder/IDeploymentArchiveHandler.png}
-		\caption{}
-	\label{}
+		\includegraphics[width=0.35\textwidth]{bilder/IDeploymentArchiveHandler.png}
 \end{figure}
 
 Die einzelne Methoden haben folgende Aufgaben:
 \begin{itemize}
-	\item \textbf{createCopy()} \- erzeugt eine Kopie des Archives, auf der die Instrumentierung durchgeführt wird.
-	\item \textbf{addWSDLFile()} \- kann in den Arvhive eine WSDL-Beschreibung hinzufügen.
-	\item \textbf{getAllBPELFilenames()}, \textbf{getDocument()} und \textbf{writeDocument()} \- ermöglichen die einzelnen BPEL-Prozesse in Form von XML-Dokumenten aus dem Archive zu extrahieren und wieder in den Archive zu schreiben. Diese Funktionalität wird für die Instrumentierung benötigt.
+	\item \textbf{createCopy()} - erzeugt eine Kopie des Archives, auf der die Instrumentierung durchgeführt wird.
+	\item \textbf{addWSDLFile()} - kann in den Arvhive eine WSDL-Beschreibung hinzufügen (für Web Service \textit{Markers Receiver}).
+	\item \textbf{addPartnerLinkEndpoint} - fügt für den Partner Link (zum Web Service \textit{Markers Receiver}) WSDL service und port sowie die konkrete Adresse des Partners in Deployment Descriptor ein.
+	\item \textbf{getAllBPELFilenames()}, \textbf{getDocument()} und \textbf{writeDocument()} - ermöglichen die einzelnen BPEL-Prozesse in Form von XML-Dokumenten aus dem Archive zu extrahieren und wieder in den Archive zu schreiben. Diese Funktionalität wird für die Instrumentierung benötigt.
 \end{itemize}
 
-Die Schnittstelle wurde innerhalb dieser Arbeit für ActiveBPEL Engine implementiert. Am Beispiel dieser Engine werden die Aufgaben, die in den einzelnen Methoden zu erledigen sind, etwas genauer vorgestellt.
-\begin{itemize}
-	\item wsdlFile in den wsdlCatalog eintragen
-	\item endpoints in dem Deployment descriptor für den Partner link einfügen.
-\end{itemize}
+Die Schnittstelle wurde innerhalb dieser Arbeit für ActiveBPEL Engine implementiert. Am Beispiel dieser Engine werden einige Aspekte der Implementierung etwas genauer vorgestellt.
+
+Die Prozessbeschreibung sowie zugehörige Daten werden für diese Engine in ein jar-Archive mit Endung \textit{bpr} zusammengepackt. Für die Implementierung der Schnittstelle braucht man den Zugriff auf die Dateien im Archive. Zu diesem Zweck wird die Bibliothek \textit{"`TrueZip"'} verwendet, die einen transparenten Zugriff auf die Verzeichnisse und Dateien des Archives ermöglicht. Nachdem die WSDL-Datei in der Methode \textit{addWSDLFile()} in den Archive eingefügt wurde, wird diese in dem WSDL-Catalog (\textit{wsdlCatalog.xml}) eingetragen. 
+
+Unter welcher Adresse (URL) der Web Service \textit{Markers Receiver} zu erreichen ist, wird im \textit{deployment descriptor} innerhalb der Methode \textit{addPartnerLinkEndpoint()} spezifiziert. 
  
 \section{Instrumentierung}
-Für alle Metriken wird die Schnittstelle \textit{IMetric} definiert.
+Für alle Metriken wird die Schnittstelle \textit{IMetric} definiert.\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+\begin{wrapfigure}[8]{l}{4cm}
+\centering%
+\includegraphics[width=0.22\textwidth]{bilder/IMetric.png}%
+\label{}
+\end{wrapfigure} 
+\begin{itemize}
+	\item \textbf{getHandler()} - gibt den für die Annotation zuständigen Handler zurück.
+	\item \textbf{getMarkerIds()} - gibt Präfixe von allen Marken dieser Metrik zurück. Die Präfixe ermöglichen die Zuordnung der empfangenen Marken einer Metrik.
+	\item \textbf{createStatistic()} - ezeugt Statistiken.
+\end{itemize}
+
+Für jede Metrik existiert eine Klasse, die diese Schnittstelle implementiert. Außerdem existiert für jede Metrik einen Handler, der die Annotation des Prozesses für diese Metrik übernimmt. Es werden beispielhaft die Klassen vorgestellt, die für die Zweigabdeckung zuständig sind..
  \begin{figure}[htbp]
-		\includegraphics[width=0.2\textwidth]{bilder/IMetric.png}
-		\caption{}
+ \center
+		\includegraphics[width=0.6\textwidth]{bilder/Klassendiagramm.png}
+		\caption{Zusammenhang der Schnittstellen \textit{IMetric} und \textit{IMetricHandler}}
 	\label{}
 \end{figure}
 
-\begin{itemize}
-	\item \textbf{getName()}
-	\item \textbf{getHandler()}
-	\item \textbf{getMarkersIds()}
-	\item \textbf{createStatistic()}
-\end{itemize}
+Die Zweigabdeckung hängt in BPEL eng mit strukturierten Aktivitäten zusammen. Im Abschnitt \ref{} wurde gezeigt, wie die Abdeckungsmessung in den einzelnen Aktivitäten umgesetzt werden kann. Die Schnittstelle \textit{IStructuredActivityHandler} verteilt die Instrumentierungsaufgabe auf mehreren Klassen.  Für jede strukturierte Aktivität wird eine Klasse vorgesehen, die diese Schnittstelle implementiert, und die Zweige der jeweiligen Aktivität annotiert. So braucht der Handler der Zweigabdeckungsmetrik für die im Prozess auftretenden strukturierten Aktivitäten lediglich die entsprechenden Handler aufzurufen. Auf diese Weise wird die Annotation des ganzen BPEL-Prozesses auf die Annotation der einzelnen strukturierten Aktivitäten reduziert. Die Beziehung der einzelnen Klassen zueinander wird im folgenden Diagramm gezeigt.
 
-Für jede Metrik existiert eine Klasse, die diese Schnittstelle implementiert. Außerdem existiert für jede Metrik einen Handler, der die Annotation des Prozesses für diese Metrik übernimmt. Wie die Annotation genau vorgenommen wird, wird anhand der Zweigabdeckung erläutert.
-
-\textbf{Zweigabdeckung}. Die Zweigabdeckung hängt in BPEL eng mit strukturierten Aktivitäten zusammen. Im Abschnitt \ref{} wurde gezeigt, wie die Abdeckungsmessung in den einzelnen Aktivitäten umgesetzt werden kann. Damit Handler der Zweigabdeckungsmetrik nicht zu komplex wird, wird eine Schnittstelle \textit{IStructuredActivityHandler} definiert, die einzige Methode \textit{insertMarkers()} festlegt.  Für jede strukturierte Aktivität wird eine Klasse vorgesehen, die diese Schnittstelle implementiert, und die Zweige der jeweiligen Aktivität annotiert. So braucht der Handler der Zweigabdeckungsmetrik für die im Prozess auftretenden strukturierten Aktivitäten lediglich die entsprechenden Handler aufzurufen. Auf diese Weise wird die Annotation des ganzen BPEL-Prozesses auf die Annotation der einzelnen strukturierten Aktivitäten heruntergebrochen.
+ \begin{figure}[htbp]
+ \center
+		\includegraphics[width=0.95\textwidth]{bilder/Klassendiagramm2.png}
+		\caption{Annotation der Kontrollflusszweigen - Klassen und Schnittstellen}
+	\label{}
+\end{figure}
 
 Der zweite wesentliche Vorteil eines solchen Designs ist die einfache Möglichkeit, weitere strukturierte Aktivitäten zu berücksichtigen. Einerseits könnte sich das als vorteilhaft bei den nächsten BPEL-Versionen erweisen, andererseits reduziert das den Aufwand bei der Anpassung des Moduls für BPEL 1.1.    
 
-
- 
- \begin{figure}[htbp]
-		\includegraphics[width=0.2\textwidth]{bilder/IMetricHandler.png}
-		\caption{}
-	\label{}
-\end{figure}
 \section{Integration der Testabdeckungsmetriken in BPELUnit-Framework}
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.9\textwidth]{bilder/bpelunit-architecture-with-coverage.pdf}
-		\caption{Kontrollfluss eines BPEL Prozesses}
+		\caption{BPELUnit Architektur mit Erweiterung für die Messung der Testabdeckung }
 	\label{fig:ExamlpleBPELProzess}
 \end{figure}
 
-BPELUnit Framework wird erweitert durch hinzufügen einer Phase vor dem tatsächlichen Testen. In dieser Phase wird der BPEL Prozess annotiert , invoke-Aktivitäten werdenhnzugefügt. Diese Aktivitäteb sind Markierungen für jede Aktivität und jede Möglichkeit des Kontrollflusses. Die Marken haben eindeutige Identifizierungen, die verwendet werden umd die Relation zwischen Marken und Aktivitäten bzw. dem Kontrollfluß 
+BPELUnit Framework wird erweitert durch hinzufügen einer Phase vor dem tatsächlichen Testen. In dieser Phase wird der BPEL Prozess annotiert , invoke-Aktivitäten werden hinzugefügt. Diese Aktivitäte sind Markierungen für jede Basisaktivität und jede Kontrollflussmöglichkeit. 
 
-Zur Laufzeit diese Aktivitöäten rufen ein Web Service des BPELUnit Frameworks . Bei diesen Aufrufen werden die Marken transportiert. , die signalisieren den Asführungspfad zum BPELUnit Framework. Diesse Marken werden auf den BPEL Prozess abgebildet. Nach der Ausführung können mit Hilfe der Marken und statischen Informationen über BPEL Prozess die Abdeckungsmetriken berechnet werden. Es ist ein neuer Modul hinzugekommen, der alle Aufgaben, die mit der Messung der Abdeckung zu tun haben, managt. So enthält dieser Modul einen Instrumentierer der den BPEL file analysiert und Annotationen hinzufügt. Der alte File wird durch den neuen ersetzt.  Zusätzlich ist ein Web Service für das Empfangen von Marken in diesem Modul enhalten
-\subsection{Command Line Client}
-\subsection{Eclipse Client}
-Ein BPEL-Prozess besteht aus der Geschäftslogik (definiert in BPEL), Servicebeschreibung (WSDL) und optional aus weiteren Datentypen (XML Schema). Diese Informationen werden zusammengefasst und in eine BPEL Engine deployt. Die Engine ist unter anderem dafür verantwortlich, die \textit{Endpoints} der Partner des BPEL Prozesses zu spezifizieren. Für jeden Link muss bekannt sein, welche WSDL service und port und welche Addresse für die Kommunikation benutzt werden sollen. Diese Information wird in so genannten Deployment descriptoren festgelegt.
-   Das Deployment und die Syntax der Deploymentdescriptoren ist nicht spezifiziert.
+Zur Laufzeit diese Aktivitäten rufen ein Web Service des BPELUnit Frameworks . Bei diesen Aufrufen werden die Marken transportiert. , die signalisieren den Ausführungspfad zum BPELUnit Framework. Diese Marken werden auf den BPEL Prozess abgebildet. Nach der Ausführung können die Abdeckungsmetriken  anhand der empfangenen Marken und  statistischen Informationen über BPEL-Prozess  berechnet werden. Es ist ein neuer Modul hinzugekommen, der alle Aufgaben, die mit der Messung der Abdeckung zu tun haben, verwaltet. So enthält dieser Modul einen Instrumentierer der die BPEL-Datei analysiert und Annotationen hinzufügt. Der alte File wird durch annotierte Kopie ersetzt.  Zusätzlich ist ein Web Service für das Empfangen von Marken in diesem Modul enthalten. 
 
-Für das Testen, wie bereits erläutert, muss BPEL-Prozess in eine Engine deployt werden. Die BPEL-Dateien mit  den Deploymentinformation werden in einem Archive zusammengefasst und an die BPEL Engine übergeben. Damit der Web Service für den BPEL-Prozess erreichbar ist, muss die WSDL Beschreibung des Web Services in dem Archive enthalten sein. Außerdem muss für die Kommunikation mit diesem Web service ein PartnerLink definiert. Für diesen Link muss in dem Deployment descriptor die WSDL service und port sowie die konkrete Adresse (in diesem Fall eine feste Adresse auf dem lokalen Host) festgelegt werden.
-   Das Deployment und die Syntax der Deploymentdescriptoren ist nicht spezifiziert.
+Das Framework erstzt die Kommunikationspartner des BPEL-Prozesses durch Mock's, die die Geschäftsprozesse des Partners simulieren. Auf dieselbe Weise kann das Empfangen von Marken (Web Service \textit{Markers Receiver}) realisiert werden. \textit{Test Harness} stellt das Service zur Verfügung (Abbildung \ref{fig:loggingservice}). 
+ \begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.9\textwidth]{bilder/bpelProzess2.png}
+		\caption{\textit{Test Harness} von BPELUnit}
+	\label{fig:loggingservice}
+\end{figure}
 
-PARTNERLINKTYPE wird in der WSDL Platziert
-
- Hierzu müssen von der jeweiligen BPEL Engine abhängige Deployment-Informationen bereitgestellt werden. 
-
-In disem Abschnitt werden zuerst zwei Möglichkeiten für die Integration der Messung der Testabdeckung in das Framework vorgestellt. Nach einem Vergleich der beiden Ansätze wird einen als Lösung ausgewählt
-
-Die Aufgabe 
-
-die SOAP-Nachrichten, die an Coverage Receiver gerichtet sind müssen dekodiert werden und  an den Servece (Mock) weitergeleitet werden.  
-
-Ansatz1
-Es kann ein spezieller Partner Track für den Service definiert und zu jedem TestCase zugeordnet werden. Zu jedem TestCase kann dann ein Thread gestartet werden, der die Coverage Nachrichten empfängt. Es reicht aus jedem TestCase aus. Es muss die Logik für den Manager der Marken implementiert werden. Dafür kann entweder die receive Aktivität mehrmals hintereinander geschaltet werden, oder eine neue Aktivität, die alle Nachrichten akzeptiert.
-
-
-
- Das Framework dekodiert und leitet weiter , man braucht sich keine Gedanken zu machen. 
-
-nachteil größere Eingriffe in das Framework und an vielen Stellen:
+Auf diese Weise kann die Funktionalität, die das Framework für die Kommunikation des Prozesses mit Mock's zur Verfügung stellt benutzt werden.  
+BPELUnit Framework übernimmt für die Ermittlung der Testabdeckung folgende Aufgaben:
 \begin{itemize}
-	\item beim Start jedes Testcases muss ein zusätzliches Thread gestartet werden
-	\item beim shutdown unberücksichtigt 
-	\item beim Auswerten des Ergebnissen muss dieser Thread unberücksichtigt bleiben 
+	\item das Deployen bzw. Simulieren des Web Services \textit{Markers Receiver},
+	\item Dekodierung der SOAP-Nachtichten und Transport an den \textit{Markers Receiver}.
 \end{itemize}
 
-
-
-Ansatz2
-
-Direkt nachdem Empfangen der Nachricht wird diese an den Receiver weitergeleitet. Dieser muss sich um die Dekodierung der SOAP Nachrichten kümmern
-
-
-Dadurch dass beim ersten Ansatz die ganze Funktionalität  der Kommunikation (der Übermittlung und Dekodierung der Nachrichten) durch das Framework erledigt werden erscheint diese Möglichkeit als eleganter. Aber Velangsamen
+\subsection{Command Line Client}
+\subsection{Eclipse Client}
 
 
 

@@ -1,7 +1,7 @@
  In diesem Abschnitt werden die Metriken für die Messung der Testabdeckung in BPEL definiert. Dabei werden die Statement- und Zweigabdeckung (siehe Abschnitt \ref{Abdeckungsmetriken}) an BPEL-Kontext angepasst und neue BPEL-spezifische Metriken eingeführt.  
  Die Metriken dienen als Mittel für die Bestimmung der Qualität und des Fortschritts der Tests. Dabei bezieht sich jede Metrik auf bestimmte Aspekte des Kontrollflusses.
  
- Bei allen Metriken wurde darauf geachtet, dass die 100\% Abdeckung beim Testen erreicht werden kann. ... die Metriken die Qualität der Tests im bezug auf einen bestimmten Aspekt des Kontrollflußes wiederspiegeln Die Relation größere Wert bessere Tests.
+ Bei allen Metriken wurde darauf geachtet, dass die 100\% Abdeckung beim Testen erreicht werden kann. Zwischen dem ermittletem Wert einer Metrik und der Testqualität gibt es einen einfachen Zusammenhang; je größer der Wert ist, desto höher ist die Qualität der Tests im Bezug auf Aspekte des Kontrollflusses, die die Metrik festlegt.
 
   \subsection{Aktivitätabdeckung}
   Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist, verschiedene Dienste (Web SerServices) zu einer Gesamtanwendung zu verknüpfen. Die Kommunikation mit den Diensten wird durch Basisaktivitäten realisiert. Die Basisaktivitäten sind die elementaren Aktivitäten eines Prozesses, die keine weiteren Aktivitäten enthalten. 
@@ -11,9 +11,8 @@ Anweisungen beim Testen ausgeführt wurden. Da die Basisaktivitäten der WS-BPEL
  den Anweisungen der anderen Programmiersprachen ent\-spre\-chen, kann die Anweisungsabdeckung als Ausgangspunkt für die Definition der Aktivitätabdeckung dienen.
  
  Insbesondere ist diese Statistik im Bezug auf einzelne Aktivitäten interessant. So ist die Information, ob alle \textit{Invokes} (Web Service-Aufrufe) beim Testen ausgeführt wurden, sehr wichtig, um die erste Einschätzung über die Testqualität zu machen. In dieser Hinsicht ist die Definition der Abdeckungsmetriken für die einzelnen Basisaktivitäten sinnvoll.
-\begin{Def}    
-\begin{itemize}
-	\item $\forall t\in \mathcal{T}_\mathcal{B},\ \mathcal{A}^{executed}_t\subseteq A^{basic}$ ist die Menge der Basisaktivitäten vom Typ $t$, die beim Testen ausgeführt wurden. Somit kann die Aktivitätabdeckung für alle Basisaktivitäten wie folgt definiert werden:
+\begin{Def}
+ $\forall t\in \mathcal{T}_\mathcal{B},\ \mathcal{A}^{executed}_t\subseteq A^{basic}$ ist die Menge der Basisaktivitäten vom Typ $t$, die beim Testen ausgeführt wurden. Somit kann die Aktivitätabdeckung für alle Basisaktivitäten wie folgt definiert werden:
 		\[
 	\mathcal{S}_t(\mathcal{W})=\frac{\left| \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}_t\right|},\ \forall t\in \mathcal{T}_\mathcal{B}
 \]
@@ -22,7 +21,6 @@ Die gesamte Statementabdeckung bezieht sich auf alle Basisaktivitäten:
 	\[
 	\mathcal{S}(\mathcal{W})=\frac{\left|\bigcup_{t\in \mathcal{T}_\mathcal{B}} \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}^{basic}\right|}
 \]
-\end{itemize}
 \end{Def}
 
 Zu bemerken ist, dass die Basisaktivitäten, die in sämtlichen Handler verwendet werden, nach Definition der Mengen $\mathcal{A}_t$, $\mathcal{A}^{executed}_t$ und $\mathcal{A}^{basic}$ durch die Aktivitätsabdeckungsmetriken berücksichtigt werden. 
@@ -59,7 +57,13 @@ sei $\mathcal{A}_i\subseteq\mathcal{A},\ s\in \mathcal{A}_i,\ t=type_\mathcal{A}
 \end{itemize}
 
 
-Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivitäten. Die Abbildung \ref{} stellt die Kontrollflussgraphen der strukturierten Aktivitäten dar und soll dem Verständnis der Formel beitragen.
+Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivitäten. Die Abbildung \ref{fig:flussgraphen} stellt die Kontrollflussgraphen der strukturierten Aktivitäten dar und soll dem Verständnis der Formel beitragen.
+\begin{figure}
+	\centering
+		\includegraphics[width=0.95\textwidth]{bilder/Flussgraphen.png}
+      \caption{Kontrollflussgraphen der Strukturierten Aktivitäten}
+	\label{fig:flussgraphen}
+\end{figure}
 \begin{itemize}
 	\item Sequence:
 		\begin{itemize}
@@ -129,15 +133,13 @@ Die Abbildung \ref{fig:ExamlpleBPELProzess} verdeutlicht an einem Beispiel welch
 	\label{fig:ExamlpleBPELProzess}
 \end{figure}
 
-?????Die Zweigabdeckung als Standard in der Insudtrie
-
 Obwohl die Fehlererkennungsquote gegenüber der Anweisungsabdeckung steigt, werden nicht alle Aspekte des Kontrollflusses erfasst. Während jeder Zweig für sich alleine betrachtet wird, bleiben die Kombinationen von Zweigen unberücksichtigt. 
 
 In den nächsten beiden Abschnitten werden die für WS-BPEL spezifischen
 Testabdeckungsmetriken vorgestellt: Link- und Handlerabdeckung. 
 
 \subsection{Link Abdeckung}
-Das Link-Konzept ist in WS-BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{join condition}das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit die Links und deren Verhalten zu testen. 
+Das Link-Konzept ist in WS-BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{join condition} das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit die Links und deren Verhalten zu testen.  Das Ziel dieser Metrik ist, den Tester dazu zu bewegen, dass jede transition condition während der Tests mindestens einmal auf den Wert \textit{true} und einmal auf \textit{false} gesetzt wird.
  
 Für die Definition einer entsprechenden Metrik wird eine Auswertungsfunktion
 definiert). Sei $f$ eine boolsche Funktion (oder ein boolscher Ausdruck),
@@ -171,7 +173,7 @@ Die entsprechende Metrik heißt \textit{Linkabdeckung} ($Link\ Coverage$) und wir
 
 \subsection{Fault und Compensation Handler Abdeckung}
 WS-BPEL Sprache hat ein Konzept zur strukturierten Behandlung von
-Laufzeitfehlern. Die Umschaltung von normalen auf \textit{FaultHandler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{FaultHandler} ausgeführt wird.  Die Tatsache, dass die
+Laufzeitfehlern. Die Umschaltung von normalen auf \textit{Fault Handler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{Fault Handler} ausgeführt wird.  Die Tatsache, dass die
 BPEL-Prozesse langlebig sein können und in geschägtskritische Bereichen eingesetzt werden, verdeutlicht die Notwendigkeit, das Verhalten des Systems auch im
 Fehlerfall umfassend zu testen. Demzufolge sollten die entsprechenden Handler durch die Tests abgedeckt werden. Die in diesem Abschnitt vorgestellten Metriken
 können dabei als Indikator für die Testqualität bezüglich der Fehlerbehandlung und Kompensation dienen.
@@ -204,7 +206,7 @@ CH=\frac{\left|A^{executed}_{compensation}\right|}{\left|A_{compensation}\right|
 \]
 
 
-Damit die 100\% auch für diese Metriken erreichbar sind, werden die impliziten \textit{Fault-} und \textbf{Compensation-Handler} nicht berücksichtigt. Die sogenannten \textit{Inline-Handler}, die direkt in die \textit{invoke}-Aktivitäten integriert sind, müssen dagegen in die Berechnung einfließen.
+Damit die 100\% auch für diese Metriken erreichbar sind, werden die impliziten \textit{Fault-} und \textit{Compensation Handler} nicht berücksichtigt. Die sogenannten \textit{inline-Handler}, die direkt in die \textit{invoke}-Aktivitäten integriert sind, müssen dagegen in die Berechnung einfließen.
 
 
 

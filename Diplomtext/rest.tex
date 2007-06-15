@@ -1,3 +1,43 @@
+ Die wichtigen Eigenschaften sind:
+  
+  
+\begin{itemize}
+	\item Service
+	\item wiederverwendbar
+	\item unabhängig
+	\item lose gekoppelt
+	\item Schnittstellen unabhängig von der Impementierung
+\end{itemize}
+
+
+Primärziel ist, die historisch gewachsene, heterogene Systemlandschaft effizient an Änderungen im Geschäftsprozess anpassen zu können. Im Einzelnen soll dadurch Software erstellt werden, die
+
+    * einfach an neue Bedürfnisse angepasst werden kann (Flexibilität)
+    * wiederverwendbar ist
+    * verteilt installiert werden kann
+    * an Geschäftsprozesse angepasst ist.
+
+Sekundärziele sind:
+
+    * Kostenvorteile durch schnelle Optimierung
+    * höhere Produktivität der Softwareentwickler durch Wiederverwendung von Services
+    * schnelle Reaktion auf Herausforderungen möglich
+    * mittelfristige Einsparungen
+    * Reduzierung der Komplexität durch Aufbrechen monolithischer IT-Systeme
+    * schrittweise Restrukturierung komplexer Anwendungssysteme.
+
+
+
+
+a.) Ein Web Service wird durch einen URI identifiziert.1
+b.) Die Schnittstelle eines Web Services ist maschinenlesbar und wird durch
+WSDL (siehe nächsten Abschnitt) beschrieben.
+c.) Ein Web Service kommuniziert mit anderen Softwarekomponenten durch
+XML Nachrichten. Der Nachrichtenaustausch kann insbesondere mit Hilfe
+von Internetprotokollen (z.B. HTTP oder SMTP) stattfinden.
+
+Unit-Tests spielen eine sehr wichtige Rolle bei der Qualitätssicherung in der Softwareentwicklung. 
+
 \subsection{Anforderungen}
 
 Die Semantik darf nicht geändert werden. Die Metriken sollen einzeln gemessen werden.
@@ -1274,7 +1314,63 @@ oder asynchron sein.  als Folge auf eine <receive>-Aktion. Ein <reply> bezieht s
      receivereply  Anbieten einer synchronen oder asynchronen Web Service Schnittstelle
 
 
+Es wird eine Umsetzung der  Die Tests, die
+auf der Codeabdeckung basieren, geh¨oren zur Gruppe der strukturorientierten
+Testtechniken und zielen darauf ab, die innere Struktur der Software zu testen 
 
+Während für das Testen, als ein Mittel zur Qualitätssicherung, schon einige Konzepte und Lösungen für  BPEL-Kompositionen  erarbeitet wurden, fehlt es an Testabdeckungsmetriken.
+
+
+
+  
+
+BPEL ist Standard und wird von vielen unterstützt. Sichern die Qualität wird kritisch.  Eine Möglichkeit Sofware qualität zu sichern ist das Testen in vielen formen darunter  als Codezentrierter Ansatz wiederholbare white box tests. 
+
+In anderen Regionen ...
+
+Der Aufstieg von SOA und Web Service Stack von STandards hat viele Unternehemen zur Bildung neuen flexiblen Architekturen bewegt. Services wurden entwickelt, die in so genannten Kompositionen mit dem Ziel realisierung voll automatischen Geschäftsprozessen 
+
+
+BPEl BPEL ist standardisiert von OASIS und wird unterstütz  Vor der Nutzung  von BPEL -Prozessen , diese Systemen müssen intensive getestet werden  um das Risiko zu minimieren bei den Fehler angesichts der wichtigen Rolle in dem Unternehmen. 
+
+Aber Web Services und BPEL sind eine relativ neue Technologiefeld und viele Methoden, die bei den Software entwicklung zur Verfügung stehen wurden aus SOA noch nicht übertragen oder SOA-Erfahrungen fehlen. In diseser Arbeit werden Testabdeckungsmetriken formal definiert. Testabdeckung ist Metrik wie viele von software ausgeführt wurde. Diese werden oft benutzt um die Qualität der Tests abzuleiten. Außerdem wird ein BPELUNit erwitert.  
+
+Wer benutz BPElUnit Was hat er davon
+
+Wozu metriken für wenn
+
+
+In einem Test-Prozess sind
+Entwickler und Tester bestrebt möglichst alle Teile des Quellcodes durch die Tests
+mindestens einmal auszuführen. Ein JUnit-Test liefert jedoch als Ergebnis im wesentlichen
+nur, ob er gelungen oder misslungen ist. Über die Qualität eines Tests liefert
+JUnit damit keine Informationen. Ein wichtiges Merkmal der Testqualität ist die sogenannte
+Testabdeckung. Sie gibt an, wieviel des zu untersuchenden Quellcodes tatsächlich
+durch die Tests ausgeführt wurde und insbesondere welche Teile des Quellcodes
+nicht ausgeführt wurden.4
+
+
+Durch das Testen sollen möglichst viele Fehler gefunden werden. Allerdings existieren selbst bei relativ kleinen Programmen unendlich viele potentielle Testfälle. Irgendwie muss eine Auswahl getroffen werden. Eine zufällige Auswahl der Testfälle scheidet aus, da es sich dabei per Definition um eine unsystematische Auswahl handelt. Wichtige Fragen sind also: Welche Testfälle soll ich wählen? Nach welchen Kriterien werden diese Testfälle ausgewählt? 
+Die verschiedenen Testarten - und damit auch die Auswahlkriterien für die Testfälle - lassen sich grundsätzlich in Black-Box- und Glass-Box-Verfahren (White-Box) unterteilen, wobei die Trennlinie nicht immer scharf ist.
+Black-Box-Verfahren stützen sich nur auf die Programm-Spezifikation, der Programmcode an sich spielt keine Rolle bei der Auswahl der Testfälle. Anders bei den Glass-Box-Verfahren, hier werden die Testfälle durch die Programmstruktur - also den Code selbst - bestimmt.
+In dieser Arbeit wird der Datenstrukturtest, bzw. sechs Ausprägungen dieses Tests, etwas näher betrachtet. Dieser Test - ein Glass-Box-Test - orientiert sich an den Zugriffen auf die Variablen, d.h. am Datenfluss und nicht am Kontrollfluss eines Programms.
+   
+   
+Mit der Aufstieg der SOA und Web Service Stack of Standarts IT der Unternehmen haben sich in Eichtung der neu aufgabauten  und flexiblen Architekturen. Es sind Services implementiert, die in sogenannten Kompositionen eingeordnet zur Realisierung von vollautomatischen Geschägtsprozessen. Solche Prozesse operieren im Herz des Unternehmens. Deswegen ist die Technische Realisierung eine kritische Aufgabe.
+
+The WS-BPEL standard ist Sprache zum Implementieren von Service Kompositionen. Weil BPEL bei OASIS standartisiert und von vielen Software Lieferanten unterstützt wird wird sie oft ausgewählt. Bevor BPEL-Prozess und die zugehörigen Web Services Eingesetzt werden können, das System muss getestet werden. um das Risiko zu verringern, die durch Fehler hervorgerufen wwird wegen der wichtigen Rolle im Unternehemen. Aber die Web Service und BPEL sind relativ neue technologiefelder und viele Methoden, die der herkömliche Softwareentwicklung zur Verfügung stehen sind noch nicht sind nicht auf SOA übertragen oder es fehlen SOA basierten Erfahrungen. In dieser Arbeit wird die Testabdeckung des BPEL-Prozesses formal definiert. Testabdeckung ist Metrik wieviel der Software wurden ausgeführt bei einer Menge von Tests. Es wird oft benutzt um die Qualität der Tests zu antizipieren: Bereiche die nicht die nicht getestet wurden können eher Fehler aufweisen als die die getestet wurden        
+
+
+Nächster logischer Schritt ist Messung der Testabdeckung auf BPEL zu übetragen. Es ist zu erwarten dass bei BPEL die Anzahl der Fehler sehr schnell steigt. 
+\begin{itemize}
+	\item BPEL befindet sich ganz oben auf dem Web Service Technologie Stack, der für die Unterstützung der Komplexen Geschäftsprozessen gedaxht ist.
+	\item Es gibt noch keine Erfahrungen, und die Fallen sind unbekannt. 
+	\item BPEL ist eng mit XML und XPath verbunden.
+\end{itemize}
+ 
+ 
+Testen von BPEL bedeutet überprüfen die Korrektheit des implementierten Geschäftsprozesses.
+Das Hauptziel von BPELUnit Framework ist unit Test, die natürliche Benutzergruppe sind entwickler.
 
 
 

@@ -8,8 +8,7 @@ Mit BPEL lässt sich ein Prozess beschreiben, der verschiedene Dienste zu einer G
 Operationen der Web Services, die in den Prozess
 eingebunden sind.
 \item \textbf{Choreography:} Es gibt keinen zentralen Koordinator. Jeder in
-die Choreography eingebunden Web Service "weiss", mit
-wem er zu interagieren hat. Bei der Choreographie erfolgt
+die Choreography eingebundene Web Service kenn seine Interaktionspartner. Bei der Choreographie erfolgt
 die Zusammenarbeit über den Austausch von Nachrichten
 in einem öffentlichen Prozess.
 \end{itemize}
@@ -17,19 +16,19 @@ in einem öffentlichen Prozess.
 BPEL unterstützt Orchestration und Choreography durch
 \begin{itemize}
 	\item \textbf{Executable Processes:} Spezifikation des intenen Verahaltens eines
-Geschäftsprozesses, der durch eine Engine
-ausgeführt werden kann. Enthält alle für die Prozessausführung notwendige Informationen bis auf die tatsächlichen Endpunkte der Web Services.
+Ge\-schäfts\-pro\-zesses, der durch eine Engine
+ausgeführt werden kann. Enthält alle für die Pro\-zess\-aus\-füh\-rung notwendige Informationen bis auf die tatsächlichen Endpunkte der Web Services.
 \item \textbf{Abstract Business Processes:} Spezifikation des
 Nachrichtenaustauschs zwischen Partnern. Beschreibung des nach außen sichbaren Verhaltens des Prozesses. Keine Aussagen über interne Logik.
 \end{itemize}
 
-Während abstrakte Prozesse nur der Beschreibung des Verhaltens des Prozesses dienen,  können ausführbare BPEL-Prozesse, wie der Name schon sagt, in einer BPEL-Engine ausgeführt werden. Da der Kontext dieser Arbeit das Testen von BPEL-Prozessen ist, und das Testen die Ausführung voraussetzt, sind dementsprechend auch nur die ausführbaren Prozesse relevant. Die weiteren Betrachtungen in dieser Arbeit beschränken sich aus diesem Grund ausschließlich auf die ausführbaren Prozesse.
+Während abstrakte Prozesse nur der Beschreibung des Prozessverhaltens dienen,  können ausführbare BPEL-Prozesse, wie der Name schon sagt, in einer BPEL-Engine ausgeführt werden. Da der Kontext dieser Arbeit das Testen von BPEL-Prozessen ist, und das Testen die Ausführung voraussetzt, sind dementsprechend auch nur die ausführbaren Prozesse relevant. Die weiteren Betrachtungen in dieser Arbeit beschränken sich aus diesem Grund ausschließlich auf die \textit{Ausführbaren Prozesse}.
 
 
 Mit BPEL können langlebige und zustandsbehaftete Prozesse modelliert werden. Es ist dabei möglich, eine sehr flexible Fehlerbehandlung mit Kompensationsmöglichkeiten zu realisieren. Durch die strikte Trennung der Geschäftslogik (BPEL-Prozess) und Implementierung (einzelnen Web Services) ist die Anpassung bei Änderungen des zugehörigen Geschäftsprozesses einfach durchzuführen. Bei ausreichend kleiner Granularität der einzelnen Services betreffen die Auswirkungen einer Änderung ausschließlich den BPEL-Prozess selbst.
 
-Die Schnittstelle nach außen eines BPEL-Prozesses wird ebenfalls in WSDl beschrieben und kann wiederum als Web Service in andere Prozesse eingebunden werden.
-Die damit gegebene Rekursivität ermöglicht durch hierarchische Aufbau der Prozessen die Abstraktionsschichten einzuführen und damit die Komplexität besser beherrschen.
+Die Schnittstelle nach außen eines BPEL-Prozesses wird ebenfalls in WSDL beschrieben und kann wiederum als Web Service in andere Prozesse eingebunden werden.
+Die damit gegebene Rekursivität ermöglicht durch hierarchische Aufbau der Prozessen die Abstraktionsschichten einzuführen und damit die Komplexität besser zu beherrschen.
 
 Allerdings bring BPEL auch einige Nachteile mit sich. Als Erstes ist die Komplexität der Sprache zu nennen. Jedoch ist diese Komplexität in dem Anspruch begründet, jede Art von Geschäftsprozessen realisieren zu können und zwar quer zu allen IT-Plattformen. Auch zu nennen sind die redundanten Ausdrucksmittel der Sprache, die aufgrund der Vereinigung zwei Sprachen entstanden sind, und oft das Verständnis der Prozessen erschweren. Als letztes ist noch das Fehlen einer standardisierten grafischen Notation zu erwähnen.
 
@@ -39,9 +38,9 @@ In den folgenden Abschnitten wird auf einige für diese Arbeit relevanten Aspekte
 
 BPEL-Prozesse interagieren mit anderen Web Services, die
 man als Partner oder Partner-Prozesse bezeichnet. Ein
-BPEL-Prozess benutzt Dienste von Partnern und bietet selbst Dienste nach außen an. Die Beziehung zwischen den möglichen Partner und dem Prozess selbst wird zuerst abstrakt durch die Rollen in einem Partner Link Type beschrieben. In jedem solchen Element werden mindestens eine und maximal zwei Rollen definiert. Die Rollen können dabei entweder vom Prozess oder vom Partner übernommen werden.  Derjenige der diese Rolle übernimmt muss den PortType, der zu der Rolle zugeordnet ist, in seiner WSDL-Schnittstelle anbieten.
+BPEL-Prozess benutzt Dienste von Partnern und bietet selbst Dienste nach außen an. Die Beziehung zwischen den möglichen Partner und dem Prozess selbst wird zuerst abstrakt durch die Rollen in einem \textit{Partner Link Type} beschrieben. In jedem solchen Element werden mindestens eine und maximal zwei Rollen definiert. Die Rollen können dabei entweder vom Prozess oder vom Partner übernommen werden.  Derjenige der diese Rolle übernimmt muss den \textit{Port Type}, der zu der Rolle zugeordnet ist, in seiner WSDL-Schnittstelle anbieten.
 
-Die Beziehung zwischen dem BPEL-Prozess und einem konkreten Partner wird letztendlich in Partner Link durch die Zuweisung der Rollen definiert.
+Die Beziehung zwischen dem BPEL-Prozess und einem konkreten Partner wird letztendlich in \textit{Partner Link} durch die Zuweisung der Rollen definiert.
 Die Bindung an einen konkreten Web Service kann entweder statisch zum Zeitpunkt des Deployments oder dynamisch zur Laufzeit erfolgen. Die Abbildung \ref{fig:partnerLink} stellt den ganzen Zusammenhang grafisch dar.
 \begin{figure}[htbp]
 	\centering
@@ -51,163 +50,107 @@ Die Bindung an einen konkreten Web Service kann entweder statisch zum Zeitpunkt 
 \end{figure}
 
 \subsection{BPEL Prozess}
-BPEL-Prozess ist definiert in Form eines XML-Dokuments. Die Wurzel eines BPEL-Dokuments ist das Element <process>, welches die Struktur und den
+BPEL-Prozess ist definiert in Form eines XML-Dokuments. Die Wurzel eines BPEL-Dokuments ist das Element $<$process$>$, welches die Struktur und den
 Kontrollfluss eines Geschäftsprozesses in sich kapselt. Das Prozess-Element enthält drei wichtige Abschnitte:
 
 \begin{itemize}
-	\item Partner Links-Enthält Partner Link-Definitionen (siehe...), werden für Kommunikation mit den Partner benutzt.   
-	\item Variables Platz für die Speicherung von internen Daten und Daten, die Empfangen oder Gesendet werden. Datentypen ...  Alle Variablen sind globale Variablen. Es gibt Möglichkeit lokale Variablen zu definieren.  Variable Analog zu anderen Programmiersprachen bietet auch BPEL dieM¨oglichkeit,
-Daten in Variablen zu speichern. Sie werden in einem Sichtbarkeitsbereich
-(scope) durch einen eindeutigen Namen und einen Datentyp definiert. Each <variable> is declared within a <scope> and is said to belong to that scope. Variables that
-belong to the global process scope are called global variables. Variables may also belong to other,
-non-global scopes, and such variables are called local variables. Each variable is visible only in
-the scope in which it is defined and in all scopes nested within the scope to which it belongs. The messageType, type or element attributes are used to specify the type of a
-variable. Exactly one of these attributes MUST be used. Attribute messageType refers to a
-WSDL message type definition. Attribute type refers to an XML Schema type (simple or
-complex). Attribute element refers to an XML Schema element.
-	\item Aktivitäten Enthält die Geschäftslogik in Form von Aktivitäten. 
+	\item \textit{Partner Links} - Partner Link-Definitionen, die für Kommunikation mit den Partner benutzt werden.   
+	\item \textit{Variables} -  Variablen für die Speicherung von internen Daten und Daten, die Empfangen oder Gesendet werden.  Alle in diesem Bereich definierten Variablen sind globale Variablen. Es gibt Möglichkeit lokale Variablen zu definieren. Sie werden in einem Sichtbarkeitsbereich
+(Scope) durch einen eindeutigen Namen und einen Datentyp definiert. 
+	\item \textit{Activity} - Geschäftslogik in Form von Aktivitäten. 
 \end{itemize}
  
-Die Geschäftslogik wird in BPEL durch so genannte Aktivitäten realisiert. Es gibt zwei Arten von Aktivitäten: Basisaktivitäten (basic activities) und Strukturierte Aktivitäten (structured activities). Basic activities are those which describe elemental steps of the process behavior.
-Structured activities encode control-flow logic, and therefore can contain other basic and/or
-structured activities recursively.
+Die Geschäftslogik wird in BPEL durch so genannte Aktivitäten realisiert. Es gibt zwei Arten von Aktivitäten: Basisaktivitäten (basic activities) und Strukturierte Aktivitäten (structured activities). Basisaktivitäten beschreiben die elementaren Schritte des Prozesses. Strukturierten Aktivitäten bestimmen den Kontrollfluss und können deswegen weitere Basis- oder Strukturierten Aktivitäten enthalten. 
 
 Die Basisaktivitäten sind: 
 \begin{itemize}
-\item invoke dient dazu, andere Web Services aus dem Prozess heraus aufzurufen. 
-\item receive Blockierendes Warten auf Nachrichten Mit <receive> kann auch eine Prozessinstanz aktiviert werden.
-\item reply Versendet eine Antwort
-\item assign Manipulation von Variablenwerten Kopiert Daten von einer Variablen zu einer anderen. So wird das Ergebnis eines Services an den nächsten übergeben. zum Kopieren von Daten von einer Variable zur nachsten,
-auch unter Verwendung von Ausdrucken (Expressions).
-\item throw Explizites Signalisieren eines Fehlers, welcher durch Fehlerbehandlungen aufgefangen werden kann. 
-\item exit Beenden einer Prozessinstanz 
-\item wait  Warten auf einen Zeitpunkt oder für eine Zeitspanne
-\item empty Nichts machen (NOP)
-\item compensate Kompensation aller eingebetteten Scopes in der standardmäßigen
-Kompensationsreihenfolge(siehe ..) compensate ist direkt im Fault- oder standardm¨aßigen Compensation-
-Handler eingebettet. compensate kann nur im FaultHandler
-oder CompensationHandler eingebettet sein.)
-\item compensateScope zur Kompensation
-eines speziellen Scope
-\item rethrow Wieterreichen der Abgefangenen Fehler
-\item validate
+\item $<$invoke$>$ - Aufruf anderer Web Services aus dem Prozess heraus. 
+\item $<$receive$>$ - Blockierendes Warten auf Nachrichten.
+\item $<$reply$>$ - Versendet eine Antwort.
+\item $<$assign$>$ - Manipulation von Variablenwerten.
+\item $<$throw$>$ - Explizites Signalisieren eines Fehlers, welcher durch Fehlerbehandlungen abgefangen werden kann.
+\item $<$exit$>$ - Beenden einer Prozessinstanz.
+\item $<$wait$>$ - Warten auf einen Zeitpunkt oder für eine Zeitspanne.
+\item $<$empty$>$ - Nichts machen (NOP).
+\item $<$compensate$>$ - Kompensation aller eingebetteten Scopes, $<$compensate$>$ kann nur im FaultHandler
+oder CompensationHandler eingebettet sein.
+\item $<$compensateScope$>$ - Kompensation
+eines speziellen Scope.
+\item $<$rethrow$>$ - Wieterreichen der abgefangenen Fehler.
+\item $<$validate$>$ - Validierung der Variablenwerten gegen XML-Schema.
 	\end{itemize}
 Mit den ersten drei lassen sich alle Kommunikationsszenarien implementieren:
 \begin{itemize}
-	\item synchrone request\/response-Operation
-	\item asynchrone request\/response-Operation
-	\item Kommunikation in eine Richtung
+	\item synchrone request\slash response-Kommunikation
+	\item asynchrone request\slash response-Kommunikation
+	\item \textit{one way}-Kommunikation
 \end{itemize}
 
-evtl Invoke genauer
-
-
-
-Strukturierte Aktivitäten bestimmen die Reihenfolge in der die eingeschloßene Aktivitäten ausgeführt werden. Können geschachtelt werden.
-WS-BPEL beschreibt den Ablauf von Geschäftsprozessen als strukturierte Aktivitäten.
+WS-BPEL beschreibt den Ablauf von Geschäftsprozessen als strukturierte Aktivitäten:
 \begin{itemize}
-\item sequence \- Die sequence-Aktivität erlaubt es, mehrere atomare oder strukturierte Aktivitäten sequenziell auszuführen.
-\item if \- The if activity provides conditional behavior. The activity consists of an ordered list of one or
-more conditional branches defined by the <if> and optional <elseif> elements, followed by an
-optional <else> element. The <if> and <elseif> branches are considered in the order in which
-they appear. The first branch whose <condition> holds true is taken, and its contained activity
-is performed.
-\item while \- Eine while-Schleife; iterative Ausführung von Aktivitäten, bis die Bedingung erfüllt
-ist. Es ist die einzige Möglichkeit
-\item repeatUntil \-
-\item forEach \-
-\item pick \- Blockierendes Warten auf  Eintreffen eines von mehreren Ereignissen. Ereignisse können dabei entweder spezifizierten Nachrichten oder zeitbasiserte Ereignisse sein.Bei dieser strukturierenden Aktivität wird ein Zweig aus mehreren anhand eines Ereignisses (Nachricht oder Alarm) ausgewählt. Wurde ein zutreffendes Ereignis empfangen, so wird die zugehörige Aktivität ausgeführt und alle nachfolgenden Ereignisse verworfen. Aus der Sicht des Kontrollflusses stimmt dieses Verhalten mit dem einer IF-\-Akti\-vi\-tät überein. Deswegen werden diese beiden Aktivitäten im Kontrollfluss durch gleiche Graphen repräsentiert.
-\item flow \- ermöglicht parallele Ausführung von Aktivitäten mit Synchronisationsmöglichkit (siehe ..).  Mit der \textit{Flow}-Aktivität wird in BPEL paralleler Ablauf mehrerer Aktivitäten realisiert. Außerdem gibt es mit dem Link-Konzept, ein mächtiges Instrument, das ermöglicht, Syn\-chro\-ni\-sa\-tions\-ab\-hän\-gig\-keiten aufzustellen und damit komplexe Abläufe zu realisieren. Die rechte Abbildung zeigt den zugehörigen Kontrollfluss. 
-\item scope \- Dient zur Strukturierung von BPEL-Prozessen.  Ist ein Ausfuhrungskontext für Aktivitäten mit der Möglichkeit,  eigene Fault Handler zu definieren.  transaktionalen Einheit zusammengefasst werden. Durch einen Scope kann einer Gruppe von Aktivitäten ein Fehlerbehandler (fault handler), Ereignisbehandler (event handler) und ein Kompensationsbehandler (compensation handler) zugeordnet werden. Durch den Kompensationsbehandler werden lang-andauernde Transaktionen ermöglicht.
-Bettet eine Aktivit¨at ein und bindet sie an einen FaultHandler,
-einen CompensationHandler und optional einen EventHandler an. Ein
-scope ist ein Sichtbarkeitsbereich f¨ur in ihm deklarierte Variablen
+\item $<$sequence$>$ - sequentielle Ausführung von Aktivitäten
+\item $<$if$>$ - bedingte Auführung von Aktivitäten.\textit{ if}-Aktivität besitzt mehrere geordnete Bedingte Zweige definiert  durch $<$\textit{if}$>$- und $<$\textit{elseif}$>$- Elemente gefolgt von einem optionalem $<$\textit{else}$>$-Element. Der erste Zweig mit der zutreffenden Bedingung wird ausgeführt. 
+\item $<$while$>$ - iterative Ausführung der Aktivitäten. Die Ausführung findet solange statt, bis die Bedingung nicht mehr erfüllt ist. Die Auswertung der Bedingung findet vor jeder Schleifenausführung statt.
+\item $<$repeatUntil$>$ - iterative Ausführung von Aktivitäten. Die Ausführung findet solange statt, bis die Bedingung erfüllt ist. Die Auswertung der Bedingung findet nach jeder Schleifenausführung statt.
+\item $<$forEach$>$ -  iterative Ausführung von Aktivitäten. Die Ausführung kann entweder seriell und parallel erfolgen (gesteuert durch Attribut \textit{parallel}).
+\item $<$pick$>$ - blockierendes Warten auf  Eintreffen eines von mehreren Ereignissen. Bei dieser strukturierenden Aktivität wird ein Zweig aus mehreren anhand eines Ereignisses (Nachricht oder Alarm) ausgewählt. Wurde ein zutreffendes Ereignis empfangen, so wird die zugehörige Aktivität ausgeführt und alle nachfolgenden Ereignisse verworfen. 
+\item $<$flow$>$ - ermöglicht parallele Ausführung von Aktivitäten mit Synchronisationsmöglichkeit (siehe Abschnitt \ref{sec:linkkonzept}).  
 \end{itemize}
 
-Die ersten drei entsprechen den konventionellen strukturierten Programmierung
 
-\subsection{Link-Konzept}%DPE
-Link-Konzept In einer flow-Aktivit¨at k¨onnen Links definiert werden. Sie dienen
-der Synchronisation nebenl¨aufiger Aktivit¨aten. Jeder Link verbindet eine
-source- (Start-) mit einer target- (Ziel-) Aktivit¨at. Ein Link kann entweder
-undefiniert sein oder einen booleschenWert (transitionCondition) haben. Ist
-eine Aktivit¨at target-Aktivit¨at eines oder mehrerer Links und haben alle eingehenden
-Links einen definierten Wert, wird eine joinCondition ausgewertet.
-Ist sie wahr (
-true), so wird die Aktivit¨at ausgef¨uhrt, andernfalls nicht.
-Wird eine Aktivit¨at aufgrund einer zu
-false ausgewerteten joinCondition
-oder eines nicht abgearbeiteten Zweiges einer switch- oder pick-Aktivit¨at nicht
-ausgef¨uhrt, so wird f¨ur alle eventuell vorhandenen ausgehenden Links die transitionCondition
-auf falsch gesetzt. So k¨onnen alle target-Aktivit¨aten geeignet
-auf den Fehler reagieren. Dieses Verhalten wird als Dead-Path-Elimination
-bezeichnet.
-Oft ist die vollkommen parallele Ausführung verschiedener Aktivitäten nicht möglich, da beispielsweise Abhängigkeiten zwischen den Aktivitäten bestehen. Die Modellierung solcher Abhängigkeiten erfolgt in BPEL über so genannte Links. An dem nun folgenden Beispiel sollen Syntax und Semantik dieser Links für eine etwas komplexere flow-Aktivität dargestellt werden.
-Zusätzlich zu der recht einfachen Synchronisation mit Source/Target lassen sich komplexere Übergangsbedingungen definieren. Dazu wird auf das optionale Attribut joinCondition einer Aktivität zurückgegriffen. Mittels der Funktion getLinkStatus lässt sich feststellen, ob die Aktivität auf Source-Seite des Links bereits abgeschlossen ist oder nicht. Innerhalb des joinCondition-Attributs kann mit getLinkStatus auf die Zustände verschiedener Links zugegriffen werden, wobei diese mit boolschen Operatoren zu komplexen Ausdrücken verknüpft werden können. Erst, wenn joinCondition zu true ausgewertet wird, darf die entsprechende Aktivität starten. Standardmäßig sind alle in einer Aktivität verwendeten target-Links mittels AND verknüpft. Das folgende Code-Fragment zeigt, wie zwei target-Links mittels OR verknüpft sind:
-Alle Aktivitäten in BPEL enthalten drei optionale Attribute name, joinCondition und suppress-
-JoinFailure. Die beiden letzten Attribute werden im Zusammenhang mit der Synchronisation von
-konkurrierenden Pfaden benutzt. DesWeiteren besitzt jede Aktivität zwei optionale Elemente <source>
-und <target>, 
 
-explizit gestellte Restriktionen:
- Je zwei Aktivitäten dürfen nur durch maximal einen Link verbunden sein.
- Links, deren Quelle im XML-Teilbaum der dazugehörigen Zielaktivität definiert ist, sind
-nicht gestattet.
- Für den Fall, dass zwei ineinander geschachtelte <flow>-Aktivitäten je einen Link mit
-dem gleichen Namen definieren, wird die Namensauflösung von innen nach außen betrieben,
-d.h. weiter außen stehende Links werden von weiter innen stehenden Links mit
-gleichem Namen überladen.
- Ausgehende Links von Fault und Termination Handler (spezieller Handler für die erzwungene
-Terminierung von Aktivitäten, siehe 3.9), müssen auf negative gesetzt werden,
-sobald feststeht, dass diese nicht abgearbeitet werden.
+\subsection{Link-Konzept}\label{sec:linkkonzept}
+ In einer flow-Aktivität können Links definiert werden. Sie dienen
+der Synchronisation nebenläufiger Aktivitäten. Jeder Link verbindet eine
+\textit{source}-  mit einer \textit{target}-Aktivität.
+Jeder Link hat eine implizite oder explizite \textit{transition condition} (boolscher Ausdruck). Ist der Ausdruck nicht spezifiziert, so ist der Wert der \textit{transition condition} \textit{true}. Jede Aktivität, die das Ziel eines Links ist, hat eine implizite oder explizite \textit{join condition} (boolscher Ausdruck). Im impiziten Fall ist das eine ODER-Verknüpfung der Status aller eingehenden Links. Die Auswertung dieser Bedingungen bei der Ausführung wird an einem kleinem Beispiel erläutert.
 
-\subsection{Eventhandler}
-Innerhalb eines Scope können zudem
-Event Handler definiert werden, über die auf eintreffende Nachrichten oder zeitgesteuerte
-Ereignisse reagiert werden kann.EventHandler 
+Bild....
+
+Ist die Ausführung der Aktivität\_2 beendet, so wird \textit{transition condition} des Links ausgewertet und der Status auf den entsprechenden Wert \textit{true} oder \textit{false}  gesetzt. Auf dieselbe Weise wird der Status des zweiten Links ermittelt. Sind die Status der beiden Links ermittelt, so kann die \textit{join condition} der Aktivität\_ 3 ausgewertet werden. Bei einem \textit{true}-Wert wird die Ausführung des Prozesses mit der Aktivität\_3 ganz normal fortgesetzt. Ist der Wert \textit{false}, so wird eine Fehlermeldung (\textit{Join Failure}) erzeugt und der Kontrollfluss für Fehlerbehandlung aktiviert. Ist dieses Verhalten unerwünscht, so kann das Standardattribut \textit{suppressJoinFailure} auf den Wert \textit{"`yes"'} gesetzt. In diesem Fall wird Aktivität\_3 ebenfalls nicht ausgeführt, allerdings wird der Prozess ganz normal, ohne eine Fehelermeldung zu produzieren, mit der Aktivität\_4 fortgesetzt.
+
+Ist die Aktivität\_2 zum Beispiel in einem \textit{if}-Zweig, der während der Ausführung nicht aktiviert wird, so kann der Status des ausgehenden Links nicht auf die normale Weise ermittelt werden. Die \textit{join condition} ohne des Status des zweiten Links kann nicht ausgewertet werden.  Das würde zu einer Blockierung des Kontrollflusses bei Aktivität\_3 führen. Für solche Situationen sieht BPEL \textit{Dead-Path-Elimination} vor. Wird eine Aktivität aufgrund einer zu
+\textit{false} ausgewerteten \textit{join condition}
+oder eines nicht abgearbeiteten Zweiges einer if- oder pick-Aktivität nicht
+ausgeführt, so wird für alle eventuell vorhandenen ausgehenden Links die \textit{transition condition}
+auf \textit{false} gesetzt. Diese Werte werden soweit wie möglich entlang des Pfades propagiert. Auf die Weise werden Pfade eliminiert, die nicht zur Ausführung kommen, und damit Blockierungen des Kontrollflusses vermieden.
+
+Bei der Verwendung von Links ist folgendes zu beachten:
+\begin{itemize}
+	\item ein Link darf genau eine \textit{source} und eine \textit{target}-Aktivität verbinden,
+	\item Links dürfen keine Zyklen bilden,
+	\item es müssen \textit{boundary crossing}-Restriktionen beachtet werden:
+\begin{itemize}
+	\item Links dürfen nicht in oder aus den Wiederholungsschleifen und \textit{Compensation Handler} ein- bzw. austreten
+	\item Links dürfen aus den \textit{Fault} und \textit{Termination Handler} nur austreten
+	\item Links, die aus den \textit{catch} oder \textit{catchAll}-Blöcken des Fault Handlers oder aus dem Termination Handler austreten, müssen in einem nicht zu den Handlern zugehörigem \textit{Scope} landen.)
+\end{itemize}
+\end{itemize}
+
+\subsection{\textit{Scope}}
+\textit{Scopes} dienen zur Strukturierung von BPEL-Prozessen und definieren Sichtbarkeitsbereiche für Variablen und Ereignisse. Ein \textit{Scope} ist ein Ausfuhrungskontext für Aktivitäten mit der Möglichkeit,  eigene Fault, Compensation, Termination und Event Handler zu definieren.
+\subsubsection{\textit{Event Handler}}
  BPEL bietet die Möglichkeit, parallel zum normalen Kontrollfluss bestimmte Ereignisse
-mit sogenannten Eventhandlern zu behandeln. Eventhandler werden mit einem
-bestimmten scope innerhalb des Prozesses oder dem globalen Prozess scope verknüpft.
+mit so genannten \textit{Event Handlern} zu behandeln. \textit{Event Handler} gehören zu einem
+bestimmten \textit{Scope} innerhalb des Prozesses oder zu dem globalen Prozess \textit{Scope}.
 Sie behandeln Ereignisse, die den zugeordneten Gültigkeitsbereich betreffen.
-Innerhalb eines Eventhandlers können beliebige Abfolgen von BPEL Aktivitäten definiert
-werden.
-Der Empfang von Nachrichten stellt eine mögliche Art von Ereignissen dar. Es können
-Nachrichten behandelt werden, welche bestimmten Interaktionsmustern entsprechen,
-dazu zählen synchrone Request-Response Interaktionen und asynchrone One-Way-
-Nachrichten. Eventhandler für diese Ereignisse werden durch das Konstrukt onEvent
-beschrieben. Ein Beispiel ist die Statusabfrage, in deren Verlauf verschiedene Zustandsdaten
-der Prozessinstanz an den Aufrufer zurückgegeben werden. Auch die Terminierung
-einer bestimmten Prozessinstanz über das Senden einer Nachricht kann auf
-diese Weise ermöglicht werden.
+Innerhalb eines \textit{Event Handlers} können beliebige Abfolgen von BPEL Aktivitäten definiert
+werden. Es können zwei Typen von Ereignissen behandelt werden: Nachrichten und zeit gesteuerten Ereignisse.
 
-Die zweite Art von Ereignissen sind zeitabhängige Alarme. Dabei kann es sich um
-das Ablaufen einer vorgegebenen Zeitspanne handeln oder ein zuvor definierter Zeitpunkt
-wird erreicht. Die Definition von Regeln für Alarme kann standardmäßig mit
-XPath erfolgen. BPEL erlaubt auch die Verwendung anderer eindeutig definierter Beschreibungssprachen
-für diesen Zweck. Eventhandler für Alarme werden durch das
-Konstrukt onAlarm spezifiziert. Durch einen Alarm kann zum Beispiel eine maximale
-Gültigkeitszeit einer Prozessinstanz vorgegeben werden, nach deren Ablauf sich
-die Prozessinstanz automatisch selbst beendet.
-
-Innerhalb eines Scope können zudem
-Event Handler definiert werden, über die auf eintreffende Nachrichten oder zeitgesteuerte
-Ereignisse reagiert werden kann.
-
-\subsection{Fehlerbehandlung und Kompensation}
+\subsubsection{Fehlerbehandlung und Kompensation}
   BPEL-Sprache hat wie viele moderne Programmiersprachen ein Konzept zur strukturierten Behandlung von Laufzeitfehlern.
-  Tritt ein Fehler im laufenden Prozess auf, so wird ein für diesen Bereich zuständiger FaultHandler aufgerufen. 
+  Tritt ein Fehler im laufenden Prozess auf, so wird ein für diesen Bereich zuständiger \textit{Fault Handler} aufgerufen. 
   Oft müssen im Fehlerfall bereits abgeschlossene Aktivitäten kompensiert werden. In BPEL kann
-dafür ein Compensation Handler definiert werden, in dem Aktivitäten für die Kompensation festgelegt werden.
-Compensation Handler können nur aus Fault Handler oder Compensation Handler des umschließenden Scopes aufgerufen werden. Ein Compensation Handler kann nur für Scopes aufgerufen werden, die
-ordnungsgemäß abgearbeitet wurden. Jeder Scope besitz ein Fault und Compensation Handler, der Prozess selbst hat in BPEL 2.0 nur den Fault Handler. 
+dafür ein \textit{Compensation Handler} definiert werden, in dem Aktivitäten für die Kompensation festgelegt werden.
+\textit{Compensation Handler} können nur aus \textit{Fault Handler} oder \textit{Compensation Handler} des umschließenden \textit{Scopes} aufgerufen werden. Außerdem ein \textit{Compensation Handler} kann nur für \textit{Scopes} aufgerufen werden, die
+ordnungsgemäß abgearbeitet wurden. Jedes \textit{Scope} besitz ein Fault und \textit{Compensation Handler}, der Prozess selbst hat in BPEL 2.0 nur den \textit{Fault Handler}. 
   
-Ist kein nutzerdefiniertes Fault Handler spezifiziert, so gibt es ein impliziter Fault Handler, der die CompensationHandler
-aller direkt eingeschlossener Scopes in der umgekehrten Reihenfolge ihrer Abarbeitung aufruft und
-anschließend den Fehler an den umschließenden Scope oder den Prozess selbst weiterreicht. Es können eigene FaultHandler spezifiziert werden, der
-je nach Art des auftretenden Fehlers eine bestimmte BPEL-Aktivit¨at ausf¨uhrt. Für die Bindung bestimmter Aktivitäten an die bestimmten Fehler werden catch und catchall-Elemente verwendet. Listing zeigt den Syntax der Handler 
-
+Ist kein benutzerdefiniertes \textit{Fault Handler} spezifiziert, so gibt es ein impliziter \textit{Fault Handler}, der die \textit{Compensation Handler}
+aller direkt eingeschlossener \textit{Scopes} in der umgekehrten Reihenfolge ihrer Abarbeitung aufruft und
+anschließend den Fehler an den umschließenden Scope oder den Prozess selbst weiter reicht. Es können eigene \textit{Fault Handler} spezifiziert werden, der
+je nach Art des auftretenden Fehlers eine bestimmte BPEL-Aktivität ausführt. Für die Bindung bestimmter Aktivitäten an die bestimmten Fehler werden \textit{catch} und \textit{catchAll}-Elemente verwendet.
   
-Die Fehler können auch in den \textit{Compensation} und in den \textit{FaultHandler} selbst auftreten. In die Abbildung \ref{fig:ScopeFaultCompensation2} wird der Zusammenhang zwischen \textit{Handler} und \textit{Scopes} graphisch dargestellt und durch die Pfeile den möglichen Kontrollfluss zwischen diesen Einheiten gezeigt. 
+Die Fehler können auch in den \textit{Compensation} und in den \textit{Fault Handler} selbst auftreten. In die Abbildung \ref{fig:ScopeFaultCompensation2} wird der Zusammenhang zwischen \textit{Handler} und \textit{Scopes} graphisch dargestellt. Die Pfeile zeigen dabei den möglichen Kontrollfluss. 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.35\textwidth]{bilder/ScopeFaultCompensation2.png}
@@ -215,45 +158,24 @@ Die Fehler können auch in den \textit{Compensation} und in den \textit{FaultHand
 	\label{fig:ScopeFaultCompensation2}
 \end{figure}
 
- 
-
-implizite Handler
-Die Ausnahme stellt hier jedoch die invoke-Aktivität dar. Aufgrund ihrer sehr häufigen Verwendung in BPEL-Prozessen besitzt sie eine eigene Art der Fehlerbehandlung.
+ Als einzige Ausnahme bietet \textit{invoke}-Aktivität die Möglichkeit, eigene \textit{Fault} und \textit{Compensation Handler} zu definieren. Es entspricht einem expliziten \textit{Scope}, das die \textit{invoke}-Aktivität umschließt und \textit{Compensation} und \textit{Fault Handler} besitzt.
 
 \subsection{Prozessinstance}
-
-Die Erzeugung von Prozessinstanzen erfolgt implizit anhand von Aktivit¨aten (receive o. pick),
-die externe Nachrichten ¨uber die durch den Prozess definierten Web Service Schnittstellen empfangen. 
-Die zur Erzeugung von Prozessinstanzen zu verwendeten Aktivit¨aten
-werden hierbei anhand des createInstance=yes Attributs charakterisiert.
+Die Erzeugung von Prozessinstanzen erfolgt implizit anhand von Aktivitäten (\textit{receive} oder \textit{pick}),
+beim Eintreffen von externen Nachrichten. Die entsprechenden Aktivitäten werden mit dem Attribut \textit{createInstance}=\textit{"'yes"'} gekennzeichnet.  
 Zur
-Identifikation von Prozessinstanzen dient, wird als Correlation Set bezeichnet.
-Um die Nachrichten an die korrekte Prozessinstanz weitergeben zu können
+Identifikation von Prozessinstanzen dienen so genannten \textit{Correlation Sets}. Diese werden von BPEL-Engine verwendet, um Nachrichten an richtige Instanzen weiterleiten zu können.
 
-Prozessinstanzen werden beendet, wenn die Aktivit¨aten, die das Verhalten von Prozessen bestimmen,
-abgearbeitet wurden (normale Beendigung), wenn ein Fehler den Prozess-G¨ultigkeitsbereich erreicht,
-der entweder behandelt oder nicht behandelt wird, oder wenn von Prozessinstanzen die terminate-
-Aktivit¨at zur explizit Beendigung ausgef¨uhrt wurde.
+Prozessinstanzen werden beendet, wenn die Aktivitäten, die das Verhalten von Prozessen bestimmen,
+abgearbeitet wurden (normale Beendigung), wenn ein Fehler den Prozess-\textit{Scope} erreicht,
+der entweder behandelt oder nicht behandelt wird, oder wenn von Prozessinstanzen die \textit{exit}-
+Aktivität ausgeführt wurde.
 
 
    
 
 \subsection{Engine}
+Ein BPEL-Prozess besteht aus der Geschäftslogik (definiert in BPEL), Servicebeschreibung (WSDL) und optional aus weiteren Datentypen (XML Schema). Diese Informationen werden zusammengefasst und in eine BPEL Engine deployt. Die Engine ist unter anderem dafür verantwortlich, die \textit{Endpoints} der Partner des BPEL Prozesses zu spezifizieren. Für jeden Link muss bekannt sein, welche WSDL-service und -port und welche Adresse für die Kommunikation benutzt werden sollen. Diese Information wird in so genannten \textit{Deployment Descriptoren} festgelegt.
 
-
-
-Ein BPEL-Prozess besteht aus der Geschäftslogik (definiert in BPEL), Servicebeschreibung (WSDL) und optional aus weiteren Datentypen (XML Schema). Diese Informationen werden zusammengefasst und in eine BPEL Engine deployt. Die Engine ist unter anderem dafür verantwortlich, die \textit{Endpoints} der Partner des BPEL Prozesses zu spezifizieren. Für jeden Link muss bekannt sein, welche WSDL service und port und welche Addresse für die Kommunikation benutzt werden sollen. Diese Information wird in so genannten Deployment descriptoren festgelegt.
-   Das Deployment und die Syntax der Deploymentdescriptoren ist nicht spezifiziert.
-
-
-
-  
-  
-  
-  
-  
-   !!!!!!!The ActiveBPEL(tm) Engine 3.0 Final Release provides comprehensive support for the forthcoming WS-BPEL 2.0 Standard, which will be officially published early in 2007. This release also retains side-by-side execution compatibility with processes based on BPEL4WS 1.1, allowing phased migration to WS-BPEL 2.0. Additional features include enhanced message routing based on WS-Addressing and BPEL sub-process execution.
-   
-
-BPEL Engines erlauben das Ausführen von BPEL-Prozessinstanzen. Hierzu müssen die BPEL-Prozesse in die BPEL Engine eingebracht (deployed) und dabei von der jeweiligen BPEL Engine abhängige Deployment-Informationen bereitgestellt werden.
+............
 
