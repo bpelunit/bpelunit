@@ -18,6 +18,7 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.IDeploymentArchiveHandler;
 import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
@@ -170,7 +171,6 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		WSDL_FILE_IN_ARCHIVE = WSDL_DIRECTORY_IN_ARCHIVE + wsdlFile.getName();
 		fLogger.info("CoverageTool: Adding WSDL-file " + wsdlFile.getPath()
 				+ " for CoverageLogging in bpr-archive");
-
 		FileOutputStream out = null;
 		try {
 			adaptWsdlCatalog();
@@ -196,6 +196,8 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		}
 		prepareDeploymentDescriptor();
 	}
+
+
 
 	private void adaptWsdlCatalog() throws ArchiveFileException {
 		FileInputStream is = null;
@@ -348,7 +350,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		Namespace ns = Namespace.getNamespace("wsa", PARTNERLINK_NAMESPACE);
 		process.addNamespaceDeclaration(ns);
 		Element adress = new Element("Address", ns);
-		adress.setText(ADDRESS_OF_SERVICE + SERVICE_NAME);
+		adress.setText(ADDRESS_OF_SERVICE);
 		Element serviceName = new Element(SERVICENAME_ELEMENT, ns);
 		serviceName.setAttribute(PORTNAME_ATTR, PORT_OF_SERVICE);
 		serviceName.setText(COVERAGETOOL_NAMESPACE.getPrefix() + ":"

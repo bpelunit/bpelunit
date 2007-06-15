@@ -36,26 +36,26 @@ public class ActivityMetricHandler implements IMetricHandler {
 
 	private static int count = 0;
 
-	private static HashMap<String, String> logging_before_activity;
+//	private static HashMap<String, String> logging_before_activity;
 
 	private HashMap<String, String> activities_to_respekt;
 
 	private Logger logger;
 	static {
 
-		logging_before_activity = new HashMap<String, String>();
-		logging_before_activity.put(BasicActivities.THROW_ACTIVITY,
-				BasicActivities.THROW_ACTIVITY);
-		logging_before_activity.put(BasicActivities.RETHROW_ACTIVITY,
-				BasicActivities.RETHROW_ACTIVITY);
-		logging_before_activity.put(BasicActivities.COMPENSATE_ACTIVITY,
-				BasicActivities.COMPENSATE_ACTIVITY);
-		logging_before_activity.put(BasicActivities.COMPENSATESCOPE_ACTIVITY,
-				BasicActivities.COMPENSATESCOPE_ACTIVITY);
-		logging_before_activity.put(BasicActivities.EXIT_ACTIVITY,
-				BasicActivities.EXIT_ACTIVITY);
-		logging_before_activity.put(BasicActivities.TERMINATE_ACTIVITY,BasicActivities.TERMINATE_ACTIVITY);
-		logging_before_activity.put(BasicActivities.REPLY_ACTIVITY,BasicActivities.REPLY_ACTIVITY);
+//		logging_before_activity = new HashMap<String, String>();
+//		logging_before_activity.put(BasicActivities.THROW_ACTIVITY,
+//				BasicActivities.THROW_ACTIVITY);
+//		logging_before_activity.put(BasicActivities.RETHROW_ACTIVITY,
+//				BasicActivities.RETHROW_ACTIVITY);
+//		logging_before_activity.put(BasicActivities.COMPENSATE_ACTIVITY,
+//				BasicActivities.COMPENSATE_ACTIVITY);
+//		logging_before_activity.put(BasicActivities.COMPENSATESCOPE_ACTIVITY,
+//				BasicActivities.COMPENSATESCOPE_ACTIVITY);
+//		logging_before_activity.put(BasicActivities.EXIT_ACTIVITY,
+//				BasicActivities.EXIT_ACTIVITY);
+//		logging_before_activity.put(BasicActivities.TERMINATE_ACTIVITY,BasicActivities.TERMINATE_ACTIVITY);
+//		logging_before_activity.put(BasicActivities.REPLY_ACTIVITY,BasicActivities.REPLY_ACTIVITY);
 	}
 
 	public ActivityMetricHandler() {
@@ -78,7 +78,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 			element = activities.get(i);
 			Element sequence = null;
 			respectTargetActivities(element, sequence);
-//			respectSourceActivities(element, sequence);
+			respectSourceActivities(element, sequence);
 			ensureElementIsInSequence(element);
 			insertMarkerForActivity(element);
 		}
@@ -111,8 +111,6 @@ public class ActivityMetricHandler implements IMetricHandler {
 					.hasNext();) {
 				targetElement = iter.next();
 				sequence.addContent(0, targetElement.detach());
-				logger.info("CoverageTool: Statementmetric. Link replaced: "
-						+ targetElement.getName());
 			}
 		}
 		return sequence;
@@ -176,20 +174,22 @@ public class ActivityMetricHandler implements IMetricHandler {
 		Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
 				+ marker);
 		int index = parent.indexOf(element);
-		if (logging_before_activity.containsKey(element_name)) {
-			parent.addContent(index, comment);
-		} else {
+		if (element_name.equals(BasicActivities.RECEIVE_ACTIVITY)) {
+
 			parent.addContent(index + 1, comment);
+		} else {
+
+			parent.addContent(index, comment);
 		}
 
 	}
 
 
 
-	public List<String> getPrefix4CovLabeles() {
-		Set<String> activities = activities_to_respekt.keySet();
-		List<String> labelsForSubMetrics = new ArrayList<String>(activities);
-		return labelsForSubMetrics;
-	}
+//	public List<String> getPrefix4CovLabeles() {
+//		Set<String> activities = activities_to_respekt.keySet();
+//		List<String> labelsForSubMetrics = new ArrayList<String>(activities);
+//		return labelsForSubMetrics;
+//	}
 
 }

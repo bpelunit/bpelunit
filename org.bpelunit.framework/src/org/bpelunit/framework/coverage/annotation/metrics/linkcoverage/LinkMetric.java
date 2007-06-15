@@ -41,7 +41,7 @@ public class LinkMetric implements IMetric {
 	public IStatistic createStatistic(Hashtable<String, Hashtable<String, LabelStatus>> allLabels) {
 		IStatistic statistic=new Statistic(METRIC_NAME);
 			statistic.addSubStatistik(createSubstatistic(LinkMetricHandler.POSITIV_LINK_LABEL,allLabels));
-			statistic.addSubStatistik(createSubstatistic(METRIC_NAME+": "+LinkMetricHandler.NEGATIV_LINK_LABEL,allLabels));
+			statistic.addSubStatistik(createSubstatistic(LinkMetricHandler.NEGATIV_LINK_LABEL,allLabels));
 		return statistic;
 	}
 

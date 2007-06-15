@@ -22,6 +22,7 @@ public class FaultMetricHandler implements  IMetricHandler {
 
 	public static final String FAULT_HANDLER_LABEL = "catchBlock";
 
+	private static int count=0;
 	/**
 	 * Generiert eine eindeutige Markierung.
 	 * 
@@ -58,10 +59,10 @@ public class FaultMetricHandler implements  IMetricHandler {
 		child.addContent(0, comment);
 	}
 
-	public List<String> getPrefix4CovLabeles() {
-		List<String> list = new ArrayList<String>();
-		list.add(FaultMetricHandler.FAULT_HANDLER_LABEL);
-		return list;
-	}
+//	public List<String> getPrefix4CovLabeles() {
+//		List<String> list = new ArrayList<String>();
+//		list.add(FaultMetricHandler.FAULT_HANDLER_LABEL);
+//		return list;
+//	}
 
 }

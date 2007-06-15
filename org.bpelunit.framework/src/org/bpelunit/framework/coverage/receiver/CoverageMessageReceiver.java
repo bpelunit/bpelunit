@@ -10,6 +10,7 @@ import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPMessage;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
@@ -45,12 +46,21 @@ public class CoverageMessageReceiver {
 		return instance;
 	}
 
-	public void putMessage(String body) {
+	public synchronized void putMessage(String body) {
+		Logger logger=Logger.getLogger(getClass());
 		try {
-			System.out.println("MESSAGE ANGEKOMMEN");
+			logger.info("!!!!!!!!!MESSAGE ANGEKOMMEN");
+			if(body==null){
+				logger.info("!!!!!!!!BODY==NULL");
+			}else{
+
+				logger.info("!!!!!!!BODY!=NULL "+body);
+			}
 			SOAPMessage fSOAPMessage = BPELUnitUtil.getMessageFactoryInstance()
 					.createMessage(null,
 							new ByteArrayInputStream(body.getBytes()));
+
+			logger.info("!!!!!!! BYTES Rausgeholt");
 			Element element = encoder.deconstruct(operation, fSOAPMessage);
 			LabelsRegistry covRegistry = LabelsRegistry.getInstance();
 			covRegistry.setCoverageStatusForAllMarker(element.getTextContent(),
@@ -62,7 +72,6 @@ public class CoverageMessageReceiver {
 	}
 
 	public void inizialize(BPELUnitRunner runner) throws SpecificationException {
-		System.out.println("WS INITIALIZIERT");
 		WSDLReader reader;
 		if(ABSOLUT_CONFIG_PATH==null||ABSOLUT_CONFIG_PATH.equals("")){
 			throw new SpecificationException(
@@ -85,8 +94,6 @@ public class CoverageMessageReceiver {
 					SOAPOperationDirectionIdentifier.INPUT);
 			String encodingStyle = operation.getEncodingStyle();
 			encoder = runner.createNewSOAPEncoder(encodingStyle);
-
-			System.out.println("ERFOLGREICH WS INITIALIZIERT");
 		}catch (WSDLException e) {
 			e.printStackTrace();
 			

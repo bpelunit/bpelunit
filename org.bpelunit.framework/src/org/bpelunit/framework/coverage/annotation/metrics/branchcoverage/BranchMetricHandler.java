@@ -192,11 +192,11 @@ public class BranchMetricHandler implements IMetricHandler {
 		return METRIC_NAME;
 	}
 
-	public List<String> getPrefix4CovLabeles() {
-		List<String> list = new ArrayList<String>();
-		list.add(BranchMetricHandler.BRANCH_LABEL);
-		return list;
-	}
+//	public List<String> getPrefix4CovLabeles() {
+//		List<String> list = new ArrayList<String>();
+//		list.add(BranchMetricHandler.BRANCH_LABEL);
+//		return list;
+//	}
 
 //	/**
 //	 * Fügt label vor allen Aktivitäten und verschiebt Targets, wenn vorhanden.

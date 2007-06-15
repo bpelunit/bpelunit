@@ -85,15 +85,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 			HttpRequest request, HttpResponse response) throws HttpException,
 			IOException {
 
-		System.out.println("MESSAGE FOR PARTNER ");
 		wsLogger.info("Incoming request for path " + pathInContext);
-
-		if (fRunner == null) {
-			wsLogger.error("Not initialized - rejecting message for URL "
-					+ pathInContext);
-			// let default 404 handler handle this situaton.
-			return;
-		}
 
 		if (!request.getMethod().equals(HttpRequest.__POST)) {
 			wsLogger.error("Got a non-POST request - rejecting message "
@@ -102,15 +94,23 @@ public class WebServiceHandler extends AbstractHttpHandler {
 			// let default 404 handler handle this situation.
 			return;
 		}
-		// find target according to path in context
-		String partnerName = getPartnerName(pathInContext);
-		System.out.println("MESSAGE FOR PARTNER "+partnerName);
-		if (partnerName.equals(CoverageConstants.SERVICE_NAME)) {
-			sendResponse(response, 202, "");
 
-			StringBuffer buf = readRequest(request);
-			CoverageMessageReceiver.getInstance().putMessage(buf.toString());
+		String partnerName = getPartnerName(pathInContext);
+
+		if (partnerName.equals(CoverageConstants.SERVICE_NAME)) {
+			sendResponse(response, 200, "");
+				StringBuffer buf = readRequest(request);
+				CoverageMessageReceiver.getInstance()
+						.putMessage(buf.toString());
+
 		} else {
+			if (fRunner == null) {
+				wsLogger.error("Not initialized - rejecting message for URL "
+						+ pathInContext);
+				// let default 404 handler handle this situaton.
+				return;
+			}
+			// find target according to path in context
 
 			wsLogger.debug("Supposed partner name for this request: "
 					+ partnerName);
@@ -164,7 +164,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 				wsLogger.debug("Posting \"message sent\" to framework...");
 				fRunner.putWSOutgoingMessageSent(m2);
 
-				wsLogger.info("Done handling request, result OK.");
+				wsLogger.info("Done handling request, result OK. "+code);
 
 			} catch (TimeoutException e) {
 				wsLogger

@@ -20,7 +20,8 @@ public class CoverageConstants {
 	public static final String REPORT_OPERATION = "reportExecution";
 	public static final String PORT_OF_SERVICE = "Soap_service_port";
 	public static final String SERVICE_NAME = "_CoverageReportingService_";
-	public static final String ADDRESS_OF_SERVICE = "http://localhost:7777/ws/";
+	public static final int SERVICE_PORT=7777;
+	public static final String ADDRESS_OF_SERVICE = "http://localhost:"+Integer.valueOf(SERVICE_PORT)+"/ws/"+SERVICE_NAME;
 
 	public static final String COVERAGE_SERVICE_WSDL = "CoverageReportingService.wsdl";
 //	public static final String PARTNERLINK_TYPE = "PLT_CoverageReportingService_";

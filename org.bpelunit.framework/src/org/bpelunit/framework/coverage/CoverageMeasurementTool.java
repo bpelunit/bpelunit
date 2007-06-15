@@ -143,6 +143,7 @@ public class CoverageMeasurementTool {
 	 * Log-Einträge dokumentieren die Ausführung bestimmter Codeteile.
 	 * 
 	 * @param archiveHandler
+	 * @param simulatedUrl 
 	 * @throws ArchiveFileException
 	 */
 	private void prepareLoggingService(IDeploymentArchiveHandler archiveHandler)

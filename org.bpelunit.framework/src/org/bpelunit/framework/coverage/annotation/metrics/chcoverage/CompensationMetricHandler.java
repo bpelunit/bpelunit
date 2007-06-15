@@ -20,6 +20,7 @@ public class CompensationMetricHandler implements IMetricHandler {
 
 	public static final String COMPENS_HANDLER_LABEL = "compHandler";
 
+	private static int count=0;
 
 	/**
 	 * Generiert eine eindeutige Markierung.
@@ -53,11 +54,11 @@ public class CompensationMetricHandler implements IMetricHandler {
 		}
 	}
 
-	public List<String> getPrefix4CovLabeles() {
-		List<String> list = new ArrayList<String>();
-		list.add(CompensationMetricHandler.COMPENS_HANDLER_LABEL);
-		return list;
-	}
+//	public List<String> getPrefix4CovLabeles() {
+//		List<String> list = new ArrayList<String>();
+//		list.add(CompensationMetricHandler.COMPENS_HANDLER_LABEL);
+//		return list;
+//	}
 
 
 }

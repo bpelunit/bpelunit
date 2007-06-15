@@ -19,15 +19,18 @@ public class LabelsRegistry {
 
 	private List<LabelsRegistryForBPELFile> bpelFiles;
 
-	private Logger logger;
+	private static Logger logger;
 	
 	private List<String> infos;
 
 	private LabelsRegistryForBPELFile currentFileRegestry=null;
 
 	public static LabelsRegistry getInstance() {
-		if (instance == null)
+		if (instance == null){
 			instance = new LabelsRegistry();
+
+			logger=Logger.getLogger(instance.getClass());
+		}
 		return instance;
 	}
 
@@ -47,7 +50,6 @@ public class LabelsRegistry {
 	}
 
 	public void setCoverageStatusForAllMarker(String marker, String testCase) {
-		System.out.println("TESTCASE ANGEKOMMEN "+testCase);
 		Scanner scanner = new Scanner(marker);
 		scanner.useDelimiter(Instrumenter.SEPARATOR);
 		String marke;
@@ -60,6 +62,7 @@ public class LabelsRegistry {
 
 	private void setCoverageStatusForMarker(String coverageLabel,
 			String testCase) {
+
 		LabelStatus status = allCoverageLabels.get(coverageLabel);
 		status.setStatus(true, testCase);
 	}

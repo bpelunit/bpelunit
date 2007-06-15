@@ -109,7 +109,7 @@ public class TestSuite implements ITestArtefact {
 		String rootPath= suiteBaseURL.getPath();
 		if (!rootPath.endsWith("/"))
 			rootPath+= "/";
-
+		System.out.println("ROOTPATH="+rootPath);
 		fLocalServer= new LocalHTTPServer(portNumber, rootPath);
 		fTestCaseMap= new LinkedHashMap<String, TestCase>();
 	}
