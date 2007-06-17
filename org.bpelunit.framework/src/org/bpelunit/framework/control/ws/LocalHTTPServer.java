@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.WebServiceHandler2;
+import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.mortbay.http.HttpContext;
 import org.mortbay.http.HttpServer;
 import org.mortbay.http.SocketListener;
@@ -29,8 +29,6 @@ public class LocalHTTPServer {
 
 	private WebServiceHandler fHandler;
 	
-	private WebServiceHandler2 fHandler2=null;
-	
 
 
 	private Logger wsLogger = Logger.getLogger(this.getClass());
@@ -45,16 +43,19 @@ public class LocalHTTPServer {
 
 		SocketListener listener = new SocketListener();
 		listener.setPort(portNumber);
-		listener.setBufferSize(25000);
-//		listener.setMaxIdleTimeMs(5000);
+		listener.setBufferSize(20000);
 		listener.setBufferReserve(1024);
-		wsLogger.info("!!!!!!!!BUFFERSIZE "+listener.getBufferSize());//8192
-		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getBufferReserve());//512
-		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getMaxIdleTimeMs());//10000
-		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getMaxThreads());//256
-		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getLingerTimeSecs());//30
+//		wsLogger.info("!!!!!!!!BUFFERSIZE "+listener.getBufferSize());//8192
+//		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getBufferReserve());//512
+//		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getMaxIdleTimeMs());//10000
+//		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getMaxThreads());//256
+//		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getLingerTimeSecs());//30
 		fServer.addListener(listener);
-
+//		listener = new SocketListener();
+//		listener.setPort(CoverageConstants.SERVICE_PORT);
+//		listener.setBufferSize(25000);
+//		listener.setBufferReserve(1024);
+//		fServer.addListener(listener);
 		// Create the context for the root path
 		HttpContext context = new HttpContext();
 		context.setContextPath(rootPath);

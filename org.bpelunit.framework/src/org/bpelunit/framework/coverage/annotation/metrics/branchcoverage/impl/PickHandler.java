@@ -8,6 +8,7 @@ import java.util.List;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
+import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Element;
 
 
@@ -17,6 +18,12 @@ public class PickHandler implements IStructuredActivityHandler {
 	private static final String ON_MESSAGE = "onMessage";
 
 	private static final String ON_ALARM = "onAlarm";
+
+	private LabelsRegistry markersRegistry;
+
+	public PickHandler(LabelsRegistry markersRegistry) {
+		this.markersRegistry = markersRegistry;
+	}
 
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
@@ -34,7 +41,7 @@ public class PickHandler implements IStructuredActivityHandler {
 			if (child == null) {
 				throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 			}
-			BranchMetricHandler.insertLabelBevorAllActivities(child);
+			markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
 //			BranchMetric.insertLabelWithRespectOfTargets(child);
 
 		}

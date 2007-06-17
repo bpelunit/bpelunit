@@ -5,11 +5,18 @@ import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
+import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Element;
 
 
 
 public class WhileHandler implements IStructuredActivityHandler {
+
+	private LabelsRegistry markersRegistry;
+
+	public WhileHandler(LabelsRegistry markersRegistry) {
+		this.markersRegistry = markersRegistry;
+	}
 
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
@@ -17,7 +24,8 @@ public class WhileHandler implements IStructuredActivityHandler {
 		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetricHandler.insertLabelsForBranch(activity);
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(activity));
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));
 	}
 
 }

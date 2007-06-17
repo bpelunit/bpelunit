@@ -30,8 +30,15 @@ public class CompensationMetricHandler implements IMetricHandler {
 	public static String getAndRegisterNextLabel() {
 		String label = COMPENS_HANDLER_LABEL + "_" + (count++);
 
-		LabelsRegistry.getInstance().addMarker(label);
-		return Instrumenter.COVERAGE_LABEL_IDENTIFIER + label;
+//		LabelsRegistry.getInstance().addMarker(label);
+		return  label;
+	}
+
+	private LabelsRegistry markersRegistry;
+	
+	public CompensationMetricHandler(LabelsRegistry markersRegistry) {
+
+		this.markersRegistry=markersRegistry;
 	}
 
 	public String getName() {
@@ -49,7 +56,9 @@ public class CompensationMetricHandler implements IMetricHandler {
 					.equals(StructuredActivities.SEQUENCE_ACTIVITY)) {
 				activity = encloseInSequence(activity);
 			}
-			Comment comment = new Comment(getAndRegisterNextLabel());
+			String label=getAndRegisterNextLabel();
+			markersRegistry.addMarker(label);
+			Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +label);
 			activity.addContent(0, comment);
 		}
 	}

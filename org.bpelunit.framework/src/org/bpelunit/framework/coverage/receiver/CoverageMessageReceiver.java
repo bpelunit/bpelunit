@@ -1,12 +1,14 @@
 package org.bpelunit.framework.coverage.receiver;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 import javax.wsdl.Definition;
 import javax.wsdl.WSDLException;
 import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 import javax.xml.namespace.QName;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 import org.apache.commons.io.FilenameUtils;
@@ -15,6 +17,7 @@ import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.coverage.CoverageConstants;
+import org.bpelunit.framework.exception.SOAPEncodingException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
@@ -28,7 +31,7 @@ public class CoverageMessageReceiver {
 
 
 //	public static String ABSOLUT_CONFIG_PATH="";
-	public static String ABSOLUT_CONFIG_PATH="C:\\bpelunit\\conf\\CoverageReportingService.wsdl";
+	public static String ABSOLUT_CONFIG_PATH="";
 
 
 	private ISOAPEncoder encoder;
@@ -37,18 +40,25 @@ public class CoverageMessageReceiver {
 
 	private String testCase;
 
-	private CoverageMessageReceiver() {
+
+
+	private LabelsRegistry markersRegistry;
+
+	public CoverageMessageReceiver(LabelsRegistry markersRegistry) {
+
+		this.markersRegistry=markersRegistry;
 	}
 
-	public static CoverageMessageReceiver getInstance() {
-		if (instance == null)
-			instance = new CoverageMessageReceiver();
-		return instance;
-	}
+//	public static CoverageMessageReceiver getInstance() {
+//		if (instance == null)
+//			instance = new CoverageMessageReceiver();
+//		return instance;
+//	}
 
 	public synchronized void putMessage(String body) {
 		Logger logger=Logger.getLogger(getClass());
-		try {
+		Element element = null;
+//		try {
 			logger.info("!!!!!!!!!MESSAGE ANGEKOMMEN");
 			if(body==null){
 				logger.info("!!!!!!!!BODY==NULL");
@@ -56,19 +66,40 @@ public class CoverageMessageReceiver {
 
 				logger.info("!!!!!!!BODY!=NULL "+body);
 			}
-			SOAPMessage fSOAPMessage = BPELUnitUtil.getMessageFactoryInstance()
-					.createMessage(null,
-							new ByteArrayInputStream(body.getBytes()));
+			SOAPMessage fSOAPMessage;
+			try {
+				fSOAPMessage = BPELUnitUtil.getMessageFactoryInstance()
+						.createMessage(null,
+								new ByteArrayInputStream(body.getBytes()));
+
 
 			logger.info("!!!!!!! BYTES Rausgeholt");
-			Element element = encoder.deconstruct(operation, fSOAPMessage);
-			LabelsRegistry covRegistry = LabelsRegistry.getInstance();
-			covRegistry.setCoverageStatusForAllMarker(element.getTextContent(),
+				element=encoder.deconstruct(operation, fSOAPMessage);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.info(e.getLocalizedMessage());
+			} catch (SOAPException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.info(e.getLocalizedMessage());
+			} catch (SOAPEncodingException e) {
+				// TODO Auto-generated catch block
+				logger.info(e.getLocalizedMessage());
+			}
+			
+			markersRegistry.setCoverageStatusForAllMarker(element.getTextContent(),
 					testCase);
-		} catch (Exception e) {
-			LabelsRegistry.getInstance().addInfo("Could not create SOAP message from incoming message: "
-					+ e.getMessage());
-		}
+//		} 
+//		catch (Exception e) {
+//			if(element==null){
+//				logger.info("!!!!!!!!!!! ELEMENT==NULL "+e.getMessage());
+//			}
+//			logger.info("Could not create SOAP message from incoming message: "
+//					+ e.getMessage());
+//			markersRegistry.addInfo("Could not create SOAP message from incoming message: "
+//					+ e.getMessage());
+//		}
 	}
 
 	public void inizialize(BPELUnitRunner runner) throws SpecificationException {

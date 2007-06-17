@@ -12,6 +12,7 @@ import java.util.List;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
+import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Element;
 
 
@@ -23,6 +24,12 @@ import org.jdom.Element;
  * @author Alex Salnikow
  */
 public class IfHandler implements IStructuredActivityHandler {
+
+	private LabelsRegistry markersRegistry;
+
+	public IfHandler(LabelsRegistry markersRegistry) {
+		this.markersRegistry = markersRegistry;
+	}
 
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
@@ -53,7 +60,7 @@ public class IfHandler implements IStructuredActivityHandler {
 		if (branch_activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetricHandler.insertLabelBevorAllActivities(branch_activity);
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 //		BranchMetric.insertLabelWithRespectOfTargets(branch_activity);
 
 	}
@@ -70,7 +77,7 @@ public class IfHandler implements IStructuredActivityHandler {
 		if (branch_activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetricHandler.insertLabelBevorAllActivities(branch_activity);
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 //		BranchMetric.insertLabelWithRespectOfTargets(branch_activity);
 
 	}
@@ -88,7 +95,7 @@ public class IfHandler implements IStructuredActivityHandler {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
 //		BranchMetric.insertLabelWithRespectOfTargets(branch_activity);
-		BranchMetricHandler.insertLabelBevorAllActivities(branch_activity);
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 
 	}
 

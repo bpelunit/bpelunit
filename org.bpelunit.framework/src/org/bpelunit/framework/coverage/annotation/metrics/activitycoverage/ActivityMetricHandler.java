@@ -40,7 +40,11 @@ public class ActivityMetricHandler implements IMetricHandler {
 
 	private HashMap<String, String> activities_to_respekt;
 
-	private Logger logger;
+
+	private Logger logger=Logger.getLogger(getClass());
+
+	private LabelsRegistry markersRegistry;
+	
 	static {
 
 //		logging_before_activity = new HashMap<String, String>();
@@ -58,10 +62,12 @@ public class ActivityMetricHandler implements IMetricHandler {
 //		logging_before_activity.put(BasicActivities.REPLY_ACTIVITY,BasicActivities.REPLY_ACTIVITY);
 	}
 
-	public ActivityMetricHandler() {
+	public ActivityMetricHandler(LabelsRegistry markersRegistry) {
+		this.markersRegistry=markersRegistry;
 		activities_to_respekt = new HashMap<String, String>();
 		logger = Logger.getLogger(getClass());
 	}
+
 
 	/**
 	 * Diese Methode fügt die Markierungen in BPEL-Process-Element ein
@@ -73,6 +79,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 	 *            Prozess-Element der BPEL
 	 */
 	public void insertMarkersForMetric(List<Element> activities) {
+		logger.info("!!!!!!!!!!!!!ANNOTATION "+activities.size());
 		Element element;
 		for (int i = 0; i < activities.size(); i++) {
 			element = activities.get(i);
@@ -117,7 +124,6 @@ public class ActivityMetricHandler implements IMetricHandler {
 	}
 
 	private List<Element> getSourceElements(Element element) {
-		// TODO nicht gleich eine neue Liste erzeugen
 		List<Element> sourceElements = new ArrayList<Element>();
 		Namespace bpelVersion = BpelXMLTools.getProcessNamespace();
 		if (bpelVersion.equals(NAMESPACE_BPEL_2_0)) {
@@ -170,7 +176,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 		String element_name = element.getName();
 		String marker = element_name + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
 				+ (count++);
-		LabelsRegistry.getInstance().addMarker(marker);
+		markersRegistry.addMarker(marker);
 		Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
 				+ marker);
 		int index = parent.indexOf(element);
@@ -183,13 +189,5 @@ public class ActivityMetricHandler implements IMetricHandler {
 		}
 
 	}
-
-
-
-//	public List<String> getPrefix4CovLabeles() {
-//		Set<String> activities = activities_to_respekt.keySet();
-//		List<String> labelsForSubMetrics = new ArrayList<String>(activities);
-//		return labelsForSubMetrics;
-//	}
 
 }

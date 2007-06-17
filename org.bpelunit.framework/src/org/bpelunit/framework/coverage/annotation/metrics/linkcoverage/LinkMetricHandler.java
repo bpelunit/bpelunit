@@ -53,11 +53,15 @@ public class LinkMetricHandler implements  IMetricHandler {
 
 	public static final String POSITIV_LINK_LABEL = "positivLinks";
 
+	private LabelsRegistry markersRegistry;
+
 	public String getName() {
 		return METRIC_NAME;
 	}
 
-	public LinkMetricHandler() {
+	public LinkMetricHandler(LabelsRegistry markersRegistry) {
+
+		this.markersRegistry=markersRegistry;
 	}
 
 	/**
@@ -67,8 +71,8 @@ public class LinkMetricHandler implements  IMetricHandler {
 	 */
 	public static String getNextPositivLinkLabel() {
 		String marker = POSITIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
-		LabelsRegistry.getInstance().addMarker(marker);
-		return Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker;
+//		LabelsRegistry.getInstance().addMarker(marker);
+		return  marker;
 	}
 
 	/**
@@ -78,8 +82,8 @@ public class LinkMetricHandler implements  IMetricHandler {
 	 */
 	public static String getNextNegativLinkLabel() {
 		String marker = NEGATIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
-		LabelsRegistry.getInstance().addMarker(marker);
-		return Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker;
+//		LabelsRegistry.getInstance().addMarker(marker);
+		return  marker;
 	}
 
 	public void insertMarkersForMetric(List<Element> activities)
@@ -240,11 +244,15 @@ public class LinkMetricHandler implements  IMetricHandler {
 			boolean isPositivValueOfLink) {
 		Comment logging;
 
-		if (isPositivValueOfLink) {
-			logging = new Comment(getNextPositivLinkLabel());
+		String label;
+		if (isPositivValueOfLink) {		
+			label=getNextPositivLinkLabel();
+			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +label);
 		} else {
-			logging = new Comment(getNextNegativLinkLabel());
+			label=getNextNegativLinkLabel();
+			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +label);
 		}
+		markersRegistry.addMarker(label);
 
 		Element sequence = createSequence();
 		Element targetElement = createBPELElement(TARGET_TAG);

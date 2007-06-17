@@ -12,6 +12,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
@@ -100,9 +101,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 		if (partnerName.equals(CoverageConstants.SERVICE_NAME)) {
 			sendResponse(response, 200, "");
 				StringBuffer buf = readRequest(request);
-				CoverageMessageReceiver.getInstance()
-						.putMessage(buf.toString());
-
+				BPELUnitRunner.getCoverageMeasurmentTool().putMessage(buf.toString());
 		} else {
 			if (fRunner == null) {
 				wsLogger.error("Not initialized - rejecting message for URL "

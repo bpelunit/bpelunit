@@ -135,7 +135,6 @@ public abstract class BPELUnitRunner {
 			fHaltOnFailure = true;
 
 		// HIER
-		CoverageMessageReceiver.getInstance().initialize();
 		coverageMeasurmentTool = null;
 		fMeasureCoverage = false;
 		String measureCoverage = options.get(MEASURE_COVERAGE);
@@ -170,11 +169,9 @@ public abstract class BPELUnitRunner {
 
 		if (fMeasureCoverage) {
 			try {
-				System.out.println("BPELUnitRunner: MEASURECOVERAGE=TRUE");
 				configureCoverageTool();
 			} catch (ConfigurationException e) {
 				e.printStackTrace();
-				LabelsRegistry.getInstance().addInfo(e.getMessage());
 			}
 		}
 

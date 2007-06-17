@@ -13,6 +13,7 @@ import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.Compensatio
 import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
 import org.bpelunit.framework.coverage.receiver.LabelStatus;
+import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 
 
@@ -31,41 +32,36 @@ public class MetricsManager {
 	}
 	
 	
-	public static IMetric createMetric(String name,List<String> list){
+	public static IMetric createMetric(String name,List<String> list, LabelsRegistry markersRegistry){
 		IMetric metric=null;
 		if(name.equals(ActivityMetric.METRIC_NAME)){
-			metric=new ActivityMetric(list);
-			getInstance().addMetric(metric);
+			metric=new ActivityMetric(list,markersRegistry);
 		}else if(name.equals(BranchMetric.METRIC_NAME)){
-			metric=new BranchMetric();
-			getInstance().addMetric(metric);
+			metric=new BranchMetric(markersRegistry);
 		}else if(name.equals(CompensationMetric.METRIC_NAME)){
-			metric=new CompensationMetric();
-			getInstance().addMetric(metric);
+			metric=new CompensationMetric(markersRegistry);
 		}else if(name.equals(FaultMetric.METRIC_NAME)){
-			metric=new FaultMetric();
-			getInstance().addMetric(metric);
+			metric=new FaultMetric(markersRegistry);
 		}else if(name.equals(LinkMetric.METRIC_NAME)){
-			metric=new LinkMetric();
-			getInstance().addMetric(metric);
+			metric=new LinkMetric(markersRegistry);
 		}
 		return metric;
 	}
 	
 	private static MetricsManager instance=null;
 	
-	public static MetricsManager getInstance(){
-		if(instance==null)
-			instance=new MetricsManager();
-		return instance;
-	}
+//	public static MetricsManager getInstance(){
+//		if(instance==null)
+//			instance=new MetricsManager();
+//		return instance;
+//	}
 	
-	private MetricsManager(){
+	public MetricsManager(){
 		metrics=new ArrayList<IMetric>();
 	}
 	private List<IMetric> metrics;
 	
-	private void addMetric(IMetric metric){
+	public void addMetric(IMetric metric){
 		metrics.add(metric);
 	}
 	
@@ -82,8 +78,8 @@ public class MetricsManager {
 	}
 
 
-	public void initialize() {
-		metrics=new ArrayList<IMetric>();
+	public void destroy() {
+		instance=null;
 	}
 
 

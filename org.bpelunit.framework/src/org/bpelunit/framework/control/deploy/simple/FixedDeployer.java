@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.coverage.CoverageMeasurementTool;
 import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
@@ -30,8 +31,8 @@ public class FixedDeployer implements IBPELDeployer {
 	public void deploy(String path, ProcessUnderTest processUnderTest) throws DeploymentException {
 		// do nothing.
 		if(BPELUnitRunner.isMeasureTestCoverage()){
-			BPELUnitRunner.setCoverageMeasurmentTool(null);
-			LabelsRegistry.getInstance().addInfo("Test coverage can not be measurmet by Fixed Deployer!");
+			CoverageMeasurementTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
+			tool.setErrorStatus("Test coverage can not be measurmet by Fixed Deployer!");
 		}
 	}
 

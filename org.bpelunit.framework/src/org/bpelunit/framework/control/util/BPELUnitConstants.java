@@ -48,7 +48,7 @@ public class BPELUnitConstants {
 	/**
 	 * Default timeout value for all send and receive activities (25 seconds)
 	 */
-	public static final int TIMEOUT= 200000;
+	public static final int TIMEOUT= 80000;
 //	public static final int TIMEOUT= 25000;
 
 	/**

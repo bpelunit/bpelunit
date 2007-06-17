@@ -103,7 +103,7 @@ public class TestCaseRunner {
 
 		List<Thread> threads= new ArrayList<Thread>();
 
-		CoverageMessageReceiver.getInstance().setCurrentTestcase(fTestCase.getName());
+		BPELUnitRunner.getCoverageMeasurmentTool().setCurrentTestCase(fTestCase.getName());
 		for (PartnerTrack partnerTrack : fPartnerTracks.keySet()) {
 			Thread trackThread= new Thread(partnerTrack, partnerTrack.getPartnerName());
 			fLogger.debug("Now starting thread for partner " + partnerTrack.getPartnerName());

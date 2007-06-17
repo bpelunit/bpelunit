@@ -82,8 +82,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 				fBPRFile = newFile;
 				fileReplaced = true;
 			} catch (Exception e) {
-				LabelsRegistry.getInstance().addInfo(
-						"Coverage can not ... An error occurred when annotation for coverage: "
+				coverageTool.setErrorStatus("Coverage can not ... An error occurred when annotation for coverage: "
 								+ e.getMessage());
 				e.printStackTrace();
 				// HIER

@@ -15,11 +15,18 @@ import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchM
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
+import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Element;
 
 
 
 public class RepeatUntilHandler implements IStructuredActivityHandler {
+
+	private LabelsRegistry markersRegistry;
+
+	public RepeatUntilHandler(LabelsRegistry markersRegistry) {
+		this.markersRegistry = markersRegistry;
+	}
 
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
@@ -33,7 +40,7 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 		if (element == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetricHandler.insertLabelAfterAllActivities(activity);
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));
 	}
 
 	private void branchFromConditionToActivity(Element element)
@@ -74,7 +81,7 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 		Element sequence = createSequence();
 		if_element.addContent(sequence);
 		activity.addContent(0, if_element);
-		BranchMetricHandler.insertLabelBevorAllActivities(sequence);
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(sequence));
 
 	}
 

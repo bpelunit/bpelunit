@@ -34,6 +34,7 @@ import org.bpelunit.framework.control.util.ActivityUtil;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
+import org.bpelunit.framework.coverage.CoverageMeasurementTool;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.bpelunit.framework.exception.ConfigurationException;
@@ -114,11 +115,10 @@ public class SpecificationLoader {
 			if (BPELUnitRunner.getCoverageMeasurmentTool()!=null) {
 				System.out.println("Spezifikationloader:BPELUnitRunner.coverageMeasurmentTool!=NULL");
 				try {
-					CoverageMessageReceiver.getInstance().inizialize(fRunner);
+					BPELUnitRunner.getCoverageMeasurmentTool().initializeMarkersReceiver(fRunner);
 				} catch (Exception e) {
-					e.printStackTrace();
-					BPELUnitRunner.setCoverageMeasurmentTool(null);
-					LabelsRegistry.getInstance().addInfo("CoverageTool: "+e.getMessage());
+					CoverageMeasurementTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
+					tool.setErrorStatus("CoverageTool: "+e.getMessage());
 					//TODO Fehler 
 					//HIER
 				}

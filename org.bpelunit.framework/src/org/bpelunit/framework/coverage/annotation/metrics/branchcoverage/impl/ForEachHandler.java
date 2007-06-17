@@ -7,12 +7,19 @@ import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStruct
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
+import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Element;
 
 
 
 public class ForEachHandler implements IStructuredActivityHandler {
 
+
+	private LabelsRegistry markersRegistry;
+
+	public ForEachHandler(LabelsRegistry markersRegistry) {
+		this.markersRegistry = markersRegistry;
+	}
 
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
@@ -37,7 +44,9 @@ public class ForEachHandler implements IStructuredActivityHandler {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY
 					+ " in ForEach activity.");
 		}
-		BranchMetricHandler.insertLabelsForBranch(activity);
+
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(activity));
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));
 
 	}
 

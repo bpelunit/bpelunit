@@ -7,10 +7,12 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.MetricsManager;
+import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
@@ -24,7 +26,9 @@ import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.exceptions.CoverageMeasurmentException;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import org.bpelunit.framework.exception.ConfigurationException;
+import org.bpelunit.framework.exception.SpecificationException;
 import org.jdom.Document;
 
 /**
@@ -49,34 +53,52 @@ public class CoverageMeasurementTool {
 
 	private String fBpelunitConfigDirectory;
 
+	private boolean failure;
+
+	private boolean error;
+
+	private CoverageMessageReceiver messageReceiver=null;
+
+	private LabelsRegistry markersRegistry=null;
+
+	private MetricsManager metricManager;
+
 	/**
 	 * 
 	 */
 	public CoverageMeasurementTool() {
-
-		MetricsManager.getInstance().initialize();
 		logger = Logger.getLogger(getClass());
 		logger.info("CoverageMeasurmentTool erzeugt");
+		metricManager=new MetricsManager();
+		markersRegistry=new LabelsRegistry(metricManager);
+		messageReceiver=new CoverageMessageReceiver(markersRegistry);
 		// this.fBpelunitConfigDirectory=FilenameUtils.concat(System.getenv(BPELUnitBaseRunner.BPELUNIT_HOME_ENV),BPELUnitBaseRunner.CONFIG_DIR);
 	}
 
-	private void configTool(Map<String, List<String>> configMap) {
-		createStatementmetric(configMap);
-		createOtherMetrics(configMap);
 
+
+
+
+	private void createMetrics(Map<String, List<String>> configMap){
+		Iterator<String> iter=configMap.keySet().iterator();
+		String key;
+		IMetric metric;
+		while(iter.hasNext()){
+			key=iter.next();
+			metric=MetricsManager.createMetric(key,configMap.get(key),markersRegistry);
+			if(metric!=null)
+				metricManager.addMetric(metric);
+		}
 	}
-
-	private void createOtherMetrics(Map<String, List<String>> configMap) {
-		if (configMap.containsKey(BranchMetric.METRIC_NAME))
-			MetricsManager.createMetric(BranchMetric.METRIC_NAME, null);
-		if (configMap.containsKey(FaultMetric.METRIC_NAME))
-			MetricsManager.createMetric(FaultMetric.METRIC_NAME, null);
-		if (configMap.containsKey(CompensationMetric.METRIC_NAME))
-			MetricsManager.createMetric(CompensationMetric.METRIC_NAME, null);
-		if (configMap.containsKey(LinkMetric.METRIC_NAME))
-			MetricsManager.createMetric(LinkMetric.METRIC_NAME, null);
-	}
-
+	
+//	private void createStatementmetric(Map<String, List<String>> configMap) {
+//		if (configMap.containsKey(ActivityMetric.METRIC_NAME)) {
+//			MetricsManager.createMetric(ActivityMetric.METRIC_NAME, configMap
+//					.get(ActivityMetric.METRIC_NAME),markersRegistry);
+//		}
+//
+//	}
+	
 	// ********** prepare archive file for coverage measurment **********
 	/**
 	 * Prepariert das Deploymentarchive für die Messung der Abdeckung beim
@@ -121,21 +143,24 @@ public class CoverageMeasurementTool {
 	 */
 	private void executeInstrumentationOfBPEL(
 			IDeploymentArchiveHandler archiveHandler) throws BpelException, ArchiveFileException {
+
 		logger.info("CoverageTool: Instrumentation gestartet.");
-		Instrumenter annotator = new Instrumenter();
+		Instrumenter instrumenter = new Instrumenter();
 		Document doc;
 		BpelXMLTools.count = 0;
 		String bpelFile;
 		for (Iterator<String> iter = archiveHandler.getAllBPELFileNames()
 				.iterator(); iter.hasNext();) {
 			bpelFile = iter.next();
-			LabelsRegistry.getInstance().addRegistryForFile(bpelFile);
+			markersRegistry.addRegistryForFile(bpelFile);
 				doc = archiveHandler.getDocument(bpelFile);
-				doc = annotator.insertAnnotations(doc);
+				doc = instrumenter.insertAnnotations(doc,metricManager);
 				archiveHandler.writeDocument(doc, bpelFile);
+				logger.info("!!!!!!!!!BPEL-Files gefunden ");
 
 		}
 		logger.info("CoverageTool: Instrumentation beendet.");
+		
 	}
 
 	/**
@@ -153,17 +178,49 @@ public class CoverageMeasurementTool {
 		archiveHandler.addWSDLFile(new File(CoverageMessageReceiver.ABSOLUT_CONFIG_PATH));
 	}
 
-	private void createStatementmetric(Map<String, List<String>> configMap) {
-		if (configMap.containsKey(ActivityMetric.METRIC_NAME)) {
-			MetricsManager.createMetric(ActivityMetric.METRIC_NAME, configMap
-					.get(ActivityMetric.METRIC_NAME));
 
-		}
-
-	}
 
 	public void setConfig(Map<String, List<String>> configMap)
 			throws ConfigurationException {
-		configTool(configMap);
+		createMetrics(configMap);
+	}
+	
+	
+	public void setFailureStatus(String message){
+		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!message "+message);
+		markersRegistry.addInfo(message);
+		failure=true;
+	}
+	
+	public void setErrorStatus(String message){
+		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!message "+message);
+		markersRegistry.addInfo(message);
+		error=true;
+	}
+	
+	
+	public void initializeMarkersReceiver(BPELUnitRunner runner){
+		try {
+			messageReceiver.inizialize(runner);
+		} catch (SpecificationException e) {
+			setErrorStatus(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	public void setCurrentTestCase(String testCase){
+			messageReceiver.setCurrentTestcase(testCase);
+	}
+	
+	public synchronized void putMessage(String body) {
+			messageReceiver.putMessage(body);
+	}
+	
+	public List<IFileStatistic> getStatistics() {
+		return markersRegistry.getStatistics();
+	}
+	
+	public List<String> getInfo(){
+		return markersRegistry.getInfo();
 	}
 }

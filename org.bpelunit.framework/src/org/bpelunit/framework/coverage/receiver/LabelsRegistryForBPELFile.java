@@ -16,9 +16,12 @@ public class LabelsRegistryForBPELFile {
 
 	private Hashtable<String, Hashtable<String, LabelStatus>> allMetricsTable;
 
-	public LabelsRegistryForBPELFile(String filename) {
+	private MetricsManager metricManager;
+
+	public LabelsRegistryForBPELFile(String filename, MetricsManager metricManager) {
 		this.fileName = filename;
-		prepareStructur();
+		this.metricManager=metricManager;
+		prepareStructur(metricManager);
 	}
 
 	public String getBPELFileName() {
@@ -31,8 +34,7 @@ public class LabelsRegistryForBPELFile {
 		allMetricsTable.get(prefix).put(marke, status);
 	}
 
-	private void prepareStructur() {
-		MetricsManager metricManager = MetricsManager.getInstance();
+	private void prepareStructur(MetricsManager metricManager) {
 		List<IMetric> metrics = metricManager.getMetrics();
 		allMetricsTable = new Hashtable<String, Hashtable<String, LabelStatus>>();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
@@ -47,7 +49,7 @@ public class LabelsRegistryForBPELFile {
 
 	public IFileStatistic getFileStatistic() {
 		IFileStatistic fileStatistic = new FileStatistic(fileName);
-		fileStatistic.setStatistics(MetricsManager.getInstance()
+		fileStatistic.setStatistics(metricManager
 				.createStatistics(allMetricsTable));
 		return fileStatistic;
 	}

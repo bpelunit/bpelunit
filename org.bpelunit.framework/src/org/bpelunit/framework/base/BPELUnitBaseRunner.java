@@ -111,15 +111,15 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	//HIER
 	public void configureCoverageTool() throws ConfigurationException {
 		System.out.println("BPELUnitBaseRunner: configuration for CoverageToo loaded");
-		String coverageFile= FilenameUtils.concat(fHomeDirectory, FilenameUtils.concat(CONFIG_DIR, COVERAGETOOL_CONFIG_FILE_NAME));
-		if ( (coverageFile == null) || ! (new File(coverageFile).exists())){
-			setCoverageMeasurmentTool(null);
-			System.out.println("BPELUnitBaseRunner: ccoverageMeasurmentTool==NULL");
-			throw new ConfigurationException("BPELUnit was expecting a coverage configuration file at location " + coverageFile);
-		}
 		CoverageMessageReceiver.ABSOLUT_CONFIG_PATH=FilenameUtils.concat(FilenameUtils.concat(fHomeDirectory,CONFIG_DIR),CoverageConstants.COVERAGE_SERVICE_WSDL);
 		CoverageMeasurementTool coverageTool=new CoverageMeasurementTool();
 		setCoverageMeasurmentTool(coverageTool);
+		String coverageFile= FilenameUtils.concat(fHomeDirectory, FilenameUtils.concat(CONFIG_DIR, COVERAGETOOL_CONFIG_FILE_NAME));
+		if ( (coverageFile == null) || ! (new File(coverageFile).exists())){
+			coverageTool.setErrorStatus("BPELUnit was expecting a coverage tool configuration file.");
+			throw new ConfigurationException("BPELUnit was expecting a coverage tool configuration file.");
+		}
+
 		System.out.println("BPELUnitBaseRunner: ccoverageMeasurmentTool!=NULL");
 		Map<String, List<String>> configMap = ExtensionRegistry.loadCoverageToolConfiguration(new File(coverageFile));
 		List<String> directory=new ArrayList<String>();

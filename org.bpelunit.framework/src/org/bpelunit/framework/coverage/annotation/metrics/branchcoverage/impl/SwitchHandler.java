@@ -7,11 +7,18 @@ import java.util.List;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
+import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Element;
 
 
 
 public class SwitchHandler implements IStructuredActivityHandler {
+	private LabelsRegistry markersRegistry;
+
+	public SwitchHandler(LabelsRegistry markersRegistry) {
+		this.markersRegistry = markersRegistry;
+	}
+
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		List case_branches = element.getChildren(SWITCH_CASE_ELEMENT,
@@ -43,7 +50,7 @@ public class SwitchHandler implements IStructuredActivityHandler {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
 //		BranchMetric.insertLabelWithRespectOfTargets(branch_activity);
-		BranchMetricHandler.insertLabelBevorAllActivities(branch_activity);
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 
 	}
 
@@ -59,7 +66,7 @@ public class SwitchHandler implements IStructuredActivityHandler {
 		if (branch_activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
-		BranchMetricHandler.insertLabelBevorAllActivities(branch_activity);
+		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 //		BranchMetric.insertLabelWithRespectOfTargets(branch_activity);
 
 	}

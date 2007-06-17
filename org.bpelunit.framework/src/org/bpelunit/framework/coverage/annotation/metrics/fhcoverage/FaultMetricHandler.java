@@ -31,8 +31,15 @@ public class FaultMetricHandler implements  IMetricHandler {
 	public static String getAndRegisterNextLabel() {
 		String label = FAULT_HANDLER_LABEL + "_" + (count++);
 
-		LabelsRegistry.getInstance().addMarker(label);
-		return Instrumenter.COVERAGE_LABEL_IDENTIFIER + label;
+//		LabelsRegistry.getInstance().addMarker(label);
+		return  label;
+	}
+
+	private LabelsRegistry markersRegistry;
+	
+	public FaultMetricHandler(LabelsRegistry markersRegistry){
+
+		this.markersRegistry=markersRegistry;
 	}
 
 	public String getName() {
@@ -55,7 +62,9 @@ public class FaultMetricHandler implements  IMetricHandler {
 		if (!isSequence(child)) {
 			child = ensureElementIsInSequence(child);
 		}
-		Comment comment = new Comment(getAndRegisterNextLabel());
+		String label=getAndRegisterNextLabel();
+		markersRegistry.addMarker(label);
+		Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +label);
 		child.addContent(0, comment);
 	}
 

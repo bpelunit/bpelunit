@@ -22,6 +22,12 @@ import org.jdom.filter.ContentFilter;
 
 
 public class FlowHandler implements IStructuredActivityHandler {
+	
+	private LabelsRegistry markersRegistry;
+
+	public FlowHandler(LabelsRegistry markersRegistry){
+		this.markersRegistry = markersRegistry;
+	}
 
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
@@ -31,12 +37,12 @@ public class FlowHandler implements IStructuredActivityHandler {
 	private void loggingOfBranches(Element element) {
 		List children = element.getChildren();
 		Element child;
-		try {
+
 			for (int i = 0; i < children.size(); i++) {
 				child = (Element) children.get(i);
 				if (isActivity(child)) {
 					if (isTargetOfLinks(child)) {
-						BranchMetricHandler.insertLabelBevorAllActivities(child);
+						markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
 					} else {
 						List<Element> createInstanceElement = getCreateInstanceActivity(child);
 						if (createInstanceElement.size()>0) {
@@ -44,19 +50,15 @@ public class FlowHandler implements IStructuredActivityHandler {
 									.iterator(); iter.hasNext();) {
 								Element el=iter.next();
 								ensureElementIsInSequence(el);
-								BranchMetricHandler.insertLabelAfterActivity(el);
+								markersRegistry.addMarker(BranchMetricHandler.insertLabelAfterActivity(el));
 							}
 							
 						} else {
-							BranchMetricHandler.insertLabelBevorAllActivities(child);
+							markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
 						}
 					}
 				}
 			}
-		} catch (Exception e) {
-			LabelsRegistry.getInstance().addInfo(e.getMessage());
-			e.printStackTrace();
-		}
 
 	}
 

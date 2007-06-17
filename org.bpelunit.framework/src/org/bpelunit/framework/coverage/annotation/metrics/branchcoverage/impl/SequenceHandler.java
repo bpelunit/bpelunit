@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
+import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
@@ -20,6 +21,12 @@ import org.jdom.filter.ElementFilter;
  * @author Alex Salnikow
  */
 public class SequenceHandler implements IStructuredActivityHandler {
+
+	private LabelsRegistry markersRegistry;
+
+	public SequenceHandler(LabelsRegistry markersRegistry) {
+		this.markersRegistry = markersRegistry;
+	}
 
 	/**
 	 * Fügt Markierungen in Sequence-Elemente ein, die später, um die Ausführung
@@ -41,9 +48,7 @@ public class SequenceHandler implements IStructuredActivityHandler {
 			if (isActivity(child)) {
 				if (previousActivity != null) {
 					{
-						// BranchMetric.insertLabelAfterActivity(previousActivity);
-						System.out.println("!!!!Vorgänger "+previousActivity.getName());
-						BranchMetricHandler.insertLabelBevorActivity(child);
+						markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorActivity(child));
 					}
 				}
 				previousActivity = child;

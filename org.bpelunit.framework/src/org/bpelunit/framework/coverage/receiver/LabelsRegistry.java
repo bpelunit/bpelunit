@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.coverage.annotation.Instrumenter;
+import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 
 
@@ -25,17 +26,20 @@ public class LabelsRegistry {
 
 	private LabelsRegistryForBPELFile currentFileRegestry=null;
 
-	public static LabelsRegistry getInstance() {
-		if (instance == null){
-			instance = new LabelsRegistry();
+	private MetricsManager metricManager;
 
-			logger=Logger.getLogger(instance.getClass());
-		}
-		return instance;
-	}
+//	public static LabelsRegistry getInstance() {
+//		if (instance == null){
+//			instance = new LabelsRegistry();
+//
+//			logger=Logger.getLogger(instance.getClass());
+//		}
+//		return instance;
+//	}
 
 
-	private LabelsRegistry() {
+	public LabelsRegistry(MetricsManager metricManager) {
+		this.metricManager=metricManager;
 		logger = Logger.getLogger(getClass());
 		allCoverageLabels = new Hashtable<String, LabelStatus>();
 		bpelFiles = new ArrayList<LabelsRegistryForBPELFile>();
@@ -44,12 +48,13 @@ public class LabelsRegistry {
 	
 
 	public void addMarker(String marker) {
+		logger.info("MARKER Registrieret="+marker);
 		LabelStatus status=new LabelStatus();
 		allCoverageLabels.put(marker, status);
 		currentFileRegestry.addMarker(marker,status);
 	}
 
-	public void setCoverageStatusForAllMarker(String marker, String testCase) {
+	public synchronized void setCoverageStatusForAllMarker(String marker, String testCase) {
 		Scanner scanner = new Scanner(marker);
 		scanner.useDelimiter(Instrumenter.SEPARATOR);
 		String marke;
@@ -62,7 +67,7 @@ public class LabelsRegistry {
 
 	private void setCoverageStatusForMarker(String coverageLabel,
 			String testCase) {
-
+		logger.info("!!!!!!!MARKE!!!! "+coverageLabel+" Testcase ="+testCase);
 		LabelStatus status = allCoverageLabels.get(coverageLabel);
 		status.setStatus(true, testCase);
 	}
@@ -79,7 +84,7 @@ public class LabelsRegistry {
 	}
 
 	public void addRegistryForFile(String fileName) {
-		LabelsRegistryForBPELFile registry4File = new LabelsRegistryForBPELFile(fileName);
+		LabelsRegistryForBPELFile registry4File = new LabelsRegistryForBPELFile(fileName,metricManager);
 		bpelFiles.add(registry4File);
 		currentFileRegestry=registry4File;
 	}
@@ -98,7 +103,6 @@ public class LabelsRegistry {
 	
 	public void addInfo(String info){
 		infos.add(info);
-		System.out.println("INFO "+ info);
 	}
 	
 	public List<String> getInfo(){

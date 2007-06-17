@@ -24,8 +24,6 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-
-
 /**
  * Klasse instrumentiert ein BPEL-Prozess, um die Zweigabdeckung bei der
  * Ausführung zu messen.
@@ -45,21 +43,21 @@ public class BranchMetricHandler implements IMetricHandler {
 	 * 
 	 * @return eindeutige Markierung
 	 */
-	public static String getAndRegisterNextLabel() {
-		String label = BRANCH_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
-				+ (count++);
-		registerCoverageLabel(label);
-		return Instrumenter.COVERAGE_LABEL_IDENTIFIER + label;
+	private static String getAndRegisterNextLabel() {
+		String label = BRANCH_LABEL
+				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+		// registerCoverageLabel(label);
+		return label;
 	}
 
-	public static String getNextLabel() {
-		return BRANCH_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
-				+ (count++);
-	}
+	// public static String getNextLabel() {
+	// return BRANCH_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
+	// + (count++);
+	// }
 
-	private static void registerCoverageLabel(String label) {
-		LabelsRegistry.getInstance().addMarker(label);
-	}
+	// private static void registerCoverageLabel(String label) {
+	// LabelsRegistry.getInstance().addMarker(label);
+	// }
 
 	/**
 	 * Fügt Markierung für einen Zweig, der durch eine Aktivität repräsentiert
@@ -69,10 +67,10 @@ public class BranchMetricHandler implements IMetricHandler {
 	 *            Aktivität, die einen Zweig repräsentiert
 	 * @param additionalInfo
 	 */
-	public static void insertLabelsForBranch(Element activity) {
-		insertLabelBevorAllActivities(activity);
-		insertLabelAfterAllActivities(activity);
-	}
+//	public static void insertLabelsForBranch(Element activity) {
+//		insertLabelBevorAllActivities(activity);
+//		insertLabelAfterAllActivities(activity);
+//	}
 
 	/**
 	 * Fügt eine Markierung vor allen Aktivitäten ein. Wenn es notwendig ist,
@@ -82,27 +80,28 @@ public class BranchMetricHandler implements IMetricHandler {
 	 * @param activity
 	 * @param additionalInfo
 	 */
-	public static void insertLabelBevorAllActivities(Element activity) {
+	public static String insertLabelBevorAllActivities(Element activity) {
 		activity = respectTargetsOfLinks(activity);
 		if (!isSequence(activity)) {
 			activity = ensureElementIsInSequence(activity);
 		}
-		activity.addContent(0, new Comment(BranchMetricHandler
-				.getAndRegisterNextLabel()));
+		String label=getAndRegisterNextLabel();
+		activity.addContent(0, new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER + label));
+		return label;
 	}
 
 	private static Element respectTargetsOfLinks(Element activity) {
 		List<Element> targets = getTargets(activity);
 		if (targets.size() > 0) {
-			Element sequence=createSequence();
+			Element sequence = createSequence();
 			for (Iterator<Element> iter = targets.iterator(); iter.hasNext();) {
 				sequence.addContent(iter.next().detach());
 			}
-			Element parent=activity.getParentElement();
-			int index=parent.indexOf(activity);
+			Element parent = activity.getParentElement();
+			int index = parent.indexOf(activity);
 			parent.addContent(index, sequence);
-			sequence.addContent(activity.detach());	
-			activity=sequence;
+			sequence.addContent(activity.detach());
+			activity = sequence;
 		}
 		return activity;
 	}
@@ -115,12 +114,14 @@ public class BranchMetricHandler implements IMetricHandler {
 	 * @param activity
 	 * @param additionalInfo
 	 */
-	public static void insertLabelAfterAllActivities(Element activity) {
+	public static String insertLabelAfterAllActivities(Element activity) {
 		if (!isSequence(activity)) {
 			activity = ensureElementIsInSequence(activity);
 		}
-		activity
-				.addContent(new Comment(BranchMetricHandler.getAndRegisterNextLabel()));
+		String label = getAndRegisterNextLabel();
+		activity.addContent(new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
+				+ label));
+		return label;
 	}
 
 	/**
@@ -128,52 +129,58 @@ public class BranchMetricHandler implements IMetricHandler {
 	 * @param activity
 	 *            muss innerhalb Sequence sein
 	 */
-	public static void insertLabelAfterActivity(Element activity) {
+	public static String  insertLabelAfterActivity(Element activity) {
 		// TODO anderer Name
 		Element parent = activity.getParentElement();
+		String label = getAndRegisterNextLabel();
 		parent.addContent(parent.indexOf(activity) + 1, new Comment(
-				getAndRegisterNextLabel()));
+				Instrumenter.COVERAGE_LABEL_IDENTIFIER + label));
+		return label;
 	}
-	
+
 	/**
 	 * 
 	 * @param activity
 	 *            muss innerhalb Sequence sein
 	 */
-	public static void insertLabelBevorActivity(Element activity) {
+	public static String insertLabelBevorActivity(Element activity) {
 		activity = respectTargetsOfLinks(activity);
 		Element parent = activity.getParentElement();
+		String label = getAndRegisterNextLabel();
 		parent.addContent(parent.indexOf(activity), new Comment(
-				getAndRegisterNextLabel()));
+				Instrumenter.COVERAGE_LABEL_IDENTIFIER + label));
+		return label;
 	}
 
 	private HashMap<String, IStructuredActivityHandler> structured_activity_handler = new HashMap<String, IStructuredActivityHandler>();
 
-	public BranchMetricHandler() {
+//	private LabelsRegistry markersRegistry;
 
+	public BranchMetricHandler(LabelsRegistry markersRegistry) {
+//		this.markersRegistry = markersRegistry;
 		structured_activity_handler.put(StructuredActivities.FLOW_ACTIVITY,
-				new FlowHandler());
+				new FlowHandler(markersRegistry));
 		structured_activity_handler.put(StructuredActivities.SEQUENCE_ACTIVITY,
-				new SequenceHandler());
+				new SequenceHandler(markersRegistry));
 		structured_activity_handler.put(StructuredActivities.IF_ACTIVITY,
-				new IfHandler());
+				new IfHandler(markersRegistry));
 		structured_activity_handler.put(StructuredActivities.WHILE_ACTIVITY,
-				new WhileHandler());
+				new WhileHandler(markersRegistry));
 		structured_activity_handler.put(
 				StructuredActivities.REPEATUNTIL_ACTIVITY,
-				new RepeatUntilHandler());
+				new RepeatUntilHandler(markersRegistry));
 		structured_activity_handler.put(StructuredActivities.FOREACH_ACTIVITY,
-				new ForEachHandler());
+				new ForEachHandler(markersRegistry));
 		structured_activity_handler.put(StructuredActivities.PICK_ACTIVITY,
-				new PickHandler());
+				new PickHandler(markersRegistry));
 		structured_activity_handler.put(StructuredActivities.SWITCH_ACTIVITY,
-				new SwitchHandler());
+				new SwitchHandler(markersRegistry));
 	}
 
-	public void insertMarkersForMetric(List<Element> activities) throws BpelException {
+	public void insertMarkersForMetric(List<Element> activities)
+			throws BpelException {
 		Element next_element;
-		for (Iterator<Element> iter = activities.iterator(); iter
-				.hasNext();) {
+		for (Iterator<Element> iter = activities.iterator(); iter.hasNext();) {
 			next_element = iter.next();
 			String next_element_name = next_element.getName();
 			if (structured_activity_handler.containsKey(next_element_name)) {
@@ -192,21 +199,22 @@ public class BranchMetricHandler implements IMetricHandler {
 		return METRIC_NAME;
 	}
 
-//	public List<String> getPrefix4CovLabeles() {
-//		List<String> list = new ArrayList<String>();
-//		list.add(BranchMetricHandler.BRANCH_LABEL);
-//		return list;
-//	}
+	// public List<String> getPrefix4CovLabeles() {
+	// List<String> list = new ArrayList<String>();
+	// list.add(BranchMetricHandler.BRANCH_LABEL);
+	// return list;
+	// }
 
-//	/**
-//	 * Fügt label vor allen Aktivitäten und verschiebt Targets, wenn vorhanden.
-//	 * 
-//	 * @param child
-//	 */
-//	public static void insertLabelWithRespectOfTargets(Element child) {
-//		child = respectTargetsOfLinks(child);
-//		insertLabelBevorAllActivities(child);
-//	}
+	// /**
+	// * Fügt label vor allen Aktivitäten und verschiebt Targets, wenn
+	// vorhanden.
+	// *
+	// * @param child
+	// */
+	// public static void insertLabelWithRespectOfTargets(Element child) {
+	// child = respectTargetsOfLinks(child);
+	// insertLabelBevorAllActivities(child);
+	// }
 
 	public static List<Element> getTargets(Element child) {
 		Namespace ns = getProcessNamespace();

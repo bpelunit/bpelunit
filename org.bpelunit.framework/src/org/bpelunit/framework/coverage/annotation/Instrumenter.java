@@ -1,13 +1,8 @@
 package org.bpelunit.framework.coverage.annotation;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.CATCHALL_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.CATCH_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.COMPENSATION_HANDLER;
 import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
 import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
 import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createVariableName;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getProcessNamespace;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.isStructuredActivity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,12 +10,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetricHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.CMServiceFactory;
@@ -33,7 +22,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.ContentFilter;
-import org.jdom.filter.ElementFilter;
 
 /**
  * Dieses Interface wird von dem Handler implementiert, der dafür zuständig ist,
@@ -51,9 +39,6 @@ public class Instrumenter {
 
 	public static final String SEPARATOR = "#";
 
-
-
-
 	private Logger logger;
 
 	private CMServiceFactory cmServiceFactory;
@@ -68,118 +53,49 @@ public class Instrumenter {
 	 * Startet die Instrumentierung der BPEL-Datei.
 	 * 
 	 * @param document
+	 * @param metricManager 
 	 * @param metrics
 	 * @throws BpelException
 	 * @throws ConfigurationException
 	 */
-	public Document insertAnnotations(Document document) throws BpelException {
+	public Document insertAnnotations(Document document, MetricsManager metricManager) throws BpelException {
 		Element process_element = document.getRootElement();
 		checkVersion(process_element);
 		initializeBPELTools(process_element);
-		List<IMetric> metrics = MetricsManager.getInstance().getMetrics();
-		executeInstrumentation(metrics,process_element);
+		List<IMetric> metrics = metricManager.getMetrics();
+		saveOriginalBPELElements(metrics, process_element);
+		executeInstrumentation(metrics);
 		createReportInvokesFromCoverageLabels(process_element);
 		logger.info("Instrumentation sucessfully completed.");
 		return document;
 	}
 
-	private List<Element> getActivitiesForMetric(Element process_element,
-			IMetric metric) {
-		List<Element> list = null;
-		if (metric.getName().equals(ActivityMetric.METRIC_NAME)) {
+	// private List<Element> getActivitiesForMetric(Element process_element,
+	// IMetric metric) {
+	// List<Element> list = null;
+	// if (metric.getName().equals(ActivityMetric.METRIC_NAME)) {
+	//
+	// list = getBasisActivities(process_element, metric.getConfigInfo());
+	// } else if (metric.getName().equals(BranchMetric.METRIC_NAME)) {
+	// list = getStructuredActivities(process_element);
+	// } else if (metric.getName().equals(LinkMetric.METRIC_NAME)) {
+	// list = getLinks(process_element);
+	// } else if (metric.getName().equals(FaultMetric.METRIC_NAME)) {
+	// list = getFaultHandlers(process_element);
+	// } else if (metric.getName().equals(CompensationMetric.METRIC_NAME)) {
+	// list = getCompensationHandlers(process_element);
+	// }
+	// return list;
+	// }
 
-			list = getBasisActivities(process_element, metric.getConfigInfo());
-		} else if (metric.getName().equals(BranchMetric.METRIC_NAME)) {
-			list = getStructuredActivities(process_element);
-		} else if (metric.getName().equals(LinkMetric.METRIC_NAME)) {
-			list = getLinks(process_element);
-		} else if (metric.getName().equals(FaultMetric.METRIC_NAME)) {
-			list = getFaultHandlers(process_element);
-		} else if (metric.getName().equals(CompensationMetric.METRIC_NAME)) {
-			list = getCompensationHandlers(process_element);
+	private void saveOriginalBPELElements(List<IMetric> metrics,
+			Element process_element) {
+		IMetric metric;
+		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
+			metric = iter.next();
+			metric.setOriginalBPELDocument(process_element);
 		}
-		return list;
 	}
-
-	private List<Element> getCompensationHandlers(Element process_element) {
-		Iterator<Element> compensHandlers = process_element
-				.getDescendants(new ElementFilter(COMPENSATION_HANDLER,
-						getProcessNamespace()));
-		List<Element> elements_to_log = new ArrayList<Element>();
-		while (compensHandlers.hasNext()) {
-			elements_to_log.add(compensHandlers.next());
-		}
-		return elements_to_log;
-	}
-
-	private List<Element> getFaultHandlers(Element process_element) {
-		ElementFilter filter = new ElementFilter(getProcessNamespace()) {
-			@Override
-			public boolean matches(Object obj) {
-				boolean result = false;
-				String elementName;
-				if (super.matches(obj)) {
-					elementName = ((Element) obj).getName();
-					if (elementName.equals(CATCH_ELEMENT)
-							|| elementName.equals(CATCHALL_ELEMENT)) {
-						result = true;
-					}
-				}
-				return result;
-			}
-		};
-
-		List<Element> elements_to_log = new ArrayList<Element>();
-		for (Iterator<Element> iter = process_element.getDescendants(filter); iter
-				.hasNext();) {
-			elements_to_log.add(iter.next());
-
-		}
-		return elements_to_log;
-	}
-
-	private List<Element> getLinks(Element process_element) {
-
-		List<Element> elements_to_log = new ArrayList<Element>();
-		Iterator<Element> iter = process_element
-				.getDescendants(new ElementFilter(LinkMetricHandler.LINK_TAG,
-						process_element.getNamespace()));
-		while (iter.hasNext()) {
-			elements_to_log.add(iter.next());
-		}
-		return elements_to_log;
-	}
-
-	private List<Element> getStructuredActivities(Element process_element) {
-		Element next_element;
-		Iterator<Element> iter = process_element
-				.getDescendants(new ElementFilter(process_element
-						.getNamespace()));
-		List<Element> elements_to_log = new ArrayList<Element>();
-		while (iter.hasNext()) {
-			next_element = iter.next();
-			if (isStructuredActivity(next_element)) {
-				elements_to_log.add(next_element);
-			}
-		}
-		return elements_to_log;
-	}
-
-	private List<Element> getBasisActivities(Element process_element,
-			List<String> activitiesToRespect) {
-
-		ElementFilter filter = new ElementFilter(process_element.getNamespace());
-		List<Element> elements_to_log = new ArrayList<Element>();
-		for (Iterator<Element> iter = process_element.getDescendants(filter); iter
-				.hasNext();) {
-			Element basicActivity = iter.next();
-			if (activitiesToRespect.contains(basicActivity.getName()))
-				elements_to_log.add(basicActivity);
-		}
-		return elements_to_log;
-	}
-
-
 
 	private void checkVersion(Element process_element)
 			throws BpelVersionException {
@@ -196,27 +112,30 @@ public class Instrumenter {
 
 	private void initializeBPELTools(Element process_element)
 			throws BpelVersionException {
-		BpelXMLTools.process_element=process_element;
+		BpelXMLTools.process_element = process_element;
 		BasicActivities.initialize();
 		StructuredActivities.initialize();
 	}
 
 	// *********************** ****************************************
 
-
-	private void executeInstrumentation(List<IMetric> metrics,Element process_element)
+	private void executeInstrumentation(List<IMetric> metrics)
 			throws BpelException {
 		IMetric metric;
-		List<Element> activities;
+		// List<Element> activities;
+		// for (Iterator<IMetric> i = metrics.iterator(); i.hasNext();) {
+		// metric = i.next();
+		// activities = getActivitiesForMetric(process_element, metric);
+		// if (activities != null) {
+		// metric.getHandler().insertMarkersForMetric(activities);
+		// }
+		// }
+
 		for (Iterator<IMetric> i = metrics.iterator(); i.hasNext();) {
 			metric = i.next();
-			activities = getActivitiesForMetric(process_element, metric);
-			if (activities != null) {
-				metric.getHandler().insertMarkersForMetric(activities);
-			}
+			metric.insertMarkers();
 		}
 	}
-
 
 	private void createReportInvokesFromCoverageLabels(Element process_element) {
 		cmServiceFactory = CMServiceFactory.getInstance();
