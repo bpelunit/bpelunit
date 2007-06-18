@@ -58,14 +58,12 @@ sei $\mathcal{A}_i\subseteq\mathcal{A},\ s\in \mathcal{A}_i,\ t=type_\mathcal{A}
 
 
 Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivitäten. Die Abbildung \ref{fig:flussgraphen} stellt die Kontrollflussgraphen der strukturierten Aktivitäten dar und soll dem Verständnis der Formel beitragen.
-\begin{figure}
-	\centering
-		\includegraphics[width=0.95\textwidth]{bilder/Flussgraphen.png}
-      \caption{Kontrollflussgraphen der Strukturierten Aktivitäten}
-	\label{fig:flussgraphen}
-\end{figure}
 \begin{itemize}
 	\item Sequence:
+	\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.11\textwidth]{bilder/sequenceGraph.png}
+\end{figure}
 		\begin{itemize}
  			\item
  			$br\_number_{sequence}(s)=\left|children(s)\right|-1+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{sequence}$ 
@@ -75,6 +73,10 @@ Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivit
  				$br\_number^{executed}_{sequence}(s)=\left|EX^{s}_{seq}\right|+br\_number^{executed}_{set}(children(s))$
 		\end{itemize}
 	\item If:
+	\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.31\textwidth]{bilder/ifGraph.png}
+\end{figure}
 		\begin{itemize}
 		 	\item
  		 		$br\_number_{if}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\
@@ -87,13 +89,22 @@ Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivit
        		\item \emph{Bemerkung:} Ein impliziter else-Zweig wird nach der formalen Definition von $If$-Aktivität automatisch berücksichtigt.
 		\end{itemize}
 \item Pick:
+	\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.32\textwidth]{bilder/pickGraph.png}
+\end{figure}
 	\begin{itemize}
 	\item $br\_number_{pick}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{pick}$
 	\item $EX^{s}_{pick}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{pick}\wedge BE((s,b,a))=true \}$
 		\item $br\_number^{executed}_{pick}(s)=\left|EX^{s}_{pick}\right|+br\_number^{executed}_{set}(children(s))$
 \end{itemize}
-\item Loops ($\forall t\in\{while,\ repeatUntil,\ forEach\footnote{
-Das Besondere an dieser Aktivität ist die Fähigkeit, den enthaltenen Scope nicht mehrmals hintereinander sondern parallel auszuführen (gesteuert mit Attribute \textit{parallel}). Diese Option bietet eine Möglichkeit die Abarbeitung des Prozesses zu beschleunigen. Diese Optimierungsmöglichkeit wird bei der Definition der Zweigabdeckung nicht berücksichtigt.}\}$):
+\item Loops: 
+	\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.7\textwidth]{bilder/loopsGraph.png}
+\end{figure}
+($\forall t\in\{while,\ repeatUntil,\ forEach\footnote{
+Das Besondere an dieser Aktivität ist die Fähigkeit, den enthaltenen Scope nicht mehrmals hintereinander sondern parallel auszuführen (gesteuert mit Attribute \textit{parallel}). Diese Option bietet eine Möglichkeit die Abarbeitung des Prozesses zu beschleunigen. Diese Optimierungsmöglichkeit wird bei der Definition der Zweigabdeckung nicht berücksichtigt.}\}$)
 	\begin{itemize}
 	\item $br\_number_{t}(s)=2+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{t}$
 	\item $EX^{s}_{\mathcal{HR}}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{t}\wedge BE((s,b,a))=true \}$
@@ -102,12 +113,20 @@ Das Besondere an dieser Aktivität ist die Fähigkeit, den enthaltenen Scope nicht
 		\item $br\_number^{executed}_{t}(s)=\left|EX^{s}_{t}\right|+br\_number^{executed}_{set}(children(s))$
 \end{itemize}
 \item Flow:
+	\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.3\textwidth]{bilder/flowGraph.png}
+\end{figure}
 	\begin{itemize}
 	\item $br\_number_{flow}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{flow}$
 	\item $EX^{s}_{flow}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{flow}\wedge BE((s,b,a))=true \}$
 		\item $br\_number^{executed}_{flow}(s)=\left|EX^{s}_{flow}\right|+br\_number^{executed}_{set}(children(s))$
 \end{itemize}
-\item Scope:
+\item Scope:	
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.15\textwidth]{bilder/scopeGraph.png}
+\end{figure}
 	\begin{itemize}
 	\item $br\_number_{flow}(s)=br\_number_{set}(children(s)),\ s \in \mathcal{A}_{scope}$
 		\item $br\_number^{executed}_{scope}(s)=br\_number^{executed}_{set}(children(s))$\\

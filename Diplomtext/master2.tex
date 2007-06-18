@@ -1,9 +1,7 @@
-\documentclass[12pt,a4paper]{scrreprt}
+\documentclass[11pt,a4paper]{scrreprt}
 
-\usepackage[latin1]{inputenc}   % UNIX Umlaute und ß
-%\usepackage{ae}                 % interne 8bit Codierung für bessere Trennungen
+\usepackage[latin1]{inputenc}   
 \usepackage[ngerman]{babel}           % deutsche Trennungen und Bezeichnungen
-%\usepackage{bibdbis}            % Literaturangaben aus der Datenbank mit bibtex
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage {natbib}
 \citestyle{dinat}
@@ -19,6 +17,7 @@
 \usepackage{listings} \lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} \lstset{language=XML}
 \usepackage{wrapfig}
 \usepackage{pdftricks}			% Zeichnen von Bäumen
+\usepackage{fancyhdr}
 %\begin{psinputs}
 %\usepackage{pst-all}
 %\end{psinputs}			
@@ -33,7 +32,6 @@
 
 \parskip3mm						%Abstand zwischen Absätzen
 \parindent0mm					%Einrückung bei Absatzbeginn
-
 
 \newcommand{\hidden}[1]{}
 \newcommand{\code}[1]{{\tt #1}}
@@ -78,6 +76,14 @@
 		{\Huge in BPEl-Komositionen}\\[1cm]}
 
 
+\pagestyle{fancyplain}
+\fancyfoot[R]{\thepage}
+\lhead{}
+\chead{}
+\cfoot{}
+\renewcommand{\chaptermark}[1]{
+\markboth{#1}{}}
+
 
 \begin{document}
 %\maketitle			
@@ -90,16 +96,17 @@
 \input{zusammenfassung}
 %\vspace{1cm}
   
+  
+  
+  
 \parskip0mm
 \newpage
 %\thispagestyle{empty}~
-\pagenumbering{arabic}
 \tableofcontents
-\parskip5mm
 \chapter{Einleitung}
-\section{Motivation}
+\section{Motivateion}
 \input{motivation}
-\section{Aufgabenstellung}
+\section{Beitrag dieser Arbeit}
 \input{aufgabenstellung}
 \section{Aufbau der Arbeit}
 \input{struktur}
@@ -141,8 +148,9 @@ ImAbschnitt Design und Implementierung
 \chapter{Beispiele}\label{beispiele}
 \input{beispiele}
 \chapter{Fallstudie}\label{chap:fallstudie}
+\input{fallstudie}
 \chapter{Zusammenfassung und Ausblick}
-%\input{ausblick}
+\input{ausblick}
 %\input{rest}
 \bibliographystyle{plain}
 \bibliography{referenzen}

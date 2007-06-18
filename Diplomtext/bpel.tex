@@ -44,8 +44,8 @@ Die Beziehung zwischen dem BPEL-Prozess und einem konkreten Partner wird letzten
 Die Bindung an einen konkreten Web Service kann entweder statisch zum Zeitpunkt des Deployments oder dynamisch zur Laufzeit erfolgen. Die Abbildung \ref{fig:partnerLink} stellt den ganzen Zusammenhang grafisch dar.
 \begin{figure}[htbp]
 	\centering
-		\includegraphics[width=0.7\textwidth]{bilder/partnerLink.png}
-		\caption{Partner Link}
+		\includegraphics[width=0.8\textwidth]{bilder/partnerLink.png}
+		\caption{Partner Link\cite{Dieter}}
 	\label{fig:partnerLink}
 \end{figure}
 
@@ -66,8 +66,8 @@ Die Basisaktivitäten sind:
 \begin{itemize}
 \item $<$invoke$>$ - Aufruf anderer Web Services aus dem Prozess heraus. 
 \item $<$receive$>$ - Blockierendes Warten auf Nachrichten.
-\item $<$reply$>$ - Versendet eine Antwort.
-\item $<$assign$>$ - Manipulation von Variablenwerten.
+\item $<$reply$>$ - Versenden einer Antwort.
+\item $<$assign$>$ - Zuweisung und Manipulation von Variablenwerten.
 \item $<$throw$>$ - Explizites Signalisieren eines Fehlers, welcher durch Fehlerbehandlungen abgefangen werden kann.
 \item $<$exit$>$ - Beenden einer Prozessinstanz.
 \item $<$wait$>$ - Warten auf einen Zeitpunkt oder für eine Zeitspanne.
@@ -92,7 +92,7 @@ WS-BPEL beschreibt den Ablauf von Geschäftsprozessen als strukturierte Aktivität
 \item $<$if$>$ - bedingte Auführung von Aktivitäten.\textit{ if}-Aktivität besitzt mehrere geordnete Bedingte Zweige definiert  durch $<$\textit{if}$>$- und $<$\textit{elseif}$>$- Elemente gefolgt von einem optionalem $<$\textit{else}$>$-Element. Der erste Zweig mit der zutreffenden Bedingung wird ausgeführt. 
 \item $<$while$>$ - iterative Ausführung der Aktivitäten. Die Ausführung findet solange statt, bis die Bedingung nicht mehr erfüllt ist. Die Auswertung der Bedingung findet vor jeder Schleifenausführung statt.
 \item $<$repeatUntil$>$ - iterative Ausführung von Aktivitäten. Die Ausführung findet solange statt, bis die Bedingung erfüllt ist. Die Auswertung der Bedingung findet nach jeder Schleifenausführung statt.
-\item $<$forEach$>$ -  iterative Ausführung von Aktivitäten. Die Ausführung kann entweder seriell und parallel erfolgen (gesteuert durch Attribut \textit{parallel}).
+\item $<$forEach$>$ -  iterative Ausführung von Aktivitäten. Die Ausführung kann entweder seriell oder parallel erfolgen (gesteuert durch Attribut \textit{parallel}).
 \item $<$pick$>$ - blockierendes Warten auf  Eintreffen eines von mehreren Ereignissen. Bei dieser strukturierenden Aktivität wird ein Zweig aus mehreren anhand eines Ereignisses (Nachricht oder Alarm) ausgewählt. Wurde ein zutreffendes Ereignis empfangen, so wird die zugehörige Aktivität ausgeführt und alle nachfolgenden Ereignisse verworfen. 
 \item $<$flow$>$ - ermöglicht parallele Ausführung von Aktivitäten mit Synchronisationsmöglichkeit (siehe Abschnitt \ref{sec:linkkonzept}).  
 \end{itemize}
@@ -105,7 +105,12 @@ der Synchronisation nebenläufiger Aktivitäten. Jeder Link verbindet eine
 \textit{source}-  mit einer \textit{target}-Aktivität.
 Jeder Link hat eine implizite oder explizite \textit{transition condition} (boolscher Ausdruck). Ist der Ausdruck nicht spezifiziert, so ist der Wert der \textit{transition condition} \textit{true}. Jede Aktivität, die das Ziel eines Links ist, hat eine implizite oder explizite \textit{join condition} (boolscher Ausdruck). Im impiziten Fall ist das eine ODER-Verknüpfung der Status aller eingehenden Links. Die Auswertung dieser Bedingungen bei der Ausführung wird an einem kleinem Beispiel erläutert.
 
-Bild....
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.5\textwidth]{bilder/FlowBespielLinks.png}
+	\caption{}
+	\label{}
+\end{figure}
 
 Ist die Ausführung der Aktivität\_2 beendet, so wird \textit{transition condition} des Links ausgewertet und der Status auf den entsprechenden Wert \textit{true} oder \textit{false}  gesetzt. Auf dieselbe Weise wird der Status des zweiten Links ermittelt. Sind die Status der beiden Links ermittelt, so kann die \textit{join condition} der Aktivität\_ 3 ausgewertet werden. Bei einem \textit{true}-Wert wird die Ausführung des Prozesses mit der Aktivität\_3 ganz normal fortgesetzt. Ist der Wert \textit{false}, so wird eine Fehlermeldung (\textit{Join Failure}) erzeugt und der Kontrollfluss für Fehlerbehandlung aktiviert. Ist dieses Verhalten unerwünscht, so kann das Standardattribut \textit{suppressJoinFailure} auf den Wert \textit{"`yes"'} gesetzt. In diesem Fall wird Aktivität\_3 ebenfalls nicht ausgeführt, allerdings wird der Prozess ganz normal, ohne eine Fehelermeldung zu produzieren, mit der Aktivität\_4 fortgesetzt.
 

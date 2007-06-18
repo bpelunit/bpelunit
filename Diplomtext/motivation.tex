@@ -1,36 +1,20 @@
-Wer benutz BPElUnit Was hat er davon
+In der heute sehr konkurenzbetonten Weltwirtschaft unterliegen die Geschäftsprozesse einer stetigen Veränderung: Unernehmen müssen ständig beobachten, wie sich die Marktbedingungen ändern, und ihre Strategie ebtsprechend anpassen, um diese Veränderungen wiederzuspiegeln. Eine Schlüsselanforderung für eine moderne Enterprise IT ist also, dass Veränderungen in den IT-Systemen des Unternehmens schnell und effizient berücksichtigt werden können. Wichtige Motivation für die Einrichtung der SOA ist das Bestreben, die Agilität der Systemen der IT zu steigern. 
+Unternehmen sehen sich heute mit sehr dynamischen M¨arkten konfrontiert und sind oft
+einem starken internationalen Wettbewerb ausgesetzt. Zu den Anforderungen solcher
+M¨arkte geh¨oren oft flexible Gesch¨aftsprozesse. Die notwendige Anpassungsf¨ahigkeit der
+Unternehmen und deren Gesch¨aftsprozessen h¨angt meistens direkt von der vorhandenen
+IT-Infrastruktur ab. Um diesen Anforderungen gerecht zu werden muss die Softwarearchitektur
+daf¨ur sorgen, dass IT-Systemen zum einen an den Gesch¨aftsprozessen ausgerichtet
+sind, zum anderen sehr einfach bei Ver¨anderungen angepasst werden k¨onnen.
+Viele setzen dabei auf SOA und Web Service Standards . 
 
-Wozu metriken für wenn
+Die Funktionen werden in Services gekapselt, die in Kompositionen zu vollautomatischen Geschäftsprozessen verknüpft werden. Für die Realisierung der Kompositionen steht mit WS-BPEL ein OASIS-Standard zu Verfügung, der durch Unterstützung vieler wichtiger Softwarehersteller auf dem Weg zu einem Industriestandard ist. Damit übernimmt BPEL  eine Schlüsselfunktion innerhalb der Konzeption einer serviceorientierten Architektur.
 
+Die entscheidende Rolle der BPEL-Prozessen innerhalb eines Unternehmens erfordert hohe Qualitätssicherung. Aufgrund der relativen Neuheit des ganzen Technologiebereichs gibt es in diesem Bereich noch wenige Erfahrungen. Viele Methoden, die sich in der konventionellen Softwareentwicklung bewährt haben,  sind noch nicht auf SOA übertragen. Während einige Konzepte und Lösungen für das systematische Testen von BPEL-Kompositionen bereits erarbeitet wurden, gibt es noch keine Lösungen zur Erfassung der Testabdeckung. 
 
-In einem Test-Prozess sind
-Entwickler und Tester bestrebt möglichst alle Teile des Quellcodes durch die Tests
-mindestens einmal auszuführen. Ein JUnit-Test liefert jedoch als Ergebnis im wesentlichen
-nur, ob er gelungen oder misslungen ist. Über die Qualität eines Tests liefert
-JUnit damit keine Informationen. Ein wichtiges Merkmal der Testqualität ist die sogenannte
-Testabdeckung. Sie gibt an, wieviel des zu untersuchenden Quellcodes tatsächlich
-durch die Tests ausgeführt wurde und insbesondere welche Teile des Quellcodes
-nicht ausgeführt wurden.4
+Unter Testabdeckung versteht man Metriken für das Verhältnis zwischen zu testenden und tatsächlich getesteten Elementen des Prüflings (in diesem Fall eine BPEL-Komposition). Diese Metriken werden  oft als Indikatoren für die Qualität und Fortschritt des Tests verwendet. 
 
-
-Das systematische Testen von Programmen ist ein wichtiger Bestandteil in der Entwicklung von Software, da es fast unmöglich ist fehlerfreie Software zu erzeugen. Durch das Testen sollen möglichst viele Fehler gefunden werden. Allerdings existieren selbst bei relativ kleinen Programmen unendlich viele potentielle Testfälle. Irgendwie muss eine Auswahl getroffen werden. Eine zufällige Auswahl der Testfälle scheidet aus, da es sich dabei per Definition um eine unsystematische Auswahl handelt. Wichtige Fragen sind also: Welche Testfälle soll ich wählen? Nach welchen Kriterien werden diese Testfälle ausgewählt? 
-Die verschiedenen Testarten - und damit auch die Auswahlkriterien für die Testfälle - lassen sich grundsätzlich in Black-Box- und Glass-Box-Verfahren (White-Box) unterteilen, wobei die Trennlinie nicht immer scharf ist.
-Black-Box-Verfahren stützen sich nur auf die Programm-Spezifikation, der Programmcode an sich spielt keine Rolle bei der Auswahl der Testfälle. Anders bei den Glass-Box-Verfahren, hier werden die Testfälle durch die Programmstruktur - also den Code selbst - bestimmt.
-In dieser Arbeit wird der Datenstrukturtest, bzw. sechs Ausprägungen dieses Tests, etwas näher betrachtet. Dieser Test - ein Glass-Box-Test - orientiert sich an den Zugriffen auf die Variablen, d.h. am Datenfluss und nicht am Kontrollfluss eines Programms.
-   
-   
-Mit der Aufstieg der SOA und Web Service Stack of Standarts IT der Unternehmen haben sich in Eichtung der neu aufgabauten  und flexiblen Architekturen. Es sind Services implementiert, die in sogenannten Kompositionen eingeordnet zur Realisierung von vollautomatischen Geschägtsprozessen. Solche Prozesse operieren im Herz des Unternehmens. Deswegen ist die Technische Realisierung eine kritische Aufgabe.
-
-The WS-BPEL standard ist Sprache zum Implementieren von Service Kompositionen. Weil BPEL bei OASIS standartisiert und von vielen Software Lieferanten unterstützt wird wird sie oft ausgewählt. Bevor BPEL-Prozess und die zugehörigen Web Services Eingesetzt werden können, das System muss getestet werden. um das Risiko zu verringern, die durch Fehler hervorgerufen wwird wegen der wichtigen Rolle im Unternehemen. Aber die Web Service und BPEL sind relativ neue technologiefelder und viele Methoden, die der herkömliche Softwareentwicklung zur Verfügung stehen sind noch nicht sind nicht auf SOA übertragen oder es fehlen SOA basierten Erfahrungen. In dieser Arbeit wird die Testabdeckung des BPEL-Prozesses formal definiert. Testabdeckung ist Metrik wieviel der Software wurden ausgeführt bei einer Menge von Tests. Es wird oft benutzt um die Qualität der Tests zu antizipieren: Bereiche die nicht die nicht getestet wurden können eher Fehler aufweisen als die die getestet wurden        
+In dieser Arbeit werden die Testabdeckungsmetriken für BPEL-Prozesse formal definiert. Dabei werden die bekannten Metriken (Anweisungs- und Zweigabdeckung) auf BPEL-Prozessen übertragen und neue BPEL-spezifischen Metriken definiert, die die wichtigen Konzepten der Sprache abdecken. Es wird ein Konzept für die Messung der Testabdeckung erarbeitet und als Erweiterung des BPELUnit Frameworks implementiert.
 
 
-Nächster logischer Schritt ist Messung der Testabdeckung auf BPEL zu übetragen. Es ist zu erwarten dass bei BPEL die Anzahl der Fehler sehr schnell steigt. 
-\begin{itemize}
-	\item BPEL befindet sich ganz oben auf dem Web Service Technologie Stack, der für die Unterstützung der Komplexen Geschäftsprozessen gedaxht ist.
-	\item Es gibt noch keine Erfahrungen, und die Fallen sind unbekannt. 
-	\item BPEL ist eng mit XML und XPath verbunden.
-\end{itemize}
- 
- 
-Testen von BPEL bedeutet überprüfen die Korrektheit des implementierten Geschäftsprozesses.
-Das Hauptziel von BPELUnit Framework ist unit Test, die natürliche Benutzergruppe sind entwickler.
+ Allerdings bietet uns das neue Paradigma der Service Orientierten Architektur (SOA) zusammen mit den aktuellen, technologischen Fortschritten aus dem Umfeld der Web Services mittlerweile schon als sehr gut zu bezeichnende Unterstützung auf dem Weg zum flexiblen Echtzeitunternehmen. 
