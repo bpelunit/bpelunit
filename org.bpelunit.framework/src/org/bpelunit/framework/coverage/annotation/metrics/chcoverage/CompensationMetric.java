@@ -34,7 +34,7 @@ public class CompensationMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-	public List<String> getMetriclabelsIds() {
+	public List<String> getMarkersId() {
 		List<String> list = new ArrayList<String>();
 		list.add(CompensationMetricHandler.COMPENS_HANDLER_LABEL);
 		return list;

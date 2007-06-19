@@ -5,11 +5,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.wsdl.Definition;
+import javax.wsdl.WSDLException;
+import javax.wsdl.factory.WSDLFactory;
+import javax.wsdl.xml.WSDLReader;
+import javax.xml.namespace.QName;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
@@ -29,7 +36,11 @@ import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
+import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import org.jdom.Document;
+
+import com.ibm.wsdl.Constants;
 
 /**
  * 
@@ -57,11 +68,13 @@ public class CoverageMeasurementTool {
 
 	private boolean error;
 
-	private CoverageMessageReceiver messageReceiver=null;
+	private CoverageMessageReceiver messageReceiver = null;
 
-	private LabelsRegistry markersRegistry=null;
+	private LabelsRegistry markersRegistry = null;
 
 	private MetricsManager metricManager;
+
+	private String pathToWSDL = null;
 
 	/**
 	 * 
@@ -69,36 +82,21 @@ public class CoverageMeasurementTool {
 	public CoverageMeasurementTool() {
 		logger = Logger.getLogger(getClass());
 		logger.info("CoverageMeasurmentTool erzeugt");
-		metricManager=new MetricsManager();
-		markersRegistry=new LabelsRegistry(metricManager);
-		messageReceiver=new CoverageMessageReceiver(markersRegistry);
+		metricManager = new MetricsManager();
+		markersRegistry = new LabelsRegistry(metricManager);
+		messageReceiver = new CoverageMessageReceiver(markersRegistry);
 		// this.fBpelunitConfigDirectory=FilenameUtils.concat(System.getenv(BPELUnitBaseRunner.BPELUNIT_HOME_ENV),BPELUnitBaseRunner.CONFIG_DIR);
 	}
 
 
+	// private void createStatementmetric(Map<String, List<String>> configMap) {
+	// if (configMap.containsKey(ActivityMetric.METRIC_NAME)) {
+	// MetricsManager.createMetric(ActivityMetric.METRIC_NAME, configMap
+	// .get(ActivityMetric.METRIC_NAME),markersRegistry);
+	// }
+	//
+	// }
 
-
-
-	private void createMetrics(Map<String, List<String>> configMap){
-		Iterator<String> iter=configMap.keySet().iterator();
-		String key;
-		IMetric metric;
-		while(iter.hasNext()){
-			key=iter.next();
-			metric=MetricsManager.createMetric(key,configMap.get(key),markersRegistry);
-			if(metric!=null)
-				metricManager.addMetric(metric);
-		}
-	}
-	
-//	private void createStatementmetric(Map<String, List<String>> configMap) {
-//		if (configMap.containsKey(ActivityMetric.METRIC_NAME)) {
-//			MetricsManager.createMetric(ActivityMetric.METRIC_NAME, configMap
-//					.get(ActivityMetric.METRIC_NAME),markersRegistry);
-//		}
-//
-//	}
-	
 	// ********** prepare archive file for coverage measurment **********
 	/**
 	 * Prepariert das Deploymentarchive für die Messung der Abdeckung beim
@@ -114,19 +112,22 @@ public class CoverageMeasurementTool {
 	public String prepareArchiveForCoverageMeasurement(String pathToArchive,
 			String archiveFile, IBPELDeployer deployer)
 			throws CoverageMeasurmentException {
-		//PFAD==NULL oder falsch behandeln
+		if(pathToWSDL==null){
+			setErrorStatus("Path to WSDL file fehlt");
+			return archiveFile;
+		}
 		IDeploymentArchiveHandler archiveHandler = null;
 		if (deployer instanceof ActiveBPELDeployer) {
 			archiveHandler = new ActiveBPELDeploymentArchiveHandler();
 		}
 		// else if //point for extention for other BPEL Engines
 
-		if (archiveHandler == null){
+		if (archiveHandler == null) {
 			throw new CoverageMeasurmentException(deployer.toString()
 					+ " is by coverage tool not supported");
 		}
-		String newArchiveFile=archiveHandler.createArchivecopy(FilenameUtils.concat(pathToArchive,
-				archiveFile));
+		String newArchiveFile = archiveHandler.createArchivecopy(FilenameUtils
+				.concat(pathToArchive, archiveFile));
 		prepareLoggingService(archiveHandler);
 		executeInstrumentationOfBPEL(archiveHandler);
 		archiveHandler.closeArchive();
@@ -137,12 +138,13 @@ public class CoverageMeasurementTool {
 	 * Startet die Instrumentierung aller BPEL-Dateien, die im Archive sind.
 	 * 
 	 * @param archiveHandler
-	 * @throws BpelException 
 	 * @throws BpelException
-	 * @throws ArchiveFileException 
+	 * @throws BpelException
+	 * @throws ArchiveFileException
 	 */
 	private void executeInstrumentationOfBPEL(
-			IDeploymentArchiveHandler archiveHandler) throws BpelException, ArchiveFileException {
+			IDeploymentArchiveHandler archiveHandler) throws BpelException,
+			ArchiveFileException {
 
 		logger.info("CoverageTool: Instrumentation gestartet.");
 		Instrumenter instrumenter = new Instrumenter();
@@ -153,14 +155,14 @@ public class CoverageMeasurementTool {
 				.iterator(); iter.hasNext();) {
 			bpelFile = iter.next();
 			markersRegistry.addRegistryForFile(bpelFile);
-				doc = archiveHandler.getDocument(bpelFile);
-				doc = instrumenter.insertAnnotations(doc,metricManager);
-				archiveHandler.writeDocument(doc, bpelFile);
-				logger.info("!!!!!!!!!BPEL-Files gefunden ");
+			doc = archiveHandler.getDocument(bpelFile);
+			doc = instrumenter.insertAnnotations(doc, metricManager);
+			archiveHandler.writeDocument(doc, bpelFile);
+			logger.info("!!!!!!!!!BPEL-Files gefunden ");
 
 		}
 		logger.info("CoverageTool: Instrumentation beendet.");
-		
+
 	}
 
 	/**
@@ -168,59 +170,78 @@ public class CoverageMeasurementTool {
 	 * Log-Einträge dokumentieren die Ausführung bestimmter Codeteile.
 	 * 
 	 * @param archiveHandler
-	 * @param simulatedUrl 
+	 * @param simulatedUrl
 	 * @throws ArchiveFileException
 	 */
 	private void prepareLoggingService(IDeploymentArchiveHandler archiveHandler)
 			throws ArchiveFileException {
 		// archiveHandler.addWSDLFile(new
 		// File(FilenameUtils.concat(fBpelunitConfigDirectory,CoverageConstants.COVERAGE_SERVICE_WSDL)));
-		archiveHandler.addWSDLFile(new File(CoverageMessageReceiver.ABSOLUT_CONFIG_PATH));
+		archiveHandler.addWSDLFile(new File(
+				pathToWSDL));
 	}
-
-
 
 	public void setConfig(Map<String, List<String>> configMap)
 			throws ConfigurationException {
-		createMetrics(configMap);
-	}
-	
-	
-	public void setFailureStatus(String message){
-		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!message "+message);
-		markersRegistry.addInfo(message);
-		failure=true;
-	}
-	
-	public void setErrorStatus(String message){
-		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!message "+message);
-		markersRegistry.addInfo(message);
-		error=true;
-	}
-	
-	
-	public void initializeMarkersReceiver(BPELUnitRunner runner){
-		try {
-			messageReceiver.inizialize(runner);
-		} catch (SpecificationException e) {
-			setErrorStatus(e.getMessage());
-			e.printStackTrace();
+		Iterator<String> iter = configMap.keySet().iterator();
+		String key;
+		IMetric metric;
+		while (iter.hasNext()) {
+			key = iter.next();
+			metric = MetricsManager.createMetric(key, configMap.get(key),
+					markersRegistry);
+			if (metric != null)
+				metricManager.addMetric(metric);
 		}
 	}
-	
-	public void setCurrentTestCase(String testCase){
-			messageReceiver.setCurrentTestcase(testCase);
+
+	public void setFailureStatus(String message) {
+		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!message " + message);
+		markersRegistry.addInfo(message);
+		failure = true;
 	}
-	
+
+	public void setErrorStatus(String message) {
+		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!message " + message);
+		markersRegistry.addInfo(message);
+		error = true;
+	}
+
+	// public void initializeMarkersReceiver(BPELUnitRunner runner){
+	// try {
+	// messageReceiver.inizialize(runner);
+	// } catch (SpecificationException e) {
+	// setErrorStatus(e.getMessage());
+	// e.printStackTrace();
+	// }
+	// }
+
+	public void setSOAPEncoder(ISOAPEncoder encoder) {
+		messageReceiver.setSOAPEncoder(encoder);
+	}
+
+	public void setPathToWSDL(String wsdl) {
+		pathToWSDL = wsdl;
+		messageReceiver.setPathToWSDL(wsdl);
+	}
+
+	public String getEncodingStyle() {
+		return messageReceiver.getEncodingStyle();
+	}
+
+	public void setCurrentTestCase(String testCase) {
+		messageReceiver.setCurrentTestcase(testCase);
+	}
+
 	public synchronized void putMessage(String body) {
-			messageReceiver.putMessage(body);
+		messageReceiver.putMessage(body);
 	}
-	
+
 	public List<IFileStatistic> getStatistics() {
 		return markersRegistry.getStatistics();
 	}
-	
-	public List<String> getInfo(){
+
+	public List<String> getInfo() {
 		return markersRegistry.getInfo();
 	}
 }

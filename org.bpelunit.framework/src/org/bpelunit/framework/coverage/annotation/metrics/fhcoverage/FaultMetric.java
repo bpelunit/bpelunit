@@ -38,7 +38,7 @@ public class FaultMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-	public List<String> getMetriclabelsIds() {
+	public List<String> getMarkersId() {
 		List<String> list = new ArrayList<String>();
 		list.add(FaultMetricHandler.FAULT_HANDLER_LABEL);
 		return list;

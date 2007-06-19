@@ -115,7 +115,11 @@ public class SpecificationLoader {
 			if (BPELUnitRunner.getCoverageMeasurmentTool()!=null) {
 				System.out.println("Spezifikationloader:BPELUnitRunner.coverageMeasurmentTool!=NULL");
 				try {
-					BPELUnitRunner.getCoverageMeasurmentTool().initializeMarkersReceiver(fRunner);
+					CoverageMeasurementTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
+					String encodingStyle=tool.getEncodingStyle();
+					if(encodingStyle!=null){
+						tool.setSOAPEncoder(fRunner.createNewSOAPEncoder(encodingStyle));
+					}
 				} catch (Exception e) {
 					CoverageMeasurementTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
 					tool.setErrorStatus("CoverageTool: "+e.getMessage());

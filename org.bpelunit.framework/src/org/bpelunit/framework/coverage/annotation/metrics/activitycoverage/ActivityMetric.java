@@ -45,7 +45,7 @@ public class ActivityMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-	public List<String> getMetriclabelsIds() {
+	public List<String> getMarkersId() {
 		return activities_to_respekt;
 	}
 

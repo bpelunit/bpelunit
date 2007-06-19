@@ -26,45 +26,42 @@ import org.w3c.dom.Element;
 import com.ibm.wsdl.Constants;
 
 public class CoverageMessageReceiver {
-	private static CoverageMessageReceiver instance = null;
 
+	// public static String ABSOLUT_CONFIG_PATH="";
+	// public static String ABSOLUT_CONFIG_PATH = "";
 
+	private ISOAPEncoder encoder = null;
+	
+	private Logger logger = Logger.getLogger(getClass());
 
-//	public static String ABSOLUT_CONFIG_PATH="";
-	public static String ABSOLUT_CONFIG_PATH="";
-
-
-	private ISOAPEncoder encoder;
-
-	private SOAPOperationCallIdentifier operation;
+	private SOAPOperationCallIdentifier operation = null;
 
 	private String testCase;
-
-
 
 	private LabelsRegistry markersRegistry;
 
 	public CoverageMessageReceiver(LabelsRegistry markersRegistry) {
 
-		this.markersRegistry=markersRegistry;
+		this.markersRegistry = markersRegistry;
 	}
 
-//	public static CoverageMessageReceiver getInstance() {
-//		if (instance == null)
-//			instance = new CoverageMessageReceiver();
-//		return instance;
-//	}
+	// public static CoverageMessageReceiver getInstance() {
+	// if (instance == null)
+	// instance = new CoverageMessageReceiver();
+	// return instance;
+	// }
 
 	public synchronized void putMessage(String body) {
-		Logger logger=Logger.getLogger(getClass());
-		Element element = null;
-//		try {
+		if (encoder != null && operation != null) {
+			
+			Element element = null;
+			// try {
 			logger.info("!!!!!!!!!MESSAGE ANGEKOMMEN");
-			if(body==null){
+			if (body == null) {
 				logger.info("!!!!!!!!BODY==NULL");
-			}else{
+			} else {
 
-				logger.info("!!!!!!!BODY!=NULL "+body);
+				logger.info("!!!!!!!BODY!=NULL " + body);
 			}
 			SOAPMessage fSOAPMessage;
 			try {
@@ -72,50 +69,81 @@ public class CoverageMessageReceiver {
 						.createMessage(null,
 								new ByteArrayInputStream(body.getBytes()));
 
-
-			logger.info("!!!!!!! BYTES Rausgeholt");
-				element=encoder.deconstruct(operation, fSOAPMessage);
+				logger.info("!!!!!!! BYTES Rausgeholt");
+				element = encoder.deconstruct(operation, fSOAPMessage);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.info(e.getLocalizedMessage());
 			} catch (SOAPException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				logger.info(e.getLocalizedMessage());
+				logger.info("Could not create SOAP message from incoming message: "
+						 + e.getMessage());
 			} catch (SOAPEncodingException e) {
-				// TODO Auto-generated catch block
-				logger.info(e.getLocalizedMessage());
+				logger.info("Could not create SOAP message from incoming message: "
+						 + e.getMessage());
 			}
-			
-			markersRegistry.setCoverageStatusForAllMarker(element.getTextContent(),
-					testCase);
-//		} 
-//		catch (Exception e) {
-//			if(element==null){
-//				logger.info("!!!!!!!!!!! ELEMENT==NULL "+e.getMessage());
-//			}
-//			logger.info("Could not create SOAP message from incoming message: "
-//					+ e.getMessage());
-//			markersRegistry.addInfo("Could not create SOAP message from incoming message: "
-//					+ e.getMessage());
-//		}
+
+			markersRegistry.setCoverageStatusForAllMarker(element
+					.getTextContent(), testCase);
+		}else{
+			logger.info("SOAPEncoder is not initialized.");
+		}
+		// }
+		// catch (Exception e) {
+		// if(element==null){
+		// logger.info("!!!!!!!!!!! ELEMENT==NULL "+e.getMessage());
+		// }
+		// logger.info("Could not create SOAP message from incoming message: "
+		// + e.getMessage());
+		// markersRegistry.addInfo("Could not create SOAP message from incoming
+		// message: "
+		// + e.getMessage());
+		// }
 	}
 
-	public void inizialize(BPELUnitRunner runner) throws SpecificationException {
-		WSDLReader reader;
-		if(ABSOLUT_CONFIG_PATH==null||ABSOLUT_CONFIG_PATH.equals("")){
-			throw new SpecificationException(
-					"ABSOLUT_CONFIG_DIR=null ");
-		}
+	// public void inizialize(BPELUnitRunner runner) throws
+	// SpecificationException {
+	// WSDLReader reader;
+	// if (ABSOLUT_CONFIG_PATH == null || ABSOLUT_CONFIG_PATH.equals("")) {
+	// throw new SpecificationException("ABSOLUT_CONFIG_DIR=null ");
+	// }
+	//
+	// // String wsdlPfad = FilenameUtils.concat(
+	// // ABSOLUT_CONFIG_PATH,CoverageConstants.COVERAGE_SERVICE_WSDL);
+	// try {
+	// reader = WSDLFactory.newInstance().newWSDLReader();
+	//
+	// reader.setFeature(Constants.FEATURE_VERBOSE, false);
+	// Definition fWSDLDefinition = reader.readWSDL(ABSOLUT_CONFIG_PATH);
+	// operation = new SOAPOperationCallIdentifier(fWSDLDefinition,
+	// new QName(
+	// CoverageConstants.COVERAGETOOL_NAMESPACE.getURI(),
+	// CoverageConstants.SERVICE_NAME),
+	// CoverageConstants.PORT_OF_SERVICE,
+	// CoverageConstants.REPORT_OPERATION,
+	// SOAPOperationDirectionIdentifier.INPUT);
+	// String encodingStyle = operation.getEncodingStyle();
+	// encoder = runner.createNewSOAPEncoder(encodingStyle);
+	// } catch (WSDLException e) {
+	// e.printStackTrace();
+	//
+	// throw new SpecificationException(
+	// "Error while reading WSDL for Coverage Tool from file "
+	// + ABSOLUT_CONFIG_PATH + "." + e.getMessage());
+	// }
+	// }
 
-//		String wsdlPfad = FilenameUtils.concat(	ABSOLUT_CONFIG_PATH,CoverageConstants.COVERAGE_SERVICE_WSDL);
+	public void setSOAPEncoder(ISOAPEncoder encoder) {
+		this.encoder = encoder;
+	}
+
+	public void setPathToWSDL(String wsdl) {
 		try {
-			reader = WSDLFactory.newInstance().newWSDLReader();
+			WSDLReader reader = WSDLFactory.newInstance().newWSDLReader();
 
 			reader.setFeature(Constants.FEATURE_VERBOSE, false);
-//			Definition fWSDLDefinition = reader.readWSDL(wsdlPfad);
-			Definition fWSDLDefinition = reader.readWSDL(ABSOLUT_CONFIG_PATH);
+			Definition fWSDLDefinition = reader.readWSDL(wsdl);
+
 			operation = new SOAPOperationCallIdentifier(fWSDLDefinition,
 					new QName(
 							CoverageConstants.COVERAGETOOL_NAMESPACE.getURI(),
@@ -123,26 +151,33 @@ public class CoverageMessageReceiver {
 					CoverageConstants.PORT_OF_SERVICE,
 					CoverageConstants.REPORT_OPERATION,
 					SOAPOperationDirectionIdentifier.INPUT);
-			String encodingStyle = operation.getEncodingStyle();
-			encoder = runner.createNewSOAPEncoder(encodingStyle);
-		}catch (WSDLException e) {
+
+			// String encodingStyle = operation.getEncodingStyle();
+		} catch (SpecificationException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
-			throw new SpecificationException(
-					"Error while reading WSDL for Coverage Tool  from file "
-							+ ABSOLUT_CONFIG_PATH 
-							+ "." + e.getMessage());
+		} catch (WSDLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
+	public String getEncodingStyle() {
+		String style = null;
+		if (operation != null) {
+			try {
+				style = operation.getEncodingStyle();
+			} catch (SpecificationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				markersRegistry.addInfo(e.getMessage());
+			}
+		}
+		return style;
+	}
 
 	public void setCurrentTestcase(String testCase) {
-		this.testCase=testCase;
+		this.testCase = testCase;
 	}
-
-	public void initialize() {
-		instance=null;	
-	}
-
 
 }

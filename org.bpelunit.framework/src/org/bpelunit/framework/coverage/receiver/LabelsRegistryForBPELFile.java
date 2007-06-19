@@ -39,7 +39,7 @@ public class LabelsRegistryForBPELFile {
 		allMetricsTable = new Hashtable<String, Hashtable<String, LabelStatus>>();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			IMetric metric = iter.next();
-			for (Iterator<String> iterator = metric.getMetriclabelsIds()
+			for (Iterator<String> iterator = metric.getMarkersId()
 					.iterator(); iterator.hasNext();) {
 				allMetricsTable.put(iterator.next(),
 						new Hashtable<String, LabelStatus>());

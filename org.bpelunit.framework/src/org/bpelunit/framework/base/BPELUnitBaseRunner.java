@@ -38,7 +38,7 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	public static final String EXTENSIONS_FILE_NAME= "extensions.xml";
 	public static final String DEPLOYER_CONFIG_FILE_NAME= "configuration.xml";
 
-	public static final String COVERAGETOOL_CONFIG_FILE_NAME= "coverageToolConfig.xml";
+	public static final String COVERAGETOOL_CONFIG_FILE_NAME= "coverageMetricsConfiguration.xml";
 	private String fHomeDirectory;
 
 	public BPELUnitBaseRunner() {
@@ -111,7 +111,7 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	//HIER
 	public void configureCoverageTool() throws ConfigurationException {
 		System.out.println("BPELUnitBaseRunner: configuration for CoverageToo loaded");
-		CoverageMessageReceiver.ABSOLUT_CONFIG_PATH=FilenameUtils.concat(FilenameUtils.concat(fHomeDirectory,CONFIG_DIR),CoverageConstants.COVERAGE_SERVICE_WSDL);
+		getCoverageMeasurmentTool().setPathToWSDL(FilenameUtils.concat(FilenameUtils.concat(fHomeDirectory,CONFIG_DIR),CoverageConstants.COVERAGE_SERVICE_WSDL));
 		CoverageMeasurementTool coverageTool=new CoverageMeasurementTool();
 		setCoverageMeasurmentTool(coverageTool);
 		String coverageFile= FilenameUtils.concat(fHomeDirectory, FilenameUtils.concat(CONFIG_DIR, COVERAGETOOL_CONFIG_FILE_NAME));

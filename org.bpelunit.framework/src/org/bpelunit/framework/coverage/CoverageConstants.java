@@ -49,7 +49,7 @@ public class CoverageConstants {
 	public static final String MESSAGETYPE_OF_REGISTER_MESSAGE = MESSAGETYPE_OF_REPORTING_MESSAGE;
 	
 	public static final Namespace NAMESPACE_CONFIGURATION = Namespace
-	.getNamespace("http://www.bpelunit.org/schema/coverageToolConfiguration");
+	.getNamespace("http://www.bpelunit.org/schema/coverageMetricsConfiguration");
 
 
 }

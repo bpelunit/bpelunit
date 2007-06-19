@@ -15,7 +15,7 @@ public interface IMetric {
 
 	public String getName();
 
-	public List<String> getMetriclabelsIds();
+	public List<String> getMarkersId();
 
 	public IStatistic createStatistic(
 			Hashtable<String, Hashtable<String, LabelStatus>> allLabels);

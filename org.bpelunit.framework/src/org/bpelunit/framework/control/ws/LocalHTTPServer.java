@@ -6,10 +6,7 @@
 package org.bpelunit.framework.control.ws;
 
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.run.TestCaseRunner;
-import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.mortbay.http.HttpContext;
 import org.mortbay.http.HttpServer;
 import org.mortbay.http.SocketListener;
@@ -40,7 +37,6 @@ public class LocalHTTPServer {
 		
 
 		fServer = new HttpServer();
-
 		SocketListener listener = new SocketListener();
 		listener.setPort(portNumber);
 		listener.setBufferSize(20000);
@@ -51,11 +47,14 @@ public class LocalHTTPServer {
 //		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getMaxThreads());//256
 //		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getLingerTimeSecs());//30
 		fServer.addListener(listener);
+//		if (BPELUnitRunner.getCoverageMeasurmentTool() != null) {
+//
 //		listener = new SocketListener();
 //		listener.setPort(CoverageConstants.SERVICE_PORT);
-//		listener.setBufferSize(25000);
+//		listener.setBufferSize(15000);
 //		listener.setBufferReserve(1024);
 //		fServer.addListener(listener);
+//		}
 		// Create the context for the root path
 		HttpContext context = new HttpContext();
 		context.setContextPath(rootPath);
@@ -70,48 +69,7 @@ public class LocalHTTPServer {
 		context.addHandler(new NotFoundHandler());
 		
 		fServer.addContext(context);
-		if (BPELUnitRunner.getCoverageMeasurmentTool() != null) {
-
-//			listener = new SocketListener();
-//			listener.setPort(CoverageConstants.SERVICE_PORT);
-//			
-//			fServer.addListener(listener);
-//
-//			// Create the context for the root path
-//			context = new HttpContext();
-//			context.setContextPath("/coverage/");
-//			context.setResourceBase("");
-//
-//			fHandler2=new WebServiceHandler2();
-//			// Add the ws handler first
-//			context.addHandler(fHandler2);
-//
-//			// Add a 404 handler last
-//			context.addHandler(new NotFoundHandler());
-//			
-//			fServer.addContext(context);
-//			 server = new HttpServer();
-//			listener = new SocketListener();
-//			listener.setPort(CoverageConstants.SERVICE_PORT);
-//			
-//			server.addListener(listener);
-//
-//			// Create the context for the root path
-//			context = new HttpContext();
-//			context.setContextPath("/coverage/");
-//			context.setResourceBase("");
-//
-//			fHandler2=new WebServiceHandler2();
-//			// Add the ws handler first
-//			context.addHandler(fHandler2);
-//
-//			// Add a 404 handler last
-//			context.addHandler(new NotFoundHandler());
-//			
-//			server.addContext(context);
-			
-			
-		}
+	
 
 
 	}
@@ -127,6 +85,9 @@ public class LocalHTTPServer {
 	}
 
 	public void stopServer() throws InterruptedException {
+		wsLogger.info("Connections="+fServer.getConnections());
+		wsLogger.info("ConnectionsOpen="+fServer.getConnectionsOpen());
+		wsLogger.info("ConnectionsRequests="+fServer.getRequests());
 		fServer.stop();
 	}
 

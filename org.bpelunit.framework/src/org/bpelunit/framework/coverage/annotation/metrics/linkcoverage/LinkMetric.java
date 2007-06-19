@@ -33,7 +33,7 @@ public class LinkMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-	public List<String> getMetriclabelsIds() {
+	public List<String> getMarkersId() {
 		List<String> list = new ArrayList<String>(2);
 		list.add(LinkMetricHandler.POSITIV_LINK_LABEL);
 		list.add(LinkMetricHandler.NEGATIV_LINK_LABEL);
