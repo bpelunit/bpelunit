@@ -5,16 +5,16 @@ import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 
 
 public class WhileHandler implements IStructuredActivityHandler {
 
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 
-	public WhileHandler(LabelsRegistry markersRegistry) {
+	public WhileHandler(MarkersRegisterForArchive markersRegistry) {
 		this.markersRegistry = markersRegistry;
 	}
 

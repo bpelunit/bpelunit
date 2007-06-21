@@ -9,7 +9,7 @@ import java.util.List;
 import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Comment;
 import org.jdom.Element;
 
@@ -22,7 +22,7 @@ public class FaultMetricHandler implements  IMetricHandler {
 
 	public static final String FAULT_HANDLER_LABEL = "catchBlock";
 
-	private static int count=0;
+//	private static int count=0;
 	/**
 	 * Generiert eine eindeutige Markierung.
 	 * 
@@ -35,9 +35,9 @@ public class FaultMetricHandler implements  IMetricHandler {
 		return  label;
 	}
 
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 	
-	public FaultMetricHandler(LabelsRegistry markersRegistry){
+	public FaultMetricHandler(MarkersRegisterForArchive markersRegistry){
 
 		this.markersRegistry=markersRegistry;
 	}

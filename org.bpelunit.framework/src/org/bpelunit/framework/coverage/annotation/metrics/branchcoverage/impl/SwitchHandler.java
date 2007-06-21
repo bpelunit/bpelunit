@@ -7,15 +7,15 @@ import java.util.List;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 
 
 public class SwitchHandler implements IStructuredActivityHandler {
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 
-	public SwitchHandler(LabelsRegistry markersRegistry) {
+	public SwitchHandler(MarkersRegisterForArchive markersRegistry) {
 		this.markersRegistry = markersRegistry;
 	}
 

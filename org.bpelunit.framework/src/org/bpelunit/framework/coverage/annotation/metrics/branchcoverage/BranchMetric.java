@@ -11,8 +11,8 @@ import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelStatus;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkerState;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.bpelunit.framework.coverage.result.statistic.impl.Statistic;
 import org.jdom.Element;
@@ -26,7 +26,7 @@ public class BranchMetric implements IMetric {
 
 	private List<Element> elementsOfBPEL = null;
 
-	public BranchMetric(LabelsRegistry markersRegistry) {
+	public BranchMetric(MarkersRegisterForArchive markersRegistry) {
 		metricHandler = new BranchMetricHandler(markersRegistry);
 	}
 
@@ -49,7 +49,7 @@ public class BranchMetric implements IMetric {
 	}
 
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, LabelStatus>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerState>> allLabels) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		statistic.setStatusListe(MetricsManager.getStatus(
 				BranchMetricHandler.BRANCH_LABEL, allLabels));

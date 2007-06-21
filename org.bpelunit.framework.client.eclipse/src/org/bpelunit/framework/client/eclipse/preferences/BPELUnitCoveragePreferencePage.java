@@ -2,25 +2,22 @@ package org.bpelunit.framework.client.eclipse.preferences;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
-import org.bpelunit.framework.client.eclipse.ExtensionControl;
-import org.bpelunit.framework.client.model.DeployerExtension;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivity;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -66,11 +63,13 @@ public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 
 	private CheckbuttonGroup checkboxGroup;
 
+	private StringFieldEditor waitTimeInput;
+
 	public BPELUnitCoveragePreferencePage() {
 
 		super(GRID);
+
 		setPreferenceStore(BPELUnitActivator.getDefault().getPreferenceStore());
-		setDescription("BPELUnit Coverage Tool");
 		checkboxGroup = new CheckbuttonGroup();
 	}
 
@@ -81,53 +80,72 @@ public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 		setListner();
 		addFields();
 	}
+	
+	
+
 
 	private void createFields() {
+
+
 		coverageFlag = new BooleanFieldEditor(
 				PreferenceConstants.P_COVERAGE_MEASURMENT,
 				"Coverage Measurment", getFieldEditorParent());
-		receiveFlag = new BooleanFieldEditor(BasicActivity.RECEIVE_ACTIVITY,
+		createSpacer(getFieldEditorParent(), 1);
+
+		createSpacer(getFieldEditorParent(), 1,"    ACTIVITY COVERAGE");
+		receiveFlag = new BooleanFieldEditor(BasicActivities.RECEIVE_ACTIVITY,
 				"receive", getFieldEditorParent());
-		replyFlag = new BooleanFieldEditor(BasicActivity.REPLY_ACTIVITY,
+		replyFlag = new BooleanFieldEditor(BasicActivities.REPLY_ACTIVITY,
 				"reply", getFieldEditorParent());
-		invokeFlag = new BooleanFieldEditor(BasicActivity.INVOKE_ACTIVITY,
+		invokeFlag = new BooleanFieldEditor(BasicActivities.INVOKE_ACTIVITY,
 				"invoke", getFieldEditorParent());
-		assignFlag = new BooleanFieldEditor(BasicActivity.ASSIGN_ACTIVITY,
+		assignFlag = new BooleanFieldEditor(BasicActivities.ASSIGN_ACTIVITY,
 				"assign", getFieldEditorParent());
-		throwFlag = new BooleanFieldEditor(BasicActivity.THROW_ACTIVITY,
+		throwFlag = new BooleanFieldEditor(BasicActivities.THROW_ACTIVITY,
 				"throw", getFieldEditorParent());
-		exitFlag = new BooleanFieldEditor(BasicActivity.EXIT_ACTIVITY, "exit",
+
+		waitFlag = new BooleanFieldEditor(BasicActivities.WAIT_ACTIVITY, "wait",
 				getFieldEditorParent());
-		checkboxGroup.addField(exitFlag);
-		waitFlag = new BooleanFieldEditor(BasicActivity.WAIT_ACTIVITY, "wait",
-				getFieldEditorParent());
-		emptyFlag = new BooleanFieldEditor(BasicActivity.EMPTY_ACTIVITY,
+		emptyFlag = new BooleanFieldEditor(BasicActivities.EMPTY_ACTIVITY,
 				"empty", getFieldEditorParent());
 		compensateFlag = new BooleanFieldEditor(
-				BasicActivity.COMPENSATE_ACTIVITY, "compensate",
+				BasicActivities.COMPENSATE_ACTIVITY, "compensate",
 				getFieldEditorParent());
 		compensateScopeFlag = new BooleanFieldEditor(
-				BasicActivity.COMPENSATESCOPE_ACTIVITY, "compensateScope",
+				BasicActivities.COMPENSATESCOPE_ACTIVITY, "compensateScope (only BPEL 2.0)",
 				getFieldEditorParent());
 		checkboxGroup.addField(compensateScopeFlag);
-		rethrowFlag = new BooleanFieldEditor(BasicActivity.RETHROW_ACTIVITY,
-				"rethrow", getFieldEditorParent());
+		rethrowFlag = new BooleanFieldEditor(BasicActivities.RETHROW_ACTIVITY,
+				"rethrow (only BPEL 2.0)", getFieldEditorParent());
 		checkboxGroup.addField(rethrowFlag);
-		validateFlag = new BooleanFieldEditor(BasicActivity.VALIDATE_ACTIVITY,
-				"validate", getFieldEditorParent());
+		validateFlag = new BooleanFieldEditor(BasicActivities.VALIDATE_ACTIVITY,
+				"validate (only BPEL 2.0)", getFieldEditorParent());
 		checkboxGroup.addField(validateFlag);
-		branchMetricFlag = new BooleanFieldEditor(BranchMetric.METRIC_NAME,
-				"Branchmetric", getFieldEditorParent());
-		linkMetricFlag = new BooleanFieldEditor(LinkMetric.METRIC_NAME,
-				"Linkmetric", getFieldEditorParent());
-		compensationHandlerFlag = new BooleanFieldEditor(
-				CompensationMetric.METRIC_NAME, "Compensation Handler",
+		exitFlag = new BooleanFieldEditor(BasicActivities.EXIT_ACTIVITY, "exit (only BPEL 2.0)",
 				getFieldEditorParent());
-		faultHandlerFlag = new BooleanFieldEditor(FaultMetric.METRIC_NAME,
-				"Fault Handler", getFieldEditorParent());
+		checkboxGroup.addField(exitFlag);
 		terminateFlag = new BooleanFieldEditor(
-				BasicActivity.TERMINATE_ACTIVITY, "terminate",
+				BasicActivities.TERMINATE_ACTIVITY, "terminate (only BPEL 1.1)",
 				getFieldEditorParent());
+
+		createSpacer(getFieldEditorParent(), 1);
+
+		branchMetricFlag = new BooleanFieldEditor(BranchMetric.METRIC_NAME,
+				"BRANCH COVERAGE", getFieldEditorParent());
+
+		createSpacer(getFieldEditorParent(), 1);
+		linkMetricFlag = new BooleanFieldEditor(LinkMetric.METRIC_NAME,
+				"LINK COVERAGE", getFieldEditorParent());
+		createSpacer(getFieldEditorParent(), 2);
+		compensationHandlerFlag = new BooleanFieldEditor(
+				CompensationMetric.METRIC_NAME, "COMPENSATION HANDLER COVERAGE",
+				getFieldEditorParent());
+		createSpacer(getFieldEditorParent(), 1);
+		faultHandlerFlag = new BooleanFieldEditor(FaultMetric.METRIC_NAME,
+				"FAULT HANDLER COVERAGE", getFieldEditorParent());
+		createSpacer(getFieldEditorParent(), 1);
+		waitTimeInput=new StringFieldEditor(PreferenceConstants.P_COVERAGE_WAIT_TIME,"wait time",getFieldEditorParent());
+		waitTimeInput.setTextLimit(5);
 	}
 
 	private void addFields() {
@@ -150,7 +168,7 @@ public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 		addField(invokeFlag);
 		addField(replyFlag);
 		addField(receiveFlag);
-		addField(coverageFlag);
+		addField(waitTimeInput);
 
 	}
 
@@ -182,11 +200,18 @@ public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 	public void propertyChange(PropertyChangeEvent event) {
 		super.propertyChange(event);
 		enableFields();
-		System.out.println("Property Changed");
 	}
 
 	protected void createSpacer(Composite composite, int columnSpan) {
 		Label label = new Label(composite, SWT.NONE);
+		GridData gd = new GridData();
+		gd.horizontalSpan = columnSpan;
+		label.setLayoutData(gd);
+	}
+	
+	protected void createSpacer(Composite composite, int columnSpan,String text) {
+		Label label = new Label(composite, SWT.NONE);
+		label.setText(text);
 		GridData gd = new GridData();
 		gd.horizontalSpan = columnSpan;
 		label.setLayoutData(gd);
@@ -196,7 +221,6 @@ public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 	protected void initialize() {
 		super.initialize();
 		enableFields();
-		System.out.println("initialize");
 	}
 
 	private void enableFields() {
@@ -223,6 +247,7 @@ public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 			invokeFlag.setEnabled(true, getFieldEditorParent());
 			replyFlag.setEnabled(true, getFieldEditorParent());
 			receiveFlag.setEnabled(true, getFieldEditorParent());
+			waitTimeInput.setEnabled(true, getFieldEditorParent());
 		} else {
 			terminateFlag.setEnabled(false, getFieldEditorParent());
 			compensationHandlerFlag.setEnabled(false, getFieldEditorParent());
@@ -241,6 +266,7 @@ public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 			invokeFlag.setEnabled(false, getFieldEditorParent());
 			replyFlag.setEnabled(false, getFieldEditorParent());
 			receiveFlag.setEnabled(false, getFieldEditorParent());
+			waitTimeInput.setEnabled(false, getFieldEditorParent());
 		}
 	}
 

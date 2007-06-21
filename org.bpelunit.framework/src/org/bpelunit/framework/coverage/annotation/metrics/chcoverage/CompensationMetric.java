@@ -12,8 +12,8 @@ import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelStatus;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkerState;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.bpelunit.framework.coverage.result.statistic.impl.Statistic;
 import org.jdom.Element;
@@ -26,7 +26,7 @@ public class CompensationMetric implements IMetric {
 
 	private ArrayList<Element> elementsOfBPEL = null;
 
-	public CompensationMetric(LabelsRegistry markersRegistry) {
+	public CompensationMetric(MarkersRegisterForArchive markersRegistry) {
 		metricHandler = new CompensationMetricHandler(markersRegistry);
 	}
 
@@ -49,7 +49,7 @@ public class CompensationMetric implements IMetric {
 	}
 
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, LabelStatus>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerState>> allLabels) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		statistic.setStatusListe(MetricsManager.getStatus(
 				CompensationMetricHandler.COMPENS_HANDLER_LABEL, allLabels));

@@ -9,8 +9,8 @@ import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelStatus;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkerState;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.bpelunit.framework.coverage.result.statistic.impl.Statistic;
 import org.jdom.Element;
@@ -25,7 +25,7 @@ public class LinkMetric implements IMetric {
 	private List<Element> elementsOfBPEL = null;
 
 
-	public LinkMetric(LabelsRegistry markersRegistry) {
+	public LinkMetric(MarkersRegisterForArchive markersRegistry) {
 		metricHandler = new LinkMetricHandler(markersRegistry);
 	}
 
@@ -41,16 +41,14 @@ public class LinkMetric implements IMetric {
 		return list;
 	}
 
-	public List<String> getConfigInfo() {
-		return null;
-	}
+
 
 	public IMetricHandler getHandler() {
 		return metricHandler;
 	}
 
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, LabelStatus>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerState>> allLabels) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		statistic.addSubStatistik(createSubstatistic(
 				LinkMetricHandler.POSITIV_LINK_LABEL, allLabels));
@@ -60,10 +58,10 @@ public class LinkMetric implements IMetric {
 	}
 
 	private IStatistic createSubstatistic(String name,
-			Hashtable<String, Hashtable<String, LabelStatus>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerState>> allLabels) {
 		IStatistic subStatistic;
 		subStatistic = new Statistic(METRIC_NAME + ": " + name);
-		List<LabelStatus> statusListe = MetricsManager.getStatus(name,
+		List<MarkerState> statusListe = MetricsManager.getStatus(name,
 				allLabels);
 		subStatistic.setStatusListe(statusListe);
 		return subStatistic;

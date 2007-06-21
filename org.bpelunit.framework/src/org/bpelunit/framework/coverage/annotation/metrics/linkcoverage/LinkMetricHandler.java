@@ -1,12 +1,6 @@
 package org.bpelunit.framework.coverage.annotation.metrics.linkcoverage;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createBPELElement;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createSequence;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseElementInFlow;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getProcessNamespace;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.process_element;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +9,7 @@ import java.util.List;
 import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -47,19 +41,19 @@ public class LinkMetricHandler implements  IMetricHandler {
 
 	private static final String COPY_LINK_NEGIERT_POSTFIX = "_negiert";
 
-	private static int count = 0;
+//	private static int count = 0;
 
 	public static final String NEGATIV_LINK_LABEL = "negativLinks";
 
 	public static final String POSITIV_LINK_LABEL = "positivLinks";
 
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 
 	public String getName() {
 		return METRIC_NAME;
 	}
 
-	public LinkMetricHandler(LabelsRegistry markersRegistry) {
+	public LinkMetricHandler(MarkersRegisterForArchive markersRegistry) {
 
 		this.markersRegistry=markersRegistry;
 	}

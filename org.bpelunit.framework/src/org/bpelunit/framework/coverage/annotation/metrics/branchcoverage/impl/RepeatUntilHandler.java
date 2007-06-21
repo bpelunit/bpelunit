@@ -15,16 +15,16 @@ import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchM
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 
 
 public class RepeatUntilHandler implements IStructuredActivityHandler {
 
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 
-	public RepeatUntilHandler(LabelsRegistry markersRegistry) {
+	public RepeatUntilHandler(MarkersRegisterForArchive markersRegistry) {
 		this.markersRegistry = markersRegistry;
 	}
 

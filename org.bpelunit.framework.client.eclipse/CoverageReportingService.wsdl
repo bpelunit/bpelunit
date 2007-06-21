@@ -32,7 +32,7 @@
 			binding="cov:BindingServiceToSOAP">
 			<soap:address
 				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-				location="http://localhost:7777/ws/_CoverageReportingService_" />
+				location="http://localhost:7778/coverage/_CoverageReportingService_" />
 		</wsdl:port>
 	</wsdl:service>
 	<plnk:partnerLinkType

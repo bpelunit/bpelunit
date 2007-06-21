@@ -23,7 +23,7 @@ import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.coverage.CoverageMeasurementTool;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
 
@@ -72,10 +72,12 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 				.getFullPath(fBPRFile));
 		fBPRFile = FilenameUtils.getName(fBPRFile);
 		boolean fileReplaced = false;
-		CoverageMeasurementTool coverageTool = BPELUnitRunner
-				.getCoverageMeasurmentTool();
-		if (coverageTool != null) {
+
+		if (BPELUnitRunner.measureTestCoverage()) {
+			CoverageMeasurementTool coverageTool = BPELUnitRunner
+			.getCoverageMeasurmentTool();
 			try {
+				
 				String newFile;
 				newFile = coverageTool.prepareArchiveForCoverageMeasurement(
 						pathToArchive, FilenameUtils.getName(fBPRFile), this);

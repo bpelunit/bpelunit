@@ -14,6 +14,7 @@ import org.apache.log4j.Appender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
+import org.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
 import org.bpelunit.framework.client.model.DeployerExtension;
 import org.bpelunit.framework.client.model.ExtensionUtil;
 import org.bpelunit.framework.client.model.HeaderProcessorExtension;
@@ -21,13 +22,16 @@ import org.bpelunit.framework.client.model.SOAPEncoderExtension;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
+import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.coverage.CoverageMeasurementTool;
 import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivity;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
+import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -120,44 +124,44 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		List<String> list = new ArrayList<String>();
 		IPreferenceStore preference = plugin.getPreferenceStore();
-		if (preference.getBoolean(BasicActivity.RECEIVE_ACTIVITY)) {
-			list.add(BasicActivity.RECEIVE_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.RECEIVE_ACTIVITY)) {
+			list.add(BasicActivities.RECEIVE_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.REPLY_ACTIVITY)) {
-			list.add(BasicActivity.REPLY_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.REPLY_ACTIVITY)) {
+			list.add(BasicActivities.REPLY_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.INVOKE_ACTIVITY)) {
-			list.add(BasicActivity.INVOKE_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.INVOKE_ACTIVITY)) {
+			list.add(BasicActivities.INVOKE_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.ASSIGN_ACTIVITY)) {
-			list.add(BasicActivity.ASSIGN_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.ASSIGN_ACTIVITY)) {
+			list.add(BasicActivities.ASSIGN_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.THROW_ACTIVITY)) {
-			list.add(BasicActivity.THROW_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.THROW_ACTIVITY)) {
+			list.add(BasicActivities.THROW_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.EXIT_ACTIVITY)) {
-			list.add(BasicActivity.EXIT_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.EXIT_ACTIVITY)) {
+			list.add(BasicActivities.EXIT_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.WAIT_ACTIVITY)) {
-			list.add(BasicActivity.WAIT_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.WAIT_ACTIVITY)) {
+			list.add(BasicActivities.WAIT_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.EMPTY_ACTIVITY)) {
-			list.add(BasicActivity.EMPTY_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.EMPTY_ACTIVITY)) {
+			list.add(BasicActivities.EMPTY_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.COMPENSATE_ACTIVITY)) {
-			list.add(BasicActivity.COMPENSATE_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.COMPENSATE_ACTIVITY)) {
+			list.add(BasicActivities.COMPENSATE_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.COMPENSATESCOPE_ACTIVITY)) {
-			list.add(BasicActivity.COMPENSATESCOPE_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.COMPENSATESCOPE_ACTIVITY)) {
+			list.add(BasicActivities.COMPENSATESCOPE_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.RETHROW_ACTIVITY)) {
-			list.add(BasicActivity.RETHROW_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.RETHROW_ACTIVITY)) {
+			list.add(BasicActivities.RETHROW_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.VALIDATE_ACTIVITY)) {
-			list.add(BasicActivity.VALIDATE_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.VALIDATE_ACTIVITY)) {
+			list.add(BasicActivities.VALIDATE_ACTIVITY);
 		}
-		if (preference.getBoolean(BasicActivity.TERMINATE_ACTIVITY)) {
-			list.add(BasicActivity.TERMINATE_ACTIVITY);
+		if (preference.getBoolean(BasicActivities.TERMINATE_ACTIVITY)) {
+			list.add(BasicActivities.TERMINATE_ACTIVITY);
 		}
 		if (list.size() > 0) {
 			map.put(ActivityMetric.METRIC_NAME, list);
@@ -174,15 +178,14 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 		if (preference.getBoolean(CompensationMetric.METRIC_NAME)) {
 			map.put(CompensationMetric.METRIC_NAME, null);
 		}
+		
+		TestCaseRunner.wait_time_for_coverage_markers=preference.getInt(PreferenceConstants.P_COVERAGE_WAIT_TIME);
 
-		BPELUnitRunner.coverageMeasurmentTool=new CoverageMeasurementTool();
+		CoverageMeasurementTool coverageTool=new CoverageMeasurementTool();
+		BPELUnitRunner.setCoverageMeasurmentTool(coverageTool);
 		try {
-		BPELUnitRunner.coverageMeasurmentTool.setConfig(map);
+		coverageTool.setConfig(map);
 		} catch (ConfigurationException e) {
-			//TODO Fehler aufnehmen
-			BPELUnitRunner.coverageMeasurmentTool=null;
-//			CoverageLabelsReceiver.getInstance().addInfo("CoverageTool: Configuration error. "+e.getMessage());
-			e.printStackTrace();
 		}
 
 	}

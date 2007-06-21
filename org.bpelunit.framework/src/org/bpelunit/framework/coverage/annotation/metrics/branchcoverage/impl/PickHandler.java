@@ -8,7 +8,7 @@ import java.util.List;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 
@@ -19,9 +19,9 @@ public class PickHandler implements IStructuredActivityHandler {
 
 	private static final String ON_ALARM = "onAlarm";
 
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 
-	public PickHandler(LabelsRegistry markersRegistry) {
+	public PickHandler(MarkersRegisterForArchive markersRegistry) {
 		this.markersRegistry = markersRegistry;
 	}
 

@@ -21,7 +21,7 @@
             category="org.bpelunit.framework.client.eclipse.preferences.BPELUnit"
             class="org.bpelunit.framework.client.eclipse.preferences.BPELUnitCoveragePreferencePage"
             id="org.bpelunit.framework.client.eclipse.preferences.BPELUnit.coverage"
-            name="Coverage"/>
+            name="Test Coverage"/>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
@@ -46,7 +46,7 @@
             category="org.bpelunit.framework.client.eclipse"
             class="org.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView"
             id="org.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView"
-            name="Coverage"/>
+            name="Test Coverage"/>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">

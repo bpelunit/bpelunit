@@ -1,13 +1,6 @@
 package org.bpelunit.framework.coverage.annotation.metrics.activitycoverage;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCES_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCE_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGETS_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGET_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseInSequence;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ensureElementIsInSequence;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +13,7 @@ import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -34,7 +27,7 @@ import org.jdom.Namespace;
  */
 public class ActivityMetricHandler implements IMetricHandler {
 
-	private static int count = 0;
+//	private static int count = 0;
 
 //	private static HashMap<String, String> logging_before_activity;
 
@@ -43,7 +36,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 
 	private Logger logger=Logger.getLogger(getClass());
 
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 	
 	static {
 
@@ -62,7 +55,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 //		logging_before_activity.put(BasicActivities.REPLY_ACTIVITY,BasicActivities.REPLY_ACTIVITY);
 	}
 
-	public ActivityMetricHandler(LabelsRegistry markersRegistry) {
+	public ActivityMetricHandler(MarkersRegisterForArchive markersRegistry) {
 		this.markersRegistry=markersRegistry;
 		activities_to_respekt = new HashMap<String, String>();
 		logger = Logger.getLogger(getClass());
@@ -85,7 +78,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 			element = activities.get(i);
 			Element sequence = null;
 			respectTargetActivities(element, sequence);
-			respectSourceActivities(element, sequence);
+//			respectSourceActivities(element, sequence);
 			ensureElementIsInSequence(element);
 			insertMarkerForActivity(element);
 		}

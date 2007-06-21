@@ -10,8 +10,8 @@ import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelStatus;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkerState;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.bpelunit.framework.coverage.result.statistic.impl.Statistic;
 import org.jdom.Element;
@@ -29,7 +29,7 @@ public class ActivityMetric implements IMetric {
 
 	private List<Element> elementsOfBPEL = null;
 
-	public ActivityMetric(List<String> activitesToRespect, LabelsRegistry markersRegistry) {
+	public ActivityMetric(List<String> activitesToRespect, MarkersRegisterForArchive markersRegistry) {
 		activities_to_respekt = new ArrayList<String>();
 		if (activitesToRespect != null) {
 			for (Iterator<String> iter = activitesToRespect.iterator(); iter
@@ -52,7 +52,7 @@ public class ActivityMetric implements IMetric {
 
 
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, LabelStatus>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerState>> allLabels) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		IStatistic subStatistic;
 		String label;
@@ -60,7 +60,7 @@ public class ActivityMetric implements IMetric {
 				.hasNext();) {
 			label = iter.next();
 			subStatistic = new Statistic(METRIC_NAME + ": " + label);
-			List<LabelStatus> statusListe = MetricsManager.getStatus(label,
+			List<MarkerState> statusListe = MetricsManager.getStatus(label,
 					allLabels);
 			subStatistic.setStatusListe(statusListe);
 			statistic.addSubStatistik(subStatistic);

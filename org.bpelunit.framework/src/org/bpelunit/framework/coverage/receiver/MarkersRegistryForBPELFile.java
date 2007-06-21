@@ -10,15 +10,15 @@ import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import org.bpelunit.framework.coverage.result.statistic.impl.FileStatistic;
 
-public class LabelsRegistryForBPELFile {
+public class MarkersRegistryForBPELFile {
 
 	private String fileName;
 
-	private Hashtable<String, Hashtable<String, LabelStatus>> allMetricsTable;
+	private Hashtable<String, Hashtable<String, MarkerState>> allMetricsTable;
 
 	private MetricsManager metricManager;
 
-	public LabelsRegistryForBPELFile(String filename, MetricsManager metricManager) {
+	public MarkersRegistryForBPELFile(String filename, MetricsManager metricManager) {
 		this.fileName = filename;
 		this.metricManager=metricManager;
 		prepareStructur(metricManager);
@@ -28,7 +28,7 @@ public class LabelsRegistryForBPELFile {
 		return fileName;
 	}
 
-	public void addMarker(String marke, LabelStatus status) {
+	public void addMarker(String marke, MarkerState status) {
 		String prefix = marke.substring(0, marke
 				.indexOf(Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR));
 		allMetricsTable.get(prefix).put(marke, status);
@@ -36,13 +36,13 @@ public class LabelsRegistryForBPELFile {
 
 	private void prepareStructur(MetricsManager metricManager) {
 		List<IMetric> metrics = metricManager.getMetrics();
-		allMetricsTable = new Hashtable<String, Hashtable<String, LabelStatus>>();
+		allMetricsTable = new Hashtable<String, Hashtable<String, MarkerState>>();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			IMetric metric = iter.next();
 			for (Iterator<String> iterator = metric.getMarkersId()
 					.iterator(); iterator.hasNext();) {
 				allMetricsTable.put(iterator.next(),
-						new Hashtable<String, LabelStatus>());
+						new Hashtable<String, MarkerState>());
 			}
 		}
 	}

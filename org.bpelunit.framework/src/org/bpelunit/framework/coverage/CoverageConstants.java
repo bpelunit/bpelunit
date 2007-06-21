@@ -8,6 +8,8 @@ import org.jdom.Namespace;
 
 public class CoverageConstants {
 	
+	public static final int DEFAULT_WAITTIME=1500;
+	
 	public static final String PARTNERLINK_NAMESPACE = "http://schemas.xmlsoap.org/ws/2003/03/addressing";
 
 	public static final Namespace COVERAGETOOL_NAMESPACE = Namespace
@@ -21,7 +23,8 @@ public class CoverageConstants {
 	public static final String PORT_OF_SERVICE = "Soap_service_port";
 	public static final String SERVICE_NAME = "_CoverageReportingService_";
 	public static final int SERVICE_PORT=7778;
-	public static final String ADDRESS_OF_SERVICE = "http://localhost:"+Integer.valueOf(SERVICE_PORT)+"/ws/"+SERVICE_NAME;
+	public static final String SERVICE_CONTEXT="/coverage/";
+	public static final String ADDRESS_OF_SERVICE = "http://localhost:"+Integer.valueOf(SERVICE_PORT)+"/coverage/"+SERVICE_NAME;
 
 	public static final String COVERAGE_SERVICE_WSDL = "CoverageReportingService.wsdl";
 //	public static final String PARTNERLINK_TYPE = "PLT_CoverageReportingService_";
@@ -50,6 +53,12 @@ public class CoverageConstants {
 	
 	public static final Namespace NAMESPACE_CONFIGURATION = Namespace
 	.getNamespace("http://www.bpelunit.org/schema/coverageMetricsConfiguration");
+	
+	public static final String CONFIG_ATTRIBUTE_WAIT_TIME="waitTime";
+	public static final String CONFIG_METRIC_ELEMENT="metric";
+	public static final String CONFIG_PROPERTY_ELEMENT="property";
+	public static final String CONFIG_ATTRIBUT_NAME="name";
+	public static final String CONFIG_ELEMENT_BASIC_ACTIVITIES="IncludeBasicActivities";
 
 
 }

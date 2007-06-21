@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
@@ -22,9 +22,9 @@ import org.jdom.filter.ElementFilter;
  */
 public class SequenceHandler implements IStructuredActivityHandler {
 
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 
-	public SequenceHandler(LabelsRegistry markersRegistry) {
+	public SequenceHandler(MarkersRegisterForArchive markersRegistry) {
 		this.markersRegistry = markersRegistry;
 	}
 

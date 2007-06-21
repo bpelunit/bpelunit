@@ -3,7 +3,7 @@ package org.bpelunit.framework.coverage.result.statistic;
 import java.util.List;
 import java.util.Set;
 
-import org.bpelunit.framework.coverage.receiver.LabelStatus;
+import org.bpelunit.framework.coverage.receiver.MarkerState;
 
 
 /**
@@ -29,7 +29,7 @@ public interface IStatistic {
 
 	public int getTestedNumber();
 
-	public void setStatusListe(List<LabelStatus> statusListe);
+	public void setStatusListe(List<MarkerState> statusListe);
 
-	public Set<LabelStatus> getTestedItems(String testCase);
+	public Set<MarkerState> getTestedItems(String testCase);
 }

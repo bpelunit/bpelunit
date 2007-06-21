@@ -32,7 +32,7 @@ import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.exceptions.CoverageMeasurmentException;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -70,7 +70,7 @@ public class CoverageMeasurementTool {
 
 	private CoverageMessageReceiver messageReceiver = null;
 
-	private LabelsRegistry markersRegistry = null;
+	private MarkersRegisterForArchive markersRegistry = null;
 
 	private MetricsManager metricManager;
 
@@ -83,7 +83,7 @@ public class CoverageMeasurementTool {
 		logger = Logger.getLogger(getClass());
 		logger.info("CoverageMeasurmentTool erzeugt");
 		metricManager = new MetricsManager();
-		markersRegistry = new LabelsRegistry(metricManager);
+		markersRegistry = new MarkersRegisterForArchive(metricManager);
 		messageReceiver = new CoverageMessageReceiver(markersRegistry);
 		// this.fBpelunitConfigDirectory=FilenameUtils.concat(System.getenv(BPELUnitBaseRunner.BPELUNIT_HOME_ENV),BPELUnitBaseRunner.CONFIG_DIR);
 	}
@@ -113,8 +113,8 @@ public class CoverageMeasurementTool {
 			String archiveFile, IBPELDeployer deployer)
 			throws CoverageMeasurmentException {
 		if(pathToWSDL==null){
-			setErrorStatus("Path to WSDL file fehlt");
-			return archiveFile;
+			setErrorStatus("Path to WSDL file for coverage measurment failure");
+			throw new CoverageMeasurmentException("Path to WSDL file for coverage measurment failure");
 		}
 		IDeploymentArchiveHandler archiveHandler = null;
 		if (deployer instanceof ActiveBPELDeployer) {
@@ -123,14 +123,21 @@ public class CoverageMeasurementTool {
 		// else if //point for extention for other BPEL Engines
 
 		if (archiveHandler == null) {
+			setErrorStatus(deployer.toString()+" is by coverage tool not supported");
 			throw new CoverageMeasurmentException(deployer.toString()
 					+ " is by coverage tool not supported");
 		}
+		 long start=System.currentTimeMillis();
 		String newArchiveFile = archiveHandler.createArchivecopy(FilenameUtils
 				.concat(pathToArchive, archiveFile));
 		prepareLoggingService(archiveHandler);
 		executeInstrumentationOfBPEL(archiveHandler);
 		archiveHandler.closeArchive();
+		long stop=System.currentTimeMillis();
+		System.out.println("Instrumentierungszeit="+(stop-start));
+		System.out.println("INVOKES "+BpelXMLTools.invoke_count);
+		System.out.println("FLOWS "+BpelXMLTools.flow_count);
+		System.out.println("Sequence "+BpelXMLTools.sequence_count);
 		return newArchiveFile;
 	}
 
@@ -183,6 +190,10 @@ public class CoverageMeasurementTool {
 
 	public void setConfig(Map<String, List<String>> configMap)
 			throws ConfigurationException {
+		if(configMap==null){
+			setErrorStatus("Configuration error.");
+			throw new ConfigurationException("Coverage metrics are not configured.");
+		}
 		Iterator<String> iter = configMap.keySet().iterator();
 		String key;
 		IMetric metric;
@@ -221,6 +232,7 @@ public class CoverageMeasurementTool {
 	}
 
 	public void setPathToWSDL(String wsdl) {
+		logger.info("PATHTOWSDL="+wsdl);
 		pathToWSDL = wsdl;
 		messageReceiver.setPathToWSDL(wsdl);
 	}
@@ -235,6 +247,7 @@ public class CoverageMeasurementTool {
 
 	public synchronized void putMessage(String body) {
 		messageReceiver.putMessage(body);
+		notifyAll();
 	}
 
 	public List<IFileStatistic> getStatistics() {

@@ -36,7 +36,7 @@ import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
 import org.bpelunit.framework.coverage.CoverageMeasurementTool;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.model.Partner;
@@ -112,16 +112,16 @@ public class SpecificationLoader {
 
 			fLogger.info("Loaded test suite with name \"" + testSuite.getName() + "\" and " + testSuite.getTestCaseCount() + " test cases.");
 
-			if (BPELUnitRunner.getCoverageMeasurmentTool()!=null) {
+			if (BPELUnitRunner.measureTestCoverage()) {
 				System.out.println("Spezifikationloader:BPELUnitRunner.coverageMeasurmentTool!=NULL");
+				CoverageMeasurementTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
 				try {
-					CoverageMeasurementTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
+					
 					String encodingStyle=tool.getEncodingStyle();
 					if(encodingStyle!=null){
 						tool.setSOAPEncoder(fRunner.createNewSOAPEncoder(encodingStyle));
 					}
 				} catch (Exception e) {
-					CoverageMeasurementTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
 					tool.setErrorStatus("CoverageTool: "+e.getMessage());
 					//TODO Fehler 
 					//HIER

@@ -3,7 +3,7 @@ package org.bpelunit.framework.coverage.receiver;
 import java.util.HashSet;
 import java.util.Set;
 
-public class LabelStatus {
+public class MarkerState {
 
 	private boolean status=false;
 	private Set<String> testcases=new HashSet<String>();

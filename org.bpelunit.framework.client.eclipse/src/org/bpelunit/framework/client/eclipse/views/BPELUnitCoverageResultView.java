@@ -47,7 +47,7 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 
 		parent.setLayout(new GridLayout(3, false));
 		fInfoLabel = new Label(parent, SWT.LEFT);
-		fInfoLabel.setText(" BPELUnit Testcoverage");
+		fInfoLabel.setText(" BPELUnit Test Coverage");
 		GridData gData = new GridData();
 		gData.horizontalSpan = 3;
 		gData.grabExcessHorizontalSpace = true;
@@ -75,7 +75,7 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 		fileList = new List(groupFilesStatistics, SWT.V_SCROLL | SWT.MULTI
 				| SWT.H_SCROLL|SWT.BORDER);
 		gData = new GridData();
-		gData.widthHint = 200;
+		gData.widthHint = 220;
 		gData.heightHint = 150;
 		fileList.setLayoutData(gData);
 		fileList.setBackground(parent.getBackground());
@@ -100,8 +100,8 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 		gData = new GridData();
 //		gData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_FILL;
 //		gData.grabExcessHorizontalSpace = true;
-		 gData.widthHint = 450;
-		gData.heightHint = 160;
+		 gData.widthHint = 480;
+		gData.heightHint = 155;
 		table.setLayoutData(gData);
 		TableColumn col1 = new TableColumn(table, 0);
 		col1.setText("Metric");
@@ -136,7 +136,7 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 			}
 		});
 		gData = new GridData();
-		gData.widthHint = 200;
+		gData.widthHint = 220;
 		gData.heightHint = 150;
 //		gData.horizontalAlignment=SWT.LEFT;
 		gData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_FILL;
@@ -150,10 +150,10 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 	}
 
 	private void initializeElements() {
-
 		text.setText("Info: ");
 		fileList.removeAll();
 		tableTestCases.removeAll();
+		table.removeAll();
 	}
 
 	@Override
@@ -189,6 +189,13 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 				text.append("Test coverage is successful measured.");
 			}
 			initialized = true;
+			fileList.selectAll();
+			model.selectedFiles = fileList.getSelection();
+			for(int i=0;i<tableTestCases.getItemCount();i++){
+				TableItem item = tableTestCases.getItem(i);
+				item.setChecked(true);
+				model.checkedTestCases.add(item.getText());
+			}
 		}
 		text.pack(true);
 
@@ -270,6 +277,7 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 				fileStatistics.put(fileStatistic.getBPELFilename(),
 						fileStatistic);
 			}
+
 			setChanged();
 			notifyObservers();
 		}

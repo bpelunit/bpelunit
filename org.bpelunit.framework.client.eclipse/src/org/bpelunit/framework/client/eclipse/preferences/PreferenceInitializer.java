@@ -11,7 +11,7 @@ import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchM
 import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivity;
+import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -37,23 +37,24 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CURRENT_DEPLOYER,
 				ExtensionControl.chooseDefaultDeployerId());
 		store.setDefault(PreferenceConstants.P_COVERAGE_MEASURMENT, false);
-		store.setDefault(BasicActivity.RECEIVE_ACTIVITY, false);
-		store.setDefault(BasicActivity.REPLY_ACTIVITY, false);
-		store.setDefault(BasicActivity.INVOKE_ACTIVITY, false);
-		store.setDefault(BasicActivity.ASSIGN_ACTIVITY, false);
-		store.setDefault(BasicActivity.THROW_ACTIVITY, false);
-		store.setDefault(BasicActivity.EXIT_ACTIVITY, false);
-		store.setDefault(BasicActivity.WAIT_ACTIVITY, false);
-		store.setDefault(BasicActivity.EMPTY_ACTIVITY, false);
-		store.setDefault(BasicActivity.COMPENSATE_ACTIVITY, false);
-		store.setDefault(BasicActivity.COMPENSATESCOPE_ACTIVITY, false);
-		store.setDefault(BasicActivity.RETHROW_ACTIVITY, false);
-		store.setDefault(BasicActivity.VALIDATE_ACTIVITY, false);
+		store.setDefault(BasicActivities.RECEIVE_ACTIVITY, false);
+		store.setDefault(BasicActivities.REPLY_ACTIVITY, false);
+		store.setDefault(BasicActivities.INVOKE_ACTIVITY, false);
+		store.setDefault(BasicActivities.ASSIGN_ACTIVITY, false);
+		store.setDefault(BasicActivities.THROW_ACTIVITY, false);
+		store.setDefault(BasicActivities.EXIT_ACTIVITY, false);
+		store.setDefault(BasicActivities.WAIT_ACTIVITY, false);
+		store.setDefault(BasicActivities.EMPTY_ACTIVITY, false);
+		store.setDefault(BasicActivities.COMPENSATE_ACTIVITY, false);
+		store.setDefault(BasicActivities.COMPENSATESCOPE_ACTIVITY, false);
+		store.setDefault(BasicActivities.RETHROW_ACTIVITY, false);
+		store.setDefault(BasicActivities.VALIDATE_ACTIVITY, false);
 		store.setDefault(BranchMetric.METRIC_NAME, false);
 		store.setDefault(LinkMetric.METRIC_NAME, false);
 		store.setDefault(CompensationMetric.METRIC_NAME, false);
 		store.setDefault(FaultMetric.METRIC_NAME, false);
-		store.setDefault(BasicActivity.TERMINATE_ACTIVITY, false);
+		store.setDefault(BasicActivities.TERMINATE_ACTIVITY, false);
+		store.setDefault(PreferenceConstants.P_COVERAGE_WAIT_TIME, 1500);
 	}
 
 }

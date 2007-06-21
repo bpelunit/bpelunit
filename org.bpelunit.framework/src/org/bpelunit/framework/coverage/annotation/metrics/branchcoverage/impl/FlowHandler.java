@@ -14,7 +14,7 @@ import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStruct
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.ContentFilter;
@@ -23,9 +23,9 @@ import org.jdom.filter.ContentFilter;
 
 public class FlowHandler implements IStructuredActivityHandler {
 	
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 
-	public FlowHandler(LabelsRegistry markersRegistry){
+	public FlowHandler(MarkersRegisterForArchive markersRegistry){
 		this.markersRegistry = markersRegistry;
 	}
 

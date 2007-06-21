@@ -99,9 +99,10 @@ public class WebServiceHandler extends AbstractHttpHandler {
 		String partnerName = getPartnerName(pathInContext);
 
 		if (partnerName.equals(CoverageConstants.SERVICE_NAME)) {
-			sendResponse(response, 200, "");
-				StringBuffer buf = readRequest(request);
-				BPELUnitRunner.getCoverageMeasurmentTool().putMessage(buf.toString());
+			wsLogger.info("??????????????????????FALSCH zugestellt"+partnerName+pathInContext);
+//			sendResponse(response, 200, "");
+//				StringBuffer buf = readRequest(request);
+//				BPELUnitRunner.getCoverageMeasurmentTool().putMessage(buf.toString());
 		} else {
 			if (fRunner == null) {
 				wsLogger.error("Not initialized - rejecting message for URL "

@@ -36,11 +36,11 @@ public class CoverageMessageReceiver {
 
 	private SOAPOperationCallIdentifier operation = null;
 
-	private String testCase;
+	private String testCase=null;
 
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 
-	public CoverageMessageReceiver(LabelsRegistry markersRegistry) {
+	public CoverageMessageReceiver(MarkersRegisterForArchive markersRegistry) {
 
 		this.markersRegistry = markersRegistry;
 	}

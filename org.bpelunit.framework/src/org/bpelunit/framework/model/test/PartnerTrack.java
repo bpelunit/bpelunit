@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.run.TestCaseRunner;
+import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.test.activity.Activity;
 import org.bpelunit.framework.model.test.activity.ActivityContext;
@@ -18,8 +20,9 @@ import org.bpelunit.framework.model.test.report.ITestArtefact;
 import org.bpelunit.framework.model.test.report.StateData;
 
 /**
- * A PartnerTrack represents the sequential list of activities which are executed on behalf of the
- * partner in a certain test case. The PartnerTrack can be seen as the simulated partner itself.
+ * A PartnerTrack represents the sequential list of activities which are
+ * executed on behalf of the partner in a certain test case. The PartnerTrack
+ * can be seen as the simulated partner itself.
  * 
  * @version $Id$
  * @author Philip Mayer
@@ -58,18 +61,18 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 	private Logger fLogger;
 
 	public PartnerTrack(TestCase testCase, Partner client) {
-		fPartner= client;
-		fTestCase= testCase;
-		fStatus= ArtefactStatus.createInitialStatus();
-		fLogger= Logger.getLogger(getClass());
+		fPartner = client;
+		fTestCase = testCase;
+		fStatus = ArtefactStatus.createInitialStatus();
+		fLogger = Logger.getLogger(getClass());
 	}
 
 	public void initialize(TestCaseRunner runner) {
-		fRunner= runner;
+		fRunner = runner;
 	}
 
 	public void setActivities(List<Activity> activities) {
-		fActivities= activities;
+		fActivities = activities;
 	}
 
 	public void run() {
@@ -80,7 +83,7 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 
 			fLogger.info(getName() + " now starting activity " + activity);
 
-			ActivityContext context= new ActivityContext(fRunner, this);
+			ActivityContext context = new ActivityContext(fRunner, this);
 			activity.run(context);
 
 			fLogger.info(getName() + " returned from activity " + activity);
@@ -88,14 +91,14 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 			reportProgress(activity);
 
 			if (activity.hasProblems()) {
-				fStatus= activity.getStatus();
+				fStatus = activity.getStatus();
 				break;
 			}
 		}
 
 		// Ensure set status before notification
 		if (!hasProblems())
-			fStatus= ArtefactStatus.createPassedStatus();
+			fStatus = ArtefactStatus.createPassedStatus();
 
 		// Notify
 		fLogger.info(getName() + " finished.");
@@ -122,13 +125,12 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 	}
 
 	public int getActivityCount() {
-		int activityCount= 0;
+		int activityCount = 0;
 		for (Activity activity : fActivities) {
-			activityCount+= activity.getActivityCount();
+			activityCount += activity.getActivityCount();
 		}
 		return activityCount;
 	}
-
 
 	@Override
 	public String toString() {
@@ -142,7 +144,7 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 	}
 
 	public List<ITestArtefact> getChildren() {
-		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
+		List<ITestArtefact> children = new ArrayList<ITestArtefact>();
 		for (Activity activity : fActivities) {
 			children.add(activity);
 		}

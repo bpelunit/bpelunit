@@ -141,7 +141,6 @@ public class Instrumenter {
 		cmServiceFactory = CMServiceFactory.getInstance();
 		cmServiceFactory.prepareBPELFile(process_element);
 		handleCoverageLabelsInElement(process_element, null);
-		// insertLastReportInvoke(process_element);
 	}
 
 	private void handleCoverageLabelsInElement(Element element, String variable) {

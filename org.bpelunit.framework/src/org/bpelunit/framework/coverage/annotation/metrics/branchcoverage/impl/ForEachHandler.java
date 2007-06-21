@@ -7,7 +7,7 @@ import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStruct
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 
@@ -15,9 +15,9 @@ import org.jdom.Element;
 public class ForEachHandler implements IStructuredActivityHandler {
 
 
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 
-	public ForEachHandler(LabelsRegistry markersRegistry) {
+	public ForEachHandler(MarkersRegisterForArchive markersRegistry) {
 		this.markersRegistry = markersRegistry;
 	}
 

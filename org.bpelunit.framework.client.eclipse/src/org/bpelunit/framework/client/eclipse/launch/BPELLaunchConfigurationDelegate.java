@@ -14,10 +14,12 @@ import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
 import org.bpelunit.framework.client.eclipse.EclipseBPELUnitRunner;
 import org.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
+import org.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView;
 import org.bpelunit.framework.client.model.TestRunSession;
 import org.bpelunit.framework.coverage.CoverageConstants;
+import org.bpelunit.framework.coverage.CoverageMeasurementTool;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -91,18 +93,16 @@ public class BPELLaunchConfigurationDelegate implements
 
 			// Bundle bundle = Platform
 			// .getBundle(BPELUnitActivator.FRAMEWORK_BUNDLE_SYMBOLICNAME);
-			if (BPELUnitRunner.coverageMeasurmentTool != null) {
+			if (BPELUnitRunner.getCoverageMeasurmentTool() != null) {
 				Bundle bundle = plugin.getBundle();
 				URL url = bundle
 						.getResource(CoverageConstants.COVERAGE_SERVICE_WSDL);
 				if (url != null) {
 					System.out.println("URL " + url.getPath());
 					url = FileLocator.toFileURL(url);
-					CoverageMessageReceiver.ABSOLUT_CONFIG_PATH = url.getPath();
+					BPELUnitRunner.getCoverageMeasurmentTool().setPathToWSDL(url.getPath());
 				} else
-					// TODO
-					LabelsRegistry.getInstance().addInfo(
-							"File " + CoverageConstants.COVERAGE_SERVICE_WSDL
+					BPELUnitRunner.getCoverageMeasurmentTool().setErrorStatus("File " + CoverageConstants.COVERAGE_SERVICE_WSDL
 									+ " not found");
 			}
 
@@ -133,6 +133,8 @@ public class BPELLaunchConfigurationDelegate implements
 			 * Register the new suite. Note that this might wait for an old
 			 * session to close.
 			 */
+
+			plugin.initializeCoverageResultView();
 			TestRunSession testRunSession = new TestRunSession(suite, launch);
 			plugin.registerLaunchSession(testRunSession);
 			try {
@@ -163,18 +165,10 @@ public class BPELLaunchConfigurationDelegate implements
 			} finally {
 				plugin.deregisterLaunchSession(testRunSession);
 			}
-
-			if (BPELUnitRunner.isMeasureTestCoverage()) {
-				plugin.showCoverageResult(suite.getTestCases(), LabelsRegistry
-						.getInstance().getStatistics(), LabelsRegistry
-						.getInstance().getInfo());
-				LabelsRegistry.getInstance().destroy();
-			}else{
-				System.out.println("VIEW Initializiert");
-				plugin.initializeCoverageResultView();
-				LabelsRegistry.getInstance().destroy();
+			if (BPELUnitRunner.measureTestCoverage()) {
+				CoverageMeasurementTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
+				plugin.showCoverageResult(suite.getTestCases(), tool.getStatistics(), tool.getInfo());
 			}
-
 		} catch (SpecificationException e) {
 			showError(e);
 		} catch (ConfigurationException e) {
@@ -182,6 +176,9 @@ public class BPELLaunchConfigurationDelegate implements
 		} catch (Exception e) {
 			showError(e);
 			BPELUnitActivator.log(e);
+		}
+		finally{
+			BPELUnitRunner.setCoverageMeasurmentTool(null);
 		}
 	}
 

@@ -30,6 +30,10 @@ public class BpelXMLTools {
 
 	/* Elements from namespace of BPEL */
 
+	public static int sequence_count=0;
+	public static int flow_count=0;
+	public static int invoke_count=0;
+	
 	public static final String PROCESS_ELEMENT = "process";
 
 	public static final String VARIABLE_ELEMENT = "variable";
@@ -334,6 +338,7 @@ public class BpelXMLTools {
 	 * @return
 	 */
 	public static Element createSequence() {
+		sequence_count++;
 		return new Element(StructuredActivities.SEQUENCE_ACTIVITY,
 				getProcessNamespace());
 	}
@@ -470,6 +475,11 @@ public class BpelXMLTools {
 	}
 
 	public static Element createBPELElement(String name) {
+		if(name.equals(StructuredActivities.FLOW_ACTIVITY))
+			flow_count++;
+
+		if(name.equals(BasicActivities.INVOKE_ACTIVITY))
+			invoke_count++;
 		return new Element(name, getProcessNamespace());
 	}
 	

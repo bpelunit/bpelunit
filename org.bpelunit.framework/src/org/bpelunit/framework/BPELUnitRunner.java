@@ -17,7 +17,7 @@ import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.coverage.CoverageMeasurementTool;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.model.test.TestSuite;
@@ -308,7 +308,7 @@ public abstract class BPELUnitRunner {
 		return fHaltOnFailure;
 	}
 
-	public static boolean isMeasureTestCoverage() {
+	public static boolean measureTestCoverage() {
 		return fMeasureCoverage;
 	}
 	

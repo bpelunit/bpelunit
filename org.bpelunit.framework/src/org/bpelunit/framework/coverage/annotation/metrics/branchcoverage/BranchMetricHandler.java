@@ -19,7 +19,7 @@ import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.Sw
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.WhileHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -36,7 +36,7 @@ public class BranchMetricHandler implements IMetricHandler {
 
 	public static final String BRANCH_LABEL = "branch";
 
-	private static int count = 0;
+//	private static int count = 0;
 
 	/**
 	 * Generiert eine eindeutige Markierung.
@@ -156,7 +156,7 @@ public class BranchMetricHandler implements IMetricHandler {
 
 //	private LabelsRegistry markersRegistry;
 
-	public BranchMetricHandler(LabelsRegistry markersRegistry) {
+	public BranchMetricHandler(MarkersRegisterForArchive markersRegistry) {
 //		this.markersRegistry = markersRegistry;
 		structured_activity_handler.put(StructuredActivities.FLOW_ACTIVITY,
 				new FlowHandler(markersRegistry));

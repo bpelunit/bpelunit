@@ -10,7 +10,7 @@ import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Comment;
 import org.jdom.Element;
 
@@ -20,7 +20,7 @@ public class CompensationMetricHandler implements IMetricHandler {
 
 	public static final String COMPENS_HANDLER_LABEL = "compHandler";
 
-	private static int count=0;
+//	private static int count=0;
 
 	/**
 	 * Generiert eine eindeutige Markierung.
@@ -34,9 +34,9 @@ public class CompensationMetricHandler implements IMetricHandler {
 		return  label;
 	}
 
-	private LabelsRegistry markersRegistry;
+	private MarkersRegisterForArchive markersRegistry;
 	
-	public CompensationMetricHandler(LabelsRegistry markersRegistry) {
+	public CompensationMetricHandler(MarkersRegisterForArchive markersRegistry) {
 
 		this.markersRegistry=markersRegistry;
 	}

@@ -12,27 +12,27 @@ import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchM
 import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
-import org.bpelunit.framework.coverage.receiver.LabelStatus;
-import org.bpelunit.framework.coverage.receiver.LabelsRegistry;
+import org.bpelunit.framework.coverage.receiver.MarkerState;
+import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 
 
 public class MetricsManager {
 	
-	public static List<LabelStatus> getStatus(String label, Hashtable<String,Hashtable<String,LabelStatus>> allLabels) {
-		List<LabelStatus> list=new ArrayList<LabelStatus>();
+	public static List<MarkerState> getStatus(String label, Hashtable<String,Hashtable<String,MarkerState>> allLabels) {
+		List<MarkerState> list=new ArrayList<MarkerState>();
 		if (allLabels.get(label) != null) {
 			Hashtable activityTable = allLabels.get(label);
 			Enumeration e = activityTable.elements();
 			while (e.hasMoreElements()) {
-				list.add ((LabelStatus) e.nextElement());
+				list.add ((MarkerState) e.nextElement());
 			}
 		}
 		return list;
 	}
 	
 	
-	public static IMetric createMetric(String name,List<String> list, LabelsRegistry markersRegistry){
+	public static IMetric createMetric(String name,List<String> list, MarkersRegisterForArchive markersRegistry){
 		IMetric metric=null;
 		if(name.equals(ActivityMetric.METRIC_NAME)){
 			metric=new ActivityMetric(list,markersRegistry);
@@ -69,7 +69,7 @@ public class MetricsManager {
 		return metrics;
 	}
 	
-	public List<IStatistic> createStatistics(Hashtable<String, Hashtable<String, LabelStatus>> allLabels){
+	public List<IStatistic> createStatistics(Hashtable<String, Hashtable<String, MarkerState>> allLabels){
 		List<IStatistic> statistics=new ArrayList<IStatistic>();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			statistics.add(iter.next().createStatistic(allLabels));
