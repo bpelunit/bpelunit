@@ -1,8 +1,14 @@
 package org.bpelunit.framework.coverage.annotation.metrics.linkcoverage;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.count;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createBPELElement;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createSequence;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseElementInFlow;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getProcessNamespace;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.process_element;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,8 +47,6 @@ public class LinkMetricHandler implements  IMetricHandler {
 
 	private static final String COPY_LINK_NEGIERT_POSTFIX = "_negiert";
 
-//	private static int count = 0;
-
 	public static final String NEGATIV_LINK_LABEL = "negativLinks";
 
 	public static final String POSITIV_LINK_LABEL = "positivLinks";
@@ -54,7 +58,6 @@ public class LinkMetricHandler implements  IMetricHandler {
 	}
 
 	public LinkMetricHandler(MarkersRegisterForArchive markersRegistry) {
-
 		this.markersRegistry=markersRegistry;
 	}
 
@@ -63,10 +66,8 @@ public class LinkMetricHandler implements  IMetricHandler {
 	 * 
 	 * @return eindeutige Markierung
 	 */
-	public static String getNextPositivLinkLabel() {
-		String marker = POSITIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
-//		LabelsRegistry.getInstance().addMarker(marker);
-		return  marker;
+	public static String getNextPositivLinkMarker() {
+		return POSITIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
 	}
 
 	/**
@@ -74,34 +75,16 @@ public class LinkMetricHandler implements  IMetricHandler {
 	 * 
 	 * @return eindeutige Markierung
 	 */
-	public static String getNextNegativLinkLabel() {
-		String marker = NEGATIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
-//		LabelsRegistry.getInstance().addMarker(marker);
-		return  marker;
+	public static String getNextNegativLinkMarker() {
+		return  NEGATIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
 	}
 
 	public void insertMarkersForMetric(List<Element> activities)
 			throws BpelException {
-		// Iterator<Element> flowElemensIter = process_element
-		// .getDescendants(new ElementFilter(
-		// StructuredActivity.FLOW_ACTIVITY,
-		// bpelFileData.getBPELProcessNamespace()));
-		// List<Element> elements_to_log=new ArrayList<Element>();
-		// while (flowElemensIter.hasNext()) {
-		// elements_to_log.add(flowElemensIter.next());
-		// }
-		//		
-		// for (Iterator<Element> iter = elements_to_log.iterator();
-		// iter.hasNext();) {
-		// loggingOfLinks(iter.next());
-		// }
-
-
 		for (Iterator<Element> iter = activities.iterator(); iter
 				.hasNext();) {
 			loggingOfLinks2(iter.next(), process_element);
 		}
-
 	}
 
 	private void loggingOfLinks2(Element link, Element processElement) {
@@ -111,13 +94,10 @@ public class LinkMetricHandler implements  IMetricHandler {
 				&& !transitionCondition.equals("false()")) {
 			createMarkerForLink2(link, sourceElement, transitionCondition);
 		}
-
 	}
 
 	private void createMarkerForLink2(Element link, Element sourceElement,
 			String transitionCondition) {
-
-		// Element flow = link.getParentElement();
 		Element sourceActivity = null;
 		if (getProcessNamespace().equals(NAMESPACE_BPEL_2_0)) {
 			sourceActivity = sourceElement.getParentElement()
@@ -132,7 +112,6 @@ public class LinkMetricHandler implements  IMetricHandler {
 		insertLoggingMarker(new_link, enclosedFlow, true);
 		new_link = insertNegativLink(enclosedFlow, sourceElement, link,transitionCondition);
 		insertLoggingMarker(new_link, enclosedFlow, false);
-
 	}
 
 	private String checkTransitionCondition(Element sourceElement) {
@@ -141,15 +120,13 @@ public class LinkMetricHandler implements  IMetricHandler {
 		Element transConElement;
 		if (ns.equals(NAMESPACE_BPEL_2_0)) {
 			transConElement = sourceElement.getChild(TRANSITION_CONDITION, ns);
-			if (transConElement != null) {
+			if (transConElement != null)
 				transitionCondition = transConElement.getText();
-			}
 		} else if (ns.equals(NAMESPACE_BPEL_1_1)) {
 			transitionCondition = sourceElement
 					.getAttributeValue(TRANSITION_CONDITION);
-			if (transitionCondition == null) {
+			if (transitionCondition == null)
 				transitionCondition = "";
-			}
 		}
 		return transitionCondition.trim();
 	}
@@ -162,43 +139,12 @@ public class LinkMetricHandler implements  IMetricHandler {
 		while (iter.hasNext()) {
 			source = iter.next();
 			String attribut = source.getAttributeValue(ATTRIBUTE_LINKNAME);
-			if (attribut != null && attribut.equals(linkName)) {
+			if (attribut != null && attribut.equals(linkName))
 				break;
-			}
 		}
 		return source;
 	}
 
-	// private void loggingOfLinks(Element element) throws BpelException {
-	// Element linksElement = element.getChild(LINKS_TAG, bpelFileData
-	// .getBPELProcessNamespace());
-	// if (linksElement != null) {
-	// Iterator iter = linksElement.getDescendants(new ElementFilter(
-	// LINK_TAG, bpelFileData.getBPELProcessNamespace()));
-	// List<Element> links = new ArrayList<Element>();
-	// while (iter.hasNext()) {
-	// links.add((Element) iter.next());
-	// }
-	// for (int i = 0; i < links.size(); i++) {
-	// createMarkerForLink((Element) links.get(i), element);
-	// }
-	// }
-	// }
-
-	// private void createMarkerForLink(Element link, Element flow)
-	// throws BpelException {
-	// Element sourceElement = searchSourceElement(link, flow);
-	// if (sourceElement == null) {
-	// throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
-	// }
-	// Element enclosedFlow = encloseElementInFlow(sourceElement
-	// .getParentElement().getParentElement());
-	// Element new_link = insertPostivLink(enclosedFlow, sourceElement, link);
-	// insertLoggingMarker(new_link, enclosedFlow, true);
-	//
-	// new_link = insertNegativLink(enclosedFlow, sourceElement, link);
-	// insertLoggingMarker(new_link, enclosedFlow, false);
-	// }
 
 	private Element insertPostivLink(Element flow, Element sourceElement,
 			Element link, String transitionCondition) {
@@ -238,15 +184,15 @@ public class LinkMetricHandler implements  IMetricHandler {
 			boolean isPositivValueOfLink) {
 		Comment logging;
 
-		String label;
+		String marker;
 		if (isPositivValueOfLink) {		
-			label=getNextPositivLinkLabel();
-			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +label);
+			marker=getNextPositivLinkMarker();
+			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +marker);
 		} else {
-			label=getNextNegativLinkLabel();
-			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +label);
+			marker=getNextNegativLinkMarker();
+			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +marker);
 		}
-		markersRegistry.addMarker(label);
+		markersRegistry.addMarker(marker);
 
 		Element sequence = createSequence();
 		Element targetElement = createBPELElement(TARGET_TAG);
@@ -283,28 +229,7 @@ public class LinkMetricHandler implements  IMetricHandler {
 		return link_copy;
 	}
 
-//	private Element searchSourceElement(Element link, Element flow) {
-//		Iterator sources = flow.getDescendants(new ElementFilter(SOURCE_TAG,
-//				getProcessNamespace()));
-//		Element source = null;
-//		String linkName;
-//		while (sources.hasNext()) {
-//			source = (Element) sources.next();
-//			linkName = source.getAttributeValue(ATTRIBUTE_LINKNAME);
-//			if (link.getAttribute(ATTRIBUTE_NAME).equals(linkName)) {
-//				break;
-//			}
-//		}
-//		return source;
-//	}
 
-//	public List<String> getPrefix4CovLabeles() {
-//		List<String> list = new ArrayList<String>(2);
-//		list.add(LinkMetricHandler.POSITIV_LINK_LABEL);
-//		list.add(LinkMetricHandler.NEGATIV_LINK_LABEL);
-//
-//		return list;
-//	}
 
 
 

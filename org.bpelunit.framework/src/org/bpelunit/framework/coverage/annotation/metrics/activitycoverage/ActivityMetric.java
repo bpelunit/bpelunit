@@ -82,8 +82,9 @@ public class ActivityMetric implements IMetric {
 	}
 
 	public void insertMarkers() throws BpelException {
-		if (elementsOfBPEL != null)
+		if (elementsOfBPEL != null) {
 			metricHandler.insertMarkersForMetric(elementsOfBPEL);
-		elementsOfBPEL = null;
+			elementsOfBPEL = null;
+		}
 	}
 }

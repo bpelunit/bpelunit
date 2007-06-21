@@ -1,5 +1,4 @@
 Web Services bieten eine auf Standards basierende Technologie, um SOAs zu realisieren. Mittlerweile setzen viele große Softwarekonzerne auf Web Services und haben ihre Produktstrategien entsprechend ausgerichtet.
-
 Als Web-Service bezeichnet man im Allgemeinen eine Softwarekomponente, die
 ihre Funktionalität über Standardinternetprotokolle zur Verfügung stellt.
 W3C definiert die Web Services folgendermaßen: 
@@ -10,7 +9,7 @@ with other software agents using XML-based messages exchanged via Internet-based
 \end{Def}
 
 
-Während die erste Definition die konkreten Interaktionsprotokollen und Beschreibungssprache für die Schnittstellen noch offen lässt, werden in der nächste Definition die  wichtigen Standards genannt. 
+Während die erste Definition die konkreten Interaktionsprotokollen und die Beschreibungssprache für die Schnittstellen noch offen lässt, werden in der nächste Definition die  wichtigen Standards genannt. 
 \begin{Def}
 A Web service is a software system designed to support interoperable machine-to-machine
 interaction over a network. It has an interface described in a machine-processable format
@@ -32,22 +31,26 @@ Services.
 \item WSDL (Web Services Defnition Language) ist eine funktionale, XML-basierte Beschreibungssprache
 für die Schnittstellen eines Web Services.(siehe nächsten Abschnitt)
 \end{itemize}
-
-Der Zusammenhang dieser Standards und die grundlegende Funktionsweise ist in der Abbildung \ref{fig:WSFunktionsweise} dargestellt.
-\begin{figure}[htbp]
-	\centering
-		\includegraphics[width=0.6\textwidth]{bilder/Webservice.png}
-		\caption{Kontrollfluss eines BPEL Prozesses}
-	\label{fig:WSFunktionsweise}
-\end{figure}
-
-Die Abbildung \ref{fig:wsTechnologieStack} zeigt den Web Service Technologie Stack.  
+In der Abbildung \ref{fig:wsTechnologieStack} sind die genannten Standards in Web Service-Technologiestack eingeordnet.  
 
 \begin{figure}[htbp]
 	\centering
-		\includegraphics[width=0.7\textwidth]{bilder/wsTechnologieStack.png}
+		\includegraphics[width=0.75\textwidth]{bilder/wsTechnologieStack.png}
 		\caption{Web Service Technologie Stack}
 	\label{fig:wsTechnologieStack}
 \end{figure}
 
+Der Zusammenhang dieser Standards und die grundlegende Funktionsweise ist in der Abbildung \ref{fig:WSFunktionsweise} dargestellt. Web Service-Architektur unterscheidet die Rollen Service-Anbieter, Service-Nutzer
+und Service-Verzeichnis. Ein Service-Anbieter registriert Informationen über von ihm bereitgestellte Dienste bei einem
+Dienst-Verzeichnis. Ein Dienst-Nutzer nutzt das Dienst-Verzeichnis zum Auffinden
+existierender Dienst-Implementierungen und startet die Interaktion mit
+der gewählten Dienst-Komponente.
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.65\textwidth]{bilder/Webservice.png}
+		\caption{Rollen und Standards in einer Web Service-Architektur}
+	\label{fig:WSFunktionsweise}
+\end{figure}
 
+Web Services stellen eine Lösung für die Integration von verschiedenen, autonomen Systemen dar. Die immer wiederkehrenden Funktionen im Unternehmen werden nur einmal implementiert und anderen Programmen als Services zur Verfügung gestellt. Dadurch können Redundanzen vermieden und
+Kosten in der Entwicklung gesenkt werden.

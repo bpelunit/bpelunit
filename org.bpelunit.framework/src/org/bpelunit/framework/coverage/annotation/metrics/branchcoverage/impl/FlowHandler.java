@@ -37,7 +37,6 @@ public class FlowHandler implements IStructuredActivityHandler {
 	private void loggingOfBranches(Element element) {
 		List children = element.getChildren();
 		Element child;
-
 			for (int i = 0; i < children.size(); i++) {
 				child = (Element) children.get(i);
 				if (isActivity(child)) {
@@ -51,8 +50,7 @@ public class FlowHandler implements IStructuredActivityHandler {
 								Element el=iter.next();
 								ensureElementIsInSequence(el);
 								markersRegistry.addMarker(BranchMetricHandler.insertLabelAfterActivity(el));
-							}
-							
+							}					
 						} else {
 							markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
 						}
@@ -74,7 +72,7 @@ public class FlowHandler implements IStructuredActivityHandler {
 		}
 		if (isStructuredActivity(activity)) {
 			Iterator<Element> iter=activity.getDescendants(new ContentFilter(ContentFilter.ELEMENT) {
-
+				
 				@Override
 				public boolean matches(Object obj) {
 					if (super.matches(obj)) {

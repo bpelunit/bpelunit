@@ -19,44 +19,27 @@ Es gibt mehrere Möglichkeiten die Informationen über Ablauf eines BPEL-Prozesses
 \end{itemize}
 
     
-Da die dritte und vierte Möglichkeit sich für die Messung der Abdeckung nicht besonders gut eignen und daher keine wirkliche Alternative darstellen, werden sie an dieser Stelle nur ganz kurz behandelt. Durch eine Erweiterung der Logik von Web Service-Mock's ist es möglich, die Interaktionen der Mock's mit dem BPEL-Prozess zu protokollieren. Aus dise Weise lassen sich nur Auusagen über externes Verhalten des Prozesses (Kommunikation mit anderen Web Services) machen. Die interne Logik und der Kontrollfluss bleiben während der Laufzeit verborgen. Zur Ermittlung von Metriken fehlt damit die Information über die Ausführung des Prozesses. Die Log-Dateien der Ablaufumgebungen, wenn diese überhaupt existieren, sind anbieterabhängig und nicht standardisiert, was diese Möglichkeit auch ausschließt. 
+Die dritte und vierte Möglichkeit eignen sich für die Messung der Abdeckung nicht werden daher an dieser Stelle nur ganz kurz behandelt. Durch eine Erweiterung der Logik von Web Service-Mock's ist es möglich, die Interaktionen der Mock's mit dem BPEL-Prozess zu protokollieren. Aus dise Weise lassen sich nur Auusagen über externes Verhalten des Prozesses (Kommunikation mit anderen Web Services) machen. Die interne Logik und der Kontrollfluss bleiben während der Laufzeit verborgen. Zur Ermittlung von Metriken fehlen damit die Informationen über die Ausführung des Prozesses. Die Log-Dateien der Ablaufumgebungen, wenn diese überhaupt existieren, sind anbieterabhängig und nicht standardisiert, was diese Möglichkeit auch ausschließt. 
 
 Der Instrumentierungs- und Tracingansatz sind als Verfahren für die Messung der Codeabdeckung aus dem Bereich der konventionellen Programmiersprachen bekannt. Die beiden Ansätze wurden in der Masterarbeit von P.Dul \cite{Dul2005} im Bezug auf Programmiersprache Java detailliert untersucht und verglichen.
  
 \section{Instrumentierungsansatz.}
-
-Weirverbreitet Cobertura für Java
 
 \begin{wrapfigure}[14]{r}{6cm}
 \centering%
 \includegraphics[width=0.3\textwidth]{bilder/Instrumentierung.png}%
 \label{}
 \end{wrapfigure}
-Bei der Instrumentierung handelt es sich um ein einfaches Verfahren zur Messung der Testabdeckung, das von vielen Werkzeugen eingesetzt wird. Dabei werden in den Quellcode zusätzliche Anweisungen eingefügt, die die Ausführung bestimmter Codebereiche dokumentieren. Damit der Originalcode unverändert bleibt, wird die Instrumentierung auf einer Kopie durchgeführt. 
+Bei der Instrumentierung handelt es sich um ein einfaches Verfahren zur Messung der Testabdeckung, das in zahlreichen kommerziellen und nicht kommerziellen Werkzeugen eingesetzt wird. 
+Dabei werden in den Quellcode zusätzliche Anweisungen eingefügt, die die Ausführung bestimmter Codebereiche dokumentieren. Damit der Originalcode unverändert bleibt, wird die Instrumentierung auf einer Kopie durchgeführt. 
 
 Während der Instrumentierung werden die relevanten statistischen Daten des Quellcodes, die für die Auswertung der Ergebnisse notwendig sind, gesammelt und gespeichert. Anhand dieser Daten und der Information, die während der Ausführung gesammelt wird, kann die Auswertung erfolgen und die Codeabdeckung ermittelt werden. Der Instrumentierungsansatz führt zu einer erheblichen Vergrößerung des Programms.  
 
-Es existieren zahlreiche kommerzielle und nicht-kommerzielle Werkzeuge zur Messung der Testabdeckung. Für Java Cobertura unter General Public License stehnde... Instrumentierung findet auf der Java Bytecode-Ebene statt.
+Cobertura ist ein bekanntes Werkzeug zur Ermittlung der Testabdeckung in Java-Programmen, das unter General Public License verfügbar ist und auf dem Instrumentierungsverfahren basiert. 
 
-Eine dynamische Analyse hat jeder schon verwendet: Testen. Auch dabei wird das Programm ausgef¨uhrt, das
-Verhalten des Programms w¨ahrend der Ausf¨uhrung beobachtet und aus den Beobachtungen R¨uckschl¨usse gezogen
-(ist die Spezifikation erf¨ullt oder nicht?).
-Auch beim Testen ist die Wahl der Testf¨alle entscheidend: M¨oglichst alle Teile des Programms sollen in allen
-Varianten mindestens einmal ausgef¨uhrt worden sein. Eine hohe Testabdeckung ist also w¨unschenswert. Genauso ist
-es bei den meisten dynamischen Analysen.
-F¨ur weitergehende Analysen ist in der Regel ein Blick in den inneren Zustand des Programms notwendig. Daher
-m¨ussen Vorkehrungen getroffen werden, um diesen Zustand zugreifbar zu machen. Zum Beispiel m¨ussen evtl.
-Variablenwerte ausgegeben oder das Passieren bestimmter Punkte erfasst werden. Dazu ist eine Instrumentierung
-notwendig.
-
-Clover
-
-Mit dem Clover Plugin für Eclipse ist es möglich, innerhalb der IDE Java-Projekte zu kompilieren, mit JUnit zu testen und den Grad der Testabdeckung der Unit-Tests sofort in einer separaten View zu sichten, ohne dabei die Entwicklungsumgebung zu verlassen. Das kommerzielle Tool ist eines der ältesten Vertreter aus dem Bereich Code Coverage. Der Name "Clover" ist übrigens die Kurzform des Kosenamens des Autors "Mr. Clover Lover" und bedeutet übersetzt "Kleeblatt".
-Code Coverage
-
-Unter dem Begriff Code Coverage versteht man die Messung des von Unit-Tests abgedeckten Source Code. Noch nicht getestete Programmzeilen lassen sich dadurch schnell aufspüren.
-
-Beim Code Coverage gibt es unterschiedliche Coverage Metriken, wie zum Beispiel Branch-, Decision-, Line- oder Path-Coverage. Die verschiedenen Ansätze sollen hier aber im Einzelnen nicht näher betrachtet werden. Festzuhalten ist nur, dass es verschiedene Herangehensweisen und Messmethoden gibt, um das Verhältnis von getestetem Quellcode zum gesamten Projekt zu errechnen und (grafisch) darzustellen.   
+..........Der Instrumentierungsansatz führt offensichtlich zu einer erheblichen Zunahme der
+Programmgröße: Es wird eine Kopie des originalen Quellcodes generiert. Dann wird
+die Kopie instrumentiert
 
 \section{Tracingansatz}
 Die modernen Entwicklungsumgebungen verfügen über Debugger, die unter anderem eine Tracing-Funktionalität mit sich mitbringen.

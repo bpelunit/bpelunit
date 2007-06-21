@@ -6,21 +6,22 @@ für diese Arbeit relevante Teile des Modells beschrieben. Als Grundlage dient
 eine Definition aus  \cite{Chun2005}, die abgesehen von der Anpassung an den
 Standard WS-BPEL 2.0 und einigen Erweiterungen, unverändert übernommen wurde.  
 
-\begin{Def}[WS-BPEL Process Model \cite{Chun2005}] Ein BPEL-Prozessmodell ist ein Tupel $\mathcal{W=(A,\ E,\ C,\ L,\ HR,\ }type_{\mathcal{A}},\ type_{\mathcal{E}},\
-instance,\ name,\ <_{seq},\ <_{if},\\ serialscp,\ process,\ trigger,\ scp_c,\
-trigger_c,\ scp_t,\ trigger_{tf},\ \mathcal{LR},\ joincon,\\ 
-transitionCondition,\ supjoinf,\ trigger_{jf})$ where: 
+\begin{Def}[WS-BPEL Process Model \cite{Chun2005}] Ein BPEL-Prozessmodell ist ein Tupel\\
+$\mathcal{W=(A,\ E,\ C,\ L,\ HR,\ }type_{\mathcal{A}},\ type_{\mathcal{E}},\
+instance,\ name,\ <_{seq},\ <_{if},\ serialscp,\ process,\\ trigger,\ scp_c,\
+trigger_c,\ scp_t,\ trigger_{tf},\ \mathcal{LR},\ joincon,\ transitionCondition,\ supjoinf,\\ trigger_{jf})$ wobei: 
 \end{Def}
-\begin{itemize}
+\begin{itemize}\itemsep2pt
   \item $\mathcal{A}$ ist eine Menge von Aktivitäten,
   \item $\mathcal{E}$ ist eine Menge von Ereignissen,
   \item $\mathcal{C}$ ist eine Menge von Bedingungen,
   \item $\mathcal{L}$ ist eine Menge von Links (innerhalb von Flow-Aktivitäten),
   \item sei $\mathcal{B=E\cup C} \cup\{\bot\} $ eine Menge von Marken, wobei $\bot$ die leere Marke ist, dann ist $\mathcal{HR\subseteq A\times B\times A}$ ein annotierter Baum, der die Realaton zwischen einer Aktivität und ihren direkten Subaktivitäten definiert,
-	\item $\forall a\in \mathcal{A},\ let\ \mathcal{HR}_{p}=_{\pi 1,3}\mathcal{HR}$(Projektion auf zwei Aktivitätsmengen von $\mathcal{HR}$), $children(a)=\{a'\in \mathcal{A}|\mathcal{HR}_p(a,a')\}$ ist die Menge von unmittelbaren Nachfolgern von $a$,
+	\item $\forall a\in \mathcal{A},\ let\ \mathcal{HR}_{p}=_{\pi 1,3}\mathcal{HR}$ (Projektion auf zwei Aktivitätsmengen von $\mathcal{HR}$),\\
+	$children(a)=\{a'\in \mathcal{A}|\mathcal{HR}_p(a,a')\}$ ist die Menge von unmittelbaren Nachfolgern von $a$,
 	\item $type_\mathcal{A}:\mathcal{A\rightarrow T_A}$ ist Funktion, die den Aktivitäten die Aktivitätstypen zuordnet 
 	
-	\begin{itemize}
+	\begin{itemize}\itemsep2pt
 		\item $\mathcal{T_A=T_B\cup T_S}$
 		\item $\mathcal{T_B}=\{receive,\ reply,\ wait,\ assign,\ validate,\ empty,\
 		throw,\ rethrow,\\ \ compensate,\ compensateScope,\ exit\}$
@@ -45,13 +46,14 @@ transitionCondition,\ supjoinf,\ trigger_{jf})$ where:
 \mathcal{A})$, so dass  if-, while- and forEach-Aktivitäten eine Bedingung auswerten müssen,
 \item gegeben $\mathcal{A'}=\mathcal{A}_{repeatUntil},\ \mathcal{HR}\cap (\mathcal{A'}\times \mathcal{B}\times \mathcal{A})=\mathcal{HR}\cap (\mathcal{A'}\times \{\bot\}\times \mathcal{A}))$,
 \item $\forall s\in \mathcal{A}_{if},\ \exists$ ist $<^{s}_{if}$ eine strenge totale Ordnung über $children(s)$,
-\item $\forall s\in \mathcal{A}_{if}$, sei $last(s)\in children(s)$ die Subaktivität im letzten Zweig so, dass $\neg \exists_{a\in
+\item $\forall s\in \mathcal{A}_{if}$, sei $last(s)\in children(s)$ die Subaktivität im letzten Zweig so, dass\\
+$\neg \exists_{a\in
 children(s)}(last(s)<^{s}_{if}a)$, sei $c\in \mathcal{C},\\
 \mathcal{HR}(s,c,last(s))\Rightarrow \forall_{assign(c)\in
 Assign(\mathcal{C})}eval(c,assign(c))=true$. $last(s)$ repräsentiert den else-Zweig in if-Aktivität, was sichert (a), dass ein else-Zweig immer vorhanden ist und (b) mindestens ein Zweig in der Aktivität aktiviert wird,
 \item $\forall s\in \mathcal{A}_{while},\ \left| \mathcal{HR}\cap (\{s\}\times \mathcal{C}\times \mathcal{A})\right|=1$, d.h., hat exakt eine Subaktivität,
 \item $\mathcal{HR}\cap (\mathcal{A}_{scope}\times \mathcal{B}\times \mathcal{A})=\mathcal{HR}\cap (\mathcal{A}_{scope} \times (\mathcal{E}\times\{\bot \})\times \mathcal{A})$, wobei: $\forall s \in \mathcal{A}_{scope}$,
-\begin{itemize}
+\begin{itemize}\itemsep2pt
 	\item $\left|\mathcal{HR}\cap (\{s\}\times \{\bot\}\times \mathcal{A})\right|=1$, d.h., jeder Scope hat eine Aktivität,
 	\item $\left|\mathcal{HR}\cap (\{s\}\times \{\mathcal{E}_{fault}\}\times \mathcal{A})\right|\geq 1$, d.h., jeder Scope hat mindestens einen Fault Handler,
 		\item $\left|\mathcal{HR}\cap (\{s\}\times \{\mathcal{E}_{compensation}\}\times \mathcal{A})\right|\leq 1$, d.h., jeder Scope hat maximal einen Compensation Handler,
@@ -61,7 +63,7 @@ Assign(\mathcal{C})}eval(c,assign(c))=true$. $last(s)$ repräsentiert den else-Zw
 \item $scp_c:\mathcal{E}_{compensation}\rightarrow \mathcal{A}_{scope}\backslash \{process\}$ ist injektive Funktion, die das Compensationereignis auf ein Scope so abbildet, dass das Auftretten dieses Ereignisses die Kompensation dieses Scopes initiiert,
 \item $trigger_c:\mathcal{A}_{compensate}\rightarrow \mathcal{E}_{compensation}$ ist injektive Funktion, die jede \textit{compensate}-Aktivität auf ein Compensationereignis abbildet, das durch dises Aktivität ausgelöst wird,
 \item $\mathcal{LR}\subseteq \mathcal{A}\times \mathcal{L}\times \mathcal{A}$ ist annotierter azyklischer Graph, der die Relation zwischen \textit{Source}- und \textit{Target}-Aktivität eines Links,
-\item sei $\mathcal{A}^{source}=\{a\in \mathcal{A}|\exists_{l\in \mathcal{L}}((a,l)\in\pi_{1,2}\mathcal{LR})\}$ die Menge von Source-Aktivitäten aller Links, und $\mathcal{A}^{target}=\{a\in \mathcal{A}|\exists_{l\in \mathcal{L}}((l,a)\in \pi_{2,3}\mathcal{LR})\}$  die Menge von Target-Aktivitäten aller Links, dann $\forall a\in \mathcal{A}^{source},\mathcal{L}_{out}(a)=\\
+\item sei $\mathcal{A}^{source}=\{a\in \mathcal{A}|\exists_{l\in \mathcal{L}}((a,l)\in\pi_{1,2}\mathcal{LR})\}$ die Menge von Source-Aktivitäten aller Links, und $\mathcal{A}^{target}=\{a\in \mathcal{A}|\exists_{l\in \mathcal{L}}((l,a)\in \pi_{2,3}\mathcal{LR})\}$  die Menge von Target-Aktivitäten aller Links, dann $\forall a\in \mathcal{A}^{source},\mathcal{L}_{out}(a)=
 \{l\in \mathcal{L}|\exists_{a'\in \mathcal{A}}\mathcal{LR}(a,l,a')\}$ ist die Menge aller ausgehenden von $a$ Links, und $\forall a\in \mathcal{A}^{target}, \mathcal{L}_{in}(a)=\{l\in \mathcal{L}|\exists_{a'\in \mathcal{A}}\mathcal{LR}(a',l,a)\}$ ist die Menge aller eingehenden bei $a$ Links,
 \item sei $a\in \mathcal{A}^{target},\ joincon(a)$, die die \textit{join condition} von $a$ definiert, ist boolsche Funktion über $\mathcal{L}_{in}(a)$(i.e. $Var(joincon(a))=\mathcal{L}_{in}(a))$,
 \item sei $l\in_{ \pi 2}\mathcal{LR},\ transitionCondition(l)$,  die die \textit{transition condition} des Links $l$ definiert, ist boolsche Funktion,
@@ -69,7 +71,8 @@ Assign(\mathcal{C})}eval(c,assign(c))=true$. $last(s)$ repräsentiert den else-Zw
 Wird eine Aktivität aufgrund einer zu $false$ ausgewerteten $joinCondition$ oder eines nicht abgearbeiteten Zweiges einer $if-$ oder $pick-$Aktivität nicht ausgeführt, so wird für alle ausgehenden Links die \textit{transition condition} auf $false$ gesetzt. Dieses Verhalten wird als \textit{Dead-Path-Elimination} bezeichnet. 
 \end{itemize}
 
-Betrachtet man die Kontrollstruktur eines WS-BPEL Prozesses, so kann die $\mathcal{HR}$-Relation als Übergabe der Kontrolle von einer Aktivität an ihre Subaktivitäten interpretiert werden. Damit entspricht ein Element dieser Relation einem Zweig des Kontrollflussgraphen. Allerdings deckt diese Relation nicht alle Zweige des Graphen ab, es fehlen nämlich die Zweige, die die Kontrolle innerhalb der Schleifen von der inneren Aktivität an die Schleife zurückgeben. Die folgende Relation $\mathcal{HBR}$ beschreibt genau solche Beziehungen:\begin{itemize}
+Betrachtet man die Kontrollstruktur eines WS-BPEL Prozesses, so kann die $\mathcal{HR}$-Relation als Übergabe der Kontrolle von einer Aktivität an ihre Subaktivitäten interpretiert werden. Damit entspricht ein Element dieser Relation einem Zweig des Kontrollflussgraphen. Allerdings deckt diese Relation nicht alle Zweige des Graphen ab, es fehlen nämlich die Zweige, die die Kontrolle innerhalb der Schleifen von der inneren Aktivität an die Schleife zurückgeben. Die folgende Relation $\mathcal{HBR}$ beschreibt genau solche Beziehungen:
+\begin{itemize}\itemsep2pt
 	\item $\mathcal{HBR}\subseteq \mathcal{A}\times(\mathcal{C}\cup
 	\{\bot\})\times \mathcal{A}$ beschreibt die Relation zwischen einer Aktivität und ihrer \textit{Parent}-Aktivität
 	\item $\forall a,a'\in \mathcal{A},\ \forall(a,a')\in_{\pi
@@ -77,7 +80,7 @@ Betrachtet man die Kontrollstruktur eines WS-BPEL Prozesses, so kann die $\mathc
 \end{itemize}
 
 Folglich gilt für die Schleifen:
-\begin{itemize}
+\begin{itemize}\itemsep2pt
 	\item gegeben $\mathcal{A'}=\mathcal{A}_{while}\cup \mathcal{A}_{forEach},\
 	\mathcal{HBR}\cap (\mathcal{A}\times \mathcal{B}\times
 	\mathcal{A'})=\mathcal{HBR}\cap (\mathcal{A}\times \{\bot \}\times 

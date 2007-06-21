@@ -57,11 +57,10 @@ public class IfHandler implements IStructuredActivityHandler {
 	 */
 	private void insertMarkerForElseBranch(Element branch_activity)
 			throws BpelException {
-		if (branch_activity == null) {
+		if (branch_activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
-		}
+		
 		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
-//		BranchMetric.insertLabelWithRespectOfTargets(branch_activity);
 
 	}
 
@@ -74,12 +73,10 @@ public class IfHandler implements IStructuredActivityHandler {
 	 */
 	private void insertMarkerForElseIfBranches(Element branch_activity)
 			throws BpelException {
-		if (branch_activity == null) {
+		if (branch_activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
-		}
+			
 		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
-//		BranchMetric.insertLabelWithRespectOfTargets(branch_activity);
-
 	}
 
 	/**
@@ -91,10 +88,9 @@ public class IfHandler implements IStructuredActivityHandler {
 	 */
 	private void insertMarkerForIfBranch(Element branch_activity)
 			throws BpelException {
-		if (branch_activity == null) {
+		if (branch_activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
-		}
-//		BranchMetric.insertLabelWithRespectOfTargets(branch_activity);
+
 		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 
 	}

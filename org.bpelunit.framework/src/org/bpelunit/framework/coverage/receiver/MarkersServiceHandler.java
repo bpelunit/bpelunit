@@ -30,7 +30,7 @@ import org.mortbay.util.ByteArrayISO8859Writer;
  * @author Philip Mayer
  * 
  */
-public class ServiceHandler extends AbstractHttpHandler {
+public class MarkersServiceHandler extends AbstractHttpHandler {
 
 	private Logger wsLogger = Logger.getLogger(this.getClass());
 

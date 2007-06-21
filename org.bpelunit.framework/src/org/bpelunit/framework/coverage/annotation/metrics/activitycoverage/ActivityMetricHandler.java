@@ -1,12 +1,18 @@
 package org.bpelunit.framework.coverage.annotation.metrics.activitycoverage;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCES_ELEMENT;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCE_ELEMENT;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGETS_ELEMENT;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGET_ELEMENT;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.count;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseInSequence;
+import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ensureElementIsInSequence;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.coverage.annotation.Instrumenter;
@@ -27,40 +33,15 @@ import org.jdom.Namespace;
  */
 public class ActivityMetricHandler implements IMetricHandler {
 
-//	private static int count = 0;
 
-//	private static HashMap<String, String> logging_before_activity;
-
-	private HashMap<String, String> activities_to_respekt;
-
-
-	private Logger logger=Logger.getLogger(getClass());
+	private Logger logger = Logger.getLogger(getClass());
 
 	private MarkersRegisterForArchive markersRegistry;
-	
-	static {
-
-//		logging_before_activity = new HashMap<String, String>();
-//		logging_before_activity.put(BasicActivities.THROW_ACTIVITY,
-//				BasicActivities.THROW_ACTIVITY);
-//		logging_before_activity.put(BasicActivities.RETHROW_ACTIVITY,
-//				BasicActivities.RETHROW_ACTIVITY);
-//		logging_before_activity.put(BasicActivities.COMPENSATE_ACTIVITY,
-//				BasicActivities.COMPENSATE_ACTIVITY);
-//		logging_before_activity.put(BasicActivities.COMPENSATESCOPE_ACTIVITY,
-//				BasicActivities.COMPENSATESCOPE_ACTIVITY);
-//		logging_before_activity.put(BasicActivities.EXIT_ACTIVITY,
-//				BasicActivities.EXIT_ACTIVITY);
-//		logging_before_activity.put(BasicActivities.TERMINATE_ACTIVITY,BasicActivities.TERMINATE_ACTIVITY);
-//		logging_before_activity.put(BasicActivities.REPLY_ACTIVITY,BasicActivities.REPLY_ACTIVITY);
-	}
 
 	public ActivityMetricHandler(MarkersRegisterForArchive markersRegistry) {
-		this.markersRegistry=markersRegistry;
-		activities_to_respekt = new HashMap<String, String>();
+		this.markersRegistry = markersRegistry;
 		logger = Logger.getLogger(getClass());
 	}
-
 
 	/**
 	 * Diese Methode fügt die Markierungen in BPEL-Process-Element ein
@@ -72,26 +53,22 @@ public class ActivityMetricHandler implements IMetricHandler {
 	 *            Prozess-Element der BPEL
 	 */
 	public void insertMarkersForMetric(List<Element> activities) {
-		logger.info("!!!!!!!!!!!!!ANNOTATION "+activities.size());
 		Element element;
 		for (int i = 0; i < activities.size(); i++) {
 			element = activities.get(i);
 			Element sequence = null;
 			respectTargetActivities(element, sequence);
-//			respectSourceActivities(element, sequence);
+			// respectSourceActivities(element, sequence);
 			ensureElementIsInSequence(element);
 			insertMarkerForActivity(element);
 		}
 	}
 
-
-
 	private void respectSourceActivities(Element element, Element sequence) {
 		List<Element> sourceElements = getSourceElements(element);
 		if (sourceElements.size() > 0) {
-			if (sequence == null) {
+			if (sequence == null)
 				sequence = encloseInSequence(element);
-			}
 			Element sourceElement;
 			for (Iterator<Element> iter = sourceElements.iterator(); iter
 					.hasNext();) {
@@ -122,9 +99,8 @@ public class ActivityMetricHandler implements IMetricHandler {
 		if (bpelVersion.equals(NAMESPACE_BPEL_2_0)) {
 			Element sourceElement = element.getChild(SOURCES_ELEMENT,
 					bpelVersion);
-			if (sourceElement != null) {
+			if (sourceElement != null)
 				sourceElements.add(sourceElement);
-			}
 		} else if (bpelVersion.equals(NAMESPACE_BPEL_1_1)) {
 			List<Element> list = element.getChildren(SOURCE_ELEMENT,
 					bpelVersion);
@@ -136,15 +112,13 @@ public class ActivityMetricHandler implements IMetricHandler {
 	}
 
 	private List<Element> getTargetElements(Element element) {
-		// TODO nicht gleich eine neue Liste erzeugen
 		List<Element> targetElements = new ArrayList<Element>();
-		Namespace bpelVersion =BpelXMLTools.getProcessNamespace();
+		Namespace bpelVersion = BpelXMLTools.getProcessNamespace();
 		if (bpelVersion.equals(NAMESPACE_BPEL_2_0)) {
 			Element targetElement = element.getChild(TARGETS_ELEMENT,
 					bpelVersion);
-			if (targetElement != null) {
+			if (targetElement != null)
 				targetElements.add(targetElement);
-			}
 		} else if (bpelVersion.equals(NAMESPACE_BPEL_1_1)) {
 			List<Element> list = element.getChildren(TARGET_ELEMENT,
 					bpelVersion);
@@ -167,19 +141,16 @@ public class ActivityMetricHandler implements IMetricHandler {
 	private void insertMarkerForActivity(Element element) {
 		Element parent = element.getParentElement();
 		String element_name = element.getName();
-		String marker = element_name + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
-				+ (count++);
+		String marker = element_name
+				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
 		markersRegistry.addMarker(marker);
 		Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
 				+ marker);
 		int index = parent.indexOf(element);
-		if (element_name.equals(BasicActivities.RECEIVE_ACTIVITY)) {
-
+		if (element_name.equals(BasicActivities.RECEIVE_ACTIVITY))
 			parent.addContent(index + 1, comment);
-		} else {
-
+		else
 			parent.addContent(index, comment);
-		}
 
 	}
 

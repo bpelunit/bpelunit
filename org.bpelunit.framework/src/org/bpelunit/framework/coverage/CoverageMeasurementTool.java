@@ -52,17 +52,8 @@ import com.ibm.wsdl.Constants;
  */
 public class CoverageMeasurementTool {
 
-	// private static List<IMetric> metrics = new ArrayList<IMetric>();
-
-	private static final String PROPERTY = "property";
-
-	private static final String BASIC_ACTIVITIES = "IncludeBasicActivities";
-
-	private static final String NAME_ATTRIBUTE = "name";
 
 	private Logger logger;
-
-	private String fBpelunitConfigDirectory;
 
 	private boolean failure;
 
@@ -182,8 +173,6 @@ public class CoverageMeasurementTool {
 	 */
 	private void prepareLoggingService(IDeploymentArchiveHandler archiveHandler)
 			throws ArchiveFileException {
-		// archiveHandler.addWSDLFile(new
-		// File(FilenameUtils.concat(fBpelunitConfigDirectory,CoverageConstants.COVERAGE_SERVICE_WSDL)));
 		archiveHandler.addWSDLFile(new File(
 				pathToWSDL));
 	}
@@ -207,25 +196,14 @@ public class CoverageMeasurementTool {
 	}
 
 	public void setFailureStatus(String message) {
-		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!message " + message);
 		markersRegistry.addInfo(message);
 		failure = true;
 	}
 
 	public void setErrorStatus(String message) {
-		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!message " + message);
 		markersRegistry.addInfo(message);
 		error = true;
 	}
-
-	// public void initializeMarkersReceiver(BPELUnitRunner runner){
-	// try {
-	// messageReceiver.inizialize(runner);
-	// } catch (SpecificationException e) {
-	// setErrorStatus(e.getMessage());
-	// e.printStackTrace();
-	// }
-	// }
 
 	public void setSOAPEncoder(ISOAPEncoder encoder) {
 		messageReceiver.setSOAPEncoder(encoder);

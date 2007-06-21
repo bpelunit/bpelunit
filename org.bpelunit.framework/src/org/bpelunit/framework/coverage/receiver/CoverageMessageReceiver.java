@@ -27,8 +27,6 @@ import com.ibm.wsdl.Constants;
 
 public class CoverageMessageReceiver {
 
-	// public static String ABSOLUT_CONFIG_PATH="";
-	// public static String ABSOLUT_CONFIG_PATH = "";
 
 	private ISOAPEncoder encoder = null;
 	
@@ -41,15 +39,9 @@ public class CoverageMessageReceiver {
 	private MarkersRegisterForArchive markersRegistry;
 
 	public CoverageMessageReceiver(MarkersRegisterForArchive markersRegistry) {
-
 		this.markersRegistry = markersRegistry;
 	}
 
-	// public static CoverageMessageReceiver getInstance() {
-	// if (instance == null)
-	// instance = new CoverageMessageReceiver();
-	// return instance;
-	// }
 
 	public synchronized void putMessage(String body) {
 		if (encoder != null && operation != null) {
@@ -88,50 +80,9 @@ public class CoverageMessageReceiver {
 		}else{
 			logger.info("SOAPEncoder is not initialized.");
 		}
-		// }
-		// catch (Exception e) {
-		// if(element==null){
-		// logger.info("!!!!!!!!!!! ELEMENT==NULL "+e.getMessage());
-		// }
-		// logger.info("Could not create SOAP message from incoming message: "
-		// + e.getMessage());
-		// markersRegistry.addInfo("Could not create SOAP message from incoming
-		// message: "
-		// + e.getMessage());
-		// }
+
 	}
 
-	// public void inizialize(BPELUnitRunner runner) throws
-	// SpecificationException {
-	// WSDLReader reader;
-	// if (ABSOLUT_CONFIG_PATH == null || ABSOLUT_CONFIG_PATH.equals("")) {
-	// throw new SpecificationException("ABSOLUT_CONFIG_DIR=null ");
-	// }
-	//
-	// // String wsdlPfad = FilenameUtils.concat(
-	// // ABSOLUT_CONFIG_PATH,CoverageConstants.COVERAGE_SERVICE_WSDL);
-	// try {
-	// reader = WSDLFactory.newInstance().newWSDLReader();
-	//
-	// reader.setFeature(Constants.FEATURE_VERBOSE, false);
-	// Definition fWSDLDefinition = reader.readWSDL(ABSOLUT_CONFIG_PATH);
-	// operation = new SOAPOperationCallIdentifier(fWSDLDefinition,
-	// new QName(
-	// CoverageConstants.COVERAGETOOL_NAMESPACE.getURI(),
-	// CoverageConstants.SERVICE_NAME),
-	// CoverageConstants.PORT_OF_SERVICE,
-	// CoverageConstants.REPORT_OPERATION,
-	// SOAPOperationDirectionIdentifier.INPUT);
-	// String encodingStyle = operation.getEncodingStyle();
-	// encoder = runner.createNewSOAPEncoder(encodingStyle);
-	// } catch (WSDLException e) {
-	// e.printStackTrace();
-	//
-	// throw new SpecificationException(
-	// "Error while reading WSDL for Coverage Tool from file "
-	// + ABSOLUT_CONFIG_PATH + "." + e.getMessage());
-	// }
-	// }
 
 	public void setSOAPEncoder(ISOAPEncoder encoder) {
 		this.encoder = encoder;

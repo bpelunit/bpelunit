@@ -3,7 +3,7 @@ In disem Abschnitt werden einige interessante Aspekte des Designs und der Implem
 
  
  \section{Externe Schnittstelle}
- Die Klasse \textit{"`CoverageMeasurmentTool"'}  ist die Schnittstelle des Moduls für die Messung der Testabdeckung nach außen.
+ Die Klasse \textit{"`CoverageMeasurmentTool"'}  ist die Schnittstelle des Moduls für die Messung der Testabdeckung.
  \begin{figure}[htbp]
  \center
 		\includegraphics[width=0.85\textwidth]{bilder/CoverageMeasurmentTool.png}
@@ -27,7 +27,7 @@ In disem Abschnitt werden einige interessante Aspekte des Designs und der Implem
 \item Durchführung der Messung:
 \begin{itemize}
 	\item \textbf{putMessage()} empfängt Nachrichten mit Marken.
-	\item \textbf{setCurrentTestCase()} identifiziert den Testcase, der gerade ausgeführt wird.
+	\item \textbf{setCurrentTestCase()} setzt den Testcase, der gerade ausgeführt wird. Dadurch ist es möglich, die Testabdeckung ein Testcase zu bestimmen. 
 \end{itemize}
 \item Ergebnis:
 \begin{itemize}
@@ -36,7 +36,6 @@ In disem Abschnitt werden einige interessante Aspekte des Designs und der Implem
 \end{itemize}
 
 \section{\textit{Archive-Handler}}
-
 Für das Deployen eines BPEL-Prozesses werden außer der BPEL-Datei selbst weitere Daten benötigt: WSDL Beschreibungen, Datentypen (XML Schema) und Deployment descriptoren mit zusätzlichen Informationen für BPEL Engine. Diese Daten werden üblicherweise zu einem Archive zusammengefasst und an die BPELEngine zur Ausführung übergeben.
 
 Für die Messung der Testabdeckung mit dem Instrumentierungsansatz müssen BPEL-Dateien vor der Ausführung modifiziert werden. Das heißt, die entsprechenden Dateien müssen aus dem Archive erst extrahiert und anschließend (nach der Instrumentierung) wieder in den Archive geschrieben werden. Außerdem muss Archive weitere Informationen für Engine bereithalten: die Beschreibung der Schnittstelle des Web Services zum Empfangen von Marken (\textit{Markers Receiver}) und wo dieser Service erreicht werden kann.
@@ -79,7 +78,6 @@ Für alle Metriken wird die Schnittstelle \textit{IMetric} definiert.\ \ \ \ \ \ 
 	\item \textbf{insertMarkers()} - dekigiert die Instrumentierungsaufgabe an eigenen Handler (siehe Abbildung \ref{fig:KlassendiagrammHandler}.
  	\item \textbf{createStatistic()} - ezeugt Statistiken.
 \end{itemize}
-
 Für jede Metrik existiert eine Klasse, die diese Schnittstelle implementiert. Außerdem existiert für jede Metrik einen Handler, der die Annotation des Prozesses für diese Metrik übernimmt. Es werden beispielhaft die Klassen vorgestellt, die für die Zweigabdeckung zuständig sind..
  \begin{figure}[htbp]
  \center
@@ -98,6 +96,38 @@ Die Zweigabdeckung hängt in BPEL eng mit strukturierten Aktivitäten zusammen. Im
 \end{figure}
 
 Der zweite wesentliche Vorteil eines solchen Designs ist die einfache Möglichkeit, weitere strukturierte Aktivitäten zu berücksichtigen. Einerseits könnte sich das als vorteilhaft bei den nächsten BPEL-Versionen erweisen, andererseits reduziert das den Aufwand bei der Anpassung des Moduls für BPEL 1.1.    
+
+\section{Ergebnisse}
+Die ermittelte Testabdeckung wird mit Hilfe der Schnittstellen \textit{IFileStatistic}, \textit{IStatistic} und der Klasse \textit{MarkerState} repräsentiert.
+
+\begin{itemize}
+	\item \textbf{\textit{IFileStatistic}} repräsentiert alle Testabdeckungs-Statistiken einer BPEL-Datei. 
+	\item \textbf{\textit{IStatistic}}
+	
+\begin{itemize}
+	\item \textbf{getName():} Name der Metrik
+	\item \textbf{getSubstatistics():} liefert die Unterstatistiken, die eine Statistik haben kann. Es gibt entsprechende (\textit{add}-)Methode, die die Substatistiken hinzufügt.
+	\item \textbf{setStateList():} Parameter dieser Methode ist eine Liste von Marken, die jeweils mit einem Status (getestet oder nicht) behaftet sind.
+	\item \textbf{getTotalNumber():} Anzahl aller Elementen des BPEL-Prozesses, die für die zugehörige Metrik relevant sind.
+	\item \textbf{getTestedNumber():} diese Methoden liefern die Anzahl der getesteten Elementen des BPEL-Prozesses. Es gibt noch eine Variante dieser Methode, die nur die Elementen berücksichtigt, die mit einem bestimmten Testcase getestet wurden.
+\end{itemize}
+	\item \textbf{\textit{MarkerState}} repräsentiert eine einzelne Marke, die mit einem Status (getestet oder nicht) behaftet ist, und, falls vorhanden, die TestCases, bei denen die Marke versendet wurde. 
+\begin{itemize}
+	\item \textbf{setState()}
+	\item \textbf{getTestCases()}
+	\item \textbf{isTested()}
+	\item \textbf{isTestedWithTestCase()}	
+\end{itemize}
+\end{itemize}
+
+Die Schnittstelle \textit{IFileStatistik} 
+ \begin{figure}[htbp]
+ \center
+		\includegraphics[width=\textwidth]{bilder/CoverageResult.png}
+		\caption{Annotation der Kontrollflusszweigen - Klassen und Schnittstellen}
+	\label{fig:KlassendiagrammBrachmetric}
+\end{figure}
+
 
 \section{Integration der Testabdeckungsmetriken in BPELUnit-Framework}
  \begin{figure}[htbp]
@@ -127,6 +157,11 @@ BPELUnit Framework übernimmt für die Ermittlung der Testabdeckung folgende Aufga
 	\item das Deployen bzw. Simulieren des Web Services \textit{Markers Receiver},
 	\item Dekodierung der SOAP-Nachtichten und Transport an den \textit{Markers Receiver}.
 \end{itemize}
+
+\subsection{Web Service zum Empfangen von Marken}
+Das BPELUnit Framework simuliert die Partner des Prozesses auf einem lokalen Http-Server, der im Framework integriert ist.  Bei der Ausführung einer Testsuite wird der WebServer gestartet und ein Handler eingerichtet, der die Kommunikation zwischen dem Prozess und seinen Partnern regelt.  Es wird Open-Source-WebServer \textit{Jetty} verwendet.  
+
+Der Port, auf dem die Partner simuliert werden, wird von dem Testenwickler in den Testsuites festgelegt. Der Web Service \textit{Markers Receiver} wartet auf Nachrichten auf einem anderen Port, der für ihn reserviert ist. Der Empfang und Auswertung der Nachrichten erfolgt damit unabhängig voneinander. 
 
 \subsection{BPELUnit-Clients}
 Die Kernfunktionalitäten des BPELUnit-Frameworks, das Starten und Stoppen der Tests und Verfolgung des Testverlaufs, sind von der Präsentationsschicht unabhängig implementiert und können von beliebigen Clients verwendet werden. Das Framework enthält bereits drei Clients: Befehlszeilen- und Eclipse-Client und Ant-Integration. Die Befehlszeilen- und Eclipse-Clients wurden innerhalb dieser Arbeit für neue Funktionalitäten der Testabdeckung erweitert.

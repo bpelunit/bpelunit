@@ -12,12 +12,9 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.bpelunit.framework.exception.PartnerNotFoundException;
 import org.bpelunit.framework.model.test.PartnerTrack;
 import org.bpelunit.framework.model.test.wire.IncomingMessage;
@@ -98,91 +95,82 @@ public class WebServiceHandler extends AbstractHttpHandler {
 
 		String partnerName = getPartnerName(pathInContext);
 
-		if (partnerName.equals(CoverageConstants.SERVICE_NAME)) {
-			wsLogger.info("??????????????????????FALSCH zugestellt"+partnerName+pathInContext);
-//			sendResponse(response, 200, "");
-//				StringBuffer buf = readRequest(request);
-//				BPELUnitRunner.getCoverageMeasurmentTool().putMessage(buf.toString());
-		} else {
-			if (fRunner == null) {
-				wsLogger.error("Not initialized - rejecting message for URL "
-						+ pathInContext);
-				// let default 404 handler handle this situaton.
-				return;
-			}
-			// find target according to path in context
+		if (fRunner == null) {
+			wsLogger.error("Not initialized - rejecting message for URL "
+					+ pathInContext);
+			// let default 404 handler handle this situaton.
+			return;
+		}
+		// find target according to path in context
 
-			wsLogger.debug("Supposed partner name for this request: "
-					+ partnerName);
+		wsLogger
+				.debug("Supposed partner name for this request: " + partnerName);
 
-			PartnerTrack key;
-			try {
-				key = fRunner.findPartnerTrackForName(partnerName);
-			} catch (PartnerNotFoundException e1) {
-				// Let default 404 handler handle this situation
-				wsLogger.info(e1.getMessage());
-				wsLogger.info("Rejecting message with 404.");
-				return;
-			}
+		PartnerTrack key;
+		try {
+			key = fRunner.findPartnerTrackForName(partnerName);
+		} catch (PartnerNotFoundException e1) {
+			// Let default 404 handler handle this situation
+			wsLogger.info(e1.getMessage());
+			wsLogger.info("Rejecting message with 404.");
+			return;
+		}
 
-			wsLogger.debug("A partner was found for the target URL: " + key);
+		wsLogger.debug("A partner was found for the target URL: " + key);
 
-			wsLogger.debug("Request method is: " + request.getMethod());
+		wsLogger.debug("Request method is: " + request.getMethod());
 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					request.getInputStream()));
-			String line;
-			StringBuffer theRequest = new StringBuffer();
-			while ((line = reader.readLine()) != null) {
-				theRequest.append(line);
-			}
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				request.getInputStream()));
+		String line;
+		StringBuffer theRequest = new StringBuffer();
+		while ((line = reader.readLine()) != null) {
+			theRequest.append(line);
+		}
 
-			wsLogger.debug("Incoming request payload is:\n"
-					+ theRequest.toString());
+		wsLogger
+				.debug("Incoming request payload is:\n" + theRequest.toString());
 
-			IncomingMessage iMessage = new IncomingMessage();
-			iMessage.setBody(theRequest.toString());
+		IncomingMessage iMessage = new IncomingMessage();
+		iMessage.setBody(theRequest.toString());
 
-			try {
+		try {
 
-				wsLogger.debug("Posting incoming message to blackboard...");
-				fRunner.putWSIncomingMessage(key, iMessage);
+			wsLogger.debug("Posting incoming message to blackboard...");
+			fRunner.putWSIncomingMessage(key, iMessage);
 
-				OutgoingMessage m2;
+			OutgoingMessage m2;
 
-				wsLogger.debug("Waiting for framework to supply answer...");
-				m2 = fRunner.getWSOutgoingMessage(key);
+			wsLogger.debug("Waiting for framework to supply answer...");
+			m2 = fRunner.getWSOutgoingMessage(key);
 
-				wsLogger.debug("Got answer from framework, now sending...");
+			wsLogger.debug("Got answer from framework, now sending...");
 
-				int code = m2.getCode();
-				String body = m2.getBody();
+			int code = m2.getCode();
+			String body = m2.getBody();
 
-				wsLogger.debug("Answer is:\n" + body);
-				sendResponse(response, code, body);
+			wsLogger.debug("Answer is:\n" + body);
+			sendResponse(response, code, body);
 
-				wsLogger.debug("Posting \"message sent\" to framework...");
-				fRunner.putWSOutgoingMessageSent(m2);
+			wsLogger.debug("Posting \"message sent\" to framework...");
+			fRunner.putWSOutgoingMessageSent(m2);
 
-				wsLogger.info("Done handling request, result OK. "+code);
+			wsLogger.info("Done handling request, result OK. " + code);
 
-			} catch (TimeoutException e) {
-				wsLogger
-						.error("Timeout while waiting for framework to supply answer to incoming message");
-				wsLogger
-						.error("This most likely indicates a bug in the framework.");
-				wsLogger.error("Sending fault.");
-				sendResponse(response, 500, BPELUnitUtil
-						.generateGenericSOAPFault());
-			} catch (InterruptedException e) {
-				wsLogger
-						.error("Interrupted while waiting for framework for incoming message or answer.");
-				wsLogger
-						.error("This most likely indicates another error occurred.");
-				wsLogger.error("Sending fault.");
-				sendResponse(response, 500, BPELUnitUtil
-						.generateGenericSOAPFault());
-			}
+		} catch (TimeoutException e) {
+			wsLogger
+					.error("Timeout while waiting for framework to supply answer to incoming message");
+			wsLogger
+					.error("This most likely indicates a bug in the framework.");
+			wsLogger.error("Sending fault.");
+			sendResponse(response, 500, BPELUnitUtil.generateGenericSOAPFault());
+		} catch (InterruptedException e) {
+			wsLogger
+					.error("Interrupted while waiting for framework for incoming message or answer.");
+			wsLogger
+					.error("This most likely indicates another error occurred.");
+			wsLogger.error("Sending fault.");
+			sendResponse(response, 500, BPELUnitUtil.generateGenericSOAPFault());
 		}
 	}
 
@@ -201,21 +189,10 @@ public class WebServiceHandler extends AbstractHttpHandler {
 		stringToTest = StringUtils.removeEnd(stringToTest, "/");
 		// Get last part of the URL.
 		stringToTest = StringUtils.substringAfterLast(stringToTest, "/");
-
 		return stringToTest;
 	}
 
-	private static StringBuffer readRequest(HttpRequest request)
-			throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				request.getInputStream()));
-		String line;
-		StringBuffer theRequest = new StringBuffer();
-		while ((line = reader.readLine()) != null) {
-			theRequest.append(line);
-		}
-		return theRequest;
-	}
+
 
 	private void sendResponse(HttpResponse response, int code, String body)
 			throws IOException {

@@ -40,13 +40,6 @@ public class BranchMetric implements IMetric {
 		return list;
 	}
 
-	public IMetricHandler getHandler() {
-		return metricHandler;
-	}
-
-	public List<String> getConfigInfo() {
-		return null;
-	}
 
 	public IStatistic createStatistic(
 			Hashtable<String, Hashtable<String, MarkerState>> allLabels) {
@@ -72,10 +65,10 @@ public class BranchMetric implements IMetric {
 	}
 
 	public void insertMarkers() throws BpelException {
-		if (elementsOfBPEL != null)
+		if (elementsOfBPEL != null) {
 			metricHandler.insertMarkersForMetric(elementsOfBPEL);
-		elementsOfBPEL = null;
-
+			elementsOfBPEL = null;
+		}
 	}
 
 }

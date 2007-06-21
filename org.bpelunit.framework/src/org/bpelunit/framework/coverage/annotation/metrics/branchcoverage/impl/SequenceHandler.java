@@ -13,7 +13,6 @@ import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
-
 /**
  * Die Klasse ist für das Einfügen der Markierungen in der Sequence-Aktivität
  * verantwortlich, die für die Messung der Zweigabdeckung verwendet werden.
@@ -35,22 +34,22 @@ public class SequenceHandler implements IStructuredActivityHandler {
 	 * @param sequence
 	 */
 	public void insertBranchMarkers(Element sequence) {
-		List<Element> children = sequence.getContent(new ElementFilter(getProcessNamespace()));
+		List<Element> children = sequence.getContent(new ElementFilter(
+				getProcessNamespace()));
 		Element child;
-		List<Element> activities=new ArrayList<Element>();
+		List<Element> activities = new ArrayList<Element>();
 		for (Iterator<Element> iter = children.iterator(); iter.hasNext();) {
 			activities.add(iter.next());
 		}
-		
+
 		Element previousActivity = null;
 		for (int i = 0; i < activities.size(); i++) {
 			child = activities.get(i);
 			if (isActivity(child)) {
-				if (previousActivity != null) {
-					{
-						markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorActivity(child));
-					}
-				}
+				if (previousActivity != null)
+					markersRegistry.addMarker(BranchMetricHandler
+							.insertLabelBevorActivity(child));
+
 				previousActivity = child;
 			}
 		}

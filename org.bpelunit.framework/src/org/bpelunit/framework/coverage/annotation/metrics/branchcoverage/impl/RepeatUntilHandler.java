@@ -37,9 +37,9 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	private void branchFromActivityToCondition(Element element)
 			throws BpelException {
 		Element activity = getFirstEnclosedActivity(element);
-		if (element == null) {
+		if (element == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
-		}
+		
 		markersRegistry.addMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));
 	}
 
@@ -65,19 +65,17 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	private void insertIfConstruct(Element element, Element countVariable)
 			throws BpelException {
 		Element activity = getFirstEnclosedActivity(element);
-		if (activity == null) {
+		if (activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
-		}
-		if (!isSequence(activity)) {
+		
+		if (!isSequence(activity))
 			activity = ensureElementIsInSequence(activity);
 
-		}
-
+		
 		Element if_element = createIfActivity(ExpressionLanguage.getInstance(
 				CoverageConstants.EXPRESSION_LANGUAGE).valueOf(
 				countVariable.getAttributeValue(NAME_ATTR))
 				+ "=1");
-
 		Element sequence = createSequence();
 		if_element.addContent(sequence);
 		activity.addContent(0, if_element);
@@ -98,12 +96,11 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	private void insertIncreesAssign(Element increesAssign, Element element)
 			throws BpelException {
 		Element activity = getFirstEnclosedActivity(element);
-		if (activity == null) {
+		if (activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
-		}
-		if (!isSequence(activity)) {
-			activity = ensureElementIsInSequence(activity);
-		}
+	
+		if (!isSequence(activity))
+			activity = ensureElementIsInSequence(activity);	
 		activity.addContent(increesAssign);
 
 	}

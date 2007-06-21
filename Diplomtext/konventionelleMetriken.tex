@@ -57,27 +57,27 @@ sei $\mathcal{A}_i\subseteq\mathcal{A},\ s\in \mathcal{A}_i,\ t=type_\mathcal{A}
 \end{itemize}
 
 
-Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivitäten. Die Abbildung \ref{fig:flussgraphen} stellt die Kontrollflussgraphen der strukturierten Aktivitäten dar und soll dem Verständnis der Formel beitragen.
+Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivitäten. Die Abbildungen stellen die Kontrollflussgraphen der jeweiligen Aktivität dar. Die Zweige, um die es in den Formeln geht, sind durch schwarze (dünne) Pfeile repräsentiert.
 \begin{itemize}
-	\item Sequence:
+	\item \textbf{Sequence:}
 	\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.11\textwidth]{bilder/sequenceGraph.png}
 \end{figure}
-		\begin{itemize}
+		\begin{itemize}\itemsep2pt
  			\item
  			$br\_number_{sequence}(s)=\left|children(s)\right|-1+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{sequence}$ 
  			weil es einen Zweig zu jeder außer der ersten Aktivität gibt.
  			\item $EX^{s}_{seq}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{sequence}\wedge \exists_{a_k\in children(s)}(a_k<^{s}_{seq}a)\wedge BE((s,b,a))=true \}$
  			\item
- 				$br\_number^{executed}_{sequence}(s)=\left|EX^{s}_{seq}\right|+br\_number^{executed}_{set}(children(s))$
+ 				$br\_number^{executed}_{sequence}(s)=\left|EX^{s}_{seq}\right|+br\_number^{executed}_{set}(children(s))$\\
 		\end{itemize}
-	\item If:
+	\item \textbf{If:}
 	\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.31\textwidth]{bilder/ifGraph.png}
 \end{figure}
-		\begin{itemize}
+		\begin{itemize}\itemsep2pt
 		 	\item
  		 		$br\_number_{if}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\
 	 			s \in \mathcal{A}_{if}$
@@ -86,54 +86,55 @@ Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivit
  			\item
           		$br\_number^{executed}_{if}(s)=\left|EX^{s}_{if}\right|+br\_number^{executed}_{set}(children(s))$
           		
-       		\item \emph{Bemerkung:} Ein impliziter else-Zweig wird nach der formalen Definition von $If$-Aktivität automatisch berücksichtigt.
+       		\item \emph{Bemerkung:} Ein impliziter else-Zweig wird nach der formalen Definition von $If$-Aktivität automatisch berücksichtigt.\\
 		\end{itemize}
-\item Pick:
+\item \textbf{Pick:}
 	\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.32\textwidth]{bilder/pickGraph.png}
 \end{figure}
-	\begin{itemize}
+	\begin{itemize}\itemsep2pt
 	\item $br\_number_{pick}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{pick}$
 	\item $EX^{s}_{pick}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{pick}\wedge BE((s,b,a))=true \}$
-		\item $br\_number^{executed}_{pick}(s)=\left|EX^{s}_{pick}\right|+br\_number^{executed}_{set}(children(s))$
+		\item $br\_number^{executed}_{pick}(s)=\left|EX^{s}_{pick}\right|+br\_number^{executed}_{set}(children(s))$\\
 \end{itemize}
-\item Loops: 
+\item \textbf{Loops:} 
 	\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.7\textwidth]{bilder/loopsGraph.png}
 \end{figure}
 ($\forall t\in\{while,\ repeatUntil,\ forEach\footnote{
 Das Besondere an dieser Aktivität ist die Fähigkeit, den enthaltenen Scope nicht mehrmals hintereinander sondern parallel auszuführen (gesteuert mit Attribute \textit{parallel}). Diese Option bietet eine Möglichkeit die Abarbeitung des Prozesses zu beschleunigen. Diese Optimierungsmöglichkeit wird bei der Definition der Zweigabdeckung nicht berücksichtigt.}\}$)
-	\begin{itemize}
+	\begin{itemize}\itemsep2pt
 	\item $br\_number_{t}(s)=2+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{t}$
 	\item $EX^{s}_{\mathcal{HR}}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{t}\wedge BE((s,b,a))=true \}$
 	\item $EX^{s}_{\mathcal{HBR}}=\{(a,b,s)\in \mathcal{HBR}|s \in \mathcal{A}_{t}\wedge BE((s,b,a))=true \}$
 	\item $EX^{s}_{t}=EX^{s}_{\mathcal{HR}}+EX^{s}_{\mathcal{HBR}}$
-		\item $br\_number^{executed}_{t}(s)=\left|EX^{s}_{t}\right|+br\_number^{executed}_{set}(children(s))$
+		\item $br\_number^{executed}_{t}(s)=\left|EX^{s}_{t}\right|+br\_number^{executed}_{set}(children(s))$\\
 \end{itemize}
-\item Flow:
+\item \textbf{Flow:}
 	\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.3\textwidth]{bilder/flowGraph.png}
 \end{figure}
-	\begin{itemize}
+	\begin{itemize}\itemsep2pt
 	\item $br\_number_{flow}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{flow}$
 	\item $EX^{s}_{flow}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{flow}\wedge BE((s,b,a))=true \}$
-		\item $br\_number^{executed}_{flow}(s)=\left|EX^{s}_{flow}\right|+br\_number^{executed}_{set}(children(s))$
+		\item $br\_number^{executed}_{flow}(s)=\left|EX^{s}_{flow}\right|+br\_number^{executed}_{set}(children(s))$\\
 \end{itemize}
-\item Scope:	
+\item \textbf{Scope:}	
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.15\textwidth]{bilder/scopeGraph.png}
 \end{figure}
-	\begin{itemize}
+	\begin{itemize}\itemsep2pt
 	\item $br\_number_{flow}(s)=br\_number_{set}(children(s)),\ s \in \mathcal{A}_{scope}$
 		\item $br\_number^{executed}_{scope}(s)=br\_number^{executed}_{set}(children(s))$\\
 Bemerkung: alle Zweige innerhalb von Handlern gehen in die Rechnung ein, weil nach Definition von $\mathcal{A}_{scope}$ alle Handler in der Menge $children(scope)$ enthalten sind,
 \end{itemize}
-\item Basic Activities ($\forall t\in \mathcal{T}_\mathcal{B}$):
-	\begin{itemize}
+\item \textbf{Basisaktivitäten:}
+	\begin{itemize}\itemsep2pt
+	\item $\forall t\in \mathcal{T}_\mathcal{B}$ 
 	\item $br\_number_{t}(s)=0,\ s \in \mathcal{A}^{basic}$
 	\item $br\_number^{executed}_{t}(s)=0,\ s \in \mathcal{A}^{basic}$
 \end{itemize}
@@ -157,7 +158,7 @@ Obwohl die Fehlererkennungsquote gegenüber der Anweisungsabdeckung steigt, werde
 In den nächsten beiden Abschnitten werden die für WS-BPEL spezifischen
 Testabdeckungsmetriken vorgestellt: Link- und Handlerabdeckung. 
 
-\subsection{Link Abdeckung}
+\subsection{Linkabdeckung}
 Das Link-Konzept ist in WS-BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{join condition} das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit die Links und deren Verhalten zu testen.  Das Ziel dieser Metrik ist, den Tester dazu zu bewegen, dass jede transition condition während der Tests mindestens einmal auf den Wert \textit{true} und einmal auf \textit{false} gesetzt wird.
  
 Für die Definition einer entsprechenden Metrik wird eine Auswertungsfunktion
@@ -186,11 +187,9 @@ Die entsprechende Metrik heißt \textit{Linkabdeckung} ($Link\ Coverage$) und wir
 \end{equation*}
 	Damit es möglich ist, die 100\%  Abdeckung dieser Metrik zu erreichen, werden nur die Links berücksichtigt, derenn transition condition mindestenns eine Variable enthält ($Var(f)\neq \emptyset$). Ansonsten wäre es nicht möglich durch die Eingabedaten dafür zu sorgen, dass die \textit{transition}-Bedingung beim Testen sowohl \textit{true} als auch \textit{false}-Wert annimmt.
 	
-	Sobald das Link gesetzt ist ..................
-	
 	Außerdem ist es wichtig, dass nur die Links beachtet werden, deren \textit{transition condition} beim Testen ausgewertet wurde und nicht durch $DPE$ auf $false$ gesetzt wurde. Anderenfalls können sehr einfache Tests, die die zugehörige Logik nicht testen, sehr schnell 50\% Abdeckung dieser Metrik erreichen. Mit so einer Metrik sind keine zutreffenden Aussagen über die Testqualität möglich.
 
-\subsection{Fault und Compensation Handler Abdeckung}
+\subsection{Fault und Compensation Handler-Abdeckung}
 WS-BPEL Sprache hat ein Konzept zur strukturierten Behandlung von
 Laufzeitfehlern. Die Umschaltung von normalen auf \textit{Fault Handler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{Fault Handler} ausgeführt wird.  Die Tatsache, dass die
 BPEL-Prozesse langlebig sein können und in geschägtskritische Bereichen eingesetzt werden, verdeutlicht die Notwendigkeit, das Verhalten des Systems auch im

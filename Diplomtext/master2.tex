@@ -17,7 +17,8 @@
 \usepackage{listings} \lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} \lstset{language=XML}
 \usepackage{wrapfig}
 \usepackage{pdftricks}			% Zeichnen von Bäumen
-\usepackage{fancyhdr}
+\usepackage{fancyhdr} %Kopf Fußzeile
+\usepackage{amsthm} %definitionen
 %\begin{psinputs}
 %\usepackage{pst-all}
 %\end{psinputs}			
@@ -26,33 +27,19 @@
 \setcounter{tocdepth}{3}
 \addtolength{\topmargin}{.5cm}  	% Rand oberhalb der Kopfzeile
 %\setlength{\footskip}{1.2cm}		% Abstand Text - Fusszeile
-%\oddsidemargin+13mm					% Ränder für ungerade Seiten
+%\oddsidemargin+2mm					% Ränder für ungerade Seiten
 %\addtolength{\evensidemargin}{-2cm}	% Ränder für gerade Seiten
 \textheight24cm						% Vertikale Texthöhe
 
-\parskip3mm						%Abstand zwischen Absätzen
+\parskip4mm					%Abstand zwischen Absätzen
 \parindent0mm					%Einrückung bei Absatzbeginn
 
-\newcommand{\hidden}[1]{}
-\newcommand{\code}[1]{{\tt #1}}
-\newcommand{\relation}[1]{\textsc{#1}}
-\newcommand{\attrib}[1]{\textit{#1}}
-\newcommand{\lsemijoin}{\ltimes}
-\newcommand{\rsemijoin}{\rtimes}
-\newcommand{\lantisemijoin}{\: \overline{\ltimes}}
-\newcommand{\rantisemijoin}{\: \overline{\rtimes}}
-% \newcommand{\fullouterjoin}{\sqsupset\hspace{-2.1mm}\times\hspace{-2.1mm}\sqsubset}
-\newcommand{\element}{\in}
-\newcommand{\notelement}{\;|\hspace{-2ex}\in}
-\newcommand{\cbox}[2]{\parbox{#1}{\begin{center} #2 \end{center}}}
 
-\newenvironment{iterator}[1]{\begin{minipage}{15.2cm}\textbf{iterator} #1 \\}
-{\end{minipage}}
-\newenvironment{method}[1]{\hspace*{0.2cm}\textbf{#1}\begin{itemize}}{\end{itemize}}
-\newenvironment{subproc}{\begin{itemize}}{\end{itemize}}
-\newenvironment{costtable}{\begin{center}\renewcommand{\arraystretch}{1.5}\begin{tabular}{l|c|c}}{\end{tabular}\end{center}}
-\newenvironment{formtable}[1]{\begin{center}\renewcommand{\arraystretch}{2}\begin{tabular}{#1}}{\end{tabular}\end{center}}
-\newtheorem{Def}{Definition}
+\newtheorem{satz}{Satz}[section]
+\newtheorem{lem}{Hilfssatz}
+
+\theoremstyle{definition}
+\newtheorem*{Def}{Definition}
 
 \date{\today \\[2cm]
 	Erstprüfer: Prof. Dr. Kurt Schneider\\
@@ -99,12 +86,12 @@
   
   
   
-\parskip0mm
+
 \newpage
 %\thispagestyle{empty}~
 \tableofcontents
 \chapter{Einleitung}
-\section{Motivateion}
+\section{Motivation}
 \input{motivation}
 \section{Beitrag dieser Arbeit}
 \input{aufgabenstellung}
@@ -124,6 +111,7 @@
 \section{Abdeckung, als Maß für die Testqualität}
 \input{testabdeckung}
 \section{Zusammenfassung}
+\input{zusammenfassung1}
 \chapter{Testabdeckung in BPEL}
 \input{bpelformal}
 \section{Definition der Abdeckungsmetriken für BPEL}\label{sec:metrikdefinition}
@@ -152,6 +140,12 @@ ImAbschnitt Design und Implementierung
 \chapter{Zusammenfassung und Ausblick}
 \input{ausblick}
 %\input{rest}
+\nocite{BPEL1.1}
+\nocite{BPEL2.0}
+\nocite{LuebketestSOA}
+\nocite{ZhuDataAdequancy}
+\nocite{MayerBPELUnit}
 \bibliographystyle{plain}
 \bibliography{referenzen}
+\listoffigures
 \end{document}

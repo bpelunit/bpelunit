@@ -20,25 +20,20 @@ public class CompensationMetricHandler implements IMetricHandler {
 
 	public static final String COMPENS_HANDLER_LABEL = "compHandler";
 
-//	private static int count=0;
-
 	/**
 	 * Generiert eine eindeutige Markierung.
 	 * 
 	 * @return eindeutige Markierung
 	 */
-	public static String getAndRegisterNextLabel() {
-		String label = COMPENS_HANDLER_LABEL + "_" + (count++);
-
-//		LabelsRegistry.getInstance().addMarker(label);
-		return  label;
+	public static String getNexMarker() {
+		return COMPENS_HANDLER_LABEL
+				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
 	}
 
 	private MarkersRegisterForArchive markersRegistry;
-	
-	public CompensationMetricHandler(MarkersRegisterForArchive markersRegistry) {
 
-		this.markersRegistry=markersRegistry;
+	public CompensationMetricHandler(MarkersRegisterForArchive markersRegistry) {
+		this.markersRegistry = markersRegistry;
 	}
 
 	public String getName() {
@@ -51,23 +46,16 @@ public class CompensationMetricHandler implements IMetricHandler {
 		for (Iterator<Element> iter = activities.iterator(); iter.hasNext();) {
 			handler = iter.next();
 			Element activity = getFirstEnclosedActivity(handler);
-
-			if (!activity.getName()
-					.equals(StructuredActivities.SEQUENCE_ACTIVITY)) {
+			if (!activity.getName().equals(
+					StructuredActivities.SEQUENCE_ACTIVITY)) {
 				activity = encloseInSequence(activity);
 			}
-			String label=getAndRegisterNextLabel();
-			markersRegistry.addMarker(label);
-			Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +label);
+			String marker = getNexMarker();
+			markersRegistry.addMarker(marker);
+			Comment comment = new Comment(
+					Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker);
 			activity.addContent(0, comment);
 		}
 	}
-
-//	public List<String> getPrefix4CovLabeles() {
-//		List<String> list = new ArrayList<String>();
-//		list.add(CompensationMetricHandler.COMPENS_HANDLER_LABEL);
-//		return list;
-//	}
-
 
 }

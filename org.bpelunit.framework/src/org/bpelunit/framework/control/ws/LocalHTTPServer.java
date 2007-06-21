@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.receiver.ServiceHandler;
+import org.bpelunit.framework.coverage.receiver.MarkersServiceHandler;
 import org.mortbay.http.HttpContext;
 import org.mortbay.http.HttpServer;
 import org.mortbay.http.SocketListener;
@@ -35,7 +35,7 @@ public class LocalHTTPServer {
 
 	private HttpServer server;
 
-	private ServiceHandler fHandler2;
+	private MarkersServiceHandler fHandler2;
 
 	private SocketListener listener2=null;
 
@@ -90,7 +90,7 @@ public class LocalHTTPServer {
 			HttpContext context2 = new HttpContext();
 			context2.setContextPath(CoverageConstants.SERVICE_CONTEXT);
 			context2.setResourceBase("");
-			fHandler2 = new ServiceHandler();
+			fHandler2 = new MarkersServiceHandler();
 			// Add the ws handler first
 			context2.addHandler(fHandler2);
 

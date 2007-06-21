@@ -48,13 +48,6 @@ public class MetricsManager {
 		return metric;
 	}
 	
-	private static MetricsManager instance=null;
-	
-//	public static MetricsManager getInstance(){
-//		if(instance==null)
-//			instance=new MetricsManager();
-//		return instance;
-//	}
 	
 	public MetricsManager(){
 		metrics=new ArrayList<IMetric>();
@@ -76,13 +69,6 @@ public class MetricsManager {
 		}
 		return statistics;
 	}
-
-
-	public void destroy() {
-		instance=null;
-	}
-
-
 
 
 }

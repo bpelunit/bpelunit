@@ -42,8 +42,6 @@ public class PickHandler implements IStructuredActivityHandler {
 				throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 			}
 			markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
-//			BranchMetric.insertLabelWithRespectOfTargets(child);
-
 		}
 	}
 }

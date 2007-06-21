@@ -118,7 +118,7 @@ public class BpelXMLTools {
 
 	public static final String EXPRESSION_LANGUAGE_ATTR = "expressionLanguage";
 
-	private static final String PREFIX_FOR_NEW_VARIABLE = "xyz";
+	private static final String PREFIX_FOR_NEW_VARIABLE = "_zyx";
 
 	public static int count = 0;
 	public static Element process_element;
@@ -261,7 +261,6 @@ public class BpelXMLTools {
 	 *         vorhanden, dann null;
 	 */
 	public static Element getFirstEnclosedActivity(Element element) {
-		//TODO Scope is Aktivität alles überprüfen
 		Element activity = null;
 		List children = element.getContent(new ContentFilter(
 				ContentFilter.ELEMENT));
@@ -272,19 +271,11 @@ public class BpelXMLTools {
 				activity = child;
 				break;
 			} 
-//			else if (isScope(child)) {
-//				activity = getFirstEnclosedActivity(child);
-//			}
 		}
 		return activity;
 	}
 
-//	public static boolean isScope(Element child) {
-//		if (child.getName().equals(StructuredActivity.SCOPE_ACTIVITY)) {
-//			return true;
-//		}
-//		return false;
-//	}
+
 	
 	public static boolean canCreateInstance(Element activity) {
 		String value = activity.getAttributeValue(CREATE_INSTANCE_ATTR, "no");
@@ -447,15 +438,6 @@ public class BpelXMLTools {
 		}
 	}
 
-	public static void sysout(Document doc) {
-		XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-		try {
-			xmlOutputter.output(doc, System.out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	public static Element getSurroundScope(Content content) {
 		Element scope = null;

@@ -9,7 +9,7 @@ Die Kernaufgabe des Verfahrens, die Instrumentierung, wird ausführlich im folgen
 \section{Instrumentierung des BPEL-Prozesses}
 Instrumentierung erfolgt in zwei Schritten. Zuerst wird der BPEL-Prozess mit speziellen Marken annotiert. Jede Marke repräsentiert dabei ein für die jeweilige Metrik relevantes Element und wird in Form eines Kommentars in den Kontrollfluss eingebettet. Im zweiten Schritt wird dafür gesorgt, dass diese Marken, sobald der Kontrollfluss sie bei der Ausführung erreicht, an spezielle Komponente übertragen werden, die die empfangenen Daten anschließend für die Berechnung der Metriken verwendet.
 
-Für die korrekte Ermittlung der Testabdeckung ist die richtige Platzierung der Marken entscheidend. Dank der Zweiteilung der Instrumentierungsphase kann dieses Problem behandelt werden, ohne die BPEL-spezifischen Aspekte der Kommunikation berücksichtigen zu müssen.
+Für die korrekte Ermittlung der Testabdeckung ist die richtige Platzierung der Marken entscheidend. Diese Problem kann im ersten Schritt behandelt werden, ohne BPEL-spezifischen Aspekte der Kommunikation berücksichtigen zu müssen, die erst im zweiten Schritt zum Tragen kommen.
 \subsection{Annotation des Prozesses}
 Die Instrumentierung eines BPEL-Prozesses besteht aus mehreren Aufgaben:
 \begin{itemize}
@@ -17,9 +17,7 @@ Die Instrumentierung eines BPEL-Prozesses besteht aus mehreren Aufgaben:
 \item Sammlung und Speicherung der statischen Daten (für die spätere Auswertung).
 \item Annotation des BPEL Prozesses mit Marken.
 \end{itemize}
-Die Ausführung der Aufgaben erfolgt in drei Phasen, die sequentiell abgearbeitet werden können. 
-
-
+Die Ausführung der Aufgaben erfolgt in drei Phasen, die sequentiell abgearbeitet werden. 
 
 \textbf{Phase 1.} Während der ersten Phase wird der BPEL-Prozess analysiert. Dabei werden für jede Metrik alle für sie relevanten Elemente des Prozesse bestimmt und gespeichert. Dadurch wird gesichert, dass die Elemente, die während der Instrumentierung in den Prozess eingefügt werden, bei der Besimmung der Metriken unberücksichtigt bleiben. Die relevanten Elemente können anhand der Definitionen der jeweiligen Metrik (siehe Abschnitt \ref{sec:metrikdefinition}) bestimmt werden:
 \begin{itemize}
@@ -32,9 +30,11 @@ Die Ausführung der Aufgaben erfolgt in drei Phasen, die sequentiell abgearbeitet
 
 \textbf{Phase 2.} Diese Phase wird ausführlich in den folgenden vier Abschnitten für jede Metrik einzeln vorgestellt. An dieser Stelle werden lediglich einige Bemerkungen gemacht, die für jede Metrik gelten. 
 
-In dieser Phase erfolgt die Annotation des Prozesses mit speziellen Marken. Jede Marke ist eindeutig identifizierbar und gehört zu einer bestimmten Metrik. Außerdem identifiziert jede Marke ein Element des Kontrollflusses, das für die Abdeckungsmessung relevant ist. Liegen die Marken während des Tests auf dem Ausführungspfad, so werden diese an eine Komponente übertragen. Damit protokolliert jede Marke Stimulation eines bestimmten Kontrollflusselements. Obwohl die Realisierung der Datenübertragung erst im zweiten Schritt erfolgt (siehe Abschnitt \ref{sec:markenuebetragung}), wird zur Vereinfachung bereits in diesem Abschnitt statt einer Marke auch von \textit{Logging} oder \textit{Loggingaktivität} gesprochen.
-Graphisch werden die Marken ebenfalls bereits als invoke-Aktivitäten dargestellt. 
+In dieser Phase erfolgt die Annotation des Prozesses mit speziellen Marken. Jede Marke ist eindeutig identifizierbar und gehört zu einer bestimmten Metrik. Außerdem identifiziert jede Marke ein Element des Kontrollflusses, das für die Abdeckungsmessung relevant ist. Liegen die Marken während des Tests auf dem Ausführungspfad, so werden diese an eine Komponente übertragen. Damit protokolliert jede Marke Stimulation eines bestimmten Kontrollflusselements. 
 Alle eingefügten Marken werden gespeichert und stehen für die Auswertung und Berechnung der Metriken zur Verfügung.
+
+Obwohl die Realisierung der Datenübertragung erst im zweiten Schritt erfolgt (siehe Abschnitt \ref{sec:markenuebetragung}), wird zur Vereinfachung bereits in diesem Abschnitt statt einer Marke auch von \textit{Logging} oder \textit{Loggingaktivität} gesprochen.
+Graphisch werden die Marken ebenfalls bereits als invoke-Aktivitäten dargestellt. 
 
 Bei der Instrumentierung ist zu beachten, dass es grundsätzlich möglich ist, die interne Programmlogik des Prozesses  durch die Manipulation zu verändern. Die syntaktische Korrektheit darf natürlich auch nicht beeinträchtigt werden. Obwohl die Marken zunächst als Kommentare eingefügt werden und damit weder Programmlogik noch die syntaktische Struktur des Programms ändern, werden diese Aspekte bereits in dieser Phase beachtet. Der Grund dafür ist, dass jede Metrik, um bestimmte Aspekte zu erfassen, zusätzliche Logik braucht (insbesondere im Zusammenhang mit dem Link-Konzept).  Also ist es sinnvoll bereits bei der Platzierung der Marken für die semantische und syntaktische Korrektheit des Prozesses zu sorgen, so dass die Marken in der letzten Phase einfach durch entsprechende Aktivitäten ersetzt werden können.
 
@@ -42,6 +42,7 @@ Bei der Instrumentierung ist zu beachten, dass es grundsätzlich möglich ist, die
 Zu erwähnen ist noch, dass die Metriken in beliebigen Reihenfolge abgearbeitet werden können, weil alle benötigten Elemente des Originalprozesses für alle Metriken in der ersten Phase gespeichert wurden und stehen damit für die Annotation zur Verfügung. 
 
 
+\textbf{Phase 3.} In dieser Phase werden BPEL-Aktivitäten in den Prozess eingefügt, die die Marken, die auf dem Ausführungspfad liegen, an den Web Service \textit{Markers Receiver} verschicken. Dank Vorbereitungen, die in der zweiten Phase gemacht wurden, können die Marken einfach durch entsprechende Aktivitäten ersetzt werden, ohne dabei auf die Semantik und Syntax des Prozesses zu achten.
 
  
   \subsubsection{Aktivitätabdeckung}
@@ -123,11 +124,11 @@ Für die Überwachung dieser Zweige wird der Prozess nach dem bisherigen Schema er
  Die Protokollierung der Zweige kann logischerweise erst nach der Erzeugung einer Instanze des BPEL-Prozesses erfolgen. Die zugehörigen Loggingaktivitäten dürfen im Kontrollfluss nur nach der receive-Aktivität platziert werden. Die Abbildung .. zeigt den Prozess, der diesen Anforderungen entspricht. 
 \begin{figure}[htbp]
   \centering
-  \begin{minipage}[b]{.48\textwidth}
+  \begin{minipage}[b]{.485\textwidth}
     \includegraphics[width=\linewidth]{bilder/FlowCreateInstance2.png}  
   \end{minipage}
-  \hspace{0.3cm}
-  \begin{minipage}[b]{.48\textwidth}
+  \hspace{0.1cm}
+  \begin{minipage}[b]{.485\textwidth}
     \includegraphics[width=\linewidth]{bilder/FlowCreateInstance3.png}  
   \end{minipage}
       \caption{Erfassung der Zweigabdeckung in einer \textit{flow}-Aktivität}
@@ -160,25 +161,25 @@ Die Protokollierung des Zweigs \textit{branch\_1} muss nach der receive-Aktivitä
 %\end{figure}
  
  \textbf{\textit{RepeatUntil}-Aktivität.}
- Die Auswertung der Bedingung erfolgt in dieser Wiederholungsschleife erst nach der Ausführung des Schleifenkörpers. Bei der Ausführung der Aktivität in der Schleife kann man ohne weiteren Logik nicht feststellen, ob es die erste Ausführung ist oder wiederholte. Ist das eine wiederholte Ausführung, so muss die Aktivierung des Zweigs von der Bedingung zur Aktivität signalisiert werde.  
- Die entsprechende Überprüfung kann mit Hilfe eines Zählers, der bei jedem Schleifendurchlauf hochgezählt wird, und einer \textit{if}-Abfrage realisiert werden.  Die Zählvariable muss natürlich im Prozess deklariert werden. Die entsprechende Modifikation der \textit{repeatUntil}-Aktivität ist in der Abbildung dargestellt. Zusätzlich muss die Zählvariable vor der Schleife initialisiert werden.
+ Die Auswertung der Bedingung erfolgt bei dieser Wiederholungsschleife erst nach der Ausführung des Schleifenkörpers. Bei der Ausführung der Aktivität in der Schleife kann man ohne weiteren Logik nicht feststellen, ob es die erste Ausführung ist oder wiederholte. Ist das eine wiederholte Ausführung, so muss die Aktivierung des Zweigs von der Bedingung zum Schleifenkörper (in der Abbildung \ref{fig:repeatUntil2} \textit{branch\_2}) signalisiert werde. Die entsprechende Überprüfung kann mit Hilfe eines Zählers, der bei jedem Schleifendurchlauf hochgezählt wird, und einer \textit{if}-Abfrage realisiert werden.  Die Zählvariable muss natürlich im Prozess deklariert werden. Die entsprechende Modifikation der \textit{repeatUntil}-Aktivität ist in der Abbildung dargestellt. Zusätzlich muss die Zählvariable vor der Schleife initialisiert werden.
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.65\textwidth]{bilder/repeatUntilZweig.png}
       \caption{Erfassung der Zweigabdeckung in einer \textit{repeatUntil}-Aktivität}
-	\label{}
+	\label{fig:repeatUntil2}
 \end{figure}
 \FloatBarrier 
-\subsubsection{Link Abdeckung}
+\subsubsection{Linkabdeckung}\label{sec:Linkabdeckung}
 Es geht bei dieser Metrik um Synchronisationslinks mit einer \textit{transition condition}, die nicht mit einem konstanten Wert \textit{true} oder \textit{false} belegt ist.Die Ermittlung dieser Metrik ist ebenfalls mit Hilfe der Links realisiert. Um die korrekte Erfassung des Linkstatus zu erreichen müssen folgende Aspekte beachtet werden:
 \begin{itemize}
 	\item boundary-crossing Restriktionen
 	\item unterschiedliche Wertebelegung des \textit{suppress join}-Attributs und daraus resultierendes Verhalten beim Auftreten von \textit{Join Failure}
 	\item \textit{Dead-Path-Elimination}
 \end{itemize} 
+Diese Aspekte wurden aim Abschnitt \ref{restrictions} ausführlich erklärt.
 
 \textbf{Beispiel}. Als Grundlage für die Erläuterungen dient folgendes Szenario. Ein Unternehmen  hat einige Strategien entwickelt, um die Großkunden trotz großer Konkurenz an sich langfristig zu binden. Als besonderen Service wird zum Beispiel bei Bestellungen dieser Kunden eine bestimmte Lieferdauer garantiert. Aus diesem Grund ist man zum Beispiel bereit, die Engpässe auf dem Lager für die Großkunden durch Bestellungen bei Konkurenz zu überbrücken und auf diese Weise kurzfristig sogar Verluste in Kauf zu nehmen. Der Geschäftsprozess wird entsprechend der Strategie angepasst und in den IT-Systemen (mit BPEL) umgesetzt. Ein vereinfachter Ausschnitt des zugehörigen BPEL-Prozesses ist in der Abbildung \ref{fig:FlowBeispielDesigner} grafisch Dargestellt.
-
+\newpage
 \begin{wrapfigure}[12]{r}{7,5cm}
 \centering%
 \includegraphics[width=0.48\textwidth]{bilder/FlowBeispiel.png}%
@@ -199,7 +200,7 @@ Die Erfassung des Status jedes relevanten Links ist für die Ermittlung der Linka
 
 \underline{Variante 1.}\\
 Zwei zusätzliche Links werden definiert (\textit{Link1Copy} und \textit{Link1CopyNegiert}). Dabei über\-nimmt der \textit{Link1CopyNegiert} die negierte  \textit{transition condition} des Originallinks \\
-( \textit{not(contains(customerType,'major'))} ) und  der \textit{Link1Copy} die unveränderte. Die Logging-Anweisungen werden bei diesem Ansatz direkt in der flow-Umgebung platziert. 
+( \textit{not(contains(customerType,'major'))} ) und  der \textit{Link1Copy} die unveränderte. Die Negierung erfolgt in den meisten Anfragesprachen mit Hilfe der Funktion \textit{not()}. Das gilt sowohl für XPath 1.0, die \textit{dafault}-Sprache in BPEL ist, als auch für XQuery 1.0. Beim Einsatz weiterer Anfragesprachen muss überprügft werden, ob die Funktion \textit{not()} vorhanden ist, und, falls das nicht der Fall ist, muss der Quellcode für die neue Sprache erweitert werden. Die Logging-Anweisungen werden bei diesem Ansatz direkt in der flow-Umgebung platziert. 
   Dadurch sind sie bereit für die Ausführung, sobald der Kontrollfluss die flow-Aktivität erreicht. Die \textit{source}- und \textit{target}-Aktivitäten des Originallinks können dabei beliebig tief in strukturierte Aktivitäten eingebettet sein. Durch die am Anfang definierten Links, wird die \textit{source}-Aktivität des Originallinks mit den Logging-Anweisungen verlinkt. Für eine Logging-Anweisung ein Link. Sobald der Status der Links bekannt ist, wird eine Logging-Anweisung ausgeführt.
 
 Die \textit{default join condition} der Logging-Aktivitäten (\textit{or}-Verknüpfung der Status aller eingehenden Links) und komplementären \textit{transition conditions} der beiden neuen Links garantieren, dass nur eine Loggingaktivität gleichzeitig ausgeführt werden kann.
@@ -276,10 +277,17 @@ Bei dieser Variante wird die source-Aktivität des Links (\textit{Kundenidentifik
 \end{figure}
 
 Während die ersten beiden Varianten keine korrekte Messung der Linkabdeckung in allen Situationen ermöglichen, gewährleistet das dritte Verfahren eine korrekte Erfassung des Linkstatus und ist damit für die Ermittlung der Linkabdeckung geeignet.
-Als Lösung für die Abdeckungsmessung der Links eignet sich diese Variante am Besten. 
 \FloatBarrier
-\subsubsection{Fault und Compensation Handler}
-Für die Fault und Compensation Handler werden die Marken auf dieselbe Weise (mit Hilfe einer umschließenden sequence-Aktivität) in den catch und catchAll-Blöcken bzw. in Compensation Handler platziert. Vor der Platzierung der Marken müssen allerdings die so genannten inline-Handler durch explizite Scopes mit expliziten Fault und Compensation Hanler ersetzt werden:
+\subsubsection{Fault und Compensation Handler-Abdeckung}
+Für die Fault und Compensation Handler werden die Marken auf dieselbe Weise (mit Hilfe einer umschließenden sequence-Aktivität) in den catch und catchAll-Blöcken bzw. in Compensation Handler platziert. 
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.6\textwidth]{bilder/FaultHandler.png}
+      \caption{Erfassung der \textit{Fault Handler}-Abdeckung}
+	\label{fig:LinksAnsatz3Designer}
+\end{figure}
+
 
 \begin{multicols}{2}
 \lstset{emph={invoke}, emphstyle=\color{red}}
@@ -319,23 +327,16 @@ Für die Fault und Compensation Handler werden die Marken auf dieselbe Weise (mit
 \end{lstlisting}
 \end{multicols}
 
-\begin{figure}[htbp]
-	\centering
-		\includegraphics[width=0.6\textwidth]{bilder/FaultHandler.png}
-      \caption{Erfassung der \textit{Fault Handler}-Abdeckung}
-	\label{fig:LinksAnsatz3Designer}
-\end{figure}
 \FloatBarrier
 \subsection{Erweiterung des BPEL-Prozesses für die Übertragung der Testabdeckungsdaten}\label{sec:markenuebertragung}
 Ein BPEL-Prozess kann nach außen grundsätzlich nur mit Web Services kommunizieren. Demzufolge muss der Dienst für den Empfang der Nachrichten als Web Service realisiert und während des Testens erreichbar sein. 
-
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.75\textwidth]{bilder/bpelProzess.png}
 		\caption{Partner eines BPEL-Prozesses}
 	\label{fig:loggingservice}
 \end{figure}
-\newpage
+
 \textbf{Web Service zum Empfangen von Marken (\textit{Markers Receiver})}.
 
 Für die Kommunikation des BPEL-Prozess mit dem WS sind für den Prozess folgende Daten notwendig:
@@ -371,26 +372,26 @@ Für die Kommunikation des BPEL-Prozess mit dem WS sind für den Prozess folgende 
 \end{verbatim}
 
 \textbf{Datenaufbereitung und -übertragen}.
-
 Mit Hilfe von Invoke-Aktivitäten kann ein BPEL-Prozess mit einem Web Service kommunizieren. Die invoke-Aktivität hat folgende Attributen:
 \begin{itemize}
-	\item \textbf{partnerLink} enthält des Partner Links. 
-\item \textbf{portType} gibt WSDL-Porttype des Zielservices an.
-\item \textbf{operation} gibt die WSDL-Operation an.
-\item \textbf{inputVariable} gibt Variable an, die die zu sendenden Daten enthält.
-\item \textbf{outputVariable} gibt Variable an, die die Antwort des Services speichert.
+	\item \textbf{partnerLink}: identifiziert \textit{Partner Link}, der für die verwendet werden soll. 
+\item \textbf{portType}:  WSDL-Porttype des Zielservices an.
+\item \textbf{operation}: WSDL-Operation.
+\item \textbf{inputVariable}: Variable, die die zu sendenden Daten enthält.
+\item \textbf{outputVariable}: Variable, die die Antwort des Services speichert.
 \end{itemize}
 
-Soll eine asynchrone Kommunikation realisiert werden oder eine Operation aufgerufen werden, die keine Rückgabedaten erzeugt, so wird der Attribut \textit{outputVariable} weggelassen. Die Listing \ref{} zeigt eine invoke-Aktivität, die die Marken an den Service transportiert.
-
-Zuvor muss die Variable .. natürlich deklariert werden. Damit die Variable im ganzen Prozess benutzt werden kann, wird sie als globale Variable (im \textit{variables}-Element des Prozesses) definiert. Zur Vermeidung der Namenskonflikten werden kryptische namen generiert. Da in BPEL durch flow-Aktivität die nebenläufige Ausführung der Aktivitäten möglich ist,    
- Variable für jeden parallelen Zweig
+Soll eine asynchrone Kommunikation realisiert werden oder eine Operation aufgerufen werden, die keine Rückgabedaten erzeugt, so wird der Attribut \textit{outputVariable} weggelassen. Eine invoke-Aktivität, die die Marken an den Service transportiert, sieht folgendermaßen aus:  
 \begin{verbatim}
 <invoke inputVariable="_ZXYYXZ_0" 
         operation="receiveMarkers" 
         partnerLink="PL_CoverageMarkersReceiver_" 
         portType="_CoverageMarkersReceiver_" />
-   \end{verbatim}
+\end{verbatim}
+
+
+Zuvor muss die Variable \textit{\_ZXYYXZ\_0} natürlich deklariert werden. Damit die Variable im ganzen Prozess benutzt werden kann, wird sie als globale Variable (im \textit{variables}-Element des Prozesses) definiert. Zur Vermeidung der Namenskonflikten werden die Variablennamen aus einem kryptischen Präfix und einem Zähler, der bei jeder Variable hochgezählt wird, erzeugt. Da in BPEL durch flow-Aktivität die nebenläufige Ausführung der Aktivitäten möglich ist, muss für jeden Zweig eine neue Variable deklariert und als \textit{inputVariable} bei entsprechenden invoke-Aufrufen verwendet werden.    
+ Variable für jeden parallelen Zweig
 Die Zuordnung der Marken erfolgt mit Hilfe einer assign-Aktivität:
 \begin{verbatim}
 <assign>
@@ -407,4 +408,8 @@ Die Zuordnung der Marken erfolgt mit Hilfe einer assign-Aktivität:
 Beim Instrumentieren des BPEL-Prozesses werden Marken generiert, die die entsprechenden Aspekte des Kontrollflusses eindeutig identifizieren und zu einer bestimmten Metrik gehören. Alle Marken, die in den Kontrollfluß eingefügt wurden, werden gespeichert und stehen während und nach der Ausführung des Prozesses zur Verfügung.
 Während der BPEL-Prozess zum Testen ausgeführt wird, werden die Marken an den Web Service gesendet. 
 Die empfangenen Marken liegen auf dem Ausführungspfad und wurden damit durch die Tests abgedeckt. 
-Anhand der bei der Instrumentierung gespeicherten und während der Ausführung gesammelten Daten können die Statistiken ermittelt werden. Dabei gibt es die Möglichkeit sowohl die Statistik einer ganzen Testsuite als auch der einzelnen Testcases zu ermitteln.
+
+Jede empfangene Marke wird einem Testcase zugeordnet, der gerade ausgeführt wird. Damit diese Zuordnung stimmt, wird nach jedem Testcase eine festgelegte Zeit gewartet, um alle Marken zu empfangen und an dem richtigen Testcase zuzuordnen. 
+
+
+Anhand der bei der Instrumentierung gespeicherten und während der Ausführung gesammelten Daten kann die Testabdeckung ermittelt und Statistiken erstellt werden. Dabei gibt es die Möglichkeit sowohl die Statistik einer ganzen Testsuite als auch der einzelnen Testcases zu generieren.

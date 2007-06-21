@@ -24,7 +24,6 @@ public class LinkMetric implements IMetric {
 
 	private List<Element> elementsOfBPEL = null;
 
-
 	public LinkMetric(MarkersRegisterForArchive markersRegistry) {
 		metricHandler = new LinkMetricHandler(markersRegistry);
 	}
@@ -37,11 +36,8 @@ public class LinkMetric implements IMetric {
 		List<String> list = new ArrayList<String>(2);
 		list.add(LinkMetricHandler.POSITIV_LINK_LABEL);
 		list.add(LinkMetricHandler.NEGATIV_LINK_LABEL);
-
 		return list;
 	}
-
-
 
 	public IMetricHandler getHandler() {
 		return metricHandler;
@@ -79,10 +75,10 @@ public class LinkMetric implements IMetric {
 	}
 
 	public void insertMarkers() throws BpelException {
-
-		if (elementsOfBPEL != null)
+		if (elementsOfBPEL != null) {
 			metricHandler.insertMarkersForMetric(elementsOfBPEL);
-		elementsOfBPEL = null;
+			elementsOfBPEL = null;
+		}
 
 	}
 

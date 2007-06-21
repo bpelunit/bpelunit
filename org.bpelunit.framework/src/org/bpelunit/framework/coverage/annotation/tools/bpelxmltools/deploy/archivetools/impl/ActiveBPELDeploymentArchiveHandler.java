@@ -85,17 +85,6 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		bpelFiles=new Hashtable<String, File>();
 	}
 
-//	public java.io.File getArchiveFile() throws ArchiveFileException {
-//		try {
-//			File.umount(archiveFile, true);
-//		} catch (ArchiveException e) {
-//			e.printStackTrace();
-//			throw new ArchiveFileException(
-//					"Error occur when writing in archive file: "
-//							+ archiveFile.getName(), e);
-//		}
-//		return archiveFile;
-//	}
 
 	/**
 	 * Erzeugt eine Kopie des Archives und unresucht das Archive nach
@@ -370,8 +359,6 @@ public class ActiveBPELDeploymentArchiveHandler implements
 				process.getNamespace());
 		partnerLink.setAttribute(NAME_ATTR, PARTNERLINK_NAME);
 		partnerLink.addContent(partnerRole);
-		// TODO PARTNERLINKS ist ein Active BPEL spezifisches Element also aus
-		// BPELXMLTools rausschmeiﬂen
 		Element partnerLinks = process.getChild(
 				BpelXMLTools.PARTNERLINKS_ELEMENT, process.getNamespace());
 		if (partnerLinks == null) {
@@ -452,8 +439,6 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		try {
 			de.schlichtherle.io.File.umount(true, true, true, true);
 		} catch (ArchiveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 

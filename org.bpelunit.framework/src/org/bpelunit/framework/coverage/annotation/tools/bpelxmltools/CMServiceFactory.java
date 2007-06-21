@@ -89,20 +89,4 @@ public class CMServiceFactory {
 		return createAssign(from, to);
 	}
 
-//	public Element createAssignElementForRegisterMarker(Element scope,
-//			String content, String variable) {
-//		insertVariableForRegisterMarker(scope, variable);
-//		Element from = createBPELElement(FROM_ELEMENT);
-//
-//		from.setText(content);
-//		Element to = createBPELElement(TO_ELEMENT);
-//		to.setAttribute(PART_ATTR, PART_OF_REGISTER_MESSAGE);
-//		to.setAttribute(VARIABLE_ATTR, variable);
-//		return createAssign(from, to);
-//	}
-
-//	public void insertVariableForRegisterMarker(String attributeValue) {
-//		insertVariableForRegisterMarker(null, attributeValue);
-//	}
-
 }

@@ -110,21 +110,4 @@ public class Statistic implements IStatistic {
 
 	}
 
-//	@Override
-//	public String toString() {
-//		StringBuffer buf = new StringBuffer();
-//		buf.append(name);
-//		if (subStatistics != null) {
-//			for (Iterator<IStatistic> iter = subStatistics.iterator(); iter
-//					.hasNext();) {
-//				buf.append(iter.toString());
-//			}
-//		} else {
-//			buf.append(" TotalNumber= " + totalNumber + "\n");
-//			buf.append(" TestedNumber= " + testedNumber + "\n");
-//		}
-//
-//		return buf.toString();
-//	}
-
 }

@@ -36,41 +36,18 @@ public class BranchMetricHandler implements IMetricHandler {
 
 	public static final String BRANCH_LABEL = "branch";
 
-//	private static int count = 0;
-
 	/**
 	 * Generiert eine eindeutige Markierung.
 	 * 
 	 * @return eindeutige Markierung
 	 */
-	private static String getAndRegisterNextLabel() {
-		String label = BRANCH_LABEL
+	private static String getNextMarker() {
+		String marker = BRANCH_LABEL
 				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
-		// registerCoverageLabel(label);
-		return label;
+		return marker;
 	}
 
-	// public static String getNextLabel() {
-	// return BRANCH_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
-	// + (count++);
-	// }
 
-	// private static void registerCoverageLabel(String label) {
-	// LabelsRegistry.getInstance().addMarker(label);
-	// }
-
-	/**
-	 * Fügt Markierung für einen Zweig, der durch eine Aktivität repräsentiert
-	 * ist. Es wird eine Markierung davor und eine danach eingefügt.
-	 * 
-	 * @param activity
-	 *            Aktivität, die einen Zweig repräsentiert
-	 * @param additionalInfo
-	 */
-//	public static void insertLabelsForBranch(Element activity) {
-//		insertLabelBevorAllActivities(activity);
-//		insertLabelAfterAllActivities(activity);
-//	}
 
 	/**
 	 * Fügt eine Markierung vor allen Aktivitäten ein. Wenn es notwendig ist,
@@ -85,9 +62,9 @@ public class BranchMetricHandler implements IMetricHandler {
 		if (!isSequence(activity)) {
 			activity = ensureElementIsInSequence(activity);
 		}
-		String label=getAndRegisterNextLabel();
-		activity.addContent(0, new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER + label));
-		return label;
+		String marker=getNextMarker();
+		activity.addContent(0, new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker));
+		return marker;
 	}
 
 	private static Element respectTargetsOfLinks(Element activity) {
@@ -118,10 +95,10 @@ public class BranchMetricHandler implements IMetricHandler {
 		if (!isSequence(activity)) {
 			activity = ensureElementIsInSequence(activity);
 		}
-		String label = getAndRegisterNextLabel();
+		String marker = getNextMarker();
 		activity.addContent(new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
-				+ label));
-		return label;
+				+ marker));
+		return marker;
 	}
 
 	/**
@@ -130,12 +107,11 @@ public class BranchMetricHandler implements IMetricHandler {
 	 *            muss innerhalb Sequence sein
 	 */
 	public static String  insertLabelAfterActivity(Element activity) {
-		// TODO anderer Name
 		Element parent = activity.getParentElement();
-		String label = getAndRegisterNextLabel();
+		String marker = getNextMarker();
 		parent.addContent(parent.indexOf(activity) + 1, new Comment(
-				Instrumenter.COVERAGE_LABEL_IDENTIFIER + label));
-		return label;
+				Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker));
+		return marker;
 	}
 
 	/**
@@ -146,18 +122,16 @@ public class BranchMetricHandler implements IMetricHandler {
 	public static String insertLabelBevorActivity(Element activity) {
 		activity = respectTargetsOfLinks(activity);
 		Element parent = activity.getParentElement();
-		String label = getAndRegisterNextLabel();
+		String marker = getNextMarker();
 		parent.addContent(parent.indexOf(activity), new Comment(
-				Instrumenter.COVERAGE_LABEL_IDENTIFIER + label));
-		return label;
+				Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker));
+		return marker;
 	}
 
 	private HashMap<String, IStructuredActivityHandler> structured_activity_handler = new HashMap<String, IStructuredActivityHandler>();
 
-//	private LabelsRegistry markersRegistry;
 
 	public BranchMetricHandler(MarkersRegisterForArchive markersRegistry) {
-//		this.markersRegistry = markersRegistry;
 		structured_activity_handler.put(StructuredActivities.FLOW_ACTIVITY,
 				new FlowHandler(markersRegistry));
 		structured_activity_handler.put(StructuredActivities.SEQUENCE_ACTIVITY,
@@ -199,22 +173,6 @@ public class BranchMetricHandler implements IMetricHandler {
 		return METRIC_NAME;
 	}
 
-	// public List<String> getPrefix4CovLabeles() {
-	// List<String> list = new ArrayList<String>();
-	// list.add(BranchMetricHandler.BRANCH_LABEL);
-	// return list;
-	// }
-
-	// /**
-	// * Fügt label vor allen Aktivitäten und verschiebt Targets, wenn
-	// vorhanden.
-	// *
-	// * @param child
-	// */
-	// public static void insertLabelWithRespectOfTargets(Element child) {
-	// child = respectTargetsOfLinks(child);
-	// insertLabelBevorAllActivities(child);
-	// }
 
 	public static List<Element> getTargets(Element child) {
 		Namespace ns = getProcessNamespace();

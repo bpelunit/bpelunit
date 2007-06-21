@@ -46,10 +46,9 @@ public class SwitchHandler implements IStructuredActivityHandler {
 	private void insertMarkerForOtherwiseBranch(Element otherwiseElement)
 			throws BpelException {
 		Element branch_activity = getFirstEnclosedActivity(otherwiseElement);
-		if (branch_activity == null) {
+		if (branch_activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
-		}
-//		BranchMetric.insertLabelWithRespectOfTargets(branch_activity);
+		
 		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 
 	}
@@ -63,12 +62,10 @@ public class SwitchHandler implements IStructuredActivityHandler {
 	 */
 	private void insertMarkerForCaseBranches(Element branch_activity)
 			throws BpelException {
-		if (branch_activity == null) {
+		if (branch_activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
-		}
+		
 		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
-//		BranchMetric.insertLabelWithRespectOfTargets(branch_activity);
-
 	}
 
 }

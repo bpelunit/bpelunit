@@ -1,41 +1,31 @@
-Eine Möglichkeit, die Qualität zu sichern, besteht in der Ausführung der Software mit dem Ziel Fehler zu finden -- das Testen der Software.
- Testen ist ein in der konventionellen Softwareentwicklung unentbehrliches Mittel zur Qualitätssicherung.
-Testen ist die in der Anwendung einfachste und wahrscheinlich verbreitetste
-Methode der Verifikation und existiert in vielen Ausprägungen. 
+Testen ist ein in der konventionellen Softwareentwicklung unentbehrliches Mittel zur Qualitätssicherung.
 
 \textit{Testen ist ein Prozess, ein Programm mit der Absicht
-auszuf¨uhren, Fehler zu finden.}
+auszuführen, Fehler zu finden.}
 
+Beim Testen von BPEL-Prozessen müssen im Vergleich zu anderen Anwendungen eine Besonderheit beachtet werden: externe Abhängigkeit in Form von Web Services. Die Durchführung eines kompletten Tests ist nur dann möglich, wenn alle beteiligten Web Services erreichbar sind und reproduzierbare Ergebnisse liefern. 
+Zum richtigen Problem wird das Testen, wenn externe Service-Anbietern eingebunden sind. In der Regel hat man in dieser Situation nur die Beschreibung der Schnittstelle aber kein Quellcode. Aus diesem Grund kann ein Web Service in einer Testumgebung repliziert werden. 
+Ein weiteres Problem ist das Testen von Fehlersituationen. Dafür müssen die solche Situationen, wie "`Web Service nicht erreichbar"' oder "`antwortet mit einer Fehlermeldung"' simuliert werden.\cite{LuebketestSOA} 
 
-Testen von BPEL ist besonders, weil BPEL Prozess externale Abhängigkeiten in Form von Web Services. Das macht das Testen schwieriger  Kompletter Systemtest kann nur durchgeführt werden, wenn alle Web Services erreichbar sind und reproduzierbare Ergebnisse liefern. Das ist vor allem bei externen Service-Anbietern schwer zu erreichen.  Anderes Problem ist das Testen gegen Fehlerbedingungen, das heißt wenn Web Service antortet Fehler oder ist nicht erreichbar.  Solche Fehlerbedingunmgen müssen simuliert werden  als Teil des Tests. 
-
-Unit Kann bedeutend reduzieren dieses Problem beim Testen von von BPELProzessen ohne der correspondirenden Web Services. 
-Im Rahmen der Forschung am Institut für Praktische Informatik (Fachgebiet Software Engeeniring) ist in ener Masterarbeit \ref{Mayer2006} BPELUnit Framework entstanden.  
- Das Framework versucht die Lücke in der xUnit Familie der Unit-testing Frameworks. 
+Die angestrebte Isolation des BPEL-Prozesses für das Testen kann mit Hilfe eines Unit-Tests erreicht werden. Im Rahmen einer Masterarbeit \cite{Mayer2006}  ist das BPELUnit Framework entstanden, der das Testen von BPEL-Kompositionen in isolation ermöglicht.
 
 \subsection{BPELUnit Framework}
-BPELUnit für wiederholbare white-box automatisierbare BPEL Kompositionen Testen.  
-  BPELUnit richtet sich primär an die Entwickler, die das Testen und Programmieren während des Entwicklungsprozesses abwechseln machen. Also bietet das  Framework schnelles Testen: Erzeugen und Ausführen sind einfach und schnell.  Unit Testen ist das Testen von Komponenten in der Isolation. BPELUnit erreicht Isolation des Prozesses durch spezielle Implementierungen ersetzt die Verwendung von Mocks, die die Partner des Prozesses ersetzte
- \begin{figure}[htbp]
-	\centering
-		\includegraphics[width=0.75\textwidth]{bilder/bpelProzess2.png}
-		\caption{Test Harness}
-	\label{fig:loggingservice}
-\end{figure} 
-
+BPELUnit ist ein Framework zum Testen von BPEL-Kompositionen in Isolation. Es ermöglicht wiederholbare white-box-Tests zu erstellen, zu speichern und auszuführen. 
+Das Framework richtet sich primär an die Entwickler, die das Testen und Programmieren während des Entwicklungsprozesses abwechseln machen. 
+Dementsprechend bietet das  Framework eine schnelle und einfache Möglichkeit, die erstellten Tests immer wieder auszuführen und Ergebnisse auszuwerten.
 Der Kern ist unabhängig von der Präsentationsschicht implementiert und bietet eine Schnittstelle für die Implementierung der Cliens an. Drei Clients gehören gehören zum Framework:
 \begin{itemize}
-	\item command line
-	\item ant
-	\item Eclipse plug-in mit integrierter Darstellung der Ergebnissen und einem Editor für die Erstellung der Tests 
+	\item command line 
+	\item ant 
+		\item Eclipse plugin 
 \end{itemize}
+ Bei den ersten beiden Clients erfolgt die Konfiguration über XML-Dokumente, die im Konfigurationsverzechnis (\textit{conf}) der BPELUnit-Installation abgelegt sind. Eclipse plugin ermöglicht neben der graphischen Darstellung des Ergebnisses auch komfortable Erstellung der Tests mit Hilfe eines Editors.
  
-Unterschiedliche BPEL Engines werden durch das Framework unterstützt und weitere können durch Erstellen entsprechender Adapter integriert werden.
-  
-  
-Als Seiteneffekt die Tests sind sind normalerweise schneller ausgeführt, weil Web Services Simulation schneller als reale Services ist.
-\textbf{BPELUnit-Architektur}.
- Das Framework basiert auf einer Schichtarchitektur, die in der Abbildung \ref{fig:schichtarchitektur} dargestellt. 
+ Das Framework unterstützt \textit{ActiveBPEL Engine} und \textit{Oracle BPEL Process Manager (Server)}. Weitere Engines können durch implementieren entsprechenden Adapter integriert werden.
+
+BPELUnit isoliert den zu testenden Prozess, indem es die Partner des Prozesses durch Mock's ersetzt, die diese Partner simulieren. Dadurch können Abhängigkeiten von externen Services aufgelöst werden. Schnellere Tests ist der angenehme Nebeneffekt dieser Vorgehensweise, denn die Simulationen der Web Services meist schneller als reale Implementierungen sind. 
+
+\textbf{BPELUnit-Architektur}. Das Framework basiert auf einer Schichtarchitektur, die in der Abbildung \ref{fig:schichtarchitektur} dargestellt ist. 
  Der erste von unten Schicht ist für die Testspezifikation zuständig und legt fest, wie die Testdaten und das Verhalten der Partner definiert werden. Die Tests werden in den Test Suiten organisiert, wofür die \textit{Test Organization}-Schicht verantwortlich ist. Die Ausführung der Tests wird in der dritten Schicht \textit{Test Execution} realisiert. \textit{Test Results}-Schicht sorgt für die Sammlung der Daten und Statistiken  während der Tests.  Im folgenden werden die einzelnen Schichten etwas näher erläutert.
  \begin{figure}[htbp]
 	\centering
@@ -47,7 +37,7 @@ Als Seiteneffekt die Tests sind sind normalerweise schneller ausgeführt, weil We
  
  \textbf{Testspezifikation}.
  Ein BPEL-Prozess hat einen Client und beliebige Anzahl von Partner. Die Partner bzw. die Web Services laufen parallel ab und interagieren dabei mit dem BPEL-Prozess. 
-Das Verhalten der Partner während der Tests wird in den Testcases definiert. Zu diesem Zweck sieht jeder Testcase so genannten \textit{Tracks} vor: einen \textit{Client-Track} und beliebig viele \textsl{Partner-Tracks}. Die Tracks definieren die Interaktionen der jeweiligen Partner mit dem BPEL-Prozess anhand von Sequenzen der atomaren Interaktionen (Aktivitäten).
+Das Verhalten der Partner (Mock's) während der Tests wird in den Testcases definiert. Zu diesem Zweck werden für jeden Testfall so genannten \textit{Tracks} definiert: einen \textit{Client-Track} und beliebig viele \textsl{Partner-Tracks}. Die Tracks legen die Interaktionen der jeweiligen Partner mit dem BPEL-Prozess anhand von Sequenzen der atomaren Interaktionen (Aktivitäten) fest..
 Dabei werden folgende Interaktionsmuster unterstützt: 
 \begin{itemize}
 	\item \textit{one way}-Interaktion: \textit{receive} oder \textit{reply},
@@ -55,26 +45,36 @@ Dabei werden folgende Interaktionsmuster unterstützt:
 	\item asynchrone \textit{two way}-Interaktion: \textit{receive-reply} und \textit{reply-receive}.
 \end{itemize}
 
+
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.8\textwidth]{bilder/TestcaseSequence.pdf}
-		\caption{Schichtarchitektur des BPELUnit Frameworks}
-	\label{fig:schichtarchitektur}
+		\caption{Sequenzen in einem Testfall}
+	\label{fig:sequenzen}
 \end{figure}
 
+Die Abbildung \ref{fig:sequenzen} zeigt das Zusammenspiel der Sequenzen eines Testfalls.
 
- Die Daten, die bei der Interaktion mit BPEL-Prozess verschickt werden, sind in XML spezifiziert. Es können WSDL-Nachrichten und sowohl einfache Datentypen als auch Elementen der XML Schema verwendet werden. Die Daten, die der BPEL-Prozess verschickt, können auf die Korrektheit überprüft werden  
-Für die Auswahl der relevanten Daten wird XPath eingesetzt. Mittels Daten, die an BPEL-Prozess geschickt werden, können bestimmte Zweige des Prozesses werden.
+Durch Daten, die an den BPEL-Prozess verschickt werden, kann der Prozess gesteuert und bestimmte Zweige des Kontrollflusses stimuliert werden. Das Kenntnis der inneren Struktur ist vorausgesetzt (white-box-Test).
+ Die Daten, die bei der Interaktion mit BPEL-Prozess verschickt werden, sind in XML spezifiziert. Es können WSDL-Nachrichten und sowohl einfache Datentypen als auch Elementen der XML Schema verwendet werden. Die Daten, die der BPEL-Prozess verschickt, können auf die Korrektheit überprüft werden. 
+Für die Auswahl der relevanten Daten wird XPath verwendet. 
 
 Mit der Fähigkeit des Frameworks, die SOAP Faults zu  empfangen und zu senden, steht dem Tester die Möglichkeit zur Verfügung, die Fault und Compensation Handler des BPEL-Prozesses zu testen.  
  
  
 \textbf{Testorganisation}.  
-Die einzelnen Testfälle werden wie in den konventionellen Programmiersprachen in einer suite organisiert. Suite referenziert alle für den Test notwendigen Elemente: zu testende BPEL-Komposition, WSDL Beschreibungen, XML-Schemata usw. Außerdem definiert die Suite für alle enthaltenen Testcases eine globale Testumgebung mit einer setup und shutdown-Routine, die für das Deployment und Undeployment der Partner zuständig ist. 
+Die einzelnen Testfälle werden wie in den konventionellen Programmiersprachen in einer suite organisiert. Suite referenziert alle für den Test notwendigen Elemente: zu testende BPEL-Komposition, WSDL Beschreibungen, XML-Schemata usw. Außerdem definiert die Suite für alle enthaltenen Testcases eine globale Testumgebung mit einer setup und shutdown-Routine, die für das Deployment und Undeployment des Prozesses zuständig ist. 
 
-\textbf{Ausführung der Tests}. Zum Testen muss der BPEL-Prozess in einer Testumgebung ausgeführt werden, die die Input- und Output-Daten des BPEL-Prozesses entsprechend der Testspezifikation behandelt. \textit{Real-life}-Testen heißt der Ansatz, der bei BPELUnit Framework dafür verwendet wird. Dabei wird der zu testende BPEL-Prozess in eine BPEL-engine deployt und als Web Service aufgerufen. Die Partner-Web Services müssen dabei durch Mocks ersetzt werden, die das Verhalten der normalen Web Services simulieren, d.h., Web Service-Aufrufe empfangen und/oder selbst absetzen.   Beim Deployen des BPEL-Prozesses müssen alle URIs der Partner-Web Services durch die URIs der Mocks ersetzt werden. 
+\textbf{Ausführung der Tests}. Zum Testen muss der BPEL-Prozess in einer Testumgebung ausgeführt werden, die die Input- und Output-Daten des BPEL-Prozesses entsprechend der Testspezifikation behandelt. \textit{Real-life}-Testen heißt der Ansatz, der bei BPELUnit Framework dafür verwendet wird. Dabei wird der zu testende BPEL-Prozess in eine BPEL-engine deployt und als Web Service aufgerufen. Die Partner-Web Services müssen dabei durch Mocks ersetzt werden, die das Verhalten der Web Services simulieren, d.h., Web Service-Aufrufe empfangen und/oder selbst absetzen.   Beim Deployen des BPEL-Prozesses müssen alle URIs der Partner-Web Services durch die URIs der Mocks ersetzt werden. 
 
-Die Testumgebung ist neben der Simulation der Partner auch für die Kommunikation mit dem BPEL-Prozess verantwortlich, die über SOAP-Nachrichten statfinden. Zu diesem Zweck simuliert BPELUnit den kompletten Web Service Stack und kommt mit allen wichtigen SOAP-Konstrukten zu recht. Das Framework erledigt sowohl das Verpacken der Daten in SOAP-Nachrichten als auch dekodieren der empfangenen SOAP-Nachrichten (siehe \ref{fig:bpelmiddleware}) und übernimmt damit dem Tester viel Arbeit.
+ \begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.75\textwidth]{bilder/BPLEUnitTestHarness.png}
+		\caption{Test Harness}
+	\label{fig:loggingservice}
+\end{figure} 
+
+Die Testumgebung ist neben der Simulation der Partner auch für die Kommunikation mit dem BPEL-Prozess verantwortlich, die über SOAP-Nachrichten statfinden. Zu diesem Zweck simuliert BPELUnit den kompletten Web Service Stack und kommt mit allen wichtigen SOAP-Konstrukten zu recht. Das Framework erledigt sowohl das Verpacken der Daten in SOAP-Nachrichten als auch dekodieren der empfangenen SOAP-Nachrichten (Abbildung \ref{fig:bpelmiddleware}) und übernimmt damit dem Tester viel Arbeit.
   
   
  \begin{figure}[htbp]
@@ -85,7 +85,7 @@ Die Testumgebung ist neben der Simulation der Partner auch für die Kommunikation
 \end{figure}
 
 
-Für das Deployment eines BPEL-Prozesses sind bei den meisten BPEL-Engines anbieterspezifische \textit{deployment descriptoren} erforderlich, die nicht standardisiert sind. Das Deployen des BPEL-Prozesses ist, wie bereits erläutert notwendig, und wird bei BPELUnit durch entsprechende anbieterspezifischen Engine-Adapter unterstützt.
+Für das Deployment eines BPEL-Prozesses sind anbieterspezifische \textit{deployment descriptoren} erforderlich, die nicht standardisiert sind. Das Deployen des BPEL-Prozesses ist, wie bereits erläutert notwendig, und wird durch BPELUnit automatisch ausgeführt. Dazu muss für die jeweilige Engine ein entsprechendes Adatpter implementiert werden.
 
 
 \textbf{Testergebnisse}.
@@ -96,7 +96,7 @@ werden zweiTypen von Fehlern unterschieden:
 	\item Fehler auf der Kommunikationsebene - Problem mit dem Web Service Stack.
 \end{itemize}
 
-Genau an dieser Stelle knüpft diese Arbeit an. Zusätzlich Informationen über Ausführung
+Eine wichtige Information beim Testen ist die erreichte Testabdeckung. Eine entsprechende Erweiterung wird im praktischen Abschnitt dieser Arbeit vorgenommen.
 
  
   

@@ -53,12 +53,13 @@ public class Instrumenter {
 	 * Startet die Instrumentierung der BPEL-Datei.
 	 * 
 	 * @param document
-	 * @param metricManager 
+	 * @param metricManager
 	 * @param metrics
 	 * @throws BpelException
 	 * @throws ConfigurationException
 	 */
-	public Document insertAnnotations(Document document, MetricsManager metricManager) throws BpelException {
+	public Document insertAnnotations(Document document,
+			MetricsManager metricManager) throws BpelException {
 		Element process_element = document.getRootElement();
 		checkVersion(process_element);
 		initializeBPELTools(process_element);
@@ -69,24 +70,6 @@ public class Instrumenter {
 		logger.info("Instrumentation sucessfully completed.");
 		return document;
 	}
-
-	// private List<Element> getActivitiesForMetric(Element process_element,
-	// IMetric metric) {
-	// List<Element> list = null;
-	// if (metric.getName().equals(ActivityMetric.METRIC_NAME)) {
-	//
-	// list = getBasisActivities(process_element, metric.getConfigInfo());
-	// } else if (metric.getName().equals(BranchMetric.METRIC_NAME)) {
-	// list = getStructuredActivities(process_element);
-	// } else if (metric.getName().equals(LinkMetric.METRIC_NAME)) {
-	// list = getLinks(process_element);
-	// } else if (metric.getName().equals(FaultMetric.METRIC_NAME)) {
-	// list = getFaultHandlers(process_element);
-	// } else if (metric.getName().equals(CompensationMetric.METRIC_NAME)) {
-	// list = getCompensationHandlers(process_element);
-	// }
-	// return list;
-	// }
 
 	private void saveOriginalBPELElements(List<IMetric> metrics,
 			Element process_element) {
@@ -122,15 +105,6 @@ public class Instrumenter {
 	private void executeInstrumentation(List<IMetric> metrics)
 			throws BpelException {
 		IMetric metric;
-		// List<Element> activities;
-		// for (Iterator<IMetric> i = metrics.iterator(); i.hasNext();) {
-		// metric = i.next();
-		// activities = getActivitiesForMetric(process_element, metric);
-		// if (activities != null) {
-		// metric.getHandler().insertMarkersForMetric(activities);
-		// }
-		// }
-
 		for (Iterator<IMetric> i = metrics.iterator(); i.hasNext();) {
 			metric = i.next();
 			metric.insertMarkers();
@@ -144,8 +118,6 @@ public class Instrumenter {
 	}
 
 	private void handleCoverageLabelsInElement(Element element, String variable) {
-		// logger.info("CoverageTool:MetricHandler.Es wird in "+
-		// element.getName() + " Aktivität Invokes eingefügt");
 		List<Element> childElements = new ArrayList<Element>();
 		List children = element.getContent(new ContentFilter(
 				ContentFilter.ELEMENT));
@@ -156,14 +128,12 @@ public class Instrumenter {
 		boolean isFlow = element.getName().equals(
 				StructuredActivities.FLOW_ACTIVITY);
 		for (int i = 0; i < childElements.size(); i++) {
-			if (isFlow) {
+			if (isFlow)
 				handleCoverageLabelsInElement(childElements.get(i),
 						createVariableName());
-			} else {
+			else
 				handleCoverageLabelsInElement(childElements.get(i), null);
-			}
 		}
-
 	}
 
 	private void replaceCoverageLabelsWithReportInvokes(Element element,
@@ -180,9 +150,6 @@ public class Instrumenter {
 			index = element.indexOf(comment);
 			commentText = comment.getText();
 			if (isCoverageLabel(commentText)) {
-
-				// logger.info("CoverageTool:Metrichandler:CoverageLabel
-				// gefunden."+ commentText);
 				if (indexOfLastMarker - 1 == index) {
 					marker = marker
 							+ getLabel(commentText, COVERAGE_LABEL_IDENTIFIER)
@@ -203,15 +170,11 @@ public class Instrumenter {
 						variable);
 			}
 		}
-		// logger.info("CoverageTool:Metrichandler. In " + element.getName()+ "
-		// alle Invokes eingefügt");
 	}
 
 	private void insertInvokeForLabels(String marker, int index,
 			Element element, String variable) {
 
-		// logger.info("CoverageTool:Metrichandler:Invoke für label " + marker+
-		// " wird eingefügt.");
 		try {
 			if (variable == null) {
 				variable = assignVariable;
@@ -222,9 +185,6 @@ public class Instrumenter {
 					.createInvokeElementForLog(variable);
 			element.addContent(index, invoke);
 			element.addContent(index, assign);
-
-			// logger.info("CoverageTool:Metrichandler:Invoke für label " +
-			// marker+ " wurde eingefügt.");
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}

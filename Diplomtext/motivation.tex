@@ -1,20 +1,20 @@
-In der heute sehr konkurenzbetonten Weltwirtschaft unterliegen die Geschäftsprozesse einer stetigen Veränderung: Unernehmen müssen ständig beobachten, wie sich die Marktbedingungen ändern, und ihre Strategie ebtsprechend anpassen, um diese Veränderungen wiederzuspiegeln. Eine Schlüsselanforderung für eine moderne Enterprise IT ist also, dass Veränderungen in den IT-Systemen des Unternehmens schnell und effizient berücksichtigt werden können. Wichtige Motivation für die Einrichtung der SOA ist das Bestreben, die Agilität der Systemen der IT zu steigern. 
-Unternehmen sehen sich heute mit sehr dynamischen M¨arkten konfrontiert und sind oft
+Unternehmen sehen sich heute mit sehr dynamischen Märkten konfrontiert und sind 
 einem starken internationalen Wettbewerb ausgesetzt. Zu den Anforderungen solcher
-M¨arkte geh¨oren oft flexible Gesch¨aftsprozesse. Die notwendige Anpassungsf¨ahigkeit der
-Unternehmen und deren Gesch¨aftsprozessen h¨angt meistens direkt von der vorhandenen
-IT-Infrastruktur ab. Um diesen Anforderungen gerecht zu werden muss die Softwarearchitektur
-daf¨ur sorgen, dass IT-Systemen zum einen an den Gesch¨aftsprozessen ausgerichtet
-sind, zum anderen sehr einfach bei Ver¨anderungen angepasst werden k¨onnen.
-Viele setzen dabei auf SOA und Web Service Standards . 
+Märkte gehören oft flexible Geschäftsprozesse. Die notwendige Anpassungsfähigkeit der
+Unternehmen und deren Geschäftsprozessen hängt meistens direkt von der vorhandenen
+IT-Infrastruktur ab. Um diesen Anforderungen gerecht zu werden, muss die Softwarearchitektur
+dafür sorgen, dass IT-Systemen zum einen an den Geschäftsprozessen ausgerichtet
+sind, zum anderen sehr einfach bei Veränderungen angepasst werden können. 
+Eine mögliche Lösung, die zur Zeit von vielen bevorzugt wird, sind Serviceorientierte Architektureen und Web Service Standards. 
 
-Die Funktionen werden in Services gekapselt, die in Kompositionen zu vollautomatischen Geschäftsprozessen verknüpft werden. Für die Realisierung der Kompositionen steht mit WS-BPEL ein OASIS-Standard zu Verfügung, der durch Unterstützung vieler wichtiger Softwarehersteller auf dem Weg zu einem Industriestandard ist. Damit übernimmt BPEL  eine Schlüsselfunktion innerhalb der Konzeption einer serviceorientierten Architektur.
+Die Funktionen werden bei solchen Architekturen in Services gekapselt, die in Kompositionen zu vollautomatischen Geschäftsprozessen verknüpft werden. Für die Realisierung der Kompositionen steht mit WS-BPEL ein OASIS-Standard zu Verfügung, der durch Unterstützung vieler wichtiger Softwarehersteller auf dem Weg zu einem Industriestandard ist. Damit übernimmt BPEL  eine Schlüsselfunktion innerhalb der Konzeption einer serviceorientierten Architektur.
 
-Die entscheidende Rolle der BPEL-Prozessen innerhalb eines Unternehmens erfordert hohe Qualitätssicherung. Aufgrund der relativen Neuheit des ganzen Technologiebereichs gibt es in diesem Bereich noch wenige Erfahrungen. Viele Methoden, die sich in der konventionellen Softwareentwicklung bewährt haben,  sind noch nicht auf SOA übertragen. Während einige Konzepte und Lösungen für das systematische Testen von BPEL-Kompositionen bereits erarbeitet wurden, gibt es noch keine Lösungen zur Erfassung der Testabdeckung. 
+Die entscheidende Rolle der BPEL-Prozessen innerhalb eines Unternehmens erfordert hohe Qualitätssicherung. Aufgrund der relativen Neuheit des ganzen Technologiebereichs gibt es auf diesem Gebiet noch wenige Erfahrungen.
+Obwohl einige Konzepte und Lösungen für das systematische Testen von BPEL-Kompositionen bereits erarbeitet und umgesetzt wurden, wurden viele Methoden, die sich in der konventionellen Softwareentwicklung bewährt haben, noch nicht für BPEL angepasst. Die Testabdeckung, die im Zusammenhang mit Qualitätssicherung der Software eine sehr wichtige Rolle spielt, zählt zu den Themen, die im BPEL-Kontext noch nicht behandelt wurde. 
 
-Unter Testabdeckung versteht man Metriken für das Verhältnis zwischen zu testenden und tatsächlich getesteten Elementen des Prüflings (in diesem Fall eine BPEL-Komposition). Diese Metriken werden  oft als Indikatoren für die Qualität und Fortschritt des Tests verwendet. 
+Unter Testabdeckung versteht man Metriken für das Verhältnis zwischen zu testenden und tatsächlich getesteten Elementen des Prüflings (in diesem Fall eine BPEL-Komposition). Diese Metriken werden  oft als Indikatoren für die Qualität und Fortschritt der Tests verwendet. Es fehlen für BPEL bislang sowohl Definitionen der Metriken als auch Verfahren zur Ermittlung der Testabdeckung. Diese Masterarbeit beschäftigt sich mit genau diesen Themen.
 
-In dieser Arbeit werden die Testabdeckungsmetriken für BPEL-Prozesse formal definiert. Dabei werden die bekannten Metriken (Anweisungs- und Zweigabdeckung) auf BPEL-Prozessen übertragen und neue BPEL-spezifischen Metriken definiert, die die wichtigen Konzepten der Sprache abdecken. Es wird ein Konzept für die Messung der Testabdeckung erarbeitet und als Erweiterung des BPELUnit Frameworks implementiert.
+Aus praktischer Sicht ist die Integration der Testabdeckungsmetriken in ein Test-Werkzeug besonders sinnvoll. Mit dem schnellen Zugriff auf die erreichten Testabdeckungwerte ist ständige und unmittelbare Kontrolle der Testqualität möglich. Im praktischen Teil dieser Arbeit wird das BPELUnit Framework, das das Testen von BPEL-Kompositionen unterstützt, erweitert. Als Ergebnis eines Tests soll das Framework neben der Aussage, ob der Test erfolgreich war oder nicht, auch die erreichte Testabdeckung liefern. 
 
 
- Allerdings bietet uns das neue Paradigma der Service Orientierten Architektur (SOA) zusammen mit den aktuellen, technologischen Fortschritten aus dem Umfeld der Web Services mittlerweile schon als sehr gut zu bezeichnende Unterstützung auf dem Weg zum flexiblen Echtzeitunternehmen. 
+

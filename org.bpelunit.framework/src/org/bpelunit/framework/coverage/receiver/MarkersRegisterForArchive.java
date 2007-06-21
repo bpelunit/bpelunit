@@ -13,8 +13,6 @@ import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 
 public class MarkersRegisterForArchive {
 
-	private static MarkersRegisterForArchive instance = null;
-
 	private Hashtable<String, MarkerState> allCoverageLabels;
 
 	private List<MarkersRegistryForBPELFile> bpelFiles;
@@ -26,15 +24,6 @@ public class MarkersRegisterForArchive {
 	private MarkersRegistryForBPELFile currentFileRegestry = null;
 
 	private MetricsManager metricManager;
-
-	// public static LabelsRegistry getInstance() {
-	// if (instance == null){
-	// instance = new LabelsRegistry();
-	//
-	// logger=Logger.getLogger(instance.getClass());
-	// }
-	// return instance;
-	// }
 
 	public MarkersRegisterForArchive(MetricsManager metricManager) {
 		this.metricManager = metricManager;
@@ -96,16 +85,6 @@ public class MarkersRegisterForArchive {
 		currentFileRegestry = registry4File;
 	}
 
-	// public void initialize() {
-	// allCoverageLabels = new Hashtable<String, LabelStatus>();
-	// bpelFiles = new ArrayList<LabelsRegistryForBPELFile>();
-	// currentFileRegestry=null;
-	// }
-
-	//
-	public void destroy() {
-		instance = null;
-	}
 
 	public void addInfo(String info) {
 		infos.add(info);
