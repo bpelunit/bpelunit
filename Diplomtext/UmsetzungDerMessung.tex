@@ -133,10 +133,10 @@ Es gibt zwei Web Services \textit{Kundenidentifikation} und \textit{Externe Best
 %\end{figure}
 %\vspace{1cm}
 
-Die Erfassung des Status jedes relevanten Links ist für die Ermittlung der Linkabdeckung notwendig. Anhängig von dem Wert der \textit{transition condition} muss während der Ausführung die Marke an den \textit{Markers Receiver} verschickt werden, die auf den Wert der \textit{transition condition} zurückschließen lässt.  Als mögliche Lösungen werden drei Ansätze mit ihren Vor- und Nachteilen vorgestellt und anschließend eine ausgewählt.
+Die Erfassung des Status jedes relevanten Links ist für die Ermittlung der Linkabdeckung notwendig. Anhängig von dem Wert der \textit{transition condition} muss während der Ausführung die Marke an den \textit{Coverage Logging Service} verschickt werden, die auf den Wert der \textit{transition condition} zurückschließen lässt.  Als mögliche Lösungen werden drei Ansätze mit ihren Vor- und Nachteilen vorgestellt und anschließend eine ausgewählt.
 
 \underline{Variante 1.}\\
-Zwei zusätzliche Links werden definiert (\textit{LinkACopy} und \textit{LinkACopyNegiert}). Dabei übernimmt der \textit{LinkACopyNegiert} die negierte  \textit{transition condition} des Originallinks (\textit{customerType}=\textit{not('major')}) und  der \textit{LinkACopy} die unveränderte (\textit{customerType}=\textit{'major'}). Die Logging-Anweisungen werden bei diesem Ansatz direkt in der flow-Umgebung platziert. 
+Zwei zusätzliche Links werden definiert (\textit{LinkACopy} und \textit{LinkACopyNeg}). Dabei übernimmt der \textit{LinkACopyNeg} die negierte  \textit{transition condition} des Originallinks (\textit{customerType}=\textit{not('major')}) und  der \textit{LinkACopy} die unveränderte (\textit{customerType}=\textit{'major'}). Die Logging-Anweisungen werden bei diesem Ansatz direkt in der flow-Umgebung platziert. 
   Dadurch sind sie bereit für die Ausführung, sobald der Kontrollfluss die flow-Aktivität erreicht. Die source- und target-Aktivitäten des Originallinks können dabei beliebig tief in strukturierte Aktivitäten eingebettet sein. Durch die am Anfang definierten Links, wird die \textit{source}-Aktivität des Originallinks mit den Logging-Anweisungen verlinkt. Für eine Logging-Anweisung ein Link. Sobald der Status der Links bekannt ist, wird eine Logging-Anweisung ausgeführt.
 
 Die \textit{Default-join condition} der Logging-Aktivitäten (\textit{or}-Verknüpfung der Status aller eingehenden Links) und komplementären \textit{transition conditions} der beiden neuen Links garantieren, dass nur eine Loggingaktivität gleichzeitig ausgeführt werden kann.
@@ -167,7 +167,7 @@ Die Variante ermöglicht den Linkstatus unabhängig von dem Aufruf des Web Service
 Allerdings funktioniert diese Vorgehensweise nicht in allen Situationen. Die Bearbeitung mehrerer Aufträge von verschiedenen Kunden kann in BPEL mittels einer Schleife umgesetzt werden. Die invoke-Aktivität \textit{Kundenidentifikation} und die komplette if-Aktivität können in die Schleife eingebettet werden, um die Bestellungen auf die gleiche Weise nacheinander zu bearbeiten. In dieser Situation würde die Instrumentierung der BPEL-Datei nach dem vorgestelltem Verfahren die Syntaxregeln der BPEL-Sprache verletzen: ein Link darf die Grenzen einer Schleife nicht schneiden (\textit{boundary crossing}-Restriktionen aus Abschnitt \ref{}).  
 
 \underline{Variante 2.}\\
-Ziel dieses Ansatzes ist, die \textit{boundary-crossing}-Restriktionen einzuhalten. Die Konstruktion der Links \textit{LinkACopy} und \textit{LinkACopyNegiert} erfolgt auf dieselbe Weise.
+Ziel dieses Ansatzes ist, die \textit{boundary-crossing}-Restriktionen einzuhalten. Die Konstruktion der Links \textit{LinkACopy} und \textit{LinkACopyNeg} erfolgt auf dieselbe Weise.
 Bei dieser Variante wird die target-Aktivität des Links (invoke-Aktivität \textit{Externe Bestellung}) mit den beiden Loggingaktivitäten in eine flow-Aktivität eingeschlossen.
 %\begin{figure}[htbp]
 %	\centering
@@ -197,7 +197,7 @@ Setzt man eine syntaktisch gültige Ausgangs-BPEL-Datei voraus, so werden keine b
 Wird die Bedingung \textit{holding}>\textit{orderSize} zu false ausgewertet, so können die Loggingaktivitäten nicht ausgeführt werden. Der Linkstatus kann in dieser Situation nicht erreicht werden.
 \FloatBarrier
 \underline{Variante3.}\\
-Bei dieser Variante wird die source-Aktivität des Links (\textit{Kundenidentifikation}) durch eine \textit{flow}-Umgebung umschlossen. Einerseits sorgt die Platzierung der Logging-Anweisungen in derselben \textit{flow}-Umgebung für die Einhaltung der \textit{boundary-crossing}-Restriktionen. Andererseits kann das Logging auch stattfinden, wenn die Zielaktivität nicht ausgeführt wird. Da der Status der Links nach der Ausführung der Quellaktivität gesetzt wird, sind die Logging-Aktivitäten zu diesem Zeitpunkt startbereit und können gleich die entsprechenden Marken an den Markers Receiver Service verschicken.
+Bei dieser Variante wird die source-Aktivität des Links (\textit{Kundenidentifikation}) durch eine \textit{flow}-Umgebung umschlossen. Einerseits sorgt die Platzierung der Logging-Aktivität in derselben \textit{flow}-Umgebung für die Einhaltung der \textit{boundary-crossing}-Restriktionen. Andererseits kann das Logging auch stattfinden, wenn die Zielaktivität nicht ausgeführt wird. Da der Status der Links nach der Ausführung der Quellaktivität gesetzt wird, sind die Logging-Aktivitäten zu diesem Zeitpunkt startbereit und können gleich die entsprechenden Marken an den \textit{Coverage Logging Service} verschicken.
 %\begin{figure}[htbp]
 %	\centering
 %		\includegraphics{bilder/LinksAnsatz3.png}

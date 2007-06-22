@@ -1,14 +1,14 @@
- In diesem Abschnitt werden die Metriken für die Messung der Testabdeckung in BPEL definiert. Dabei werden die Statement- und Zweigabdeckung (siehe Abschnitt \ref{Abdeckungsmetriken}) an BPEL-Kontext angepasst und neue BPEL-spezifische Metriken eingeführt.  
+ In diesem Abschnitt werden die Metriken für die Messung der Testabdeckung in BPEL definiert. Dabei werden die Statement- und Zweigabdeckung  an BPEL-Kontext angepasst und neue BPEL-spezifische Metriken eingeführt.  
  Die Metriken dienen als Mittel für die Bestimmung der Qualität und des Fortschritts der Tests. Dabei bezieht sich jede Metrik auf bestimmte Aspekte des Kontrollflusses.
  
- Bei allen Metriken wurde darauf geachtet, dass die 100\% Abdeckung beim Testen erreicht werden kann. Zwischen dem ermittletem Wert einer Metrik und der Testqualität gibt es einen einfachen Zusammenhang; je größer der Wert ist, desto höher ist die Qualität der Tests im Bezug auf Aspekte des Kontrollflusses, die die Metrik festlegt.
+ Bei allen Metriken wurde darauf geachtet, dass die 100\% Abdeckung beim Testen erreicht werden kann. Zwischen dem ermitteltem Wert einer Metrik und der Testqualität gibt es einen einfachen Zusammenhang; je größer der Wert ist, desto höher ist die Qualität der Tests im Bezug auf Aspekte des Kontrollflusses, die die Metrik festlegt.
 
   \subsection{Aktivitätabdeckung}
-  Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist, verschiedene Dienste (Web SerServices) zu einer Gesamtanwendung zu verknüpfen. Die Kommunikation mit den Diensten wird durch Basisaktivitäten realisiert. Die Basisaktivitäten sind die elementaren Aktivitäten eines Prozesses, die keine weiteren Aktivitäten enthalten. 
+  Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist, verschiedene Dienste (Web Services) zu einer Gesamtanwendung zu verknüpfen. Die Kommunikation mit den Diensten wird durch Basisaktivitäten realisiert. Die Basisaktivitäten sind die elementaren Aktivitäten eines Prozesses, die keine weiteren Aktivitäten enthalten. 
  
  Bei der Statementabdeckung geht es darum, festzustellen, wie viele der
 Anweisungen beim Testen ausgeführt wurden. Da die Basisaktivitäten der WS-BPEL
- den Anweisungen der anderen Programmiersprachen ent\-spre\-chen, kann die Anweisungsabdeckung als Ausgangspunkt für die Definition der Aktivitätabdeckung dienen.
+ den Anweisungen der anderen Programmiersprachen ent\-spre\-chen, kann die Anweisungsabdeckung als Grundlage für die Definition der Aktivitätabdeckung dienen.
  
  Insbesondere ist diese Statistik im Bezug auf einzelne Aktivitäten interessant. So ist die Information, ob alle \textit{Invokes} (Web Service-Aufrufe) beim Testen ausgeführt wurden, sehr wichtig, um die erste Einschätzung über die Testqualität zu machen. In dieser Hinsicht ist die Definition der Abdeckungsmetriken für die einzelnen Basisaktivitäten sinnvoll.
 \begin{Def}
@@ -17,7 +17,7 @@ Anweisungen beim Testen ausgeführt wurden. Da die Basisaktivitäten der WS-BPEL
 	\mathcal{S}_t(\mathcal{W})=\frac{\left| \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}_t\right|},\ \forall t\in \mathcal{T}_\mathcal{B}
 \]
 
-Die gesamte Statementabdeckung bezieht sich auf alle Basisaktivitäten:
+Die gesamte Aktivitätsabdeckung bezieht sich auf alle Basisaktivitäten:
 	\[
 	\mathcal{S}(\mathcal{W})=\frac{\left|\bigcup_{t\in \mathcal{T}_\mathcal{B}} \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}^{basic}\right|}
 \]
@@ -27,7 +27,7 @@ Zu bemerken ist, dass die Basisaktivitäten, die in sämtlichen Handler verwendet 
 
 Es sollte beim Testen mindestens sichergestellt werden, dass alle
 Basisaktivitäten, die die elementaren Aktivitäten eines Prozesses sind, durch
-die Tests abgedeckt sind. Die Aktivitätsabdeckung ist dennoch ein schwaches
+die Tests abgedeckt sind. Die Akti\-vi\-täts\-ab\-de\-ckung ist dennoch ein schwaches
 Kriterium, weil dabei nur die einzelnen Basisaktivitäten betrachtet werden, ohne
 Zusammenhänge zu berücksichtigen.    
 
@@ -45,13 +45,13 @@ durchlaufen wurden und wird wie folgt definiert:
 \end{itemize}
 
 
-Außerdem werden folgende Funktionen eingeführt:
+Außerdem werden zwei weitere Funktionen eingeführt:
+
+ sei $\mathcal{A}_i\subseteq\mathcal{A},\ s\in \mathcal{A}_i,\ t=type_\mathcal{A}(s)$,
 \begin{itemize}
-\item 
-sei $\mathcal{A}_i\subseteq\mathcal{A},\ s\in \mathcal{A}_i,\ t=type_\mathcal{A}(s)$
 	\item
 	$br\_number_{set}(\mathcal{A}_i)=\sum_{s\in\mathcal{A}_i}br\_number_t(s)$
-	berechnet für eine Menge von Aktivitäten, die Zweige in der Kontrollstruktur, die durch diese Aktivität beschrieben werden.
+	berechnet für eine Menge von Aktivitäten, die Zweige in der Kontrollstruktur, die durch diese Aktivität beschrieben werden,
 	\item $br\_number_{set}^{executed}(\mathcal{A}_i)=\sum_{s\in
 	\mathcal{A}_i}br\_number_t(s)$ berechnet für eine Menge von Aktivitäten die Anzahl der Zweige, die beim Testen durchlaufen wurden.
 \end{itemize}
@@ -67,10 +67,10 @@ Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivit
 		\begin{itemize}\itemsep2pt
  			\item
  			$br\_number_{sequence}(s)=\left|children(s)\right|-1+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{sequence}$ 
- 			weil es einen Zweig zu jeder außer der ersten Aktivität gibt.
+ 			weil es einen Zweig zu jeder außer der ersten Aktivität gibt,
  			\item $EX^{s}_{seq}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{sequence}\wedge \exists_{a_k\in children(s)}(a_k<^{s}_{seq}a)\wedge BE((s,b,a))=true \}$
  			\item
- 				$br\_number^{executed}_{sequence}(s)=\left|EX^{s}_{seq}\right|+br\_number^{executed}_{set}(children(s))$\\
+ 				$br\_number^{executed}_{sequence}(s)=\left|EX^{s}_{seq}\right|+br\_number^{executed}_{set}(children(s))$.\\
 		\end{itemize}
 	\item \textbf{If:}
 	\begin{figure}[h!]
@@ -80,11 +80,10 @@ Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivit
 		\begin{itemize}\itemsep2pt
 		 	\item
  		 		$br\_number_{if}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\
-	 			s \in \mathcal{A}_{if}$
+	 			s \in \mathcal{A}_{if}$,
  			\item $EX^{s}_{if}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{if}\wedge
-				BE((s,b,a))=true \}$
- 			\item
-          		$br\_number^{executed}_{if}(s)=\left|EX^{s}_{if}\right|+br\_number^{executed}_{set}(children(s))$
+				BE((s,b,a))=true \}$,
+ 			\item		$br\_number^{executed}_{if}(s)=\left|EX^{s}_{if}\right|+br\_number^{executed}_{set}(children(s))$,
           		
        		\item \emph{Bemerkung:} Ein impliziter else-Zweig wird nach der formalen Definition von $If$-Aktivität automatisch berücksichtigt.\\
 		\end{itemize}
@@ -94,33 +93,34 @@ Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivit
 		\includegraphics[width=0.32\textwidth]{bilder/pickGraph.png}
 \end{figure}
 	\begin{itemize}\itemsep2pt
-	\item $br\_number_{pick}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{pick}$
-	\item $EX^{s}_{pick}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{pick}\wedge BE((s,b,a))=true \}$
-		\item $br\_number^{executed}_{pick}(s)=\left|EX^{s}_{pick}\right|+br\_number^{executed}_{set}(children(s))$\\
+	\item $br\_number_{pick}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{pick}$,
+	\item $EX^{s}_{pick}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{pick}\wedge BE((s,b,a))=true \}$,
+		\item $br\_number^{executed}_{pick}(s)=\left|EX^{s}_{pick}\right|+br\_number^{executed}_{set}(children(s))$.\\
 \end{itemize}
 \item \textbf{Loops:} 
 	\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.7\textwidth]{bilder/loopsGraph.png}
 \end{figure}
-($\forall t\in\{while,\ repeatUntil,\ forEach\footnote{
-Das Besondere an dieser Aktivität ist die Fähigkeit, den enthaltenen Scope nicht mehrmals hintereinander sondern parallel auszuführen (gesteuert mit Attribute \textit{parallel}). Diese Option bietet eine Möglichkeit die Abarbeitung des Prozesses zu beschleunigen. Diese Optimierungsmöglichkeit wird bei der Definition der Zweigabdeckung nicht berücksichtigt.}\}$)
+($\forall t\in\{while,\ repeatUntil,\ forEach\}$)
 	\begin{itemize}\itemsep2pt
-	\item $br\_number_{t}(s)=2+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{t}$
-	\item $EX^{s}_{\mathcal{HR}}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{t}\wedge BE((s,b,a))=true \}$
-	\item $EX^{s}_{\mathcal{HBR}}=\{(a,b,s)\in \mathcal{HBR}|s \in \mathcal{A}_{t}\wedge BE((s,b,a))=true \}$
-	\item $EX^{s}_{t}=EX^{s}_{\mathcal{HR}}+EX^{s}_{\mathcal{HBR}}$
-		\item $br\_number^{executed}_{t}(s)=\left|EX^{s}_{t}\right|+br\_number^{executed}_{set}(children(s))$\\
+	\item $br\_number_{t}(s)=2+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{t}$,
+	\item $EX^{s}_{\mathcal{HR}}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{t}\wedge BE((s,b,a))=true \}$,
+	\item $EX^{s}_{\mathcal{HBR}}=\{(a,b,s)\in \mathcal{HBR}|s \in \mathcal{A}_{t}\wedge BE((s,b,a))=true \}$,
+	\item $EX^{s}_{t}=EX^{s}_{\mathcal{HR}}+EX^{s}_{\mathcal{HBR}}$,
+		\item $br\_number^{executed}_{t}(s)=\left|EX^{s}_{t}\right|+br\_number^{executed}_{set}(children(s))$,\\
+		Bemerkung: Das Besondere an der \textit{forEach}-Aktivität ist die Fähigkeit, den enthaltenen \textit{Scope} nicht mehrmals hintereinander sondern parallel auszuführen (gesteuert mit Attribute \textit{parallel}). Diese Option bietet eine Möglichkeit die Abarbeitung des Prozesses zu beschleunigen. Bei der sequenziellen Ausführung werden zwei Zweige, wie bei \textit{while}-Aktivität abwechseln aktiviert. Bei der parallelen Ausführung der \textit{forEach}-Aktivität sind alle Zweige unterschiedlich. Diese Optimierungsoption (parallele Ausführung) wird bei der Zweigabdeckung nicht berücksichtigt. Der Grund dafür ist, dass die Anzahl der parallelen Zweige erst zur Laufzeit bekannt ist. Damit ist es nicht möglich, die Zweige vor der Ausführungszeit zu identifizieren und zu annotieren.\\
 \end{itemize}
+\newpage
 \item \textbf{Flow:}
 	\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.3\textwidth]{bilder/flowGraph.png}
 \end{figure}
 	\begin{itemize}\itemsep2pt
-	\item $br\_number_{flow}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{flow}$
-	\item $EX^{s}_{flow}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{flow}\wedge BE((s,b,a))=true \}$
-		\item $br\_number^{executed}_{flow}(s)=\left|EX^{s}_{flow}\right|+br\_number^{executed}_{set}(children(s))$\\
+	\item $br\_number_{flow}(s)=\left|children(s)\right|+br\_number_{set}(children(s)),\ s \in \mathcal{A}_{flow}$,
+	\item $EX^{s}_{flow}=\{(s,b,a)\in \mathcal{HR}|s \in \mathcal{A}_{flow}\wedge BE((s,b,a))=true \}$,
+		\item $br\_number^{executed}_{flow}(s)=\left|EX^{s}_{flow}\right|+br\_number^{executed}_{set}(children(s))$.\\
 \end{itemize}
 \item \textbf{Scope:}	
 \begin{figure}[h!]
@@ -128,15 +128,15 @@ Das Besondere an dieser Aktivität ist die Fähigkeit, den enthaltenen Scope nicht
 		\includegraphics[width=0.15\textwidth]{bilder/scopeGraph.png}
 \end{figure}
 	\begin{itemize}\itemsep2pt
-	\item $br\_number_{flow}(s)=br\_number_{set}(children(s)),\ s \in \mathcal{A}_{scope}$
-		\item $br\_number^{executed}_{scope}(s)=br\_number^{executed}_{set}(children(s))$\\
-Bemerkung: alle Zweige innerhalb von Handlern gehen in die Rechnung ein, weil nach Definition von $\mathcal{A}_{scope}$ alle Handler in der Menge $children(scope)$ enthalten sind,
+	\item $br\_number_{flow}(s)=br\_number_{set}(children(s)),\ s \in \mathcal{A}_{scope}$,
+		\item $br\_number^{executed}_{scope}(s)=br\_number^{executed}_{set}(children(s))$,\\
+Bemerkung: alle Zweige innerhalb von Handlern gehen in die Rechnung ein, weil nach Definition von $\mathcal{A}_{scope}$ alle Handler in der Menge $children(scope)$ enthalten sind.\\
 \end{itemize}
 \item \textbf{Basisaktivitäten:}
 	\begin{itemize}\itemsep2pt
-	\item $\forall t\in \mathcal{T}_\mathcal{B}$ 
-	\item $br\_number_{t}(s)=0,\ s \in \mathcal{A}^{basic}$
-	\item $br\_number^{executed}_{t}(s)=0,\ s \in \mathcal{A}^{basic}$
+	\item $\forall t\in \mathcal{T}_\mathcal{B}$, 
+	\item $br\_number_{t}(s)=0,\ s \in \mathcal{A}^{basic}$,
+	\item $br\_number^{executed}_{t}(s)=0,\ s \in \mathcal{A}^{basic}$.
 \end{itemize}
 \end{itemize}
 
@@ -159,20 +159,15 @@ In den nächsten beiden Abschnitten werden die für WS-BPEL spezifischen
 Testabdeckungsmetriken vorgestellt: Link- und Handlerabdeckung. 
 
 \subsection{Linkabdeckung}
-Das Link-Konzept ist in WS-BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{join condition} das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit die Links und deren Verhalten zu testen.  Das Ziel dieser Metrik ist, den Tester dazu zu bewegen, dass jede transition condition während der Tests mindestens einmal auf den Wert \textit{true} und einmal auf \textit{false} gesetzt wird.
+Das Link-Konzept ist in WS-BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{join condition} das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit die Links und deren Verhalten zu testen.  Das Ziel dieser Metrik ist, den Tester dazu zu bewegen, dass jede \textit{transition condition} während der Tests mindestens einmal auf den Wert \textit{true} und einmal auf \textit{false} gesetzt wird.
  
-Für die Definition einer entsprechenden Metrik wird eine Auswertungsfunktion
-definiert). Sei $f$ eine boolsche Funktion (oder ein boolscher Ausdruck),
-$Var(f)$ enthält aussagenlogische Variablen, die in $f$ vorkommen. Sei $F$ die Menge
-der boolschen Funktionen und $B$ die Menge (\textit{true}, \textit{false}), dann ist die Variablenzuordnung von $F$ ist die Abbildung $assign: Var(F)\rightarrow B$, und eine Menge aller möglichen Variablenzuordnungen von $F$ ist $Assign(F)$. Die Auswertungsfunktion ist $eval: F \times Assign(F)\rightarrow B$
-(\cite{Ouyang2005}).
 
 Für die Tests sind nur die Links relevant, deren \textit{transition condition} nicht mit
 einem konstanten Wert belegt sind, sondern mit einem Ausdruck, der erst zur
 Laufzeit ausgewertet werden kann. Es ist dabei wichtig, dass der Ausdruck während der Ausführung
-sowohl zu $true$ als auch zu $false$ ausgewertet wird, um das Verhalten in beiden Fällen zu testen.
+sowohl zu \textit{true} als auch zu \textit{false} ausgewertet wird, um das Verhalten in beiden Fällen zu testen.
 
-Die entsprechende Metrik heißt \textit{Linkabdeckung} ($Link\ Coverage$) und wird wie folgt definiert:
+Die entsprechende Metrik heißt \textit{Linkabdeckung} (\textit{eng. Link Coverage}) und wird wie folgt definiert:
 \begin{itemize}
 	\item $l \in_{\pi 2}\mathcal{LR}$,
 	\item $f=transcon(l)$,
@@ -185,14 +180,14 @@ Die entsprechende Metrik heißt \textit{Linkabdeckung} ($Link\ Coverage$) und wir
 \\\frac{\{\left|l\in_{\pi 2}\mathcal{LR}|Var(f)\neq \emptyset\wedge eval(f,Assign_{test}(Var(f))=false)\right|\}}{2*\left|\{l\in_{\pi 2}\mathcal{LR}|Var(f)\neq \emptyset \}\right|}
 \end{split}
 \end{equation*}
-	Damit es möglich ist, die 100\%  Abdeckung dieser Metrik zu erreichen, werden nur die Links berücksichtigt, derenn transition condition mindestenns eine Variable enthält ($Var(f)\neq \emptyset$). Ansonsten wäre es nicht möglich durch die Eingabedaten dafür zu sorgen, dass die \textit{transition}-Bedingung beim Testen sowohl \textit{true} als auch \textit{false}-Wert annimmt.
+	Damit es möglich ist, die 100\%  Abdeckung dieser Metrik zu erreichen, werden nur die Links berücksichtigt, deren transition condition mindestenns eine Variable enthält ($Var(f)\neq \emptyset$). Ansonsten wäre es nicht möglich durch die Eingabedaten dafür zu sorgen, dass die \textit{transition condition} beim Testen sowohl \textit{true} als auch \textit{false}-Wert annimmt.
 	
-	Außerdem ist es wichtig, dass nur die Links beachtet werden, deren \textit{transition condition} beim Testen ausgewertet wurde und nicht durch $DPE$ auf $false$ gesetzt wurde. Anderenfalls können sehr einfache Tests, die die zugehörige Logik nicht testen, sehr schnell 50\% Abdeckung dieser Metrik erreichen. Mit so einer Metrik sind keine zutreffenden Aussagen über die Testqualität möglich.
+	Außerdem ist es wichtig, dass nur die Links beachtet werden, deren \textit{transition condition} beim Testen ausgewertet wurde und nicht durch $DPE$ auf $false$ gesetzt wurde. Anderenfalls können sehr einfache Tests sehr schnell 50\% Abdeckung dieser Metrik erreichen, ohne die Logik der Links zu testen. Demzufolge könnte diese Metrik auch nicht als Indikator für Testqualität verwendet werden.
 
 \subsection{Fault und Compensation Handler-Abdeckung}
-WS-BPEL Sprache hat ein Konzept zur strukturierten Behandlung von
+BPEL Sprache hat ein Konzept zur strukturierten Behandlung von
 Laufzeitfehlern. Die Umschaltung von normalen auf \textit{Fault Handler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{Fault Handler} ausgeführt wird.  Die Tatsache, dass die
-BPEL-Prozesse langlebig sein können und in geschägtskritische Bereichen eingesetzt werden, verdeutlicht die Notwendigkeit, das Verhalten des Systems auch im
+BPEL-Prozesse langlebig sein können und in geschäftskritische Bereichen eingesetzt werden, verdeutlicht die Notwendigkeit, das Verhalten des Systems auch im
 Fehlerfall umfassend zu testen. Demzufolge sollten die entsprechenden Handler durch die Tests abgedeckt werden. Die in diesem Abschnitt vorgestellten Metriken
 können dabei als Indikator für die Testqualität bezüglich der Fehlerbehandlung und Kompensation dienen.
 
@@ -211,7 +206,7 @@ FH=\frac{\left|A_{catch}\right|}{\left|A^{executed}_{catch}\right|}
 
 Im Rahmen einer Fehlerbehandlung ist es möglich, die
 eigentlich in sich erfolgreichen Aktionen rückgängig zu machen. Dafür sind in
-WS-BPEL die Compensation Handler vorgesehen.
+BPEL die Compensation Handler vorgesehen.
 
 \textbf{Compensation Handler.} Die Tests sollten also nicht nur die Fehlersituationen provozieren sondern auch überprüfen, ob die entsprechenden Aktionen (in Form von \textit{Compenation Handler}) durchgeführt werden. 
 \begin{itemize}

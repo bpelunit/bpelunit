@@ -106,32 +106,38 @@
 \input{wsdl}
 \section{Komposition der Services mit BPEL}
 \input{bpel}
-\section{BPEL Testen}
+\section{Testen von BPEL-Kompositionen}\label{sec:framework}
 \input{framework}
 \section{Abdeckung, als Maß für die Testqualität}
 \input{testabdeckung}
 \section{Zusammenfassung}
 \input{zusammenfassung1}
-\chapter{Testabdeckung in BPEL}
+\chapter{Testabdeckung in BPEL}\label{chap:testabdceckungInBPEL}
 \input{bpelformal}
 \section{Definition der Abdeckungsmetriken für BPEL}\label{sec:metrikdefinition}
 \input{konventionelleMetriken}
 
 \section{Zusammenfassung}
-In diesem Abschnitt wurden Konzepte, Technologien und Werkzeuge beschrieben, die für diese Arbeit relevant sind. Besonders ausführlich wurde die BPEL-Sprache behandelt, die im Fokus dieser Arbeit steht. Die detaillierte Beschreibung der Konzepten der Sprache dient dem Verständnis der formalen Definition der Metriken (\ref{}) und Umsetzung der Abdeckungsmessung (\ref{}).
-
-ImAbschnitt Design und Implementierung  
+Nach der Vorstellung der formalen Beschreibung von BPEL wurden in diesem Kapitel die Testabdeckungsmetriken für BPEL formal definiert:
+\begin{itemize}
+	\item Aktivitätsabdeckung,
+	\item Zweigabdeckung,
+	\item Linkabdeckung,
+	\item Fault und Compensation Handler-Abdeckung.	
+\end{itemize}
 \chapter{Verfahren für die Messung der Testabdeckung}
 \input{konzepte}
-\chapter{Umsetzung der Abdeckungsmessung}
+\chapter{Umsetzung der Abdeckungsmessung}\label{chap:umsetzung}
 \input{umsetzung}
 
 \section{Zusammenfassung}
+In diesem Kapitel wurde ausführlich erläutert, wie die Ermittlung der Testabdeckung mit dem Instrumentierungsverfahren umgesetzt werden kann. Die Instrumentierungsphase wurde für jede Metrik erläutert. Dabei wurden Probleme aufgetauchten Problemen und gefundene Lösungen vorgestellt.
 %\input{vorgehensweise}
 %\input{UmsetzungDerMessung}
 \chapter{Design und Implementierung}
 \input{integration}
 \section{Zusammenfassung}
+In diesem Abschnitt wurden einige Aspekte des Designs und der Implementierung des Moduls für die Ermittlung der Testabdeckung vorgestellt. Anschließend wurde die Integration des Moduls in das BPELUnit-Framework und entsprechende Erweiterungen der Clients beschrieben. 
 %\input{integrationrest}
 \chapter{Beispiele}\label{beispiele}
 \input{beispiele}

@@ -5,7 +5,7 @@ auszuführen, Fehler zu finden.}
 
 Beim Testen von BPEL-Prozessen müssen im Vergleich zu anderen Anwendungen eine Besonderheit beachtet werden: externe Abhängigkeit in Form von Web Services. Die Durchführung eines kompletten Tests ist nur dann möglich, wenn alle beteiligten Web Services erreichbar sind und reproduzierbare Ergebnisse liefern. 
 Zum richtigen Problem wird das Testen, wenn externe Service-Anbietern eingebunden sind. In der Regel hat man in dieser Situation nur die Beschreibung der Schnittstelle aber kein Quellcode. Aus diesem Grund kann ein Web Service in einer Testumgebung repliziert werden. 
-Ein weiteres Problem ist das Testen von Fehlersituationen. Dafür müssen die solche Situationen, wie "`Web Service nicht erreichbar"' oder "`antwortet mit einer Fehlermeldung"' simuliert werden.\cite{LuebketestSOA} 
+Ein weiteres Problem ist das Testen von Fehlersituationen. Dafür müssen die solche Situationen, wie "`Web Service nicht erreichbar"' oder "`antwortet mit einer Fehlermeldung"' simuliert werden. \cite{LuebketestSOA} 
 
 Die angestrebte Isolation des BPEL-Prozesses für das Testen kann mit Hilfe eines Unit-Tests erreicht werden. Im Rahmen einer Masterarbeit \cite{Mayer2006}  ist das BPELUnit Framework entstanden, der das Testen von BPEL-Kompositionen in isolation ermöglicht.
 
@@ -15,11 +15,11 @@ Das Framework richtet sich primär an die Entwickler, die das Testen und Programm
 Dementsprechend bietet das  Framework eine schnelle und einfache Möglichkeit, die erstellten Tests immer wieder auszuführen und Ergebnisse auszuwerten.
 Der Kern ist unabhängig von der Präsentationsschicht implementiert und bietet eine Schnittstelle für die Implementierung der Cliens an. Drei Clients gehören gehören zum Framework:
 \begin{itemize}
-	\item command line 
-	\item ant 
-		\item Eclipse plugin 
+	\item Befehlszeilen-Client 
+	\item ANT-Integration 
+		\item Eclipse-Plugin 
 \end{itemize}
- Bei den ersten beiden Clients erfolgt die Konfiguration über XML-Dokumente, die im Konfigurationsverzechnis (\textit{conf}) der BPELUnit-Installation abgelegt sind. Eclipse plugin ermöglicht neben der graphischen Darstellung des Ergebnisses auch komfortable Erstellung der Tests mit Hilfe eines Editors.
+ Bei den ersten beiden Clients erfolgt die Konfiguration über XML-Dokumente, die im Konfigurationsverzechnis (\textit{conf}) der BPELUnit-Installation abgelegt sind. Eclipse plugin ermöglicht neben der grafischen Darstellung des Ergebnisses auch komfortable Erstellung der Tests mit Hilfe eines Editors.
  
  Das Framework unterstützt \textit{ActiveBPEL Engine} und \textit{Oracle BPEL Process Manager (Server)}. Weitere Engines können durch implementieren entsprechenden Adapter integriert werden.
 
@@ -37,7 +37,7 @@ BPELUnit isoliert den zu testenden Prozess, indem es die Partner des Prozesses d
  
  \textbf{Testspezifikation}.
  Ein BPEL-Prozess hat einen Client und beliebige Anzahl von Partner. Die Partner bzw. die Web Services laufen parallel ab und interagieren dabei mit dem BPEL-Prozess. 
-Das Verhalten der Partner (Mock's) während der Tests wird in den Testcases definiert. Zu diesem Zweck werden für jeden Testfall so genannten \textit{Tracks} definiert: einen \textit{Client-Track} und beliebig viele \textsl{Partner-Tracks}. Die Tracks legen die Interaktionen der jeweiligen Partner mit dem BPEL-Prozess anhand von Sequenzen der atomaren Interaktionen (Aktivitäten) fest..
+Das Verhalten der Partner (Mock's) während der Tests wird in den so genannten Testfällen (\textit{eng. Testcases}) definiert. Zu diesem Zweck werden für jeden Testfall so genannten \textit{Tracks} definiert: einen \textit{Client-Track} und beliebig viele \textsl{Partner-Tracks}. Die Tracks legen die Interaktionen der jeweiligen Partner mit dem BPEL-Prozess anhand von Sequenzen der atomaren Interaktionen (Aktivitäten) fest..
 Dabei werden folgende Interaktionsmuster unterstützt: 
 \begin{itemize}
 	\item \textit{one way}-Interaktion: \textit{receive} oder \textit{reply},
@@ -63,7 +63,7 @@ Mit der Fähigkeit des Frameworks, die SOAP Faults zu  empfangen und zu senden, s
  
  
 \textbf{Testorganisation}.  
-Die einzelnen Testfälle werden wie in den konventionellen Programmiersprachen in einer suite organisiert. Suite referenziert alle für den Test notwendigen Elemente: zu testende BPEL-Komposition, WSDL Beschreibungen, XML-Schemata usw. Außerdem definiert die Suite für alle enthaltenen Testcases eine globale Testumgebung mit einer setup und shutdown-Routine, die für das Deployment und Undeployment des Prozesses zuständig ist. 
+Die einzelnen Testfälle werden wie in den konventionellen Programmiersprachen in einer \textit{suite} organisiert. \textit{Suite} referenziert alle für den Test notwendigen Elemente: zu testende BPEL-Komposition, WSDL Beschreibungen, XML-Schemata usw. Außerdem definiert die Suite für alle enthaltenen Testfälle eine globale Testumgebung mit einer setup und shutdown-Routine, die für das Deployment und Undeployment des Prozesses zuständig ist. 
 
 \textbf{Ausführung der Tests}. Zum Testen muss der BPEL-Prozess in einer Testumgebung ausgeführt werden, die die Input- und Output-Daten des BPEL-Prozesses entsprechend der Testspezifikation behandelt. \textit{Real-life}-Testen heißt der Ansatz, der bei BPELUnit Framework dafür verwendet wird. Dabei wird der zu testende BPEL-Prozess in eine BPEL-engine deployt und als Web Service aufgerufen. Die Partner-Web Services müssen dabei durch Mocks ersetzt werden, die das Verhalten der Web Services simulieren, d.h., Web Service-Aufrufe empfangen und/oder selbst absetzen.   Beim Deployen des BPEL-Prozesses müssen alle URIs der Partner-Web Services durch die URIs der Mocks ersetzt werden. 
 
@@ -89,7 +89,7 @@ Für das Deployment eines BPEL-Prozesses sind anbieterspezifische \textit{deploym
 
 
 \textbf{Testergebnisse}.
-Beim Testen wird der BPEL-Prozess in einer Engine ausgeführt. Der beschränkte Zugriff auf den Prozess (bedingt durch die Ausführung in einer BPEL-Engine) während der Tests erschwert die Sammlung der Information über die Ausführung wesentlich. BPELUnit kann nur berichten, ob der TestCase erfolgreich war oder nicht. Im Fehlerfall wird 
+Beim Testen wird der BPEL-Prozess in einer Engine ausgeführt. Der beschränkte Zugriff auf den Prozess (bedingt durch die Ausführung in einer BPEL-Engine) während der Tests erschwert die Sammlung der Information über die Ausführung wesentlich. BPELUnit kann nur berichten, ob der Testfall erfolgreich war oder nicht. Im Fehlerfall wird 
 werden zweiTypen von Fehlern unterschieden:
 \begin{itemize}
 	\item Fehler auf der Anwendungsebene - zum Beispiel eine erwartete Nachricht von BPEL ist nicht angekommen , oder enthält falsche Informationen oder zu viele Nachrichten sind angekommen,

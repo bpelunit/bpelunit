@@ -1,4 +1,4 @@
-BPEL ist eine XML-basierte, ausführbare Sprache zur Modellierung und Beschreibung
+WS-BPEL(kurz BPEL) ist eine XML-basierte, ausführbare Sprache zur Modellierung und Beschreibung
 von Geschäftsprozessen. BPEL ist 2002 aus IBMs WSFL und Microsofts XLANG entstanden und liegt aktuell in der Version 2.0  als OASIS Standard vor. Durch breite Produktunterstützung ist die Sprache auf dem Weg, sich auch als Industriestandard zu etabliert.
 
 
@@ -106,14 +106,14 @@ der Synchronisation nebenläufiger Aktivitäten. Jeder Link verbindet eine
 
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=0.5\textwidth]{bilder/FlowBespielLinks.png}
+		\includegraphics[width=0.53\textwidth]{bilder/FlowBespielLinks.png}
 	\caption{Beispiel einer flow-Aktivität mit Synchronisationslinks}
 	\label{}
 \end{figure}
 
-Ist die Ausführung der Aktivität\_2 beendet, so wird \textit{transition condition} des Links ausgewertet und der Status auf den entsprechenden Wert \textit{true} oder \textit{false}  gesetzt. Auf dieselbe Weise wird der Status des zweiten Links ermittelt. Sind die Status der beiden Links ermittelt, so kann die \textit{join condition} der Aktivität\_ 3 ausgewertet werden. Bei einem \textit{true}-Wert wird die Ausführung des Prozesses mit der Aktivität\_3 ganz normal fortgesetzt. Ist der Wert \textit{false}, so wird eine Fehlermeldung (\textit{Join Failure}) erzeugt und der Kontrollfluss für Fehlerbehandlung aktiviert. Ist dieses Verhalten unerwünscht, so kann das Standardattribut \textit{suppressJoinFailure} auf den Wert \textit{"`yes"'} gesetzt. In diesem Fall wird Aktivität\_3 ebenfalls nicht ausgeführt, allerdings wird der Prozess ganz normal, ohne eine Fehelermeldung zu produzieren, mit der Aktivität\_4 fortgesetzt.
+Ist die Ausführung der Aktivität \textit{activity\_1} beendet, so wird \textit{transition condition} des Links \textit{link\_1} ausgewertet und der Status auf den entsprechenden Wert \textit{true} oder \textit{false}  gesetzt. Auf dieselbe Weise wird der Status des zweiten Links ermittelt. Stehen die Status der beiden Links fest, so kann die \textit{join condition} der Aktivität \textit{activity\_3} ausgewertet werden. Bei einem \textit{true}-Wert wird die Ausführung des Prozesses  ganz normal mit \textit{activity\_3}  fortgesetzt. Ist der Wert \textit{false}, so wird eine Fehlermeldung (\textit{Join Failure}) erzeugt und der Kontrollfluss für Fehlerbehandlung aktiviert. Ist dieses Verhalten unerwünscht, so kann das Standardattribut \textit{suppressJoinFailure} auf den Wert \textit{"`yes"'} gesetzt. In diesem Fall wird \textit{activity\_3} ebenfalls nicht ausgeführt, allerdings wird der Prozess ganz normal, ohne eine Fehelermeldung zu produzieren, mit der \textit{activity\_4} fortgesetzt.
 
-Ist die Aktivität\_2 zum Beispiel in einem \textit{if}-Zweig, der während der Ausführung nicht aktiviert wird, so kann der Status des ausgehenden Links nicht auf die normale Weise ermittelt werden. Die \textit{join condition} ohne des Status des zweiten Links kann nicht ausgewertet werden.  Das würde zu einer Blockierung des Kontrollflusses bei Aktivität\_3 führen. Für solche Situationen sieht BPEL \textit{Dead-Path-Elimination} vor. Wird eine Aktivität aufgrund einer zu
+Ist \textit{activity\_2} zum Beispiel in einem \textit{if}-Zweig, der während der Ausführung nicht aktiviert wird, so kann der Status des ausgehenden Links nicht auf die normale Weise ermittelt werden. Die \textit{join condition}  kann ohne des Status des zweiten Links nicht ausgewertet werden.  Das würde zu einer Blockierung des Kontrollflusses bei \textit{activity\_3} führen. Für solche Situationen sieht BPEL \textit{Dead-Path-Elimination} vor. Wird eine Aktivität aufgrund einer zu
 \textit{false} ausgewerteten \textit{join condition}
 oder eines nicht abgearbeiteten Zweiges einer if- oder pick-Aktivität nicht
 ausgeführt, so wird für alle eventuell vorhandenen ausgehenden Links die \textit{transition condition}
@@ -154,10 +154,10 @@ aller direkt eingeschlossener \textit{Scopes} in der umgekehrten Reihenfolge ihr
 anschließend den Fehler an den umschließenden Scope oder den Prozess selbst weiter reicht. Es können eigene \textit{Fault Handler} spezifiziert werden, der
 je nach Art des auftretenden Fehlers eine bestimmte BPEL-Aktivität ausführt. Für die Bindung bestimmter Aktivitäten an die bestimmten Fehler werden \textit{catch} und \textit{catchAll}-Elemente verwendet.
   
-Die Fehler können auch in den \textit{Compensation} und in den \textit{Fault Handler} selbst auftreten. In die Abbildung \ref{fig:ScopeFaultCompensation2} wird der Zusammenhang zwischen \textit{Handler} und \textit{Scopes} graphisch dargestellt. Die Pfeile zeigen dabei den möglichen Kontrollfluss. 
+Die Fehler können auch in den \textit{Compensation} und in den \textit{Fault Handler} selbst auftreten. In die Abbildung \ref{fig:ScopeFaultCompensation2} wird der Zusammenhang zwischen \textit{Handler} und \textit{Scopes} grafisch dargestellt. Die Pfeile zeigen dabei den möglichen Kontrollfluss. 
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=0.35\textwidth]{bilder/ScopeFaultCompensation2.png}
+		\includegraphics[width=0.33\textwidth]{bilder/ScopeFaultCompensation2.png}
 	\caption{Zusammenhang zwischen Scopes, Fault und Compensation Handler}
 	\label{fig:ScopeFaultCompensation2}
 \end{figure}

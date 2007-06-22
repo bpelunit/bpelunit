@@ -485,7 +485,7 @@ Ereignisse reagiert werden kann.
 \subsection{Fault Handling und Kompensation}
 \subsubsection{Kontrollfluss bei Ausnahmebehandlung}
 BPEL-Sprache hat wie viele moderne Programmiersprachen ein Konzept zur strukturierten Behandlung von Laufzeitfehlern. 
-Die Umschaltung von normalen auf \textit{FaultHandler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{FaultHandler} ausgeführt wird. Die Fehler können auch in den \textit{Compensation} und in den \textit{FaultHandler} selbst auftreten. In die Abbildung \ref{fig:ScopeFaultCompensation2} wird der Zusammenhang zwischen \textit{Handler} und \textit{Scopes} graphisch dargestellt und durch die Pfeile den möglichen Kontrollfluss zwischen diesen Einheiten gezeigt. 
+Die Umschaltung von normalen auf \textit{FaultHandler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{FaultHandler} ausgeführt wird. Die Fehler können auch in den \textit{Compensation} und in den \textit{FaultHandler} selbst auftreten. In die Abbildung \ref{fig:ScopeFaultCompensation2} wird der Zusammenhang zwischen \textit{Handler} und \textit{Scopes} grafisch dargestellt und durch die Pfeile den möglichen Kontrollfluss zwischen diesen Einheiten gezeigt. 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.35\textwidth]{bilder/ScopeFaultCompensation2.png}
@@ -1253,7 +1253,7 @@ Ziel von BPEL ist, das Programmieren im Großen zu ermöglichen. Dabei ist zu beac
 
 BPEL ist blockstrukturiert, d.h. bei der Definition von lokalen Umgebungen (Scopes) können Variable (Programmierung) eingeführt werden. Mit den Scopes können außerdem Fehlerbehandlung (Fault Handler), Kompensationsbehandlung (Compensation Handler) und Ereignisbehandlung (Event Handler) assoziiert werden.
 
-Der BPEL-Standard selbst definiert keine graphische Darstellung der modellierten Prozesse. Dafür ist die BPMN vorgesehen, die im Standard die Abbildung von BPMN nach BPEL beschreibt.
+Der BPEL-Standard selbst definiert keine grafische Darstellung der modellierten Prozesse. Dafür ist die BPMN vorgesehen, die im Standard die Abbildung von BPMN nach BPEL beschreibt.
 
 Ausführbare BPEL-Prozesse können auf einer Workflowmaschine zum Einsatz gebracht werden (engl. deployed) und sind durch sie ausführbar. Abstrakte Prozesse dienen der Beschreibung des Verhaltens des Prozesses (behavioral interface). Sie werden als Sicht auf einen ausführbaren Prozess verwendet und dienen dazu, das interne Verhalten des Prozesses z.B. vor einem Geschäftspartner zu verbergen.
 

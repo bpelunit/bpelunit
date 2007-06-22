@@ -1,14 +1,14 @@
 Für BPEL-Prozesse, die mestens zu der unternehmenskritischen Software zählen, ist die Qualität der Tests sehr wichtig. In dieser Arbeit werden Codeabdeckungsmetriken für BPEL-Prozesse definiert:
 \begin{itemize}
-	\item Aktivitätsabdeckung: Zeigt, wie viele Basisaktivitäten bei den Tests ausgeführt wurden.
-	\item Zweigabdeckung: Zeigt, wie viele Zweige bei den Tests aktiviert wurde.
-	\item Linkabdeckung: Zeigt, wie viele Links bei den Tests ausgewertet wurden.
-	\item Fault und Compensation Handler-Abdeckung: Zeigt, wie viele Handler bei den Tests ausgelöst wurden.
+	\item Aktivitätsabdeckung: zeigt, wie viele Basisaktivitäten bei den Tests ausgeführt wurden,
+	\item Zweigabdeckung: zeigt, wie viele Zweige bei den Tests aktiviert wurde,
+	\item Linkabdeckung: zeigt, wie viele Links bei den Tests ausgewertet wurden,
+	\item Fault und Compensation Handler-Abdeckung: zeigt, wie viele Handler bei den Tests ausgelöst wurden.
 \end{itemize}
 
 Bei der Definition der Metriken wurde darauf geachtet, dass für jeden BPEL-Prozess 100\%-ge Abdeckung erreichbar ist. 
 
-Implementiert wurde die Messung der Testabdeckung als Erweiterung des BPELUnit Frameworks. Die Instrumentierung und Ermittlung der Testabdeckung erfolgt automatisch und transparent während eines Testlaufs.  Die Eclipse- und Befehlszeilen-Clients wurden entsprechend erweitert. Bei beiden Clients hat der Tester die Möglichkeitdie Metriken gestzulegen, diese zu konfigurieren und nach dem Testlauf anzuzeigen.
+Implementiert wurde die Messung der Testabdeckung als Erweiterung des BPELUnit Frameworks. Die Instrumentierung der BPEL-Dateien und Ermittlung der Testabdeckung erfolgt automatisch und transparent während eines Testlaufs. Es werden zwei Versionen der BPEL-Sprache unterstützt: 1.1 und 2.0. Die Erkennung erfolgt automatisch und erfordert keine zusätzlichen Konfigurationen. Der Eclipse-Plugin und der Befehlszeilen-Client wurden entsprechend erweitert. Bei beiden Clients hat der Tester die Möglichkeitdie Metriken gestzulegen, diese zu konfigurieren und nach dem Testlauf die Statistiken anzuzeigen.
 
 Der nächste logische Schritt ist die Visualisierung. Die grafische Darstellung der Testabdeckung kann den Testentwickler bei der gezielten Testerstellung besser unterstützen.
 Für das Erreichen der gewünschten oder geforderter Testabdeckung ist diese Vorgehensweise viel effizienter und kann positive Auswirkungen auf die Entwicklungszeit und -Kosten haben.
