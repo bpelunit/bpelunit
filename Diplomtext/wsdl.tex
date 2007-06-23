@@ -7,13 +7,13 @@ er gebunden ist.
 Obwohl das W3C WSDL 2.0 am 23 May 2007  veröffentlicht hat, wird in dieser Arbeit WSDL 1.1 verwendet.  
 Der Grund hierfür ist, dass die BPEL 2.0, um die es in dieser Arbeit in erster Linie geht, auch noch auf WSDL 1.1 aufsetzt.
 
-Abbildung \ref{fig:wsdlStructur} zeigt die Strujtur eines WSDL-Dokuments.
+Abbildung \ref{fig:wsdlStructur} zeigt die Struktur eines WSDL-Dokuments.
 Die Elemente in einem WSDL-Dokument lassen sich in abstrakte Definitionen
 und konkrete technische Beschreibungen zu diesen Definitionen unterteilen. 
 Für die sprach- und plattformunabhängige Beschreibung
 der Schnittstelle (Datentypen, Operationen und Nachrichten) sind die abstrakten Elemente zuständig: $<$types$>$-, $<$message$>$- und $<$portType$>$-Elemente.
 Die konkreten technischen Details (wo die Services sich befinden und wie sie aufgerufen werden können) werden durch die Elemente $<$binding$>$ und $<$service$>$ definiert.  Die konkreten Definitionen referenzieren
-dabei stets abstrakte Definitionen. Das bedeutet, daß zu einer abstrakten
+dabei stets abstrakte Definitionen. Das bedeutet, dass zu einer abstrakten
 Definition mehrere konkrete Implementierungen  existieren können. Damit besteht die Möglichkeit ein Service an mehreren Stellen verfügbar zu machen und die Verwendung verschiedenen Kommunikations- und Transportprotokollen zu ermöglichen.
 Die Elemente
 
@@ -21,7 +21,7 @@ Die Elemente
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.42\textwidth]{bilder/wsdlStructur.pdf}
-		\caption{WSDL Dokumentformat}
+		\caption{WSDL-Dokumentformat}
 	\label{fig:wsdlStructur}
 \end{figure}
 
@@ -33,10 +33,10 @@ Die Elemente
 \textbf{$<$message$>$}  fasst die definierten Typen zu abstrakten unidirektionalen Nachrichten zusammen.
 
 \textbf{$<$portType$>$} beschreibt die Schnittstelle des Services, die eine oder mehrere
-Operationen zusammenfasst. Diese ordnen der Operation
+Operationen zusammen fasst. Diese ordnen der Operation
 die Ein- und Ausgabeparameter zu und legen damit das Nachrichtenaustauschmuster fest.
 
-\textbf{$<$binding$>$} definiert die vom Web Service verwendeten Kommunikationsprotokolle und Nachrichten formate. Die meist benutzten Protokolle sind SOAP, HTTP GET/POST. 
+\textbf{$<$binding$>$} definiert die vom Web Service verwendeten Kommunikationsprotokolle und Nachrichtenformate. Die meist benutzten Protokolle sind SOAP, HTTP GET/POST. 
 
 \textbf{$<$service$>$} stellt aus einem oder mehreren ports einen Dienst zusammen.
 Ein port ordnet dem Binding einen bestimmten Endpunkt zu. Die genaue Definition hängt vom verwendeten Transportprotokoll ab.

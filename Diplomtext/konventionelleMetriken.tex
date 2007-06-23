@@ -7,8 +7,8 @@
   Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist, verschiedene Dienste (Web Services) zu einer Gesamtanwendung zu verknüpfen. Die Kommunikation mit den Diensten wird durch Basisaktivitäten realisiert. Die Basisaktivitäten sind die elementaren Aktivitäten eines Prozesses, die keine weiteren Aktivitäten enthalten. 
  
  Bei der Statementabdeckung geht es darum, festzustellen, wie viele der
-Anweisungen beim Testen ausgeführt wurden. Da die Basisaktivitäten der WS-BPEL
- den Anweisungen der anderen Programmiersprachen ent\-spre\-chen, kann die Anweisungsabdeckung als Grundlage für die Definition der Aktivitätabdeckung dienen.
+Anweisungen beim Testen ausgeführt wurden. Da die Basisaktivitäten der BPEL
+ den Anweisungen der anderen Programmiersprachen entsprechen, kann die Anweisungsabdeckung als Grundlage für die Definition der Aktivitätabdeckung dienen.
  
  Insbesondere ist diese Statistik im Bezug auf einzelne Aktivitäten interessant. So ist die Information, ob alle \textit{Invokes} (Web Service-Aufrufe) beim Testen ausgeführt wurden, sehr wichtig, um die erste Einschätzung über die Testqualität zu machen. In dieser Hinsicht ist die Definition der Abdeckungsmetriken für die einzelnen Basisaktivitäten sinnvoll.
 \begin{Def}
@@ -17,13 +17,13 @@ Anweisungen beim Testen ausgeführt wurden. Da die Basisaktivitäten der WS-BPEL
 	\mathcal{S}_t(\mathcal{W})=\frac{\left| \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}_t\right|},\ \forall t\in \mathcal{T}_\mathcal{B}
 \]
 
-Die gesamte Aktivitätsabdeckung bezieht sich auf alle Basisaktivitäten:
+Die gesamte Aktivitätabdeckung bezieht sich auf alle Basisaktivitäten:
 	\[
 	\mathcal{S}(\mathcal{W})=\frac{\left|\bigcup_{t\in \mathcal{T}_\mathcal{B}} \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}^{basic}\right|}
 \]
 \end{Def}
 
-Zu bemerken ist, dass die Basisaktivitäten, die in sämtlichen Handler verwendet werden, nach Definition der Mengen $\mathcal{A}_t$, $\mathcal{A}^{executed}_t$ und $\mathcal{A}^{basic}$ durch die Aktivitätsabdeckungsmetriken berücksichtigt werden. 
+Zu bemerken ist, dass die Basisaktivitäten, die in sämtlichen Handler verwendet werden, nach Definition der Mengen $\mathcal{A}_t$, $\mathcal{A}^{executed}_t$ und $\mathcal{A}^{basic}$ durch die Aktivitätabdeckungsmetriken berücksichtigt werden. 
 
 Es sollte beim Testen mindestens sichergestellt werden, dass alle
 Basisaktivitäten, die die elementaren Aktivitäten eines Prozesses sind, durch
@@ -140,7 +140,7 @@ Bemerkung: alle Zweige innerhalb von Handlern gehen in die Rechnung ein, weil na
 \end{itemize}
 \end{itemize}
 
-$process$ ist die Scope-Aktivität an der Wurzel des Baumes, der durch die Schachtelung von Aktivitäten entsteht. Nach der Definition beinhaltet process-Aktivität alle Aktivitäten des WS-BPEL Prozesses. Dementsprechend kann die Zweigabdeckung für einen WS-BPEL Prozess folgendermaßen definiert werden: 
+$process$ ist die Scope-Aktivität an der Wurzel des Baumes, der durch die Schachtelung von Aktivitäten entsteht. Nach der Definition beinhaltet \textit{process}-Aktivität alle Aktivitäten des BPEL-Prozesses. Dementsprechend kann die Zweigabdeckung für einen BPEL Prozess folgendermaßen definiert werden: 
 \[
 \mathcal{B}(\mathcal{W})=\frac{br\_number^{executed}_{scope}(process)}{br\_number_{scope}(process)}
 \]
@@ -149,17 +149,17 @@ Die Abbildung \ref{fig:ExamlpleBPELProzess} verdeutlicht an einem Beispiel welch
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.9\textwidth]{bilder/Fault_Compensation.png}
-		\caption{Kontrollfluss eines BPEL Prozesses}
+		\caption{Kontrollfluss eines BPEL-Prozesses}
 	\label{fig:ExamlpleBPELProzess}
 \end{figure}
 
 Obwohl die Fehlererkennungsquote gegenüber der Anweisungsabdeckung steigt, werden nicht alle Aspekte des Kontrollflusses erfasst. Während jeder Zweig für sich alleine betrachtet wird, bleiben die Kombinationen von Zweigen unberücksichtigt. 
 
-In den nächsten beiden Abschnitten werden die für WS-BPEL spezifischen
+In den nächsten beiden Abschnitten werden die für BPEL spezifischen
 Testabdeckungsmetriken vorgestellt: Link- und Handlerabdeckung. 
 
 \subsection{Linkabdeckung}
-Das Link-Konzept ist in WS-BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{join condition} das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit die Links und deren Verhalten zu testen.  Das Ziel dieser Metrik ist, den Tester dazu zu bewegen, dass jede \textit{transition condition} während der Tests mindestens einmal auf den Wert \textit{true} und einmal auf \textit{false} gesetzt wird.
+Das Link-Konzept ist in BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{join condition} das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit die Links und deren Verhalten zu testen.  Das Ziel dieser Metrik ist, den Tester dazu zu bewegen, dass jede \textit{transition condition} während der Tests mindestens einmal auf den Wert \textit{true} und einmal auf \textit{false} gesetzt wird.
  
 
 Für die Tests sind nur die Links relevant, deren \textit{transition condition} nicht mit
@@ -185,7 +185,7 @@ Die entsprechende Metrik heißt \textit{Linkabdeckung} (\textit{eng. Link Coverag
 	Außerdem ist es wichtig, dass nur die Links beachtet werden, deren \textit{transition condition} beim Testen ausgewertet wurde und nicht durch $DPE$ auf $false$ gesetzt wurde. Anderenfalls können sehr einfache Tests sehr schnell 50\% Abdeckung dieser Metrik erreichen, ohne die Logik der Links zu testen. Demzufolge könnte diese Metrik auch nicht als Indikator für Testqualität verwendet werden.
 
 \subsection{Fault und Compensation Handler-Abdeckung}
-BPEL Sprache hat ein Konzept zur strukturierten Behandlung von
+BPEL-Sprache hat ein Konzept zur strukturierten Behandlung von
 Laufzeitfehlern. Die Umschaltung von normalen auf \textit{Fault Handler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{Fault Handler} ausgeführt wird.  Die Tatsache, dass die
 BPEL-Prozesse langlebig sein können und in geschäftskritische Bereichen eingesetzt werden, verdeutlicht die Notwendigkeit, das Verhalten des Systems auch im
 Fehlerfall umfassend zu testen. Demzufolge sollten die entsprechenden Handler durch die Tests abgedeckt werden. Die in diesem Abschnitt vorgestellten Metriken

@@ -26,27 +26,27 @@ Es gibt eine Vielzahl von unterschiedlichsten Abdeckungsmetriken. Eine gute Über
 
 Als \textit{Testabdeckung} wird üblicherweise das Verhältnis zwischen
 zu testenden und tatsächlich getesteten Elementen des Prüflings bezeichnet. Es muss nicht immer 100\% gefordert werden. Je nach festgelegtem Ziel kann auch ein gewisser Anteil festgelegt werden. Die bekanntesten Kriterien sind 
-Anweisungs-, Zweig-, Bedingungs- und Pfadüberdeckung.
+Anweisungs-, Zweig-, Bedingungs- und Pfadabdeckung.
 \subsubsection{Anweisungsabdeckung}
-Die Anweisungsabdeckung (\textit{eng. statement coverage}) ist die enfachse kontrollflußorientierte Metrik.  
+Die Anweisungsabdeckung (\textit{eng. statement coverage}) ist die enfachste kontrollflussorientierte Metrik.  
 Sie wird wie folgt definiert: 
 \[
 	Anweisungsabdeckung=\frac{\text{\textit{Anzahl der ausgeführten Anweisungen}}}{\text{\textit{Anzahl der Anweisungen}}}
 \]
-Das Ziel der Anweisungsüberdeckung ist die mindestens einmalige Ausführung aller Anweisungen des zu testenden Programms.
-Bezogen auf den Kontrollflußgraph heißt es, dass alle Knoten abgedeckt werden müssen. Es ist möglich, mehrerer Anweisungen (z. B. Anweisungen innerhalb einer Schleife) zu einer Einheit
+Das Ziel der Anweisungsabdeckung ist die mindestens einmalige Ausführung aller Anweisungen des zu testenden Programms.
+Bezogen auf den Kontrollflussgraph heißt es, dass alle Knoten abgedeckt werden müssen. Es ist möglich, mehrerer Anweisungen (z.B. Anweisungen innerhalb einer Schleife) zu einer Einheit
 zusammenzufassen, die keinerlei Verzweigungen im Sinne von \textit{if-else}-Anweisungen enthält. zusammenzufassen. Wenn die 100\% Anweisungsabdeckung nicht erreicht werden kann, dann ist das ein Hinweis auf Programmcode, der möglicherweise unter keinen Umständen ausgeführt werden kann. 
 
 Anweisungsabdeckung ist ein schwaches Kriterium. Die Fehleridentifizierungsquote ist sehr niedrig. Der Grund dafür ist, dass Anweisungsabdeckung nur die einzelnen Anweisungen betrachtet, ohne Zusammenhänge zu berücksichtigen.
 \subsubsection{Zweigabdeckung}\label{Zweigabdeckung}
-Zweigabdeckung (\textit{eng. branch coverage}) gilt als minimales Kriterium für kontrollflußorientierte Testtechniken.
+Zweigabdeckung (\textit{eng. branch coverage}) gilt als minimales Kriterium für kontrollflussorientierte Testtechniken.
 \[
 Zweigabdeckung=\frac{\text{\textit{Anzahl der durchlaufenen Zweige}}}{\text{\textit{Anzahl aller Zweige}}}
 \]
 Das heißt, dass die hundertprozentige Zweigabdeckung dann erreicht ist, wenn alle Kanten des Kontrollflussgraphen mindestens einmal durchlaufen wurden. Erfüllte Zweigabdeckung stellt sicher, dass alle Verzweigungen des zu testenden Moduls tatsächlich erreichbar sind. Weil das Durchlaufen aller Zweige die Ausführung aller Anweisungen verursacht, impliziert die Zweigabdeckung die Erfüllung der Anweisungsabdeckung. Mit der Zweigabdeckung können die nichtausführbaren Programmzweige zusätzlich aufgespürt werden. 
 
 Obwohl die Fehlererkennungsquote gegenüber der Anweisungsabdeckung steigt, werden nicht alle Aspekte des Kontrollflusses erfasst. Bei den Schleifen wird nur ermittelt, ob diese durchlaufen werden können.
-Obwohl bei der vollständigen Zweigabdeckung jede Entscheidung (komplexe Bedingungen), die Verzweigungen im Kontrollfluss auslösen, insgesamt die Wahrheitswerte $wahr$ und $falsch$ mindestens einmal annehmen muss, bleiben die Werte der einzelnen Bedingungen unberücksichtigt. Außerdem wird jeder Zweig für sich alleine betrachtet, ohne die Kombinationen von Zweigen zu berücksichtigen. 
+Obwohl bei der vollständigen Zweigabdeckung jede Entscheidung (komplexe Bedingungen), die Verzweigungen im Kontrollfluss auslösen, insgesamt die Wahrheitswerte $true$ und $false$ mindestens einmal annehmen muss, bleiben die Werte der einzelnen Bedingungen unberücksichtigt. Außerdem wird jeder Zweig für sich alleine betrachtet, ohne die Kombinationen von Zweigen zu berücksichtigen. 
 
 Es gibt viele weitere Abdeckungsmaße, die in dieser Arbeit nicht betrachtet werden. 
 

@@ -1,8 +1,8 @@
  
   \subsection{Aktivitätabdeckung}
-  Zu betonen ist, dass es  bei der Messung der Testabdeckung nicht darum geht, ob die Aktivität \textit{erfolgreich} ausgeführt wurde, sondern lediglich darum, ob es zur Ausführung der Aktivität kommt. Die Marken, die die Ausführung der Basisaktivitäten signalisieren sollen, werden im Kontrollfluß direkt vor der jeweiligen Aktivität platziert. Bei der \textit{receive}-Aktivität wird die Marke ausnahmsweise erst nach der Aktivität eingefügt. Die Ausführung dieser Aktivität findet erst statt, wenn sie die Kontrolle hat und eine Nachricht von außen ankommt. Bei diesem Verhalten darf die Ausführung der Aktivität erst nach dem Eintreffen einer Nachricht registriert werden. 
+  Zu betonen ist, dass es  bei der Messung der Testabdeckung nicht darum geht, ob die Aktivität \textit{erfolgreich} ausgeführt wurde, sondern lediglich darum, ob es zur Ausführung der Aktivität kommt. Die Marken, die die Ausführung der Basisaktivitäten signalisieren sollen, werden im Kontrollfluss direkt vor der jeweiligen Aktivität platziert. Bei der \textit{receive}-Aktivität wird die Marke ausnahmsweise erst nach der Aktivität eingefügt. Die Ausführung dieser Aktivität findet erst statt, wenn sie die Kontrolle hat und eine Nachricht von außen ankommt. Bei diesem Verhalten darf die Ausführung der Aktivität erst nach dem Eintreffen einer Nachricht registriert werden. 
   
-  Befindet sich eine Basisaktivität in einer sequence, so kann die zugehörige Marke direkt davor oder danach eingefügt werden. Die Semantik der sequence-Aktivität sorgt dafür, dass die Marken im Kontrollfluß direkt hintereinander erreicht werden können. Ist eine Basisaktivität in einer anderen strukturierten Aktivität eingebettet, so wird eine sequence eingefügt, die diese Aktivität und die zugehörige Marke umschließt. Durch das Schachtelungsprinzip der strukturierten Aktivitäten ist diese Vorgehensweise an jeder Stelle des Prozesses möglich.
+  Befindet sich eine Basisaktivität in einer \textit{sequence}, so kann die zugehörige Marke direkt davor oder danach eingefügt werden. Die Semantik der \textit{sequence}-Aktivität sorgt dafür, dass die Marken im Kontrollfluss direkt hintereinander erreicht werden können. Ist eine Basisaktivität in einer anderen strukturierten Aktivität eingebettet, so wird eine \textit{sequence} eingefügt, die diese Aktivität und die zugehörige Marke umschließt. Durch das Schachtelungsprinzip der Strukturierten Aktivitäten ist diese Vorgehensweise an jeder Stelle des Prozesses möglich.
   
   Das Link-Konzept, wie bereits angekündigt, braucht eine  besondere Betrachtung. 
   Innerhalb der Flow-Aktivitäten ermöglicht das Link-Konzept die Syn\-chro\-ni\-sa\-tions\-ab\-hän\-gig\-keit\-en zwischen den Aktivitäten zu definieren und durch die darauf aufbauenden Bedingungen die Ausführung der Aktivitäten zu steuern. Befindet sich eine eingefügte Marke im Kontrollfluss direkt vor oder nach der Aktivität, so besteht die Gefahr, dass die Ausführung der Aktivitäten falsch erfasst wird:
@@ -12,7 +12,7 @@
 \end{itemize}
 In den beiden Fällen wird die Ausführung einer Aktivität registriert, obwohl die Aktivität gar nicht ausgeführt wurde.
 
-Um zu erreichen, dass die Aktivität und das Logging (beide) entweder ausgeführt oder nicht ausgeführt werden, muss die Synchronisation und damit das Link sich auf beide beziehen. Zu beachten ist, dass ein Link genau eine \textit{target}- und eine \textit{source}-Aktivität verbinden kann. Damit ist es nicht möglich, dasselbe Link für die Aktivität selbst und für die Protokollierung zu verwenden.  Schließt man die zu protokollierende Aktivität und die Loggingaktivität in eine \textit{sequence} ein und definiert diese als Ziel des Links, so ist das gewünschte Verhalten erreicht, ohne die Geschäftslogik zu beeinflussen.  Das gilt für beide Werte des \textit{suppress join}-Attributes. 
+Um zu erreichen, dass die Aktivität und das Logging (beide) entweder ausgeführt oder nicht ausgeführt werden, muss die Synchronisation und damit das Link sich auf beide beziehen. Zu beachten ist, dass ein Link genau eine \textit{target}- und eine \textit{source}-Aktivität verbinden kann. Damit ist es nicht möglich, dasselbe Link für die Aktivität selbst und für die Protokollierung zu verwenden.  Schließt man die zu protokollierende Aktivität und die Logging-Aktivität in eine \textit{sequence} ein und definiert diese als Ziel des Links, so ist das gewünschte Verhalten erreicht, ohne die Geschäftslogik zu beeinflussen.  Das gilt für beide Werte des \textit{suppress join}-Attributes. 
 Die Definition und die Quelle des Links (\textit{source}-Aktivität) bleiben unverändert. Die Abbildung \ref{fig:Listing2Designer} stellt die Manipulation grafisch dar.
 \begin{figure}[htbp]
 	\centering
@@ -51,10 +51,10 @@ Listing \ref{Listing1} zeigt beispielhaft die entsprechenden Änderungen des Quel
 \end{multicols}
 
 \subsection{Zweigabdeckung}
-Die strukturierten Aktivitäten bestimmen in BPEL den Kontrollfluss und spielen damit eine entscheidende Rolle für die Ermittlung der Zweigabdeckung. Die einzelnen Zweige werden nämlich bei der Analyse der strukturierten Aktivitäten des Prozesses identifiziert. Die Protokollierung der Zweigen erfolgt im Wesentlichen nach dem Schema, das für die Erfassung der Aktivitätsabdeckung vorgestellt wurde. An den entsprechenden Stellen in der BPEL-Datei werden Marken eingefügt, die das Aktivieren der entsprechenden Zweigen markieren. Damit die Datei bei diesen Manipulationen syntaktisch gültig bleibt, wird ebenfalls 
-eine umschließende sequence-Aktivität eingefügt. 
+Die Strukturierten Aktivitäten bestimmen in BPEL den Kontrollfluss und spielen damit eine entscheidende Rolle für die Ermittlung der Zweigabdeckung. Die einzelnen Zweige werden nämlich bei der Analyse der strukturierten Aktivitäten des Prozesses identifiziert. Die Protokollierung der Zweigen erfolgt im Wesentlichen nach dem Schema, das für die Erfassung der Aktivitätabdeckung vorgestellt wurde. An den entsprechenden Stellen in der BPEL-Datei werden Marken eingefügt, die das Aktivieren der entsprechenden Zweigen markieren. Damit die Datei bei diesen Manipulationen syntaktisch gültig bleibt, wird ebenfalls 
+eine umschließende \textit{sequence}-Aktivität eingefügt. 
 
-Ausführlicher werden einige strukturierten Aktivitäten vorgestellt, die im Bezug auf die Zweigabdeckung einige Besonderheiten aufweisen.
+Ausführlicher werden einige Strukturierten Aktivitäten vorgestellt, die im Bezug auf die Zweigabdeckung einige Besonderheiten aufweisen.
 
 \textbf{\textit{If}-Aktivität.}
 Es muss bei diesem Konstrukt darauf geachtet werden, dass der \textit{else}-Zweig erfasst wird. Ist der Zweig nicht explizit im Quellcode vorhanden, dann muss er hinzugefügt und wie alle anderen Zweige annotiert werden.
@@ -113,7 +113,7 @@ Es geht bei dieser Metrik um Links mit einer \textit{transition condition}, die 
 Für die Erfassung dieser Werte während der Ausführung werden ebenfalls Links verwendet. Folgende Aspekte müssen bei der Realisierung beachtete werden:
 \begin{itemize}
 	\item boundary-crossing Restriktionen
-	\item unterschiedliche Wertebelegung des \textit{suppress join}-Attributs und daraus resultierendes Verhalten beim Auftreten von \textit{Join Failure}
+	\item unterschiedliche Wertebelegung des \textit{suppress join}-Attributes und daraus resultierendes Verhalten beim Auftreten von \textit{Join Failure}
 	\item \textit{Dead-Path-Elimination}
 \end{itemize} 
 
@@ -139,7 +139,7 @@ Die Erfassung des Status jedes relevanten Links ist für die Ermittlung der Linka
 Zwei zusätzliche Links werden definiert (\textit{LinkACopy} und \textit{LinkACopyNeg}). Dabei übernimmt der \textit{LinkACopyNeg} die negierte  \textit{transition condition} des Originallinks (\textit{customerType}=\textit{not('major')}) und  der \textit{LinkACopy} die unveränderte (\textit{customerType}=\textit{'major'}). Die Logging-Anweisungen werden bei diesem Ansatz direkt in der flow-Umgebung platziert. 
   Dadurch sind sie bereit für die Ausführung, sobald der Kontrollfluss die flow-Aktivität erreicht. Die source- und target-Aktivitäten des Originallinks können dabei beliebig tief in strukturierte Aktivitäten eingebettet sein. Durch die am Anfang definierten Links, wird die \textit{source}-Aktivität des Originallinks mit den Logging-Anweisungen verlinkt. Für eine Logging-Anweisung ein Link. Sobald der Status der Links bekannt ist, wird eine Logging-Anweisung ausgeführt.
 
-Die \textit{Default-join condition} der Logging-Aktivitäten (\textit{or}-Verknüpfung der Status aller eingehenden Links) und komplementären \textit{transition conditions} der beiden neuen Links garantieren, dass nur eine Loggingaktivität gleichzeitig ausgeführt werden kann.
+Die \textit{Default-join condition} der Logging-Aktivitäten (\textit{or}-Verknüpfung der Status aller eingehenden Links) und komplementären \textit{transition conditions} der beiden neuen Links garantieren, dass nur eine Logging-Aktivität gleichzeitig ausgeführt werden kann.
 %\begin{figure}[htbp]
 %	\centering
 %		\includegraphics{bilder/LinksAnsatz1.png}
@@ -168,7 +168,7 @@ Allerdings funktioniert diese Vorgehensweise nicht in allen Situationen. Die Bea
 
 \underline{Variante 2.}\\
 Ziel dieses Ansatzes ist, die \textit{boundary-crossing}-Restriktionen einzuhalten. Die Konstruktion der Links \textit{LinkACopy} und \textit{LinkACopyNeg} erfolgt auf dieselbe Weise.
-Bei dieser Variante wird die target-Aktivität des Links (invoke-Aktivität \textit{Externe Bestellung}) mit den beiden Loggingaktivitäten in eine flow-Aktivität eingeschlossen.
+Bei dieser Variante wird die \textit{target}-Aktivität des Links (\textit{invoke}-Aktivität \textit{Externe Bestellung}) mit den beiden Logging-Aktivitäten in eine flow-Aktivität eingeschlossen.
 %\begin{figure}[htbp]
 %	\centering
 %		\includegraphics{bilder/LinksAnsatz2.png}
@@ -194,7 +194,7 @@ Bei dieser Variante wird die target-Aktivität des Links (invoke-Aktivität \texti
 Bei diesem Verfahren schneiden das Originallink und die neu eingefügten Links dieselben Grenzen der strukturierten Aktivitäten.
 Setzt man eine syntaktisch gültige Ausgangs-BPEL-Datei voraus, so werden keine boundary crossing-Restriktionen verletzt, denn die Grenzen der eingefügten flow-Aktivität dürfen durch die Links geschnitten werden.
 
-Wird die Bedingung \textit{holding}>\textit{orderSize} zu false ausgewertet, so können die Loggingaktivitäten nicht ausgeführt werden. Der Linkstatus kann in dieser Situation nicht erreicht werden.
+Wird die Bedingung \textit{holding}>\textit{orderSize} zu \textit{false} ausgewertet, so können die Logging-Aktivitäten nicht ausgeführt werden. Der Linkstatus kann in dieser Situation nicht erreicht werden.
 \FloatBarrier
 \underline{Variante3.}\\
 Bei dieser Variante wird die source-Aktivität des Links (\textit{Kundenidentifikation}) durch eine \textit{flow}-Umgebung umschlossen. Einerseits sorgt die Platzierung der Logging-Aktivität in derselben \textit{flow}-Umgebung für die Einhaltung der \textit{boundary-crossing}-Restriktionen. Andererseits kann das Logging auch stattfinden, wenn die Zielaktivität nicht ausgeführt wird. Da der Status der Links nach der Ausführung der Quellaktivität gesetzt wird, sind die Logging-Aktivitäten zu diesem Zeitpunkt startbereit und können gleich die entsprechenden Marken an den \textit{Coverage Logging Service} verschicken.

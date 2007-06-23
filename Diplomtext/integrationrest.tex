@@ -1,5 +1,5 @@
-Ein BPEL-Prozess besteht aus der Geschäftslogik (definiert in BPEL), Servicebeschreibung (WSDL) und optional aus weiteren Datentypen (XML Schema). Diese Informationen werden zusammengefasst und in eine BPEL Engine deployt. Die Engine ist unter anderem dafür verantwortlich, die \textit{Endpoints} der Partner des BPEL Prozesses zu spezifizieren. Für jeden Link muss bekannt sein, welche WSDL service und port und welche Adresse für die Kommunikation benutzt werden sollen. Diese Information wird in so genannten Deployment descriptoren festgelegt.
-   Das Deployment und die Syntax der Deploymentdescriptoren ist nicht spezifiziert.
+Ein BPEL-Prozess besteht aus der Geschäftslogik (definiert in BPEL), Servicebeschreibung (WSDL) und optional aus weiteren Datentypen (XML Schema). Diese Informationen werden zusammengefasst und in eine BPEL-Engine deployt. Die Engine ist unter anderem dafür verantwortlich, die \textit{Endpoints} der Partner des BPEL Prozesses zu spezifizieren. Für jeden Link muss bekannt sein, welche WSDL service und port und welche Adresse für die Kommunikation benutzt werden sollen. Diese Information wird in so genannten Deployment descriptoren festgelegt.
+   Das Deployment und die Syntax der Deployment descriptoren ist nicht spezifiziert.
 
 
 
@@ -17,7 +17,7 @@ Die Aufgabe
 die SOAP-Nachrichten, die an Coverage Receiver gerichtet sind müssen dekodiert werden und  an den Servece (Mock) weitergeleitet werden.  
 
 Ansatz1
-Es kann ein spezieller Partner Track für den Service definiert und zu jedem TestCase zugeordnet werden. Zu jedem Testfall kann dann ein \textit{Thread} gestartet werden, der die Coverage Nachrichten empfängt. Es reicht aus jedem TestCase aus. Es muss die Logik für den Manager der Marken implementiert werden. Dafür kann entweder die receive Aktivität mehrmals hintereinander geschaltet werden, oder eine neue Aktivität, die alle Nachrichten akzeptiert.
+Es kann ein spezieller Partner Track für den Service definiert und zu jedem Testfall zugeordnet werden. Zu jedem Testfall kann dann ein \textit{Thread} gestartet werden, der die Coverage Nachrichten empfängt. Es reicht aus jedem TestCase aus. Es muss die Logik für den Manager der Marken implementiert werden. Dafür kann entweder die receive Aktivität mehrmals hintereinander geschaltet werden, oder eine neue Aktivität, die alle Nachrichten akzeptiert.
 
 
 
@@ -25,7 +25,7 @@ Es kann ein spezieller Partner Track für den Service definiert und zu jedem Test
 
 nachteil größere Eingriffe in das Framework und an vielen Stellen:
 \begin{itemize}
-	\item beim Start jedes Testcases muss ein zusätzliches Thread gestartet werden
+	\item beim Start jedes Testfalls muss ein zusätzliches Thread gestartet werden
 	\item beim shutdown unberücksichtigt 
 	\item beim Auswerten des Ergebnissen muss dieser Thread unberücksichtigt bleiben 
 \end{itemize}

@@ -1,7 +1,7 @@
-Durch die Berechnung der Testabdeckung will der Tester erfahren, wieviel von dem Prüfling beim Testen ausgeführt wurde. Für die Definition des Prüflings, in diesem Fall BPEL-Prozesses, wird die BPEL Formalisierung von Ouyang in \cite{Chun2005} verwendet. Nach der Präsentation der wichtigsten Punkten dieser Formalisierung folgen die Definition der  Aktivität- und Zweigabdeckung. Darüber hinaus werden zwei speziell für BPEL definierten Metriken vorgestellt: Link- und Handlerabdeckung.  
+Durch die Berechnung der Testabdeckung will der Tester erfahren, wie viel von dem Prüfling beim Testen ausgeführt wurde. Für die Definition des Prüflings, in diesem Fall BPEL-Prozesses, wird die BPEL Formalisierung von Ouyang in \cite{Chun2005} verwendet. Nach der Präsentation der wichtigsten Punkten dieser Formalisierung folgen die Definition der  Aktivität- und Zweigabdeckung. Darüber hinaus werden zwei speziell für BPEL definierten Metriken vorgestellt: Link- und Handler-Abdeckung.  
 \section{Formale Definition von BPEL}
-Die hier vorgestellte formale Beschreibung von WS-BPEL Process Model ist nicht
-vollständig und fasst nicht den gesamten Umfang von WS-BPEL um. Es werden nur
+Die hier vorgestellte formale Beschreibung von WS-BPEL-Process Model ist nicht
+vollständig und fasst nicht den gesamten Umfang von BPEL um. Es werden nur
 für diese Arbeit relevante Teile des Modells beschrieben. Als Grundlage dient
 eine Definition aus  \cite{Chun2005}, die abgesehen von der Anpassung an den
 Standard WS-BPEL 2.0 und einigen Erweiterungen, unverändert übernommen wurde.  
@@ -38,7 +38,7 @@ trigger_c,\ scp_t,\ trigger_{tf},\ \mathcal{LR},\ joincon,\ transitionCondition,
  	\item $type_\mathcal{E}:\mathcal{E\rightarrow T_E}$ ist die Funktion, die den Ereignissen die Typen aus der Menge $\mathcal{T_E}$  zuordnet, wobei $\mathcal{T_E}=\{message,\ alarm,\ fault,\ compensation,\ termination\}.$
  	\item $\forall t\in \mathcal{T_E},\ \mathcal{E}_t=\{e\in \mathcal{E}|type_\mathcal{E}(e)=t\}$ ist die Menge der Ereignissen des Types $t$,
 %\item $instance:\mathcal{A}_{receive}\cup \mathcal{A}_{pick}\rightarrow \mathcal{B}$ is a %function which sddigns a boolean value to the createInstance attribete of a receive or a %pick activity.
-\item sei $\mathcal{A}^{structured}=\mathcal{A}_{sequence}\cup \mathcal{A}_{flow}\cup \mathcal{A}_{if}\cup \mathcal{A}_{while}\cup \mathcal{A}_{repeatUntil}\cup \mathcal{A}_{forEach}\cup \mathcal{A}_{pick}\cup \mathcal{A}_{scope}$ ist die Menge der strukturierten Aktivitäten, $\forall_{s\in \mathcal{A}^{structured}}(children(s)\neq \emptyset)$, das heißt, sie sind die internen Knoten des $\mathcal{HR}$ Baumes,
+\item sei $\mathcal{A}^{structured}=\mathcal{A}_{sequence}\cup \mathcal{A}_{flow}\cup \mathcal{A}_{if}\cup \mathcal{A}_{while}\cup \mathcal{A}_{repeatUntil}\cup \mathcal{A}_{forEach}\cup \mathcal{A}_{pick}\cup \mathcal{A}_{scope}$ ist die Menge der Strukturierten Aktivitäten, $\forall_{s\in \mathcal{A}^{structured}}(children(s)\neq \emptyset)$, das heißt, sie sind die internen Knoten des $\mathcal{HR}$ Baumes,
 \item sei $\mathcal{A}^{basic}=\mathcal{A}_{invoke}\cup \mathcal{A}_{receive}\cup \mathcal{A}_{reply}\cup \mathcal{A}_{wait}\cup \mathcal{A}_{assign}\cup \mathcal{A}_{validate}\cup \mathcal{A}_{empty}\cup \mathcal{A}_{validate}\cup \mathcal{A}_{throw}\cup \mathcal{A}_{rethrow}\cup \mathcal{A}_{compensate}\cup \mathcal{A}_{compensateScope}$ ist die Menge der Basisaktivitäten, $\forall_{s\in \mathcal{A}^{basic}}(children(s)= \emptyset)$, d.h., sie sind die Blätter des $\mathcal{HR}$ Baumes,
 \item gegeben $\mathcal{A'}=\mathcal{A}_{sequence}\cup \mathcal{A}_{flow},\
 \mathcal{HR} \cap (\mathcal{A}'\times B\times \mathcal{A})=\mathcal{HR} \cap
@@ -80,7 +80,7 @@ Assign(\mathcal{C})}eval(c,assign(c))=true$,
 Wird eine Aktivität aufgrund einer zu \textit{false} ausgewerteten \textit{join condition} oder eines nicht abgearbeiteten Zweiges einer $if-$ oder $pick-$Aktivität nicht ausgeführt, so wird für alle ausgehenden Links die \textit{transition condition} auf \textit{false }gesetzt. Dieses Verhalten wird als \textit{Dead-Path-Elimination} bezeichnet. 
 \end{itemize}
 
-Betrachtet man die Kontrollstruktur eines WS-BPEL Prozesses, so kann die $\mathcal{HR}$-Relation als Übergabe der Kontrolle von einer Aktivität an ihre Subaktivitäten interpretiert werden. Damit entspricht ein Element dieser Relation einem Zweig des Kontrollflussgraphen. Allerdings deckt diese Relation nicht alle Zweige des Graphen ab, es fehlen nämlich die Zweige, die die Kontrolle innerhalb der Schleifen von der inneren Aktivität an die Schleife zurückgeben. Die folgende Relation $\mathcal{HBR}$ beschreibt genau solche Beziehungen:
+Betrachtet man die Kontrollstruktur eines BPEL-Prozesses, so kann die $\mathcal{HR}$-Relation als Übergabe der Kontrolle von einer Aktivität an ihre Subaktivitäten interpretiert werden. Damit entspricht ein Element dieser Relation einem Zweig des Kontrollflussgraphen. Allerdings deckt diese Relation nicht alle Zweige des Graphen ab, es fehlen nämlich die Zweige, die die Kontrolle innerhalb der Schleifen von der inneren Aktivität an die Schleife zurückgeben. Die folgende Relation $\mathcal{HBR}$ beschreibt genau solche Beziehungen:
 \begin{itemize}\itemsep2pt
 	\item $\mathcal{HBR}\subseteq \mathcal{A}\times(\mathcal{C}\cup
 	\{\bot\})\times \mathcal{A}$ beschreibt die Relation zwischen einer Aktivität und ihrer \textit{Parent}-Aktivität
@@ -100,4 +100,4 @@ Folglich gilt für die Schleifen:
 \end{itemize}
 
 
-Die Relationen $\mathcal{HR}$ und $\mathcal{HBR}$ beschreiben zusammen alle Kanten des Kontrollflussgraphen des zugehörigen WS-BPEL Prozesses.
+Die Relationen $\mathcal{HR}$ und $\mathcal{HBR}$ beschreiben zusammen alle Kanten des Kontrollflussgraphen des zugehörigen BPEL-Prozesses.
