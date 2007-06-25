@@ -1,12 +1,16 @@
-Um die Softwarequalität anhand der Test bewerten zu können, müssen zusätzliche Informationen über die Tests bekannt sein. Wichtig sind unter anderem die Anforderungs-, Code- und Datenabdeckung der Tests.
+Um die Softwarequalität anhand der Test bewerten zu können, müssen zusätzliche
+Informationen über die Tests bekannt sein. Wichtig sind unter anderem die Anforderungs-,
+Code- und Datenabdeckung der Tests.
 \begin{itemize}
-	\item \textbf{Anforderungsabdeckung}(\textit{eng. requirements coverage}) ist eine funktionale
+	\item \textbf{Anforderungsabdeckungsmetriken}(\textit{eng. requirements coverage}) ist eine funktionale
 Abdeckung auf Basis einer Spezifikation, die angibt, inwieweit die Testfälle alle Anforderungen abdecken. Diese Metrik wird meist im Zusammenhang mit \textit{Black-Box-Tests} verwendet. 
-	\item \textbf{Codeabdeckung}(\textit{eng. code coverage}) ist eine Metrik für das Verhältnis zwischen
-zu testenden und tatsächlich getesteten Elementen des Prüflings. Die Tests, die auf der Codeabdeckung basieren, gehören zur Gruppe der strukturorientierten Testtechniken und zielen darauf ab, die innere Struktur der Software zu testen (\textit{Glass-Box-Test}). 
-\item \textbf{Datenabdeckung}(\textit{eng.data coverage})  ist die Metrik, die angibt wie und wann und in welcher Weise die Variablen verwendet werden (\textit{Glass-Box-Test}).
+	\item \textbf{Codeabdeckungsmetriken}(\textit{eng. code coverage}) ist eine Metrik für das Verhältnis zwischen
+zu testenden und tatsächlich getesteten Elementen des Prüflings. Die Tests, die auf der Codeabdeckung basieren, gehören zur Gruppe der strukturorientierten Testtechniken und zielen darauf ab, die innere Struktur der Software zu testen (\textit{Glass-Box-Test}).\cite{MyersJune2004}
+\item \textbf{Datenabdeckungsmetriken}(\textit{eng.data coverage})  ist die Metrik, die angibt wie und wann und in welcher Weise die Variablen verwendet werden (\textit{Glass-Box-Test}).
 \end{itemize}
-Die Anforderungs-, Code- und Datenabdeckung sind Mittel zur Messung der Qualität bzw. Voll"-stän"-dig"-keit der Tests. Die beiden Testarten (\textit{Black-Box} und \textit{Glass-Box}) ergänzen sich gegenseitig und werden in der Regel kombiniert angewendet. Da für diese Arbeit nur die Codeabdeckung relevant ist, geht es im weiteren Verlauf des Dokuments nur um diesen Aspekt. Der Begriff \textit{Testabdeckung} wird ausschließlich als Synonym zu diesem Begriff verwendet. 
+Die Anforderungs-, Code- und Datenabdeckung sind Mittel zur Messung der Qualität bzw. Voll"-stän"-dig"-keit der Tests. Die beiden Testarten (\textit{Black-Box} und \textit{Glass-Box}) ergänzen sich gegenseitig und werden in der Regel kombiniert angewendet. 
+
+Die Aufgabe der BPEL ist, die Web Services in einer bestimmten Reihenfolge zu einer Anwendung zu verknüpfen. Die Ablauf\-logik, die somit in einer BPEL-Datei gekapselt ist, kann am Besten mit kontrollflussorientierten Tests überprüft werden. Für die Bewertung solcher Tests eignen sich die Codeabdeckungsmetriken, die damit im Fokus dieser Arbeit stehen. Im weiteren Verlauf dieser Arbeit werden Anforderungs- und Datenabdeckung nicht weiter behandelt. Der Begriff \textit{Testabdeckung} wird ausschließlich als Synonym zu Codeabdeckung verwendet. 
 
 Die Unit-Tests werden verwendet, um sicherzustellen, dass der erstellte Code korrekt funktioniert. Jedoch lassen sich dabei nur Aussagen über die Codebereiche machen, die im Test aufgerufen oder, anders gesagt, durch den Test abgedeckt wurden. Das zugrundeliegende Prinzip lautet: ist der Code abgedeckt, so ist die Wahrscheinlichkeit höher, dass es keinen Fehler gibt. Das Ausführen aller potentiell fehlerhaften Stellen des Programms ist ein notwendiges Kriterium für das Finden der Fehler im Code. Deswegen ist die Angabe der erreichten Codeabdeckung aus der Sicht der Qualitätssicherung nicht nur sinnvoll sondern unabdingbar.
 
@@ -26,9 +30,9 @@ Es gibt eine Vielzahl von unterschiedlichsten Abdeckungsmetriken. Eine gute Über
 
 Als \textit{Testabdeckung} wird üblicherweise das Verhältnis zwischen
 zu testenden und tatsächlich getesteten Elementen des Prüflings bezeichnet. Es muss nicht immer 100\% gefordert werden. Je nach festgelegtem Ziel kann auch ein gewisser Anteil festgelegt werden. Die bekanntesten Kriterien sind 
-Anweisungs-, Zweig-, Bedingungs- und Pfadabdeckung.
+Anweisungs-, Zweig-, Bedingungs- und Pfadabdeckung. In den nächsten Abschnitten werden die Anweisungs- und Zweigabdeckung vorgestellt. Weitere Metriken werden aufgrund der exponentiell steigenden Anzahl der Testfälle, die für die geforderte Abdeckung notwendig sind, oder geringen Praxisrelevanz nicht behandelt. Für weitere Informationen zu diesen Metriken wird auf \ref{Liggesmeyer2002} verwiesen. 
 \subsubsection{Anweisungsabdeckung}
-Die Anweisungsabdeckung (\textit{eng. statement coverage}) ist die enfachste kontrollflussorientierte Metrik.  
+Die Anweisungsabdeckung (\textit{eng. statement coverage}) ist die einfachste kontrollflussorientierte Metrik.  
 Sie wird wie folgt definiert: 
 \[
 	Anweisungsabdeckung=\frac{\text{\textit{Anzahl der ausgeführten Anweisungen}}}{\text{\textit{Anzahl der Anweisungen}}}
@@ -46,9 +50,9 @@ Zweigabdeckung=\frac{\text{\textit{Anzahl der durchlaufenen Zweige}}}{\text{\tex
 Das heißt, dass die hundertprozentige Zweigabdeckung dann erreicht ist, wenn alle Kanten des Kontrollflussgraphen mindestens einmal durchlaufen wurden. Erfüllte Zweigabdeckung stellt sicher, dass alle Verzweigungen des zu testenden Moduls tatsächlich erreichbar sind. Weil das Durchlaufen aller Zweige die Ausführung aller Anweisungen verursacht, impliziert die Zweigabdeckung die Erfüllung der Anweisungsabdeckung. Mit der Zweigabdeckung können die nichtausführbaren Programmzweige zusätzlich aufgespürt werden. 
 
 Obwohl die Fehlererkennungsquote gegenüber der Anweisungsabdeckung steigt, werden nicht alle Aspekte des Kontrollflusses erfasst. Bei den Schleifen wird nur ermittelt, ob diese durchlaufen werden können.
-Obwohl bei der vollständigen Zweigabdeckung jede Entscheidung (komplexe Bedingungen), die Verzweigungen im Kontrollfluss auslösen, insgesamt die Wahrheitswerte $true$ und $false$ mindestens einmal annehmen muss, bleiben die Werte der einzelnen Bedingungen unberücksichtigt. Außerdem wird jeder Zweig für sich alleine betrachtet, ohne die Kombinationen von Zweigen zu berücksichtigen. 
+Obwohl bei der vollständigen Zweigabdeckung jede Entscheidung (komplexe Bedingungen), die Verzweigungen im Kontrollfluss auslösen, insgesamt die Wahrheitswerte $true$ und $false$ mindestens einmal annehmen muss, bleiben die Werte der einzelnen Bedingungen unberücksichtigt. Außerdem wird jeder Zweig für sich alleine betrachtet, ohne die Kombinationen von Zweigen zu berücksichtigen. \\[0.5cm]
 
-Es gibt viele weitere Abdeckungsmaße, die in dieser Arbeit nicht betrachtet werden. 
+Eine hohe Testabdeckung bedeutet nicht automatisch, dass der abgedeckte Code optimal getestet wurde. Außerdem reicht das Erreichen von Abdeckungsvorgaben alleine nicht aus, um die Qualität der Software zu garantieren.  Die Testabdeckung ist nur ein Aspekt der Softwareentwicklung, der beim richtigen Einsatz zur Qualität der Software beitragen kann.
 
 \nocite{Liggesmeyer2002}
 \nocite{Winkler2003}

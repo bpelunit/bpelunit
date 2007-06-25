@@ -189,7 +189,7 @@ Aktivität ausgeführt wurde.
 Ein BPEL-Prozess besteht aus der Geschäftslogik (definiert in BPEL), Servicebeschreibung (WSDL) und optional aus weiteren Datentypen (XML Schema). Diese Informationen werden zusammengefasst und in eine BPEL-Engine deployt. Die Engine ist unter anderem dafür verantwortlich, die \textit{Endpoints} der Partner des BPEL-Prozesses zu spezifizieren. Für jeden Link muss bekannt sein, welche WSDL-service und -port und welche Adresse für die Kommunikation benutzt werden sollen. Diese Information wird in so genannten \textit{Deployment Descriptoren} festgelegt.
 
 \textbf{ActiveBPEL Engine}.
-Die \textit{ActiveBPEL Engine} ist eine Runtime-Umgebung für die Business Process Execution Language, die in Java implementiert und sowohl BPEL 1.1 als auch BPEL2.0 konform ist. 
+Die \textit{ActiveBPEL Engine} der Firma \textit{Active Endpoint} ist eine Runtime-Umgebung für die Business Process Execution Language, die in Java implementiert und sowohl BPEL 1.1 als auch BPEL2.0 konform ist.
 Die Engine läuft innerhalb des Apache Tomcat Servers und stellt dort die zum automatischen Geschäftsprozess zusammengefassten Web Services - wiederum als Web Service - zur Verfügung. Zum \textit{Deployen} wird eine Archivdatei, die das BPEL-Modell, WSDLDateien
 und den Engine-spezifischen Deployment Descriptor enthält, in das bpr-Verzeichnis
-des Servers, auf dem die \textit{ActiveBPEL Engine} läuft, abgelegt. 
+des Servers, auf dem die \textit{ActiveBPEL Engine} läuft, abgelegt. Zusätzlich bietet \textit{Active Endpoint} eine BPEL-Entwicklungsumgebung \textit{ActiveBPEL Designer}, die auf Eclipse-Plattform basiert und auf die \textit{ActiveBPEL Engine} abgestimmt ist. Sowohl die BPEL-Engine als auch Designer  werden in dieser Arbeit verwendet.

@@ -3,9 +3,10 @@
 \usepackage[latin1]{inputenc}   
 \usepackage[ngerman]{babel}           % deutsche Trennungen und Bezeichnungen
 \usepackage{amsmath,amsfonts,amssymb}
-\usepackage {natbib}
-\citestyle{dinat}
-\usepackage{typearea}           % Satzspiegelberechnung: Texthöhe und -breite
+%\usepackage{natbib}
+%\citestyle{dinat}
+\usepackage{typearea}   
+\usepackage{url}         % Satzspiegelberechnung: Texthöhe und -breite
 \typearea{12}                   % je höher das Argument, desto kleiner die Ränder
 \usepackage{graphicx}           % zur Graphikeinbindung
 \usepackage{amssymb,amsmath}	% mathematische Symbole
@@ -86,7 +87,7 @@
 \input{bpel}
 \section{Testen von BPEL-Kompositionen}\label{sec:framework}
 \input{framework}
-\section{Abdeckung, als Maß für die Testqualität}
+\section{Testabdeckung, als Maß für die Testqualität}
 \input{testabdeckung}
 \section{Zusammenfassung}
 \input{zusammenfassung1}
@@ -109,13 +110,13 @@ Nach der Vorstellung der formalen Beschreibung von BPEL wurden in diesem Kapitel
 \input{umsetzung}
 
 \section{Zusammenfassung}
-In diesem Kapitel wurde ausführlich erläutert, wie die Ermittlung der Testabdeckung mit dem Instrumentierungsverfahren umgesetzt werden kann. Die Instrumentierungsphase wurde für jede Metrik detailliert vorgestellt. Dabei wurden Probleme aufgetauchten Problemen und gefundene Lösungen vorgestellt.
+In diesem Kapitel wurde ausführlich erläutert, wie die Ermittlung der Testabdeckung mit dem Instrumentierungsverfahren umgesetzt werden kann. Die Instrumentierungsphase wurde für jede Metrik detailliert vorgestellt. Dabei wurden aufgetauchten Problemen beschrieben und gefundene Lösungen vorgestellt.
 %\input{vorgehensweise}
 %\input{UmsetzungDerMessung}
 \chapter{Design und Implementierung}
 \input{integration}
 \section{Zusammenfassung}
-In diesem Abschnitt wurden einige Aspekte des Designs und der Implementierung des Moduls für die Ermittlung der Testabdeckung vorgestellt. Anschließend wurde die Integration des Moduls in das BPELUnit-Framework und entsprechende Erweiterungen der Clients beschrieben. 
+In diesem Abschnitt wurden einige Aspekte des Designs und der Implementierung der Komponente für die Ermittlung der Testabdeckung vorgestellt. Anschließend wurde die Integration  in das BPELUnit-Framework und entsprechende Erweiterungen der Clients beschrieben. 
 %\input{integrationrest}
 \chapter{Beispiele}\label{beispiele}
 \input{beispiele}
@@ -129,7 +130,13 @@ In diesem Abschnitt wurden einige Aspekte des Designs und der Implementierung de
 \nocite{LuebketestSOA}
 \nocite{ZhuDataAdequancy}
 \nocite{MayerBPELUnit}
-\bibliographystyle{plain}
+\nocite{Alonso2004}
+\nocite{W3C2004}
+\nocite{W3C2004a}
+\nocite{Dostal2005}
+\nocite{Hunter2004}
+\bibliographystyle{alpha}
 \bibliography{referenzen}
 \listoffigures
+\input{erklaerung}
 \end{document}

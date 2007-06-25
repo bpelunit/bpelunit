@@ -1,4 +1,9 @@
-Testen ist ein in der konventionellen Softwareentwicklung unentbehrliches Mittel zur Qualitätssicherung.
+Eine der wichtigsten Aufgaben bei der
+Entwicklung von komplexer, umfangreicher Software ist die Prüfung. In
+der Praxis wird dafür ein erheblicher Anteil des
+gesamten Entwicklungsaufwands aufgebracht. Es
+existieren zahlreiche Methoden und Techniken für die
+Prüfung von Software. Testen ist ein in der konventionellen Softwareentwicklung unentbehrliches Mittel zur Qualitätssicherung.
 
 \textit{Testen ist ein Prozess, ein Programm mit der Absicht
 auszuführen, Fehler zu finden.}
@@ -49,7 +54,7 @@ Dabei werden folgende Interaktionsmuster unterstützt:
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.8\textwidth]{bilder/TestcaseSequence.pdf}
-		\caption{Sequenzen in einem Testfall}
+		\caption{BPELUnit - Sequenzen in einem Testfall}
 	\label{fig:sequenzen}
 \end{figure}
 
@@ -57,7 +62,7 @@ Die Abbildung \ref{fig:sequenzen} zeigt das Zusammenspiel der Sequenzen eines Te
 
 Durch Daten, die an den BPEL-Prozess verschickt werden, kann der Prozess gesteuert und bestimmte Zweige des Kontrollflusses stimuliert werden. Das Kenntnis der inneren Struktur ist vorausgesetzt (white-box-Test).
  Die Daten, die bei der Interaktion mit BPEL-Prozess verschickt werden, sind in XML spezifiziert. Es können WSDL-Nachrichten und sowohl einfache Datentypen als auch Elementen der XML Schema verwendet werden. Die Daten, die der BPEL-Prozess verschickt, können auf die Korrektheit überprüft werden. 
-Für die Auswahl der relevanten Daten wird XPath verwendet. 
+Für die Auswahl der relevanten Daten wird XPath \cite{W3C1999} verwendet. 
 
 Mit der Fähigkeit des Frameworks, die SOAP Faults zu  empfangen und zu senden, steht dem Tester die Möglichkeit zur Verfügung, die Fault und Compensation Handler des BPEL-Prozesses zu testen.  
  
@@ -89,14 +94,13 @@ Für das \textit{Deployment} eines BPEL-Prozesses sind anbieterspezifische \texti
 
 
 \textbf{Testergebnisse}.
-Beim Testen wird der BPEL-Prozess in einer Engine ausgeführt. Der beschränkte Zugriff auf den Prozess (bedingt durch die Ausführung in einer BPEL-Engine) während der Tests erschwert die Sammlung der Information über die Ausführung wesentlich. BPELUnit kann nur berichten, ob der Testfall erfolgreich war oder nicht. Im Fehlerfall wird 
+Beim Testen wird der BPEL-Prozess in einer Engine ausgeführt. Der beschränkte Zugriff auf den Prozess (bedingt durch die Ausführung in einer BPEL-Engine) während der Tests erschwert die Sammlung der Information über die Ausführung wesentlich. BPELUnit kann nur berichten, ob der Testfall erfolgreich war oder nicht. Im Fehlerfall 
 werden zwei Typen von Fehlern unterschieden:
 \begin{itemize}
-	\item Fehler auf der Anwendungsebene - zum Beispiel eine erwartete Nachricht von BPEL ist nicht angekommen , oder enthält falsche Informationen oder zu viele Nachrichten sind angekommen,
+	\item Fehler auf der Anwendungsebene - zum Beispiel eine erwartete Nachricht von BPEL ist nicht angekommen, oder enthält falsche Informationen oder zu viele Nachrichten sind angekommen,
 	\item Fehler auf der Kommunikationsebene - Problem mit dem Web Service Stack.
 \end{itemize}
 
-Eine wichtige Information beim Testen ist die erreichte Testabdeckung. Eine entsprechende Erweiterung wird im praktischen Abschnitt dieser Arbeit vorgenommen.
-
+Eine wichtige Information beim Testen ist die erreichte Testabdeckung. Das BPELUnit-Framework wird im praktischen Teil mit der Funktionalität der Ermittlung von  Testabdeckung erweitert.
  
   
