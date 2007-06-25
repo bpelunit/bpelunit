@@ -62,6 +62,14 @@ public class MetricsManager {
 		return metrics;
 	}
 	
+	public boolean hasMetric(String metricname){
+		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
+			if(iter.next().getName().equals(metricname))
+				return true;
+		}
+		return false;
+	}
+	
 	public List<IStatistic> createStatistics(Hashtable<String, Hashtable<String, MarkerState>> allLabels){
 		List<IStatistic> statistics=new ArrayList<IStatistic>();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {

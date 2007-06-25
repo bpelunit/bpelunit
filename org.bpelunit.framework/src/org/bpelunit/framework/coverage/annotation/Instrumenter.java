@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
+import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
+import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
+import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetricHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.CMServiceFactory;
@@ -22,6 +25,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.ContentFilter;
+import org.jdom.filter.ElementFilter;
 
 /**
  * Dieses Interface wird von dem Handler implementiert, der dafür zuständig ist,
@@ -63,12 +67,85 @@ public class Instrumenter {
 		Element process_element = document.getRootElement();
 		checkVersion(process_element);
 		initializeBPELTools(process_element);
+		if (metricManager.hasMetric(FaultMetric.METRIC_NAME)
+				|| metricManager.hasMetric(CompensationMetric.METRIC_NAME)) {
+			replaceInlineHandler(process_element);
+		}
 		List<IMetric> metrics = metricManager.getMetrics();
 		saveOriginalBPELElements(metrics, process_element);
 		executeInstrumentation(metrics);
 		createReportInvokesFromCoverageLabels(process_element);
 		logger.info("Instrumentation sucessfully completed.");
 		return document;
+	}
+
+	private void replaceInlineHandler(Element process_element) {
+		Iterator<Element> iter = process_element
+				.getDescendants(new ElementFilter(
+						BasicActivities.INVOKE_ACTIVITY, process_element
+								.getNamespace()) {
+
+					@Override
+					public boolean matches(Object arg0) {
+						if (super.matches(arg0)) {
+							Element invoke = (Element) arg0;
+							List<Element> children = invoke
+									.getChildren(BpelXMLTools.CATCH_ELEMENT);
+							if (children.size() > 0)
+								return true;
+							children = invoke
+									.getChildren(BpelXMLTools.CATCHALL_ELEMENT);
+							if (children.size() > 0)
+								return true;
+							children = invoke
+									.getChildren(BpelXMLTools.COMPENSATION_HANDLER);
+							if (children.size() > 0)
+								return true;
+						}
+						return false;
+					}
+
+				});
+		while (iter.hasNext()) {
+			replaceInlineHandlerForInvoke(iter.next());
+		}
+
+	}
+
+	private void replaceInlineHandlerForInvoke(Element element) {
+		Element scope = null;
+		List<Element> inlineElements = element
+				.getChildren(BpelXMLTools.CATCH_ELEMENT);
+		List<Element> inlineElements2 = element
+				.getChildren(BpelXMLTools.CATCHALL_ELEMENT);
+		if (inlineElements.size() > 0 || inlineElements2.size() > 0) {
+			scope = BpelXMLTools
+					.createBPELElement(StructuredActivities.SCOPE_ACTIVITY);
+			Element faultHandler = BpelXMLTools
+					.createBPELElement(BpelXMLTools.FAULT_HANDLERS);
+			scope.addContent(faultHandler);
+			for (Iterator<Element> iter = inlineElements.iterator(); iter
+					.hasNext();) {
+				faultHandler.addContent(iter.next().detach());
+			}
+			if(inlineElements2.size()>0){
+				faultHandler.addContent(inlineElements2.get(0).detach());
+			}
+		}
+		
+		inlineElements=element.getChildren(BpelXMLTools.COMPENSATION_HANDLER);
+		if(inlineElements.size()>0){
+			if(scope==null)
+				scope=BpelXMLTools
+				.createBPELElement(StructuredActivities.SCOPE_ACTIVITY);
+			scope.addContent(inlineElements.get(0).detach());
+		}
+		if(scope!=null){
+			int i=element.getParentElement().indexOf(element);
+			scope.setContent(i, scope);
+			scope.addContent(element);
+		}
+
 	}
 
 	private void saveOriginalBPELElements(List<IMetric> metrics,

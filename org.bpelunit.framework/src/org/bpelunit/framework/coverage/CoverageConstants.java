@@ -53,7 +53,7 @@ public class CoverageConstants {
 	public static final Namespace NAMESPACE_CONFIGURATION = Namespace
 	.getNamespace("http://www.bpelunit.org/schema/coverageMetricsConfiguration");
 	
-	public static final String CONFIG_ATTRIBUTE_WAIT_TIME="waitTime";
+	public static final String CONFIG_ATTRIBUTE_WAIT_TIME="waitingTime";
 	public static final String CONFIG_METRIC_ELEMENT="metric";
 	public static final String CONFIG_PROPERTY_ELEMENT="property";
 	public static final String CONFIG_ATTRIBUT_NAME="name";

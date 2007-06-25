@@ -22,6 +22,8 @@ import org.jdom.filter.ElementFilter;
 
 public class FaultMetric implements IMetric {
 
+
+
 	public static final String METRIC_NAME = "FaultHandlerCoverage";
 
 	private IMetricHandler metricHandler;
@@ -90,5 +92,7 @@ public class FaultMetric implements IMetric {
 		}
 
 	}
+	
+
 
 }

@@ -72,5 +72,7 @@ public class CompensationMetric implements IMetric {
 			elementsOfBPEL = null;
 		}
 	}
+	
+
 
 }
