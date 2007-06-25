@@ -10,18 +10,20 @@
 Anweisungen beim Testen ausgeführt wurden. Da die Basisaktivitäten der BPEL
  den Anweisungen der anderen Programmiersprachen entsprechen, kann die Anweisungsabdeckung als Grundlage für die Definition der Aktivitätabdeckung dienen.
  
- Insbesondere ist diese Statistik im Bezug auf einzelne Aktivitäten interessant. So ist die Information, ob alle \textit{Invokes} (Web Service-Aufrufe) beim Testen ausgeführt wurden, sehr wichtig, um die erste Einschätzung über die Testqualität zu machen. In dieser Hinsicht ist die Definition der Abdeckungsmetriken für die einzelnen Basisaktivitäten sinnvoll.
+ Insbesondere ist diese Statistik im Bezug auf einzelne Aktivitäten interessant. So ist die Information, ob alle \textit{invokes}-Aktivitäten (Web Service-Aufrufe) beim Testen ausgeführt wurden, sehr wichtig, um die erste Einschätzung über die Testqualität zu machen. In dieser Hinsicht ist die Definition der Abdeckungsmetriken für die einzelnen Basisaktivitäten sinnvoll.
+\begin{quotation}
 \begin{Def}
- $\forall t\in \mathcal{T}_\mathcal{B},\ \mathcal{A}^{executed}_t\subseteq A^{basic}$ ist die Menge der Basisaktivitäten vom Typ $t$, die beim Testen ausgeführt wurden. Somit kann die Aktivitätabdeckung für alle Basisaktivitäten wie folgt definiert werden:
+\textit{ $\forall t\in \mathcal{T}_\mathcal{B},\ \mathcal{A}^{executed}_t\subseteq A^{basic}$ ist die Menge der Basisaktivitäten vom Typ $t$, die beim Testen ausgeführt wurden. Somit kann die Aktivitätabdeckung für alle Basisaktivitäten wie folgt definiert werden:}
 		\[
 	\mathcal{S}_t(\mathcal{W})=\frac{\left| \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}_t\right|},\ \forall t\in \mathcal{T}_\mathcal{B}
 \]
 
-Die gesamte Aktivitätabdeckung bezieht sich auf alle Basisaktivitäten:
+\textit{Die gesamte Aktivitätabdeckung bezieht sich auf alle Basisaktivitäten:}
 	\[
 	\mathcal{S}(\mathcal{W})=\frac{\left|\bigcup_{t\in \mathcal{T}_\mathcal{B}} \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}^{basic}\right|}
 \]
 \end{Def}
+\end{quotation}
 
 Zu bemerken ist, dass die Basisaktivitäten, die in sämtlichen Handler verwendet werden, nach Definition der Mengen $\mathcal{A}_t$, $\mathcal{A}^{executed}_t$ und $\mathcal{A}^{basic}$ durch die Aktivitätabdeckungsmetriken berücksichtigt werden. 
 
@@ -34,9 +36,9 @@ Zusammenhänge zu berücksichtigen.
 
 \subsection{Zweigabdeckung}
 Die Zweigabdeckung beschreibt das Verhältnis von durchlaufenen Zweigen zu allen
-möglichen Zweigen des BPEL-Prozesses. Wie bereits im Abschnitt \ref{bpelformal}
+möglichen Zweigen des BPEL-Prozesses. Wie bereits im Abschnitt \ref{sec:bpelformal}
 erklärt, werden die Zweige durch Relationen $\mathcal{HR}$ und $\mathcal{HBR}$
-beschrieben. Die Funktion $BE$ (branch executed) bestimmt welche Zweige beim Testen
+beschrieben. Die Funktion $BE$ (\textit{branch executed}) bestimmt welche Zweige beim Testen
 durchlaufen wurden und wird wie folgt definiert:      
 \begin{itemize}
 	\item $BE:\mathcal{HR}\cup \mathcal{HBR}\rightarrow \mathcal{B}$,

@@ -1,5 +1,5 @@
 Zur Überprüfung der praktischen Einsetzbarkeit der entwickelten Lösung wurde eine Fallstudie durchgeführt. Die Web Service-basierte Anwendung und die zugehörigen Tests, die dabei verwendet wurden, sind aus einem studentischen Projekt entstanden. An der Universität Hannover am Fachgebiet Software Engineering wurde im Wintersemester 2006/07 das Projekt "`Entwicklung einer Weservice-basierten Anwendung"' durchgeführt. 
-Innerhalb eines Semesters haben 8 Studenten die Anwendung entworfen, entwickelt und getestet. Aufgrund der eingesetzten Technologien und Werkzeuge, wie BPEL (Kompositionsprache), BPELUnit-Framework (Testwerkzeug) und \textit{ActiveBPEL Engine} (BPEL-Engine), hat sich das Projekt als Fallstudie für diese Arbeit angeboten. Zu erwähnen ist noch, dass in dem Projekt die BPEL-Sprache noch in der Versiom 1.1 verwendet wurde.
+Innerhalb eines Semesters haben 8 Studenten die Anwendung entworfen, implementiert und getestet. Aufgrund der eingesetzten Technologien und Werkzeuge, wie BPEL (Kompositionsprache), BPELUnit-Framework (Testwerkzeug) und \textit{ActiveBPEL Engine}, hat sich das Projekt als Fallstudie für diese Arbeit angeboten. Zu erwähnen ist noch, dass in dem Projekt die BPEL-Sprache noch in der Versiom 1.1 verwendet wurde.
 
 Entwickelt wurde ein System für Fachgebiet Software Engineering , das den Anmeldeprozess für studentische Abschlussarbeiten unterstützt. Das System stellt dabei sicher, dass alle wesentliche Bestandteile der Betreuung, wie z.B. Veröffentlichung und Anmeldung der Abschlussarbeit, Planung von Zwischen- und Endvorträgen, Bewertung usw., eingehalten werden.
 Für die Fallstudie sind vor allem die entstandenen BPEL-Prozesse und die Tests interessant. 
@@ -54,9 +54,9 @@ Es wurden zwei Testsuites erstellt:
 \end{itemize}
 
 Die Teilprozesse werden sowohl in \textit{suite1} als auch in \textit{suite2} getestet. Um die gesamte Testabdeckung zu ermitteln, die durch beide Suites zusammen erreicht wird, müssen zum einen beide Testsuites ausgeführt und zum anderen dieselbe Marken verwendet werden, um die abgedeckten Prozesselemente in beiden Testläufen identifizieren zu können. Das BPELUnit-Framework ist allerdings so konzipiert, dass nur eine suite pro Testlauf ausgeführt werden kann und die einzelnen Testläufe voneinander unabhängig sind. 
-Die Messung der Testabdeckung erfolgt ebenfalls suite-bezogen. Das heißt, nur die Testabdeckungen, die bei Ausführung der einzelnen Suites erreicht werden, können ermittelt werden. Die Berechnung der Testabdeckung über mehrere Suites ist nicht möglich.
+Die Messung der Testabdeckung erfolgt ebenfalls suite-bezogen. Das heißt, nur die Testabdeckungen, die bei Ausführung der einzelnen Suites erreicht werden,  ermittelt werden können. Die Berechnung der Testabdeckung über mehrere Suites ist nicht möglich.
 
-Die vollständige Abdeckung beim Testen eines BPEL-Prozesses kann nur dann ermittelt werden, wenn alle Tests, die den Prozess betreffen, in einer Testsuite organisiert sind.\footnote{Es ist natürlich auch möglich, das BPELUnit-Framework so zu erweitern, dass Suites in einem Testlauf ausgeführt werden, damit die Gesamttestabdeckung ermittelt werden kann. Die Aufgabe kann allerdings nicht mehr im Rahmen dieser Arbeit erfolgen.} 
+Für die Ermittlung der Testabdeckung mit dem BPELUnit-Framework müssen also alle Testfälle, die ein Prozess betreffen, in einer Testsuite organisiert sein.s
   
 Obwohl die Organisaton der Suites in dem Projekt den Anforderungen nicht entspricht und die vollständige Abdeckung nicht berechnet werden kann, kann die praktische Einsetzbarkeit des Verfahrens und der Implementierung trotzdem überprüft werden.
 
@@ -123,7 +123,7 @@ Compensation Handler-Abdeckung&0&0&-\%\\
 
 
 \FloatBarrier
-Wie bereits erläutert, überschneiden sich die beiden Testsuites in den getesteten Prozessen. Aufgrund der Fehlenden Werten für die gesamte Testabdeckung können die Tests nicht bewertet werden.
+Wie bereits erläutert, überschneiden sich die beiden Testsuites in den getesteten Prozessen. Aufgrund der fehlenden Werten für die gesamte Testabdeckung können die Tests nicht bewertet werden.
  
 \textbf{Zeitmessungen}.
 Die Laufzeit wird aufgrund der zusätzlichen Instrumentierungsphase und neuen Aktivitäten im Prozess größer.

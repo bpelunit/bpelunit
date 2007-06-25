@@ -25,17 +25,17 @@ Die letzten zwei Schritte werden in Abschnitt erklärt.
 \section{Referenzierung des Web Services}\label{sec:empfaengerWS}
 Für die Kommunikation des BPEL-Prozess mit dem WS sind für den Prozess selbst oder die Engine folgende Daten notwendig:
 \begin{itemize}
-	\item WSDL Beschreibung
+	\item WSDL-Beschreibung
 	\item PartnerLinkType
 	\item PartnerLink
 	\item die konkrete Adresse, unter der der service erreicht werden kann.
 \end{itemize}
 
-\textbf{WSDL Beschreibung}. Die einzige Funktionalität, die der Service öffentlich anbieten muss, ist der Empfang von Marken in Form von Strings. Dementsprechend einfach sieht die Schnittstelle dieses Services aus. Der \textit{Port Type} hat nur eine Funktion \textit{receiveMarkers}, die die String empfangen kann. Der Service ist unter einer festen Addresse "`http:\/\/localhost:7777\/ws\/\_CoverageLoggingService\_"' erreichbar.  Die Abbildung \ref{fig:webserrvice} zeigt die grafische Darstellung der Schnittstelle.
+\textbf{WSDL-Beschreibung}. Die einzige Funktionalität, die der Service öffentlich anbieten muss, ist der Empfang von Marken in Form von Strings. Dementsprechend einfach sieht die Schnittstelle dieses Services aus. Der \textit{Port Type} hat nur eine Funktion \textit{receiveMarkers}, die die String empfangen kann. Der Service ist unter einer festen Addresse "`http:\/\/localhost:7777\/ws\/\_CoverageLoggingService\_"' erreichbar.  Die Abbildung \ref{fig:webserrvice} zeigt die grafische Darstellung der Schnittstelle.
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.7\textwidth]{bilder/WebServiceWSDL.png}
-		\caption{WSDL Beschreibung vom Service zum Empfangen von Marken}
+		\caption{WSDL-Beschreibung vom Service zum Empfangen von Marken}
 	\label{fig:webserrvice}
 \end{figure}
 

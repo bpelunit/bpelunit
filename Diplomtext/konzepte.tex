@@ -23,7 +23,7 @@ Die dritte und vierte Möglichkeit eignen sich für die Messung der Abdeckung nich
 
 Der Instrumentierungs- und Tracingansatz sind als Verfahren für die Messung der Codeabdeckung aus dem Bereich der konventionellen Programmiersprachen bekannt. Die beiden Ansätze wurden in der Masterarbeit von P.Dul \cite{Dul2005} im Bezug auf Programmiersprache Java detailliert untersucht und verglichen.
  
-\section{Instrumentierungsansatz.}
+\section{Instrumentierungsansatz.}\label{sec:instrumentierungsansatz}
 
 \begin{wrapfigure}[14]{r}{6cm}
 \centering%
@@ -102,7 +102,7 @@ Die Messung ist nur möglich, wenn der Anbieter der Ablaufumgebung eine Tracing-F
 
 Zahlenmäßig weist der Tracingansatz weniger Nachteile auf. Jedoch fehlt es teilweise Unterstützung der BPEL-Ablaufumgebungen für Debugging bzw. es gibt keine Tracing-Funktiona\-lität, die die Verfolgung des Ablaufs ermöglichen würde. Noch größeres Problem ist, dass diese Schnittstelle in keinster Weise standardisiert ist. Alle Nachteile des Instrumentierungsansatzes entstehen aus der Tatsache, dass die Manipulation des Quellcodes stattfindet. 
 
-Bei der Fallstudie in der oben erwähnten Masterarbeit wurde festgestellt, dass die Messung beim Tracingansatz wesentlich langsamer ist, als beim Instrumentierungsansatz. Diese Aussage hat aber für den BPEL-Prozess, der die Dienste über Netzwerk anspricht, keine Gültigkeit. Der Grund dafür ist der Netzwerkzugriff, der für die Kommunikation notwendig ist. Auch wenn BPELUnit-Framework die Möglichkeit anbietet, den BPEL-Prozess isoliert von den einzelnen Web Servives zu testen, werden die Mock's, die Web Services simulieren, immer noch über Netzwerkschicht angesprochen. Die Programmeinheit, die die Meldungen über Ausführung bestimmter Codeteile empfängt, muss ebenfalls über Netzwerkschicht angesprochen werden. Außerdem muss die Zeit für die Instrumentierung berücksichtigt werden. Es ist zu erwarten, dass die Abdeckungsmessung in den BPEL-Kompositionen bei diesem Verfahren einen erheblichen Zeitoverhead verursachen wird.  Im Kapitel \ref{chap:fallstudie} werden für die vorgestellten Beispiele gemessene Zeitdifferenzen angegeben. 
+Bei der Fallstudie in der oben erwähnten Masterarbeit wurde festgestellt, dass die Messung beim Tracingansatz wesentlich langsamer ist, als beim Instrumentierungsansatz. Diese Aussage hat aber für den BPEL-Prozess, der die Dienste über Netzwerk anspricht, keine Gültigkeit. Der Grund dafür ist der Netzwerkzugriff, der für die Kommunikation notwendig ist. Auch wenn BPELUnit-Framework die Möglichkeit anbietet, den BPEL-Prozess isoliert von den einzelnen Web Servives zu testen, werden die Mock's, die Web Services simulieren, immer noch über Netzwerkschicht angesprochen. Die Programmeinheit, die die Meldungen über Ausführung bestimmter Codeteile empfängt, muss ebenfalls über Netzwerkschicht angesprochen werden. Außerdem muss die Zeit für die Instrumentierung berücksichtigt werden. Es ist zu erwarten, dass die Abdeckungsmessung in den BPEL-Kompositionen bei diesem Verfahren einen erheblichen Zeitoverhead verursachen wird.  Im Kapitel \ref{chap:fallstudie} werden für die vorgestellten Beispiele gemessene Zeitdiferenzen angegeben. 
 
 
 \textbf{Auswahl des Ansatzes für die Realisierung der Abdeckungsmessung in BPEL}\ \\

@@ -35,7 +35,7 @@ BPELUnit isoliert den zu testenden Prozess, indem es die Partner des Prozesses d
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.47\textwidth]{bilder/FrameworkLayer.png}
-		\caption{Schichtarchitektur des BPELUnit-Frameworks}
+		\caption{Schichtarchitektur des BPELUnit-Frameworks \cite{Mayer2006}}
 	\label{fig:schichtarchitektur}
 \end{figure}
   
@@ -54,7 +54,7 @@ Dabei werden folgende Interaktionsmuster unterstützt:
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.8\textwidth]{bilder/TestcaseSequence.pdf}
-		\caption{BPELUnit - Sequenzen in einem Testfall}
+		\caption{BPELUnit - Sequenzen in einem Testfall \cite{Mayer2006}}
 	\label{fig:sequenzen}
 \end{figure}
 
@@ -68,14 +68,14 @@ Mit der Fähigkeit des Frameworks, die SOAP Faults zu  empfangen und zu senden, s
  
  
 \textbf{Testorganisation}.  
-Die einzelnen Testfälle werden wie in den konventionellen Programmiersprachen in einer \textit{suite} organisiert. \textit{Suite} referenziert alle für den Test notwendigen Elemente: zu testende BPEL-Komposition, WSDL Beschreibungen, XML-Schemata usw. Außerdem definiert die Suite für alle enthaltenen Testfälle eine globale Testumgebung mit einer \textit{setup} und \textit{shutdown}-Routine, die für das \textit{Deployment} und \textit{Undeployment} des Prozesses zuständig ist. 
+Die einzelnen Testfälle werden wie in den konventionellen Programmiersprachen in einer \textit{suite} organisiert. \textit{Suite} referenziert alle für den Test notwendigen Elemente: zu testende BPEL-Komposition, WSDL-Beschreibungen, XML-Schemata usw. Außerdem definiert die Suite für alle enthaltenen Testfälle eine globale Testumgebung mit einer \textit{setup} und \textit{shutdown}-Routine, die für das \textit{Deployment} und \textit{Undeployment} des Prozesses zuständig ist. 
 
 \textbf{Ausführung der Tests}. Zum Testen muss der BPEL-Prozess in einer Testumgebung ausgeführt werden, die die Input- und Output-Daten des BPEL-Prozesses entsprechend der Testspezifikation behandelt. \textit{Real-life}-Testen heißt der Ansatz, der bei BPELUnit-Framework dafür verwendet wird. Dabei wird der zu testende BPEL-Prozess in eine BPEL-Engine deployt und als Web Service aufgerufen. Die Partner-Web Services müssen dabei durch Mock's ersetzt werden, die das Verhalten der Web Services simulieren, d.h., Web Service-Aufrufe empfangen und/oder selbst absetzen.   Beim \textit{Deployen} des BPEL-Prozesses müssen alle URI's der Partner-Web Services durch die URI's der Mock's ersetzt werden. 
 
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.75\textwidth]{bilder/BPLEUnitTestHarness.png}
-		\caption{BPELUnit -Testumgebung}
+		\caption{BPELUnit - Testumgebung \cite{Mayer2006}}
 	\label{fig:loggingservice}
 \end{figure} 
 
@@ -85,7 +85,7 @@ Die Testumgebung ist neben der Simulation der Partner auch für die Kommunikation
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.98\textwidth]{bilder/BPELUnitMiddleware.pdf}
-		\caption{Kommunikation zwischen BPEL-Prozess und simulierten Partnern}
+		\caption{Kommunikation zwischen BPEL-Prozess und simulierten Partnern \cite{Mayer2006}}
 	\label{fig:bpelmiddleware}
 \end{figure}
 
