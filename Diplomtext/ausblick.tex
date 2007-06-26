@@ -2,7 +2,7 @@ Für BPEL-Prozesse, die meistens zu der unternehmenskritischen Software zählen, i
 
 In dieser Arbeit wurden Codeabdeckungsmetriken für BPEL-Prozesse definiert:
 \begin{itemize}
-	\item Aktivitätabdeckung: zeigt, wie viele Basisaktivitäten bei den Tests ausgeführt wurden,
+	\item Aktivitätsabdeckung: zeigt, wie viele Basisaktivitäten bei den Tests ausgeführt wurden,
 	\item Zweigabdeckung: zeigt, wie viele Zweige bei den Tests aktiviert wurde,
 	\item Linkabdeckung: zeigt, wie viele Links bei den Tests ausgewertet wurden,
 	\item Fault und Compensation Handler-Abdeckung: zeigt, wie viele Handler bei den Tests ausgelöst wurden.
@@ -12,13 +12,13 @@ Bei der Definition der Metriken wurde darauf geachtet, dass für jeden BPEL-Proze
 
 Implementiert wurde die Messung der Testabdeckung als Erweiterung des BPELUnit-Frame\-works. Die Instrumentierung der BPEL-Dateien und Ermittlung der Testabdeckung erfolgt automatisch und transparent während eines Testlaufs. Es kann nur suite-bezogene Testabdeckung ermittelt werden, was keine wirkliche Einschränkung darstellt, wenn die Teilprozesse einzeln (jeweils eine BPEL-Datei) isoliert und getestet werden. Es werden zwei Versionen der BPEL-Sprache unterstützt: 1.1 und 2.0. Die Erkennung erfolgt automatisch und erfordert keine zusätzlichen Konfigurationen. Der Eclipse-Plugin und der Befehlszeilen-Client wurden entsprechend erweitert. Die beiden Clients bieten die Möglichkeit die Metriken festzulegen, diese zu konfigurieren und nach dem Testlauf die ermittelte Testabdeckung anzuzeigen.
 
-Der nächste logische Schritt ist die Visualisierung. Die grafische Darstellung der Testabdeckung kann den Testentwickler bei der gezielten Testerstellung besser unterstützen.
-Für das Erreichen der gewünschten oder geforderter Testabdeckung ist diese Vorgehensweise viel effizienter und kann positive Auswirkungen auf die Entwicklungszeit und -Kosten haben.
+Der nächste logische Schritt ist die Visualisierung der Testabdeckung. Die grafische Darstellung des Kontrollflussgraphen mit den abgedeckten Elementen kann den Testentwickler bei der gezielten Testerstellung besser unterstützen.
+Für das Erreichen der gewünschten oder geforderter Testabdeckung ist diese Vorgehensweise viel effizienter und kann sich positiv auf die Entwicklungszeit und -kosten auswirken.
 
 Interessant wäre eine Erweiterung des BPELUnit-Frameworks, die die Ausführung mehrerer Testsuites ermöglichen würde. Damit wäre es auch möglich die Testabdeckung über mehrere \textit{Suites} zu ermitteln. 
 
-Ein weiterer sehr interessanter Aspekt ist die Unterstützung der Anforderungsabdeckung für BPEL-Prozesse und die Definition der anforderungsbasierten (\textit{black box}-) Tesdtabdeckungsmetriken.
 
-Die implementierte Erweiterung des BPELUnit-Frameworks bietet eine einfache Möglichkeit, die Komplexität des Prozesses zu berechnen. Eine entsprechende Anpassung der Definition von Komplexität für BPEL wurde in \cite{Cardoso2006} vorgeschlagen.
+Außerdem kann die Analyse des BPEL-Prozesses, die während der Instrumentierungsohase vorgenommen wird, für die Berechnung der Komplexität des Prozesses verwendet werden. Eine entsprechende Metrik wurde in \cite{Cardoso2006} definiert.
 
+Ein weiterer sehr interessanter Aspekt ist die Unterstützung der Anforderungsabdeckung für BPEL-Prozesse und die Definition der anforderungsbasierten  Testabdeckungsmetriken.
 

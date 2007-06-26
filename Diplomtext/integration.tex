@@ -21,12 +21,12 @@ In diesem Abschnitt werden einige interessante Aspekte des Designs und der Imple
 \end{itemize}
 \item Instrumentierung:
 \begin{itemize}
-	\item \textbf{prepareArchiveForCoverageMeasurment} - erzeugt eine Kopie des \textit{Deployment}-Archivs und führt die Instrumentierung der BPEL-Dateien entsprechend der konfigurierten Metriken durch. Fügt alle benötigten für die Messung der Testabdeckung Daten in den Archive ein. Als Argumenten werden der Pfad zum Archive und der \textit{Deployer} übergeben. \textit{Deployer} wird benötigt, um festzustellen, welche BPEL-Engine zum Einsatz kommt und den entsprechenden Archive-Handler (siehe nächsten Abschnitt) auszuwählen. Wenn keine Fehler während der Instrumentierung, wie zum Beispiel falsche oder fehlende Konfiguration, auftreten, gibt die Methode den Namen der instrumentierten Archivekopie zurück. Die Kopie wird im Verzeichnis der Originaldatei abgelegt und nach dem Test gelöscht. Die entsprechenden Schreibrechte müssen vorhanden sein.  
+	\item Die Methode \textbf{prepareArchiveForCoverageMeasurment} - erzeugt eine Kopie des \textit{Deployment}-Archivs und führt die Instrumentierung der BPEL-Dateien entsprechend der konfigurierten Metriken durch. Außerdem fügt sie alle benötigten Daten für die Messung der Testabdeckung in den Archive ein. Als Argumente werden der Pfad zum Archive und der \textit{Deployer} übergeben. Der \textit{Deployer} wird benötigt, um festzustellen, welche BPEL-Engine zum Einsatz kommt und um den entsprechenden Archive-Handler (siehe nächsten Abschnitt) auszuwählen. Wenn keine Fehler während der Instrumentierung, wie zum Beispiel falsche oder fehlende Konfiguration, auftreten, gibt die Methode den Namen der instrumentierten Archivekopie zurück. Die Kopie wird im Verzeichnis der Originaldatei abgelegt und nach dem Test gelöscht. Die entsprechenden Schreibrechte müssen vorhanden sein.  
 \end{itemize}
 \item Durchführung der Messung:
 \begin{itemize}
 	\item \textbf{\textit{putMessage}} - empfängt Nachrichten mit Marken.
-	\item \textbf{\textit{setCurrentTestCase}} - setzt den Testfall, der gerade ausgeführt wird. Dadurch ist es möglich, die Testabdeckung jedes Testfalls zu bestimmen. 
+	\item \textbf{\textit{setCurrentTestCase}} - setzt den Testfall, der gerade ausgeführt wird. Dadurch ist es möglich, die Testabdeckung von jedem Testfalls zu bestimmen. 
 	\item \textbf{\textit{setErrorStatus}} - empfängt Fehlermeldungen, die bei der Instrumentierung oder Ausführung der Tests im Zusammenhang mit der Testabdeckung auftreten können. 
 \end{itemize}
 \item Ergebnis:
@@ -38,7 +38,7 @@ In diesem Abschnitt werden einige interessante Aspekte des Designs und der Imple
 \section{\textit{Archive-Handler}}
 Für das \textit{Deployen} eines BPEL-Prozesses werden außer der BPEL-Datei selbst weitere Daten benötigt: WSDL-Beschreibungen, Datentypen (XML Schema) und \textit{Deployment Descriptor} mit zusätzlichen Informationen für BPEL-Engine. Diese Daten werden zu einem Archive zusammengefasst und an die BPEL-Engine zur Ausführung übergeben.  Alle Modifikationen erfolgen auf einer Kopie des Archivs, die als erstes erstellt wird.
 
-Für die Messung der Testabdeckung mit dem Instrumentierungsansatz müssen BPEL-Dateien vor der Ausführung modifiziert werden. Dafür müssen die Dateien erst aus dem Archive extrahiert und nach der Instrumentierung wieder in den Archiv geschrieben werden. Außerdem muss Archive weitere Informationen für Engine bereithalten: die Beschreibung der Schnittstelle des Web Services zum Empfangen von Marken (\textit{Coverage Logging Service}) und wo dieser Service erreicht werden kann.
+Für die Messung der Testabdeckung mit dem Instrumentierungsansatz müssen BPEL-Dateien vor der Ausführung modifiziert werden. Dafür müssen die Dateien zunächst aus dem Archive extrahiert und nach der Instrumentierung wieder in den Archiv geschrieben werden. Außerdem muss das  Archive weitere Informationen für die Engine bereithalten: die Beschreibung der Schnittstelle des Web Services zum Empfangen von Marken (\textit{Coverage Logging Service}) und Information, wo dieser Service erreicht werden kann:
 \begin{itemize}
 	\item WSDL-Beschreibung des \textit{Coverage Logging}-Services,
 	\item Endpoint des Partner Links zum \textit{Coverage Logging}-Service.
@@ -56,9 +56,9 @@ Die Komponente für die Messung der Testabdeckung kann, wie das BPELUnit-Framewor
 Die einzelne Methoden haben folgende Aufgaben:
 \begin{itemize}
 	\item \textbf{\textit{createArchiveCopy}} - erzeugt eine Kopie des Archivs, auf der die Instrumentierung durchgeführt wird.
-	\item \textbf{\textit{addWSDLFile}} - kann in den Arvhive eine WSDL-Beschreibung hinzufügen (für \textit{Coverage Logging Service}).
+	\item \textbf{\textit{addWSDLFile}} - kann in den Archiv eine WSDL-Beschreibung hinzufügen (für \textit{Coverage Logging Service}).
 	\item \textbf{\textit{addPartnerLinkEndpoint}} - fügt für den Partner Link (zum \textit{Coverage Logging Service}), WSDL service und port sowie die konkrete Adresse in \textit{Deployment Descriptor} ein.
-	\item \textbf{\textit{getAllBPELFilenames}}, \textbf{\textit{getDocument}} und \textbf{\textit{writeDocument}} - ermöglichen die einzelnen Prozessebeschreibungen (BPEL-Dateien) in Form von XML-Dokumenten aus dem Archive zu extrahieren und wieder in den Archive zu schreiben. Diese Funktionalität wird für die Instrumentierung benötigt.
+	\item \textbf{\textit{getAllBPELFilenames}}, \textbf{\textit{getDocument}} und \textbf{\textit{writeDocument}} - ermöglichen die einzelnen Prozessebeschreibungen (BPEL-Dateien) in Form von XML-Dokumenten aus dem Archive zu extrahieren und wieder in das Archive zu schreiben. Diese Funktionalität wird für die Instrumentierung benötigt.
 	\item \textbf{\textit{closeArchive}} - gibt alle reservierten Ressourcen frei.
 \end{itemize}
 
@@ -80,12 +80,12 @@ Für alle Metriken wird die Schnittstelle \textit{IMetric} definiert (Abbildung \
 \end{wrapfigure} 
 \begin{itemize}
 \item \textbf{\textit{getName}} - liefert die Bezeichnung der Metrik,
-	\item \textbf{\textit{setOriginalBPELProzess}} - erhält noch nicht modifizierte Beschreibung des BPEL-Prozesses als XML-Element. Alle für die Instrumentierung benötigten Elemente der Prozessbeschreibung werden gespeichert,
+	\item \textbf{\textit{setOriginalBPELProzess}} - erhält die noch nicht modifizierte Beschreibung des BPEL-Prozesses als XML-Element. Alle für die Instrumentierung benötigten Elemente der Prozessbeschreibung werden gespeichert,
 	\item \textbf{\textit{getMarkersIds}} - gibt Präfixe von allen Marken dieser Metrik zurück. Sie ermöglichen die Zuordnung der empfangenen Marken einer Metrik,
 	\item \textbf{\textit{insertMarkers}} - delegiert die Instrumentierungsaufgabe an eigenen Handler (siehe Abbildung \ref{fig:KlassendiagrammHandler},
  	\item \textbf{\textit{createStatistic}} - erzeugt Statistiken.
 \end{itemize}
-Für jede Metrik existiert eine Klasse, die diese Schnittstelle implementiert. Außerdem existiert für jede Metrik einen Handler, der die Annotation des Prozesses für diese Metrik übernimmt. Es werden im Folgenden beispielhaft die Klassen vorgestellt, die für die Zweigabdeckung zuständig sind (Abbildung \ref{fig:KlassendiagrammHandler})
+Für jede Metrik existiert eine Klasse, welche diese Schnittstelle implementiert. Außerdem existiert für jede Metrik ein Handler, der die Annotation des Prozesses für diese Metrik übernimmt. Es werden im Folgenden beispielhaft die Klassen vorgestellt, die für die Zweigabdeckung zuständig sind (Abbildung \ref{fig:KlassendiagrammHandler}).
  \begin{figure}[htbp]
  \center
 		\includegraphics[width=0.83\textwidth]{bilder/Klassendiagramm1.png}
@@ -139,7 +139,7 @@ Die ermittelte Testabdeckung wird mit Hilfe der Schnittstellen \textit{IFileStat
 	\label{fig:KlassendiagrammResult}
 \end{figure}
 
-Wichtig ist, dass eine Statistik entweder direkt die Marken verwaltet oder Substatistiken enthält und nicht beides gleichzeitig. Mit dieser Bedingung ist sichergestellt, dass Substatistiken eine disjunkte Zerlegung der (\textit{Gesamt}-)Statistik darstellen. So setzt sich die Statistik der Aktivitätabdeckung aus Abdeckungsstatistiken aller Basisaktivitäten zusammen. 
+Wichtig ist, dass eine Statistik entweder direkt die Marken verwaltet oder Substatistiken enthält aber nicht beides gleichzeitig. Mit dieser Bedingung ist sichergestellt, dass Substatistiken eine disjunkte Zerlegung der (\textit{Gesamt}-)Statistik darstellen. So setzt sich die Statistik der Aktivitätsabdeckung aus Abdeckungsstatistiken aller Basisaktivitäten zusammen. 
 
 
 \section{Integration der Testabdeckungsmetriken in BPELUnit-Framework}
@@ -150,12 +150,12 @@ Wichtig ist, dass eine Statistik entweder direkt die Marken verwaltet oder Subst
 	\label{fig:BPELUnitErweiterung}
 \end{figure}
 
-BPELUnit-Framework wird durch Hinzufügen einer Phase vor dem tatsächlichen Testen. In dieser Phase wird der BPEL-Prozess annotiert, \textit{invoke}-Aktivitäten werden hinzugefügt erweitert. Diese Aktivitäten sind Markierungen für jede Basisaktivität und jede Kontrollflussmöglichkeit. 
+Das BPELUnit-Framework wird durch Hinzufügen einer zusätzlichen Phase vor dem tatsächlichen Testen. In dieser Phase wird der BPEL-Prozess annotiert, \textit{invoke}-Aktivitäten werden hinzugefügt erweitert. Diese Aktivitäten sind Markierungen für jede Basisaktivität und jede Kontrollflussmöglichkeit. 
 Zur Laufzeit rufen die Aktivitäten ein \textit{Coverage Logging Service} auf. Bei diesen Aufrufen werden die Marken transportiert, die den Ausführungspfad zum BPELUnit-Framework bzw. der Komponente für die Messung der Testabdeckung signalisieren. Nach der Ausführung können die Abdeckungsmetriken  anhand der empfangenen Marken und  statistischen Informationen über BPEL-Prozess  berechnet werden. 
 
-BPELUnit-Framework wurde mit einer Komponente erweitert, die alle Aufgaben, die mit der Messung der Abdeckung zu tun haben, verwaltet (Abbildung \ref{fig:BPELUnitErweiterung}). So enthält sie einen Instrumentierer der die BPEL-Datei analysiert und Annotationen hinzufügt. Die Originaldatei wird durch annotierte Kopie ersetzt.  Zusätzlich ist ein Web Service für das Empfangen von Marken (\textit{Coverage Logging Service}) in dieser Komponente enthalten. 
+Das BPELUnit-Framework wurde mit einer Komponente erweitert, die alle Aufgaben, die mit der Messung der Abdeckung zu tun haben, verwaltet (Abbildung \ref{fig:BPELUnitErweiterung}). So enthält sie einen Instrumentierer der die BPEL-Datei analysiert und Annotationen hinzufügt. Die Originaldatei wird durch eine annotierte Kopie ersetzt.  Zusätzlich ist ein Web Service für das Empfangen von Marken (\textit{Coverage Logging Service}) in dieser Komponente enthalten. 
 
-Das Framework ersetzt die Kommunikationspartner des BPEL-Prozesses durch Mock's, die die Geschäftsprozesse des Partners simulieren. Auf dieselbe Weise wird das Empfangen von Marken realisiert. Der \textit{Coverage Logging Service} wird durch Testumgebung zur Verfügung gestellt (Abbildung \ref{fig:loggingservice}). 
+Das Framework ersetzt die Kommunikationspartner des BPEL-Prozesses durch Mocks, welche die Geschäftsprozesse des Partners simulieren. So wird auch das Empfangen von Marken realisiert. Der \textit{Coverage Logging Service} wird durch Testumgebung zur Verfügung gestellt (Abbildung \ref{fig:loggingservice}). 
  \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.9\textwidth]{bilder/bpelProzess2.png}
@@ -163,25 +163,25 @@ Das Framework ersetzt die Kommunikationspartner des BPEL-Prozesses durch Mock's,
 	\label{fig:loggingservice}
 \end{figure}
 
-So kann die Funktionalität, die das Framework für die Kommunikation des Prozesses mit Mock's zur Verfügung stellt, auch für die Übetragung der Marken verwendet werden.  
+So kann die Funktionalität, die das Framework für die Kommunikation des Prozesses mit Mocks zur Verfügung stellt, auch für die Übetragung der Marken verwendet werden.  
 BPELUnit-Framework übernimmt für die Ermittlung der Testabdeckung folgende Aufgaben:
 \begin{itemize}
 	\item das \textit{Deployen} bzw. Simulieren von \textit{Coverage Logging Service},
 	\item Dekodierung der SOAP-Nachtichten und Transport an den \textit{Coverage Logging Service}.
 \end{itemize}
 
-\subsection{Web Service zum Empfangen von Marken (\textit{Coverage Logging Service})}
-Das BPELUnit-Framework simuliert die Partner des Prozesses auf einem lokalen Http-Server, der im Framework integriert ist.  Zum Einsatz kommt open-source Webserver \textit{Jetty} in der Version 5.1. Bei der Ausführung einer Testsuite wird der Webserver gestartet und ein Handler eingerichtet, der die Kommunikation zwischen dem Prozess und seinen Partnern regelt.   
+\subsection{Web Service zum Empfangen von Marken (\textit{Coverage Logging Service})}\label{sec:coverageLoggingService}
+Das BPELUnit-Framework simuliert die Partner des Prozesses auf einem lokalen Http-Server, der im Framework integriert ist.  Zum Einsatz kommt der Open-Source-Webserver \textit{Jetty} in der Version 5.1. Bei der Ausführung einer Testsuite wird der Webserver gestartet und ein Handler eingerichtet, der die Kommunikation zwischen dem Prozess und seinen Partnern regelt.   
 
-Der Port, auf dem die Partner simuliert werden, wird von dem Testenwickler in den Testsuites festgelegt. Der \textit{Coverage Logging Service} wartet auf Nachrichten auf dem Port 7778, der für ihn reserviert ist. Der Empfang und Auswertung der Marken wird von einem speziellen Handler unabhängig von allen anderen Nachrichten ausgeführt.
+Der Port, auf dem die Partner simuliert werden, wird von dem Testenwickler in den Testsuites festgelegt. Der \textit{Coverage Logging Service} wartet auf Nachrichten auf dem Port 7778, der für ihn reserviert ist. Der Empfang und die Auswertung der Marken wird von einem speziellen Handler unabhängig von allen anderen Nachrichten ausgeführt.
 
-Um die Abdeckung der einzelnen Testfällen bestimmen zu können, muss bekannt sein, beim welchen Testfall die jeweilige Marke verschickt wurde. Es ist nicht möglich, aus dem ausgeführten BPEL-Prozess zu erfahren, welcher Testfall gerade ausgeführt wird. Die einzige Lösung ist, beim Start eines Testfalls eine Meldung an den \textit{Coverage Logging Service} zu schicken (kein Web Service-Aufruf). Dafür ist die Methode \textit{setCurrentTestCase} in der Schnittstelle \textit{CoverageMeasurmentTool}  vorgesehen. Das heißt, die Klasse \textit{TestCaseRunner}, die im BPELUnit-Framework für den Start der Testfälle zuständig ist, ruft diese Methode auf und übergibt die Bezeichnung des Testfalls. 
+Um die Abdeckung der einzelnen Testfälle bestimmen zu können, muss bekannt sein, bei welchem Testfall die jeweilige Marke verschickt wurde. Es ist nicht möglich, aus dem ausgeführten BPEL-Prozess zu erfahren, welcher Testfall gerade ausgeführt wird. Die einzige Lösung ist, beim Start eines Testfalls eine Meldung an den \textit{Coverage Logging Service} zu schicken (kein Web Service-Aufruf). Dafür ist die Methode \textit{setCurrentTestCase} in der Schnittstelle \textit{CoverageMeasurmentTool}  vorgesehen. Das heißt, die Klasse \textit{TestCaseRunner}, die im BPELUnit-Framework für den Start der Testfälle zuständig ist, ruft diese Methode auf und übergibt die Bezeichnung des Testfalls. 
 
-Dabei gibt es ein Problem: es kann vorkommen, dass während die (\textit{Coverage-})Nachrichten eines Testfalls noch übertragen werden, bereits alle Geschäftsinteraktionen des Testfalls abgearbeitet wurden und ein neuer Testfall gestartet wird. In diesem Fall findet falsche Zuordnung der Marken an die Testfälle statt. Beim letzten Testfall gehen die Marken sogar verloren, weil der Webserver, auf dem der \textit{Coverage Logging Service} läuft, heruntergefahren wird. Das Problem wird behoben, indem nach jedem Testfall, nach Beenden aller Interaktionen des Testfalls, eine bestimmte Zeitspanne vor dem Starten des nächsten Testfalls bzw. Herunterfahren des Webservers abgewartet wird. Dadurch wird zwar die Zeit, die ein Test in Anspruch nimmt vergrößert, dafür liefert die Testabdeckung korrekte Werte. Die \textit{default}-Wartezeit ist auf  500ms gesetzt kann aber in der Konfigurationsdatei oder bei Eclipse-Plugin über die Konfigurationsmenü angepasst werden. Das Sequenzdiagramm in der Abbildung \ref{fig:sequenzediagrammTestcase} stellt die entsprechenden Interaktionen grafisch dar. 
+Dabei gibt es ein Problem: es kann vorkommen, dass während die (\textit{Coverage-})Nachrichten eines Testfalls noch übertragen werden, bereits alle Geschäftsinteraktionen des Testfalls abgearbeitet wurden und ein neuer Testfall gestartet wird. In diesem Fall findet falsche Zuordnung der Marken an die Testfälle statt. Beim letzten Testfall gehen die Marken sogar verloren, weil der Webserver, auf dem der \textit{Coverage Logging Service} läuft, heruntergefahren wird. Das Problem wird behoben, indem nach jedem Testfall, nach Beenden aller Interaktionen des Testfalls, eine bestimmte Zeitspanne vor dem Starten des nächsten Testfalls bzw. Herunterfahren des Webservers abgewartet wird. Dadurch wird zwar die Zeit, die ein Test in Anspruch nimmt vergrößert, dafür wird die Testabdeckung aber  korrekt ermittelt. Die \textit{default}-Wartezeit ist auf  500ms gesetzt kann aber in der Konfigurationsdatei oder bei Eclipse-Plugin über die Konfigurationsmenü angepasst werden. Das Sequenzdiagramm in der Abbildung \ref{fig:sequenzediagrammTestcase} stellt die entsprechenden Interaktionen grafisch dar. 
 
  \begin{figure}[htbp]
 	\centering
-		\includegraphics[width=0.8\textwidth]{bilder/Sequenzdiagram.pdf}
+		\includegraphics[width=0.95\textwidth]{bilder/Sequenzdiagram.pdf}
 		\caption{Sequenzdiagramm - testfallbezogene Testabdeckung}
 	\label{fig:sequenzediagrammTestcase}
 \end{figure}
@@ -190,9 +190,9 @@ Auf die  Interaktionspfeile, die die Instanziierung der Klassen repräsentieren, 
 
 
 \subsection{BPELUnit-Clients}
-Die Kernfunktionalitäten des BPELUnit-Frameworks, das Starten und Stoppen der Tests und Verfolgung des Testverlaufs, sind von der Präsentationsschicht unabhängig implementiert und können von beliebigen Clients verwendet werden. Das Framework enthält bereits drei Clients: Befehlszeilen-Client und Eclipse-Plugin und Ant-Integration. Die Befehlszeilen- und Eclipse-Plugin wurden innerhalb dieser Arbeit für neue Funktionalitäten der Testabdeckung erweitert.
+Die Kernfunktionalitäten des BPELUnit-Frameworks, das Starten und Stoppen der Tests und die Verfolgung des Testverlaufs, sind von der Präsentationsschicht unabhängig implementiert und können von beliebigen Clients verwendet werden. Das Framework enthält bereits drei Clients: Befehlszeilen-Client und Eclipse-Plugin und Ant-Integration. Die Befehlszeilen- und Eclipse-Plugin wurden innerhalb dieser Arbeit für neue Funktionalitäten der Testabdeckung erweitert.
 \subsubsection{Befehlszeilen-Client}
-Die Umgebungsvariable \textit{BPELUNIT\_HOME} muss auf Wurzelverzeichnis der BPELUnit installation zeigen.
+Die Umgebungsvariable \textit{BPELUNIT\_HOME} muss auf das Wurzelverzeichnis der BPELUnit installation zeigen.
 Mit Hilfe eines neuen Parameters (\textit{-c}) kann eine Ausgabedatei für die Ergebnisse der Testabdeckung festgelegt werden.
 Insgesamt stehen beim Aufruf folgende Optionen zur Verfügung:
 \begin{verbatim}
@@ -224,9 +224,9 @@ Außerdem muss eine Konfigurationsdatei "`coverageMetricsConfiguration.xml"' im V
 	   <metric name="CompensationHandlerCoverage"/>
 </coverageMetrics>
 \end{verbatim}
-Soll eine Metrik nicht berechnet werden, so kann sie einfach auskommentiert werden. Für die Aktivitätabdeckung können zusätzlich die Basisaktivitäten festgelegt werden, die berücksichtigt werden sollen. Mit dem Parameter \textit{waitTime} kann die Dauer festgelegt werden, die nach jedem Testfall abgewartet wird, um alle (\textit{Coverage-})Nachrichten zu empfangen. Beim fehlen des Attributs wird der Wert auf 500 ms gesetzt. 
+Soll eine Metrik nicht berechnet werden, so kann sie einfach auskommentiert werden. Für die Aktivitätsabdeckung können zusätzlich die Basisaktivitäten festgelegt werden, die berücksichtigt werden sollen. Mit dem Parameter \textit{waitTime} kann die Dauer festgelegt werden, die nach jedem Testfall abgewartet wird, um alle (\textit{Coverage-})Nachrichten zu empfangen. Beim fehlen des Attributs wird der Wert auf 500 ms gesetzt. 
 \subsubsection{Eclipse-Plugin}
-Die Konfiguration der Metriken erfolgt im Eclipse-Plugin über Konfigurationspanel "`Testcoverage"'. Die Panel ist über \textit{preference}-Dialog der Eclipse erreichbar und ist in der nächsten Abbildung \ref{fig:eclipseConfigMenue} dargestellt.
+Die Konfiguration der Metriken erfolgt im Eclipse-Plugin über ein Konfigurationspanel "`Testcoverage"'. Das Panel ist über \textit{preference}-Dialog der Eclipse erreichbar und ist in der nächsten Abbildung \ref{fig:eclipseConfigMenue} dargestellt.
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.5\textwidth]{bilder/PreferenceMenu.png}
@@ -234,7 +234,7 @@ Die Konfiguration der Metriken erfolgt im Eclipse-Plugin über Konfigurationspane
 	\label{fig:eclipseConfigMenue}
 \end{figure}
 
-Nach der Ausführung der Testsuite wird eine Panel (\textit{view}) mit der ermittelten Testabdeckung angezeigt (Abbildung \ref{fig:testcoverageResult}). Links sind alle BPEL-Dateien des getesteten Archivs in einer Liste aufgezählt. Die Tabelle, die rechts von der Liste ist, zeigt die erreichte Testabdeckung für die ausgewählte Datei. Für jede Metrik werden dabei gesamte Anzahl der Elementen, Anzahl der beim Test abgedeckten Elementen und die erreichte Abdeckung in Prozent angezeigt. Mehrfachauswahl der Dateien ist auch möglich, so dass zum Beispiel die Abdeckung für den ganzen Deploymentarchiv angezeigt werden kann. 
+Nach der Ausführung der Testsuite wird ein Panel (\textit{view}) mit der ermittelten Testabdeckung angezeigt (Abbildung \ref{fig:testcoverageResult}). Links sind alle BPEL-Dateien des getesteten Archivs in einer Liste aufgezählt. Die Tabelle, die rechts von der Liste ist, zeigt die erreichte Testabdeckung für die ausgewählte Datei. Für jede Metrik werden dabei die gesamte Anzahl der Elemente, Anzahl der beim Test abgedeckten Elementen und die erreichte Abdeckung in Prozent angezeigt. Mehrfachauswahl der Dateien ist auch möglich, so dass zum Beispiel die Abdeckung für das ganze Deploymentarchiv angezeigt werden kann. 
 
 Auf der rechten Seite sind alle Testfälle der Suite aufgelistet. Der Tester kann festlegen, welche Testfälle in der Statistik berücksichtigt werden. Auf diese Weise kann die Testabdeckung der einzelnen Testfälle angezeigt werden.
 

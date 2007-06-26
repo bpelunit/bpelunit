@@ -1,15 +1,14 @@
-Durch die Berechnung der Testabdeckung will der Tester erfahren, wie viel von dem Prüfling beim Testen ausgeführt wurde. Für die Definition des Prüflings, in diesem Fall BPEL-Prozesses, wird die BPEL Formalisierung von Ouyang in \cite{Chun2005} verwendet. Nach der Präsentation der wichtigsten Punkten dieser Formalisierung folgen die Definition der  Aktivität- und Zweigabdeckung. Darüber hinaus werden zwei speziell für BPEL definierten Metriken vorgestellt: Link- und Handler-Abdeckung.  
+Durch die Berechnung der Testabdeckung will der Tester erfahren, wie viel von dem Prüfling beim Testen ausgeführt wurde. Für die Definition des Prüflings, in diesem Fall des BPEL-Prozesses, wird die BPEL Formalisierung von Ouyang in \cite{Chun2005} verwendet. Nach der Präsentation der wichtigsten Punkte dieser Formalisierung folgt die Definition der  Aktivitäts- und Zweigabdeckung. Darüber hinaus werden zwei speziell für BPEL definierte Metriken vorgestellt: Link- und Handler-Abdeckung.  
 \section{Formale Definition von BPEL}\label{sec:bpelformal}
-Die hier vorgestellte formale Beschreibung von WS-BPEL-Process Model ist nicht
-vollständig und fasst nicht den gesamten Umfang von BPEL um. Es werden nur
+Die hier vorgestellte formale Beschreibung des BPEL-Prozessmodels ist nicht
+vollständig und erfasst nicht den gesamten Umfang von BPEL. Es werden nur
 für diese Arbeit relevante Teile des Modells beschrieben. Als Grundlage dient
 eine Definition aus  \cite{Chun2005}, die abgesehen von der Anpassung an den
-Standard WS-BPEL 2.0 und einigen Erweiterungen, unverändert übernommen wurde.  
+Standard BPEL 2.0 und einigen Erweiterungen, unverändert übernommen wurde.  
 
-Als Erstes wir eine Auswertungsfunktion definiert. Für die Definition einer entsprechenden Metrik wird eine Auswertungsfunktion
-definiert). Sei $f$ eine boolsche Funktion (oder ein boolscher Ausdruck),
+Als Erstes wird eine Auswertungsfunktion definiert. Sei $f$ eine boolsche Funktion (oder ein boolscher Ausdruck),
 $Var(f)$ enthält aussagenlogische Variablen, die in $f$ vorkommen. Sei $F$ die Menge
-der boolschen Funktionen und $B$ die Menge (\textit{true}, \textit{false}), dann ist die Variablenzuordnung von $F$ ist die Abbildung $assign: Var(F)\rightarrow B$, und eine Menge aller möglichen Variablenzuordnungen von $F$ ist $Assign(F)$. Die Auswertungsfunktion ist $eval: F \times Assign(F)\rightarrow B$.
+der boolschen Funktionen und $B$ die Menge (\textit{true}, \textit{false}), dann ist die Variablenzuordnung von $F$ die Abbildung $assign: Var(F)\rightarrow B$, und eine Menge aller möglichen Variablenzuordnungen von $F$ ist $Assign(F)$. Die Auswertungsfunktion ist $eval: F \times Assign(F)\rightarrow B$.
 
 \begin{Def}[WS-BPEL Process Model \cite{Chun2005}] Ein BPEL-Prozessmodell ist ein Tupel\\
 $\mathcal{W=(A,\ E,\ C,\ L,\ HR,\ }type_{\mathcal{A}},\ type_{\mathcal{E}},\
@@ -59,7 +58,7 @@ children(s)}(last(s)<^{s}_{if}a)$,
 \item sei $c\in \mathcal{C}\mathcal{HR}(s,c,last(s))\Rightarrow \forall_{assign(c)\in
 Assign(\mathcal{C})}eval(c,assign(c))=true$,
 \end{itemize}
- $last(s)$ repräsentiert den \textit{else}-Zweig in \textit{if}-Aktivität, was  sichert zum einem, dass ein \textit{else}-Zweig immer vorhanden ist und zum anderen mindestens ein Zweig in der Aktivität aktiviert wird,
+ $last(s)$ repräsentiert den \textit{else}-Zweig in \textit{if}-Aktivität, was zum einem,  sichert dass ein \textit{else}-Zweig immer vorhanden ist und zum anderen mindestens ein Zweig in der Aktivität aktiviert wird,
 \item $\forall s\in \mathcal{A}_{while},\ \left| \mathcal{HR}\cap (\{s\}\times \mathcal{C}\times \mathcal{A})\right|=1$, d.h., hat exakt eine Subaktivität,
 \item $\mathcal{HR}\cap (\mathcal{A}_{scope}\times \mathcal{B}\times \mathcal{A})=\mathcal{HR}\cap (\mathcal{A}_{scope} \times (\mathcal{E}\times\{\bot \})\times \mathcal{A})$, wobei: $\forall s \in \mathcal{A}_{scope}$,
 \begin{itemize}\itemsep2pt
@@ -67,7 +66,7 @@ Assign(\mathcal{C})}eval(c,assign(c))=true$,
 	\item $\left|\mathcal{HR}\cap (\{s\}\times \{\mathcal{E}_{fault}\}\times \mathcal{A})\right|\geq 1$, d.h., jeder Scope hat mindestens einen \textit{Fault Handler},
 		\item $\left|\mathcal{HR}\cap (\{s\}\times \{\mathcal{E}_{compensation}\}\times \mathcal{A})\right|\leq 1$, d.h., jeder Scope hat maximal einen \textit{Compensation Handler},
 \end{itemize}
-\item $process\in \mathcal{A}_{scope}$ ist der Wurzel des $\mathcal{HR}$ Baumes ,
+\item $process\in \mathcal{A}_{scope}$ ist die Wurzel des $\mathcal{HR}$ Baumes ,
 \item $trigger_{tf}:\mathcal{A}_{throw}\cup \mathcal{A}_{rethrow}\rightarrow \mathcal{E}_{fault}$ ist die Funktion, die jede \textit{throw}-Aktivität auf ein Fehlerereignis abbildet, das durch diese Aktivität ausgelöst wird,
 \item $scp_c:\mathcal{E}_{compensation}\rightarrow \mathcal{A}_{scope}\backslash \{process\}$ ist injektive Funktion, die das \textit{Compensation}-Ereignis auf ein Scope so abbildet, dass das Auftreten dieses Ereignisses die Kompensation dieses Scopes initiiert,
 \item $trigger_c:\mathcal{A}_{compensate}\rightarrow \mathcal{E}_{compensation}$ ist injektive Funktion, die jede \textit{compensate}-Aktivität auf ein Compensation-Ereignis abbildet, das durch dises Aktivität ausgelöst wird,

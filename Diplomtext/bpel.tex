@@ -15,30 +15,30 @@ in einem öffentlichen Prozess.
 
 BPEL unterstützt Orchestration und Choreography durch
 \begin{itemize}
-	\item \textbf{Executable Processes:} Spezifikation des intenen Verahaltens eines
+	\item \textbf{Executable Processes:} Spezifikation des internen Verhaltens eines
 Ge\-schäfts\-pro\-zesses, der durch eine Engine
-ausgeführt werden kann. Enthält alle für die Pro\-zess\-aus\-füh\-rung notwendige Informationen bis auf die tatsächlichen Endpunkte der Web Services.
+ausgeführt werden kann. Enthält alle für die Pro\-zess\-aus\-füh\-rung notwendigen Informationen bis auf die tatsächlichen Endpunkte der Web Services.
 \item \textbf{Abstract Business Processes:} Spezifikation des
 Nachrichtenaustauschs zwischen Partnern. Beschreibung des nach außen sichtbaren Verhaltens des Prozesses. Keine Aussagen über interne Logik.
 \end{itemize}
 
-Während abstrakte Prozesse nur der Beschreibung des Prozessverhaltens dienen,  können aus\-führ\-ba\-re BPEL-Prozesse (\textit{executable Processes}), wie der Name schon sagt, in einer BPEL-Engine ausgeführt werden. Da der Kontext dieser Arbeit das Testen von BPEL-Prozessen ist, und das Testen die Ausführung voraussetzt, sind dementsprechend auch nur die ausführbaren Prozesse relevant. Die weiteren Betrachtungen in dieser Arbeit beschränken sich aus diesem Grund ausschließlich auf die ausführbaren Prozesse.
+Während abstrakte Prozesse nur der Beschreibung des Prozessverhaltens dienen,  können aus\-führ\-ba\-re BPEL-Prozesse (\textit{executable Processes}), wie der Name schon sagt, in einer BPEL-Engine ausgeführt werden. Da der Kontext dieser Arbeit das Testen von BPEL-Prozessen ist und das Testen die Ausführung voraussetzt, sind dementsprechend auch nur die ausführbaren Prozesse relevant. Die weiteren Betrachtungen in dieser Arbeit beschränken sich aus diesem Grund ausschließlich auf die ausführbaren Prozesse.
 
 
-Mit BPEL können langlebige und zustandsbehaftete Prozesse modelliert werden. Es ist dabei möglich, eine sehr flexible Fehlerbehandlung mit Kompensationsmöglichkeiten zu realisieren. Durch die strikte Trennung der Ablauflogik (BPEL-Prozess) und Implementierung (einzelnen Web Services) ist die Anpassung bei Änderungen des zugehörigen Geschäftsprozesses einfach durchzuführen. Bei ausreichend kleiner Granularität der einzelnen Services betreffen die Auswirkungen einer Geschäftsprozessänderung ausschließlich den BPEL-Prozess selbst.
+Mit BPEL können langlebige und zustandsbehaftete Prozesse modelliert werden. Es ist dabei möglich, eine sehr flexible Fehlerbehandlung mit Kompensationsmöglichkeiten zu realisieren. Durch die strikte Trennung der Ablauflogik (BPEL-Prozess) und Implementierung (einzelne Web Services) ist die Anpassung bei Änderungen des zugehörigen Geschäftsprozesses einfach durchzuführen. Bei ausreichend kleiner Granularität der einzelnen Services betreffen die Auswirkungen einer Geschäftsprozessänderung ausschließlich den BPEL-Prozess selbst.
 
-Die Schnittstelle nach außen eines BPEL-Prozesses wird ebenfalls in WSDL beschrieben und kann wiederum als Web Service in andere Prozesse eingebunden werden.
-Die damit gegebene Rekursivität ermöglicht durch hierarchische Aufbau der Prozessen die Abstraktionsschichten einzuführen und damit die Komplexität besser zu beherrschen.
+Die Schnittstelle eines BPEL-Prozesses nach außen  wird ebenfalls in WSDL beschrieben und kann wiederum als Web Service in andere Prozesse eingebunden werden.
+Die damit gegebene Rekursivität ermöglicht durch den hierarchische Aufbau der Prozesse, die Abstraktionsschichten einzuführen und damit die Komplexität besser zu beherrschen.
 
-Allerdings bring BPEL auch einige Nachteile mit sich. Als Erstes ist die Komplexität der Sprache zu nennen. Jedoch ist diese Komplexität in dem Anspruch begründet, jede Art von Geschäftsprozessen realisieren zu können und zwar quer zu allen IT-Plattformen. Auch zu nennen sind die redundanten Ausdrucksmittel der Sprache, die aufgrund der Vereinigung zwei Sprachen entstanden sind, und oft das Verständnis der Prozessen erschweren. Als letztes ist noch das Fehlen einer standardisierten grafischen Notation zu erwähnen.
+Allerdings bringt BPEL auch einige Nachteile mit sich. Als Erstes ist die Komplexität der Sprache zu nennen. Jedoch ist diese Komplexität in dem Anspruch begründet, jede Art von Geschäftsprozessen realisieren zu können und zwar quer zu allen IT-Plattformen. Auch zu nennen sind die redundanten Ausdrucksmittel der Sprache, die aufgrund der Vereinigung von zwei Sprachen entstanden sind und oft das Verständnis der Prozessen erschweren. Als letztes ist noch das Fehlen einer standardisierten grafischen Notation zu erwähnen.
 
-In den folgenden Abschnitten wird auf einige für diese Arbeit relevanten Aspekte der BPEL eingegangen.
+In den folgenden Abschnitten wird auf einige für diese Arbeit relevante Aspekte der BPEL eingegangen.
 
-\subsection{Partners}
+\subsection{Partner}
 
 BPEL-Prozesse interagieren mit anderen Web Services, die
 man als Partner oder Partner-Prozesse bezeichnet. Ein
-BPEL-Prozess benutzt Dienste von Partnern und bietet selbst Dienste nach außen an. Die Beziehung zwischen den möglichen Partner und dem Prozess selbst wird zuerst abstrakt durch die Rollen in einem \textit{Partner Link Type} beschrieben. In jedem solchen Element werden mindestens eine und maximal zwei Rollen definiert. Die Rollen können dabei entweder vom Prozess oder vom Partner übernommen werden.  Derjenige der diese Rolle übernimmt muss den \textit{Port Type}, der zu der Rolle zugeordnet ist, in seiner WSDL-Schnittstelle anbieten.
+BPEL-Prozess benutzt Dienste von Partnern und bietet selbst Dienste nach außen an. Die Beziehung zwischen den möglichen Partnern und dem Prozess selbst wird zuerst abstrakt durch die Rollen in einem \textit{Partner Link Type} beschrieben. In jedem solchen Element werden mindestens eine und maximal zwei Rollen definiert. Die Rollen können dabei entweder vom Prozess oder vom Partner übernommen werden.  Derjenige, der diese Rolle übernimmt, muss den \textit{Port Type}, der der Rolle zugeordnet ist, in seiner WSDL-Schnittstelle anbieten.
 
 Die Beziehung zwischen dem BPEL-Prozess und einem konkreten Partner wird letztendlich in \textit{Partner Link} durch die Zuweisung der Rollen definiert.
 Die Bindung an einen konkreten Web Service kann entweder statisch zum Zeitpunkt des \textit{Deployments} oder dynamisch zur Laufzeit erfolgen. Die Abbildung \ref{fig:partnerLink} stellt den Zusammenhang grafisch dar.
@@ -55,12 +55,12 @@ Kontrollfluss eines Geschäftsprozesses in sich kapselt. Das Prozess-Element enth
 
 \begin{itemize}
 	\item $<$partnerLinks$>$ - Partner Link-Definitionen, die für Kommunikation mit den Partner benutzt werden.   
-	\item $<$variables$>$ -  Variablen für die Speicherung von internen Daten und Daten, die Empfangen oder Gesendet werden.  Alle in diesem Bereich definierten Variablen sind globale Variablen. Es gibt Möglichkeit lokale Variablen zu definieren. Sie werden in einem Sichtbarkeitsbereich
+	\item $<$variables$>$ -  Variablen für die Speicherung von internen Daten und Daten, die empfangen oder gesendet werden.  Alle in diesem Bereich definierten Variablen sind globale Variablen. Es gibt Möglichkeit lokale Variablen zu definieren. Sie werden in einem Sichtbarkeitsbereich
 (Scope) durch einen eindeutigen Namen und einen Datentyp definiert. 
 	\item $<$activity$>$(\textit{process}-Aktivität) - Geschäftslogik in Form von Aktivitäten. 
 \end{itemize}
  
-Die Geschäftslogik wird in BPEL durch so genannte Aktivitäten realisiert. Es gibt zwei Arten von Aktivitäten: Basisaktivitäten (basic activities) und Strukturierte Aktivitäten (structured activities). Basisaktivitäten beschreiben die elementaren Schritte des Prozesses. Strukturierten Aktivitäten bestimmen den Kontrollfluss und können deswegen weitere Basis- oder Strukturierten Aktivitäten enthalten. 
+Die Geschäftslogik wird in BPEL durch so genannte Aktivitäten realisiert. Es gibt zwei Arten von Aktivitäten: Basisaktivitäten (basic activities) und Strukturierte Aktivitäten (structured activities). Basisaktivitäten beschreiben die elementaren Schritte des Prozesses. Strukturierte Aktivitäten bestimmen den Kontrollfluss und können deswegen weitere Basis- oder Strukturierte Aktivitäten enthalten. 
 
 Die Basisaktivitäten repräsentieren einzelne Aktionen:
 \begin{itemize}
@@ -70,7 +70,7 @@ Die Basisaktivitäten repräsentieren einzelne Aktionen:
 \item $<$assign$>$ - Zuweisung und Manipulation von Variablenwerten.
 \item $<$throw$>$ - Explizites Signalisieren eines Fehlers, welcher durch Fehlerbehandlungen abgefangen werden kann.
 \item $<$exit$>$ - Beenden einer Prozessinstanz.
-\item $<$wait$>$ - Warten auf einen Zeitpunkt oder für eine Zeitspanne.
+\item $<$wait$>$ - Warten auf einen Zeitpunkt oder eine Zeitspanne.
 \item $<$empty$>$ - Nichts machen (NOP).
 \item $<$compensate$>$ - Kompensation aller eingebetteten Scopes, $<$compensate$>$ kann nur im FaultHandler
 oder CompensationHandler eingebettet sein.
@@ -102,16 +102,16 @@ BPEL beschreibt den Ablauf von Geschäftsprozessen mit den Strukturierten Aktivit
 \subsection{Link-Konzept}\label{sec:linkkonzept}
  In einer flow-Aktivität können Links definiert werden. Sie dienen
 der Synchronisation nebenläufiger Aktivitäten. Jeder Link verbindet eine
-\textit{source}-  mit einer \textit{target}-Aktivität und besitzt eine implizite oder explizite \textit{transition condition} (boolscher Ausdruck). Ist der Ausdruck nicht spezifiziert, so ist der Wert der \textit{transition condition} \textit{true}. Jede Aktivität, die das Ziel eines Links ist, hat eine implizite oder explizite \textit{join condition} (boolscher Ausdruck). Im impiziten Fall ist das eine ODER-Verknüpfung der Status aller eingehenden Links. Die Auswertung dieser Bedingungen bei der Ausführung wird an einem kleinem Beispiel erläutert.
+\textit{source}-  mit einer \textit{target}-Aktivität und besitzt eine implizite oder explizite \textit{transition condition} (boolscher Ausdruck). Ist der Ausdruck nicht spezifiziert, so ist der Wert der \textit{transition condition} \textit{true}. Jede Aktivität, die das Ziel eines Links ist, hat eine implizite oder explizite \textit{join condition} (boolscher Ausdruck). Im impliziten Fall ist das eine ODER-Verknüpfung der Status aller eingehenden Links. Die Auswertung dieser Bedingungen bei der Ausführung wird an einem kleinem Beispiel erläutert.
 
 \begin{figure}[h!]
 	\centering
-		\includegraphics[width=0.53\textwidth]{bilder/FlowBespielLinks.png}
+		\includegraphics[width=0.55\textwidth]{bilder/FlowBespielLinks.png}
 	\caption{Beispiel einer flow-Aktivität mit Synchronisationslinks}
 	\label{}
 \end{figure}
 
-Ist die Ausführung der Aktivität \textit{activity\_1} beendet, so wird \textit{transition condition} des Links \textit{link\_1} ausgewertet und der Status auf den entsprechenden Wert \textit{true} oder \textit{false}  gesetzt. Auf dieselbe Weise wird der Status des zweiten Links ermittelt. Stehen die Status der beiden Links fest, so kann die \textit{join condition} der Aktivität \textit{activity\_3} ausgewertet werden. Bei einem \textit{true}-Wert wird die Ausführung des Prozesses  ganz normal mit \textit{activity\_3}  fortgesetzt. Ist der Wert \textit{false}, so wird eine Fehlermeldung (\textit{Join Failure}) erzeugt und der Kontrollfluss für Fehlerbehandlung aktiviert. Ist dieses Verhalten unerwünscht, so kann das Standardattribut \textit{suppressJoinFailure} auf den Wert \textit{"`yes"'} gesetzt. In diesem Fall wird \textit{activity\_3} ebenfalls nicht ausgeführt, allerdings wird der Prozess ganz normal, ohne eine Fehlermeldung zu produzieren, mit der \textit{activity\_4} fortgesetzt.
+Ist die Ausführung der Aktivität \textit{activity\_1} beendet, so wird \textit{transition condition} des Links \textit{link\_1} ausgewertet und der Status auf den entsprechenden Wert \textit{true} oder \textit{false}  gesetzt. Auf dieselbe Weise wird der Status des zweiten Links ermittelt. Steht der Status der beiden Links fest, so kann die \textit{join condition} der Aktivität \textit{activity\_3} ausgewertet werden. Bei einem \textit{true}-Wert wird die Ausführung des Prozesses  ganz normal mit \textit{activity\_3}  fortgesetzt. Ist der Wert \textit{false}, so wird eine Fehlermeldung (\textit{Join Failure}) erzeugt und der Kontrollfluss für Fehlerbehandlung aktiviert. Ist dieses Verhalten unerwünscht, so kann das Standardattribut \textit{suppressJoinFailure} auf den Wert \textit{"`yes"'} gesetzt. In diesem Fall wird \textit{activity\_3} ebenfalls nicht ausgeführt, allerdings wird der Prozess ganz normal, ohne eine Fehlermeldung zu produzieren, mit der \textit{activity\_4} fortgesetzt.
 
 Ist \textit{activity\_2} zum Beispiel in einem \textit{if}-Zweig, der während der Ausführung nicht aktiviert wird, so kann der Status des ausgehenden Links nicht auf die normale Weise ermittelt werden. Die \textit{join condition}  kann ohne des Status des zweiten Links nicht ausgewertet werden.  Das würde zu einer Blockierung des Kontrollflusses bei \textit{activity\_3} führen. Für solche Situationen sieht BPEL \textit{Dead-Path-Elimination} vor. Wird eine Aktivität aufgrund einer zu
 \textit{false} ausgewerteten \textit{join condition}
@@ -125,9 +125,9 @@ Bei der Verwendung von Links ist folgendes zu beachten:
 	\item Links dürfen keine Zyklen bilden,
 	\item es müssen \textit{boundary crossing}-Restriktionen beachtet werden:
 \begin{itemize}
-	\item Links dürfen nicht in oder aus den Wiederholungsschleifen und \textit{Compensation Handler} ein- bzw. austreten
-	\item Links dürfen aus den \textit{Fault} und \textit{Termination Handler} nur austreten
-	\item Links, die aus den \textit{catch} oder \textit{catchAll}-Blöcken des Fault Handlers oder aus dem Termination Handler austreten, müssen in einem nicht zu den Handlern zugehörigem \textit{Scope} landen.)
+	\item Links dürfen nicht in oder aus den Wiederholungsschleifen und \textit{Compensation Handler} ein- bzw. austreten,
+	\item Links dürfen nicht in den \textit{Fault} und \textit{Termination Handler} eintreten,
+	\item Links, die aus den \textit{catch} oder \textit{catchAll}-Blöcken des Fault Handlers oder aus dem Termination Handler austreten, müssen in einem nicht zu den Handlern gehörigen \textit{Scope} landen.)
 \end{itemize}
 \end{itemize}
 

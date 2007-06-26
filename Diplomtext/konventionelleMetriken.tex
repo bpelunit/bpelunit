@@ -1,31 +1,31 @@
- In diesem Abschnitt werden die Metriken für die Messung der Testabdeckung in BPEL definiert. Dabei werden die Anweisungs- und Zweigabdeckung  an BPEL-Kontext angepasst und neue BPEL-spezifische Metriken eingeführt.  
+ In diesem Abschnitt werden die Metriken für die Messung der Testabdeckung in BPEL definiert. Dabei werden die Anweisungs- und Zweigabdeckung  an den BPEL-Kontext angepasst und neue BPEL-spezifische Metriken eingeführt.  
  Die Metriken dienen als Mittel für die Bestimmung der Qualität und des Fortschritts der Tests. Dabei bezieht sich jede Metrik auf bestimmte Aspekte des Kontrollflusses.
  
- Bei allen Metriken wurde darauf geachtet, dass die 100\% Abdeckung beim Testen erreicht werden kann. Zwischen dem ermitteltem Wert einer Metrik und der Testqualität gibt es einen einfachen Zusammenhang; je größer der Wert ist, desto höher ist die Qualität der Tests im Bezug auf Aspekte des Kontrollflusses, die die Metrik festlegt.
+ Bei allen Metriken wurde darauf geachtet, dass die 100\% Abdeckung beim Testen erreicht werden kann. Zwischen dem ermitteltem Wert einer Metrik und der Testqualität gibt es einen einfachen Zusammenhang; je größer der Wert ist, desto höher ist die Qualität der Tests in Bezug auf Aspekte des Kontrollflusses, die die Metrik festlegt.
 
-  \subsection{Aktivitätabdeckung}
+  \subsection{Aktivitätsabdeckung}
   Mit BPEL lässt sich ein Prozess beschreiben, der in der Lage ist, verschiedene Dienste (Web Services) zu einer Gesamtanwendung zu verknüpfen. Die Kommunikation mit den Diensten wird durch Basisaktivitäten realisiert. Die Basisaktivitäten sind die elementaren Aktivitäten eines Prozesses, die keine weiteren Aktivitäten enthalten. 
  
  Bei der Anweisungsabdeckung geht es darum, festzustellen, wie viele der
 Anweisungen beim Testen ausgeführt wurden. Da die Basisaktivitäten der BPEL
- den Anweisungen der anderen Programmiersprachen entsprechen, kann die Anweisungsabdeckung als Grundlage für die Definition der Aktivitätabdeckung dienen.
+ den Anweisungen der anderen Programmiersprachen entsprechen, kann die Anweisungsabdeckung als Grundlage für die Definition der Aktivitätsabdeckung dienen.
  
- Insbesondere ist diese Statistik im Bezug auf einzelne Aktivitäten interessant. So ist die Information, ob alle \textit{invokes}-Aktivitäten (Web Service-Aufrufe) beim Testen ausgeführt wurden, sehr wichtig, um die erste Einschätzung über die Testqualität zu machen. In dieser Hinsicht ist die Definition der Abdeckungsmetriken für die einzelnen Basisaktivitäten sinnvoll.
+ Insbesondere ist diese Statistik im Bezug auf einzelne Aktivitäten interessant. So ist die Information, ob alle \textit{invokes}-Aktivitäten (Web Service-Aufrufe) beim Testen ausgeführt wurden, sehr wichtig, um die erste Einschätzung der Testqualität zu machen. In dieser Hinsicht ist die Definition der Abdeckungsmetriken für die einzelnen Basisaktivitäten sinnvoll.
 \begin{quotation}
 \begin{Def}
-\textit{ $\forall t\in \mathcal{T}_\mathcal{B},\ \mathcal{A}^{executed}_t\subseteq A^{basic}$ ist die Menge der Basisaktivitäten vom Typ $t$, die beim Testen ausgeführt wurden. Somit kann die Aktivitätabdeckung für alle Basisaktivitäten wie folgt definiert werden:}
+\textit{ $\forall t\in \mathcal{T}_\mathcal{B},\ \mathcal{A}^{executed}_t\subseteq A^{basic}$ ist die Menge der Basisaktivitäten vom Typ $t$, die beim Testen ausgeführt wurden. Somit kann die Aktivitätsabdeckung für alle Basisaktivitäten wie folgt definiert werden:}
 		\[
 	\mathcal{S}_t(\mathcal{W})=\frac{\left| \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}_t\right|},\ \forall t\in \mathcal{T}_\mathcal{B}
 \]
 
-\textit{Die gesamte Aktivitätabdeckung bezieht sich auf alle Basisaktivitäten:}
+\textit{Die gesamte Aktivitätsabdeckung bezieht sich auf alle Basisaktivitäten:}
 	\[
 	\mathcal{S}(\mathcal{W})=\frac{\left|\bigcup_{t\in \mathcal{T}_\mathcal{B}} \mathcal{A}^{executed}_t\right|}{ \left|\mathcal{A}^{basic}\right|}
 \]
 \end{Def}
 \end{quotation}
 
-Zu bemerken ist, dass die Basisaktivitäten, die in sämtlichen Handler verwendet werden, nach Definition der Mengen $\mathcal{A}_t$, $\mathcal{A}^{executed}_t$ und $\mathcal{A}^{basic}$ durch die Aktivitätabdeckungsmetriken berücksichtigt werden. 
+Zu bemerken ist, dass die Basisaktivitäten, die in sämtlichen Handlern verwendet werden, nach Definition der Mengen $\mathcal{A}_t$, $\mathcal{A}^{executed}_t$ und $\mathcal{A}^{basic}$ durch die Aktivitätsabdeckungsmetriken berücksichtigt werden. 
 
 Es sollte beim Testen mindestens sichergestellt werden, dass alle
 Basisaktivitäten, die die elementaren Aktivitäten eines Prozesses sind, durch
@@ -38,8 +38,8 @@ Zusammenhänge zu berücksichtigen.
 Die Zweigabdeckung beschreibt das Verhältnis von durchlaufenen Zweigen zu allen
 möglichen Zweigen des BPEL-Prozesses. Wie bereits im Abschnitt \ref{sec:bpelformal}
 erklärt, werden die Zweige durch Relationen $\mathcal{HR}$ und $\mathcal{HBR}$
-beschrieben. Die Funktion $BE$ (\textit{branch executed}) bestimmt welche Zweige beim Testen
-durchlaufen wurden und wird wie folgt definiert:      
+beschrieben. Die Funktion $BE$ (\textit{branch executed}) bestimmt, welche Zweige beim Testen
+durchlaufen wurden, und wird wie folgt definiert:      
 \begin{itemize}
 	\item $BE:\mathcal{HR}\cup \mathcal{HBR}\rightarrow \mathcal{B}$,
 	\item $\forall r\in \mathcal{HR}\cup \mathcal{HBR},\ BE(r)=true$
@@ -53,7 +53,7 @@ Außerdem werden zwei weitere Funktionen eingeführt:
 \begin{itemize}
 	\item
 	$br\_number_{set}(\mathcal{A}_i)=\sum_{s\in\mathcal{A}_i}br\_number_t(s)$
-	berechnet für eine Menge von Aktivitäten, die Zweige in der Kontrollstruktur, die durch diese Aktivität beschrieben werden,
+	berechnet für eine Menge von Aktivitäten die Zweige in der Kontrollstruktur, die durch diese Aktivität beschrieben werden,
 	\item $br\_number_{set}^{executed}(\mathcal{A}_i)=\sum_{s\in
 	\mathcal{A}_i}br\_number_t(s)$ berechnet für eine Menge von Aktivitäten die Anzahl der Zweige, die beim Testen durchlaufen wurden.
 \end{itemize}
@@ -111,7 +111,7 @@ Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivit
 	\item $EX^{s}_{\mathcal{HBR}}=\{(a,b,s)\in \mathcal{HBR}|s \in \mathcal{A}_{t}\wedge BE((s,b,a))=true \}$,
 	\item $EX^{s}_{t}=EX^{s}_{\mathcal{HR}}+EX^{s}_{\mathcal{HBR}}$,
 		\item $br\_number^{executed}_{t}(s)=\left|EX^{s}_{t}\right|+br\_number^{executed}_{set}(children(s))$,\\
-		Bemerkung: Das Besondere an der \textit{forEach}-Aktivität ist die Fähigkeit, den enthaltenen \textit{Scope} nicht mehrmals hintereinander sondern parallel auszuführen (gesteuert mit Attribute \textit{parallel}). Diese Option bietet eine Möglichkeit die Abarbeitung des Prozesses zu beschleunigen. Bei der sequenziellen Ausführung werden zwei Zweige, wie bei \textit{while}-Aktivität abwechseln aktiviert. Bei der parallelen Ausführung der \textit{forEach}-Aktivität sind alle Zweige unterschiedlich. Diese Optimierungsoption (parallele Ausführung) wird bei der Zweigabdeckung nicht berücksichtigt. Der Grund dafür ist, dass die Anzahl der parallelen Zweige erst zur Laufzeit bekannt ist. Damit ist es nicht möglich, die Zweige vor der Ausführungszeit zu identifizieren und zu annotieren.\\
+		Bemerkung: Das Besondere an der \textit{forEach}-Aktivität ist die Fähigkeit, den enthaltenen \textit{Scope} nicht mehrmals hintereinander, sondern parallel auszuführen (gesteuert mit dem Attribute \textit{parallel}). Diese Option bietet eine Möglichkeit die Abarbeitung des Prozesses zu beschleunigen. Bei der sequenziellen Ausführung werden zwei Zweige, wie bei \textit{while}-Aktivität abwechseln aktiviert. Bei der parallelen Ausführung der \textit{forEach}-Aktivität sind alle Zweige unterschiedlich. Diese Optimierungsoption (parallele Ausführung) wird bei der Zweigabdeckung nicht berücksichtigt. Der Grund dafür ist, dass die Anzahl der parallelen Zweige erst zur Laufzeit bekannt ist. Damit ist es nicht möglich, die Zweige vor der Ausführungszeit zu identifizieren und zu annotieren.\\
 \end{itemize}
 \newpage
 \item \textbf{Flow:}
@@ -132,9 +132,13 @@ Es folgt die Definition der entsprechenden Funktionen für alle Typen der Aktivit
 	\begin{itemize}\itemsep2pt
 	\item $br\_number_{flow}(s)=br\_number_{set}(children(s)),\ s \in \mathcal{A}_{scope}$,
 		\item $br\_number^{executed}_{scope}(s)=br\_number^{executed}_{set}(children(s))$,\\
-Bemerkung: alle Zweige innerhalb von Handlern gehen in die Rechnung ein, weil nach Definition von $\mathcal{A}_{scope}$ alle Handler in der Menge $children(scope)$ enthalten sind.\\
+Bemerkung: Alle Zweige innerhalb von Handlern gehen in die Rechnung ein, weil nach Definition von $\mathcal{A}_{scope}$ alle Handler in der Menge $children(scope)$ enthalten sind.\\
 \end{itemize}
 \item \textbf{Basisaktivitäten:}
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.12\textwidth]{bilder/basisactivityGraph.png}
+\end{figure}
 	\begin{itemize}\itemsep2pt
 	\item $\forall t\in \mathcal{T}_\mathcal{B}$, 
 	\item $br\_number_{t}(s)=0,\ s \in \mathcal{A}^{basic}$,
@@ -150,7 +154,7 @@ $process$ ist die Scope-Aktivität an der Wurzel des Baumes, der durch die Schach
 Die Abbildung \ref{fig:ExamlpleBPELProzess} verdeutlicht an einem Beispiel welche Kontrollflusszweige durch die Metrik abgedeckt sind. Die dickeren Pfeile markieren den Ausführungspfad. Während alle durchgezogenen Kanten dieses Pfades (auch in \textit{Fault}- und \textit{CompensationHandler}) für die Zweigabdeckung relevant sind, gehen die gestrichelten nicht in die Rechnung ein. Die Übergabe der Kontrolle in einem Fehlerfall an die entsprechenden Handler bleibt unberücksichtigt.
 \begin{figure}[htbp]
 	\centering
-		\includegraphics[width=0.9\textwidth]{bilder/Fault_Compensation.png}
+		\includegraphics[width=0.95\textwidth]{bilder/FaultCompensation.pdf}
 		\caption{Kontrollfluss eines BPEL-Prozesses}
 	\label{fig:ExamlpleBPELProzess}
 \end{figure}
@@ -161,7 +165,7 @@ In den nächsten beiden Abschnitten werden die für BPEL spezifischen
 Testabdeckungsmetriken vorgestellt: Link- und Handlerabdeckung. 
 
 \subsection{Linkabdeckung}
-Das Link-Konzept ist in BPEL ein wichtiges aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{join condition} das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit die Links und deren Verhalten zu testen.  Das Ziel dieser Metrik ist, den Tester dazu zu bewegen, dass jede \textit{transition condition} während der Tests mindestens einmal auf den Wert \textit{true} und einmal auf \textit{false} gesetzt wird.
+Das Link-Konzept ist in BPEL ein wichtiges, aber komplexes Modellierungsmittel. Die Links dienen der Synchronisation zwischen parallelen Aktivitäten. Zusätzlich erlauben \textit{transition}- und \textit{join condition}, das Verhalten der Links zu beeinflussen. Durch diese Bedingungen ist es möglich, komplexe Logik zu modellieren. Daraus ergibt sich die zwingende Notwendigkeit, die Links und deren Verhalten zu testen.  Das Ziel dieser Metrik ist, den Tester dazu zu bewegen, dass jede \textit{transition condition} während der Tests mindestens einmal auf den Wert \textit{true} und einmal auf \textit{false} gesetzt wird.
  
 
 Für die Tests sind nur die Links relevant, deren \textit{transition condition} nicht mit
@@ -169,11 +173,11 @@ einem konstanten Wert belegt sind, sondern mit einem Ausdruck, der erst zur
 Laufzeit ausgewertet werden kann. Es ist dabei wichtig, dass der Ausdruck während der Ausführung
 sowohl zu \textit{true} als auch zu \textit{false} ausgewertet wird, um das Verhalten in beiden Fällen zu testen.
 
-Die entsprechende Metrik heißt \textit{Linkabdeckung} (\textit{eng. Link Coverage}) und wird wie folgt definiert:
+Die entsprechende Metrik heißt \textit{Linkabdeckung} (\textit{engl. Link Coverage}) und wird wie folgt definiert:
 \begin{itemize}
 	\item $l \in_{\pi 2}\mathcal{LR}$,
 	\item $f=transcon(l)$,
-	\item $Assign_{test}\subseteq Assign(f)$ die Menge der Kombinationen von Variablenbelegungen, die beim Testen stattgefunden sind,
+	\item $Assign_{test}\subseteq Assign(f)$ die Menge der Kombinationen von Variablenbelegungen, die beim Testen stattgefunden haben,
 \end{itemize}
 \begin{equation*}
 \begin{split}
@@ -182,24 +186,24 @@ Die entsprechende Metrik heißt \textit{Linkabdeckung} (\textit{eng. Link Coverag
 \\\frac{\{\left|l\in_{\pi 2}\mathcal{LR}|Var(f)\neq \emptyset\wedge eval(f,Assign_{test}(Var(f))=false)\right|\}}{2*\left|\{l\in_{\pi 2}\mathcal{LR}|Var(f)\neq \emptyset \}\right|}
 \end{split}
 \end{equation*}
-	Damit es möglich ist, die 100\%  Abdeckung dieser Metrik zu erreichen, werden nur die Links berücksichtigt, deren transition condition mindestenns eine Variable enthält ($Var(f)\neq \emptyset$). Ansonsten wäre es nicht möglich durch die Eingabedaten dafür zu sorgen, dass die \textit{transition condition} beim Testen sowohl \textit{true} als auch \textit{false}-Wert annimmt.
+	Damit es möglich ist, die 100\%  Abdeckung dieser Metrik zu erreichen, werden nur die Links berücksichtigt, deren transition condition mindestenns eine Variable enthält ($Var(f)\neq \emptyset$). Ansonsten wäre es nicht möglich, durch die Eingabedaten dafür zu sorgen, dass die \textit{transition condition} beim Testen sowohl \textit{true} als auch \textit{false}-Wert annimmt.
 	
 	Außerdem ist es wichtig, dass nur die Links beachtet werden, deren \textit{transition condition} beim Testen ausgewertet wurde und nicht durch $DPE$ auf $false$ gesetzt wurde. Anderenfalls können sehr einfache Tests sehr schnell 50\% Abdeckung dieser Metrik erreichen, ohne die Logik der Links zu testen. Demzufolge könnte diese Metrik auch nicht als Indikator für Testqualität verwendet werden.
 
 \subsection{Fault und Compensation Handler-Abdeckung}
 BPEL-Sprache hat ein Konzept zur strukturierten Behandlung von
-Laufzeitfehlern. Die Umschaltung von normalen auf \textit{Fault Handler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{Fault Handler} ausgeführt wird.  Die Tatsache, dass die
-BPEL-Prozesse langlebig sein können und in geschäftskritische Bereichen eingesetzt werden, verdeutlicht die Notwendigkeit, das Verhalten des Systems auch im
+Laufzeitfehlern. Die Umschaltung von normalem auf \textit{Fault Handler-}Kontrollfluss erfolgt automatisch beim Auftreten eines Fehlers. Was nichts anderes heißt, als dass der zugehörige \textit{Fault Handler} ausgeführt wird.  Die Tatsache, dass die
+BPEL-Prozesse langlebig sein können und in geschäftskritischen Bereichen eingesetzt werden, verdeutlicht die Notwendigkeit, das Verhalten des Systems auch im
 Fehlerfall umfassend zu testen. Demzufolge sollten die entsprechenden Handler durch die Tests abgedeckt werden. Die in diesem Abschnitt vorgestellten Metriken
 können dabei als Indikator für die Testqualität bezüglich der Fehlerbehandlung und Kompensation dienen.
 
 \textbf{FaultHandler.} Eine wichtige Information beim Testen des Systems im
-Fehlerfall ist, ob alle  $catch$- bzw $catchAll$-Blöcken durch die Tests
+Fehlerfall ist, ob alle  $catch$- bzw $catchAll$-Blöcke durch die Tests
 ausgeführt werden.   
 
 \begin{itemize}
 	\item $A_{catch}=\{a\in \mathcal{A}^{structured}\cup \mathcal{A}^{basic}|(s,f,a)\in \mathcal{HR}\wedge f\in \mathcal{E}_{fault}\wedge s\in \mathcal{A}_{scope}\}$ die Menge der top-level Aktivitäten in allen $catch$- und $catchAll$-Blöcken, 
-	\item $\left|A_{catch}\right|$ entspricht der Anzahl von catch- und catchall-Blöcken
+	\item $\left|A_{catch}\right|$ entspricht der Anzahl von \textit{catch}- und \textit{catchAll}-Blöcken
 	\item $A^{executed}_{catch}=\{a\in A_{catch}|\exists (s,f,a)\in \mathcal{HR}\wedge BE((s,f,x))=true\}$ die Teilmenge der Aktivitäten aus $A_{catch}$, die getestet wurden,
 \end{itemize}
 \[
@@ -210,7 +214,7 @@ Im Rahmen einer Fehlerbehandlung ist es möglich, die
 eigentlich in sich erfolgreichen Aktionen rückgängig zu machen. Dafür sind in
 BPEL die Compensation Handler vorgesehen.
 
-\textbf{Compensation Handler.} Die Tests sollten also nicht nur die Fehlersituationen provozieren sondern auch überprüfen, ob die entsprechenden Aktionen (in Form von \textit{Compenation Handler}) durchgeführt werden. 
+\textbf{Compensation Handler.} Die Tests sollten also nicht nur die Fehlersituationen provozieren, sondern auch überprüfen, ob die entsprechenden Aktionen (in Form von \textit{Compenation Handler}) durchgeführt werden. 
 \begin{itemize}
 	\item $A_{compensation}=\{a\in \mathcal{A}^{structured}\cup \mathcal{A}^{basic}|(s,c,a)\in \mathcal{HR}\wedge c\in \mathcal{E}_{compensate}\wedge s\in \mathcal{A}_{scope}\}$ die Menge der top-level Aktivitäten in allen Compensation Handler
 	\item $\left|A_{compensation}\right|$ entspricht der Anzahl der Compensation Handler

@@ -20,6 +20,19 @@
 \usepackage{pdftricks}			% Zeichnen von Bäumen
 \usepackage{fancyhdr} %Kopf Fußzeile
 \usepackage{amsthm} %definitionen
+\usepackage[pagebackref, colorlinks=true, urlcolor=black, linkcolor=black,bookmarksnumbered=true,linktocpage=false,citecolor=black]{hyperref}
+
+  %  *  breaklinks=true/false: Gibt an, ob Links umgebrochen werden dürfen.
+  %  * linktocpage=true/false: im Inhaltsverzeichnis sind nur die Seitenzahlen links, nicht der Text
+ %   * colorlinks=true/false: Links werden eingefärbt (Farben werden mit linkcolor, anchorcolor ... festgelegt)
+ %   * linkcolor=Farbe: Farbe des verlinkten Textes, Dokument-interne Links
+ %   * citecolor=Farbe: Farbe des verlinkten Textes, Links zum Literaturverzeichnis
+ %   * filecolor=Farbe: Farbe des verlinkten Textes, Links auf lokale Dateien
+ %   * pagecolor=Farbe: Farbe des verlinkten Textes, Links auf andere Seiten
+  %  * urlcolor=Farbe: Farbe des verlinkten Textes, externe URLs
+ %   * frenchlinks=true/false: Links werden als smallcaps, anstatt farbig dargestellt.
+%    * breaklinks=true/false: Gibt an, ob Links umgebrochen werden dürfen.
+
 %\begin{psinputs}
 %\usepackage{pst-all}
 %\end{psinputs}			
@@ -69,6 +82,7 @@
 \newpage
 %\thispagestyle{empty}~
 \tableofcontents
+
 \chapter{Einleitung}
 \section{Motivation}
 \input{motivation}
@@ -87,7 +101,7 @@
 \input{bpel}
 \section{Testen von BPEL-Kompositionen}\label{sec:framework}
 \input{framework}
-\section{Testabdeckung, als Maß für die Testqualität}
+\section{Testabdeckung als Maß für die Testqualität}
 \input{testabdeckung}
 \section{Zusammenfassung}
 \input{zusammenfassung1}
@@ -97,28 +111,33 @@
 \input{konventionelleMetriken}
 
 \section{Zusammenfassung}
-Nach der Vorstellung der formalen Beschreibung von BPEL wurden in diesem Kapitel die Testabdeckungsmetriken für BPEL formal definiert:
+In diesem Kapitel wurden nach der Vorstellung der formalen Beschreibung des BPEL-Prozessmodels  die Testabdeckungsmetriken für BPEL formal definiert:
 \begin{itemize}
-	\item Aktivitätabdeckung,
-	\item Zweigabdeckung,
-	\item Linkabdeckung,
-	\item Fault und Compensation Handler-Abdeckung.	
+\item Aktivitätsabdeckung: zeigt, wie viele Basisaktivitäten bei den Tests ausgeführt wurden,
+\item Zweigabdeckung: zeigt, wie viele Zweige bei den Tests aktiviert wurde,
+\item Linkabdeckung: zeigt, wie viele Links bei den Tests ausgewertet wurden,
+\item Fault und Compensation Handler-Abdeckung: zeigt, wie viele Handler bei den Tests
+ausgelöst wurden.
 \end{itemize}
+Bei der Definition der Metriken wurde darauf geachtet, dass für jeden BPEL-Prozess 100\%-ge
+Abdeckung erreichbar ist.
 \chapter{Verfahren für die Messung der Testabdeckung}
 \input{konzepte}
 \chapter{Umsetzung der Abdeckungsmessung}\label{chap:umsetzung}
 \input{umsetzung}
 
 \section{Zusammenfassung}
-In diesem Kapitel wurde ausführlich erläutert, wie die Ermittlung der Testabdeckung mit dem Instrumentierungsverfahren umgesetzt werden kann. Die Instrumentierungsphase wurde für jede Metrik detailliert vorgestellt. Dabei wurden aufgetauchten Problemen beschrieben und gefundene Lösungen vorgestellt.
+In diesem Kapitel wurde ausführlich erläutert, wie die Ermittlung der Testabdeckung mit dem Instrumentierungsverfahren umgesetzt werden kann.
+Die Ermittlung der Testabdeckung wurde dabei in drei Phasen aufgeteilt: Instrumentierung der BPEL-Datei, Sammlung der Daten während der Testausführung und Auswertung der Daten mit anschließender Berechnung der Metriken. Die Instrumentierung, als Kernaufgabe des Verfahrens, wurde dabei besonders ausführlich beschrieben. 
+
+Nach der Identifizierung der Aufgaben dieser Phase wurde sie wiederum in drei Phasen aufgeteilt, die für jede Metrik erläutert wurden. Anhand von verschiedenen Szenarien wurden Problemen aufgedeckt und mögliche Lösungen diskutiert.
 %\input{vorgehensweise}
 %\input{UmsetzungDerMessung}
 \chapter{Design und Implementierung}
 \input{integration}
 \section{Zusammenfassung}
-In diesem Abschnitt wurden einige Aspekte des Designs und der Implementierung der Komponente für die Ermittlung der Testabdeckung in BPEL-Kompositionen vorgestellt. Alle in dieser Arbeit definierten Metriken werden im vollen Umfang unterstützt. 
-Anschließend wurde die Integration  in das BPELUnit-Framework und entsprechende Erweiterungen der Clients beschrieben.  
-Insbesondere Eclipse-Client ermöglicht eine detaillierte und flexible Darstellung der erreichten Abdeckung.
+In diesem Kapitel wurden einige Aspekte des Designs und der Implementierung der Komponente für die Ermittlung der Testabdeckung vorgestellt. Dabei wurden die  Designentscheidungen erklärt und begründet sowie die wichtigen Schnittstellen und Klassen besprochen. 
+Anschließend wurde die Integration  in das BPELUnit-Framework und die entsprechende Erweiterungen der Clients beschrieben. 
 %\input{integrationrest}
 \chapter{Beispiel}\label{beispiele}
 \input{beispiele}
@@ -138,8 +157,13 @@ Insbesondere Eclipse-Client ermöglicht eine detaillierte und flexible Darstellun
 \nocite{Dostal2005}
 \nocite{Hunter2004}
 \bibliographystyle{alpha}
+\clearpage
+  \addcontentsline{toc}{chapter}{\bibname}
 \bibliography{referenzen}
-\listoffigures
+  % Abbildungsverzeichnis ins Inhaltsverzeichnis: 
+\clearpage
+  \addcontentsline{toc}{chapter}{\listfigurename}
+  \listoffigures
 \input{appendix}
 \input{erklaerung}
 \end{document}

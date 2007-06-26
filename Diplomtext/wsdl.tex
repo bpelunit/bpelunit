@@ -4,18 +4,17 @@ Service selbst. Neben der Methodenspezifikation beinhaltet sie auch technische
 Daten, wie die eigentliche Lage des Dienstes und an welche Transportprotokolle
 er gebunden ist.
 
-Obwohl das W3C WSDL 2.0 am 23 May 2007  veröffentlicht hat, wird in dieser Arbeit WSDL 1.1 \cite{W3C2001} verwendet.  
+Obwohl WSDL 2.0 am 23. May 2007  veröffentlicht wurde, wird in dieser Arbeit WSDL 1.1 \cite{W3C2001} verwendet.  
 Der Grund hierfür ist, dass die BPEL 2.0, um die es in dieser Arbeit in erster Linie geht, auch noch auf WSDL 1.1 aufsetzt.
 
 Abbildung \ref{fig:wsdlStructur} zeigt die Struktur eines WSDL-Dokuments.
 Die Elemente in einem WSDL-Dokument lassen sich in abstrakte Definitionen
 und konkrete technische Beschreibungen zu diesen Definitionen unterteilen. 
 Für die sprach- und plattformunabhängige Beschreibung
-der Schnittstelle (Datentypen, Operationen und Nachrichten) sind die abstrakten Elemente zuständig: $<$types$>$-, $<$message$>$- und $<$portType$>$-Elemente.
+der Schnittstelle (Datentypen, Operationen und Nachrichten) sind die abstrakten Elemente zuständig: $<$types$>$-, $<$message$>$- und $<$portType$>$.
 Die konkreten technischen Details (wo die Services sich befinden und wie sie aufgerufen werden können) werden durch die Elemente $<$binding$>$ und $<$service$>$ definiert.  Die konkreten Definitionen referenzieren
 dabei stets abstrakte Definitionen. Das bedeutet, dass zu einer abstrakten
-Definition mehrere konkrete Implementierungen  existieren können. Damit besteht die Möglichkeit ein Service an mehreren Stellen verfügbar zu machen und die Verwendung verschiedenen Kommunikations- und Transportprotokollen zu ermöglichen.
-Die Elemente
+Definition mehrere konkrete Implementierungen  existieren können. Damit besteht die Möglichkeit, einen Service an mehreren Stellen verfügbar zu machen und die Verwendung verschiedener Kommunikations- und Transportprotokolle zu ermöglichen. Im Folgenden werden die Elemente eines WSDL-Dokumentes einzeln beschrieben und näher erläutert.
 
 
 \begin{figure}[htbp]
@@ -27,7 +26,7 @@ Die Elemente
 
 \textbf{$<$definitions$>$} ist das Wurzelelement des WSDL-Dokuments. Es enthält den Namen des Services, Namespaces für den Service selbst und für die verwendeten Standards.
 
-\textbf{$<$types$>$} enthält Definitionen für eigene Datentypen. Standardmäßig werden die Datentypen aus der XML-Schema-Spezifikation verwendet.Die Flexibilität der XML-Schemas, die sprachunabhängig und plattformneutral sind, erlaubt es in WSDL die Besonderheiten bestehender Programmiersprachen oder Datenaustauschstandards abzubilden
+\textbf{$<$types$>$} enthält Definitionen für eigene Datentypen. Standardmäßig werden die Datentypen aus des XML-Schema-Spezifikation verwendet. Die Flexibilität der XML-Schemas, die sprachun\-abhängig und plattformneutral sind, erlaubt es, in WSDL die Besonderheiten bestehender Programmiersprachen oder Datenaustauschstandards abzubilden.
 
 
 \textbf{$<$message$>$}  fasst die definierten Typen zu abstrakten unidirektionalen Nachrichten zusammen.

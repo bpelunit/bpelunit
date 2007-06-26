@@ -1373,5 +1373,124 @@ Testen von BPEL bedeutet überprüfen die Korrektheit des implementierten Geschäft
 Das Hauptziel von BPELUnit Framework ist unit Test, die natürliche Benutzergruppe sind entwickler.
 
 
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(tm) Designer Version 3.0.0 (http://www.active-endpoints.com)
+-->
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" 
+xmlns:ns1="http://order.service.coverage.example.se.uni.hannover.de" 
+xmlns:ns2="http://auth.service.coverage.example.se.uni.hannover.de" 
+xmlns:ns3="http://message.service.coverage.example.se.uni.hannover.de" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="prozess" suppressJoinFailure="yes" targetNamespace="http://prozess">
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" 
+   location="../wsdl/OrderService.wsdl" 
+   namespace="http://order.service.coverage.example.se.uni.hannover.de"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" 
+   location="../wsdl/authentifikationService.wsdl" 
+   namespace="http://auth.service.coverage.example.se.uni.hannover.de"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/MessagingService.wsdl"
+    namespace="http://message.service.coverage.example.se.uni.hannover.de"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink myRole="orderService" name="PLTOrderService" partnerLinkType="ns1:PLTOrderService"/>
+      <bpel:partnerLink name="PLTAuthenticateService" partnerLinkType="ns1:PLTAuthenticateService" partnerRole="AuthenticateService"/>
+      <bpel:partnerLink name="PLTMessageService" partnerLinkType="ns1:PLTMessageService" partnerRole="messageService"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable messageType="ns1:receiveOrderRequest" name="orderRequest"/>
+      <bpel:variable messageType="ns1:receiveOrderResponse" name="orderResponse"/>
+      <bpel:variable messageType="ns2:authenticateRequest" name="authenticateRequest"/>
+      <bpel:variable messageType="ns2:authenticateResponse" name="authenticateResponse"/>
+      <bpel:variable messageType="ns3:notifyRequest" name="notifyRequest"/>
+   </bpel:variables>
+   <bpel:faultHandlers>
+      <bpel:catchAll>
+         <bpel:sequence>
+            <bpel:assign>
+               <bpel:copy>
+                  <bpel:from>
+                     <bpel:literal>Error</bpel:literal>
+                  </bpel:from>
+                  <bpel:to part="in" variable="notifyRequest"/>
+               </bpel:copy>
+            </bpel:assign>
+            <bpel:invoke inputVariable="notifyRequest" operation="notify" partnerLink="PLTMessageService" portType="ns3:MessageService"/>
+         </bpel:sequence>
+      </bpel:catchAll>
+   </bpel:faultHandlers>
+   <bpel:sequence>
+      <bpel:receive createInstance="yes" operation="receiveOrder" partnerLink="PLTOrderService" portType="ns1:OrderHandler" 
+                                                                                                                    variable="orderRequest"/>
+      <bpel:if>
+         <bpel:condition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$orderRequest.in/shipment='express'</bpel:condition>
+         <bpel:assign>
+            <bpel:copy>
+               <bpel:from>
+                  <bpel:literal>Hallo</bpel:literal>
+               </bpel:from>
+               <bpel:to part="id" variable="authenticateRequest"/>
+            </bpel:copy>
+            <bpel:copy>
+               <bpel:from part="in" variable="orderRequest">
+                  <bpel:query>customerId</bpel:query>
+               </bpel:from>
+               <bpel:to part="id" variable="authenticateRequest"/>
+            </bpel:copy>
+         </bpel:assign>
+         <bpel:else>
+            <bpel:assign>
+               <bpel:copy>
+                  <bpel:from part="in" variable="orderRequest">
+                     <bpel:query>customerId</bpel:query>
+                  </bpel:from>
+                  <bpel:to part="id" variable="authenticateRequest"/>
+               </bpel:copy>
+            </bpel:assign>
+         </bpel:else>
+      </bpel:if>
+      <bpel:flow>
+         <bpel:links>
+            <bpel:link name="L1"/>
+         </bpel:links>
+         <bpel:sequence>
+            <bpel:targets>
+               <bpel:target linkName="L1"/>
+            </bpel:targets>
+            <bpel:assign>
+               <bpel:copy>
+                  <bpel:from>
+                     <bpel:literal>VIP</bpel:literal>
+                  </bpel:from>
+                  <bpel:to part="in" variable="notifyRequest"/>
+               </bpel:copy>
+            </bpel:assign>
+            <bpel:invoke inputVariable="notifyRequest" operation="notify" partnerLink="PLTMessageService" portType="ns3:MessageService"/>
+         </bpel:sequence>
+         <bpel:sequence>
+            <bpel:sources>
+               <bpel:source linkName="L1">
+                  <bpel:transitionCondition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">
+                  $authenticateResponse.out/customerType='VIP'</bpel:transitionCondition>
+               </bpel:source>
+            </bpel:sources>
+            <bpel:invoke inputVariable="authenticateRequest" operation="authenticate" outputVariable="authenticateResponse" 
+                                                             partnerLink="PLTAuthenticateService" portType="ns2:AuthenticationService"/>
+            <bpel:assign>
+               <bpel:copy>
+                  <bpel:from>
+                     <bpel:literal>Order is accepted</bpel:literal>
+                  </bpel:from>
+                  <bpel:to part="message" variable="orderResponse"/>
+               </bpel:copy>
+            </bpel:assign>
+         </bpel:sequence>
+      </bpel:flow>
+      <bpel:reply operation="receiveOrder" partnerLink="PLTOrderService" portType="ns1:OrderHandler" variable="orderResponse"/>
+   </bpel:sequence>
+</bpel:process>
+
+\end{verbatim}
+
 
 

@@ -6,7 +6,7 @@ In diesem Abschnitt werden die Metriken an einem Besipiel demonstriert. Als Beis
 	\label{fig:Bespielprozess}
 \end{figure}
 
-Abhängig vom Liefertyp (\textit{express} oder \textit{normal}) werden die Bestellungsdaten unterschiedlich verarbeitet. Wenn der Kunde einen besonderen Status (VIP) hat, was mit dem \textit{Customer Identification}-Service festgestellt wird, dann wir der Kunde und sein Handelsvertreter über die Bestellung benachrichtigt.
+Abhängig vom Liefertyp (\textit{express} oder \textit{normal}) werden die Bestelldaten unterschiedlich verarbeitet. Wenn der Kunde einen besonderen Status (VIP) hat, was mit dem \textit{Customer Identification}-Service festgestellt wird, dann wird der Kunde und sein Handelsvertreter über die Bestellung benachrichtigt.
 Das wird mit Hilfe des Synchronisationslinks \textit{link\_1} modelliert, der eine explizite \textit{transition condition} aufweist: \textit{customerType='VIP'}.
 Für den Fehlerfall ist ein einfacher Fault Handler implementiert.
 
@@ -21,30 +21,35 @@ Der Prozess bekommt in einem Testfall eine Bestellung eines \textit{VIP}-Kunden 
 
 Es ist nur wichtig zu wissen, dass der Kunde den VIP-Status hat. Bei der Bearbeitung der Daten wird der mit roten Pfeilen markierte Pfad durchlaufen.
 Mit der Erweiterung des BPELUnit-Frameworks kann die Testabdeckung ermittelt werden. Der Befehlszeilen-Client liefert die Testabdeckung im XML-Format:
+\begin{small}
 \begin{verbatim}
-<testingCoverage xmlns="http://www.bpelunit.org/schema/coverageResult">
+<testingCoverage>
   <FileStatistics filename="bpel/prozess.bpel">
-    <statistic name="ActivityCoverage" totalItems="10" testedItems="7" />
-    <statistic name="ActivityCoverage: assign" totalItems="5" 
-                                                          testedItems="3" />
-    <statistic name="ActivityCoverage: invoke" totalItems="3" 
-                                                          testedItems="2" />
-    <statistic name="ActivityCoverage: receive" totalItems="1" 
-                                                          testedItems="1" />
-    <statistic name="ActivityCoverage: reply" totalItems="1" 
-                                                          testedItems="1" />
-    <statistic name="BranchCoverage" totalItems="10" testedItems="8" />
-    <statistic name="CompensationHandlerCoverage" totalItems="0" 
-                                                          testedItems="0" />
-    <statistic name="FaultHandlerCoverage" totalItems="1" testedItems="0" />
-    <statistic name="LinkCoverage" totalItems="2" testedItems="1" />
-    <statistic name="LinkCoverage: negativLinks" totalItems="1" 
-                                                          testedItems="0" />
-    <statistic name="LinkCoverage: positivLinks" totalItems="1" 
-                                                          testedItems="1" />
+    <statistic name="ActivityCoverage" 
+                    totalItems="10" testedItems="7" perCent="70.0%" />
+    <statistic name="ActivityCoverage: assign" 
+                    totalItems="5" testedItems="3" perCent="60.0%" />
+    <statistic name="ActivityCoverage: invoke" 
+                    totalItems="3" testedItems="2" perCent="66.6%" />
+    <statistic name="ActivityCoverage: receive" 
+                    totalItems="1" testedItems="1" perCent="100.0%" />
+    <statistic name="ActivityCoverage: reply" 
+                    totalItems="1" testedItems="1" perCent="100.0%" />
+    <statistic name="BranchCoverage" 
+                    totalItems="10" testedItems="8" perCent="80.0%" />
+    <statistic name="CompensationHandlerCoverage" 
+                    totalItems="0" testedItems="0" perCent="-" />
+    <statistic name="FaultHandlerCoverage" 
+                    totalItems="1" testedItems="0" perCent="0.0%" />
+    <statistic name="LinkCoverage" 
+                    totalItems="2" testedItems="1" perCent="50.0%" />
+    <statistic name="LinkCoverage: negativLinks" 
+                    totalItems="1" testedItems="0" perCent="0.0%" />
+    <statistic name="LinkCoverage: positivLinks" 
+                    totalItems="1" testedItems="1" perCent="100.0%" />
   </FileStatistics>
-</testingCoverage>
-\end{verbatim}
+</testingCoverage>\end{verbatim}
+\end{small}
 
 
 Obwohl es sich um einen sehr einfachen BPEL-Prozess handelt, deckt ein Testfall   bereits 70\% der Basisaktivitäten und 80\% der Zweige ab. Es wird allerding nur 50\% der Linkabdeckung erreicht und der Fault Handler wird gar nicht getestet. Der Tester kann diese Ergebnisse nutzen, um neue Testfälle zu definieren und fehlende Bereiche abzudecken.

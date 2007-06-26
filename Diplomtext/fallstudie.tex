@@ -1,10 +1,10 @@
-Zur Überprüfung der praktischen Einsetzbarkeit der entwickelten Lösung wurde eine Fallstudie durchgeführt. Die Web Service-basierte Anwendung und die zugehörigen Tests, die dabei verwendet wurden, sind aus einem studentischen Projekt entstanden. An der Universität Hannover am Fachgebiet Software Engineering wurde im Wintersemester 2006/07 das Projekt "`Entwicklung einer Weservice-basierten Anwendung"' durchgeführt. 
-Innerhalb eines Semesters haben 8 Studenten die Anwendung entworfen, implementiert und getestet. Aufgrund der eingesetzten Technologien und Werkzeuge, wie BPEL (Kompositionsprache), BPELUnit-Framework (Testwerkzeug) und \textit{ActiveBPEL Engine}, hat sich das Projekt als Fallstudie für diese Arbeit angeboten. Zu erwähnen ist noch, dass in dem Projekt die BPEL-Sprache noch in der Versiom 1.1 verwendet wurde.
+Zur Überprüfung der praktischen Einsetzbarkeit der entwickelten Lösung wurde eine Fallstudie durchgeführt. Die Web Service-basierte Anwendung und die zugehörigen Tests, die dabei verwendet wurden, sind aus einem studentischen Projekt entstanden: "`Entwicklung einer Web Service-basierten Anwendung"' an der Universität Hannover am Fachgebiet Software Engineering (WS 2006/07). 
+Innerhalb eines Semesters haben 8 Studenten die Anwendung entworfen, implementiert und getestet. Aufgrund der eingesetzten Technologien und Werkzeuge, wie BPEL (Kompositionsprache), BPELUnit-Framework (Testwerkzeug) und \textit{ActiveBPEL Engine}, hat sich das Projekt als Fallstudie für diese Arbeit angeboten. Zu erwähnen ist noch, dass die BPEL-Sprache noch in der Version 1.1 verwendet wurde.
 
-Entwickelt wurde ein System für Fachgebiet Software Engineering , das den Anmeldeprozess für studentische Abschlussarbeiten unterstützt. Das System stellt dabei sicher, dass alle wesentliche Bestandteile der Betreuung, wie z.B. Veröffentlichung und Anmeldung der Abschlussarbeit, Planung von Zwischen- und Endvorträgen, Bewertung usw., eingehalten werden.
+Entwickelt wurde ein System für das Fachgebiet Software Engineering, das den Anmeldeprozess für studentische Abschlussarbeiten unterstützt. Das System stellt dabei sicher, dass alle wesentlichen Bestandteile der Betreuung, wie z.B. Veröffentlichung und Anmeldung der Abschlussarbeit, Planung von Zwischen- und Endvorträgen, Bewertung usw., eingehalten werden.
 Für die Fallstudie sind vor allem die entstandenen BPEL-Prozesse und die Tests interessant. 
 
-Zur besseren Einschätzung der Größe der entstandenen Anwendung und Einordnung dieser Fallstudie werden einige statistischen Daten der BPEL-Prozesses und (BPELUnit-) Tests vorgestellt.  
+Zur besseren Einschätzung der Größe der entstandenen Anwendung und Einordnung dieser Fallstudie werden einige statistische Daten des BPEL-Prozesses und (BPELUnit-) Tests vorgestellt.  
 
 Der Gesamtprozess besteht aus 12 Teilprozessen. Insgesamt wurden 13 BPEL-Dateien erstellt: 12 für Teilprozesse und eine für den Hauptprozess, der alle Teilprozesse (als Web Services) zu einer Anwendung verknüpft. Die Abbildung \ref{fig:beispielprozess} stellt den Zusammenhang grafisch dar.
 Die folgenden Statistiken beziehen sich auf alle 13 BPEL-Dateien und zeigen welche Aktivitäten bei der Prozessmodellierung verwendet wurden.
@@ -44,31 +44,32 @@ wait&10&&\\
 \end{tabular}
 \end{table}
 
-Auffällig ist, dass keine \textit{sequence}-Aktivitäten verwendet wurden; die sämtlichen squentiellen Abläufe wurden mit Hilfe von Synchronistaionslinks in \textit{flow}-Aktivitäten modelliert.
+Auffällig ist, dass keine \textit{sequence}-Aktivitäten verwendet wurden;  sämtliche squentiellen Abläufe wurden mit Hilfe von Synchronistaionslinks in \textit{flow}-Aktivitäten modelliert. Es wurden insgesamt 596 Synchronisationslinks verwendet.
 
 Zum Testen des Prozesses wurde BPELUnit-Framework eingesetzt.
 Es wurden zwei Testsuites erstellt:
 \begin{itemize}
-	\item \textbf{Suite1} testet den gesamten Prozesses. In diesem Fall werden außschließlich die Kommuniaktionspüartner (Web Services) der Teilprozesse durch Mock's ersetzt. Die zugehörige Aufrufe sind in der Abbildung \ref{fig:beispielprozess} durch kurze Pfeile angedeutet. Das heißt, es wird ein Prozess getestet, der nicht in einer einzelnen BPEL-Datei beschrieben ist, sondern sich aus mehreren Teilprozessen zusammensetzt, die jeweils in einer-BPEL-Datei definiert sind. Es werden also nicht die kleinsten Einheiten des Prozesses isoliert, was eine Auswirkung auf die Ermittlung der Testabdeckung haben wird (siehe weiter).
-	\item \textbf{Suite2} testet die einzelnen Teilprozesse. In dieser \textit{suite} werden die einzelnen Prozesse isoliert und getestet, so wie es bei Unittest auch gefordert wird. Zusätzlich zu den Partnern, die bei \textit{suite1} durch Mock's ersetzt wurden, wird auch der Hauptprozess, der in diesem Fall Client ist, durch ein Client-Mock ersetzt. 
+	\item \textbf{Suite1} besteht aus 30 Testfällen und testet den gesamten Prozesses. In diesem Fall werden ausschließlich die Kommuniaktionspartner (Web Services) der Teilprozesse durch Mocks ersetzt. Die zugehörige Aufrufe sind in der Abbildung \ref{fig:beispielprozess} durch kurze Pfeile angedeutet. Das heißt, es wird ein Prozess getestet, der nicht in einer einzelnen BPEL-Datei beschrieben ist, sondern sich aus mehreren Teilprozessen zusammen setzt. Es werden also nicht die kleinsten Einheiten des Prozesses isoliert.
+	\item \textbf{Suite2} besteht aus 12 Testfällen und testet die einzelnen Teilprozesse. Zusätzlich zu den Partnern, die bei \textit{suite1} durch Mocks ersetzt wurden, wird auch der Hauptprozess, der in diesem Fall Client ist, durch ein Client-Mock ersetzt.  
 \end{itemize}
 
-Die Teilprozesse werden sowohl in \textit{suite1} als auch in \textit{suite2} getestet. Um die gesamte Testabdeckung zu ermitteln, die durch beide Suites zusammen erreicht wird, müssen zum einen beide Testsuites ausgeführt und zum anderen dieselbe Marken verwendet werden, um die abgedeckten Prozesselemente in beiden Testläufen identifizieren zu können. Das BPELUnit-Framework ist allerdings so konzipiert, dass nur eine suite pro Testlauf ausgeführt werden kann und die einzelnen Testläufe voneinander unabhängig sind. 
-Die Messung der Testabdeckung erfolgt ebenfalls suite-bezogen. Das heißt, nur die Testabdeckungen, die bei Ausführung der einzelnen Suites erreicht werden,  ermittelt werden können. Die Berechnung der Testabdeckung über mehrere Suites ist nicht möglich.
+Die Teilprozesse werden sowohl in \textit{suite1} als auch in \textit{suite2} getestet. Um die gesamte Testabdeckung zu ermitteln, die durch beide Suites zusammen erreicht wird, müssen zum einen beide Testsuites ausgeführt und zum anderen dieselben Marken verwendet werden, um die abgedeckten Prozesselemente in beiden Testläufen identifizieren zu können. Das BPELUnit-Framework ist allerdings so konzipiert, dass nur eine suite pro Testlauf ausgeführt werden kann und die einzelnen Testläufe voneinander unabhängig sind. 
+Die Messung der Testabdeckung erfolgt ebenfalls suite-bezogen. Das heißt, dass die Berechnung der Testabdeckung über mehrere Suites nicht möglich ist.
+Für die Ermittlung der Testabdeckung mit dem BPELUnit-Framework ist es notwendig, dass alle Testfälle, die ein Prozess betreffen, in einer Testsuite zusammengeführt werden. 
 
-Für die Ermittlung der Testabdeckung mit dem BPELUnit-Framework müssen also alle Testfälle, die ein Prozess betreffen, in einer Testsuite organisiert sein.s
-  
-Obwohl die Organisaton der Suites in dem Projekt den Anforderungen nicht entspricht und die vollständige Abdeckung nicht berechnet werden kann, kann die praktische Einsetzbarkeit des Verfahrens und der Implementierung trotzdem überprüft werden.
+Die Organisation der Testfälle im betrachteten Projekt erfüllt diese Anforderungen nicht. Aufgrund der unterschiedlichen Schnittstellen, die in den beiden Testsuites für die Clients vorgesehen sind, ist auch das Zusammenführen der beiden Suites  nicht möglich. Deswegen kann die Gesamtabdeckung, die beim Testen erreicht wird, nicht ermittelt werden. 
+ 
+ Die praktische Einsetzbarkeit des Verfahrens für die Ermittlung der Testabdeckung und die Implementierung können trotzdem an diesem Projekt überprüft werden. Die Ermittlung der Testabdeckung für einzelnen Suites schafft in diesem Fall zwar keine Grundlage für die Bewertung der Tests zeigt aber die Funktionstüchtigkeit des entwickelten Werkzeugs an einem realen Projekt.
 
 \textbf{Instrumentierung}. Bei der Instrumentierung werden die BPEL-Dateien (alle 13) für alle in dem Abschnitt \ref{sec:metrikdefinition} definierten Metriken instrumentiert. Einige statistischen Daten der Instrumentierungsphase folgen:
 \begin{itemize}
-	\item 2857 Marken,
-	\item 1502 invoke- und assign-Aktivitäten,
-	\item 1095 sequence-Aktivitäten,
+	\item 2856 Marken,
+	\item 1500 invoke- und assign-Aktivitäten,
+	\item 1094 sequence-Aktivitäten,
 	\item 4 flow-Aktivitäten.
 \end{itemize}
 
-Es werden insgesamt 2857 Marken im Prozess platziert. Die Übertragung der Marken wird durch 1502 \textit{invoke-}Aktivitäten realisiert. Durch das Zusammenfassen der Marken, die hintereinander im Kontrollfluss liegen, können 1355 \textit{invoke}-Aktivitäten gespart werden und damit die \textit{overhead}-Zeit, die durch Ausführung der Aktivitäten für die Übertragung der Marken zustande kommt, verringert werden.  Der getestete BPEL-Prozess enthält vier Links, die für die Linkabdeckung relevant sind.  Zur Erfassung des Linkstatus wurde für jeden Link, wie im Abschnitt \ref{sec:Linkabdeckung} beschrieben, eine \textit{flow}-Aktivität eingefügt. 
+Es werden insgesamt 2856 Marken im Prozess platziert. Die Übertragung der Marken wird durch 1502 \textit{invoke-}Aktivitäten realisiert. Durch das Zusammenfassen der Marken, die hintereinander im Kontrollfluss liegen, können 1356 \textit{invoke}-Aktivitäten gespart werden und damit die \textit{overhead}-Zeit, die durch Ausführung der Aktivitäten für die Übertragung der Marken zustande kommt, verringert werden.  Der getestete BPEL-Prozess enthält vier Links, die für die Linkabdeckung relevant sind.  Zur Erfassung des Linkstatus wurde für jeden Link, wie im Abschnitt \ref{sec:Linkabdeckung} beschrieben, eine \textit{flow}-Aktivität eingefügt.  Die vielen zusätzlichen \textit{sequence}-Aktivitäten werden vor allem durch Synchronisationslinks verursacht (siehe Abschnitt \ref{sec:aktivitaetsabdeckung} und \ref{sec:zweigabdeckung}), die im Originalprozess auch für die Modellierung der sequenziellen Abläufen eingesetzt werden.
 
 \textbf{Ergebnisse}.
 Die Ergebnisse sind in der folgenden Tabelle dargestellt.
@@ -123,12 +124,34 @@ Compensation Handler-Abdeckung&0&0&-\%\\
 
 
 \FloatBarrier
-Wie bereits erläutert, überschneiden sich die beiden Testsuites in den getesteten Prozessen. Aufgrund der fehlenden Werten für die gesamte Testabdeckung können die Tests nicht bewertet werden.
- 
+Wie bereits erläutert, kann die Gesamtabdeckung aufgrund der Überschneidungen der Testsuites nicht ermittelt werden. Es fehlt damit die Grundlage für die Bewertung der Tests.
+
 \textbf{Zeitmessungen}.
-Die Laufzeit wird aufgrund der zusätzlichen Instrumentierungsphase und neuen Aktivitäten im Prozess größer.
-Die Studie wurde auf folgendem System durchgeführt:
+Die Testlaufzeiten werden aufgrund der zusätzlichen Instrumentierungsphase und neuen Aktivitäten im Prozess größer.
+Die gemessenen Zeiten mit und ohne der Ermittlung der Testabdeckung sind in der Tabelle \ref{tab:testlaufzeiten} für die beiden Testsuites angegeben (in Sekunden).
+Das System auf dem die Testlaufzeiten gemessen wurden hat folgende Charakteristiken:
+\begin{itemize}
+	\item CPU: AMD Athlon XP 2,17 GHz
+	\item Speicher: 2GB
+	\item Betriebssystem: Windows XP
+\end{itemize}
+Die verwendete Software ist im Anhang angegeben \ref{}.
 
+ Nach jedem Testfall wird der Testlauf angehalten, um auf die Coverage-Nachrichten zu warten, die noch übertragen werden (siehe Abschnitt \ref{sec:coverageLoggingService}). Die Wartezeit kann durch den Tester bestimmt werden. Der optimale für diese Fallstudie Wert wurde experimentell ermittelt und beträgt 0,5 Sekunden.  Die gesamte Wartezeit für jede Testsuite ergibt sich aus der Anzahl der Testfälle und der Wartezeit pro Testfall und ist in der letzten Spalte angegeben. Die Instrumentierungsphase ist für die beiden Testsuites gleich und beträgt 2,2 Sekunden.
+ \begin{table}[h!]
+\begin{tabular}{p{7cm}p{2cm}p{3cm}}
+&\textbf{Laufzeit}&\textbf{Wartezeit}\\[0.1cm]
+Testsuite1&\\
+\ \ \ \ \ \ \ \ \ ohne Messung der Testabdeckung&$24,3\ s$\\
+\ \ \ \ \ \ \ \ \ mit Messung der Testabdeckung&$68,7\ s$&$0,5*30=15\ s$\\
+\\
+Testsuite2&\\
+\ \ \ \ \ \ \ \ \ ohne Messung der Testabdeckung&$14,6\ s$\\
+\ \ \ \ \ \ \ \ \ mit Messung der Testabdeckung&$32,8\ s$&$0,5*12=6\ s$\\
+\end{tabular}
+\caption{Fallstudie - Testlaufzeiten mit und ohne der Ermittlung der Testabdeckung}
+\label{tab:testlaufzeiten}
+\end{table}
 
-Die Tabelle listet gemessene Zeiten für beide Testsuites:
- 
+In den Laufzeiten mit der Ermittlung der Testabdeckung ist die Instrumentierungszeit und Wartezeit enthalten.
+Die Ausführungszeit hat sich bei der ersten Suite um Faktor 2,8 (ohne Instrumentierungsphase 2,7) und bei der zweiten um Faktor 2,2 (2,1) verlängert. Der Faktor  hängt sehr stark von dem getesteten Prozess und der Testlogik ab. Aus dem Grund lässt sich kein Faktor angeben, der allgemein gültig ist. 
