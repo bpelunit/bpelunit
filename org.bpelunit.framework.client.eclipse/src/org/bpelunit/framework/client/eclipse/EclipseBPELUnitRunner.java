@@ -24,6 +24,7 @@ import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.coverage.CoverageMeasurementTool;
+import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
 import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
@@ -117,10 +118,7 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 		
 	}
 
-//	HIER
 	public void configureCoverageTool(BPELUnitActivator plugin) {
-//		Logger logger=Logger.getLogger(getClass());
-//		logger.info("!!EclipseBPELUnitRunner: Configuration von CoverageTool starte");
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		List<String> list = new ArrayList<String>();
 		IPreferenceStore preference = plugin.getPreferenceStore();
@@ -181,10 +179,10 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 		
 		TestCaseRunner.wait_time_for_coverage_markers=preference.getInt(PreferenceConstants.P_COVERAGE_WAIT_TIME);
 
-		CoverageMeasurementTool coverageTool=new CoverageMeasurementTool();
+		ICoverageMeasurmentTool coverageTool=new CoverageMeasurementTool();
 		BPELUnitRunner.setCoverageMeasurmentTool(coverageTool);
 		try {
-		coverageTool.setConfig(map);
+		coverageTool.configureMetrics(map);
 		} catch (ConfigurationException e) {
 		}
 

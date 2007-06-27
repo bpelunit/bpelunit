@@ -34,7 +34,7 @@ import org.bpelunit.framework.control.util.ActivityUtil;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
-import org.bpelunit.framework.coverage.CoverageMeasurementTool;
+import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.exception.ConfigurationException;
@@ -113,8 +113,7 @@ public class SpecificationLoader {
 			fLogger.info("Loaded test suite with name \"" + testSuite.getName() + "\" and " + testSuite.getTestCaseCount() + " test cases.");
 
 			if (BPELUnitRunner.measureTestCoverage()) {
-				System.out.println("Spezifikationloader:BPELUnitRunner.coverageMeasurmentTool!=NULL");
-				CoverageMeasurementTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
+				ICoverageMeasurmentTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
 				try {
 					
 					String encodingStyle=tool.getEncodingStyle();
@@ -123,13 +122,9 @@ public class SpecificationLoader {
 					}
 				} catch (Exception e) {
 					tool.setErrorStatus("CoverageTool: "+e.getMessage());
-					//TODO Fehler 
-					//HIER
+
 				}
 
-			}else{
-
-				System.out.println("Spezifikationloader:BPELUnitRunner.coverageMeasurmentTool==NULL");
 			}
 			return testSuite;
 

@@ -22,6 +22,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+/**
+ * 
+ * @author Alex Salnikow
+ *
+ */
 public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 		implements IWorkbenchPreferencePage {
 
@@ -92,7 +97,7 @@ public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 				"Coverage Measurment", getFieldEditorParent());
 		createSpacer(getFieldEditorParent(), 1);
 
-		createSpacer(getFieldEditorParent(), 1,"    ACTIVITY COVERAGE");
+		createSpacer(getFieldEditorParent(), 2,"    ACTIVITY COVERAGE");
 		receiveFlag = new BooleanFieldEditor(BasicActivities.RECEIVE_ACTIVITY,
 				"receive", getFieldEditorParent());
 		replyFlag = new BooleanFieldEditor(BasicActivities.REPLY_ACTIVITY,
@@ -144,7 +149,8 @@ public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 		faultHandlerFlag = new BooleanFieldEditor(FaultMetric.METRIC_NAME,
 				"FAULT HANDLER COVERAGE", getFieldEditorParent());
 		createSpacer(getFieldEditorParent(), 1);
-		waitTimeInput=new StringFieldEditor(PreferenceConstants.P_COVERAGE_WAIT_TIME,"wait time",getFieldEditorParent());
+		createSpacer(getFieldEditorParent(), 2,"DELAY PER TESTCASE");
+		waitTimeInput=new IntegerFieldEditor(PreferenceConstants.P_COVERAGE_WAIT_TIME,"",5,StringFieldEditor.VALIDATE_ON_KEY_STROKE,getFieldEditorParent());
 		waitTimeInput.setTextLimit(5);
 	}
 
@@ -203,14 +209,14 @@ public class BPELUnitCoveragePreferencePage extends FieldEditorPreferencePage
 	}
 
 	protected void createSpacer(Composite composite, int columnSpan) {
-		Label label = new Label(composite, SWT.NONE);
+		Label label = new Label(composite, SWT.LEFT);
 		GridData gd = new GridData();
 		gd.horizontalSpan = columnSpan;
 		label.setLayoutData(gd);
 	}
 	
 	protected void createSpacer(Composite composite, int columnSpan,String text) {
-		Label label = new Label(composite, SWT.NONE);
+		Label label = new Label(composite, SWT.LEFT);
 		label.setText(text);
 		GridData gd = new GridData();
 		gd.horizontalSpan = columnSpan;

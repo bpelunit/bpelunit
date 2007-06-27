@@ -15,7 +15,7 @@ import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.coverage.CoverageMeasurementTool;
+import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.exception.ConfigurationException;
@@ -90,8 +90,7 @@ public abstract class BPELUnitRunner {
 
 	private static boolean fMeasureCoverage = false;
 
-	// HIER
-	private static CoverageMeasurementTool coverageMeasurmentTool = null;
+	private static ICoverageMeasurmentTool coverageMeasurmentTool = null;
 
 	/**
 	 * Indicates whether the runner has been properly initialized
@@ -134,7 +133,6 @@ public abstract class BPELUnitRunner {
 		if ((haltOnFail != null) && (haltOnFail.equalsIgnoreCase("true")))
 			fHaltOnFailure = true;
 
-		// HIER
 		coverageMeasurmentTool = null;
 		fMeasureCoverage = false;
 		String measureCoverage = options.get(MEASURE_COVERAGE);
@@ -165,7 +163,6 @@ public abstract class BPELUnitRunner {
 		configureExtensions();
 		configureDeployers();
 
-		// HIER
 
 		if (fMeasureCoverage) {
 			try {
@@ -211,7 +208,6 @@ public abstract class BPELUnitRunner {
 	 * Called by initialize() to configure the measurement of coverage.
 	 * 
 	 */
-	// HIER
 	public abstract void configureCoverageTool() throws ConfigurationException;
 
 	/**
@@ -312,11 +308,11 @@ public abstract class BPELUnitRunner {
 		return fMeasureCoverage;
 	}
 	
-	public static void setCoverageMeasurmentTool(CoverageMeasurementTool tool){
+	public static void setCoverageMeasurmentTool(ICoverageMeasurmentTool tool){
 		coverageMeasurmentTool=tool;
 	}
 	
-	public static CoverageMeasurementTool getCoverageMeasurmentTool(){
+	public static ICoverageMeasurmentTool getCoverageMeasurmentTool(){
 		return coverageMeasurmentTool;
 	}
 

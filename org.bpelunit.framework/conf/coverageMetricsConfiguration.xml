@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverageMetrics
+	xmlns="http://www.bpelunit.org/schema/coverageMetricsConfiguration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bpelunit.org/schema/coverageToolConfiguration" waitingTime='500'>
+<metric name="ActivityCoverage">
+		<property name="IncludeBasicActivities">
+			invoke,receive,reply,throw,rethrow,wait,assign,empty,compensate,compensateScope,exit,terminate
+		</property>
+	</metric>
+<!--	<metric name="BranchCoverage"/>
+	<metric name="LinkCoverage"/>
+	<metric name="FaultHandlerCoverage"/>
+	<metric name="CompensationHandlerCoverage"/>-->
+</coverageMetrics>

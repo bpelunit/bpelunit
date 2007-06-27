@@ -8,12 +8,12 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -25,7 +25,11 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
-
+/**
+ * 
+ * @author Alex Salnikow
+ *
+ */
 public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 
 	private Label fInfoLabel;
@@ -42,41 +46,55 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 
 	private Text text;
 
+	private Composite fParent;
+
 	@Override
 	public void createPartControl(Composite parent) {
+		fParent = parent;
+		GridData gData;
+		parent.setLayout(new FillLayout(SWT.VERTICAL));
 
-		parent.setLayout(new GridLayout(3, false));
-		fInfoLabel = new Label(parent, SWT.LEFT);
+
+		Group groupFilesStatistics = new Group(parent, SWT.V_SCROLL);
+
+		groupFilesStatistics.setLayout(new GridLayout(3, false));
+
+		fInfoLabel = new Label(groupFilesStatistics, SWT.LEFT);
 		fInfoLabel.setText(" BPELUnit Test Coverage");
-		GridData gData = new GridData();
+		gData = new GridData();
 		gData.horizontalSpan = 3;
 		gData.grabExcessHorizontalSpace = true;
 		fInfoLabel.setLayoutData(gData);
-
-		text = new Text(parent, SWT.MULTI | SWT.READ_ONLY);
+		//
+		text = new Text(groupFilesStatistics, SWT.MULTI | SWT.READ_ONLY);
 		gData = new GridData();
 		gData.horizontalSpan = 3;
 		gData.grabExcessHorizontalSpace = true;
 		text.setLayoutData(gData);
 
-		Group groupFilesStatistics = new Group(parent, SWT.V_SCROLL);
-		gData = new GridData();
-		gData.grabExcessHorizontalSpace = true;
-		gData.horizontalAlignment = GridData.FILL;
-		gData.verticalAlignment = GridData.FILL;
-		groupFilesStatistics.setLayoutData(gData);
-		groupFilesStatistics.setLayout(new GridLayout(3, false));
-		Label label1=new Label(groupFilesStatistics,SWT.CENTER);
+		Label label1 = new Label(groupFilesStatistics, SWT.CENTER);
 		label1.setText("BPELFiles in archive");
-		label1=new Label(groupFilesStatistics,SWT.CENTER);
-		label1.setText("Test coverage");
-		label1=new Label(groupFilesStatistics,SWT.CENTER);
-		label1.setText("Test cases");
-		fileList = new List(groupFilesStatistics, SWT.V_SCROLL | SWT.MULTI
-				| SWT.H_SCROLL|SWT.BORDER);
 		gData = new GridData();
-		gData.widthHint = 220;
-		gData.heightHint = 150;
+		gData.verticalAlignment = GridData.END;
+		label1.setLayoutData(gData);
+		label1 = new Label(groupFilesStatistics, SWT.CENTER);
+		label1.setText("Test coverage");
+		gData = new GridData();
+		gData.verticalAlignment = GridData.END;
+		label1.setLayoutData(gData);
+		label1 = new Label(groupFilesStatistics, SWT.CENTER);
+		label1.setText("Test cases");
+		gData = new GridData();
+		gData.verticalAlignment = GridData.END;
+		label1.setLayoutData(gData);
+		fileList = new List(groupFilesStatistics, SWT.V_SCROLL | SWT.MULTI
+				| SWT.H_SCROLL | SWT.BORDER);
+		gData = new GridData();
+		gData.verticalAlignment = GridData.BEGINNING;
+		gData.grabExcessVerticalSpace = true;
+		gData.grabExcessHorizontalSpace = true;
+		gData.minimumHeight = 150;
+		gData.minimumWidth = 200;
 		fileList.setLayoutData(gData);
 		fileList.setBackground(parent.getBackground());
 		fileList.addSelectionListener(new SelectionListener() {
@@ -97,12 +115,7 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 		table = new Table(groupFilesStatistics, SWT.BORDER | SWT.VIRTUAL);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		gData = new GridData();
-//		gData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_FILL;
-//		gData.grabExcessHorizontalSpace = true;
-		 gData.widthHint = 480;
-		gData.heightHint = 155;
-		table.setLayoutData(gData);
+
 		TableColumn col1 = new TableColumn(table, 0);
 		col1.setText("Metric");
 		col1.setWidth(180);
@@ -116,13 +129,31 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 		col3.setWidth(100);
 		col3.setMoveable(false);
 		TableColumn col4 = new TableColumn(table, 0);
-		col4.setText("per cent");
+		col4.setText("           %");
 		col4.setWidth(100);
 		col4.setMoveable(false);
+
+		gData = new GridData();
+		// gData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_FILL;
+		gData.grabExcessVerticalSpace = true;
+		gData.grabExcessHorizontalSpace = true;
+		gData.minimumHeight = 155;
+		gData.minimumWidth = 200;
+		gData.verticalAlignment = GridData.BEGINNING;
+		table.setLayoutData(gData);
+
 		tableTestCases = new Table(groupFilesStatistics, SWT.BORDER
 				| SWT.VIRTUAL | SWT.CHECK);
 		tableTestCases.setLayout(new GridLayout(1, false));
 		tableTestCases.setBackground(parent.getBackground());
+		gData = new GridData();
+		gData.grabExcessVerticalSpace = true;
+		gData.grabExcessHorizontalSpace = true;
+		gData.minimumHeight = 155;
+		gData.minimumWidth = 200;
+		gData.verticalAlignment = GridData.BEGINNING;
+		tableTestCases.setLayoutData(gData);
+
 		tableTestCases.addSelectionListener(new SelectionListener() {
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -135,16 +166,8 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 				}
 			}
 		});
-		gData = new GridData();
-		gData.widthHint = 220;
-		gData.heightHint = 150;
-//		gData.horizontalAlignment=SWT.LEFT;
-		gData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_FILL;
-		gData.grabExcessHorizontalSpace = true;
-		tableTestCases.setLayoutData(gData);
-		tableTestCases.setSize(180, 130);
+
 		initializeElements();
-		parent.pack();
 		model = new CoverageModel();
 		model.addObserver(this);
 	}
@@ -172,32 +195,25 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 			}
 			for (Iterator<String> iter = model.getAllTestCases().iterator(); iter
 					.hasNext();) {
-				// Button but = new Button(tableTestCases, SWT.CHECK);
-				// but.setText(iter.next());
-				// but.addSelectionListener(this);
-				// // groupTestCases.update();
-				// tableTestCases.pack(true);
 				TableItem item = new TableItem(tableTestCases, SWT.NULL);
 				item.setText(iter.next());
 			}
-			java.util.List<String> infos = model.getInfos();
-			if (infos != null && infos.size() > 0) {
-				for (Iterator<String> iter = infos.iterator(); iter.hasNext();) {
-					text.append(iter.next());
-				}
+			String infos = model.getInfos();
+			if (infos != null && !infos.equals("")) {
+				text.append(infos);
 			} else {
 				text.append("Test coverage is successful measured.");
 			}
 			initialized = true;
 			fileList.selectAll();
 			model.selectedFiles = fileList.getSelection();
-			for(int i=0;i<tableTestCases.getItemCount();i++){
+			for (int i = 0; i < tableTestCases.getItemCount(); i++) {
 				TableItem item = tableTestCases.getItem(i);
 				item.setChecked(true);
 				model.checkedTestCases.add(item.getText());
 			}
 		}
-		text.pack(true);
+		// text.pack(true);
 
 		table.removeAll();
 		java.util.List<String[]> list = model.getCurrentData();
@@ -205,38 +221,18 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 			TableItem item = new TableItem(table, SWT.NULL);
 			item.setText(iter.next());
 		}
+		fParent.pack();
 	}
 
-//	private void addStatistic(IStatistic statistic, Set<String> set,
-//			boolean subStatistic) {
-//		int total = 0;
-//		int tested = 0;
-//		String name;
-//		name = statistic.getName();
-//		if (subStatistic)
-//			name = "     " + name;
-//		total = statistic.getTotalNumber();
-//		tested = statistic.getTestedNumber(set);
-//		TableItem item = new TableItem(table, SWT.NULL);
-//		String relativ;
-//		if (total > 0)
-//			relativ = Integer.toString((tested * 100 / total)) + "%";
-//		else
-//			relativ = "100%";
-//		String[] data = new String[] { name, Integer.toString(total),
-//				Integer.toString(tested), relativ };
-//		item.setText(data);
-//
-//	}
+
 
 	public void setData(java.util.List<String> testCases,
-			java.util.List<IFileStatistic> statistics,
-			java.util.List<String> infos) {
+			java.util.List<IFileStatistic> statistics, String string) {
 		initialized = false;
-		model.setData(testCases, statistics, infos);
+		model.setData(testCases, statistics, string);
 
 	}
-	
+
 	public void initialize() {
 		model.initialize();
 		initializeElements();
@@ -250,7 +246,7 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 
 		private Set<String> checkedTestCases;
 
-		private java.util.List<String> infos = null;
+		private String info = null;
 
 		private Hashtable<String, IFileStatistic> fileStatistics;
 
@@ -266,16 +262,18 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 		}
 
 		public void setData(java.util.List<String> testCases,
-				java.util.List<IFileStatistic> statistics,
-				java.util.List<String> infos) {
+				java.util.List<IFileStatistic> statistics, String string) {
 			init();
-			this.testCases = testCases;
-			this.infos = infos;
-			for (Iterator<IFileStatistic> iter = statistics.iterator(); iter
-					.hasNext();) {
-				IFileStatistic fileStatistic = iter.next();
-				fileStatistics.put(fileStatistic.getBPELFilename(),
-						fileStatistic);
+			this.info = string;
+			if (statistics != null) {
+				this.testCases = testCases;
+				
+				for (Iterator<IFileStatistic> iter = statistics.iterator(); iter
+						.hasNext();) {
+					IFileStatistic fileStatistic = iter.next();
+					fileStatistics.put(fileStatistic.getBPELFilename(),
+							fileStatistic);
+				}
 			}
 
 			setChanged();
@@ -338,7 +336,9 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 				tested = tested + statistic.getTestedNumber(checkedTestCases);
 			}
 			if (total > 0)
-				relativ = Integer.toString((tested * 100 / total)) + "%";
+				relativ = Float
+						.toString((tested * 1000 / total) / (float) 10.0)
+						+ "%";
 			return new String[] { statisticName, Integer.toString(total),
 					Integer.toString(tested), relativ };
 		}
@@ -355,8 +355,8 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 			return fileStatistics.keySet();
 		}
 
-		public java.util.List<String> getInfos() {
-			return infos;
+		public String getInfos() {
+			return info;
 		}
 
 		public void initialize() {
@@ -366,7 +366,5 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 			selectedFiles = new String[] {};
 		}
 	}
-
-
 
 }

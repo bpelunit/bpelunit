@@ -249,15 +249,14 @@ public class BPELUnitActivator extends AbstractUIPlugin {
 
 	// HIER
 	public void showCoverageResult(final List<String> testCases,
-			final List<IFileStatistic> statistics, final List<String> infos) {
+			final List<IFileStatistic> statistics, final String string) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				try {
 					getBPELUnitCoverageView().setData(testCases, statistics,
-							infos);
+							string);
 				} catch (PartInitException e) {
 					BPELUnitActivator.log(e);
-					System.out.println("FEHLER " + e.getMessage());
 				}
 			}
 		});
