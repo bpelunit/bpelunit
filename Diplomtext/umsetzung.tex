@@ -65,11 +65,12 @@ Um zu erreichen, dass die Aktivität und das Logging entweder beide ausgeführt od
 		\caption{Erfassung von Basisaktivitäten in flow-Umgebung}
 	\label{fig:activityAsTarget}
 \end{figure}
-Die Definition und die Quelle des Links (\textit{source}-Aktivität) bleiben unverändert. Die Abbildung \ref{fig:activityAsTarget} stellt die Manipulation grafisch dar. Die neu eingefügten Aktivitäten sind unterstreichen.
+Die Definition und die Quelle des Links (\textit{source}-Aktivität) bleiben unverändert. Die Abbildung \ref{fig:activityAsTarget} stellt die Manipulation grafisch dar. Die Legende ist im Anhang zu finden Die neu eingefügten Aktivitäten sind unterstreichen.
 
+\newpage
 Die entsprechenden Änderungen des XML-Codes:
       %\begin{lstlisting}[caption=\textit{Invoke}-Aktivität als Ziel\\ eines Links,numbers=none,label=Listing1]{Name}
-\mbox{
+
 \setlength{\columnsep}{1cm}
 \begin{multicols}{2}
 \lstset{emph={joinCondition,target }, emphstyle=\color{red}}
@@ -79,7 +80,7 @@ Die entsprechenden Änderungen des XML-Codes:
 
 	 ...
   <invoke ... joinCondition=...>
-    <target linkName="LinkA"/>
+    <target linkName="linkA"/>
   </invoke>  
   
   
@@ -90,7 +91,7 @@ Die entsprechenden Änderungen des XML-Codes:
 <flow>
 	 ...
   <sequence joinCondition=...>
-    <target linkName="LinkA"/>
+    <target linkName="linkA"/>
     <!--Logging_of_invoke-->
     <invoke .../>
   </sequence>
@@ -98,7 +99,7 @@ Die entsprechenden Änderungen des XML-Codes:
 </flow>      
 \end{lstlisting}
 \end{multicols}
-}
+
 
 \subsubsection{Zweigabdeckung}\label{sec:zweigabdeckung}
 Die Strukturierten Aktivitäten bestimmen in BPEL den Kontrollfluss und spielen damit eine entscheidende Rolle für die Ermittlung der Zweigabdeckung. Die Zweige werden nämlich bei der Analyse der Strukturierten Aktivitäten des Prozesses identifiziert. Die Protokollierung der Zweigen erfolgt im Wesentlichen nach dem Schema, das für die Erfassung der Aktivitätsabdeckung vorgestellt wurde. An den entsprechenden Stellen in der BPEL-Datei werden Marken eingefügt, die das Aktivieren der entsprechenden Zweigen markieren. Damit die Datei bei diesen Manipulationen syntaktisch gültig bleibt, wird ebenfalls, falls notwendig, 
@@ -110,20 +111,15 @@ Ausführlicher werden einige Strukturierten Aktivitäten vorgestellt, die im Bezug
 Bei diesem Konstrukt muss darauf geachtet werden, dass der \textit{else}-Zweig erfasst wird. Ist der Zweig nicht explizit im Quellcode vorhanden, dann muss er hinzugefügt und wie alle anderen Zweige mit einer Marke annotiert werden.
 
 \textbf{\textit{Flow}-Aktivität.}
+Bei der Messung der Zweigabdeckung in einer \textit{flow}-Aktivität müssen einige Details beachtet werden. Die Abbildung \ref{fig:zweigabdeckungInFlow} zeigt ein kleines Beispiel, an dem die Problemen und entsprechende Lösung erläutert werden. Die breiten Pfeile repräsentieren die Zweige \textit{branch\_1} und \textit{branch\_2}, deren Aktivierung protokolliert werden soll. Jeder BPEL-Prozess muss 
 \begin{wrapfigure}[11]{r}{7,2cm}
 \centering%
 \includegraphics[width=0.45\textwidth]{bilder/FlowCreateInstance.png}%
 \caption{Beispiel - Zweigabdeckung in \textit{flow}-Aktivität}
 \label{fig:zweigabdeckungInFlow}
-\end{wrapfigure}
-Bei der Messung der Zweigabdeckung in einer \textit{flow}-Aktivität müssen einige Details beachtet werden. Die Abbildung \ref{fig:zweigabdeckungInFlow} zeigt ein kleines Beispiel, an dem die Problemen und entsprechende Lösung erläutert werden. Die breiten Pfeile repräsentieren die Zweige \textit{branch\_1} und \textit{branch\_2}, deren Aktivierung protokolliert werden soll. Jeder BPEL-Prozess muss mindestens eine Aktivität enthalten, die die Instanziierung des Prozesses initiieren kann (Attribut \textit{createInstance}=\textit{"'yes"'}). In diesem Beispiel ist das die \textit{receive}-Aktivität. Alle anderen Basisaktivitäten müssen im Kontrollfluss hinter dieser Aktivität liegen. Der Beispielprozess ist nur aufgrund des Synchronisationslinks \textit{linkA} gültig. Der Link sorgt dafür, dass die \textit{receive}-Aktivität vor \textit{activity\_1} abgearbeitet wird. 
+\end{wrapfigure}mindestens eine Aktivität enthalten, die die Instanziierung des Prozesses initiieren kann (Attribut \textit{createInstance}=\textit{"'yes"'}). In diesem Beispiel ist das die \textit{receive}-Aktivität. Alle anderen Basisaktivitäten müssen im Kontrollfluss hinter dieser Aktivität liegen. Der Beispielprozess ist nur aufgrund des Synchronisationslinks \textit{linkA} gültig. Der Link sorgt dafür, dass die \textit{receive}-Aktivität vor \textit{activity\_1} abgearbeitet wird. 
 
 Für die Überwachung dieser Zweige wird der Prozess nach dem bisherigen Schema erweitert. Die Abbildung \ref{fig:ZweigabdReceive} (links) stellt den modifizierten Prozess grafisch dar. Es werden zwei Logging-Aktivitäten eingefügt, die jeweils in eine \textit{sequence}-Aktivität eingeschlossen sind. Der entstandene Prozess ist nicht mehr gültig: die \textit{receive}-Aktivität ist nicht mehr die erste Basisaktivität im Kontrollfluss.
-%\begin{figure}[htbp]
-%	\centering
-%		\includegraphics[width=0.5\textwidth]{bilder/FlowCreateInstance.png}
-%	\label{fig:createInstanceProblem}
-%\end{figure}
 
  Die Protokollierung der Zweige kann erst nach der Erzeugung einer Prozessinstanz erfolgen. Die zugehörigen Logging-Aktivitäten dürfen im Kontrollfluss nur nach der receive-Aktivität platziert werden. Die rechte Abbildung zeigt den Prozess, der diesen Anforderungen entspricht. 
 \begin{figure}[htbp]
@@ -145,33 +141,10 @@ Die Protokollierung des Zweiges \textit{branch\_1} darf erst nach der Ausführung
 Nur in diesem Sinne "`aktivierte"' Zweige gelten beim Test als abgedeckt.
 Das heißt, dass die Synchronisationslinks berücksichtigt werden müssen. 
  
-%\begin{wrapfigure}[12]{r}{7,5cm}
-%\centering%
-%\includegraphics[width=0.48\textwidth]{bilder/FlowCreateInstance2.png}%
-%\label{}
-%\end{wrapfigure}
-
-
- %\begin{figure}[htbp]
-	%\centering
-	%	\includegraphics[width=0.5\textwidth]{bilder/FlowCreateInstance2.png}
-	%\label{fig:createInstanceProblem}
-%\end{figure}
-%\begin{wrapfigure}[12]{r}{7,5cm}
-%\centering%
-%\includegraphics[width=0.48\textwidth]{bilder/FlowCreateInstance3.png}%
-%\label{}
-%\end{wrapfigure} 
- 
- %\begin{figure}[htbp]
-%	\centering
-%		\includegraphics[width=0.5\textwidth]{bilder/FlowCreateInstance3.png}
-%	\label{fig:createInstanceProblem}
-%\end{figure}
  
  \textbf{\textit{RepeatUntil}-Aktivität.}
  Die Auswertung der Bedingung erfolgt bei dieser Wiederholungsschleife erst nach der Ausführung des Schleifenkörpers. In der Schleife kann man ohne weiteren Logik nicht feststellen, ob das die erste oder bereits wiederholte Ausführung ist. Denn im Falle einer wiederholten Ausführung muss die Aktivierung des Zweiges von der Bedingung zum Schleifenkörper (in der Abbildung \ref{fig:repeatUntil2} \textit{branch\_2}) signalisiert werden. Die entsprechende Überprüfung kann mit Hilfe eines Zählers, der bei jedem Schleifendurchlauf hochgezählt wird, und einer \textit{if}-Abfrage realisiert werden.  Die Zählvariable muss natürlich im Prozess deklariert und vor der Schleife initialisiert werden. Die entsprechende Modifikation der \textit{repeatUntil}-Aktivität ist in der Abbildung dargestellt. Die Deklaration der Variable und die Initialisierung vor der Schleife sind nicht abgebildet.
- \begin{figure}[htbp]
+ \begin{figure}[htbp]%
 	\centering
 		\includegraphics[width=0.65\textwidth]{bilder/repeatUntilZweig.png}
       \caption{Erfassung der Zweigabdeckung in einer \textit{repeatUntil}-Aktivität}
@@ -188,21 +161,14 @@ Es geht bei dieser Metrik um Synchronisationslinks mit einer \textit{transition 
 Diese Aspekte wurden im Abschnitt \ref{restrictions} ausführlich erklärt.
 
 \textbf{Beispiel}. Als Grundlage für die Erläuterungen dient folgendes Szenario. Ein Unternehmen  hat einige Strategien entwickelt, um die Großkunden trotz großer Konkurenz an sich langfristig zu binden. Als besonderen Service wird  zum Beispiel eine bestimmte Lieferdauer für diese Kunden  garantiert. Aus diesem Grund ist man  bereit, die Engpässe auf dem Lager für die Großkunden durch Bestellungen bei Konkurenz zu überbrücken und auf diese Weise kurzfristig sogar Verluste in Kauf zu nehmen. Der Geschäftsprozess wird entsprechend der Strategie angepasst und in den IT-Systemen (mit BPEL) umgesetzt. Ein vereinfachter Ausschnitt des zugehörigen BPEL-Prozesses ist in der Abbildung \ref{fig:LinkAbdeckungBeispiel} grafisch Dargestellt.
-\begin{wrapfigure}[12]{r}{7,5cm}
+
+\begin{wrapfigure}[13]{r}{7,5cm}
 \centering%
 \includegraphics[width=0.48\textwidth]{bilder/FlowBeispiel.png}%
       \caption{Linkabdeckung - Beispielprozess }
 \label{fig:LinkAbdeckungBeispiel}
 \end{wrapfigure} 
 Zwei Web Services: \textit{customer identification}- und \textit{external order}-Service gibt es, welche von BPEL in dem Prozess aufgerufen werden.   Die dafür zuständigen \textit{invoke}-Aktivitäten sind in einer \textit{flow}-Umgebung eingebettet. Die \textit{if}-Abfrage (\textit{orderSize}$>$\textit{inventory}) stellt sicher, dass externe Unternehmen nur dann beauftragt werden, wenn die Ware nicht im Lager vorhanden ist. Da die externe Bestellungen nur bei Großkunden in Frage kommen, muss erst der Kunde identifiziert werden. Die entsprechende Reihenfolge der Web Service-Aufrufe wird durch das Synchronisationslink \textit{link1} gesichert. Die \textit{transition condition} des Links \textit{customerType='major'} sichert, dass nur die Großkunden diesen Service genießen können.  
-
-
-%\begin{figure}[htbp]
-%	\centering
-%		\includegraphics[width=0.5\textwidth]{bilder/FlowBeispiel.png}
-%	\label{fig:FlowBeispielDesigner}
-%\end{figure}
-%\vspace{1cm}
 
 Die Erfassung des Status jedes relevanten Links ist für die Ermittlung der Linkabdeckung notwendig. Abhängig von dem Wert der \textit{transition condition} muss während der Ausführung die Marke an den \textit{Coverage Logging Service} verschickt werden, die auf den Wert der \textit{transition condition} zurück schließen lässt.  Als mögliche Lösungen werden drei Ansätze mit ihren Vor- und Nachteilen vorgestellt und anschließend eine ausgewählt.
 
@@ -211,16 +177,11 @@ Zwei zusätzliche Links werden definiert (\textit{link1Copy} und \textit{link1Neg
   Dadurch sind sie bereit für die Ausführung, sobald der Kontrollfluss die \textit{flow}-Aktivität erreicht. Die \textit{source}- und \textit{target}-Aktivitäten des Originallinks können dabei beliebig tief in Strukturierte Aktivitäten eingebettet sein. Durch die am Anfang definierten Links, wird die \textit{source}-Aktivität des Originallinks mit den Logging-Aktivitäten verlinkt. Sobald der Status der Links bekannt ist, wird eine Logging-Aktivität ausgeführt.
 
 Die \textit{default join condition} der Logging-Aktivitäten (\textit{or}-Verknüpfung der Status aller eingehenden Links) und komplementären \textit{transition conditions} der beiden neuen Links garantieren, dass nur eine Logging-Aktivität gleichzeitig ausgeführt werden kann.
-%\begin{figure}[htbp]
-%	\centering
-%		\includegraphics{bilder/LinksAnsatz1.png}
-%	\label{fig:LinksAnsatz1}
-%\end{figure}
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.98\textwidth]{bilder/FlowBeispielV1.png}
       \caption{Erfassung der Linkabdeckung (erste Variante)}
-	\label{fig:LinksAnsatz1Designer}
+\label{fig:LinksAnsatz1Designer}
 \end{figure}
 
 
@@ -241,14 +202,9 @@ Allerdings funktioniert diese Vorgehensweise nicht in allen Situationen. Die Bea
 \underline{Variante 2.}\\
 Ziel dieses Ansatzes ist, die \textit{boundary crossing}-Restriktionen bei der Erfassung der Linkabdeckung einzuhalten. Die Konstruktion der Links \textit{link1Copy} und \textit{link1Neg} erfolgt auf dieselbe Weise.
 Bei dieser Variante wird die \textit{target}-Aktivität des Links (\textit{invoke}-Aktivität \textit{external identification}) mit den beiden Logging-Aktivitäten in eine \textit{flow}-Aktivität eingeschlossen.
-%\begin{figure}[htbp]
-%	\centering
-%		\includegraphics{bilder/LinksAnsatz2.png}
-%	\label{fig:LinksAnsatz2}
-%\end{figure}
 \begin{figure}
 	\centering
-		\includegraphics[width=0.95\textwidth]{bilder/FlowBeispielV2.png}
+	\includegraphics[width=0.95\textwidth]{bilder/FlowBeispielV2.png}
       \caption{Erfassung der Linkabdeckung (zweite Variante)}
 	\label{fig:LinksAnsatz2Designer}
 \end{figure}
@@ -271,11 +227,7 @@ Wird die Bedingung \textit{orderSize}$>$\textit{inventory} zu \textit{false} aus
 \FloatBarrier
 \underline{Variante 3.}\\
 Bei dieser Variante wird die \textit{source}-Aktivität des Links (\textit{customer identification}) mit einer \textit{flow}-Aktivität umschlossen. Einerseits sorgt die Platzierung der Logging-Anweisungen in der selben \textit{flow}-Umgebung für die Einhaltung der \textit{boundary crossing}-Restriktionen. Andererseits kann das Logging auch stattfinden, wenn die Zielaktivität nicht ausgeführt wird. Da der Status der Links nach der Ausführung der Quellaktivität gesetzt wird, sind die Logging-Aktivitäten zu diesem Zeitpunkt startbereit und können gleich die entsprechenden Marken an den \textit{Coverage Logging}-Service verschicken.
-%\begin{figure}[htbp]
-%	\centering
-%		\includegraphics{bilder/LinksAnsatz3.png}
-%	\label{fig:LinksAnsatz3}
-%\end{figure}
+
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.95\textwidth]{bilder/FlowBeispielV3.png}
@@ -288,7 +240,7 @@ Während die ersten beiden Varianten keine korrekte Messung der Linkabdeckung in 
 \subsubsection{Fault und Compensation Handler-Abdeckung}
 Für die Fault und Compensation Handler werden die Marken auf dieselbe Weise (mit Hilfe einer umschließenden \textit{sequence}-Aktivität) in den \textit{catch}- und \textit{catchAll}-Blöcken bzw. in Compensation Handler platziert. Die folgende Abbildung zeigt entsprechende Modifikationen am Beispiel von Fault Handler.
 
-\begin{figure}[htbp]
+\begin{figure}[htbp]%
 	\centering
 		\includegraphics[width=0.65\textwidth]{bilder/FaultHandler.png}
       \caption{Erfassung der \textit{Fault Handler}-Abdeckung}
@@ -315,6 +267,7 @@ Zuvor müssen \textit{inline}-Handler (sowohl Fault- als auch Compensation-Handle
   \end{lstlisting}
 \lstset{emph=[2]{scope, faultHandlers}, emphstyle=[2]\color{blue}}
       \begin{lstlisting}[numbers=none]{Name}
+      
       
        
 <scope ...>

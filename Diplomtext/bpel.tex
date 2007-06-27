@@ -102,13 +102,13 @@ BPEL beschreibt den Ablauf von Geschäftsprozessen mit den Strukturierten Aktivit
 \subsection{Link-Konzept}\label{sec:linkkonzept}
  In einer flow-Aktivität können Links definiert werden. Sie dienen
 der Synchronisation nebenläufiger Aktivitäten. Jeder Link verbindet eine
-\textit{source}-  mit einer \textit{target}-Aktivität und besitzt eine implizite oder explizite \textit{transition condition} (boolscher Ausdruck). Ist der Ausdruck nicht spezifiziert, so ist der Wert der \textit{transition condition} \textit{true}. Jede Aktivität, die das Ziel eines Links ist, hat eine implizite oder explizite \textit{join condition} (boolscher Ausdruck). Im impliziten Fall ist das eine ODER-Verknüpfung der Status aller eingehenden Links. Die Auswertung dieser Bedingungen bei der Ausführung wird an einem kleinem Beispiel erläutert.
+\textit{source}-  mit einer \textit{target}-Aktivität und besitzt eine implizite oder explizite \textit{transition condition} (boolscher Ausdruck). Ist der Ausdruck nicht spezifiziert, so ist der Wert der \textit{transition condition} \textit{true}. Jede Aktivität, die das Ziel eines Links ist, hat eine implizite oder explizite \textit{join condition} (boolscher Ausdruck). Im impliziten Fall ist das eine ODER-Verknüpfung der Status aller eingehenden Links. Die Auswertung dieser Bedingungen bei der Ausführung wird an einem kleinem Beispiel erläutert (Abbildung \ref{fig:sncLinksBeispiel}).
 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.55\textwidth]{bilder/FlowBespielLinks.png}
-	\caption{Beispiel einer flow-Aktivität mit Synchronisationslinks}
-	\label{}
+	\caption{Beispiel - \textit{flow}-Aktivität mit Synchronisationslinks}
+	\label{fig:sncLinksBeispiel}
 \end{figure}
 
 Ist die Ausführung der Aktivität \textit{activity\_1} beendet, so wird \textit{transition condition} des Links \textit{link\_1} ausgewertet und der Status auf den entsprechenden Wert \textit{true} oder \textit{false}  gesetzt. Auf dieselbe Weise wird der Status des zweiten Links ermittelt. Steht der Status der beiden Links fest, so kann die \textit{join condition} der Aktivität \textit{activity\_3} ausgewertet werden. Bei einem \textit{true}-Wert wird die Ausführung des Prozesses  ganz normal mit \textit{activity\_3}  fortgesetzt. Ist der Wert \textit{false}, so wird eine Fehlermeldung (\textit{Join Failure}) erzeugt und der Kontrollfluss für Fehlerbehandlung aktiviert. Ist dieses Verhalten unerwünscht, so kann das Standardattribut \textit{suppressJoinFailure} auf den Wert \textit{"`yes"'} gesetzt. In diesem Fall wird \textit{activity\_3} ebenfalls nicht ausgeführt, allerdings wird der Prozess ganz normal, ohne eine Fehlermeldung zu produzieren, mit der \textit{activity\_4} fortgesetzt.

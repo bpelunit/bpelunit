@@ -1,5 +1,5 @@
 
-In diesem Abschnitt werden einige interessante Aspekte des Designs und der Implementierung vorgestellt. Anschließend wird die Integration des Moduls für die Messung der Testabdeckung in das BPELUnit-Framework präsentiert und die implementierten Clients beschrieben. 
+In diesem Kapitel werden einige interessante Aspekte des Designs und der Implementierung vorgestellt. Anschließend wird die Integration des Moduls für die Messung der Testabdeckung in das BPELUnit-Framework präsentiert und die implementierten Clients beschrieben. 
 
  
  \section{Externe Schnittstelle der Erweiterung}
@@ -82,7 +82,7 @@ Für alle Metriken wird die Schnittstelle \textit{IMetric} definiert (Abbildung \
 \item \textbf{\textit{getName}} - liefert die Bezeichnung der Metrik,
 	\item \textbf{\textit{setOriginalBPELProzess}} - erhält die noch nicht modifizierte Beschreibung des BPEL-Prozesses als XML-Element. Alle für die Instrumentierung benötigten Elemente der Prozessbeschreibung werden gespeichert,
 	\item \textbf{\textit{getMarkersIds}} - gibt Präfixe von allen Marken dieser Metrik zurück. Sie ermöglichen die Zuordnung der empfangenen Marken einer Metrik,
-	\item \textbf{\textit{insertMarkers}} - delegiert die Instrumentierungsaufgabe an eigenen Handler (siehe Abbildung \ref{fig:KlassendiagrammHandler},
+	\item \textbf{\textit{insertMarkers}} - delegiert die Instrumentierungsaufgabe an eigenen Handler (siehe Abbildung \ref{fig:KlassendiagrammHandler}),
  	\item \textbf{\textit{createStatistic}} - erzeugt Statistiken.
 \end{itemize}
 Für jede Metrik existiert eine Klasse, welche diese Schnittstelle implementiert. Außerdem existiert für jede Metrik ein Handler, der die Annotation des Prozesses für diese Metrik übernimmt. Es werden im Folgenden beispielhaft die Klassen vorgestellt, die für die Zweigabdeckung zuständig sind (Abbildung \ref{fig:KlassendiagrammHandler}).
@@ -240,7 +240,7 @@ Auf der rechten Seite sind alle Testfälle der Suite aufgelistet. Der Tester kann
 
 \begin{figure}[htbp]
 	\centering
-		\includegraphics[width=\textwidth]{bilder/CoverageResultMenu.png}
+		\includegraphics[width=0.9\textwidth]{bilder/CoverageResultMenu.png}
 		\caption{Eclipse - Darstellung der Testabdeckung}
 	\label{fig:testcoverageResult}
 \end{figure}
