@@ -8,6 +8,12 @@ import java.util.Hashtable;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
+/**
+ * Die Klasse repräsentiert die Basisaktivitäten.
+ * 
+ * @author Alex Salnikow
+ *
+ */
 public class BasicActivities {
 
 	public static final String INVOKE_ACTIVITY = "invoke";
@@ -53,6 +59,10 @@ public class BasicActivities {
 		return basis_activities.containsKey(name) ? true : false;
 	}
 
+	/**
+	 * Legt die Aktivitäten fest, abhängig von der BPEL-Version (1.1 oder 2.0)
+	 *
+	 */
 	public static void initialize() {
 		Namespace bpelNamespace = BpelXMLTools.getProcessNamespace();
 		if (bpelNamespace.equals(NAMESPACE_BPEL_2_0)) {

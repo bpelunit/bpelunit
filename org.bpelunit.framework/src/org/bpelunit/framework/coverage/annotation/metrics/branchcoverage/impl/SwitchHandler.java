@@ -11,6 +11,12 @@ import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 
+/**
+ * Handler, der die Instrumentierung der
+ * switch-Aktivitäten für die Zweigabdeckung übernehmen.
+ * 
+ * @author Alex Salnikow
+ */
 
 public class SwitchHandler implements IStructuredActivityHandler {
 	private MarkersRegisterForArchive markersRegistry;
@@ -19,6 +25,13 @@ public class SwitchHandler implements IStructuredActivityHandler {
 		this.markersRegistry = markersRegistry;
 	}
 
+	/**
+	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
+	 * um die Ausführung der Zweige zu erfassen.
+	 * 
+	 * @param structured_activity
+	 * @throws BpelException
+	 */
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		List case_branches = element.getChildren(SWITCH_CASE_ELEMENT,
@@ -49,7 +62,7 @@ public class SwitchHandler implements IStructuredActivityHandler {
 		if (branch_activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		
-		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 
 	}
 
@@ -65,7 +78,7 @@ public class SwitchHandler implements IStructuredActivityHandler {
 		if (branch_activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		
-		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 	}
 
 }

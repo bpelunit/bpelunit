@@ -9,6 +9,12 @@ import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 
+/**
+ * Handler, der die Instrumentierung der
+ * while-Aktivitäten für die Zweigabdeckung übernehmen.
+ * 
+ * @author Alex Salnikow
+ */
 
 public class WhileHandler implements IStructuredActivityHandler {
 
@@ -18,14 +24,21 @@ public class WhileHandler implements IStructuredActivityHandler {
 		this.markersRegistry = markersRegistry;
 	}
 
+	/**
+	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
+	 * um die Ausführung der Zweige zu erfassen.
+	 * 
+	 * @param structured_activity
+	 * @throws BpelException
+	 */
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		Element activity = getFirstEnclosedActivity(element);
 		if (activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		
-		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(activity));
-		markersRegistry.addMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));
 	}
 
 }

@@ -6,6 +6,11 @@ import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
+/**
+ * Factory für BPEL-XML-Elemente.
+ * @author Alex
+ *
+ */
 
 public class CMServiceFactory {
 
@@ -23,18 +28,22 @@ public class CMServiceFactory {
 		logger = Logger.getLogger(getClass());
 	}
 
+	/**
+	 * Fügt Namespace und Partner Link für Coverage Logging Service.
+	 * @param process_element Wurzelelement des BPEL-Prozesses.
+	 */
 	public void prepareBPELFile(Element process_element) {
 		process_element
 				.addNamespaceDeclaration(COVERAGETOOL_NAMESPACE);
 		insertPartnerLink(process_element);
 	}
 
-	public void insertVariableForRegisterMarker(Element scope,
-			String variableName) {
-		insertVariable(createVariable(variableName,
-				MESSAGETYPE_OF_REGISTER_MESSAGE, null), scope);
-
-	}
+//	public void insertVariableForRegisterMarker(Element scope,
+//			String variableName) {
+//		insertVariable(createVariable(variableName,
+//				MESSAGETYPE_OF_REGISTER_MESSAGE, null), scope);
+//
+//	}
 
 	private void insertPartnerLink(Element process_element) {
 		Element partnerLinks = process_element.getChild(PARTNERLINKS_ELEMENT,
@@ -47,7 +56,12 @@ public class CMServiceFactory {
 		partnerLinks.addContent(partnerLink);
 	}
 
-	public Element createInvokeElementForLog(String variable) {
+	/**
+	 * 
+	 * @param variable inputVariable
+	 * @return
+	 */
+	public Element createInvokeElementForLoggingService(String variable) {
 
 		Element invoke = createBPELElement(BasicActivities.INVOKE_ACTIVITY);
 		invoke.setAttribute(INPUTVARIABLE_ATTR, variable);
@@ -57,19 +71,12 @@ public class CMServiceFactory {
 		return invoke;
 	}
 
-	public Element createInvokeElementForRegisterMarker(String variable) {
-
-		Element invoke = createBPELElement(BasicActivities.INVOKE_ACTIVITY);
-		invoke.setAttribute(INPUTVARIABLE_ATTR, variable);
-		invoke.setAttribute(OPERATION_ATTRIBUTE,
-				REGISTER_COVERAGE_LABELS_OPERATION);
-		invoke.setAttribute(PARTNERLINK_ATTRIBUTE, PARTNERLINK_NAME);
-		invoke.setAttribute(PORTTYPE_ATTRIBUTE,
-				REPORTING_SERVICE_PORT);
-
-		return invoke;
-	}
-
+	/**
+	 * 
+	 * @param content Inhalt, der zugeordnet werden soll.
+	 * @param variable an die zugeordent wird.
+	 * @return
+	 */
 	public Element createAssignElement(String content, String variable) {
 		insertVariable(createVariable(variable,
 				MESSAGETYPE_OF_REPORTING_MESSAGE, null), null);
@@ -88,5 +95,20 @@ public class CMServiceFactory {
 		to.setAttribute(VARIABLE_ATTR, variable);
 		return createAssign(from, to);
 	}
+	
+//	public Element createInvokeElementForRegisterMarker(String variable) {
+//
+//		Element invoke = createBPELElement(BasicActivities.INVOKE_ACTIVITY);
+//		invoke.setAttribute(INPUTVARIABLE_ATTR, variable);
+//		invoke.setAttribute(OPERATION_ATTRIBUTE,
+//				REGISTER_COVERAGE_LABELS_OPERATION);
+//		invoke.setAttribute(PARTNERLINK_ATTRIBUTE, PARTNERLINK_NAME);
+//		invoke.setAttribute(PORTTYPE_ATTRIBUTE,
+//				REPORTING_SERVICE_PORT);
+//
+//		return invoke;
+//	}
+
+
 
 }

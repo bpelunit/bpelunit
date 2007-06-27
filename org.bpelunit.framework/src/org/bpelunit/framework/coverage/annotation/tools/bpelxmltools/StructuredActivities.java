@@ -8,6 +8,12 @@ import java.util.Hashtable;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
+/**
+ * Die Klasse repräsentiert die Strukturierten Aktivitäten.
+ * 
+ * @author Alex Salnikow
+ *
+ */
 public class StructuredActivities {
 
 	public static final String SEQUENCE_ACTIVITY = "sequence";
@@ -41,6 +47,10 @@ public class StructuredActivities {
 				: false;
 	}
 
+	/**
+	 * Legt die Aktivitäten fest abhängig von der BPEL-Version (1.1 oder 2.0)
+	 *
+	 */
 	public static void initialize() {
 		Namespace bpelNamespace = BpelXMLTools.getProcessNamespace();
 		if (bpelNamespace.equals(NAMESPACE_BPEL_2_0)) {

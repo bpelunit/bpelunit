@@ -77,14 +77,12 @@ public class ActiveBPELDeploymentArchiveHandler implements
 
 	private File archiveFile;
 
-
 	private Logger fLogger;
 
 	public ActiveBPELDeploymentArchiveHandler() {
 		fLogger = Logger.getLogger(getClass());
-		bpelFiles=new Hashtable<String, File>();
+		bpelFiles = new Hashtable<String, File>();
 	}
-
 
 	/**
 	 * Erzeugt eine Kopie des Archives und unresucht das Archive nach
@@ -93,7 +91,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	 * @throws ArchiveFileException
 	 */
 	public String createArchivecopy(String archive) throws ArchiveFileException {
-		File copyFile=this.archiveFile = createCopy(archive);
+		File copyFile = this.archiveFile = createCopy(archive);
 		searchBPELFiles();
 		return copyFile.getName();
 	}
@@ -129,13 +127,17 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		return bpelFile;
 	}
 
-
 	private void searchBPELFiles() {
 		fLogger.info("CoverageTool:Search for BPEL-files is started");
 		File file = new File(archiveFile.getPath());
 		searchChildrenBPEL(file);
 	}
 
+	/**
+	 * Sucht die Verzeichnisse nach BPEL-Dateien rekursiv durch.
+	 * 
+	 * @param file
+	 */
 	private void searchChildrenBPEL(File file) {
 		java.io.File[] files = file.listFiles();
 		if (files != null) {
@@ -186,8 +188,11 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		prepareDeploymentDescriptor();
 	}
 
-
-
+	/**
+	 * Rgestriert WSDL-File in dem WSDL-Catalog
+	 * 
+	 * @throws ArchiveFileException
+	 */
 	private void adaptWsdlCatalog() throws ArchiveFileException {
 		FileInputStream is = null;
 		FileWriter writer = null;
@@ -247,6 +252,13 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		return wsdlCatalog;
 	}
 
+	/**
+	 * 
+	 * Fügt Endpoint des Coverage Logging Services und WSDl-Eintrag in den
+	 * Deployment Descriptor ein.
+	 * 
+	 * @throws ArchiveFileException
+	 */
 	private void prepareDeploymentDescriptor() throws ArchiveFileException {
 		FileInputStream is = null;
 		FileWriter writer = null;
@@ -371,14 +383,24 @@ public class ActiveBPELDeploymentArchiveHandler implements
 				.info("CoverageTool:PartnerLink for Covergae_Logging_Service in BPEL added.");
 	}
 
-
-	public Document getDocument(String relativFilePath) throws BpelException {
-		de.schlichtherle.io.File file=bpelFiles.get(relativFilePath);
+	/**
+	 * Extrahiert BPEL-File aus dem Archive
+	 * @return BPEL-File als XML-Dokument
+	 */
+	public Document getDocument(String bpelFile) throws BpelException {
+		de.schlichtherle.io.File file = bpelFiles.get(bpelFile);
 		return readBPELDocument(file);
 	}
 
-	public void writeDocument(Document doc, String relativFilePath) throws ArchiveFileException {
-		writeBPELDocument(bpelFiles.get(relativFilePath), doc);
+	/**
+	 * Schreibt den BPEL-Prozess in Form eines XML-Dokumentes in den Archiv
+	 * @param doc BPEL-Prozess als XML-Dokument
+	 * @param fileName Name der BPEL-Datei
+	 * @throws ArchiveFileException
+	 */
+	public void writeDocument(Document doc, String fileName)
+			throws ArchiveFileException {
+		writeBPELDocument(bpelFiles.get(fileName), doc);
 	}
 
 	private Document readBPELDocument(File file) throws BpelException {
@@ -406,9 +428,9 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		}
 		return doc;
 	}
-	
-	private void writeBPELDocument(File file, Document doc) throws ArchiveFileException
-			 {
+
+	private void writeBPELDocument(File file, Document doc)
+			throws ArchiveFileException {
 		FileWriter writer = null;
 		try {
 			writer = new FileWriter(file);
@@ -435,6 +457,10 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		return bpelFiles.keySet();
 	}
 
+	/**
+	 * Gibt die reservierten Ressourcen (Streams) frei. 
+	 *
+	 */
 	public void closeArchive() {
 		try {
 			de.schlichtherle.io.File.umount(true, true, true, true);

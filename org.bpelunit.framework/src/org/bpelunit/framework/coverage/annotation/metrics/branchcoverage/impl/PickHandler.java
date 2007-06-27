@@ -12,7 +12,12 @@ import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 
-
+/**
+ * Handler, der die Instrumentierung der
+ * pick-Aktivitäten für die Zweigabdeckung übernehmen.
+ * 
+ * @author Alex Salnikow
+ */
 public class PickHandler implements IStructuredActivityHandler {
 
 	private static final String ON_MESSAGE = "onMessage";
@@ -25,6 +30,13 @@ public class PickHandler implements IStructuredActivityHandler {
 		this.markersRegistry = markersRegistry;
 	}
 
+	/**
+	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
+	 * um die Ausführung der Zweige zu erfassen.
+	 * 
+	 * @param structured_activity
+	 * @throws BpelException
+	 */
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		identifyBranches(element, ON_MESSAGE);
@@ -41,7 +53,7 @@ public class PickHandler implements IStructuredActivityHandler {
 			if (child == null) {
 				throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 			}
-			markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
+			markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
 		}
 	}
 }

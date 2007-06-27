@@ -9,13 +9,14 @@ import java.util.List;
 
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
+import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
 /**
- * Die Klasse ist für das Einfügen der Markierungen in der Sequence-Aktivität
- * verantwortlich, die für die Messung der Zweigabdeckung verwendet werden.
+ * Handler, der die Instrumentierung der
+ * sequence-Aktivitäten für die Zweigabdeckung übernehmen.
  * 
  * @author Alex Salnikow
  */
@@ -28,10 +29,11 @@ public class SequenceHandler implements IStructuredActivityHandler {
 	}
 
 	/**
-	 * Fügt Markierungen in Sequence-Elemente ein, die später, um die Ausführung
-	 * der Zweige zu erfassen, durch Invoke-Aufrufe protokolliert werden.
+	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
+	 * um die Ausführung der Zweige zu erfassen.
 	 * 
-	 * @param sequence
+	 * @param structured_activity
+	 * @throws BpelException
 	 */
 	public void insertBranchMarkers(Element sequence) {
 		List<Element> children = sequence.getContent(new ElementFilter(
@@ -47,7 +49,7 @@ public class SequenceHandler implements IStructuredActivityHandler {
 			child = activities.get(i);
 			if (isActivity(child)) {
 				if (previousActivity != null)
-					markersRegistry.addMarker(BranchMetricHandler
+					markersRegistry.registerMarker(BranchMetricHandler
 							.insertLabelBevorActivity(child));
 
 				previousActivity = child;

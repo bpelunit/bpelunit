@@ -53,9 +53,7 @@ public class LinkMetricHandler implements  IMetricHandler {
 
 	private MarkersRegisterForArchive markersRegistry;
 
-	public String getName() {
-		return METRIC_NAME;
-	}
+
 
 	public LinkMetricHandler(MarkersRegisterForArchive markersRegistry) {
 		this.markersRegistry=markersRegistry;
@@ -79,6 +77,15 @@ public class LinkMetricHandler implements  IMetricHandler {
 		return  NEGATIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
 	}
 
+	/**
+	 * Fügt die Marker an den richtigen Stellen in
+	 * BPEL-Process-Element ein (Instrumentierung). Anhand dieser Marker werden
+	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
+	 * bestimmter Aktivitäten geloggt.
+	 * 
+	 * @param process_element
+	 * @throws BpelException 
+	 */
 	public void insertMarkersForMetric(List<Element> activities)
 			throws BpelException {
 		for (Iterator<Element> iter = activities.iterator(); iter
@@ -192,7 +199,7 @@ public class LinkMetricHandler implements  IMetricHandler {
 			marker=getNextNegativLinkMarker();
 			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +marker);
 		}
-		markersRegistry.addMarker(marker);
+		markersRegistry.registerMarker(marker);
 
 		Element sequence = createSequence();
 		Element targetElement = createBPELElement(TARGET_TAG);

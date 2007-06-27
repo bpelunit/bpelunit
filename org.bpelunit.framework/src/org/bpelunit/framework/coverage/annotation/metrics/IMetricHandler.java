@@ -5,7 +5,11 @@ import java.util.List;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.jdom.Element;
 
-
+/**
+ * Die Schnittstelle ist für Handler vorgesehen, die die Instrumentierung für die Metriken übernehmen.
+ * @author Alex
+ *
+ */
 public interface IMetricHandler {
 
 	/**

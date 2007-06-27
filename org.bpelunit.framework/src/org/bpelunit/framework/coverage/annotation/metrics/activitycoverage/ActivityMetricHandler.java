@@ -34,6 +34,8 @@ import org.jdom.Namespace;
 public class ActivityMetricHandler implements IMetricHandler {
 
 
+	public static int targetscount;
+	
 	private Logger logger = Logger.getLogger(getClass());
 
 	private MarkersRegisterForArchive markersRegistry;
@@ -82,6 +84,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 	private Element respectTargetActivities(Element element, Element sequence) {
 		List<Element> targetElements = getTargetElements(element);
 		if (targetElements.size() > 0) {
+			targetscount++;
 			sequence = encloseInSequence(element);
 			Element targetElement;
 			for (Iterator<Element> iter = targetElements.iterator(); iter
@@ -143,7 +146,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 		String element_name = element.getName();
 		String marker = element_name
 				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
-		markersRegistry.addMarker(marker);
+		markersRegistry.registerMarker(marker);
 		Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
 				+ marker);
 		int index = parent.indexOf(element);

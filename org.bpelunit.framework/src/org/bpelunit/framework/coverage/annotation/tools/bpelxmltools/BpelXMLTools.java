@@ -9,7 +9,6 @@ import org.bpelunit.framework.coverage.CoverageConstants;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.XpathLanguage;
 import org.jdom.Content;
-import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.ContentFilter;

@@ -153,7 +153,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 			method.releaseConnection();
 			if (fileReplaced && uploadingFile.exists()) {
 				//HIER
-//				uploadingFile.delete();
+				uploadingFile.delete();
 			}
 		}
 

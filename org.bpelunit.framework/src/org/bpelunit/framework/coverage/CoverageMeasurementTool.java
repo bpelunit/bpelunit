@@ -5,26 +5,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.wsdl.Definition;
-import javax.wsdl.WSDLException;
-import javax.wsdl.factory.WSDLFactory;
-import javax.wsdl.xml.WSDLReader;
-import javax.xml.namespace.QName;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
+import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetricHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.IDeploymentArchiveHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.impl.ActiveBPELDeploymentArchiveHandler;
@@ -35,12 +24,8 @@ import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
-import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import org.jdom.Document;
-
-import com.ibm.wsdl.Constants;
+import org.jdom.filter.ElementFilter;
 
 /**
  * 
@@ -67,26 +52,15 @@ public class CoverageMeasurementTool {
 
 	private String pathToWSDL = null;
 
-	/**
-	 * 
-	 */
+
 	public CoverageMeasurementTool() {
 		logger = Logger.getLogger(getClass());
-		logger.info("CoverageMeasurmentTool erzeugt");
 		metricManager = new MetricsManager();
 		markersRegistry = new MarkersRegisterForArchive(metricManager);
 		messageReceiver = new CoverageMessageReceiver(markersRegistry);
-		// this.fBpelunitConfigDirectory=FilenameUtils.concat(System.getenv(BPELUnitBaseRunner.BPELUNIT_HOME_ENV),BPELUnitBaseRunner.CONFIG_DIR);
 	}
 
 
-	// private void createStatementmetric(Map<String, List<String>> configMap) {
-	// if (configMap.containsKey(ActivityMetric.METRIC_NAME)) {
-	// MetricsManager.createMetric(ActivityMetric.METRIC_NAME, configMap
-	// .get(ActivityMetric.METRIC_NAME),markersRegistry);
-	// }
-	//
-	// }
 
 	// ********** prepare archive file for coverage measurment **********
 	/**
@@ -148,17 +122,26 @@ public class CoverageMeasurementTool {
 		Instrumenter instrumenter = new Instrumenter();
 		Document doc;
 		BpelXMLTools.count = 0;
+		int count=0;
 		String bpelFile;
+		ActivityMetricHandler.targetscount=0;
 		for (Iterator<String> iter = archiveHandler.getAllBPELFileNames()
 				.iterator(); iter.hasNext();) {
 			bpelFile = iter.next();
 			markersRegistry.addRegistryForFile(bpelFile);
 			doc = archiveHandler.getDocument(bpelFile);
+			Iterator iter2=doc.getDescendants(new ElementFilter("link",doc.getRootElement().getNamespace()));
+			while (iter2.hasNext()) {
+				iter2.next();
+				count++;
+				
+			}
 			doc = instrumenter.insertAnnotations(doc, metricManager);
 			archiveHandler.writeDocument(doc, bpelFile);
 			logger.info("!!!!!!!!!BPEL-Files gefunden ");
 
 		}
+		System.out.println("!!!!!!!LInks gefunden"+count);
 		logger.info("CoverageTool: Instrumentation beendet.");
 
 	}
@@ -177,7 +160,7 @@ public class CoverageMeasurementTool {
 				pathToWSDL));
 	}
 
-	public void setConfig(Map<String, List<String>> configMap)
+	public void configureMetrics(Map<String, List<String>> configMap)
 			throws ConfigurationException {
 		if(configMap==null){
 			setErrorStatus("Configuration error.");
@@ -205,29 +188,60 @@ public class CoverageMeasurementTool {
 		error = true;
 	}
 
+	/**
+	 * 
+	 * @param encoder
+	 *            sSOAPEncoder für die Dekodierung der Nachrichten mit
+	 *            Coverage-Marken
+	 */
 	public void setSOAPEncoder(ISOAPEncoder encoder) {
 		messageReceiver.setSOAPEncoder(encoder);
 	}
 
+	/**
+	 * 
+	 * @param wsdl WSDL-Beschreibung des Coverage Logging Services
+	 */
 	public void setPathToWSDL(String wsdl) {
 		logger.info("PATHTOWSDL="+wsdl);
 		pathToWSDL = wsdl;
 		messageReceiver.setPathToWSDL(wsdl);
 	}
 
+	/**
+	 * 
+	 * @return Encoding Style der Coverage-Nachrichten
+	 */
 	public String getEncodingStyle() {
 		return messageReceiver.getEncodingStyle();
 	}
 
+	/**
+	 * Setzt den Testfall, der gerade ausgeführt wird. Dadurch ist es möglich,
+	 * die Testabdeckung von jedem Testfalls zu bestimmen.
+	 * 
+	 * @param testCase
+	 *            Testfall, der gerade ausgeführt wird.
+	 */
 	public void setCurrentTestCase(String testCase) {
 		messageReceiver.setCurrentTestcase(testCase);
 	}
 
+	/**
+	 * Empfängt SOAP-Nachrichten mit Coverage Marken während der Testausführung
+	 * 
+	 * @param body
+	 *            Nachricht mit Coverage-Marken
+	 */
 	public synchronized void putMessage(String body) {
 		messageReceiver.putMessage(body);
 		notifyAll();
 	}
 
+	/**
+	 * Generiert Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im Archive sind. 
+	 * @return Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im Archive sind. 
+	 */
 	public List<IFileStatistic> getStatistics() {
 		return markersRegistry.getStatistics();
 	}

@@ -19,6 +19,12 @@ import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 
+/**
+ * Handler, der die Instrumentierung der
+ * repeatUntil-Aktivitäten für die Zweigabdeckung übernehmen.
+ * 
+ * @author Alex Salnikow
+ */
 
 public class RepeatUntilHandler implements IStructuredActivityHandler {
 
@@ -28,6 +34,13 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 		this.markersRegistry = markersRegistry;
 	}
 
+	/**
+	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
+	 * um die Ausführung der Zweige zu erfassen.
+	 * 
+	 * @param structured_activity
+	 * @throws BpelException
+	 */
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		branchFromConditionToActivity(element);
@@ -40,7 +53,7 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 		if (element == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		
-		markersRegistry.addMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));
 	}
 
 	private void branchFromConditionToActivity(Element element)
@@ -79,7 +92,7 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 		Element sequence = createSequence();
 		if_element.addContent(sequence);
 		activity.addContent(0, if_element);
-		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(sequence));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(sequence));
 
 	}
 

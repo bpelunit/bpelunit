@@ -16,10 +16,9 @@ import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 
-
 /**
- * Die Klasse ist für das Einfügen der Markierungen in der If-Aktivität
- * verantwortlich, die für die Messung der Zweigabdeckung verwendet werden.
+ * Handler, der die Instrumentierung der
+ * if-Aktivitäten für die Zweigabdeckung übernehmen.
  * 
  * @author Alex Salnikow
  */
@@ -31,6 +30,13 @@ public class IfHandler implements IStructuredActivityHandler {
 		this.markersRegistry = markersRegistry;
 	}
 
+	/**
+	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
+	 * um die Ausführung der Zweige zu erfassen.
+	 * 
+	 * @param structured_activity
+	 * @throws BpelException
+	 */
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		insertMarkerForIfBranch(getFirstEnclosedActivity(element));
@@ -60,7 +66,7 @@ public class IfHandler implements IStructuredActivityHandler {
 		if (branch_activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		
-		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 
 	}
 
@@ -76,7 +82,7 @@ public class IfHandler implements IStructuredActivityHandler {
 		if (branch_activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 			
-		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 	}
 
 	/**
@@ -91,7 +97,7 @@ public class IfHandler implements IStructuredActivityHandler {
 		if (branch_activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 
-		markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 
 	}
 

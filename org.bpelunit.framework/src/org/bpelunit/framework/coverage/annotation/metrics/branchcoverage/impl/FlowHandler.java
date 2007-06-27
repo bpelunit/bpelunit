@@ -19,7 +19,12 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.ContentFilter;
 
-
+/**
+ * Handler, der die Instrumentierung der
+ * flow-Aktivitäten für die Zweigabdeckung übernehmen.
+ * 
+ * @author Alex Salnikow
+ */
 
 public class FlowHandler implements IStructuredActivityHandler {
 	
@@ -29,6 +34,13 @@ public class FlowHandler implements IStructuredActivityHandler {
 		this.markersRegistry = markersRegistry;
 	}
 
+	/**
+	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
+	 * um die Ausführung der Zweige zu erfassen.
+	 * 
+	 * @param structured_activity
+	 * @throws BpelException
+	 */
 	public void insertBranchMarkers(Element element)
 			throws BpelException {
 		loggingOfBranches(element);
@@ -41,7 +53,7 @@ public class FlowHandler implements IStructuredActivityHandler {
 				child = (Element) children.get(i);
 				if (isActivity(child)) {
 					if (isTargetOfLinks(child)) {
-						markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
+						markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
 					} else {
 						List<Element> createInstanceElement = getCreateInstanceActivity(child);
 						if (createInstanceElement.size()>0) {
@@ -49,10 +61,10 @@ public class FlowHandler implements IStructuredActivityHandler {
 									.iterator(); iter.hasNext();) {
 								Element el=iter.next();
 								ensureElementIsInSequence(el);
-								markersRegistry.addMarker(BranchMetricHandler.insertLabelAfterActivity(el));
+								markersRegistry.registerMarker(BranchMetricHandler.insertLabelAfterActivity(el));
 							}					
 						} else {
-							markersRegistry.addMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
+							markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(child));
 						}
 					}
 				}

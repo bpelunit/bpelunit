@@ -36,10 +36,16 @@ public class FaultMetricHandler implements IMetricHandler {
 		this.markersRegistry = markersRegistry;
 	}
 
-	public String getName() {
-		return METRIC_NAME;
-	}
 
+	/**
+	 * Fügt die Marker an den richtigen Stellen in
+	 * BPEL-Process-Element ein (Instrumentierung). Anhand dieser Marker werden
+	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
+	 * bestimmter Aktivitäten geloggt.
+	 * 
+	 * @param process_element
+	 * @throws BpelException 
+	 */
 	public void insertMarkersForMetric(List<Element> activities)
 			throws BpelException {
 
@@ -56,7 +62,7 @@ public class FaultMetricHandler implements IMetricHandler {
 			child = ensureElementIsInSequence(child);
 
 		String marker = getNextMarker();
-		markersRegistry.addMarker(marker);
+		markersRegistry.registerMarker(marker);
 		Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
 				+ marker);
 		child.addContent(0, comment);

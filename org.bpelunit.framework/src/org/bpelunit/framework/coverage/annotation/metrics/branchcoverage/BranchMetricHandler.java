@@ -151,6 +151,15 @@ public class BranchMetricHandler implements IMetricHandler {
 				new SwitchHandler(markersRegistry));
 	}
 
+	/**
+	 * Fügt die Marker an den richtigen Stellen in
+	 * BPEL-Process-Element ein (Instrumentierung). Anhand dieser Marker werden
+	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
+	 * bestimmter Aktivitäten geloggt.
+	 * 
+	 * @param process_element
+	 * @throws BpelException 
+	 */
 	public void insertMarkersForMetric(List<Element> activities)
 			throws BpelException {
 		Element next_element;
@@ -158,6 +167,7 @@ public class BranchMetricHandler implements IMetricHandler {
 			next_element = iter.next();
 			String next_element_name = next_element.getName();
 			if (structured_activity_handler.containsKey(next_element_name)) {
+				//Delegiert die Instrumentierung
 				structured_activity_handler.get(next_element_name)
 						.insertBranchMarkers(next_element);
 			}

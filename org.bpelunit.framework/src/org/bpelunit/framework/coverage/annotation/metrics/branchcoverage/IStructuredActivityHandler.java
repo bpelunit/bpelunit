@@ -1,13 +1,12 @@
 package org.bpelunit.framework.coverage.annotation.metrics.branchcoverage;
 
-
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.jdom.Element;
 
-
-
-
 /**
+ * Die Schnittstelle für die Handler, die die Instrumentierung der
+ * Strukturierten Aktivitäten für die Zweigabdeckung übernehmen.
+ * 
  * @author Alex Salnikow
  */
 public interface IStructuredActivityHandler {
@@ -16,7 +15,8 @@ public interface IStructuredActivityHandler {
 	 * um die Ausführung der Zweige zu erfassen.
 	 * 
 	 * @param structured_activity
-	 * @throws BpelException 
+	 * @throws BpelException
 	 */
-	public void insertBranchMarkers(Element structured_activity) throws BpelException;
+	public void insertBranchMarkers(Element structured_activity)
+			throws BpelException;
 }

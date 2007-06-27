@@ -1,10 +1,5 @@
 package org.bpelunit.framework.coverage.receiver;
 
-/**
- * This file belongs to the BPELUnit utility and Eclipse plugin set. See enclosed
- * license file for more information.
- * 
- */
 
 
 import java.io.BufferedReader;
@@ -25,9 +20,8 @@ import org.mortbay.util.ByteArrayISO8859Writer;
 /**
  * The handler for incoming HTTP connections. Each incoming request is related
  * to the target PartnerTrack and passed to the framework for analysis.
- * 
- * @version $Id$
- * @author Philip Mayer
+
+ * @author Alex Salnikow
  * 
  */
 public class MarkersServiceHandler extends AbstractHttpHandler {
@@ -57,8 +51,6 @@ public class MarkersServiceHandler extends AbstractHttpHandler {
 	public void handle(String pathInContext, String pathParams,
 			HttpRequest request, HttpResponse response) throws HttpException,
 			IOException {
-
-		wsLogger.info("!!!!!!!!!!!!!Incoming request for path " + pathInContext);
 
 		if (!request.getMethod().equals(HttpRequest.__POST)) {
 			wsLogger.error("Got a non-POST request - rejecting message "

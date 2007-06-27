@@ -15,6 +15,12 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+/**
+ * Die Klasse schreibt die Testabdeckungsmetriken im XML-Format in Outputstream.
+ * 
+ * @author Alex
+ * 
+ */
 public class XMLCoverageResultProducer {
 
 	private static final String STATISTIC_ELEMENT = "statistic";
@@ -36,6 +42,19 @@ public class XMLCoverageResultProducer {
 	private static final Namespace NAMESPACE = Namespace
 			.getNamespace("http://www.bpelunit.org/schema/coverageResult");
 
+	/**
+	 * 
+	 * Schreibt Testabdeckungsmetriken im XML-Format in OutputStream.
+	 * 
+	 * @param out Outputstream in den die Statistiken geschrieben werden.
+	 * @param statistics
+	 * @param info
+	 * @param detailed
+	 *            entscheidet, ob eine detaillierte Augabe erzeugt wird
+	 *            (Statistik für jede einzelen Datei), oder nicht (Statistik für
+	 *            den kompletten Archive. )
+	 * @throws IOException
+	 */
 	public static void writeResult(OutputStream out,
 			List<IFileStatistic> statistics, List<String> info, boolean detailed)
 			throws IOException {
@@ -122,7 +141,8 @@ public class XMLCoverageResultProducer {
 			tested = tested + statistic.getTestedNumber();
 		}
 		if (total > 0)
-			relativ = Integer.toString((tested * 100 / total)) + "%";
+			relativ = Float.toString((tested * 1000 / total) / (float) 10.0)
+					+ "%";
 		return new String[] { statisticName, Integer.toString(total),
 				Integer.toString(tested), relativ };
 	}

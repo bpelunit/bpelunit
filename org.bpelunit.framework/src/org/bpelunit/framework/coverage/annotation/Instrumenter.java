@@ -12,14 +12,12 @@ import org.apache.log4j.Logger;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetricHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.CMServiceFactory;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.exceptions.BpelVersionException;
-import org.bpelunit.framework.exception.ConfigurationException;
 import org.jdom.Comment;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -28,9 +26,8 @@ import org.jdom.filter.ContentFilter;
 import org.jdom.filter.ElementFilter;
 
 /**
- * Dieses Interface wird von dem Handler implementiert, der dafür zuständig ist,
- * die Instrumentierung der BPEL-Datei zu starten und dabei nur die gewünschten
- * Metriken zu berücksichtigen.
+ * In der Klasse ist für die Vorbereitung und Start der Instrumentierung
+ * verantwortlich.
  * 
  * @author Alex Salnikow
  * 
@@ -54,13 +51,13 @@ public class Instrumenter {
 	}
 
 	/**
-	 * Startet die Instrumentierung der BPEL-Datei.
+	 * * Führt die Instrumentierung der BPEL-Datei durch.
 	 * 
 	 * @param document
+	 *            BPEL-Prozess
 	 * @param metricManager
-	 * @param metrics
+	 * @return instrumentierter BPEL-Prozess
 	 * @throws BpelException
-	 * @throws ConfigurationException
 	 */
 	public Document insertAnnotations(Document document,
 			MetricsManager metricManager) throws BpelException {
@@ -79,6 +76,11 @@ public class Instrumenter {
 		return document;
 	}
 
+	/**
+	 * Ersetzt die inline-Handler durch explizite Scopes
+	 * 
+	 * @param process_element
+	 */
 	private void replaceInlineHandler(Element process_element) {
 		Iterator<Element> iter = process_element
 				.getDescendants(new ElementFilter(
@@ -128,35 +130,47 @@ public class Instrumenter {
 					.hasNext();) {
 				faultHandler.addContent(iter.next().detach());
 			}
-			if(inlineElements2.size()>0){
+			if (inlineElements2.size() > 0) {
 				faultHandler.addContent(inlineElements2.get(0).detach());
 			}
 		}
-		
-		inlineElements=element.getChildren(BpelXMLTools.COMPENSATION_HANDLER);
-		if(inlineElements.size()>0){
-			if(scope==null)
-				scope=BpelXMLTools
-				.createBPELElement(StructuredActivities.SCOPE_ACTIVITY);
+
+		inlineElements = element.getChildren(BpelXMLTools.COMPENSATION_HANDLER);
+		if (inlineElements.size() > 0) {
+			if (scope == null)
+				scope = BpelXMLTools
+						.createBPELElement(StructuredActivities.SCOPE_ACTIVITY);
 			scope.addContent(inlineElements.get(0).detach());
 		}
-		if(scope!=null){
-			int i=element.getParentElement().indexOf(element);
+		if (scope != null) {
+			int i = element.getParentElement().indexOf(element);
 			scope.setContent(i, scope);
 			scope.addContent(element);
 		}
 
 	}
 
+	/**
+	 * speichert für die Metriken notwendigen Elemente des Original-Prozesses
+	 * 
+	 * @param metrics
+	 * @param process_element
+	 */
 	private void saveOriginalBPELElements(List<IMetric> metrics,
 			Element process_element) {
 		IMetric metric;
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			metric = iter.next();
-			metric.setOriginalBPELDocument(process_element);
+			metric.setOriginalBPELProcess(process_element);
 		}
 	}
 
+	/**
+	 * Überprüft die BPEL-Version
+	 * 
+	 * @param process_element
+	 * @throws BpelVersionException
+	 */
 	private void checkVersion(Element process_element)
 			throws BpelVersionException {
 		Namespace processNamespace = process_element.getNamespace();
@@ -170,6 +184,12 @@ public class Instrumenter {
 		}
 	}
 
+	/**
+	 * Führt die Initialisierung der Tools durch
+	 * 
+	 * @param process_element
+	 * @throws BpelVersionException
+	 */
 	private void initializeBPELTools(Element process_element)
 			throws BpelVersionException {
 		BpelXMLTools.process_element = process_element;
@@ -177,8 +197,12 @@ public class Instrumenter {
 		StructuredActivities.initialize();
 	}
 
-	// *********************** ****************************************
-
+	/**
+	 * Startet für jede Metrik den Instrumentierungsprozess
+	 * 
+	 * @param metrics
+	 * @throws BpelException
+	 */
 	private void executeInstrumentation(List<IMetric> metrics)
 			throws BpelException {
 		IMetric metric;
@@ -188,6 +212,12 @@ public class Instrumenter {
 		}
 	}
 
+	/**
+	 * Fügt nach der Annotation des Prozesses für eingefügte Marken invoke und
+	 * assig-Aktivitäten in den Prozess ein.
+	 * 
+	 * @param process_element Wurzelelement des BPEL-Prozesses
+	 */
 	private void createReportInvokesFromCoverageLabels(Element process_element) {
 		cmServiceFactory = CMServiceFactory.getInstance();
 		cmServiceFactory.prepareBPELFile(process_element);
@@ -229,14 +259,14 @@ public class Instrumenter {
 			if (isCoverageLabel(commentText)) {
 				if (indexOfLastMarker - 1 == index) {
 					marker = marker
-							+ getLabel(commentText, COVERAGE_LABEL_IDENTIFIER)
+							+ getMarker(commentText, COVERAGE_LABEL_IDENTIFIER)
 							+ SEPARATOR;
 				} else {
 					if (marker.length() > 0) {
 						insertInvokeForLabels(marker, indexOfLastMarker,
 								element, variable);
 					}
-					marker = getLabel(commentText, COVERAGE_LABEL_IDENTIFIER)
+					marker = getMarker(commentText, COVERAGE_LABEL_IDENTIFIER)
 							+ SEPARATOR;
 				}
 				comment.detach();
@@ -259,7 +289,7 @@ public class Instrumenter {
 			Element assign = cmServiceFactory.createAssignElement(marker,
 					variable);
 			Element invoke = cmServiceFactory
-					.createInvokeElementForLog(variable);
+					.createInvokeElementForLoggingService(variable);
 			element.addContent(index, invoke);
 			element.addContent(index, assign);
 		} catch (Exception e) {
@@ -267,13 +297,24 @@ public class Instrumenter {
 		}
 	}
 
-	private String getLabel(String complettLabel, String identifier) {
+	/**
+	 * Extrahiert die Marke aus dem Kommentar
+	 * @param complettLabel
+	 * @param identifier
+	 * @return
+	 */
+	private String getMarker(String complettLabel, String identifier) {
 		int startIndex = complettLabel.indexOf(identifier)
 				+ identifier.length();
 		return complettLabel.substring(startIndex);
 
 	}
 
+	/**
+	 * Überprüft, ob der Kommentar eine Coverage-Marke ist.
+	 * @param label
+	 * @return
+	 */
 	private boolean isCoverageLabel(String label) {
 		if (label.startsWith(COVERAGE_LABEL_IDENTIFIER)) {
 			return true;

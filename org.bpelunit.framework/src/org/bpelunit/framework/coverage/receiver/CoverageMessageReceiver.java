@@ -11,9 +11,7 @@ import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.coverage.CoverageConstants;
@@ -25,16 +23,22 @@ import org.w3c.dom.Element;
 
 import com.ibm.wsdl.Constants;
 
+/**
+ * Die Klasse ist für die Verarbeitung von SOAP-Nachrichten an Coverage Logging
+ * Service zuständig.
+ * 
+ * @author Alex Salnikow
+ * 
+ */
 public class CoverageMessageReceiver {
 
-
 	private ISOAPEncoder encoder = null;
-	
+
 	private Logger logger = Logger.getLogger(getClass());
 
 	private SOAPOperationCallIdentifier operation = null;
 
-	private String testCase=null;
+	private String testCase = null;
 
 	private MarkersRegisterForArchive markersRegistry;
 
@@ -42,19 +46,15 @@ public class CoverageMessageReceiver {
 		this.markersRegistry = markersRegistry;
 	}
 
-
+	/**
+	 * Empfängt SOAP-Nachrichten mit Coverage Marken während der Testausführung
+	 * 
+	 * @param body
+	 *            Nachricht mit Coverage-Marken
+	 */
 	public synchronized void putMessage(String body) {
 		if (encoder != null && operation != null) {
-			
 			Element element = null;
-			// try {
-			logger.info("!!!!!!!!!MESSAGE ANGEKOMMEN");
-			if (body == null) {
-				logger.info("!!!!!!!!BODY==NULL");
-			} else {
-
-				logger.info("!!!!!!!BODY!=NULL " + body);
-			}
 			SOAPMessage fSOAPMessage;
 			try {
 				fSOAPMessage = BPELUnitUtil.getMessageFactoryInstance()
@@ -68,26 +68,37 @@ public class CoverageMessageReceiver {
 				e.printStackTrace();
 				logger.info(e.getLocalizedMessage());
 			} catch (SOAPException e) {
-				logger.info("Could not create SOAP message from incoming message: "
-						 + e.getMessage());
+				logger
+						.info("Could not create SOAP message from incoming message: "
+								+ e.getMessage());
 			} catch (SOAPEncodingException e) {
-				logger.info("Could not create SOAP message from incoming message: "
-						 + e.getMessage());
+				logger
+						.info("Could not create SOAP message from incoming message: "
+								+ e.getMessage());
 			}
 
 			markersRegistry.setCoverageStatusForAllMarker(element
 					.getTextContent(), testCase);
-		}else{
+		} else {
 			logger.info("SOAPEncoder is not initialized.");
 		}
 
 	}
 
-
+	/**
+	 * 
+	 * @param encoder
+	 *            sSOAPEncoder für die Dekodierung der Nachrichten mit
+	 *            Coverage-Marken
+	 */
 	public void setSOAPEncoder(ISOAPEncoder encoder) {
 		this.encoder = encoder;
 	}
 
+	/**
+	 * 
+	 * @param wsdl WSDL-Beschreibung des Coverage Logging Services
+	 */
 	public void setPathToWSDL(String wsdl) {
 		try {
 			WSDLReader reader = WSDLFactory.newInstance().newWSDLReader();
@@ -103,7 +114,6 @@ public class CoverageMessageReceiver {
 					CoverageConstants.REPORT_OPERATION,
 					SOAPOperationDirectionIdentifier.INPUT);
 
-			// String encodingStyle = operation.getEncodingStyle();
 		} catch (SpecificationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,13 +123,16 @@ public class CoverageMessageReceiver {
 		}
 	}
 
+	/**
+	 * 
+	 * @return Encoding Style der Coverage-Nachrichten
+	 */
 	public String getEncodingStyle() {
 		String style = null;
 		if (operation != null) {
 			try {
 				style = operation.getEncodingStyle();
 			} catch (SpecificationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				markersRegistry.addInfo(e.getMessage());
 			}
@@ -127,6 +140,13 @@ public class CoverageMessageReceiver {
 		return style;
 	}
 
+	/**
+	 * Setzt den Testfall, der gerade ausgeführt wird. Dadurch ist es möglich,
+	 * die Testabdeckung von jedem Testfalls zu bestimmen.
+	 * 
+	 * @param testCase
+	 *            Testfall, der gerade ausgeführt wird.
+	 */
 	public void setCurrentTestcase(String testCase) {
 		this.testCase = testCase;
 	}

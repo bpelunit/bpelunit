@@ -10,7 +10,7 @@ import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkerState;
+import org.bpelunit.framework.coverage.receiver.MarkerStatus;
 import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.bpelunit.framework.coverage.result.statistic.impl.Statistic;
@@ -41,18 +41,33 @@ public class ActivityMetric implements IMetric {
 		metricHandler = new ActivityMetricHandler(markersRegistry);
 	}
 
+	/**
+	 * 
+	 */
 	public String getName() {
 		return METRIC_NAME;
 	}
 
+	/**
+	 * Liefert Präfixe von allen Marken dieser Metrik. Sie ermöglichen die
+	 * Zuordnung der empfangenen Marken einer Metrik
+	 * 
+	 * @return Präfixe von allen Marken dieser Metrik
+	 */
 	public List<String> getMarkersId() {
 		return activities_to_respekt;
 	}
 
 
-
+	/**
+	 * Erzeugt Statistiken
+	 * 
+	 * @param allMarkers
+	 *            alle einegfügten Marken (von allen Metriken), nach dem Testen
+	 * @return Statistik
+	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerState>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerStatus>> allLabels) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		IStatistic subStatistic;
 		String label;
@@ -60,7 +75,7 @@ public class ActivityMetric implements IMetric {
 				.hasNext();) {
 			label = iter.next();
 			subStatistic = new Statistic(METRIC_NAME + ": " + label);
-			List<MarkerState> statusListe = MetricsManager.getStatus(label,
+			List<MarkerStatus> statusListe = MetricsManager.getStatus(label,
 					allLabels);
 			subStatistic.setStatusListe(statusListe);
 			statistic.addSubStatistik(subStatistic);
@@ -69,7 +84,15 @@ public class ActivityMetric implements IMetric {
 	}
 
 
-	public void setOriginalBPELDocument(Element process_element) {
+	/**
+	 * Erhält die noch nicht modifizierte Beschreibung des BPELProzesses als
+	 * XML-Element. Alle für die Instrumentierung benötigten Elemente der
+	 * Prozessbeschreibung werden gespeichert
+	 * 
+	 * @param process
+	 *            noch nicht modifiziertes BPEL-Prozess
+	 */
+	public void setOriginalBPELProcess(Element process_element) {
 		ElementFilter filter = new ElementFilter(process_element.getNamespace());
 		elementsOfBPEL = new ArrayList<Element>();
 		for (Iterator<Element> iter = process_element.getDescendants(filter); iter
@@ -78,9 +101,13 @@ public class ActivityMetric implements IMetric {
 			if (activities_to_respekt.contains(basicActivity.getName()))
 				elementsOfBPEL.add(basicActivity);
 		}	
-		logger.info("!!!!!!!!!!!!!ELEMENTSGELOGGT "+elementsOfBPEL.size());
 	}
 
+	/**
+	 * delegiert die Instrumentierungsaufgabe an eigenen Handler
+	 * 
+	 * @throws BpelException
+	 */
 	public void insertMarkers() throws BpelException {
 		if (elementsOfBPEL != null) {
 			metricHandler.insertMarkersForMetric(elementsOfBPEL);

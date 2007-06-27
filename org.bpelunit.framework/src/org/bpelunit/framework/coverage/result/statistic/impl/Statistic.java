@@ -6,9 +6,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.bpelunit.framework.coverage.receiver.MarkerState;
+import org.bpelunit.framework.coverage.receiver.MarkerStatus;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 
+/**
+ * Repräsentiert Statistik, die die Anzahl der getesteten und gesamten
+ * Codestücke beinhalten. Eine Statistik kann sich aus mehreren Statistiken
+ * (Substatistiken) zusammensetzten.
+ * 
+ * @author Alex Salnikow
+ * 
+ */
 public class Statistic implements IStatistic {
 
 	private int totalNumber = 0;
@@ -19,7 +27,7 @@ public class Statistic implements IStatistic {
 
 	private List<IStatistic> subStatistics = null;
 
-	private List<MarkerState> statusListe = null;
+	private List<MarkerStatus> statusListe = null;
 
 	public Statistic(String string) {
 		this.name = string;
@@ -37,7 +45,7 @@ public class Statistic implements IStatistic {
 
 	/**
 	 * Wenn die Statistik sich aus weiteren Statistiken zusammensetzt, dann
-	 * setzt sich das Ergebnis aus den Daten der Unterstatistiken zusammen.
+	 * setzt sich das Ergebnis aus den Daten der Substatistiken zusammen.
 	 */
 	public int getTotalNumber() {
 		int number = 0;
@@ -56,12 +64,12 @@ public class Statistic implements IStatistic {
 		return name;
 	}
 
-	public Set<MarkerState> getTestedItems(String testCase) {
-		Set<MarkerState> set = new HashSet<MarkerState>();
+	public Set<MarkerStatus> getTestedItems(String testCase) {
+		Set<MarkerStatus> set = new HashSet<MarkerStatus>();
 		if (subStatistics == null) {
-			for (Iterator<MarkerState> iter = statusListe.iterator(); iter
+			for (Iterator<MarkerStatus> iter = statusListe.iterator(); iter
 					.hasNext();) {
-				MarkerState status = iter.next();
+				MarkerStatus status = iter.next();
 				if (status.isTestedWithTestcase(testCase))
 					set.add(status);
 			}
@@ -79,9 +87,9 @@ public class Statistic implements IStatistic {
 	}
 
 	public int getTestedNumber(Set<String> testCases) {
-		Set<MarkerState> set = new HashSet<MarkerState>();
+		Set<MarkerStatus> set = new HashSet<MarkerStatus>();
 		for (Iterator<String> iter = testCases.iterator(); iter.hasNext();) {
-			Set<MarkerState> items = getTestedItems(iter.next());
+			Set<MarkerStatus> items = getTestedItems(iter.next());
 			set.addAll(items);
 		}
 		return set.size();
@@ -90,7 +98,7 @@ public class Statistic implements IStatistic {
 	public int getTestedNumber() {
 		int number = 0;
 		if (subStatistics == null && statusListe != null) {
-			for (Iterator<MarkerState> iter = statusListe.iterator(); iter
+			for (Iterator<MarkerStatus> iter = statusListe.iterator(); iter
 					.hasNext();) {
 				if (iter.next().isTested())
 					number++;		
@@ -104,7 +112,7 @@ public class Statistic implements IStatistic {
 		return number;
 	}
 
-	public void setStatusListe(List<MarkerState> statusListe) {
+	public void setStatusListe(List<MarkerStatus> statusListe) {
 		totalNumber = statusListe.size();
 		this.statusListe = statusListe;
 
