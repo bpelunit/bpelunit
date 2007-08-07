@@ -1,0 +1,15 @@
+
+----------------------------------------------------------
+
+BPELUnit - A BPEL testing framework
+www.bpelunit.org
+
+----------------------------------------------------------
+
+This project belongs to the BPELUnit suite of tools and Eclipse plugins. Please
+see the enclosed license file for licensing information.
+
+----------------------------------------------------------
+
+This project contains the BPELUnit Ant client. Have a look at the org.bpelunit.build.standalone
+package for information on how to build it.

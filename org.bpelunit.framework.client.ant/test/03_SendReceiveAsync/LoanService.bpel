@@ -1,0 +1,80 @@
+<!-- LoanService BPEL Process -->
+<process name="LoanService"
+         targetNamespace="http://services.otn.com"
+         suppressJoinFailure="yes"
+         xmlns:tns="http://examples.bpelunit.org/LoanService"
+         xmlns:auto="http://examples.bpelunit.org/LoanService" 
+         xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         >
+         
+    <!-- List of services participating in this BPEL process -->    
+    <partnerLinks>
+        <!--
+        The 'client' role represents the requester of this service. It is 
+        used for callback. The location and correlation information associated
+        with the client role are automatically set using WS-Addressing.
+        -->
+        <partnerLink name="client"
+                     partnerLinkType="tns:LoanService"
+                     myRole="LoanServiceProvider"
+                     partnerRole="LoanServiceRequester"
+                     />
+    </partnerLinks>
+  
+    <!-- List of messages and XML documents used as part of this 
+         BPEL process 
+         -->    
+    <variables>
+        <!-- Reference to the message passed as input during initiation -->
+        <variable name="input"
+                  messageType="tns:LoanServiceRequestMessage"/>
+                  
+        <!-- Reference to the message that will be sent back to the 
+             requestor during callback
+             -->
+        <variable name="output"
+                  messageType="tns:LoanServiceResultMessage"/>
+    </variables>
+
+    <!-- Orchestration Logic -->
+    
+    <sequence>
+        
+        <!-- Receive input from requestor. 
+             Note: This maps to operation defined in LoanService.wsdl 
+             -->
+        <receive name="receiveInput" partnerLink="client"
+                 portType="tns:LoanService"
+                 operation="initiate" variable="input"
+                 createInstance="yes"/>
+        
+        <!-- Generate content of output message based on the content of the
+             input message.
+             -->
+        <assign>
+            <copy>
+                 <from>
+                    <loanOffer xmlns="http://www.autoloan.com/ns/autoloan">
+                        <providerName>American Loan</providerName>
+                        <selected>false</selected>
+                        <approved>true</approved>
+                        <APR>6.2</APR>
+                    </loanOffer>
+                </from>
+                <to variable="output" part="payload" query="/auto:loanOffer"/>
+            </copy>
+        </assign>
+
+        <!-- Asynchronous callback to the requester.
+             Note: the callback location and correlation id is transparently handled 
+             using WS-addressing.
+             -->
+        <invoke name="replyOutput" 
+                partnerLink="client"
+                portType="tns:LoanServiceCallback"
+                operation="onResult" 
+                inputVariable="output"
+                />
+    </sequence>
+</process>
+

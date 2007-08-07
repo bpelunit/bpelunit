@@ -1,0 +1,61 @@
+<!--
+  ///////////////////////////////////////////////////////////////////////////////////////////// 
+  // Oracle JDeveloper BPEL Designer 
+  // 
+  // Created: Wed May 24 13:53:09 CEST 2006
+  // Author:  Phil
+  // Purpose: Synchronous BPEL Process
+  ///////////////////////////////////////////////////////////////////////////////////////////// 
+-->
+<process name="TravelDoc" targetNamespace="http://xmlns.oracle.com/TravelDoc" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://xmlns.oracle.com/EmployeeDatabase" xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://packtpub.com/service/employee/" xmlns:ns2="http://xmlns.oracle.com/TravelAirlineReservation" xmlns:client="http://xmlns.oracle.com/TravelDoc" xmlns:bpelx="http://schemas.oracle.com/bpel/extension" xmlns:ora="http://schemas.oracle.com/xpath/extension" xmlns:orcl="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"><!-- ================================================================= --><!-- PARTNERLINKS                                                      --><!-- List of services participating in this BPEL process               --><!-- ================================================================= -->
+  <partnerLinks><!-- 
+    The 'client' role represents the requester of this service. It is 
+    used for callback. The location and correlation information associated
+    with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="client" partnerLinkType="client:TravelDoc" myRole="TravelDocProvider"/>
+    <partnerLink name="EmployeeDB" partnerRole="EmployeeDatabaseProvider" partnerLinkType="ns1:EmployeeDatabase"/>
+    <partnerLink myRole="TravelAirlineReservationRequester" name="Airline" partnerRole="TravelAirlineReservationProvider" partnerLinkType="ns2:TravelAirlineReservation"/>
+  </partnerLinks><!-- ================================================================= --><!-- VARIABLES                                                         --><!-- List of messages and XML documents used within this BPEL process  --><!-- ================================================================= -->
+  <variables><!-- Reference to the message passed as input during initiation --><!--  
+    Reference to the message that will be returned to the requester
+    -->
+    <variable name="replyOutput_process_OutputVariable" messageType="client:TravelDocResponseMessage"/>
+    <variable name="AirlineInvoke_initiate_InputVariable" messageType="ns2:TravelAirlineReservationRequestMessage"/>
+    <variable name="receiveInput_process_InputVariable" messageType="client:TravelDocRequestMessage"/>
+    <variable name="EmployeeDB_process_OutputVariable" messageType="ns1:EmployeeDatabaseResponseMessage"/>
+    <variable name="EmployeeDB_process_InputVariable" messageType="ns1:EmployeeDatabaseRequestMessage"/>
+    <variable name="AirlineResult_onResult_InputVariable" messageType="ns2:TravelAirlineReservationResponseMessage"/>
+  </variables><!-- ================================================================= --><!-- ORCHESTRATION LOGIC                                               --><!-- Set of activities coordinating the flow of messages across the    --><!-- services integrated within this business process                  --><!-- ================================================================= -->
+  <sequence name="main"><!-- Receive input from requestor. 
+    Note: This maps to operation defined in TravelDoc.wsdl
+    -->
+    <receive name="receiveInput" partnerLink="client" portType="client:TravelDoc" operation="process" variable="receiveInput_process_InputVariable" createInstance="yes"/><!-- Generate reply to synchronous request -->
+    <assign name="CopyEmployeeInfo">
+      <copy>
+        <from variable="receiveInput_process_InputVariable" part="payload" query="/client:TravelDocProcessRequest/client:employeeData"/>
+        <to variable="EmployeeDB_process_InputVariable" part="payload" query="/ns1:EmployeeDatabaseProcessRequest"/>
+      </copy>
+    </assign>
+    <invoke name="EmployeeDB" partnerLink="EmployeeDB" portType="ns1:EmployeeDatabase" operation="process" inputVariable="EmployeeDB_process_InputVariable" outputVariable="EmployeeDB_process_OutputVariable"/>
+    <assign name="Assign_1">
+      <copy>
+        <from variable="receiveInput_process_InputVariable" part="payload" query="/client:TravelDocProcessRequest/client:flightData"/>
+        <to variable="AirlineInvoke_initiate_InputVariable" part="payload" query="/ns2:TravelAirlineReservationProcessRequest/ns2:flightData"/>
+      </copy>
+      <copy>
+        <from variable="EmployeeDB_process_OutputVariable" part="payload" query="/ns1:EmployeeDatabaseProcessResponse"/>
+        <to variable="AirlineInvoke_initiate_InputVariable" part="payload" query="/ns2:TravelAirlineReservationProcessRequest/ns2:class"/>
+      </copy>
+    </assign>
+    <invoke name="AirlineInvoke" partnerLink="Airline" portType="ns2:TravelAirlineReservation" operation="initiate" inputVariable="AirlineInvoke_initiate_InputVariable"/>
+    <receive name="AirlineResult" partnerLink="Airline" portType="ns2:TravelAirlineReservationCallback" operation="onResult" variable="AirlineResult_onResult_InputVariable" createInstance="no"/>
+    <assign name="Assign_2">
+      <copy>
+        <from variable="AirlineResult_onResult_InputVariable" part="payload" query="/ns2:TravelAirlineReservationProcessResponse"/>
+        <to variable="replyOutput_process_OutputVariable" part="payload" query="/client:TravelDocProcessResponse"/>
+      </copy>
+    </assign>
+    <reply name="replyOutput" partnerLink="client" portType="client:TravelDoc" operation="process" variable="replyOutput_process_OutputVariable"/>
+  </sequence>
+</process>

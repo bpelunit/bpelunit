@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://examples.bpelunit.org/CreditRatingService" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://examples.bpelunit.org/CreditRatingService" name="CreditRatingService">
+	<types>
+		<schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://examples.bpelunit.org/CreditRatingService" xmlns="http://www.w3.org/2001/XMLSchema">
+			<element name="ssn" type="string"/>
+			<element name="rating" type="int"/>
+			<element name="error" type="string"/>
+		</schema>
+	</types>
+	<message name="CreditRatingServiceResponseMessage">
+		<part name="payload" element="tns:rating"/>
+	</message>
+	<message name="CreditRatingServiceFaultMessage">
+		<part name="payload" element="tns:error"/>
+	</message>
+	<message name="CreditRatingServiceRequestMessage">
+		<part name="payload" element="tns:ssn"/>
+	</message>
+	<portType name="CreditRatingService">
+		<operation name="process">
+			<input message="tns:CreditRatingServiceRequestMessage"/>
+			<output message="tns:CreditRatingServiceResponseMessage"/>
+			<fault name="NegativeCredit" message="tns:CreditRatingServiceFaultMessage"/>
+		</operation>
+	</portType>
+	<binding name="CreditRatingServiceBinding" type="tns:CreditRatingService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="process">
+			<soap:operation soapAction="process" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="">
+				<soap:fault name="NegativeCredit" use="literal"/>
+			</fault>
+		</operation>
+	</binding>
+	<service name="CreditRatingService">
+		<port name="CreditRatingServicePort" binding="tns:CreditRatingServiceBinding">
+			<soap:address location="http://localhost:7777/ws/CreditRatingService"/>
+		</port>
+	</service>
+	<plnk:partnerLinkType name="CreditRatingService">
+		<plnk:role name="CreditRatingServiceProvider">
+			<plnk:portType name="tns:CreditRatingService"/>
+		</plnk:role>
+	</plnk:partnerLinkType>
+</definitions>

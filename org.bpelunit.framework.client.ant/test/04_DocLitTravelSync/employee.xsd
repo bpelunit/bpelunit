@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://xmlns.oracle.com/EmployeeDatabase"
+            targetNamespace="http://xmlns.oracle.com/EmployeeDatabase"
+            elementFormDefault="qualified" >
+
+       <xsd:complexType name="EmployeeRequestType">
+          <xsd:sequence>
+            <xsd:element name="FirstName" type="xsd:string" /> 
+            <xsd:element name="LastName" type="xsd:string" /> 
+            <xsd:element name="Departement" type="xsd:string" /> 
+           </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:simpleType name="TravelClassType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Economy"/>
+			<xsd:enumeration value="Business"/>
+			<xsd:enumeration value="First"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+</xsd:schema>
+

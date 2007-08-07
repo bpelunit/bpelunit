@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<BPELSuitcase>
+   <BPELProcess id="TravelDoc" src="TravelDoc.bpel">
+      <partnerLinkBindings>
+         <partnerLinkBinding name="client">
+            <property name="wsdlLocation">TravelDoc.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="EmployeeDB">
+            <property name="wsdlLocation">EmployeeDatabase.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="Airline">
+            <property name="wsdlLocation">TravelAirlineReservation.wsdl</property>
+         </partnerLinkBinding>
+      </partnerLinkBindings>
+   </BPELProcess>
+</BPELSuitcase>

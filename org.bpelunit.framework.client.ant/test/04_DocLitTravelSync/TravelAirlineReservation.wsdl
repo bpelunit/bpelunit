@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://xmlns.oracle.com/TravelAirlineReservation" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:employee="http://xmlns.oracle.com/EmployeeDatabase" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:client="http://xmlns.oracle.com/TravelAirlineReservation" targetNamespace="http://xmlns.oracle.com/TravelAirlineReservation" name="TravelAirlineReservation">
+	<types>
+		<schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://xmlns.oracle.com/TravelAirlineReservation" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:air="http://xmlns.oracle.com/TravelAirlineReservation">
+			<include schemaLocation="airline.xsd"/>
+			<element name="TravelAirlineReservationProcessRequest">
+				<complexType>
+					<sequence>
+						<element name="flightData" type="air:FlightRequestType"/>
+						<element name="class" type="air:TravelClassType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="TravelAirlineReservationProcessResponse" type="air:FlightConfirmationType"/>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://schemas.xmlsoap.org/ws/2003/03/addressing" schemaLocation="ws-addressing.xsd"/>
+		</schema>
+	</types>
+	<message name="WSARelatesToHeader">
+		<part name="RelatesTo" element="wsa:RelatesTo"/>
+	</message>
+	<message name="TravelAirlineReservationResponseMessage">
+		<part name="payload" element="tns:TravelAirlineReservationProcessResponse"/>
+	</message>
+	<message name="WSAReplyToHeader">
+		<part name="ReplyTo" element="wsa:ReplyTo"/>
+	</message>
+	<message name="WSAMessageIDHeader">
+		<part name="MessageID" element="wsa:MessageID"/>
+	</message>
+	<message name="TravelAirlineReservationRequestMessage">
+		<part name="payload" element="tns:TravelAirlineReservationProcessRequest"/>
+	</message>
+	<portType name="TravelAirlineReservation">
+		<operation name="initiate">
+			<input message="tns:TravelAirlineReservationRequestMessage"/>
+		</operation>
+	</portType>
+	<portType name="TravelAirlineReservationCallback">
+		<operation name="onResult">
+			<input message="tns:TravelAirlineReservationResponseMessage"/>
+		</operation>
+	</portType>
+	<binding name="TravelAirlineReservationCallbackBinding" type="tns:TravelAirlineReservationCallback">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="onResult">
+			<soap:operation soapAction="onResult" style="document"/>
+			<input>
+				<soap:header message="tns:WSARelatesToHeader" part="RelatesTo" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+		</operation>
+	</binding>
+	<binding name="TravelAirlineReservationBinding" type="tns:TravelAirlineReservation">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="initiate">
+			<soap:operation soapAction="initiate" style="document"/>
+			<input>
+				<soap:header message="tns:WSAReplyToHeader" part="ReplyTo" use="literal"/>
+				<soap:header message="tns:WSAMessageIDHeader" part="MessageID" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+		</operation>
+	</binding>
+	<service name="TravelAirlineReservation">
+		<port name="TravelAirlineReservationPort" binding="tns:TravelAirlineReservationBinding">
+			<soap:address location="http://localhost:7777/ws/airline"/>
+		</port>
+	</service>
+	<service name="TravelAirlineReservationCallbackService">
+		<port name="TravelAirlineReservationCallbackPort" binding="tns:TravelAirlineReservationCallbackBinding">
+			<soap:address location="http://set.by.caller"/>
+		</port>
+	</service>
+	<plnk:partnerLinkType name="TravelAirlineReservation">
+		<plnk:role name="TravelAirlineReservationProvider">
+			<plnk:portType name="tns:TravelAirlineReservation"/>
+		</plnk:role>
+		<plnk:role name="TravelAirlineReservationRequester">
+			<plnk:portType name="tns:TravelAirlineReservationCallback"/>
+		</plnk:role>
+	</plnk:partnerLinkType>
+</definitions>

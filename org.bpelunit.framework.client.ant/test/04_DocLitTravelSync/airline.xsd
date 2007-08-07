@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.oracle.com/TravelAirlineReservation" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:air="http://xmlns.oracle.com/TravelAirlineReservation">
+	<complexType name="FlightRequestType">
+		<sequence>
+			<element name="OriginFrom" type="string"/>
+			<element name="DestinationTo" type="string"/>
+			<element name="DesiredDepartureDate" type="date"/>
+			<element name="DesiredReturnDate" type="date"/>
+		</sequence>
+	</complexType>
+	<simpleType name="TravelClassType">
+		<restriction base="string">
+			<enumeration value="Economy"/>
+			<enumeration value="Business"/>
+			<enumeration value="First"/>
+		</restriction>
+	</simpleType>
+	<complexType name="FlightConfirmationType">
+		<sequence>
+			<element name="FlightNo" type="string"/>
+			<element name="TravelClass" type="air:TravelClassType"/>
+			<element name="Price" type="float"/>
+			<element name="DepartureDateTime" type="dateTime"/>
+			<element name="ReturnDateTime" type="dateTime"/>
+			<element name="Approved" type="boolean"/>
+		</sequence>
+	</complexType>
+</schema>

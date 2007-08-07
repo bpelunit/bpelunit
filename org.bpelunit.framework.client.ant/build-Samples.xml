@@ -1,0 +1,41 @@
+<project name="BPELUnit Ant Samples" default="test">
+	
+	<!--
+	
+		This script is an example of an ant build file making use of the BPELUnit
+		task. Be sure to define the BPELUNIT_HOME property before calling the script.
+	
+	-->
+	
+	<path id="lib.path">
+		<fileset dir="${BPELUNIT_HOME}/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="test">
+		
+		<typedef name="bpelunit" classname="org.bpelunit.framework.ui.ant.BPELUnit">
+			<classpath refid="lib.path" />
+		</typedef>
+
+		<bpelunit testsuite="test/01_SendReceiveOnly/WastePaperBasketTestSuite.bpts" bpelunitdir="${BPELUNIT_HOME}">
+			<output style="XML" file="out1.xml" />
+		</bpelunit>
+
+		<bpelunit testsuite="test/02_SendReceiveSync/CreditRatingServiceTestSuite.bpts" bpelunitdir="${BPELUNIT_HOME}">
+			<output style="XML" file="out2.xml" />
+		</bpelunit>
+
+		<bpelunit testsuite="test/03_SendReceiveAsync/LoanServiceTestSuite.bpts" bpelunitdir="${BPELUNIT_HOME}">
+			<output style="XML" file="out3.xml" />
+		</bpelunit>
+
+		<!-- This call requires an Oracle server -->
+		<bpelunit testsuite="test/04_DocLitTravelSync/DocLitTravelSyncSuite.bpts" bpelunitdir="${BPELUNIT_HOME}">
+			<output style="XML" file="out4.xml" />
+		</bpelunit>
+
+	</target>
+
+</project>

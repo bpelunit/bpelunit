@@ -1,0 +1,101 @@
+<!-- CreditRatingService BPEL Process -->
+<process name="CreditRatingService"
+     targetNamespace="http://services.otn.com"
+     suppressJoinFailure="yes"
+     xmlns:tns="http://examples.bpelunit.org/CreditRatingService"
+     xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+     xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/">
+     
+  <!-- List of services participating in this BPEL process -->  
+  <partnerLinks>
+    <!-- The 'client' role represents the requester of this service. -->
+    <partnerLink name="client"
+           partnerLinkType="tns:CreditRatingService"
+           myRole="CreditRatingServiceProvider"/>
+  </partnerLinks>
+ 
+  <!-- List of messages and XML documents used as part of this BPEL process -->  
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="input"
+         messageType="tns:CreditRatingServiceRequestMessage"/>
+         
+    <!-- Reference to the message that will be sent back to the 
+         requestor during callback
+      -->
+    <variable name="output"
+         messageType="tns:CreditRatingServiceResponseMessage"/>
+         
+    <variable name="fault"
+         messageType="tns:CreditRatingServiceFaultMessage"/>         
+  </variables>
+
+  <!-- Orchestration Logic -->
+  
+  <sequence>
+    
+    <!-- Receive input from requestor. 
+         Note: This maps to operation defined in CreditRatingService.wsdl 
+      -->
+    <receive name="receiveInput" partnerLink="client"
+         portType="tns:CreditRatingService"
+         operation="process" variable="input"
+         createInstance="yes"/>
+    
+    <!-- switch depends on the input value -->
+    <switch>
+      <case condition="starts-with(bpws:getVariableData('input', 'payload','/tns:ssn'),'0') = 'true'">
+        <sequence>
+          <!-- Generate content of output message based on the content of the
+             input message.
+             -->
+          <assign>
+            <copy>
+              <from>
+                  <error xmlns="http://services.otn.com">Bankruptcy Report</error>                                
+              </from>
+              <to variable="fault" part="payload"/>
+            </copy>
+          </assign>
+
+          <!-- Asynchronous callback to the requester.
+               Note: the callback location and correlation id is transparently
+               handled using WS-addressing.
+            -->
+          <reply name="replyOutput" 
+              partnerLink="client"
+              portType="tns:CreditRatingService"
+              operation="process" 
+              variable="fault"
+              faultName="tns:NegativeCredit"/>
+        </sequence>
+      </case>
+      <otherwise>
+        <sequence>
+          <!-- Generate content of output message based on the content of the
+               input message.
+            -->
+          <assign>
+            <copy>
+              <from expression="560"/>
+              <to variable="output" part="payload" query="/tns:rating"/>
+            </copy>
+          </assign>
+
+          <!-- Asynchronous callback to the requester.
+               Note: the callback location and correlation id is transparently
+               handled using WS-addressing.
+            -->
+          <reply name="replyOutput" 
+              partnerLink="client"
+              portType="tns:CreditRatingService"
+              operation="process" 
+              variable="output"
+              />
+        </sequence>
+      </otherwise>
+    </switch>    
+
+  </sequence>
+</process>
+

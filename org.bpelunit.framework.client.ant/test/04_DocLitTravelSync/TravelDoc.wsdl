@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="TravelDoc" targetNamespace="http://xmlns.oracle.com/TravelDoc" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://xmlns.oracle.com/TravelDoc" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:client="http://xmlns.oracle.com/TravelDoc">
+    <types>
+        <schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://xmlns.oracle.com/TravelDoc" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:air="http://xmlns.oracle.com/TravelAirlineReservation" xmlns:emp="http://xmlns.oracle.com/EmployeeDatabase">
+            <import namespace="http://xmlns.oracle.com/TravelAirlineReservation" schemaLocation="airline.xsd"/>
+            <import namespace="http://xmlns.oracle.com/EmployeeDatabase" schemaLocation="employee.xsd"/>
+            <element name="TravelDocProcessRequest">
+                <complexType>
+                    <sequence>
+                        <element name="employeeData" type="emp:EmployeeRequestType"/>
+                        <element name="flightData" type="air:FlightRequestType"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="TravelDocProcessResponse" type="air:FlightConfirmationType"/>
+        </schema>
+    </types>
+    <message name="TravelDocResponseMessage">
+        <part name="payload" element="tns:TravelDocProcessResponse"/>
+    </message>
+    <message name="TravelDocRequestMessage">
+        <part name="payload" element="tns:TravelDocProcessRequest"/>
+    </message>
+    <portType name="TravelDoc">
+        <operation name="process">
+            <input message="tns:TravelDocRequestMessage"/>
+            <output message="tns:TravelDocResponseMessage"/>
+        </operation>
+    </portType>
+    <binding name="TravelDocBinding" type="tns:TravelDoc">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="process">
+            <soap:operation style="document" soapAction="process"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="TravelDoc">
+        <port name="TravelDocPort" binding="tns:TravelDocBinding">
+            <soap:address location="http://localhost:9700/orabpel/default/TravelDoc/1.0"/>
+        </port>
+    </service>
+  <plnk:partnerLinkType name="TravelDoc">
+    <plnk:role name="TravelDocProvider">
+      <plnk:portType name="tns:TravelDoc"/>
+    </plnk:role>
+  </plnk:partnerLinkType>
+</definitions>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testSuite xmlns="http://www.bpelunit.org/schema/testSuite" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.bpelunit.org/schema/testSuite c:\java\bpelunitws\org.bpelunit.framework\schema\TestSuite.xsd">
+	<name>Oracle Travel Synchronous Chapter 3 Test Suite</name>
+	<baseURL>http://localhost:7777/</baseURL>
+	<deployment>
+		<put type="oracle" name="TravelDoc">
+			<property name="BPELJARFile">bpel_TravelDoc_1.0.jar</property>
+			<wsdl>TravelDoc.wsdl</wsdl>
+		</put>
+		<partner name="Employee" wsdl="EmployeeDatabase.wsdl"/>
+		<partner name="Airline" wsdl="TravelAirlineReservation.wsdl"/>
+	</deployment>
+	<testCases xmlns:emp="http://xmlns.oracle.com/EmployeeDatabase" xmlns:aln="http://xmlns.oracle.com/TravelAirlineReservation" xmlns:travel="http://xmlns.oracle.com/TravelDoc">
+		<testCase name="Travel Test">
+			<clientTrack>
+				<activity>
+					<sendReceive service="travel:TravelDoc" port="TravelDocPort" operation="process">
+						<send>
+							<data>
+								<travel:TravelDocProcessRequest>
+									<travel:employeeData>
+										<emp:FirstName>Phil</emp:FirstName>
+										<emp:LastName>Mayer</emp:LastName>
+										<emp:Department>SE</emp:Department>
+									</travel:employeeData>
+									<travel:flightData>
+										<aln:OriginFrom>Hannover</aln:OriginFrom>
+										<aln:DestinationTo>Stuttgart</aln:DestinationTo>
+										<aln:DesiredDepartureDate>2006-05-05</aln:DesiredDepartureDate>
+										<aln:DesiredReturnDate>2006-06-06</aln:DesiredReturnDate>
+									</travel:flightData>
+								</travel:TravelDocProcessRequest>
+							</data>
+						</send>
+						<receive>
+							<condition>travel:TravelDocProcessResponse/aln:Approved[1]='true'</condition>
+						</receive>
+					</sendReceive>
+				</activity>
+			</clientTrack>
+			<partnerTrack name="Employee">
+				<activity>
+					<receiveSend service="emp:EmployeeDatabase" port="EmployeeDatabasePort" operation="process">
+						<receive>
+							<condition>emp:EmployeeDatabaseProcessRequest/emp:FirstName[1]="Phil"</condition>
+						</receive>
+						<send>
+							<data>
+								<emp:EmployeeDatabaseProcessResponse>Economy</emp:EmployeeDatabaseProcessResponse>
+							</data>
+						</send>
+					</receiveSend>
+				</activity>
+			</partnerTrack>
+			<partnerTrack name="Airline">
+				<activity>
+					<receiveSendAsynchronous>
+						<headerProcessor name="wsa"/>
+						<mapping>
+							<copy from="aln:TravelAirlineReservationProcessRequest/aln:class[1]" to="aln:TravelAirlineReservationProcessResponse/aln:TravelClass[1]"/>
+						</mapping>
+						<receive service="aln:TravelAirlineReservation" port="TravelAirlineReservationPort" operation="initiate">
+							<condition>aln:TravelAirlineReservationProcessRequest/aln:flightData/aln:OriginFrom[1]="Hannover"</condition>
+						</receive>
+						<send service="aln:TravelAirlineReservationCallbackService" port="TravelAirlineReservationCallbackPort" operation="onResult">
+							<data>
+								<aln:TravelAirlineReservationProcessResponse>
+									<aln:FlightNo>5435</aln:FlightNo>
+									<aln:TravelClass>(will be inserted)</aln:TravelClass>
+									<aln:Price>93848.4884</aln:Price>
+									<aln:DepartureDateTime>2006-05-17T12:19:22.843Z</aln:DepartureDateTime>
+									<aln:ReturnDateTime>2006-05-26T12:19:26.078Z</aln:ReturnDateTime>
+									<aln:Approved>true</aln:Approved>
+								</aln:TravelAirlineReservationProcessResponse>
+							</data>
+						</send>
+					</receiveSendAsynchronous>
+				</activity>
+			</partnerTrack>
+		</testCase>
+	</testCases>
+</testSuite>
