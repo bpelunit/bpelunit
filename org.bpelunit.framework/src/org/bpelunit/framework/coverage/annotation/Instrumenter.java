@@ -64,10 +64,10 @@ public class Instrumenter {
 		Element process_element = document.getRootElement();
 		checkVersion(process_element);
 		initializeBPELTools(process_element);
-		if (metricManager.hasMetric(FaultMetric.METRIC_NAME)
-				|| metricManager.hasMetric(CompensationMetric.METRIC_NAME)) {
-			replaceInlineHandler(process_element);
-		}
+//		if (metricManager.hasMetric(FaultMetric.METRIC_NAME)
+//				|| metricManager.hasMetric(CompensationMetric.METRIC_NAME)) {
+//			replaceInlineHandler(process_element);
+//		}
 		List<IMetric> metrics = metricManager.getMetrics();
 		saveOriginalBPELElements(metrics, process_element);
 		executeInstrumentation(metrics);
