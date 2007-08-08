@@ -31,9 +31,9 @@ public class WhileHandler implements IStructuredActivityHandler {
 	 * @param structured_activity
 	 * @throws BpelException
 	 */
-	public void insertBranchMarkers(Element element)
+	public void insertBranchMarkers(Element structured_activity)
 			throws BpelException {
-		Element activity = getFirstEnclosedActivity(element);
+		Element activity = getFirstEnclosedActivity(structured_activity);
 		if (activity == null)
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		

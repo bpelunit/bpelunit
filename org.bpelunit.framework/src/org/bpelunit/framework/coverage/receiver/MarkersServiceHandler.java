@@ -26,7 +26,7 @@ import org.mortbay.util.ByteArrayISO8859Writer;
  */
 public class MarkersServiceHandler extends AbstractHttpHandler {
 
-	private Logger wsLogger = Logger.getLogger(this.getClass());
+	private Logger logger = Logger.getLogger(this.getClass());
 
 	private static final long serialVersionUID = -2402788148972993151L;
 
@@ -53,7 +53,7 @@ public class MarkersServiceHandler extends AbstractHttpHandler {
 			IOException {
 
 		if (!request.getMethod().equals(HttpRequest.__POST)) {
-			wsLogger.error("Got a non-POST request - rejecting message "
+			logger.error("Got a non-POST request - rejecting message "
 					+ pathInContext);
 			// no POST method
 			// let default 404 handler handle this situation.

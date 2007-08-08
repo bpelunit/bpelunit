@@ -21,7 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.coverage.CoverageMeasurementTool;
+import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
 import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.exception.DeploymentException;
@@ -74,7 +74,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		boolean fileReplaced = false;
 
 		if (BPELUnitRunner.measureTestCoverage()) {
-			CoverageMeasurementTool coverageTool = BPELUnitRunner
+			ICoverageMeasurmentTool coverageTool = BPELUnitRunner
 			.getCoverageMeasurmentTool();
 			try {
 				
@@ -84,10 +84,9 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 				fBPRFile = newFile;
 				fileReplaced = true;
 			} catch (Exception e) {
-				coverageTool.setErrorStatus("Coverage can not ... An error occurred when annotation for coverage: "
+				coverageTool.setErrorStatus("Coverage measurmetn is failed. An error occurred when annotation for coverage: "
 								+ e.getMessage());
-				e.printStackTrace();
-				// HIER
+//				e.printStackTrace();
 			}
 		}
 		File uploadingFile = new File(FilenameUtils.concat(pathToArchive,
@@ -152,7 +151,6 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		} finally {
 			method.releaseConnection();
 			if (fileReplaced && uploadingFile.exists()) {
-				//HIER
 				uploadingFile.delete();
 			}
 		}

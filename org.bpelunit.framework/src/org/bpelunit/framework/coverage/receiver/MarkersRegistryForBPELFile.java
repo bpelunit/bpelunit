@@ -15,7 +15,7 @@ import org.bpelunit.framework.coverage.result.statistic.impl.FileStatistic;
  * Die Klasse verwaltet alle eingefügten Coverage-Marken für eine BPEL-Datei.
  * 
  * @author Alex Salnikow
- *
+ * 
  */
 
 public class MarkersRegistryForBPELFile {
@@ -26,9 +26,10 @@ public class MarkersRegistryForBPELFile {
 
 	private MetricsManager metricManager;
 
-	public MarkersRegistryForBPELFile(String filename, MetricsManager metricManager) {
+	public MarkersRegistryForBPELFile(String filename,
+			MetricsManager metricManager) {
 		this.fileName = filename;
-		this.metricManager=metricManager;
+		this.metricManager = metricManager;
 		prepareStructur(metricManager);
 	}
 
@@ -38,7 +39,10 @@ public class MarkersRegistryForBPELFile {
 
 	/**
 	 * registriert eingefügte Marken
-	 * @param marker Coverage-Marke
+	 * 
+	 * @param marke Coverage Marke
+	 * @param status
+	 *            Coverage-Marke
 	 */
 	public void registerMarker(String marke, MarkerStatus status) {
 		String prefix = marke.substring(0, marke
@@ -47,7 +51,9 @@ public class MarkersRegistryForBPELFile {
 	}
 
 	/**
-	 * Initialisiert Datenstruktur für die Speicherung der Marken für alle Metriken.
+	 * Initialisiert Datenstruktur für die Speicherung der Marken für alle
+	 * Metriken.
+	 * 
 	 * @param metricManager
 	 */
 	private void prepareStructur(MetricsManager metricManager) {
@@ -55,8 +61,8 @@ public class MarkersRegistryForBPELFile {
 		allMetricsTable = new Hashtable<String, Hashtable<String, MarkerStatus>>();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			IMetric metric = iter.next();
-			for (Iterator<String> iterator = metric.getMarkersId()
-					.iterator(); iterator.hasNext();) {
+			for (Iterator<String> iterator = metric.getMarkersId().iterator(); iterator
+					.hasNext();) {
 				allMetricsTable.put(iterator.next(),
 						new Hashtable<String, MarkerStatus>());
 			}

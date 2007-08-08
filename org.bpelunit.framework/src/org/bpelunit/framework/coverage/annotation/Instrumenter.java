@@ -47,7 +47,7 @@ public class Instrumenter {
 	private String assignVariable = createVariableName();
 
 	public Instrumenter() {
-		logger = Logger.getLogger(getClass());
+//		logger = Logger.getLogger(getClass());
 	}
 
 	/**
@@ -72,7 +72,6 @@ public class Instrumenter {
 		saveOriginalBPELElements(metrics, process_element);
 		executeInstrumentation(metrics);
 		createReportInvokesFromCoverageLabels(process_element);
-		logger.info("Instrumentation sucessfully completed.");
 		return document;
 	}
 

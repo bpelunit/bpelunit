@@ -1,5 +1,5 @@
 <project name="BPELUnit Standalone" default="build">
-	
+
 	<!--
 	
 		This script builds the BPELUnit stand alone distribution. This includes
@@ -27,8 +27,8 @@
 		<mkdir dir="${builddir}/lib" />
 		<mkdir dir="${builddir}/conf" />
 		<mkdir dir="${builddir}/schema" />
-		<mkdir dir="${builddir}/doc" />		
-		<mkdir dir="${builddir}/doc/licenses" />	
+		<mkdir dir="${builddir}/doc" />
+		<mkdir dir="${builddir}/doc/licenses" />
 	</target>
 
 	<!-- ========================== clean ==== -->
@@ -43,6 +43,9 @@
 	<target name="build" depends="clean, init, buildframework">
 	</target>
 
+
+
+
 	<target name="buildframework">
 
 		<!-- re-build xml model -->
@@ -51,12 +54,15 @@
 			<property name="bin-dir" value="${temp-class-dir}" />
 		</ant>
 
+
+
 		<!-- build other sources -->
 		<javac srcdir="../org.bpelunit.framework/src" destdir="${temp-class-dir}">
 			<classpath>
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
 				</fileset>
+
 			</classpath>
 		</javac>
 
@@ -66,6 +72,9 @@
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
 				</fileset>
+				<!--	<fileset dir="../Parser2/jar">
+					<include name="*.jar" />
+				</fileset>-->
 			</classpath>
 		</javac>
 
@@ -75,12 +84,15 @@
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
 				</fileset>
+				<!--	<fileset dir="../Parser2/jar">
+					<include name="*.jar" />
+				</fileset>-->
 			</classpath>
 		</javac>
-		
+
 		<!-- Call oracle deployer build -->
 		<antcall target="buildoracle" />
-		
+
 
 		<!--jar the framework and clients -->
 		<jar destfile="${bpelunit.jar}" basedir="${temp-class-dir}" />
@@ -92,9 +104,11 @@
 			</fileset>
 		</copy>
 
+
 		<!-- copy conf files -->
 		<copy todir="${builddir}/conf">
 			<fileset dir="../org.bpelunit.framework/conf" />
+
 		</copy>
 
 		<!-- copy schema files -->
@@ -104,27 +118,29 @@
 			</fileset>
 		</copy>
 
+
+
 		<!-- copy startup file -->
 		<copy todir="${builddir}">
 			<fileset file="../org.bpelunit.framework.client.command/bpelunit.bat" />
 		</copy>
-		
+
 		<!-- copy documentation -->
 		<copy todir="${builddir}/doc">
 			<fileset dir="doc" />
 		</copy>
-		
+
 		<copy todir="${builddir}/doc/licenses">
 			<fileset dir="../org.bpelunit.framework/3rdpartylicenses/" />
 		</copy>
-		
+
 		<!-- Remove temp dir -->
 		<delete dir="temp" />
-			
+
 	</target>
 
-	<target name="buildoracle" if="OraBPELPM"> 
-		
+	<target name="buildoracle" if="OraBPELPM">
+
 		<!-- oracle deployment -->
 		<ant antfile="../org.bpelunit.oracleUnDeployer/build.xml" dir="../org.bpelunit.oracleUnDeployer/" inheritAll="false" />
 
@@ -132,7 +148,7 @@
 		<copy todir="${builddir}/oracledeploy">
 			<fileset dir="../org.bpelunit.oracleUnDeployer/build" />
 		</copy>
-		
+
 	</target>
 
 </project>

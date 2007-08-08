@@ -18,9 +18,9 @@ public interface IMetricHandler {
 	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
 	 * bestimmter Aktivitäten geloggt.
 	 * 
-	 * @param process_element
+	 * @param process_elements
 	 * @throws BpelException 
 	 */
-	public void insertMarkersForMetric(List<Element> activities) throws BpelException;
+	public void insertMarkersForMetric(List<Element> process_elements) throws BpelException;
 	
 }

@@ -68,10 +68,10 @@ public class FaultMetric implements IMetric {
 	 * @return Statistik
 	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerStatus>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerStatus>> allMarkers) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		statistic.setStatusListe(MetricsManager.getStatus(
-				FaultMetricHandler.FAULT_HANDLER_LABEL, allLabels));
+				FaultMetricHandler.FAULT_HANDLER_LABEL, allMarkers));
 		return statistic;
 	}
 
@@ -83,7 +83,7 @@ public class FaultMetric implements IMetric {
 	 * @param process
 	 *            noch nicht modifiziertes BPEL-Prozess
 	 */
-	public void setOriginalBPELProcess(Element process_element) {
+	public void setOriginalBPELProcess(Element process) {
 		ElementFilter filter = new ElementFilter(getProcessNamespace()) {
 			@Override
 			public boolean matches(Object obj) {
@@ -101,7 +101,7 @@ public class FaultMetric implements IMetric {
 		};
 
 		elementsOfBPEL = new ArrayList<Element>();
-		for (Iterator<Element> iter = process_element.getDescendants(filter); iter
+		for (Iterator<Element> iter = process.getDescendants(filter); iter
 				.hasNext();) {
 			elementsOfBPEL.add(iter.next());
 		}

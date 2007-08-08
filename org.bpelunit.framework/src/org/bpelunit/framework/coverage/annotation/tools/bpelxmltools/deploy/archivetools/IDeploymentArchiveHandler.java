@@ -22,7 +22,7 @@ public interface IDeploymentArchiveHandler {
 	 * Erzeugt eine Kopie des Archivs, auf der die Instrumentierung durchgeführt wird.
 	 * 
 	 * @param archiv Deploymentarchive
-	 * @return
+	 * @return ArchivCopy
 	 * @throws ArchiveFileException
 	 */
 	public String createArchivecopy(String archiv) throws ArchiveFileException;

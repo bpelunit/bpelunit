@@ -43,13 +43,13 @@ public class FaultMetricHandler implements IMetricHandler {
 	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
 	 * bestimmter Aktivitäten geloggt.
 	 * 
-	 * @param process_element
+	 * @param catch_elements
 	 * @throws BpelException 
 	 */
-	public void insertMarkersForMetric(List<Element> activities)
+	public void insertMarkersForMetric(List<Element> catch_elements)
 			throws BpelException {
 
-		Iterator<Element> iter = activities.iterator();
+		Iterator<Element> iter = catch_elements.iterator();
 		while (iter.hasNext()) {
 			insertCoverageLabelsForCatchBlock(iter.next());
 		}

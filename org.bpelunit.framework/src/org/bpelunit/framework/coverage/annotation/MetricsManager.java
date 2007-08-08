@@ -41,7 +41,7 @@ public class MetricsManager {
 	 * @param name 
 	 * @param list eine Liste mit Konfigurationsinformation
 	 * @param markersRegistry wird verwendet um beim Instrumentieren, die ingefügten Marken zu registrieren.
-	 * @return
+	 * @return Metrik
 	 */
 	public static IMetric createMetric(String name,List<String> list, MarkersRegisterForArchive markersRegistry){
 		IMetric metric=null;

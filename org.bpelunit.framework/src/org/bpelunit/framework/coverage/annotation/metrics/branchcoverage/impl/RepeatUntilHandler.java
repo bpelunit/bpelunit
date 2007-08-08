@@ -41,10 +41,10 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	 * @param structured_activity
 	 * @throws BpelException
 	 */
-	public void insertBranchMarkers(Element element)
+	public void insertBranchMarkers(Element structured_activity)
 			throws BpelException {
-		branchFromConditionToActivity(element);
-		branchFromActivityToCondition(element);
+		branchFromConditionToActivity(structured_activity);
+		branchFromActivityToCondition(structured_activity);
 	}
 
 	private void branchFromActivityToCondition(Element element)

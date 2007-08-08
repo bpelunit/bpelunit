@@ -23,8 +23,6 @@ public class MarkersRegisterForArchive {
 
 	private List<MarkersRegistryForBPELFile> bpelFiles;
 
-	private Logger logger=Logger.getLogger(getClass());;
-
 	private List<String> infos;
 
 	private MarkersRegistryForBPELFile currentFileRegestry = null;

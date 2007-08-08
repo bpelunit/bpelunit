@@ -25,17 +25,17 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 
 /**
- * Klasse instrumentiert ein BPEL-Prozess, um die Abdeckung der BasicActivities
- * bei der Ausführung zu messen. Die einzelnen Aktivitäten, die bei der Messung
- * berücksichtigt werden müssen, müssen explizit angegeben werden ({@link #addBasicActivity(String)}).
+ * Klasse instrumentiert einen BPEL-Prozess, um die Abdeckung der
+ * BasicActivities bei der Ausführung zu messen. Die einzelnen Aktivitäten, die
+ * bei der Messung berücksichtigt werden müssen, müssen explizit angegeben
+ * werden.
  * 
  * @author Alex Salnikow
  */
 public class ActivityMetricHandler implements IMetricHandler {
 
-
 	public static int targetscount;
-	
+
 	private Logger logger = Logger.getLogger(getClass());
 
 	private MarkersRegisterForArchive markersRegistry;
@@ -51,7 +51,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 	 * entsprechende Invoke aufrufe generiert und dadurch die Ausführung
 	 * bestimmter Aktivitäten geloggt.
 	 * 
-	 * @param process_element
+	 * @param activities
 	 *            Prozess-Element der BPEL
 	 */
 	public void insertMarkersForMetric(List<Element> activities) {
@@ -81,10 +81,16 @@ public class ActivityMetricHandler implements IMetricHandler {
 		}
 	}
 
-	private Element respectTargetActivities(Element element, Element sequence) {
+	/**
+	 * Schliesst die Aktivität mit der Coverage Marke mit einer Sequence um,
+	 * wenn die Aktivität Ziel eines Synchronisationslinks ist.
+	 * 
+	 * @param element
+	 * @param sequence
+	 */
+	private void respectTargetActivities(Element element, Element sequence) {
 		List<Element> targetElements = getTargetElements(element);
 		if (targetElements.size() > 0) {
-			targetscount++;
 			sequence = encloseInSequence(element);
 			Element targetElement;
 			for (Iterator<Element> iter = targetElements.iterator(); iter
@@ -93,7 +99,6 @@ public class ActivityMetricHandler implements IMetricHandler {
 				sequence.addContent(0, targetElement.detach());
 			}
 		}
-		return sequence;
 	}
 
 	private List<Element> getSourceElements(Element element) {
@@ -135,8 +140,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 	/**
 	 * Fügt eine Markierung für die Aktivität ein. Die Markierung wird entweder
 	 * direkt vor oder nach der Aktivität eingefügt. Die Aktivitäten, die in
-	 * {@link #logging_before_activity} eingetragen sind, müssen vor der
-	 * Ausführung geloggt werden.
+	 * eingetragen sind, müssen vor der Ausführung geloggt werden.
 	 * 
 	 * @param element
 	 *            Aktivität

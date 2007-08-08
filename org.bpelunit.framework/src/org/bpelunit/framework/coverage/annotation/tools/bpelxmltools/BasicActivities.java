@@ -49,7 +49,7 @@ public class BasicActivities {
 	 * Überprüft, ob das Element eine BPEL-BasicActivität repräsentiert.
 	 * 
 	 * @param element
-	 * @return
+	 * @return ist BasicActivität
 	 */
 	public static boolean isBasisActivity(Element element) {
 		return isBasisActivity(element.getName());

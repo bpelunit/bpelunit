@@ -57,12 +57,12 @@ public class LinkMetric implements IMetric {
 	 * @return Statistik
 	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerStatus>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerStatus>> allMarkers) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		statistic.addSubStatistik(createSubstatistic(
-				LinkMetricHandler.POSITIV_LINK_LABEL, allLabels));
+				LinkMetricHandler.POSITIV_LINK_LABEL, allMarkers));
 		statistic.addSubStatistik(createSubstatistic(
-				LinkMetricHandler.NEGATIV_LINK_LABEL, allLabels));
+				LinkMetricHandler.NEGATIV_LINK_LABEL, allMarkers));
 		return statistic;
 	}
 
@@ -84,11 +84,11 @@ public class LinkMetric implements IMetric {
 	 * @param process
 	 *            noch nicht modifiziertes BPEL-Prozess
 	 */
-	public void setOriginalBPELProcess(Element process_element) {
+	public void setOriginalBPELProcess(Element process) {
 		elementsOfBPEL = new ArrayList<Element>();
-		Iterator<Element> iter = process_element
+		Iterator<Element> iter = process
 				.getDescendants(new ElementFilter(LinkMetricHandler.LINK_TAG,
-						process_element.getNamespace()));
+						process.getNamespace()));
 		while (iter.hasNext()) {
 			elementsOfBPEL.add(iter.next());
 		}

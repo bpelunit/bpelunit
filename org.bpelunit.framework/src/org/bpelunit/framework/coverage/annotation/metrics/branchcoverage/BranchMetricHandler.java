@@ -47,23 +47,21 @@ public class BranchMetricHandler implements IMetricHandler {
 		return marker;
 	}
 
-
-
 	/**
 	 * Fügt eine Markierung vor allen Aktivitäten ein. Wenn es notwendig ist,
 	 * dann wird die Markierung ind die Aktivitäten in ein Sequence-Element
 	 * eingeschlossen.
 	 * 
 	 * @param activity
-	 * @param additionalInfo
 	 */
 	public static String insertLabelBevorAllActivities(Element activity) {
 		activity = respectTargetsOfLinks(activity);
 		if (!isSequence(activity)) {
 			activity = ensureElementIsInSequence(activity);
 		}
-		String marker=getNextMarker();
-		activity.addContent(0, new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker));
+		String marker = getNextMarker();
+		activity.addContent(0, new Comment(
+				Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker));
 		return marker;
 	}
 
@@ -89,7 +87,6 @@ public class BranchMetricHandler implements IMetricHandler {
 	 * eingeschlossen.
 	 * 
 	 * @param activity
-	 * @param additionalInfo
 	 */
 	public static String insertLabelAfterAllActivities(Element activity) {
 		if (!isSequence(activity)) {
@@ -106,7 +103,7 @@ public class BranchMetricHandler implements IMetricHandler {
 	 * @param activity
 	 *            muss innerhalb Sequence sein
 	 */
-	public static String  insertLabelAfterActivity(Element activity) {
+	public static String insertLabelAfterActivity(Element activity) {
 		Element parent = activity.getParentElement();
 		String marker = getNextMarker();
 		parent.addContent(parent.indexOf(activity) + 1, new Comment(
@@ -127,9 +124,21 @@ public class BranchMetricHandler implements IMetricHandler {
 				Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker));
 		return marker;
 	}
+	
+	public static List<Element> getTargets(Element child) {
+		Namespace ns = getProcessNamespace();
+		List<Element> targets = new ArrayList<Element>();
+		if (ns.equals(NAMESPACE_BPEL_1_1)) {
+			targets.addAll(child.getChildren(TARGET_ELEMENT, ns));
+		} else if (ns.equals(NAMESPACE_BPEL_2_0)) {
+			Element target = child.getChild(TARGETS_ELEMENT, ns);
+			if (target != null)
+				targets.add(target);
+		}
+		return targets;
+	}
 
 	private HashMap<String, IStructuredActivityHandler> structured_activity_handler = new HashMap<String, IStructuredActivityHandler>();
-
 
 	public BranchMetricHandler(MarkersRegisterForArchive markersRegistry) {
 		structured_activity_handler.put(StructuredActivities.FLOW_ACTIVITY,
@@ -152,13 +161,12 @@ public class BranchMetricHandler implements IMetricHandler {
 	}
 
 	/**
-	 * Fügt die Marker an den richtigen Stellen in
-	 * BPEL-Process-Element ein (Instrumentierung). Anhand dieser Marker werden
-	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
-	 * bestimmter Aktivitäten geloggt.
+	 * * Fügt die Marker an den richtigen Stellen in BPEL-Process-Element ein
+	 * (Instrumentierung). Anhand dieser Marker werden danach entsprechende
+	 * Invoke aufrufe generiert und dadurch die Aktivierung der Zweige geloggt.
 	 * 
-	 * @param process_element
-	 * @throws BpelException 
+	 * @param activities alle Strukturierten Aktivitäten des Prozesses
+	 * @throws BpelException
 	 */
 	public void insertMarkersForMetric(List<Element> activities)
 			throws BpelException {
@@ -167,7 +175,7 @@ public class BranchMetricHandler implements IMetricHandler {
 			next_element = iter.next();
 			String next_element_name = next_element.getName();
 			if (structured_activity_handler.containsKey(next_element_name)) {
-				//Delegiert die Instrumentierung
+				// Delegiert die Instrumentierung
 				structured_activity_handler.get(next_element_name)
 						.insertBranchMarkers(next_element);
 			}
@@ -184,17 +192,5 @@ public class BranchMetricHandler implements IMetricHandler {
 	}
 
 
-	public static List<Element> getTargets(Element child) {
-		Namespace ns = getProcessNamespace();
-		List<Element> targets = new ArrayList<Element>();
-		if (ns.equals(NAMESPACE_BPEL_1_1)) {
-			targets.addAll(child.getChildren(TARGET_ELEMENT, ns));
-		} else if (ns.equals(NAMESPACE_BPEL_2_0)) {
-			Element target = child.getChild(TARGETS_ELEMENT, ns);
-			if (target != null)
-				targets.add(target);
-		}
-		return targets;
-	}
 
 }

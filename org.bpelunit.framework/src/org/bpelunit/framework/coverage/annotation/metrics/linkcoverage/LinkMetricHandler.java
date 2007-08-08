@@ -83,12 +83,12 @@ public class LinkMetricHandler implements  IMetricHandler {
 	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
 	 * bestimmter Aktivitäten geloggt.
 	 * 
-	 * @param process_element
+	 * @param process_elements
 	 * @throws BpelException 
 	 */
-	public void insertMarkersForMetric(List<Element> activities)
+	public void insertMarkersForMetric(List<Element> process_elements)
 			throws BpelException {
-		for (Iterator<Element> iter = activities.iterator(); iter
+		for (Iterator<Element> iter = process_elements.iterator(); iter
 				.hasNext();) {
 			loggingOfLinks2(iter.next(), process_element);
 		}

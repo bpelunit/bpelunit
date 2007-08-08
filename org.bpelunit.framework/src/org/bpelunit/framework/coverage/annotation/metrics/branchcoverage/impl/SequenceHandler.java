@@ -35,8 +35,8 @@ public class SequenceHandler implements IStructuredActivityHandler {
 	 * @param structured_activity
 	 * @throws BpelException
 	 */
-	public void insertBranchMarkers(Element sequence) {
-		List<Element> children = sequence.getContent(new ElementFilter(
+	public void insertBranchMarkers(Element structured_activity) {
+		List<Element> children = structured_activity.getContent(new ElementFilter(
 				getProcessNamespace()));
 		Element child;
 		List<Element> activities = new ArrayList<Element>();

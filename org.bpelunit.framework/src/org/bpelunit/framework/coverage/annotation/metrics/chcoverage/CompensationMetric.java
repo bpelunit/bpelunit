@@ -62,10 +62,10 @@ public class CompensationMetric implements IMetric {
 	 * @return Statistik
 	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerStatus>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerStatus>> allMarkers) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		statistic.setStatusListe(MetricsManager.getStatus(
-				CompensationMetricHandler.COMPENS_HANDLER_LABEL, allLabels));
+				CompensationMetricHandler.COMPENS_HANDLER_LABEL, allMarkers));
 		return statistic;
 	}
 
@@ -77,8 +77,8 @@ public class CompensationMetric implements IMetric {
 	 * @param process
 	 *            noch nicht modifiziertes BPEL-Prozess
 	 */
-	public void setOriginalBPELProcess(Element process_element) {
-		Iterator<Element> compensHandlers = process_element
+	public void setOriginalBPELProcess(Element process) {
+		Iterator<Element> compensHandlers = process
 				.getDescendants(new ElementFilter(COMPENSATION_HANDLER,
 						getProcessNamespace()));
 		elementsOfBPEL = new ArrayList<Element>();

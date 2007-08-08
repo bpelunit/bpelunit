@@ -61,19 +61,16 @@ public class CoverageMessageReceiver {
 						.createMessage(null,
 								new ByteArrayInputStream(body.getBytes()));
 
-				logger.info("!!!!!!! BYTES Rausgeholt");
 				element = encoder.deconstruct(operation, fSOAPMessage);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				logger.info(e.getLocalizedMessage());
+				logger.debug(e.getLocalizedMessage());
 			} catch (SOAPException e) {
 				logger
-						.info("Could not create SOAP message from incoming message: "
+						.debug("Could not create SOAP message from incoming message: "
 								+ e.getMessage());
 			} catch (SOAPEncodingException e) {
 				logger
-						.info("Could not create SOAP message from incoming message: "
+						.debug("Could not create SOAP message from incoming message: "
 								+ e.getMessage());
 			}
 
@@ -115,11 +112,13 @@ public class CoverageMessageReceiver {
 					SOAPOperationDirectionIdentifier.INPUT);
 
 		} catch (SpecificationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger
+			.debug("WSDL of Coverage Logging Service is not valid:"
+					+ e.getMessage());
 		} catch (WSDLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger
+			.debug("WSDL of Coverage Logging Service is not valid:"
+					+ e.getMessage());
 		}
 	}
 
@@ -133,8 +132,11 @@ public class CoverageMessageReceiver {
 			try {
 				style = operation.getEncodingStyle();
 			} catch (SpecificationException e) {
-				e.printStackTrace();
-				markersRegistry.addInfo(e.getMessage());
+				logger
+				.debug("Encoding style problem:"
+						+ e.getMessage());
+//				markersRegistry.addInfo(e.getMessage());
+				
 			}
 		}
 		return style;

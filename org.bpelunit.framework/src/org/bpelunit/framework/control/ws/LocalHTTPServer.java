@@ -46,19 +46,8 @@ public class LocalHTTPServer {
 		fServer = new HttpServer();
 		SocketListener listener = new SocketListener();
 		listener.setPort(portNumber);
-//		listener.setBufferSize(15000);
-//		listener.setBufferReserve(1024);
-//		listener.setAcceptQueueSize(100);
-//		listener.getAcceptQueueSize();
-//		listener.getAcceptQ();
-		wsLogger.info("!!!!!!!!AcceptQueueSize "+listener.getAcceptQueueSize());
-		wsLogger.info("!!!!!!!!AcceptThreads "+listener.getAcceptorThreads());
-//		wsLogger.info("!!!!!!!!BUFFERSIZE "+listener.getBufferSize());//8192
-//		wsLogger.info("!!!!!!!!BUFFERSIZE "+listener.getBufferSize());//8192
-//		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getBufferReserve());//512
-//		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getMaxIdleTimeMs());//10000
-//		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getMaxThreads());//256
-//		wsLogger.info("!!!!!!!!BUFFERRserve "+listener.getLingerTimeSecs());//30
+
+
 		fServer.addListener(listener);
 
 		// Create the context for the root path
@@ -83,8 +72,7 @@ public class LocalHTTPServer {
 			listener2.setPort(CoverageConstants.SERVICE_PORT);
 			listener2.setBufferSize(20000);
 			listener2.setBufferReserve(1024);
-//			listener2.setMinThreads(4);
-//			listener2.setAcceptQueueSize(200);
+
 			fServer.addListener(listener2);
 			// Create the context for the root path
 			HttpContext context2 = new HttpContext();
@@ -119,7 +107,6 @@ public class LocalHTTPServer {
 			wsLogger.info("ACCEPTQUESIZE="+listener2.getAcceptQueueSize());
 		}
 		fServer.stop(true);
-//		fServer.destroy();
 	}
 
 	public void stopTest(TestCaseRunner runner) {

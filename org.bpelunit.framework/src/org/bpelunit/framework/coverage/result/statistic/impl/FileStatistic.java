@@ -8,6 +8,11 @@ import java.util.TreeMap;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 
+/**
+ * 
+ * @author Alex Salnikow
+ *
+ */
 
 public class FileStatistic implements IFileStatistic {
 

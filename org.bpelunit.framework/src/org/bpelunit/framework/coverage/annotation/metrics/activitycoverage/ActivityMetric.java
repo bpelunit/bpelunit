@@ -67,7 +67,7 @@ public class ActivityMetric implements IMetric {
 	 * @return Statistik
 	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerStatus>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerStatus>> allMarkers) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		IStatistic subStatistic;
 		String label;
@@ -76,7 +76,7 @@ public class ActivityMetric implements IMetric {
 			label = iter.next();
 			subStatistic = new Statistic(METRIC_NAME + ": " + label);
 			List<MarkerStatus> statusListe = MetricsManager.getStatus(label,
-					allLabels);
+					allMarkers);
 			subStatistic.setStatusListe(statusListe);
 			statistic.addSubStatistik(subStatistic);
 		}
@@ -92,10 +92,10 @@ public class ActivityMetric implements IMetric {
 	 * @param process
 	 *            noch nicht modifiziertes BPEL-Prozess
 	 */
-	public void setOriginalBPELProcess(Element process_element) {
-		ElementFilter filter = new ElementFilter(process_element.getNamespace());
+	public void setOriginalBPELProcess(Element process) {
+		ElementFilter filter = new ElementFilter(process.getNamespace());
 		elementsOfBPEL = new ArrayList<Element>();
-		for (Iterator<Element> iter = process_element.getDescendants(filter); iter
+		for (Iterator<Element> iter = process.getDescendants(filter); iter
 				.hasNext();) {
 			Element basicActivity = iter.next();
 			if (activities_to_respekt.contains(basicActivity.getName()))

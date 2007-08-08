@@ -7,7 +7,7 @@
 	
 	-->
     
-	<property name="xmlbeans.home" location="c:/Programme/java/xmlbeans-2.2.0"/>
+	<property name="xmlbeans.home" location="c:/Programme/Java/xmlbeans-2.3.0"/>
 	
 	<property name="src-dir" location="src"/>
 	<property name="bin-dir" location="bin"/>

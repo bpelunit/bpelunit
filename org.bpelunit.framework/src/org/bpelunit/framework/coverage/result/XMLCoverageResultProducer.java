@@ -48,7 +48,7 @@ public class XMLCoverageResultProducer {
 	 * 
 	 * @param out Outputstream in den die Statistiken geschrieben werden.
 	 * @param statistics
-	 * @param info
+	 * @param string
 	 * @param detailed
 	 *            entscheidet, ob eine detaillierte Augabe erzeugt wird
 	 *            (Statistik für jede einzelen Datei), oder nicht (Statistik für
@@ -56,7 +56,7 @@ public class XMLCoverageResultProducer {
 	 * @throws IOException
 	 */
 	public static void writeResult(OutputStream out,
-			List<IFileStatistic> statistics, List<String> info, boolean detailed)
+			List<IFileStatistic> statistics, String string, boolean detailed)
 			throws IOException {
 		Logger logger = Logger.getLogger("XMLOutput");
 		Document doc = new Document();
@@ -64,13 +64,10 @@ public class XMLCoverageResultProducer {
 				COVERAGE_STATISTIC_ELEMENT, NAMESPACE);
 		doc.setRootElement(coverageStatisticElement);
 		logger.info("INFO WIRD EINGEFÜGT");
-		if (info != null) {
-			Element infoElement;
-			for (Iterator<String> iter = info.iterator(); iter.hasNext();) {
-				infoElement = new Element("info", NAMESPACE);
-				infoElement.setText(iter.next());
-				coverageStatisticElement.addContent(infoElement);
-			}
+		if (string != null&&!string.equals("")) {
+			Element infoElement = new Element("info", NAMESPACE);
+			infoElement.setText(string);
+			coverageStatisticElement.addContent(infoElement);
 		}
 		if (detailed) {
 			for (Iterator<IFileStatistic> iter = statistics.iterator(); iter
@@ -154,16 +151,27 @@ public class XMLCoverageResultProducer {
 		fileStatisticElement.setAttribute("filename", fileStatistic
 				.getBPELFilename());
 		parentElement.addContent(fileStatisticElement);
+		int total=0;
+		int tested=0;
+		String  relativ = "-";
 		for (Iterator<IStatistic> iter = fileStatistic.getStatistics()
 				.iterator(); iter.hasNext();) {
+			relativ = "-";
 			IStatistic statistic = iter.next();
 			Element statisticElement;
 			statisticElement = new Element(STATISTIC_ELEMENT, NAMESPACE);
 			statisticElement.setAttribute(NAME_ATTRIBUT, statistic.getName());
+
+			total=statistic.getTotalNumber();
+			tested=statistic.getTestedNumber();
 			statisticElement.setAttribute(TOTAL_NUMBER_ATTRIBUT, Integer
-					.toString(statistic.getTotalNumber()));
+					.toString(total));
 			statisticElement.setAttribute(TESTED_NUMBER_ATTRIBUT, Integer
-					.toString(statistic.getTestedNumber()));
+					.toString(tested));
+			if (total > 0)
+				relativ = Float.toString((tested * 1000 / total) / (float) 10.0)
+						+ "%";
+			statisticElement.setAttribute(PER_CENT_ATTRIBUT,relativ );
 			fileStatisticElement.addContent(statisticElement);
 		}
 	}

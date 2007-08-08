@@ -59,7 +59,7 @@ public class CMServiceFactory {
 	/**
 	 * 
 	 * @param variable inputVariable
-	 * @return
+	 * @return Invoke-Element
 	 */
 	public Element createInvokeElementForLoggingService(String variable) {
 
@@ -75,7 +75,7 @@ public class CMServiceFactory {
 	 * 
 	 * @param content Inhalt, der zugeordnet werden soll.
 	 * @param variable an die zugeordent wird.
-	 * @return
+	 * @return Assign-Element
 	 */
 	public Element createAssignElement(String content, String variable) {
 		insertVariable(createVariable(variable,

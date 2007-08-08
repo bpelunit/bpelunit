@@ -46,8 +46,7 @@ import org.jdom.input.SAXBuilder;
  * The BPELUnit Extension Registry handles reading the extensions.xml file and
  * instantiates the extensions.
  * 
- * @version $Id$
- * @author Philip Mayer
+ * @version $Id: ExtensionRegistry.java,v 1.3 2007/06/21 06:34:46 asalnikowAlex Salnikow
  * 
  */
 public class ExtensionRegistry {
@@ -311,7 +310,7 @@ public class ExtensionRegistry {
 					int i=Integer.parseInt(attribute);
 					TestCaseRunner.wait_time_for_coverage_markers=i;
 				}catch(Exception e){
-					BPELUnitRunner.getCoverageMeasurmentTool().setFailureStatus("Configuration of wait time is not valid.");
+					BPELUnitRunner.getCoverageMeasurmentTool().setErrorStatus("Configuration of wait time is not valid.");
 				}
 			}
 			map = handleMetricElements(config);

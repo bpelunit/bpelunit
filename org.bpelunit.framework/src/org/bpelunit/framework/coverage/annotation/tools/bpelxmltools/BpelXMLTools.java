@@ -159,8 +159,9 @@ public class BpelXMLTools {
 	/**
 	 * Erzeugt ein Variable-Element ohne es in BPEL einzuf¸gen.
 	 * 
-	 * @param document
-	 * @return
+	 * @param scope kann null sein, dann wird die Variable in den globelen Prozess-Scope eingef¸gt.
+	 * @param name Variablenname
+	 * @return variable-Element
 	 */
 	public static Element insertNewIntVariable(Element scope, String name) {
 		if (name == null) {
@@ -208,7 +209,7 @@ public class BpelXMLTools {
 	/**
 	 * Schlieﬂt das Element in eine Sequence ein.
 	 * 
-	 * @param activity:
+	 * @param activity :
 	 *            Element, das in eine Sequence eingeschloﬂen werden soll.
 	 * @return Umschlieﬂende Sequence-Element
 	 */
@@ -288,7 +289,7 @@ public class BpelXMLTools {
 	/**
 	 * Schlieﬂt das Element in eine Flow ein.
 	 * 
-	 * @param activity:
+	 * @param activity :
 	 *            Element, das in eine Flow eingeschloﬂen werden soll.
 	 * @return Umschlieﬂende Flow-Element
 	 */
@@ -325,7 +326,7 @@ public class BpelXMLTools {
 	/**
 	 * Erzeugt ein Sequence-Element
 	 * 
-	 * @return
+	 * @return sequence-Element
 	 */
 	public static Element createSequence() {
 		sequence_count++;

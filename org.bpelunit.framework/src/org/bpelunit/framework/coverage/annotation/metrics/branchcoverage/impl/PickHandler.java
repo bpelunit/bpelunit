@@ -37,10 +37,10 @@ public class PickHandler implements IStructuredActivityHandler {
 	 * @param structured_activity
 	 * @throws BpelException
 	 */
-	public void insertBranchMarkers(Element element)
+	public void insertBranchMarkers(Element structured_activity)
 			throws BpelException {
-		identifyBranches(element, ON_MESSAGE);
-		identifyBranches(element, ON_ALARM);
+		identifyBranches(structured_activity, ON_MESSAGE);
+		identifyBranches(structured_activity, ON_ALARM);
 	}
 
 	private void identifyBranches(Element element, String name)

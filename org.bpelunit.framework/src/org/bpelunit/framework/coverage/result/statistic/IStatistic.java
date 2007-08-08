@@ -68,7 +68,7 @@ public interface IStatistic {
 	/**
 	 * 
 	 * @param testCase
-	 * @return
+	 * @return getestete Marken
 	 */
 	public Set<MarkerStatus> getTestedItems(String testCase);
 }

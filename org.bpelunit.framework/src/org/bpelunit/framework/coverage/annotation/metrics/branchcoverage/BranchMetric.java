@@ -55,10 +55,10 @@ public class BranchMetric implements IMetric {
 	 * @return Statistik
 	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerStatus>> allLabels) {
+			Hashtable<String, Hashtable<String, MarkerStatus>> allMarkers) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		statistic.setStatusListe(MetricsManager.getStatus(
-				BranchMetricHandler.BRANCH_LABEL, allLabels));
+				BranchMetricHandler.BRANCH_LABEL, allMarkers));
 		return statistic;
 	}
 
@@ -70,10 +70,10 @@ public class BranchMetric implements IMetric {
 	 * @param process
 	 *            noch nicht modifiziertes BPEL-Prozess
 	 */
-	public void setOriginalBPELProcess(Element process_element) {
+	public void setOriginalBPELProcess(Element process) {
 		Element next_element;
-		Iterator<Element> iter = process_element
-				.getDescendants(new ElementFilter(process_element
+		Iterator<Element> iter = process
+				.getDescendants(new ElementFilter(process
 						.getNamespace()));
 		elementsOfBPEL = new ArrayList<Element>();
 		while (iter.hasNext()) {
