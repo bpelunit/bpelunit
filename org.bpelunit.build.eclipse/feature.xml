@@ -2,15 +2,15 @@
 <feature
       id="org.bpelunit.eclipse.feature"
       label="BPELUnit Feature"
-      version="1.0.0"
-      provider-name="University of Hannover">
+      version="1.1.0"
+      provider-name="Leibniz Universität Hannover">
 
-   <description url="http://www.bpelunit.org/">
-      This is BPELUnit 1.0
+   <description url="http://www.se.uni-hannover.de/forschung/soa/bpelunit/">
+      This is BPELUnit 1.1
    </description>
 
    <copyright url="http://www.example.com/copyright">
-      (c) 2006 Philip Mayer, University of Hannover
+      (c) 2006-2009 Leibniz Universität Hannover
    </copyright>
 
    <license url="http://www.example.com/license">

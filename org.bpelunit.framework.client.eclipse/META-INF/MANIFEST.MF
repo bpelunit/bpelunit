@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit Eclipse Client Plugin
 Bundle-SymbolicName: org.bpelunit.framework.client.eclipse; singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.1.0
 Bundle-Activator: org.bpelunit.framework.client.eclipse.BPELUnitActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -27,4 +27,4 @@ Export-Package: org.bpelunit.framework.client.eclipse,
  org.bpelunit.framework.client.eclipse.preferences,
  org.bpelunit.framework.client.eclipse.views,
  org.bpelunit.framework.client.model
-Bundle-Vendor: Philip Mayer
+Bundle-Vendor: Leibniz Universität Hannover
