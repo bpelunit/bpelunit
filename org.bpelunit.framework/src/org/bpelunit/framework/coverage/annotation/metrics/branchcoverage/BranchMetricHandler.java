@@ -24,11 +24,16 @@ import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-/**
+/*
  * Klasse instrumentiert ein BPEL-Prozess, um die Zweigabdeckung bei der
  * Ausführung zu messen.
  * 
  * @author Alex Salnikow
+ */
+/**
+ * Instrumentats a bpel process for branch coverage measuring
+ * 
+ * @author Alex Salnikow, Ronald Becher
  */
 public class BranchMetricHandler implements IMetricHandler {
 
@@ -36,8 +41,13 @@ public class BranchMetricHandler implements IMetricHandler {
 
 	public static final String BRANCH_LABEL = "branch";
 
-	/**
+	/*
 	 * Generiert eine eindeutige Markierung.
+	 * 
+	 * @return eindeutige Markierung
+	 */
+	/**
+	 * Generates an unique marker 
 	 * 
 	 * @return eindeutige Markierung
 	 */

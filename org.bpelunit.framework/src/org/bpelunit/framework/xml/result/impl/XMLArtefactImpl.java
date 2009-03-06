@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLArtefactImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.result.XMLArtefact
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLArtefactImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -72,13 +73,14 @@ public class XMLArtefactImpl extends org.apache.xmlbeans.impl.values.XmlComplexC
     
     /**
      * Gets array of all "state" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.result.XMLInfo[] getStateArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.result.XMLInfo> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.result.XMLInfo>();
             get_store().find_all_element_users(STATE$0, targetList);
             org.bpelunit.framework.xml.result.XMLInfo[] result = new org.bpelunit.framework.xml.result.XMLInfo[targetList.size()];
             targetList.toArray(result);

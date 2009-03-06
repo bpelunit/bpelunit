@@ -14,12 +14,9 @@ import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
 import org.bpelunit.framework.client.eclipse.EclipseBPELUnitRunner;
 import org.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
-import org.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView;
 import org.bpelunit.framework.client.model.TestRunSession;
 import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
-import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -166,7 +163,7 @@ public class BPELLaunchConfigurationDelegate implements
 				plugin.deregisterLaunchSession(testRunSession);
 			}
 			if (BPELUnitRunner.measureTestCoverage()) {
-				ICoverageMeasurmentTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
+				ICoverageMeasurementTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
 				plugin.showCoverageResult(suite.getTestCases(), tool.getStatistics(), tool.getErrorStatus());
 			}
 		} catch (SpecificationException e) {

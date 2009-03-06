@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLTestCaseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLTestCase
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLTestCaseImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -76,13 +77,14 @@ public class XMLTestCaseImpl extends org.apache.xmlbeans.impl.values.XmlComplexC
     
     /**
      * Gets array of all "property" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLProperty[] getPropertyArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.suite.XMLProperty> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLProperty>();
             get_store().find_all_element_users(PROPERTY$0, targetList);
             org.bpelunit.framework.xml.suite.XMLProperty[] result = new org.bpelunit.framework.xml.suite.XMLProperty[targetList.size()];
             targetList.toArray(result);
@@ -281,13 +283,14 @@ public class XMLTestCaseImpl extends org.apache.xmlbeans.impl.values.XmlComplexC
     
     /**
      * Gets array of all "partnerTrack" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLPartnerTrack[] getPartnerTrackArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.suite.XMLPartnerTrack> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLPartnerTrack>();
             get_store().find_all_element_users(PARTNERTRACK$4, targetList);
             org.bpelunit.framework.xml.suite.XMLPartnerTrack[] result = new org.bpelunit.framework.xml.suite.XMLPartnerTrack[targetList.size()];
             targetList.toArray(result);

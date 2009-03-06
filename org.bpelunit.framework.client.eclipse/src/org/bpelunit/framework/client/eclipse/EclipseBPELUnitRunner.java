@@ -24,15 +24,13 @@ import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.coverage.CoverageMeasurementTool;
-import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
+import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
-import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -179,7 +177,7 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 		
 		TestCaseRunner.wait_time_for_coverage_markers=preference.getInt(PreferenceConstants.P_COVERAGE_WAIT_TIME);
 
-		ICoverageMeasurmentTool coverageTool=new CoverageMeasurementTool();
+		ICoverageMeasurementTool coverageTool=new CoverageMeasurementTool();
 		BPELUnitRunner.setCoverageMeasurmentTool(coverageTool);
 		try {
 		coverageTool.configureMetrics(map);

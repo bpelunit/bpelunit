@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLConditionImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLCondition
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLConditionImpl(org.apache.xmlbeans.SchemaType sType)
     {

@@ -18,7 +18,6 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.IDeploymentArchiveHandler;
 import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;

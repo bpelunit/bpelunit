@@ -23,11 +23,18 @@ import org.w3c.dom.Element;
 
 import com.ibm.wsdl.Constants;
 
-/**
+/*
  * Die Klasse ist für die Verarbeitung von SOAP-Nachrichten an Coverage Logging
  * Service zuständig.
  * 
  * @author Alex Salnikow
+ * 
+ */
+/**
+ * This class holds accountable for processing SOAP messages in the coverage
+ * logging service
+ * 
+ * @author Alex Salnikow, Ronald Becher
  * 
  */
 public class CoverageMessageReceiver {
@@ -46,20 +53,25 @@ public class CoverageMessageReceiver {
 		this.markersRegistry = markersRegistry;
 	}
 
-	/**
+	/*
 	 * Empfängt SOAP-Nachrichten mit Coverage Marken während der Testausführung
 	 * 
-	 * @param body
-	 *            Nachricht mit Coverage-Marken
+	 * @param body Nachricht mit Coverage-Marken
 	 */
-	public synchronized void putMessage(String body) {
+	/**
+	 * Receives SOAP messages with coverage markers while testing
+	 * 
+	 * @param message
+	 *            with markers
+	 */
+	public synchronized void putMessage(String message) {
 		if (encoder != null && operation != null) {
 			Element element = null;
 			SOAPMessage fSOAPMessage;
 			try {
 				fSOAPMessage = BPELUnitUtil.getMessageFactoryInstance()
 						.createMessage(null,
-								new ByteArrayInputStream(body.getBytes()));
+								new ByteArrayInputStream(message.getBytes()));
 
 				element = encoder.deconstruct(operation, fSOAPMessage);
 			} catch (IOException e) {
@@ -82,20 +94,31 @@ public class CoverageMessageReceiver {
 
 	}
 
+	/*
+	 * 
+	 * @param encoder sSOAPEncoder für die Dekodierung der Nachrichten mit
+	 * Coverage-Marken
+	 */
 	/**
+	 * Sets SOAP encoder for decoding messages with markers
 	 * 
 	 * @param encoder
-	 *            sSOAPEncoder für die Dekodierung der Nachrichten mit
-	 *            Coverage-Marken
 	 */
 	public void setSOAPEncoder(ISOAPEncoder encoder) {
 		this.encoder = encoder;
 	}
 
-	/**
+	/*
 	 * 
 	 * @param wsdl WSDL-Beschreibung des Coverage Logging Services
 	 */
+	/**
+	 * Sets path to WDL
+	 * 
+	 * @param wsdl
+	 *            WSDL-Beschreibung des Coverage Logging Services
+	 */
+	// TODO Path oder beschreibung?
 	public void setPathToWSDL(String wsdl) {
 		try {
 			WSDLReader reader = WSDLFactory.newInstance().newWSDLReader();
@@ -112,19 +135,22 @@ public class CoverageMessageReceiver {
 					SOAPOperationDirectionIdentifier.INPUT);
 
 		} catch (SpecificationException e) {
-			logger
-			.debug("WSDL of Coverage Logging Service is not valid:"
+			logger.debug("WSDL of Coverage Logging Service is not valid:"
 					+ e.getMessage());
 		} catch (WSDLException e) {
-			logger
-			.debug("WSDL of Coverage Logging Service is not valid:"
+			logger.debug("WSDL of Coverage Logging Service is not valid:"
 					+ e.getMessage());
 		}
 	}
 
-	/**
+	/*
 	 * 
 	 * @return Encoding Style der Coverage-Nachrichten
+	 */
+	/**
+	 * Gets coverage messages encoding style
+	 * 
+	 * @return encoding style
 	 */
 	public String getEncodingStyle() {
 		String style = null;
@@ -132,22 +158,27 @@ public class CoverageMessageReceiver {
 			try {
 				style = operation.getEncodingStyle();
 			} catch (SpecificationException e) {
-				logger
-				.debug("Encoding style problem:"
-						+ e.getMessage());
-//				markersRegistry.addInfo(e.getMessage());
-				
+				logger.debug("Encoding style problem:" + e.getMessage());
+				// markersRegistry.addInfo(e.getMessage());
+
 			}
 		}
 		return style;
 	}
 
-	/**
+	/*
 	 * Setzt den Testfall, der gerade ausgeführt wird. Dadurch ist es möglich,
 	 * die Testabdeckung von jedem Testfalls zu bestimmen.
 	 * 
-	 * @param testCase
-	 *            Testfall, der gerade ausgeführt wird.
+	 * @param testCase Testfall, der gerade ausgeführt wird.
+	 */
+	/**
+	 * Sets the currently processed test case.
+	 * 
+	 * <br />This holds accountable for determining coverage of test cases
+	 * 
+	 * @param currently
+	 *            processed test case
 	 */
 	public void setCurrentTestcase(String testCase) {
 		this.testCase = testCase;

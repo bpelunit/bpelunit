@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLPartnerTrackImpl extends org.bpelunit.framework.xml.result.impl.XMLArtefactImpl implements org.bpelunit.framework.xml.result.XMLPartnerTrack
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLPartnerTrackImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -64,13 +65,14 @@ public class XMLPartnerTrackImpl extends org.bpelunit.framework.xml.result.impl.
     
     /**
      * Gets array of all "activity" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity[] getActivityArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity>();
             get_store().find_all_element_users(ACTIVITY$0, targetList);
             org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity[] result = new org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity[targetList.size()];
             targetList.toArray(result);
@@ -184,6 +186,7 @@ public class XMLPartnerTrackImpl extends org.bpelunit.framework.xml.result.impl.
      */
     public static class ActivityImpl extends org.bpelunit.framework.xml.result.impl.XMLActivityImpl implements org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity
     {
+        private static final long serialVersionUID = 1L;
         
         public ActivityImpl(org.apache.xmlbeans.SchemaType sType)
         {

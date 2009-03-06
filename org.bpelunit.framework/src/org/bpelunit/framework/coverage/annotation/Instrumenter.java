@@ -25,11 +25,17 @@ import org.jdom.Namespace;
 import org.jdom.filter.ContentFilter;
 import org.jdom.filter.ElementFilter;
 
-/**
+/*
  * In der Klasse ist für die Vorbereitung und Start der Instrumentierung
  * verantwortlich.
  * 
  * @author Alex Salnikow
+ * 
+ */
+/**
+ * Class responsible for preparations and start of instrumentation
+ * 
+ * @author Alex Salnikow, Ronald Becher
  * 
  */
 public class Instrumenter {
@@ -47,16 +53,27 @@ public class Instrumenter {
 	private String assignVariable = createVariableName();
 
 	public Instrumenter() {
-//		logger = Logger.getLogger(getClass());
+		// logger = Logger.getLogger(getClass());
 	}
 
+	/*
+	 * Führt die Instrumentierung der BPEL-Datei durch.
+	 * 
+	 * @param document BPEL-Prozess
+	 * 
+	 * @param metricManager
+	 * 
+	 * @return instrumentierter BPEL-Prozess
+	 * 
+	 * @throws BpelException
+	 */
 	/**
-	 * * Führt die Instrumentierung der BPEL-Datei durch.
+	 * Executes instrumentation of the BPEL file
 	 * 
 	 * @param document
-	 *            BPEL-Prozess
+	 *            BPEL process
 	 * @param metricManager
-	 * @return instrumentierter BPEL-Prozess
+	 * @return instrumentated BPEL-Prozess
 	 * @throws BpelException
 	 */
 	public Document insertAnnotations(Document document,
@@ -64,10 +81,10 @@ public class Instrumenter {
 		Element process_element = document.getRootElement();
 		checkVersion(process_element);
 		initializeBPELTools(process_element);
-//		if (metricManager.hasMetric(FaultMetric.METRIC_NAME)
-//				|| metricManager.hasMetric(CompensationMetric.METRIC_NAME)) {
-//			replaceInlineHandler(process_element);
-//		}
+		if (metricManager.hasMetric(FaultMetric.METRIC_NAME)
+				|| metricManager.hasMetric(CompensationMetric.METRIC_NAME)) {
+			replaceInlineHandler(process_element);
+		}
 		List<IMetric> metrics = metricManager.getMetrics();
 		saveOriginalBPELElements(metrics, process_element);
 		executeInstrumentation(metrics);
@@ -75,10 +92,16 @@ public class Instrumenter {
 		return document;
 	}
 
-	/**
+	/*
 	 * Ersetzt die inline-Handler durch explizite Scopes
 	 * 
 	 * @param process_element
+	 */
+	/**
+	 * Replaces inline header with explicit scopes
+	 * 
+	 * @param process
+	 *            element
 	 */
 	private void replaceInlineHandler(Element process_element) {
 		Iterator<Element> iter = process_element
@@ -149,11 +172,19 @@ public class Instrumenter {
 
 	}
 
-	/**
+	/*
 	 * speichert für die Metriken notwendigen Elemente des Original-Prozesses
 	 * 
 	 * @param metrics
+	 * 
 	 * @param process_element
+	 */
+	/**
+	 * Saves the process elements needed by the metrics
+	 * 
+	 * @param metrics
+	 * @param process
+	 *            element
 	 */
 	private void saveOriginalBPELElements(List<IMetric> metrics,
 			Element process_element) {
@@ -164,10 +195,18 @@ public class Instrumenter {
 		}
 	}
 
-	/**
+	/*
 	 * Überprüft die BPEL-Version
 	 * 
 	 * @param process_element
+	 * 
+	 * @throws BpelVersionException
+	 */
+	/**
+	 * Check BPEL version
+	 * 
+	 * @param process
+	 *            element
 	 * @throws BpelVersionException
 	 */
 	private void checkVersion(Element process_element)
@@ -183,10 +222,18 @@ public class Instrumenter {
 		}
 	}
 
-	/**
+	/*
 	 * Führt die Initialisierung der Tools durch
 	 * 
 	 * @param process_element
+	 * 
+	 * @throws BpelVersionException
+	 */
+	/**
+	 * Exercices initializing of the tools
+	 * 
+	 * @param process
+	 *            element
 	 * @throws BpelVersionException
 	 */
 	private void initializeBPELTools(Element process_element)
@@ -196,8 +243,15 @@ public class Instrumenter {
 		StructuredActivities.initialize();
 	}
 
-	/**
+	/*
 	 * Startet für jede Metrik den Instrumentierungsprozess
+	 * 
+	 * @param metrics
+	 * 
+	 * @throws BpelException
+	 */
+	/**
+	 * Starts the process of instrumentating for each metric
 	 * 
 	 * @param metrics
 	 * @throws BpelException
@@ -211,11 +265,18 @@ public class Instrumenter {
 		}
 	}
 
-	/**
+	/*
 	 * Fügt nach der Annotation des Prozesses für eingefügte Marken invoke und
 	 * assig-Aktivitäten in den Prozess ein.
 	 * 
 	 * @param process_element Wurzelelement des BPEL-Prozesses
+	 */
+	/**
+	 * Inserts invoke and assign activities after annotating the process for
+	 * included markings
+	 * 
+	 * @param process_element
+	 *            BPEL process root element
 	 */
 	private void createReportInvokesFromCoverageLabels(Element process_element) {
 		cmServiceFactory = CMServiceFactory.getInstance();
@@ -296,11 +357,19 @@ public class Instrumenter {
 		}
 	}
 
-	/**
+	/*
 	 * Extrahiert die Marke aus dem Kommentar
+	 * 
 	 * @param complettLabel
 	 * @param identifier
 	 * @return
+	 */
+	/**
+	 * Extracts the marking from the comment
+	 * 
+	 * @param complettLabel
+	 * @param identifier
+	 * @return marking
 	 */
 	private String getMarker(String complettLabel, String identifier) {
 		int startIndex = complettLabel.indexOf(identifier)
@@ -309,16 +378,24 @@ public class Instrumenter {
 
 	}
 
-	/**
+	/*
 	 * Überprüft, ob der Kommentar eine Coverage-Marke ist.
+	 * 
 	 * @param label
 	 * @return
 	 */
+	/**
+	 * Checks whether comment is a coverage marking
+	 * 
+	 * @param label
+	 * @return yes, iff comment is a marking
+	 */
 	private boolean isCoverageLabel(String label) {
-		if (label.startsWith(COVERAGE_LABEL_IDENTIFIER)) {
+		/*if (label.startsWith(COVERAGE_LABEL_IDENTIFIER)) {
 			return true;
 		}
-		return false;
+		return false;*/
+		return (label.startsWith(COVERAGE_LABEL_IDENTIFIER));
 	}
 
 }

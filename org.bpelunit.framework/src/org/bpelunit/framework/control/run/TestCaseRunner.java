@@ -24,7 +24,6 @@ import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.ws.LocalHTTPServer;
 import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
 import org.bpelunit.framework.exception.PartnerNotFoundException;
 import org.bpelunit.framework.exception.SynchronousSendException;
 import org.bpelunit.framework.model.test.PartnerTrack;

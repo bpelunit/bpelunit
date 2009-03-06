@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry sourcepath="/org.bpelunit.framework/lib/wsdl4j-1.5.2-src.jar" kind="lib" path="/org.bpelunit.framework/lib/wsdl4j-1.5.2.jar"/>
-	<classpathentry sourcepath="/org.bpelunit.framework/lib/commons-lang-2.1-src.jar" kind="lib" path="/org.bpelunit.framework/lib/commons-lang-2.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/xbean.jar" sourcepath="/org.bpelunit.framework/lib/old_xbean-src.jar"/>
+	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/commons-lang-2.1.jar" sourcepath="/org.bpelunit.framework/lib/commons-lang-2.1-src.jar"/>
+	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/wsdl4j-1.6.2.jar"/>
+	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/qname-1.6.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

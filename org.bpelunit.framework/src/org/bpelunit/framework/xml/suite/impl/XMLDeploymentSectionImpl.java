@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLDeploymentSectionImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLDeploymentSection
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLDeploymentSectionImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -116,13 +117,14 @@ public class XMLDeploymentSectionImpl extends org.apache.xmlbeans.impl.values.Xm
     
     /**
      * Gets array of all "partner" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation[] getPartnerArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation>();
             get_store().find_all_element_users(PARTNER$2, targetList);
             org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation[] result = new org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation[targetList.size()];
             targetList.toArray(result);

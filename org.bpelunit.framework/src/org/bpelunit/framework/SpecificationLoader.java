@@ -34,9 +34,7 @@ import org.bpelunit.framework.control.util.ActivityUtil;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
-import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
-import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.model.Partner;
@@ -113,7 +111,7 @@ public class SpecificationLoader {
 			fLogger.info("Loaded test suite with name \"" + testSuite.getName() + "\" and " + testSuite.getTestCaseCount() + " test cases.");
 
 			if (BPELUnitRunner.measureTestCoverage()) {
-				ICoverageMeasurmentTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
+				ICoverageMeasurementTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
 				try {
 					
 					String encodingStyle=tool.getEncodingStyle();

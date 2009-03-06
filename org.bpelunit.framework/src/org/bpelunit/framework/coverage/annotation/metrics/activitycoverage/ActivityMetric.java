@@ -10,13 +10,18 @@ import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkerStatus;
+import org.bpelunit.framework.coverage.receiver.MarkerState;
 import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.bpelunit.framework.coverage.result.statistic.impl.Statistic;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
+/** 
+ * Activity Metric class
+ * 
+ * @author Alex Salnikow, Ronald Becher
+ */
 public class ActivityMetric implements IMetric {
 
 	private Logger logger=Logger.getLogger(getClass());
@@ -48,26 +53,40 @@ public class ActivityMetric implements IMetric {
 		return METRIC_NAME;
 	}
 
-	/**
+	/*
 	 * Liefert Präfixe von allen Marken dieser Metrik. Sie ermöglichen die
 	 * Zuordnung der empfangenen Marken einer Metrik
 	 * 
 	 * @return Präfixe von allen Marken dieser Metrik
+	 */
+	/**
+	 * Delivers prefixes of all metric's markers.
+	 * 
+	 * <br />They allow the association to received metrics 
+	 * 
+	 * @return prefixes
 	 */
 	public List<String> getMarkersId() {
 		return activities_to_respekt;
 	}
 
 
-	/**
+	/*
 	 * Erzeugt Statistiken
 	 * 
 	 * @param allMarkers
 	 *            alle einegfügten Marken (von allen Metriken), nach dem Testen
 	 * @return Statistik
 	 */
+	/**
+	 * Generates statistics
+	 * 
+	 * @param allMarkers
+	 *            all inserted markers (after testing)
+	 * @return statistic
+	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerStatus>> allMarkers) {
+			Hashtable<String, Hashtable<String, MarkerState>> allMarkers) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		IStatistic subStatistic;
 		String label;
@@ -75,22 +94,29 @@ public class ActivityMetric implements IMetric {
 				.hasNext();) {
 			label = iter.next();
 			subStatistic = new Statistic(METRIC_NAME + ": " + label);
-			List<MarkerStatus> statusListe = MetricsManager.getStatus(label,
+			List<MarkerState> statusListe = MetricsManager.getStatus(label,
 					allMarkers);
-			subStatistic.setStatusListe(statusListe);
-			statistic.addSubStatistik(subStatistic);
+			subStatistic.setStateList(statusListe);
+			statistic.addSubStatistic(subStatistic);
 		}
 		return statistic;
 	}
 
 
-	/**
+	/*
 	 * Erhält die noch nicht modifizierte Beschreibung des BPELProzesses als
 	 * XML-Element. Alle für die Instrumentierung benötigten Elemente der
 	 * Prozessbeschreibung werden gespeichert
 	 * 
 	 * @param process
 	 *            noch nicht modifiziertes BPEL-Prozess
+	 */
+	/**
+	 * Gets the unmodified bpel process as xml element.
+	 * 
+	 * <br />All elements needed for instrumentating will be saved
+	 * 
+	 * @param unmodified bpel process
 	 */
 	public void setOriginalBPELProcess(Element process) {
 		ElementFilter filter = new ElementFilter(process.getNamespace());
@@ -103,8 +129,13 @@ public class ActivityMetric implements IMetric {
 		}	
 	}
 
-	/**
+	/*
 	 * delegiert die Instrumentierungsaufgabe an eigenen Handler
+	 * 
+	 * @throws BpelException
+	 */
+	/**
+	 * Delegates instrumentating to own handler
 	 * 
 	 * @throws BpelException
 	 */

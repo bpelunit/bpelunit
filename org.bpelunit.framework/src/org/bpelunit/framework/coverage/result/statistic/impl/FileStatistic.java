@@ -9,9 +9,9 @@ import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 
 /**
+ * Straight implementation of {@link IFileStatistic}
  * 
- * @author Alex Salnikow
- *
+ * @author Alex Salnikow, Ronald Becher
  */
 
 public class FileStatistic implements IFileStatistic {

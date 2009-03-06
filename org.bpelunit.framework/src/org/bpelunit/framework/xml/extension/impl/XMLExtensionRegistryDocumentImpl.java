@@ -14,6 +14,7 @@ package org.bpelunit.framework.xml.extension.impl;
  */
 public class XMLExtensionRegistryDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.extension.XMLExtensionRegistryDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLExtensionRegistryDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {

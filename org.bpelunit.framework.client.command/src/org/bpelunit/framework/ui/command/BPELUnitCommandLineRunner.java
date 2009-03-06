@@ -25,7 +25,7 @@ import org.bpelunit.framework.control.result.ITestResultListener;
 import org.bpelunit.framework.control.result.XMLResultProducer;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
+import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.coverage.result.XMLCoverageResultProducer;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.DeploymentException;
@@ -245,7 +245,7 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 			stop1=System.currentTimeMillis();
 			if (fCovFileName != null) {
 				try {
-					ICoverageMeasurmentTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
+					ICoverageMeasurementTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
 					if(tool!=null)
 					XMLCoverageResultProducer.writeResult(new FileOutputStream(
 							fCovFileName),tool.getStatistics(),tool.getErrorStatus(),coverageDetailed);

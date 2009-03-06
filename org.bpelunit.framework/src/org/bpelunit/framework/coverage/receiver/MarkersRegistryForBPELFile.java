@@ -10,19 +10,24 @@ import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import org.bpelunit.framework.coverage.result.statistic.impl.FileStatistic;
 
-/**
+/*
  * 
  * Die Klasse verwaltet alle eingefügten Coverage-Marken für eine BPEL-Datei.
  * 
  * @author Alex Salnikow
  * 
  */
-
+/**
+ * This class manages all included coverage markings for bpel file
+ * 
+ * @author Alex Salnikow, Ronald Becher
+ * 
+ */
 public class MarkersRegistryForBPELFile {
 
 	private String fileName;
 
-	private Hashtable<String, Hashtable<String, MarkerStatus>> allMetricsTable;
+	private Hashtable<String, Hashtable<String, MarkerState>> allMetricsTable;
 
 	private MetricsManager metricManager;
 
@@ -37,41 +42,56 @@ public class MarkersRegistryForBPELFile {
 		return fileName;
 	}
 
-	/**
+	/*
 	 * registriert eingefügte Marken
 	 * 
 	 * @param marke Coverage Marke
 	 * @param status
 	 *            Coverage-Marke
 	 */
-	public void registerMarker(String marke, MarkerStatus status) {
-		String prefix = marke.substring(0, marke
+	/**
+	 * Registers marker
+	 * 
+	 * @param Coverage marker
+	 * @param marker status
+	 */
+	public void registerMarker(String marker, MarkerState status) {
+		String prefix = marker.substring(0, marker
 				.indexOf(Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR));
-		allMetricsTable.get(prefix).put(marke, status);
+		allMetricsTable.get(prefix).put(marker, status);
 	}
 
-	/**
+	/*
 	 * Initialisiert Datenstruktur für die Speicherung der Marken für alle
 	 * Metriken.
 	 * 
 	 * @param metricManager
 	 */
-	private void prepareStructur(MetricsManager metricManager) {
-		List<IMetric> metrics = metricManager.getMetrics();
-		allMetricsTable = new Hashtable<String, Hashtable<String, MarkerStatus>>();
+	/**
+	 * Initializes data structure for saving markers for all metrics
+	 * 
+	 * @param metricsManager
+	 */
+	private void prepareStructur(MetricsManager metricsManager) {
+		List<IMetric> metrics = metricsManager.getMetrics();
+		allMetricsTable = new Hashtable<String, Hashtable<String, MarkerState>>();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			IMetric metric = iter.next();
 			for (Iterator<String> iterator = metric.getMarkersId().iterator(); iterator
 					.hasNext();) {
 				allMetricsTable.put(iterator.next(),
-						new Hashtable<String, MarkerStatus>());
+						new Hashtable<String, MarkerState>());
 			}
 		}
 	}
 
-	/**
+	/*
 	 * 
 	 * @return Statistik der BPEL-Datei
+	 */
+	/**
+	 * Get file statistic
+	 * @return bpel file statistics
 	 */
 	public IFileStatistic getFileStatistic() {
 		IFileStatistic fileStatistic = new FileStatistic(fileName);

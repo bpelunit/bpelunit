@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLMappingImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLMapping
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLMappingImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -64,13 +65,14 @@ public class XMLMappingImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     
     /**
      * Gets array of all "copy" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLCopy[] getCopyArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.suite.XMLCopy> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLCopy>();
             get_store().find_all_element_users(COPY$0, targetList);
             org.bpelunit.framework.xml.suite.XMLCopy[] result = new org.bpelunit.framework.xml.suite.XMLCopy[targetList.size()];
             targetList.toArray(result);

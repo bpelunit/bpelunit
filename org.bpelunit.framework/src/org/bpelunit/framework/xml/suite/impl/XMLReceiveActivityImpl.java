@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLReceiveActivityImpl extends org.bpelunit.framework.xml.suite.impl.XMLActivityImpl implements org.bpelunit.framework.xml.suite.XMLReceiveActivity
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLReceiveActivityImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -66,13 +67,14 @@ public class XMLReceiveActivityImpl extends org.bpelunit.framework.xml.suite.imp
     
     /**
      * Gets array of all "condition" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLCondition[] getConditionArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.suite.XMLCondition> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLCondition>();
             get_store().find_all_element_users(CONDITION$0, targetList);
             org.bpelunit.framework.xml.suite.XMLCondition[] result = new org.bpelunit.framework.xml.suite.XMLCondition[targetList.size()];
             targetList.toArray(result);

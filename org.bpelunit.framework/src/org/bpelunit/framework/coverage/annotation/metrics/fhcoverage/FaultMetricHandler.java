@@ -2,7 +2,6 @@ package org.bpelunit.framework.coverage.annotation.metrics.fhcoverage;
 
 import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,8 +18,13 @@ public class FaultMetricHandler implements IMetricHandler {
 
 	public static final String FAULT_HANDLER_LABEL = "catchBlock";
 
-	/**
+	/*
 	 * Generiert eine eindeutige Markierung.
+	 * 
+	 * @return eindeutige Markierung
+	 */
+	/**
+	 * Generates unique marker
 	 * 
 	 * @return eindeutige Markierung
 	 */
@@ -37,19 +41,13 @@ public class FaultMetricHandler implements IMetricHandler {
 	}
 
 
-	/**
-	 * Fügt die Marker an den richtigen Stellen in
-	 * BPEL-Process-Element ein (Instrumentierung). Anhand dieser Marker werden
-	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
-	 * bestimmter Aktivitäten geloggt.
-	 * 
-	 * @param catch_elements
-	 * @throws BpelException 
+	/* (non-Javadoc)
+	 * @see org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler#insertMarkersForMetric(java.util.List)
 	 */
-	public void insertMarkersForMetric(List<Element> catch_elements)
+	public void insertMarkersForMetric(List<Element> processElements)
 			throws BpelException {
 
-		Iterator<Element> iter = catch_elements.iterator();
+		Iterator<Element> iter = processElements.iterator();
 		while (iter.hasNext()) {
 			insertCoverageLabelsForCatchBlock(iter.next());
 		}

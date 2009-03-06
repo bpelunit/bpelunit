@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLTestResultImpl extends org.bpelunit.framework.xml.result.impl.XMLArtefactImpl implements org.bpelunit.framework.xml.result.XMLTestResult
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLTestResultImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -64,13 +65,14 @@ public class XMLTestResultImpl extends org.bpelunit.framework.xml.result.impl.XM
     
     /**
      * Gets array of all "testCase" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.result.XMLTestCase[] getTestCaseArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.result.XMLTestCase> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.result.XMLTestCase>();
             get_store().find_all_element_users(TESTCASE$0, targetList);
             org.bpelunit.framework.xml.result.XMLTestCase[] result = new org.bpelunit.framework.xml.result.XMLTestCase[targetList.size()];
             targetList.toArray(result);

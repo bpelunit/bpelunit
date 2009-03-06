@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.6.5
+Created-By: 1.6.0-b105 (Sun Microsystems Inc.)
+Main-Class: nzip
+Class-Path: lib/ant.jar lib/lcrypto-jdk14-135.jar
+Specification-Title: TrueZIP
+Specification-Version: 6.5.4
+Specification-Vendor: Schlichtherle IT Services
+Implementation-Title: TrueZIP
+Implementation-Version: 6.5.4
+Implementation-Vendor: Schlichtherle IT Services
+Implementation-URL: https://truezip.dev.java.net
+

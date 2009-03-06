@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLTestCaseImpl extends org.bpelunit.framework.xml.result.impl.XMLArtefactImpl implements org.bpelunit.framework.xml.result.XMLTestCase
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLTestCaseImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -64,13 +65,14 @@ public class XMLTestCaseImpl extends org.bpelunit.framework.xml.result.impl.XMLA
     
     /**
      * Gets array of all "partnerTrack" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.result.XMLPartnerTrack[] getPartnerTrackArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.result.XMLPartnerTrack> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.result.XMLPartnerTrack>();
             get_store().find_all_element_users(PARTNERTRACK$0, targetList);
             org.bpelunit.framework.xml.result.XMLPartnerTrack[] result = new org.bpelunit.framework.xml.result.XMLPartnerTrack[targetList.size()];
             targetList.toArray(result);

@@ -13,7 +13,6 @@ import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric
 import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**

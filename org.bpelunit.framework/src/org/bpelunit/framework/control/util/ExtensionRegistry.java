@@ -22,7 +22,6 @@ import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.CoverageMeasurementTool;
 import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;

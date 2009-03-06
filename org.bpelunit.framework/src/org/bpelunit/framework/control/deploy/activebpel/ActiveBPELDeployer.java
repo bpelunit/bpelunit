@@ -21,9 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
-import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
 
@@ -74,7 +72,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		boolean fileReplaced = false;
 
 		if (BPELUnitRunner.measureTestCoverage()) {
-			ICoverageMeasurmentTool coverageTool = BPELUnitRunner
+			ICoverageMeasurementTool coverageTool = BPELUnitRunner
 			.getCoverageMeasurmentTool();
 			try {
 				

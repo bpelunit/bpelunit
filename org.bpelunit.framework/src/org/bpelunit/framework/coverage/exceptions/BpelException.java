@@ -1,13 +1,12 @@
 package org.bpelunit.framework.coverage.exceptions;
 
-import org.bpelunit.framework.coverage.exceptions.CoverageMeasurmentException;
-
+import org.bpelunit.framework.coverage.exceptions.CoverageMeasurementException;
 
 /**
- * 
- * @author Alex Salnikow
+ * Bpel Exception
+ * @author Alex Salnikow, Ronald Becher
  */
-public class BpelException extends CoverageMeasurmentException {
+public class BpelException extends CoverageMeasurementException {
 
 	public static final String NO_VALIDE_BPEL = "No valide BPEL";
 

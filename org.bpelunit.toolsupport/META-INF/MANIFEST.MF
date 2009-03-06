@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit Eclipse Tool Support Plugin
 Bundle-SymbolicName: org.bpelunit.toolsupport; singleton:=true
-Bundle-Version: 1.1.0
+Bundle-Version: 1.0.0
 Bundle-Activator: org.bpelunit.toolsupport.ToolSupportActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -18,4 +18,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.help,
  org.eclipse.help.ui
 Eclipse-LazyStart: true
-Bundle-Vendor: Leibniz Universität Hannover
+Bundle-Vendor: Philip Mayer
+Import-Package: javax.wsdl

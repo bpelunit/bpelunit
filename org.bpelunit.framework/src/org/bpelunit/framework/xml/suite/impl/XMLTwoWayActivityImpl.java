@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLTwoWayActivityImpl extends org.bpelunit.framework.xml.suite.impl.XMLActivityImpl implements org.bpelunit.framework.xml.suite.XMLTwoWayActivity
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLTwoWayActivityImpl(org.apache.xmlbeans.SchemaType sType)
     {

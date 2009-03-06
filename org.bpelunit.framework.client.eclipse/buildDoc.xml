@@ -35,7 +35,7 @@
 		    <packageset dir="../org.bpelunit.framework/src" defaultexcludes="yes">
 		      	<include name="org/bpelunit/framework"/>		    	
 		    	<include name="org/bpelunit/framework/control/ext"/>		    	
-		    	<include name="org/bpelunit/framework/control/result"/>		    	
+		    	<include name="org/bpelunit/framework/control/result"/>	    	
 		    </packageset>
 		</javadoc>
 		

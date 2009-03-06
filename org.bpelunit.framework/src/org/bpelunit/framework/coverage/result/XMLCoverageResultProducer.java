@@ -15,10 +15,18 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-/**
+/*
  * Die Klasse schreibt die Testabdeckungsmetriken im XML-Format in Outputstream.
  * 
  * @author Alex
+ * 
+ */
+/**
+ * This class sends coverage metrics to the output stream.
+ * 
+ * <br />This is done through XML
+ * 
+ * @author Alex Salnikow, Ronald Becher
  * 
  */
 public class XMLCoverageResultProducer {
@@ -42,19 +50,38 @@ public class XMLCoverageResultProducer {
 	private static final Namespace NAMESPACE = Namespace
 			.getNamespace("http://www.bpelunit.org/schema/coverageResult");
 
-	/**
+	/*
 	 * 
 	 * Schreibt Testabdeckungsmetriken im XML-Format in OutputStream.
 	 * 
 	 * @param out Outputstream in den die Statistiken geschrieben werden.
+	 * 
 	 * @param statistics
+	 * 
 	 * @param string
-	 * @param detailed
-	 *            entscheidet, ob eine detaillierte Augabe erzeugt wird
-	 *            (Statistik für jede einzelen Datei), oder nicht (Statistik für
-	 *            den kompletten Archive. )
+	 * 
+	 * @param detailed entscheidet, ob eine detaillierte Augabe erzeugt wird
+	 * (Statistik für jede einzelen Datei), oder nicht (Statistik für den
+	 * kompletten Archive. )
+	 * 
 	 * @throws IOException
 	 */
+	/**
+	 * 
+	 * Writes test coverage metrics to the output stream utilizing a XML format
+	 * 
+	 * <br />The boolean parameter "detailed" decides whether statistics are
+	 * verbose or not. Verbose statistics would be for every file, non verbose
+	 * for the whole archive.
+	 * 
+	 * @param output
+	 *            stream
+	 * @param statistics
+	 * @param string
+	 * @param detailed statistics
+	 * @throws IOException
+	 */
+	// TODO "param string"?
 	public static void writeResult(OutputStream out,
 			List<IFileStatistic> statistics, String string, boolean detailed)
 			throws IOException {
@@ -64,7 +91,7 @@ public class XMLCoverageResultProducer {
 				COVERAGE_STATISTIC_ELEMENT, NAMESPACE);
 		doc.setRootElement(coverageStatisticElement);
 		logger.info("INFO WIRD EINGEFÜGT");
-		if (string != null&&!string.equals("")) {
+		if (string != null && !string.equals("")) {
 			Element infoElement = new Element("info", NAMESPACE);
 			infoElement.setText(string);
 			coverageStatisticElement.addContent(infoElement);
@@ -151,9 +178,9 @@ public class XMLCoverageResultProducer {
 		fileStatisticElement.setAttribute("filename", fileStatistic
 				.getBPELFilename());
 		parentElement.addContent(fileStatisticElement);
-		int total=0;
-		int tested=0;
-		String  relativ = "-";
+		int total = 0;
+		int tested = 0;
+		String relativ = "-";
 		for (Iterator<IStatistic> iter = fileStatistic.getStatistics()
 				.iterator(); iter.hasNext();) {
 			relativ = "-";
@@ -162,16 +189,17 @@ public class XMLCoverageResultProducer {
 			statisticElement = new Element(STATISTIC_ELEMENT, NAMESPACE);
 			statisticElement.setAttribute(NAME_ATTRIBUT, statistic.getName());
 
-			total=statistic.getTotalNumber();
-			tested=statistic.getTestedNumber();
+			total = statistic.getTotalNumber();
+			tested = statistic.getTestedNumber();
 			statisticElement.setAttribute(TOTAL_NUMBER_ATTRIBUT, Integer
 					.toString(total));
 			statisticElement.setAttribute(TESTED_NUMBER_ATTRIBUT, Integer
 					.toString(tested));
 			if (total > 0)
-				relativ = Float.toString((tested * 1000 / total) / (float) 10.0)
+				relativ = Float
+						.toString((tested * 1000 / total) / (float) 10.0)
 						+ "%";
-			statisticElement.setAttribute(PER_CENT_ATTRIBUT,relativ );
+			statisticElement.setAttribute(PER_CENT_ATTRIBUT, relativ);
 			fileStatisticElement.addContent(statisticElement);
 		}
 	}

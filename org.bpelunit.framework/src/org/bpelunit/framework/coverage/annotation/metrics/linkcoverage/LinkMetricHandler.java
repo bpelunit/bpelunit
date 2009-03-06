@@ -21,9 +21,7 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 
-
-
-public class LinkMetricHandler implements  IMetricHandler {
+public class LinkMetricHandler implements IMetricHandler {
 
 	public static final String METRIC_NAME = "LinkMetric";
 
@@ -53,42 +51,63 @@ public class LinkMetricHandler implements  IMetricHandler {
 
 	private MarkersRegisterForArchive markersRegistry;
 
-
-
 	public LinkMetricHandler(MarkersRegisterForArchive markersRegistry) {
-		this.markersRegistry=markersRegistry;
+		this.markersRegistry = markersRegistry;
 	}
 
-	/**
+	/*
 	 * Generiert eindeutige Merkierung für die Links (in der Flow-Umgebung)
 	 * 
 	 * @return eindeutige Markierung
+	 */
+	/**
+	 * Generates unique marker for the (FLOW) links
+	 * 
+	 * @return unique marker
 	 */
 	public static String getNextPositivLinkMarker() {
-		return POSITIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+		return POSITIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
+				+ (count++);
 	}
 
-	/**
+	/*
 	 * Generiert eindeutige Merkierung für die Links (in der Flow-Umgebung)
 	 * 
 	 * @return eindeutige Markierung
 	 */
+	/**
+	 * Generates unique marker for the (FLOW) links
+	 * 
+	 * @return unique marker
+	 */
 	public static String getNextNegativLinkMarker() {
-		return  NEGATIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+		return NEGATIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
+				+ (count++);
 	}
 
-	/**
-	 * Fügt die Marker an den richtigen Stellen in
-	 * BPEL-Process-Element ein (Instrumentierung). Anhand dieser Marker werden
-	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
-	 * bestimmter Aktivitäten geloggt.
+	/*
+	 * Fügt die Marker an den richtigen Stellen in BPEL-Process-Element ein
+	 * (Instrumentierung). Anhand dieser Marker werden danach entsprechende
+	 * Invoke aufrufe generiert und dadurch die Ausführung bestimmter
+	 * Aktivitäten geloggt.
 	 * 
 	 * @param process_elements
-	 * @throws BpelException 
+	 * 
+	 * @throws BpelException
 	 */
-	public void insertMarkersForMetric(List<Element> process_elements)
+	/**
+	 * Inserts the markers at the correct places into the BPEL process element
+	 * (instrumentating).
+	 * 
+	 * <br />Due to these several invoke calls will be generated and certain
+	 * activities will be logged
+	 * 
+	 * @param process elements
+	 * @throws BpelException
+	 */
+	public void insertMarkersForMetric(List<Element> processElements)
 			throws BpelException {
-		for (Iterator<Element> iter = process_elements.iterator(); iter
+		for (Iterator<Element> iter = processElements.iterator(); iter
 				.hasNext();) {
 			loggingOfLinks2(iter.next(), process_element);
 		}
@@ -97,7 +116,8 @@ public class LinkMetricHandler implements  IMetricHandler {
 	private void loggingOfLinks2(Element link, Element processElement) {
 		Element sourceElement = searchSourceElement2(link, processElement);
 		String transitionCondition = checkTransitionCondition(sourceElement);
-		if (!transitionCondition.equals("")&&!transitionCondition.equals("true()")
+		if (!transitionCondition.equals("")
+				&& !transitionCondition.equals("true()")
 				&& !transitionCondition.equals("false()")) {
 			createMarkerForLink2(link, sourceElement, transitionCondition);
 		}
@@ -109,15 +129,15 @@ public class LinkMetricHandler implements  IMetricHandler {
 		if (getProcessNamespace().equals(NAMESPACE_BPEL_2_0)) {
 			sourceActivity = sourceElement.getParentElement()
 					.getParentElement();
-		} else if (getProcessNamespace().equals(
-				NAMESPACE_BPEL_1_1)) {
+		} else if (getProcessNamespace().equals(NAMESPACE_BPEL_1_1)) {
 			sourceActivity = sourceElement.getParentElement();
 		}
 		Element enclosedFlow = encloseElementInFlow(sourceActivity);
 		Element new_link = insertPostivLink(enclosedFlow, sourceElement, link,
 				transitionCondition);
 		insertLoggingMarker(new_link, enclosedFlow, true);
-		new_link = insertNegativLink(enclosedFlow, sourceElement, link,transitionCondition);
+		new_link = insertNegativLink(enclosedFlow, sourceElement, link,
+				transitionCondition);
 		insertLoggingMarker(new_link, enclosedFlow, false);
 	}
 
@@ -140,7 +160,8 @@ public class LinkMetricHandler implements  IMetricHandler {
 
 	private Element searchSourceElement2(Element link, Element processElement) {
 		Iterator<Element> iter = processElement
-				.getDescendants(new ElementFilter(SOURCE_TAG, getProcessNamespace()));
+				.getDescendants(new ElementFilter(SOURCE_TAG,
+						getProcessNamespace()));
 		Element source = null;
 		String linkName = link.getAttributeValue(ATTRIBUTE_NAME);
 		while (iter.hasNext()) {
@@ -152,7 +173,6 @@ public class LinkMetricHandler implements  IMetricHandler {
 		return source;
 	}
 
-
 	private Element insertPostivLink(Element flow, Element sourceElement,
 			Element link, String transitionCondition) {
 		Element link_copy = createLinkCopy(link, flow, COPY_LINK_POSTFIX);
@@ -160,12 +180,11 @@ public class LinkMetricHandler implements  IMetricHandler {
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		if (getProcessNamespace().equals(NAMESPACE_BPEL_2_0)) {
-			Element transConditionElement = (Element)sourceElement.getChild(
+			Element transConditionElement = (Element) sourceElement.getChild(
 					TRANSITION_CONDITION, getProcessNamespace()).clone();
 			new_source_element.addContent((Element) transConditionElement
 					.clone());
-		} else if (getProcessNamespace().equals(
-				NAMESPACE_BPEL_1_1)) {
+		} else if (getProcessNamespace().equals(NAMESPACE_BPEL_1_1)) {
 			new_source_element.setAttribute(TRANSITION_CONDITION,
 					transitionCondition);
 		}
@@ -192,12 +211,14 @@ public class LinkMetricHandler implements  IMetricHandler {
 		Comment logging;
 
 		String marker;
-		if (isPositivValueOfLink) {		
-			marker=getNextPositivLinkMarker();
-			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +marker);
+		if (isPositivValueOfLink) {
+			marker = getNextPositivLinkMarker();
+			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
+					+ marker);
 		} else {
-			marker=getNextNegativLinkMarker();
-			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER +marker);
+			marker = getNextNegativLinkMarker();
+			logging = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
+					+ marker);
 		}
 		markersRegistry.registerMarker(marker);
 
@@ -208,8 +229,8 @@ public class LinkMetricHandler implements  IMetricHandler {
 		if (getProcessNamespace().equals(NAMESPACE_BPEL_2_0)) {
 			Element targets = createBPELElement(TARGETS_TAG);
 			targets.addContent(targetElement);
-			targetElement=targets;
-		} 
+			targetElement = targets;
+		}
 		sequence.addContent(targetElement);
 		sequence.addContent(logging);
 		enclosedFlow.addContent(sequence);
@@ -223,21 +244,17 @@ public class LinkMetricHandler implements  IMetricHandler {
 		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		if (getProcessNamespace().equals(NAMESPACE_BPEL_2_0)) {
-			Element transConditionElement =(Element) sourceElement.getChild(
+			Element transConditionElement = (Element) sourceElement.getChild(
 					TRANSITION_CONDITION, getProcessNamespace()).clone();
-			transConditionElement.setText("not("+transConditionElement.getText()+ ")");
+			transConditionElement.setText("not("
+					+ transConditionElement.getText() + ")");
 			new_source_element.addContent(transConditionElement);
-		} else if (getProcessNamespace().equals(
-				NAMESPACE_BPEL_1_1)) {
+		} else if (getProcessNamespace().equals(NAMESPACE_BPEL_1_1)) {
 			new_source_element.setAttribute(TRANSITION_CONDITION, "not("
 					+ transitionCondition + ")");
 		}
-		sourceElement.getParentElement().addContent(0,new_source_element);
+		sourceElement.getParentElement().addContent(0, new_source_element);
 		return link_copy;
 	}
-
-
-
-
 
 }

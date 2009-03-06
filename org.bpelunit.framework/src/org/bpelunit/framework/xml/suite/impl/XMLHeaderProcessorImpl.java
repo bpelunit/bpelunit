@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLHeaderProcessorImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLHeaderProcessor
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLHeaderProcessorImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -66,13 +67,14 @@ public class XMLHeaderProcessorImpl extends org.apache.xmlbeans.impl.values.XmlC
     
     /**
      * Gets array of all "property" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLProperty[] getPropertyArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.suite.XMLProperty> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLProperty>();
             get_store().find_all_element_users(PROPERTY$0, targetList);
             org.bpelunit.framework.xml.suite.XMLProperty[] result = new org.bpelunit.framework.xml.suite.XMLProperty[targetList.size()];
             targetList.toArray(result);

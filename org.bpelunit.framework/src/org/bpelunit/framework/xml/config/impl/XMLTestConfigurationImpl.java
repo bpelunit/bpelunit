@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.config.impl;
  */
 public class XMLTestConfigurationImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.config.XMLTestConfiguration
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLTestConfigurationImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -64,13 +65,14 @@ public class XMLTestConfigurationImpl extends org.apache.xmlbeans.impl.values.Xm
     
     /**
      * Gets array of all "configuration" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.config.XMLConfiguration[] getConfigurationArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.config.XMLConfiguration> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.config.XMLConfiguration>();
             get_store().find_all_element_users(CONFIGURATION$0, targetList);
             org.bpelunit.framework.xml.config.XMLConfiguration[] result = new org.bpelunit.framework.xml.config.XMLConfiguration[targetList.size()];
             targetList.toArray(result);

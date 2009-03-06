@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLReceiveConditionImpl extends org.bpelunit.framework.xml.result.impl.XMLArtefactImpl implements org.bpelunit.framework.xml.result.XMLReceiveCondition
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLReceiveConditionImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -79,6 +80,7 @@ public class XMLReceiveConditionImpl extends org.bpelunit.framework.xml.result.i
      */
     public static class ConditionImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.result.XMLReceiveCondition.Condition
     {
+        private static final long serialVersionUID = 1L;
         
         public ConditionImpl(org.apache.xmlbeans.SchemaType sType)
         {

@@ -75,9 +75,17 @@ public class BPELUnitNewWizard extends BasicNewResourceWizard {
 		if (file == null) {
 			return false;
 		}
+		XMLTestSuiteDocument document = null;
+		try {
+			document= XMLTestSuiteDocument.Factory.newInstance();
+		} catch(Throwable e) {
+			e.printStackTrace();
+		}
 
-		XMLTestSuiteDocument document= XMLTestSuiteDocument.Factory.newInstance();
-
+		/*if (document == null) {
+			return true;
+		}*/
+		
 		// Create some initial stuff
 		XMLTestSuite suite= document.addNewTestSuite();
 		XMLDeploymentSection deploymentSection= suite.addNewDeployment();
@@ -90,7 +98,7 @@ public class BPELUnitNewWizard extends BasicNewResourceWizard {
 		IWorkbenchWindow dw= getWorkbench().getActiveWorkbenchWindow();
 
 		try {
-			file.setContents(document.newInputStream(BPELUnitUtil.getDefaultXMLOptions()), IResource.NONE, new NullProgressMonitor());
+			file.setContents(document.newInputStream( BPELUnitUtil.getDefaultXMLOptions()), IResource.NONE, new NullProgressMonitor());
 		} catch (CoreException e) {
 			MessageDialog.openError(getShell(), "Error writing initial data", "Could not create the .bpts file");
 		}

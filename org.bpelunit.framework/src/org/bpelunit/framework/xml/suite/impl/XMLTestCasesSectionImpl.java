@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLTestCasesSectionImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLTestCasesSection
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLTestCasesSectionImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -64,13 +65,14 @@ public class XMLTestCasesSectionImpl extends org.apache.xmlbeans.impl.values.Xml
     
     /**
      * Gets array of all "testCase" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLTestCase[] getTestCaseArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.suite.XMLTestCase> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLTestCase>();
             get_store().find_all_element_users(TESTCASE$0, targetList);
             org.bpelunit.framework.xml.suite.XMLTestCase[] result = new org.bpelunit.framework.xml.suite.XMLTestCase[targetList.size()];
             targetList.toArray(result);

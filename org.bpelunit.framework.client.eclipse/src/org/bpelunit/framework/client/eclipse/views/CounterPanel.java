@@ -5,8 +5,6 @@
  */
 package org.bpelunit.framework.client.eclipse.views;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
-import org.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
 import org.bpelunit.framework.model.test.report.ArtefactStatus.StatusCode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -14,7 +12,6 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;

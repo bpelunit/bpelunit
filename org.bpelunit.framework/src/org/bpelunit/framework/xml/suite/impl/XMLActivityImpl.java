@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLActivityImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLActivity
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLActivityImpl(org.apache.xmlbeans.SchemaType sType)
     {

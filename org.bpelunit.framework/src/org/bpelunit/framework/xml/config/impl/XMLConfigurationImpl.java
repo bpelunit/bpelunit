@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.config.impl;
  */
 public class XMLConfigurationImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.config.XMLConfiguration
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLConfigurationImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -66,13 +67,14 @@ public class XMLConfigurationImpl extends org.apache.xmlbeans.impl.values.XmlCom
     
     /**
      * Gets array of all "property" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.config.XMLProperty[] getPropertyArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.config.XMLProperty> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.config.XMLProperty>();
             get_store().find_all_element_users(PROPERTY$0, targetList);
             org.bpelunit.framework.xml.config.XMLProperty[] result = new org.bpelunit.framework.xml.config.XMLProperty[targetList.size()];
             targetList.toArray(result);

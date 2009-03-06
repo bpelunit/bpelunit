@@ -3,14 +3,19 @@ package org.bpelunit.framework.coverage;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
 import org.jdom.Namespace;
 
+/**
+ * Holds the Constants for Coverage behaviour
+ */
 public class CoverageConstants {
 
 	/**
-	 * Wartezeit nach jedem Testfall um alle Coverage-Nachrichten zu empfangen.
+	 * Default delay after each test.
+	 * 
+	 * Is utilized for receiving all coverage messages.
 	 */
 	public static final int DEFAULT_WAITTIME = 500;
 
-	//***********************WSDL für Coverage Logging Service **************************************
+	//***********************WSDL for Coverage Logging Service **************************************
 	
 	public static final String PARTNERLINK_NAMESPACE = "http://schemas.xmlsoap.org/ws/2003/03/addressing";
 
@@ -60,7 +65,7 @@ public class CoverageConstants {
 	public static final String MESSAGETYPE_OF_REGISTER_MESSAGE = MESSAGETYPE_OF_REPORTING_MESSAGE;
 
 	
-	//***********************Konfiguration des Befehlszeilen -Clients
+	//***********************Configuration of Commandline-Clients
 	public static final Namespace NAMESPACE_CONFIGURATION = Namespace
 			.getNamespace("http://www.bpelunit.org/schema/coverageMetricsConfiguration");
 

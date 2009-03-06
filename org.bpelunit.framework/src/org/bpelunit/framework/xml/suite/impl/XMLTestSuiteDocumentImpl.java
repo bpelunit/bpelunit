@@ -14,6 +14,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLTestSuiteDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLTestSuiteDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLTestSuiteDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {

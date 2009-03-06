@@ -2,7 +2,6 @@ package org.bpelunit.framework.coverage.annotation.metrics.chcoverage;
 
 import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 

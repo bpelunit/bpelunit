@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLAnyElementImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLAnyElement
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLAnyElementImpl(org.apache.xmlbeans.SchemaType sType)
     {

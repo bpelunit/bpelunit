@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLActivityImpl extends org.bpelunit.framework.xml.result.impl.XMLArtefactImpl implements org.bpelunit.framework.xml.result.XMLActivity
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLActivityImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -70,13 +71,14 @@ public class XMLActivityImpl extends org.bpelunit.framework.xml.result.impl.XMLA
     
     /**
      * Gets array of all "activity" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.result.XMLActivity[] getActivityArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.result.XMLActivity> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.result.XMLActivity>();
             get_store().find_all_element_users(ACTIVITY$0, targetList);
             org.bpelunit.framework.xml.result.XMLActivity[] result = new org.bpelunit.framework.xml.result.XMLActivity[targetList.size()];
             targetList.toArray(result);
@@ -225,13 +227,14 @@ public class XMLActivityImpl extends org.bpelunit.framework.xml.result.impl.XMLA
     
     /**
      * Gets array of all "dataPackage" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.result.XMLData[] getDataPackageArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.result.XMLData> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.result.XMLData>();
             get_store().find_all_element_users(DATAPACKAGE$2, targetList);
             org.bpelunit.framework.xml.result.XMLData[] result = new org.bpelunit.framework.xml.result.XMLData[targetList.size()];
             targetList.toArray(result);
@@ -380,13 +383,14 @@ public class XMLActivityImpl extends org.bpelunit.framework.xml.result.impl.XMLA
     
     /**
      * Gets array of all "copyOperation" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.result.XMLCopyOperation[] getCopyOperationArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.result.XMLCopyOperation> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.result.XMLCopyOperation>();
             get_store().find_all_element_users(COPYOPERATION$4, targetList);
             org.bpelunit.framework.xml.result.XMLCopyOperation[] result = new org.bpelunit.framework.xml.result.XMLCopyOperation[targetList.size()];
             targetList.toArray(result);

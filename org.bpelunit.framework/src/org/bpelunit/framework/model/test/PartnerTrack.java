@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.run.TestCaseRunner;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.test.activity.Activity;
 import org.bpelunit.framework.model.test.activity.ActivityContext;

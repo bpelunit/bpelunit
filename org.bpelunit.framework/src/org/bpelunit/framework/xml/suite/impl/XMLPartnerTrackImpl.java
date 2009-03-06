@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLPartnerTrackImpl extends org.bpelunit.framework.xml.suite.impl.XMLTrackImpl implements org.bpelunit.framework.xml.suite.XMLPartnerTrack
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLPartnerTrackImpl(org.apache.xmlbeans.SchemaType sType)
     {

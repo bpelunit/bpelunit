@@ -91,19 +91,19 @@ public interface XMLExtensionRegistryDocument extends org.apache.xmlbeans.XmlObj
         public static org.bpelunit.framework.xml.extension.XMLExtensionRegistryDocument parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
           return (org.bpelunit.framework.xml.extension.XMLExtensionRegistryDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }
         
-        /** @deprecated {@link XMLInputStream} */
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
         public static org.bpelunit.framework.xml.extension.XMLExtensionRegistryDocument parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.extension.XMLExtensionRegistryDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }
         
-        /** @deprecated {@link XMLInputStream} */
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
         public static org.bpelunit.framework.xml.extension.XMLExtensionRegistryDocument parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.extension.XMLExtensionRegistryDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }
         
-        /** @deprecated {@link XMLInputStream} */
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }
         
-        /** @deprecated {@link XMLInputStream} */
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }
         

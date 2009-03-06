@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLPartnerDeploymentInformationImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLPartnerDeploymentInformationImpl(org.apache.xmlbeans.SchemaType sType)
     {

@@ -13,9 +13,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
 
@@ -55,7 +53,7 @@ public class OracleDeployer implements IBPELDeployer {
 	public void deploy(String path, ProcessUnderTest processUnderTest) throws DeploymentException {
 
 		if(BPELUnitRunner.measureTestCoverage()){
-			ICoverageMeasurmentTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
+			ICoverageMeasurementTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
 			tool.setErrorStatus("Test coverage for Oracle Deployer is not implemented!");
 		}
 		

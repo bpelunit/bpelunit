@@ -18,8 +18,7 @@ import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.ExtensionRegistry;
 import org.bpelunit.framework.coverage.CoverageConstants;
 import org.bpelunit.framework.coverage.CoverageMeasurementTool;
-import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
-import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
+import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
 
@@ -110,7 +109,7 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	
 	@Override
 	public void configureCoverageTool() throws ConfigurationException {
-		ICoverageMeasurmentTool coverageTool=new CoverageMeasurementTool();
+		ICoverageMeasurementTool coverageTool=new CoverageMeasurementTool();
 		setCoverageMeasurmentTool(coverageTool);
 		getCoverageMeasurmentTool().setPathToWSDL(FilenameUtils.concat(FilenameUtils.concat(fHomeDirectory,CONFIG_DIR),CoverageConstants.COVERAGE_SERVICE_WSDL));
 		String coverageFile= FilenameUtils.concat(fHomeDirectory, FilenameUtils.concat(CONFIG_DIR, COVERAGETOOL_CONFIG_FILE_NAME));

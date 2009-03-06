@@ -15,9 +15,7 @@ import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.coverage.ICoverageMeasurmentTool;
-import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.model.test.TestSuite;
@@ -90,7 +88,7 @@ public abstract class BPELUnitRunner {
 
 	private static boolean fMeasureCoverage = false;
 
-	private static ICoverageMeasurmentTool coverageMeasurmentTool = null;
+	private static ICoverageMeasurementTool coverageMeasurmentTool = null;
 
 	/**
 	 * Indicates whether the runner has been properly initialized
@@ -308,11 +306,11 @@ public abstract class BPELUnitRunner {
 		return fMeasureCoverage;
 	}
 	
-	public static void setCoverageMeasurmentTool(ICoverageMeasurmentTool tool){
+	public static void setCoverageMeasurmentTool(ICoverageMeasurementTool tool){
 		coverageMeasurmentTool=tool;
 	}
 	
-	public static ICoverageMeasurmentTool getCoverageMeasurmentTool(){
+	public static ICoverageMeasurementTool getCoverageMeasurmentTool(){
 		return coverageMeasurmentTool;
 	}
 

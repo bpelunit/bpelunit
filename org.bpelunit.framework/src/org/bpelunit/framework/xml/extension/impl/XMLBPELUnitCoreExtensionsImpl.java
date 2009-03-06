@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.extension.impl;
  */
 public class XMLBPELUnitCoreExtensionsImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.extension.XMLBPELUnitCoreExtensions
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLBPELUnitCoreExtensionsImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -68,13 +69,14 @@ public class XMLBPELUnitCoreExtensionsImpl extends org.apache.xmlbeans.impl.valu
     
     /**
      * Gets array of all "deployer" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.extension.XMLExtension[] getDeployerArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.extension.XMLExtension>();
             get_store().find_all_element_users(DEPLOYER$0, targetList);
             org.bpelunit.framework.xml.extension.XMLExtension[] result = new org.bpelunit.framework.xml.extension.XMLExtension[targetList.size()];
             targetList.toArray(result);
@@ -223,13 +225,14 @@ public class XMLBPELUnitCoreExtensionsImpl extends org.apache.xmlbeans.impl.valu
     
     /**
      * Gets array of all "encoder" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.extension.XMLExtension[] getEncoderArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.extension.XMLExtension>();
             get_store().find_all_element_users(ENCODER$2, targetList);
             org.bpelunit.framework.xml.extension.XMLExtension[] result = new org.bpelunit.framework.xml.extension.XMLExtension[targetList.size()];
             targetList.toArray(result);
@@ -378,13 +381,14 @@ public class XMLBPELUnitCoreExtensionsImpl extends org.apache.xmlbeans.impl.valu
     
     /**
      * Gets array of all "headerProcessor" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.extension.XMLExtension[] getHeaderProcessorArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.extension.XMLExtension>();
             get_store().find_all_element_users(HEADERPROCESSOR$4, targetList);
             org.bpelunit.framework.xml.extension.XMLExtension[] result = new org.bpelunit.framework.xml.extension.XMLExtension[targetList.size()];
             targetList.toArray(result);

@@ -13,6 +13,7 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLDataImpl extends org.bpelunit.framework.xml.result.impl.XMLArtefactImpl implements org.bpelunit.framework.xml.result.XMLData
 {
+    private static final long serialVersionUID = 1L;
     
     public XMLDataImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -66,13 +67,14 @@ public class XMLDataImpl extends org.bpelunit.framework.xml.result.impl.XMLArtef
     
     /**
      * Gets array of all "xmlData" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.result.XMLData.XmlData[] getXmlDataArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.result.XMLData.XmlData> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.result.XMLData.XmlData>();
             get_store().find_all_element_users(XMLDATA$0, targetList);
             org.bpelunit.framework.xml.result.XMLData.XmlData[] result = new org.bpelunit.framework.xml.result.XMLData.XmlData[targetList.size()];
             targetList.toArray(result);
@@ -221,13 +223,14 @@ public class XMLDataImpl extends org.bpelunit.framework.xml.result.impl.XMLArtef
     
     /**
      * Gets array of all "receiveCondition" elements
+     * @deprecated
      */
     public org.bpelunit.framework.xml.result.XMLReceiveCondition[] getReceiveConditionArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
+            java.util.List<org.bpelunit.framework.xml.result.XMLReceiveCondition> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.result.XMLReceiveCondition>();
             get_store().find_all_element_users(RECEIVECONDITION$2, targetList);
             org.bpelunit.framework.xml.result.XMLReceiveCondition[] result = new org.bpelunit.framework.xml.result.XMLReceiveCondition[targetList.size()];
             targetList.toArray(result);
@@ -341,6 +344,7 @@ public class XMLDataImpl extends org.bpelunit.framework.xml.result.impl.XMLArtef
      */
     public static class XmlDataImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.result.XMLData.XmlData
     {
+        private static final long serialVersionUID = 1L;
         
         public XmlDataImpl(org.apache.xmlbeans.SchemaType sType)
         {

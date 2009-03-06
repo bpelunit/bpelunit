@@ -6,20 +6,26 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import org.apache.log4j.Logger;
 import org.bpelunit.framework.coverage.annotation.Instrumenter;
 import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
-/**
+
+/*
  * 
  * Die Klasse verwaltet alle eingefügten Coverage-Marken eines Deployment-Archivs.
  * 
  * @author Alex Salnikow
  *
  */
+/**
+ * This class manages all coverage markers included in a deployment archive
+ * 
+ * @author Alex Salnikow, Ronald Becher
+ * 
+ */
 public class MarkersRegisterForArchive {
 
-	private Hashtable<String, MarkerStatus> allCoverageLabels;
+	private Hashtable<String, MarkerState> allCoverageLabels;
 
 	private List<MarkersRegistryForBPELFile> bpelFiles;
 
@@ -31,25 +37,42 @@ public class MarkersRegisterForArchive {
 
 	public MarkersRegisterForArchive(MetricsManager metricManager) {
 		this.metricManager = metricManager;
-		allCoverageLabels = new Hashtable<String, MarkerStatus>();
+		allCoverageLabels = new Hashtable<String, MarkerState>();
 		bpelFiles = new ArrayList<MarkersRegistryForBPELFile>();
 		infos = new ArrayList<String>();
 	}
 
-	/**
+	/*
 	 * registriert eingefügte Marken
+	 * 
 	 * @param marker Coverage-Marke
 	 */
+	/**
+	 * Registers included markers
+	 * 
+	 * @param marker
+	 *            Coverage marker
+	 */
 	public void registerMarker(String marker) {
-		MarkerStatus status = new MarkerStatus();
+		MarkerState status = new MarkerState();
 		allCoverageLabels.put(marker, status);
 		currentFileRegestry.registerMarker(marker, status);
 	}
 
-	/**
+	/*
 	 * Setzt status der empfangenen Marken auf true und vermerkt den Testcase.
+	 * 
 	 * @param marker Coverage-Marken (einer Nachricht)
+	 * 
 	 * @param testCase
+	 */
+	/**
+	 * Sets marker status to tested and saves associated test case
+	 * 
+	 * @param marker
+	 *            Coverage marker
+	 * @param test
+	 *            case
 	 */
 	public synchronized void setCoverageStatusForAllMarker(String marker,
 			String testCase) {
@@ -67,15 +90,24 @@ public class MarkersRegisterForArchive {
 	private void setCoverageStatusForMarker(String coverageMarker,
 			String testCase) {
 		if (testCase != null) {
-			MarkerStatus status = allCoverageLabels.get(coverageMarker);
+			MarkerState status = allCoverageLabels.get(coverageMarker);
 			if (status != null)
-				status.setStatus(true, testCase);
-		} 
+				status.setState(true, testCase);
+		}
 	}
 
+	/*
+	 * Generiert Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im
+	 * Archive sind.
+	 * 
+	 * @return Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im
+	 * Archive sind.
+	 */
 	/**
-	 * Generiert Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im Archive sind. 
-	 * @return Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im Archive sind. 
+	 * Generates statistics (after test run) for all bpel files included in
+	 * archive
+	 * 
+	 * @return statistics
 	 */
 	public List<IFileStatistic> getStatistics() {
 		List<IFileStatistic> statistics = new ArrayList<IFileStatistic>();
@@ -94,7 +126,6 @@ public class MarkersRegisterForArchive {
 		bpelFiles.add(registry4File);
 		currentFileRegestry = registry4File;
 	}
-
 
 	public void addInfo(String info) {
 		infos.add(info);

@@ -13,7 +13,7 @@ import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkerStatus;
+import org.bpelunit.framework.coverage.receiver.MarkerState;
 import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.bpelunit.framework.coverage.result.statistic.impl.Statistic;
@@ -39,11 +39,8 @@ public class FaultMetric implements IMetric {
 	}
 	
 	
-	/**
-	 * Liefert Präfixe von allen Marken dieser Metrik. Sie ermöglichen die
-	 * Zuordnung der empfangenen Marken einer Metrik
-	 * 
-	 * @return Präfixe von allen Marken dieser Metrik
+	/* (non-Javadoc)
+	 * @see org.bpelunit.framework.coverage.annotation.metrics.IMetric#getMarkersId()
 	 */
 	public List<String> getMarkersId() {
 		List<String> list = new ArrayList<String>();
@@ -60,28 +57,27 @@ public class FaultMetric implements IMetric {
 		return metricHandler;
 	}
 
-	/**
-	 * Erzeugt Statistiken
-	 * 
-	 * @param allMarkers
-	 *            alle einegfügten Marken (von allen Metriken), nach dem Testen
-	 * @return Statistik
+	/* (non-Javadoc)
+	 * @see org.bpelunit.framework.coverage.annotation.metrics.IMetric#createStatistic(java.util.Hashtable)
 	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerStatus>> allMarkers) {
+			Hashtable<String, Hashtable<String, MarkerState>> allMarkers) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
-		statistic.setStatusListe(MetricsManager.getStatus(
+		statistic.setStateList(MetricsManager.getStatus(
 				FaultMetricHandler.FAULT_HANDLER_LABEL, allMarkers));
 		return statistic;
 	}
 
-	/**
+	/*
 	 * Erhält die noch nicht modifizierte Beschreibung des BPELProzesses als
 	 * XML-Element. Alle für die Instrumentierung benötigten Elemente der
 	 * Prozessbeschreibung werden gespeichert
 	 * 
 	 * @param process
 	 *            noch nicht modifiziertes BPEL-Prozess
+	 */
+	/* (non-Javadoc)
+	 * @see org.bpelunit.framework.coverage.annotation.metrics.IMetric#setOriginalBPELProcess(org.jdom.Element)
 	 */
 	public void setOriginalBPELProcess(Element process) {
 		ElementFilter filter = new ElementFilter(getProcessNamespace()) {
@@ -107,10 +103,8 @@ public class FaultMetric implements IMetric {
 		}
 	}
 
-	/**
-	 * delegiert die Instrumentierungsaufgabe an eigenen Handler
-	 * 
-	 * @throws BpelException
+	/* (non-Javadoc)
+	 * @see org.bpelunit.framework.coverage.annotation.metrics.IMetric#insertMarkers()
 	 */
 	public void insertMarkers() throws BpelException {
 		if (elementsOfBPEL != null) {
