@@ -5,6 +5,7 @@
  */
 package org.bpelunit.toolsupport.editors.wizards.components;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
@@ -115,9 +116,9 @@ public class DataCopyComponent extends StructuredDataComponent implements IHyper
 	public void handleRemovePressed() {
 		XMLCopy copy= getSelectedCopy();
 		if (copy != null) {
-			int index= ActivityUtil.getIndexFor(fParentActivity.getMapping().getCopyList().toArray(), copy);
+			int index= ActivityUtil.getIndexFor(fParentActivity.getMapping().getCopyArray(), copy);
 			if (index != -1) {
-				fParentActivity.getMapping().getCopyList().remove(index);
+				fParentActivity.getMapping().removeCopy(index);
 				recreateInput();
 				enableButtonsForSelection(fDataCopyField, false);
 			}
@@ -125,7 +126,7 @@ public class DataCopyComponent extends StructuredDataComponent implements IHyper
 	}
 
 	private XMLCopy getSelectedCopy() {
-		List selectedElements= fDataCopyField.getSelectedElements();
+		List<Object> selectedElements= fDataCopyField.getSelectedElements();
 		if (selectedElements.size() > 0)
 			return ((XMLCopy) selectedElements.get(0));
 		else
@@ -133,7 +134,11 @@ public class DataCopyComponent extends StructuredDataComponent implements IHyper
 	}
 
 	public void recreateInput() {
-		fDataCopyField.setElements(fParentActivity.getMapping().getCopyList());
+		List<Object> l = new ArrayList<Object>();
+		for(Object o : fParentActivity.getMapping().getCopyArray()) {
+			l.add(o);
+		}
+		fDataCopyField.setElements(l);
 	}
 
 	private String[] editCopy(XMLCopy currentProperty) {
@@ -173,7 +178,11 @@ public class DataCopyComponent extends StructuredDataComponent implements IHyper
 			activity.addNewMapping();
 
 		fParentActivity= activity;
-		fDataCopyField.setElements(fParentActivity.getMapping().getCopyList());
+		List<Object> l = new ArrayList<Object>();
+		for(Object o : fParentActivity.getMapping().getCopyArray()) {
+			l.add(o);
+		}
+		fDataCopyField.setElements(l);
 		enableButtonsForSelection(fDataCopyField, false);
 	}
 

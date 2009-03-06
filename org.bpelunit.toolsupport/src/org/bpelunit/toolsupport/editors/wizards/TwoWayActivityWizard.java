@@ -48,7 +48,7 @@ public abstract class TwoWayActivityWizard extends ActivityWizard {
 		XMLMapping mapping= fTwoWayActivity.getMapping();
 		if (mapping == null)
 			return;
-		else if (mapping.getCopyList().size() == 0)
+		else if (mapping.getCopyArray().length == 0)
 			fTwoWayActivity.unsetMapping();
 
 	}

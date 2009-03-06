@@ -5,6 +5,7 @@
  */
 package org.bpelunit.toolsupport.editors.wizards.components;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
@@ -106,7 +107,7 @@ public class ReceiveComponent extends StructuredDataComponent implements IHyperL
 	public void handleRemovePressed() {
 		XMLCondition cond= getSelectedCondition();
 		if (cond != null) {
-			int index= ActivityUtil.getIndexFor(fReceiveOperation.getConditionList().toArray(), cond);
+			int index= ActivityUtil.getIndexFor(fReceiveOperation.getConditionArray(), cond);
 			if (index != -1) {
 				fReceiveOperation.removeCondition(index);
 				recreateInput();
@@ -116,7 +117,7 @@ public class ReceiveComponent extends StructuredDataComponent implements IHyperL
 	}
 
 	private XMLCondition getSelectedCondition() {
-		List selectedElements= fConditionsField.getSelectedElements();
+		List<Object> selectedElements= fConditionsField.getSelectedElements();
 		if (selectedElements.size() > 0)
 			return ((XMLCondition) selectedElements.get(0));
 		else
@@ -184,7 +185,11 @@ public class ReceiveComponent extends StructuredDataComponent implements IHyperL
 	}
 
 	public void recreateInput() {
-		fConditionsField.setElements(fReceiveOperation.getConditionList());
+		List<Object> l = new ArrayList<Object>();
+		for(Object o : fReceiveOperation.getConditionArray()) {
+			l.add(o);
+		}
+		fConditionsField.setElements(l);
 		enableButtonsForSelection(fConditionsField, false);
 	}
 

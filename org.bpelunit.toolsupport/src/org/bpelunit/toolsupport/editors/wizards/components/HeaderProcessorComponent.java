@@ -5,6 +5,7 @@
  */
 package org.bpelunit.toolsupport.editors.wizards.components;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bpelunit.framework.client.eclipse.ExtensionControl;
@@ -132,7 +133,7 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 	public void handleRemovePressed() {
 		XMLProperty prop= getSelectedProperty();
 		if (prop != null) {
-			int index= ActivityUtil.getIndexFor(fParentActivity.getHeaderProcessor().getPropertyList().toArray(), prop);
+			int index= ActivityUtil.getIndexFor(fParentActivity.getHeaderProcessor().getPropertyArray(), prop);
 			if (index != -1) {
 				fParentActivity.getHeaderProcessor().removeProperty(index);
 				recreateInput();
@@ -151,7 +152,11 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 	}
 
 	public void recreateInput() {
-		fPropertiesField.setElements(fParentActivity.getHeaderProcessor().getPropertyList());
+		List<Object> l = new ArrayList<Object>();
+		for(Object o : fParentActivity.getHeaderProcessor().getPropertyArray()) {
+			l.add(o);
+		}
+		fPropertiesField.setElements(l);
 	}
 
 
@@ -233,7 +238,11 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 			int index= getItemIndex(items, readableName);
 			if (readableName != null && index != -1) {
 				fPropertiesField.setEnabled(true);
-				fPropertiesField.setElements(fParentActivity.getHeaderProcessor().getPropertyList());
+				List<Object> l = new ArrayList<Object>();
+				for(Object o : fParentActivity.getHeaderProcessor().getPropertyArray()) {
+					l.add(o);
+				}
+				fPropertiesField.setElements(l);
 
 				fHeaderProcessorField.selectItem(index);
 				fCurrentlySelectedHeaderProcessor= code;

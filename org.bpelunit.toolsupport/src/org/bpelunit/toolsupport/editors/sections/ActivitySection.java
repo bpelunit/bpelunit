@@ -134,7 +134,7 @@ public class ActivitySection extends TreeSection {
 
 				if (activity instanceof XMLReceiveActivity) {
 					XMLReceiveActivity rcvOp= (XMLReceiveActivity) activity;
-					return rcvOp.getConditionList().toArray();
+					return rcvOp.getConditionArray();
 				}
 				if (ActivityUtil.isTwoWayActivity(activity)) {
 					XMLTwoWayActivity twoWayActivity= (XMLTwoWayActivity) activity;
@@ -165,7 +165,7 @@ public class ActivitySection extends TreeSection {
 
 		public boolean hasChildren(Object element) {
 			if (element instanceof XMLReceiveActivity)
-				return ((XMLReceiveActivity) element).getConditionList().size() > 0;
+				return ((XMLReceiveActivity) element).getConditionArray().length > 0;
 			if (element instanceof XMLTwoWayActivity)
 				return true;
 			return false;
@@ -315,7 +315,7 @@ public class ActivitySection extends TreeSection {
 				XmlObject parent= cursor.getObject();
 				if (parent instanceof XMLReceiveActivity) {
 					XMLReceiveActivity rcvOp= (XMLReceiveActivity) parent;
-					int index= ActivityUtil.getIndexFor(rcvOp.getConditionList().toArray(), viewerSelection);
+					int index= ActivityUtil.getIndexFor(rcvOp.getConditionArray(), viewerSelection);
 					if (index != -1)
 						rcvOp.removeCondition(index);
 				}
@@ -414,22 +414,22 @@ public class ActivitySection extends TreeSection {
 		Object[] activities= null;
 		switch (ActivityUtil.getActivityConstant(activity)) {
 			case SEND_ONLY:
-				activities= track.getSendOnlyList().toArray();
+				activities= track.getSendOnlyArray();
 				break;
 			case RECEIVE_ONLY:
-				activities= fCurrentPartnerTrack.getReceiveOnlyList().toArray();
+				activities= fCurrentPartnerTrack.getReceiveOnlyArray();
 				break;
 			case SEND_RECEIVE_SYNC:
-				activities= fCurrentPartnerTrack.getSendReceiveList().toArray();
+				activities= fCurrentPartnerTrack.getSendReceiveArray();
 				break;
 			case RECEIVE_SEND_SYNC:
-				activities= fCurrentPartnerTrack.getReceiveSendList().toArray();
+				activities= fCurrentPartnerTrack.getReceiveSendArray();
 				break;
 			case SEND_RECEIVE_ASYNC:
-				activities= fCurrentPartnerTrack.getSendReceiveAsynchronousList().toArray();
+				activities= fCurrentPartnerTrack.getSendReceiveAsynchronousArray();
 				break;
 			case RECEIVE_SEND_ASYNC:
-				activities= fCurrentPartnerTrack.getReceiveSendAsynchronousList().toArray();
+				activities= fCurrentPartnerTrack.getReceiveSendAsynchronousArray();
 				break;
 			default:
 				return -1;

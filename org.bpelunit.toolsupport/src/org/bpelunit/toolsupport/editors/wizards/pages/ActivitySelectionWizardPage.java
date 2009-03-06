@@ -5,6 +5,8 @@
  */
 package org.bpelunit.toolsupport.editors.wizards.pages;
 
+import java.util.ArrayList;
+
 import org.bpelunit.framework.control.util.ActivityUtil;
 import org.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
 import org.bpelunit.toolsupport.ToolSupportActivator;
@@ -83,7 +85,7 @@ public class ActivitySelectionWizardPage extends ActivityWizardPage {
 		fSelectionField.setTableColumns(new ListDialogField.ColumnsDescription(1, false));
 		fSelectionField.setLabelText(null);
 
-		fSelectionField.setElements(ActivityUtil.getTopLevelActivities());
+		fSelectionField.setElements(new ArrayList<Object>(ActivityUtil.getTopLevelActivities()));
 
 		fSelectionField.doFillIntoGrid(composite, nColumns);
 

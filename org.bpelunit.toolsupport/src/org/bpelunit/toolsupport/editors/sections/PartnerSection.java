@@ -5,8 +5,6 @@
  */
 package org.bpelunit.toolsupport.editors.sections;
 
-import java.util.List;
-
 import org.bpelunit.framework.client.eclipse.dialog.DialogFieldValidator;
 import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
 import org.bpelunit.framework.client.eclipse.dialog.field.FileField;
@@ -82,7 +80,7 @@ public class PartnerSection extends ListSection {
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof XMLDeploymentSection) {
 				XMLDeploymentSection element= (XMLDeploymentSection) inputElement;
-				return element.getPartnerList().toArray();
+				return element.getPartnerArray();
 			} else
 				return new Object[0];
 		}
@@ -214,7 +212,7 @@ public class PartnerSection extends ListSection {
 	@Override
 	protected void removePressed() {
 		XMLPartnerDeploymentInformation currentlySelectedItem= getCurrentlySelectedItem();
-		List<XMLPartnerDeploymentInformation> partnerList= getDeploymentXMLPart().getPartnerList();
+		XMLPartnerDeploymentInformation[] partnerList= getDeploymentXMLPart().getPartnerArray();
 		int i= 0;
 		for (XMLPartnerDeploymentInformation information : partnerList) {
 			if (information.equals(currentlySelectedItem)) {

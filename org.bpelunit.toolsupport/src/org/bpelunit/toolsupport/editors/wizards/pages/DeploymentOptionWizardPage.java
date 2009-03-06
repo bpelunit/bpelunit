@@ -5,6 +5,7 @@
  */
 package org.bpelunit.toolsupport.editors.wizards.pages;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bpelunit.framework.client.eclipse.ExtensionControl;
@@ -110,7 +111,7 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 	public void handleRemovePressed() {
 		XMLProperty prop= getSelectedProperty();
 		if (prop != null) {
-			int index= ActivityUtil.getIndexFor(fPutInfo.getPropertyList().toArray(), prop);
+			int index= ActivityUtil.getIndexFor(fPutInfo.getPropertyArray(), prop);
 			if (index != -1) {
 				fPutInfo.removeProperty(index);
 				recreateInput();
@@ -129,7 +130,11 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 	}
 
 	public void recreateInput() {
-		fSelectionField.setElements(fPutInfo.getPropertyList());
+		List<Object> l = new ArrayList<Object>();
+		for(Object o : fPutInfo.getPropertyArray()) {
+			l.add(o);
+		}
+		fSelectionField.setElements(l);
 	}
 
 	private String[] editProperty(XMLProperty currentProperty) {
@@ -167,7 +172,11 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 		fSelectionField.setTableColumns(new ListDialogField.ColumnsDescription(new String[] { "Key", "Value" }, true));
 		fSelectionField.setLabelText(null);
 
-		fSelectionField.setElements(fPutInfo.getPropertyList());
+		List<Object> l = new ArrayList<Object>();
+		for(Object o : fPutInfo.getPropertyArray()) {
+			l.add(o);
+		}
+		fSelectionField.setElements(l);
 		enableButtonsForSelection(fSelectionField, false);
 	}
 

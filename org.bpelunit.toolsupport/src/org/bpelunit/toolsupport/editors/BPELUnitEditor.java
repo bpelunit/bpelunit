@@ -328,7 +328,7 @@ public class BPELUnitEditor extends FormEditor {
 
 		if (track instanceof XMLPartnerTrack) {
 			XMLPartnerTrack partner= (XMLPartnerTrack) track;
-			List<XMLPartnerDeploymentInformation> partnerList= getTestSuite().getDeployment().getPartnerList();
+			XMLPartnerDeploymentInformation[] partnerList= getTestSuite().getDeployment().getPartnerArray();
 			for (XMLPartnerDeploymentInformation information : partnerList) {
 				if (information.getName().equals(partner.getName()))
 					return information.getWsdl();

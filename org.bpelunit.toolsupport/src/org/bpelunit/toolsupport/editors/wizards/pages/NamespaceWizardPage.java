@@ -125,7 +125,7 @@ public class NamespaceWizardPage extends StructuredActivityWizardPage {
 
 	public void recreateInput() {
 		getNamespacesFromSuite();
-		fNamespaceField.setElements(getNamespacesAsList());
+		fNamespaceField.setElements(new ArrayList<Object>(getNamespacesAsList()));
 	}
 
 	private String[] editProperty(NamespaceDeclaration currentProperty) {
