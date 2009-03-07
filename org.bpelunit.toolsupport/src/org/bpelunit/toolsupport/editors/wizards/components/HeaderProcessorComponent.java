@@ -144,7 +144,7 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 	}
 
 	private XMLProperty getSelectedProperty() {
-		List selectedElements= fPropertiesField.getSelectedElements();
+		List<Object> selectedElements= fPropertiesField.getSelectedElements();
 		if (selectedElements.size() > 0)
 			return ((XMLProperty) selectedElements.get(0));
 		else
