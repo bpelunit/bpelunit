@@ -222,7 +222,7 @@ public class PartnerSection extends ListSection {
 			i++;
 		}
 		getViewer().refresh();
-		setEditRemoveEnabled(false);
+		setEditRemoveDuplicateEnabled(false);
 		markDirty();
 	}
 

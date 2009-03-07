@@ -33,8 +33,9 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 /**
- * A structured section contains a structured viewer like a List, Table, or Tree, and buttons for
- * adding, editing, removing, and (optionally) moving the elements inside the viewer.
+ * A structured section contains a structured viewer like a List, Table, or
+ * Tree, and buttons for adding, editing, removing, and (optionally) moving the
+ * elements inside the viewer.
  * 
  * @version $Id$
  * @author Philip Mayer
@@ -42,22 +43,33 @@ import org.eclipse.ui.forms.widgets.Section;
  */
 public abstract class StructuredSection extends BPELUnitSection {
 
-	public static String BUTTON_ADD= "ADD";
-	public static String BUTTON_REMOVE= "REMOVE";
-	public static String BUTTON_EDIT= "EDIT";
-	public static final String BUTTON_UP= "UP";
-	public static final String BUTTON_DOWN= "DOWN";
+	public static String BUTTON_ADD = "ADD";
+	public static String BUTTON_REMOVE = "REMOVE";
+	public static String BUTTON_EDIT = "EDIT";
+	public static String BUTTON_DUPLICATE = "DUPLICATE";
+	public static final String BUTTON_UP = "UP";
+	public static final String BUTTON_DOWN = "DOWN";
 
 	private Map<String, Button> fButtons;
 	private boolean fEnableUpDownButtons;
+	private boolean fEnableDuplicateButton;
 
-	public StructuredSection(Composite parent, FormToolkit toolkit, TestSuitePage page) {
+	public StructuredSection(Composite parent, FormToolkit toolkit,
+			TestSuitePage page) {
 		this(parent, toolkit, page, false);
 	}
 
-	public StructuredSection(Composite parent, FormToolkit toolkit, TestSuitePage page, boolean enableUpDownButtons) {
-		super(page, parent, toolkit, ExpandableComposite.TITLE_BAR | Section.DESCRIPTION);
-		fEnableUpDownButtons= enableUpDownButtons;
+	public StructuredSection(Composite parent, FormToolkit toolkit,
+			TestSuitePage page, boolean enableUpDownButtons) {
+		this(parent, toolkit, page, enableUpDownButtons, false);
+	}
+	
+	public StructuredSection(Composite parent, FormToolkit toolkit,
+			TestSuitePage page, boolean enableUpDownButtons, boolean enableDuplicateButton) {
+		super(page, parent, toolkit, ExpandableComposite.TITLE_BAR
+				| Section.DESCRIPTION);
+		fEnableUpDownButtons = enableUpDownButtons;
+		fEnableDuplicateButton = enableDuplicateButton;
 		createClient(getSection(), toolkit);
 	}
 
@@ -86,14 +98,17 @@ public abstract class StructuredSection extends BPELUnitSection {
 
 	protected void upPressed() { /* dummy */
 	}
+	
+	protected void duplicatePressed() { /* dummy */
+	}
 
 	// ******************************** helpers ****************************
 
 	public void createClient(final Section section, FormToolkit toolkit) {
 
-		Composite container= createClientContainer(section, 2, toolkit);
+		Composite container = createClientContainer(section, 2, toolkit);
 
-		fButtons= new HashMap<String, Button>();
+		fButtons = new HashMap<String, Button>();
 
 		section.setText(getName());
 		section.setDescription(getDescription());
@@ -112,19 +127,19 @@ public abstract class StructuredSection extends BPELUnitSection {
 			}
 		});
 
-		Composite buttonsContainer= toolkit.createComposite(container);
+		Composite buttonsContainer = toolkit.createComposite(container);
 		buttonsContainer.setLayout(createButtonsLayout());
 
-		GridData gd= new GridData(GridData.FILL_VERTICAL);
+		GridData gd = new GridData(GridData.FILL_VERTICAL);
 		buttonsContainer.setLayoutData(gd);
 
-		Button addButton= createButton(buttonsContainer, "&Add...", toolkit);
+		Button addButton = createButton(buttonsContainer, "&Add...", toolkit);
 		fButtons.put(BUTTON_ADD, addButton);
 
-		Button editButton= createButton(buttonsContainer, "&Edit...", toolkit);
+		Button editButton = createButton(buttonsContainer, "&Edit...", toolkit);
 		fButtons.put(BUTTON_EDIT, editButton);
 
-		Button removeButton= createButton(buttonsContainer, "Remove", toolkit);
+		Button removeButton = createButton(buttonsContainer, "Remove", toolkit);
 		fButtons.put(BUTTON_REMOVE, removeButton);
 
 		addButton.addSelectionListener(new SelectionListener() {
@@ -162,12 +177,27 @@ public abstract class StructuredSection extends BPELUnitSection {
 		editButton.setLayoutData(createButtonLayoutData());
 		removeButton.setLayoutData(createButtonLayoutData());
 
+		if(fEnableDuplicateButton) {
+			Button duplicateButton = createButton(buttonsContainer, "Duplicate", toolkit);
+			fButtons.put(BUTTON_DUPLICATE, duplicateButton);
+			duplicateButton.addSelectionListener(new SelectionListener() {
+				public void widgetDefaultSelected(SelectionEvent e) {
+				}
+
+				public void widgetSelected(SelectionEvent e) {
+					duplicatePressed();
+				}
+			});
+			duplicateButton.setLayoutData(createButtonLayoutData());
+
+		}
+		
 		if (fEnableUpDownButtons) {
 
-			Label spacer= new Label(buttonsContainer, SWT.NULL);
+			Label spacer = new Label(buttonsContainer, SWT.NULL);
 			spacer.setLayoutData(createButtonLayoutData());
 
-			Button upButton= createButton(buttonsContainer, "Up", toolkit);
+			Button upButton = createButton(buttonsContainer, "Up", toolkit);
 			fButtons.put(BUTTON_UP, upButton);
 			upButton.addSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {
@@ -179,7 +209,7 @@ public abstract class StructuredSection extends BPELUnitSection {
 			});
 			upButton.setLayoutData(createButtonLayoutData());
 
-			Button downButton= createButton(buttonsContainer, "Down", toolkit);
+			Button downButton = createButton(buttonsContainer, "Down", toolkit);
 			fButtons.put(BUTTON_DOWN, downButton);
 			downButton.addSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {
@@ -194,13 +224,12 @@ public abstract class StructuredSection extends BPELUnitSection {
 
 		toolkit.paintBordersFor(container);
 		section.setClient(container);
-		setEditRemoveEnabled(false);
+		setEditRemoveDuplicateEnabled(false);
 	}
 
 	private GridData createButtonLayoutData() {
 		return new GridData(SWT.FILL, SWT.BEGINNING, false, false);
 	}
-
 
 	protected void handleKeyPressed(KeyEvent event) {
 		if (event.keyCode == SWT.DEL)
@@ -211,37 +240,40 @@ public abstract class StructuredSection extends BPELUnitSection {
 		// do nothing. Subclasses may override.
 	}
 
-	protected Button createButton(Composite parent, String label, FormToolkit toolkit) {
+	protected Button createButton(Composite parent, String label,
+			FormToolkit toolkit) {
 		Button button;
 		if (toolkit != null)
-			button= toolkit.createButton(parent, label, SWT.PUSH);
+			button = toolkit.createButton(parent, label, SWT.PUSH);
 		else {
-			button= new Button(parent, SWT.PUSH);
+			button = new Button(parent, SWT.PUSH);
 			button.setText(label);
 		}
-		GridData gd= new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_BEGINNING);
 		button.setLayoutData(gd);
 		return button;
 	}
 
 	protected GridLayout createButtonsLayout() {
-		GridLayout layout= new GridLayout();
-		layout.marginWidth= layout.marginHeight= 0;
+		GridLayout layout = new GridLayout();
+		layout.marginWidth = layout.marginHeight = 0;
 		return layout;
 	}
 
-	protected Composite createClientContainer(Composite parent, int span, FormToolkit toolkit) {
+	protected Composite createClientContainer(Composite parent, int span,
+			FormToolkit toolkit) {
 
-		Composite container= toolkit.createComposite(parent);
-		GridLayout layout= new GridLayout();
-		layout.marginWidth= layout.marginHeight= 2;
-		layout.numColumns= span;
+		Composite container = toolkit.createComposite(parent);
+		GridLayout layout = new GridLayout();
+		layout.marginWidth = layout.marginHeight = 2;
+		layout.numColumns = span;
 		container.setLayout(layout);
 		return container;
 	}
 
 	public void setViewerInput(Object input) {
-		setEditRemoveEnabled(false);
+		setEditRemoveDuplicateEnabled(false);
 		getViewer().setInput(input);
 	}
 
@@ -249,9 +281,12 @@ public abstract class StructuredSection extends BPELUnitSection {
 		fButtons.get(button).setEnabled(enabled);
 	}
 
-	protected void setEditRemoveEnabled(boolean enabled) {
+	protected void setEditRemoveDuplicateEnabled(boolean enabled) {
 		fButtons.get(BUTTON_EDIT).setEnabled(enabled);
 		fButtons.get(BUTTON_REMOVE).setEnabled(enabled);
+		if(fEnableDuplicateButton) {
+			fButtons.get(BUTTON_DUPLICATE).setEnabled(enabled);
+		}
 		if (fEnableUpDownButtons) {
 			fButtons.get(BUTTON_UP).setEnabled(enabled);
 			fButtons.get(BUTTON_DOWN).setEnabled(enabled);
@@ -259,27 +294,28 @@ public abstract class StructuredSection extends BPELUnitSection {
 	}
 
 	protected Object getViewerSelection() {
-		ISelection selection= getViewer().getSelection();
+		ISelection selection = getViewer().getSelection();
 		if (selection instanceof IStructuredSelection)
 			return ((IStructuredSelection) selection).getFirstElement();
 		return null;
 	}
 
 	protected void hookMenu() {
-		MenuManager popupMenuManager= new MenuManager();
-		IMenuListener listener= new IMenuListener() {
+		MenuManager popupMenuManager = new MenuManager();
+		IMenuListener listener = new IMenuListener() {
 			public void menuAboutToShow(IMenuManager mng) {
 				fillContextMenu(mng);
 			}
 		};
 		popupMenuManager.addMenuListener(listener);
 		popupMenuManager.setRemoveAllWhenShown(true);
-		Control control= getViewer().getControl();
-		Menu menu= popupMenuManager.createContextMenu(control);
+		Control control = getViewer().getControl();
+		Menu menu = popupMenuManager.createContextMenu(control);
 		control.setMenu(menu);
 	}
 
-	protected Action createAction(IMenuManager newMenu, String text, Action newSendOnlyActivity) {
+	protected Action createAction(IMenuManager newMenu, String text,
+			Action newSendOnlyActivity) {
 		newSendOnlyActivity.setText(text);
 		newMenu.add(newSendOnlyActivity);
 		return newSendOnlyActivity;

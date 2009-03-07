@@ -52,7 +52,7 @@ public abstract class ListSection extends StructuredSection {
 			public void selectionChanged(SelectionChangedEvent event) {
 				if (event.getSelection() instanceof IStructuredSelection) {
 					IStructuredSelection sel= (IStructuredSelection) event.getSelection();
-					setEditRemoveEnabled(true);
+					setEditRemoveDuplicateEnabled(true);
 					itemSelected(sel.getFirstElement());
 				}
 			}

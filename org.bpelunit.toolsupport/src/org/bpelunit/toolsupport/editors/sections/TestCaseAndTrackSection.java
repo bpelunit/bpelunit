@@ -42,6 +42,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.w3c.dom.Node;
 
 /**
  * The TestCaseAndTrack section offers a tree view of test cases and their
@@ -156,7 +157,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 	public TestCaseAndTrackSection(Composite parent, TestSuitePage page,
 			FormToolkit toolkit) {
-		super(parent, toolkit, page, true);
+		super(parent, toolkit, page, true, true);
 		init();
 	}
 
@@ -257,7 +258,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 				testCase.setBasedOn(results[1]);
 				testCase.setAbstract(Boolean.parseBoolean(results[2]));
 				testCase.setVary(Boolean.parseBoolean(results[3]));
-				setEditRemoveEnabled(true);
+				setEditRemoveDuplicateEnabled(true);
 				adjust();
 			}
 		} else if (current instanceof XMLPartnerTrack) {
@@ -270,7 +271,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 		String name = editPartnerTrack("Edit a partner track", track.getName());
 		if (name != null) {
 			track.setName(name);
-			setEditRemoveEnabled(true);
+			setEditRemoveDuplicateEnabled(true);
 			adjust();
 		}
 	}
@@ -297,7 +298,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 			i++;
 		}
 		getViewer().refresh();
-		setEditRemoveEnabled(false);
+		setEditRemoveDuplicateEnabled(false);
 		markDirty();
 	}
 
@@ -328,7 +329,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 		}
 
 		getViewer().refresh();
-		setEditRemoveEnabled(false);
+		setEditRemoveDuplicateEnabled(false);
 		markDirty();
 	}
 
@@ -366,6 +367,20 @@ public class TestCaseAndTrackSection extends TreeSection {
 		}
 	}
 
+	@Override
+	protected void duplicatePressed() {
+		Object viewerSelection = getViewerSelection();
+		if (viewerSelection instanceof XMLTestCase) {
+			// move the current activity to the one before
+			XMLTestCase testCase = (XMLTestCase) viewerSelection;
+			
+			Node node = testCase.getDomNode();
+			node.getParentNode().appendChild(node.cloneNode(true));
+			
+			adjust();
+		}
+	}
+	
 	private void adjust() {
 		// Don't call this.refresh(); changes dirty/stale states
 		getViewer().refresh();
@@ -448,6 +463,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 		}
 		setEnabled(BUTTON_REMOVE, getIsDeleteEnabled(firstElement));
 		setEnabled(BUTTON_EDIT, getIsEditEnabled(firstElement));
+		setEnabled(BUTTON_DUPLICATE, getIsDuplicateEnabled(firstElement));
 		setEnabled(BUTTON_UP, getIsMoveEnabled(firstElement)
 				&& ActivityUtil.hasPrevious((XmlObject) firstElement));
 		setEnabled(BUTTON_DOWN, getIsMoveEnabled(firstElement)
@@ -522,6 +538,17 @@ public class TestCaseAndTrackSection extends TreeSection {
 						}
 					});
 			removeAction.setEnabled(getIsDeleteEnabled(object));
+			
+			manager.add(new Separator());
+
+			Action duplicateAction = createAction(manager, "D&uplicate",
+					new Action() {
+						@Override
+						public void run() {
+							removePressed();
+						}
+					});
+			duplicateAction.setEnabled(getIsDeleteEnabled(object));
 		}
 	}
 
@@ -533,8 +560,12 @@ public class TestCaseAndTrackSection extends TreeSection {
 		return (object instanceof XMLPartnerTrack || object instanceof XMLTestCase);
 	}
 
-	private boolean getIsDeleteEnabled(Object object) {
+	private boolean getIsDuplicateEnabled(Object object) {
 		return (object instanceof XMLPartnerTrack || object instanceof XMLTestCase);
+	}
+	
+	private boolean getIsDeleteEnabled(Object object) {
+		return (object instanceof XMLTestCase);
 	}
 
 }

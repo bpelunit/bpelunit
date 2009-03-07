@@ -36,6 +36,10 @@ public abstract class TreeSection extends StructuredSection {
 	public TreeSection(Composite parent, FormToolkit toolkit, TestSuitePage page, boolean enableUpDownButtons) {
 		super(parent, toolkit, page, enableUpDownButtons);
 	}
+	
+	public TreeSection(Composite parent, FormToolkit toolkit, TestSuitePage page, boolean enableUpDownButtons, boolean enableDuplicateButton) {
+		super(parent, toolkit, page, enableUpDownButtons, enableDuplicateButton);
+	}
 
 	@Override
 	protected void createStructuredViewer(Composite container) {
@@ -51,7 +55,7 @@ public abstract class TreeSection extends StructuredSection {
 			public void selectionChanged(SelectionChangedEvent event) {
 				if (event.getSelection() instanceof IStructuredSelection) {
 					IStructuredSelection sel= (IStructuredSelection) event.getSelection();
-					setEditRemoveEnabled(true);
+					setEditRemoveDuplicateEnabled(true);
 					itemSelected(sel.getFirstElement());
 				}
 			}
