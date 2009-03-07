@@ -7,7 +7,7 @@
 	
 	-->
     
-	<property name="xmlbeans.home" location="c:/xmlbeans-2.4.0"/>
+	<property name="xmlbeans.home" location="C:\Users\dluebke\src\xmlbeans-1.0.4"/>
 	
 	<property name="src-dir" location="src"/>
 	<property name="bin-dir" location="bin"/>
@@ -63,7 +63,6 @@
             srcgendir="${src-dir}"
     		classgendir="${bin-dir}"
             classpathref="xmlbeans.path"
-        	javasource="1.5"
             />
     </target>
 
