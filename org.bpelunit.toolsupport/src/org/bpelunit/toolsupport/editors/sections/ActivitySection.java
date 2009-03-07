@@ -784,6 +784,7 @@ public class ActivitySection extends TreeSection {
 			receiveOp.setService(new QName(""));
 			receiveOp.setPort("");
 			receiveOp.setOperation("");
+			this.prefillDataIfOnlyOneChoiceExists(receiveOp);
 
 			// Open the wizard
 			ReceiveOnlyWizard wiz = new ReceiveOnlyWizard(getPage(),
@@ -889,7 +890,7 @@ public class ActivitySection extends TreeSection {
 
 			}
 		} catch (WSDLReadingException e) {
-			// if we cannot determine a service, we leave it empty
+			// if we cannot determine a service, we leave it as is
 		}
 	}
 
@@ -901,9 +902,14 @@ public class ActivitySection extends TreeSection {
 		// Initialize the activity:
 		XMLSendActivity sendOp = sendRcvOp.addNewSend();
 		sendOp.addNewData();
-		sendRcvOp.addNewReceive();
+		XMLReceiveActivity recvOp = sendRcvOp.addNewReceive();
 
+		// a bit ugly but we have to fill in for every block
+		// because depending on the type of the operation,
+		// one or the other is read
 		this.prefillDataIfOnlyOneChoiceExists(sendRcvOp);
+		this.prefillDataIfOnlyOneChoiceExists(sendOp);
+		this.prefillDataIfOnlyOneChoiceExists(recvOp);
 	}
 
 	@Override
