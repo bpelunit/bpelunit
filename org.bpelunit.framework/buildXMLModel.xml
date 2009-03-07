@@ -7,7 +7,7 @@
 	
 	-->
     
-	<property name="xmlbeans.home" location="C:\Users\dluebke\src\xmlbeans-1.0.4"/>
+	<property name="xmlbeans.home" location="./"/>
 	
 	<property name="src-dir" location="src"/>
 	<property name="bin-dir" location="bin"/>
