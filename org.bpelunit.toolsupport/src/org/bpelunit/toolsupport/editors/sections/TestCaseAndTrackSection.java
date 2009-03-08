@@ -561,7 +561,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 	}
 
 	private boolean getIsDuplicateEnabled(Object object) {
-		return (object instanceof XMLPartnerTrack || object instanceof XMLTestCase);
+		return (object instanceof XMLTestCase);
 	}
 	
 	private boolean getIsDeleteEnabled(Object object) {
