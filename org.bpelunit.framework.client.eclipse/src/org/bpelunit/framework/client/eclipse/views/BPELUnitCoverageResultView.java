@@ -13,11 +13,9 @@ import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
@@ -25,14 +23,13 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
+
 /**
  * 
  * @author Alex Salnikow
- *
+ * 
  */
 public class BPELUnitCoverageResultView extends ViewPart implements Observer {
-
-	private Label fInfoLabel;
 
 	private CoverageModel model;
 
@@ -52,49 +49,43 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 	public void createPartControl(Composite parent) {
 		fParent = parent;
 		GridData gData;
-		parent.setLayout(new FillLayout(SWT.VERTICAL));
+		
+		parent.setLayout(new GridLayout(3, false));
 
-
-		Group groupFilesStatistics = new Group(parent, SWT.V_SCROLL);
-
-		groupFilesStatistics.setLayout(new GridLayout(3, false));
-
-		fInfoLabel = new Label(groupFilesStatistics, SWT.LEFT);
-		fInfoLabel.setText(" BPELUnit Test Coverage");
-		gData = new GridData();
+		Label fInfoLabel = new Label(parent, SWT.LEFT);
+		fInfoLabel.setText("BPELUnit Test Coverage");
+		gData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		gData.horizontalSpan = 3;
-		gData.grabExcessHorizontalSpace = true;
 		fInfoLabel.setLayoutData(gData);
-		//
-		text = new Text(groupFilesStatistics, SWT.MULTI | SWT.READ_ONLY);
-		gData = new GridData();
+		
+		this.text = new Text(parent, SWT.MULTI | SWT.READ_ONLY);
+		gData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		gData.horizontalSpan = 3;
-		gData.grabExcessHorizontalSpace = true;
-		text.setLayoutData(gData);
+		this.text.setLayoutData(gData);
 
-		Label label1 = new Label(groupFilesStatistics, SWT.CENTER);
-		label1.setText("BPELFiles in archive");
+		Label labelFilesInArchive = new Label(parent, SWT.CENTER);
+		labelFilesInArchive.setText("BPELFiles in archive");
 		gData = new GridData();
 		gData.verticalAlignment = GridData.END;
-		label1.setLayoutData(gData);
-		label1 = new Label(groupFilesStatistics, SWT.CENTER);
-		label1.setText("Test coverage");
+		labelFilesInArchive.setLayoutData(gData);
+
+		Label labelTestCoverage = new Label(parent, SWT.CENTER);
+		labelTestCoverage.setText("Test coverage");
 		gData = new GridData();
 		gData.verticalAlignment = GridData.END;
-		label1.setLayoutData(gData);
-		label1 = new Label(groupFilesStatistics, SWT.CENTER);
-		label1.setText("Test cases");
+		labelTestCoverage.setLayoutData(gData);
+
+		Label labelTestCases = new Label(parent, SWT.CENTER);
+		labelTestCases.setText("Test cases");
 		gData = new GridData();
 		gData.verticalAlignment = GridData.END;
-		label1.setLayoutData(gData);
-		fileList = new List(groupFilesStatistics, SWT.V_SCROLL | SWT.MULTI
+		labelTestCases.setLayoutData(gData);
+
+		fileList = new List(parent, SWT.V_SCROLL | SWT.MULTI
 				| SWT.H_SCROLL | SWT.BORDER);
-		gData = new GridData();
-		gData.verticalAlignment = GridData.BEGINNING;
+		gData = new GridData(GridData.FILL_BOTH);
 		gData.grabExcessVerticalSpace = true;
 		gData.grabExcessHorizontalSpace = true;
-		gData.minimumHeight = 150;
-		gData.minimumWidth = 200;
 		fileList.setLayoutData(gData);
 		fileList.setBackground(parent.getBackground());
 		fileList.addSelectionListener(new SelectionListener() {
@@ -112,46 +103,16 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 			}
 
 		});
-		table = new Table(groupFilesStatistics, SWT.BORDER | SWT.VIRTUAL);
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-
-		TableColumn col1 = new TableColumn(table, 0);
-		col1.setText("Metric");
-		col1.setWidth(180);
-		col1.setMoveable(false);
-		TableColumn col2 = new TableColumn(table, SWT.CENTER);
-		col2.setText("total number");
-		col2.setWidth(100);
-		col2.setMoveable(false);
-		TableColumn col3 = new TableColumn(table, SWT.CENTER);
-		col3.setText("tested number");
-		col3.setWidth(100);
-		col3.setMoveable(false);
-		TableColumn col4 = new TableColumn(table, 0);
-		col4.setText("           %");
-		col4.setWidth(100);
-		col4.setMoveable(false);
-
-		gData = new GridData();
-		// gData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_FILL;
-		gData.grabExcessVerticalSpace = true;
-		gData.grabExcessHorizontalSpace = true;
-		gData.minimumHeight = 155;
-		gData.minimumWidth = 200;
-		gData.verticalAlignment = GridData.BEGINNING;
+		
+		initializeTable(parent);
+		gData = new GridData(GridData.FILL_BOTH);
 		table.setLayoutData(gData);
 
-		tableTestCases = new Table(groupFilesStatistics, SWT.BORDER
+		tableTestCases = new Table(parent, SWT.BORDER
 				| SWT.VIRTUAL | SWT.CHECK);
 		tableTestCases.setLayout(new GridLayout(1, false));
 		tableTestCases.setBackground(parent.getBackground());
-		gData = new GridData();
-		gData.grabExcessVerticalSpace = true;
-		gData.grabExcessHorizontalSpace = true;
-		gData.minimumHeight = 155;
-		gData.minimumWidth = 200;
-		gData.verticalAlignment = GridData.BEGINNING;
+		gData = new GridData(GridData.FILL_BOTH);
 		tableTestCases.setLayoutData(gData);
 
 		tableTestCases.addSelectionListener(new SelectionListener() {
@@ -172,6 +133,31 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 		model.addObserver(this);
 	}
 
+	private Table initializeTable(Composite parent) {
+		table = new Table(parent, SWT.BORDER | SWT.VIRTUAL);
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+
+		TableColumn col1 = new TableColumn(table, 0);
+		col1.setText("Metric");
+		col1.setWidth(180);
+		col1.setMoveable(false);
+		TableColumn col2 = new TableColumn(table, SWT.CENTER);
+		col2.setText("total");
+		col2.setWidth(100);
+		col2.setMoveable(false);
+		TableColumn col3 = new TableColumn(table, SWT.CENTER);
+		col3.setText("tested");
+		col3.setWidth(100);
+		col3.setMoveable(false);
+		TableColumn col4 = new TableColumn(table, 0);
+		col4.setText("           %");
+		col4.setWidth(100);
+		col4.setMoveable(false);
+
+		return this.table;
+	}
+
 	private void initializeElements() {
 		text.setText("Info: ");
 		fileList.removeAll();
@@ -181,8 +167,7 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
-
+		// nothing to be done
 	}
 
 	public void update(Observable arg0, Object arg1) {
@@ -223,8 +208,6 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 		}
 		fParent.pack();
 	}
-
-
 
 	public void setData(java.util.List<String> testCases,
 			java.util.List<IFileStatistic> statistics, String string) {
@@ -267,7 +250,7 @@ public class BPELUnitCoverageResultView extends ViewPart implements Observer {
 			this.info = string;
 			if (statistics != null) {
 				this.testCases = testCases;
-				
+
 				for (Iterator<IFileStatistic> iter = statistics.iterator(); iter
 						.hasNext();) {
 					IFileStatistic fileStatistic = iter.next();
