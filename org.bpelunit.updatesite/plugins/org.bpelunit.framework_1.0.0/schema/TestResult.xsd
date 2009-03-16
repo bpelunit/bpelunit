@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns="http://www.bpelunit.org/schema/testResult" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           targetNamespace="http://www.bpelunit.org/schema/testResult" 
+           elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="testResult" type="TestResult">
+		<xs:annotation>
+			<xs:documentation>result</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="Info">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="Artefact">
+		<xs:sequence>
+			<xs:element name="state" type="Info" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="result" type="xs:string" use="required"/>
+		<xs:attribute name="message" type="xs:string" use="required"/>
+		<xs:attribute name="exception" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="Activity">
+		<xs:complexContent>
+			<xs:extension base="Artefact">
+				<xs:sequence>
+					<xs:element name="activity" type="Activity" minOccurs="0" maxOccurs="2"/>
+					<xs:element name="dataPackage" type="Data" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="copyOperation" type="CopyOperation" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="type" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PartnerTrack">
+		<xs:complexContent>
+			<xs:extension base="Artefact">
+				<xs:sequence>
+					<xs:element name="activity" maxOccurs="unbounded">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="Activity"/>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Data">
+		<xs:complexContent>
+			<xs:extension base="Artefact">
+				<xs:sequence>
+					<xs:element name="xmlData" minOccurs="0" maxOccurs="unbounded">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:any namespace="##any" processContents="lax"/>
+							</xs:sequence>
+							<xs:attribute name="name" type="xs:string" use="required"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="receiveCondition" type="ReceiveCondition" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TestCase">
+		<xs:complexContent>
+			<xs:extension base="Artefact">
+				<xs:sequence>
+					<xs:element name="partnerTrack" type="PartnerTrack" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TestResult">
+		<xs:complexContent>
+			<xs:extension base="Artefact">
+				<xs:sequence>
+					<xs:element name="testCase" type="TestCase" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CopyOperation">
+		<xs:complexContent>
+			<xs:extension base="Artefact">
+				<xs:sequence>
+					<xs:element name="from" type="xs:string"/>
+					<xs:element name="to" type="xs:string"/>
+					<xs:element name="copyiedValue" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ReceiveCondition">
+		<xs:complexContent>
+			<xs:extension base="Artefact">
+				<xs:sequence>
+					<xs:element name="condition">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="expression" type="xs:string"/>
+								<xs:element name="expectedValue" type="xs:string"/>
+								<xs:element name="actualValue" type="xs:string"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>
