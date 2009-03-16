@@ -868,8 +868,16 @@ public class ActivitySection extends TreeSection {
 	@SuppressWarnings("unchecked")
 	private void prefillDataIfOnlyOneChoiceExists(XMLActivity operation) {
 		XMLTrack track = ActivityUtil.getEnclosingTrack(operation);
+		if(track == null) {
+			return;
+		}
+		
 		try {
 			Definition wsdlForPartner = getEditor().getWsdlForPartner(track);
+			if(wsdlForPartner == null) {
+				return;
+			}
+			
 			Map services = wsdlForPartner.getServices();
 			if (services.size() == 1) {
 				Service service = (Service) services.values().iterator().next();
@@ -895,6 +903,10 @@ public class ActivitySection extends TreeSection {
 	}
 
 	private void initializeTwoWay(XMLTwoWayActivity sendRcvOp) {
+		if(sendRcvOp == null) {
+			return;
+		}
+		
 		sendRcvOp.setService(new QName(""));
 		sendRcvOp.setPort("");
 		sendRcvOp.setOperation("");
