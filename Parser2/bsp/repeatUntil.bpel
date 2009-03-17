@@ -1,6 +1,0 @@
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TestBpel2" suppressJoinFailure="yes" targetNamespace="http://TestBpel2">
-   <bpel:repeatUntil>
-      <bpel:condition/>
-      <bpel:empty/>
-   </bpel:repeatUntil>
-</bpel:process>
