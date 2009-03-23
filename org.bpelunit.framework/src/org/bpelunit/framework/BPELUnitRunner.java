@@ -1,5 +1,5 @@
 /**
- * This file belongs to the BPELUnit utility and Eclipse plugin set. See enclosed
+ * This file belongs to the BPELUnit utility and Eclipse plug-in set. See enclosed
  * license file for more information.
  * 
  */
@@ -23,7 +23,7 @@ import org.bpelunit.framework.model.test.TestSuite;
 /**
  * <p>
  * The BPELUnit Runner lies at the heart of BPELUnit. To execute BPELUnit tests,
- * the runner must be subclasses, then instantiated and run.
+ * the runner must be sub-classed, then instantiated and run.
  * </p>
  * <p>
  * BPELUnit Core options: <table>
