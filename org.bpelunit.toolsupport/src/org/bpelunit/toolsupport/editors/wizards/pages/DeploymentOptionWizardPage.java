@@ -122,7 +122,7 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 	}
 
 	private XMLProperty getSelectedProperty() {
-		List selectedElements= fSelectionField.getSelectedElements();
+		List<Object> selectedElements= fSelectionField.getSelectedElements();
 		if (selectedElements.size() > 0)
 			return ((XMLProperty) selectedElements.get(0));
 		else
