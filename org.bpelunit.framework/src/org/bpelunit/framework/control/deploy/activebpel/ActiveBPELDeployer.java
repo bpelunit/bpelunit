@@ -42,6 +42,8 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	private static final String fsDeploymentServiceURL = "ActiveBPELDeploymentServiceURL";
 
+	private static final String DEFAULT_DEPLOYMENT_URL = "http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR";
+
 	private Logger fLogger = Logger.getLogger(getClass());
 
 	private Map<String, String> fDeploymentOptions;
@@ -187,6 +189,24 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	public void setConfiguration(Map<String, String> options) {
 		fDeploymentOptions = options;
+	}
+
+	@Override
+	public String[] getConfigurationParameters() {
+		return new String[] { fsBPRFile, fsDeploymentDirectory, fsDeploymentServiceURL };
+	}
+
+	@Override
+	public String getDefaultValueForParameter(String parameter) {
+		if(parameter == null) {
+			throw new NullPointerException("the parameter name must not be null");
+		}
+		
+		if(fsDeploymentServiceURL.equals(parameter)) {
+			return DEFAULT_DEPLOYMENT_URL;
+		}
+		
+		return "";
 	}
 
 }

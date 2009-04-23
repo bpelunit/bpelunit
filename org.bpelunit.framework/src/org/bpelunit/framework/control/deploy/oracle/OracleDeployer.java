@@ -26,21 +26,21 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  */
 public class OracleDeployer implements IBPELDeployer {
 
-	private static final String KEYWORD_UNDEPLOY= "undeploy";
-	private static final String KEYWORD_DEPLOY= "deploy";
+	private static final String KEYWORD_UNDEPLOY = "undeploy";
+	private static final String KEYWORD_DEPLOY = "deploy";
 
-	private static final String BPELDEPLOY_SCRIPT_NAME= "bpeldeploy.bat";
-	private static final String ORACLE_BIN_DIRECTORY= "bin/";
+	private static final String BPELDEPLOY_SCRIPT_NAME = "bpeldeploy.bat";
+	private static final String ORACLE_BIN_DIRECTORY = "bin/";
 
 	// put config
-	private static final String fsBPELJARPath= "BPELJARFile";
+	private static final String fsBPELJARPath = "BPELJARFile";
 
 	// general config
-	private static final String fsOracleDirectory= "OracleDirectory";
-	private static final String fsOracleDomain= "OracleDomain";
-	private static final String fsOracleDomainPassword= "OracleDomainPassword";
+	private static final String fsOracleDirectory = "OracleDirectory";
+	private static final String fsOracleDomain = "OracleDomain";
+	private static final String fsOracleDomainPassword = "OracleDomainPassword";
 
-	private Logger fLogger= Logger.getLogger(this.getClass());
+	private Logger fLogger = Logger.getLogger(this.getClass());
 
 	private Map<String, String> fDeploymentOptions;
 	private String fProcessName;
@@ -50,58 +50,74 @@ public class OracleDeployer implements IBPELDeployer {
 	private String fDomain;
 	private String fPassword;
 
-	public void deploy(String path, ProcessUnderTest processUnderTest) throws DeploymentException {
+	public void deploy(String path, ProcessUnderTest processUnderTest)
+			throws DeploymentException {
 
-		if(BPELUnitRunner.measureTestCoverage()){
-			ICoverageMeasurementTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
-			tool.setErrorStatus("Test coverage for Oracle Deployer is not implemented!");
+		if (BPELUnitRunner.measureTestCoverage()) {
+			ICoverageMeasurementTool tool = BPELUnitRunner
+					.getCoverageMeasurmentTool();
+			tool
+					.setErrorStatus("Test coverage for Oracle Deployer is not implemented!");
 		}
-		
-		fLogger.info("Oracle BPEL deployer got deploy request for PUT " + processUnderTest);
 
-		check(processUnderTest.getDeploymentOption(fsBPELJARPath), "BPEL JAR file");
+		fLogger.info("Oracle BPEL deployer got deploy request for PUT "
+				+ processUnderTest);
+
+		check(processUnderTest.getDeploymentOption(fsBPELJARPath),
+				"BPEL JAR file");
 		check(fDeploymentOptions.get(fsOracleDirectory), "Oracle Directory");
 
 		if (!new File(fDeploymentOptions.get(fsOracleDirectory)).exists())
-			throw new DeploymentException("The specified Oracle Directory does not exist.");
+			throw new DeploymentException(
+					"The specified Oracle Directory does not exist.");
 
-		fProcessName= processUnderTest.getName();
-		fBPELFilePath= FilenameUtils.concat(path, processUnderTest.getDeploymentOption(fsBPELJARPath));
-		fScriptFilePath= FilenameUtils.concat(fDeploymentOptions.get(fsOracleDirectory), FilenameUtils.concat(ORACLE_BIN_DIRECTORY,
-				BPELDEPLOY_SCRIPT_NAME));
-		fDomain= fDeploymentOptions.get(fsOracleDomain);
-		fPassword= fDeploymentOptions.get(fsOracleDomainPassword);
+		fProcessName = processUnderTest.getName();
+		fBPELFilePath = FilenameUtils.concat(path, processUnderTest
+				.getDeploymentOption(fsBPELJARPath));
+		fScriptFilePath = FilenameUtils.concat(fDeploymentOptions
+				.get(fsOracleDirectory), FilenameUtils.concat(
+				ORACLE_BIN_DIRECTORY, BPELDEPLOY_SCRIPT_NAME));
+		fDomain = fDeploymentOptions.get(fsOracleDomain);
+		fPassword = fDeploymentOptions.get(fsOracleDomainPassword);
 
-		fBinDir= fDeploymentOptions.get(fsOracleDirectory);
+		fBinDir = fDeploymentOptions.get(fsOracleDirectory);
 		if (fBinDir.endsWith("/") || fBinDir.endsWith("\\"))
-			fBinDir= fBinDir.substring(0, fBinDir.length());
-		fBinDir= FilenameUtils.separatorsToSystem(fBinDir);
+			fBinDir = fBinDir.substring(0, fBinDir.length());
+		fBinDir = FilenameUtils.separatorsToSystem(fBinDir);
 
 		check(fBPELFilePath, "BPEL JAR file");
 
 		if (!new File(fBPELFilePath).exists())
-			throw new DeploymentException("The referenced BPEL JAR file for Oracle deployment does not exist: " + fBPELFilePath);
+			throw new DeploymentException(
+					"The referenced BPEL JAR file for Oracle deployment does not exist: "
+							+ fBPELFilePath);
 
 		check(fScriptFilePath, "deployment script file path");
 
 		if (!new File(fScriptFilePath).exists())
-			throw new DeploymentException("The referenced deployment script file for Oracle deployment does not exist: " + fScriptFilePath);
+			throw new DeploymentException(
+					"The referenced deployment script file for Oracle deployment does not exist: "
+							+ fScriptFilePath);
 
 		check(fProcessName, "BPEL Process Name");
 
 		check(fDomain, "BPEL server domain name");
 		check(fPassword, "BPEL server domain password");
 
-		String[] cmd= generateDeploy(fScriptFilePath, fProcessName, fBPELFilePath, fDomain, fPassword);
+		String[] cmd = generateDeploy(fScriptFilePath, fProcessName,
+				fBPELFilePath, fDomain, fPassword);
 		runExternal(cmd);
 
 	}
 
-	public void undeploy(String path, ProcessUnderTest processUnderTest) throws DeploymentException {
+	public void undeploy(String path, ProcessUnderTest processUnderTest)
+			throws DeploymentException {
 
 		// May be called even if deploy was not successful
-		if (fScriptFilePath != null && fProcessName != null && fDomain != null && fPassword != null) {
-			String[] cmd= generateUndeploy(fScriptFilePath, fProcessName, fDomain, fPassword);
+		if (fScriptFilePath != null && fProcessName != null && fDomain != null
+				&& fPassword != null) {
+			String[] cmd = generateUndeploy(fScriptFilePath, fProcessName,
+					fDomain, fPassword);
 			runExternal(cmd);
 		}
 	}
@@ -110,26 +126,26 @@ public class OracleDeployer implements IBPELDeployer {
 
 	private void runExternal(String[] cmd) throws DeploymentException {
 		try {
-			Runtime rt= Runtime.getRuntime();
+			Runtime rt = Runtime.getRuntime();
 			Process proc;
 
-			proc= rt.exec(cmd);
-			StreamReader errorReader= new StreamReader(proc.getErrorStream());
-			StreamReader outputReader= new StreamReader(proc.getInputStream());
+			proc = rt.exec(cmd);
+			StreamReader errorReader = new StreamReader(proc.getErrorStream());
+			StreamReader outputReader = new StreamReader(proc.getInputStream());
 
 			errorReader.start();
 			outputReader.start();
 
-			int exitVal= proc.waitFor();
+			int exitVal = proc.waitFor();
 
 			if (exitVal != 0) {
 				// Error. Get message...
-				String lastLine= errorReader.getAsString();
+				String lastLine = errorReader.getAsString();
 				String errorMessage;
 				if (lastLine != null && !lastLine.equals(""))
-					errorMessage= lastLine;
+					errorMessage = lastLine;
 				else
-					errorMessage= "An unknown error occurred while deploying.";
+					errorMessage = "An unknown error occurred while deploying.";
 
 				throw new DeploymentException(errorMessage);
 			}
@@ -140,35 +156,51 @@ public class OracleDeployer implements IBPELDeployer {
 		}
 	}
 
-	private String[] generateDeploy(String script, String processName, String processUrl, String domain, String password) {
-		String[] cmd= new String[7];
-		cmd[0]= script;
-		cmd[1]= fBinDir;
-		cmd[2]= KEYWORD_DEPLOY;
-		cmd[3]= processName;
-		cmd[4]= processUrl;
-		cmd[5]= domain;
-		cmd[6]= password;
+	private String[] generateDeploy(String script, String processName,
+			String processUrl, String domain, String password) {
+		String[] cmd = new String[7];
+		cmd[0] = script;
+		cmd[1] = fBinDir;
+		cmd[2] = KEYWORD_DEPLOY;
+		cmd[3] = processName;
+		cmd[4] = processUrl;
+		cmd[5] = domain;
+		cmd[6] = password;
 		return cmd;
 	}
 
-	private String[] generateUndeploy(String script, String processName, String domain, String password) {
-		String[] cmd= new String[6];
-		cmd[0]= script;
-		cmd[1]= fBinDir;
-		cmd[2]= KEYWORD_UNDEPLOY;
-		cmd[3]= processName;
-		cmd[4]= domain;
-		cmd[5]= password;
+	private String[] generateUndeploy(String script, String processName,
+			String domain, String password) {
+		String[] cmd = new String[6];
+		cmd[0] = script;
+		cmd[1] = fBinDir;
+		cmd[2] = KEYWORD_UNDEPLOY;
+		cmd[3] = processName;
+		cmd[4] = domain;
+		cmd[5] = password;
 		return cmd;
 	}
 
-	private void check(String toCheck, String description) throws DeploymentException {
+	private void check(String toCheck, String description)
+			throws DeploymentException {
 		if (toCheck == null)
-			throw new DeploymentException("Oracle deployment configuration is missing the " + description + ".");
+			throw new DeploymentException(
+					"Oracle deployment configuration is missing the "
+							+ description + ".");
 	}
 
 	public void setConfiguration(Map<String, String> options) {
-		fDeploymentOptions= options;
+		fDeploymentOptions = options;
+	}
+
+	@Override
+	public String[] getConfigurationParameters() {
+		return new String[] { fsBPELJARPath, fsOracleDirectory, fsOracleDomain,
+				fsOracleDomainPassword };
+	}
+
+	@Override
+	public String getDefaultValueForParameter(String parameter) {
+		return "";
 	}
 }

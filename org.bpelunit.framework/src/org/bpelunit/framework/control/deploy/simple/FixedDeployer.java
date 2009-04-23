@@ -45,4 +45,14 @@ public class FixedDeployer implements IBPELDeployer {
 
 	}
 
+	@Override
+	public String[] getConfigurationParameters() {
+		return new String[0];
+	}
+
+	@Override
+	public String getDefaultValueForParameter(String parameter) {
+		return "";
+	}
+
 }
