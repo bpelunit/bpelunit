@@ -1,3 +1,9 @@
+/**
+ * This file belongs to the BPELUnit utility and Eclipse plugin set. See enclosed
+ * license file for more information.
+ * 
+ */
+
 package org.bpelunit.framework.control.deploy.ode;
 
 import java.io.IOException;
@@ -31,6 +37,11 @@ import org.jdom.input.SAXBuilder;
 
 import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;
+
+/**
+ * ODE Deployer-deploys a process to an ODE server.
+ * 
+ */
 
 public class ODEDeployer implements IBPELDeployer {
 
