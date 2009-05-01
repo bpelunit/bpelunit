@@ -141,6 +141,13 @@
             suite_options="BPRFile"
             />
       <bpelDeployer
+            deployerClass="org.bpelunit.framework.control.deploy.ode.ODEDeployer"
+            id="ode"
+            name="ODE Deployer"
+            general_options="ODEDeploymentServiceURL"
+            suite_options="BundleLocation"
+            />
+      <bpelDeployer
             deployerClass="org.bpelunit.framework.control.deploy.simple.TestModeDeployer"
             id="testmode"
             name="Test Mode Deployer"/>

@@ -293,6 +293,7 @@ Export-Package: .,
  org.bpelunit.framework.base;uses:="org.bpelunit.framework.control.ext,org.bpelunit.framework",
  org.bpelunit.framework.control.deploy.activebpel;uses:="org.apache.commons.httpclient.methods,org.bpelunit.framework.model,org.bpelunit.framework.control.ext",
  org.bpelunit.framework.control.deploy.oracle;uses:="org.bpelunit.framework.model,org.bpelunit.framework.control.ext",
+ org.bpelunit.framework.control.deploy.ode;uses:="org.apache.commons.httpclient.methods,org.bpelunit.framework.model,org.bpelunit.framework.control.ext",
  org.bpelunit.framework.control.deploy.simple;uses:="org.bpelunit.framework.model,org.bpelunit.framework.control.ext",
  org.bpelunit.framework.control.ext;
   uses:="org.bpelunit.framework.model,
