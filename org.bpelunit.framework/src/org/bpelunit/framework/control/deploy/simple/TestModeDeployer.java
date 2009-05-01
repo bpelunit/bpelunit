@@ -5,9 +5,8 @@
  */
 package org.bpelunit.framework.control.deploy.simple;
 
-import java.util.Map;
-
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
 
@@ -23,29 +22,16 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  * @author Philip Mayer
  * 
  */
+@IBPELDeployerCapabilities
 public class TestModeDeployer implements IBPELDeployer {
 
+	@Override
 	public void deploy(String path, ProcessUnderTest processUnderTest) throws DeploymentException {
 		// do nothing.
 	}
 
+	@Override
 	public void undeploy(String path, ProcessUnderTest processUnderTest) throws DeploymentException {
 		// do nothing.
 	}
-
-	public void setConfiguration(Map<String, String> options) {
-		// do nothing.
-
-	}
-
-	@Override
-	public String[] getConfigurationParameters() {
-		return new String[0];
-	}
-
-	@Override
-	public String getDefaultValueForParameter(String parameter) {
-		return "";
-	}
-
 }

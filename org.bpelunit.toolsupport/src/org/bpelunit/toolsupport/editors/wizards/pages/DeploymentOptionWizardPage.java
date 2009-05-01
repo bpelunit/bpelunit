@@ -13,7 +13,9 @@ import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
 import org.bpelunit.framework.client.eclipse.dialog.field.SelectionField;
 import org.bpelunit.framework.client.eclipse.dialog.field.TextField;
 import org.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
+import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.util.ActivityUtil;
+import org.bpelunit.framework.control.util.ExtensionRegistry;
 import org.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
 import org.bpelunit.framework.xml.suite.XMLProperty;
 import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
@@ -28,7 +30,8 @@ import org.eclipse.swt.widgets.Composite;
 /**
  * A page for editing deployment options.
  * 
- * @version $Id$
+ * @version $Id: DeploymentOptionWizardPage.java 199 2009-04-23 17:19:04Z
+ *          dluebke $
  * @author Philip Mayer
  * 
  */
@@ -42,12 +45,12 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof XMLProperty) {
-				XMLProperty property= (XMLProperty) element;
+				XMLProperty property = (XMLProperty) element;
 				switch (columnIndex) {
-					case 0:
-						return property.getName();
-					case 1:
-						return property.getStringValue();
+				case 0:
+					return property.getName();
+				case 1:
+					return property.getStringValue();
 				}
 			}
 			return "";
@@ -69,6 +72,7 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 
 	private ListDialogField fSelectionField;
 	private XMLPUTDeploymentInformation fPutInfo;
+	private String[] fPossibleParameterNames = null;
 
 	public DeploymentOptionWizardPage(String pageName) {
 		super(pageName);
@@ -79,9 +83,9 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 	@Override
 	public void handleAddPressed() {
 
-		String[] edit= editProperty(null);
+		String[] edit = editProperty(null);
 		if (edit != null) {
-			XMLProperty xmlCondition= fPutInfo.addNewProperty();
+			XMLProperty xmlCondition = fPutInfo.addNewProperty();
 			xmlCondition.setName(edit[0]);
 			xmlCondition.setStringValue(edit[1]);
 			recreateInput();
@@ -93,11 +97,11 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 	@Override
 	public void handleEditPressed() {
 
-		XMLProperty current= getSelectedProperty();
+		XMLProperty current = getSelectedProperty();
 		if (current == null)
 			return;
 
-		String[] edit= editProperty(current);
+		String[] edit = editProperty(current);
 		if (edit != null) {
 			current.setName(edit[0]);
 			current.setStringValue(edit[1]);
@@ -109,9 +113,10 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 
 	@Override
 	public void handleRemovePressed() {
-		XMLProperty prop= getSelectedProperty();
+		XMLProperty prop = getSelectedProperty();
 		if (prop != null) {
-			int index= ActivityUtil.getIndexFor(fPutInfo.getPropertyArray(), prop);
+			int index = ActivityUtil.getIndexFor(fPutInfo.getPropertyArray(),
+					prop);
 			if (index != -1) {
 				fPutInfo.removeProperty(index);
 				recreateInput();
@@ -122,7 +127,7 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 	}
 
 	private XMLProperty getSelectedProperty() {
-		List<Object> selectedElements= fSelectionField.getSelectedElements();
+		List<Object> selectedElements = fSelectionField.getSelectedElements();
 		if (selectedElements.size() > 0)
 			return ((XMLProperty) selectedElements.get(0));
 		else
@@ -131,7 +136,7 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 
 	public void recreateInput() {
 		List<Object> l = new ArrayList<Object>();
-		for(Object o : fPutInfo.getPropertyArray()) {
+		for (Object o : fPutInfo.getPropertyArray()) {
 			l.add(o);
 		}
 		fSelectionField.setElements(l);
@@ -139,45 +144,63 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 
 	private String[] editProperty(XMLProperty currentProperty) {
 
-		String initialKey= currentProperty != null ? currentProperty.getName() : null;
-		String initialValue= currentProperty != null ? currentProperty.getStringValue() : null;
+		String initialKey = currentProperty != null ? currentProperty.getName()
+				: null;
+		String initialValue = currentProperty != null ? currentProperty
+				.getStringValue() : null;
 
-		String title= currentProperty != null ? "Edit an option " : "Add an option";
-		FieldBasedInputDialog dialog= new FieldBasedInputDialog(getShell(), title);
+		String title = currentProperty != null ? "Edit an option "
+				: "Add an option";
+		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
+				title);
 
-		SelectionField field= new SelectionField(dialog, "Key", initialKey, "Keys...", ExtensionControl
-				.getSuiteOptionsForDeployer(fPutInfo.getType()));
+		SelectionField field = new SelectionField(dialog, "Key", initialKey,
+				"Keys...", this.fPossibleParameterNames);
 		field.setValidator(new NotEmptyValidator("Key"));
 		dialog.addField(field);
 
-		TextField field2= new TextField(dialog, "Value", initialValue, TextField.Style.SINGLE); // TODO
+		TextField field2 = new TextField(dialog, "Value", initialValue,
+				TextField.Style.SINGLE); // TODO
 		field2.setValidator(new NotEmptyValidator("Value"));
 		dialog.addField(field2);
 
 		if (dialog.open() != Window.OK)
 			return null;
 
-		String[] s= new String[2];
-		s[0]= field.getSelection();
-		s[1]= field2.getSelection();
+		String[] s = new String[2];
+		s[0] = field.getSelection();
+		s[1] = field2.getSelection();
 		return s;
 	}
 
 	public void init(XMLPUTDeploymentInformation putInfo) {
-		fPutInfo= putInfo;
+		fPutInfo = putInfo;
 
-		ListFieldListener deploymentConfigListener= createListFieldListener();
-		fSelectionField= new ListDialogField(deploymentConfigListener, fButtons, new OptionListLabelProvider());
+		ListFieldListener deploymentConfigListener = createListFieldListener();
+		fSelectionField = new ListDialogField(deploymentConfigListener,
+				fButtons, new OptionListLabelProvider());
 		fSelectionField.setDialogFieldListener(deploymentConfigListener);
-		fSelectionField.setTableColumns(new ListDialogField.ColumnsDescription(new String[] { "Key", "Value" }, true));
+		fSelectionField.setTableColumns(new ListDialogField.ColumnsDescription(
+				new String[] { "Key", "Value" }, true));
 		fSelectionField.setLabelText(null);
 
 		List<Object> l = new ArrayList<Object>();
-		for(Object o : fPutInfo.getPropertyArray()) {
+		for (Object o : fPutInfo.getPropertyArray()) {
 			l.add(o);
 		}
 		fSelectionField.setElements(l);
 		enableButtonsForSelection(fSelectionField, false);
+
+		try {
+			String deployerName = fPutInfo.getType();
+			IBPELDeployer deployer = ExtensionControl.findDeployerExtension(
+					deployerName).createNew();
+			this.fPossibleParameterNames = ExtensionRegistry
+					.getPossibleConfigurationOptions(deployer.getClass(), true)
+					.toArray(new String[0]);
+		} catch (Throwable t) {
+			this.fPossibleParameterNames = new String[0];
+		}
 	}
 
 	@Override
@@ -185,9 +208,10 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 
 		fSelectionField.doFillIntoGrid(composite, nColumns);
 
-		GridData gd= (GridData) fSelectionField.getListControl(null).getLayoutData();
-		gd.grabExcessVerticalSpace= true;
-		gd.grabExcessHorizontalSpace= true;
+		GridData gd = (GridData) fSelectionField.getListControl(null)
+				.getLayoutData();
+		gd.grabExcessVerticalSpace = true;
+		gd.grabExcessHorizontalSpace = true;
 	}
 
 	@Override

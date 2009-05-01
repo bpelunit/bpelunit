@@ -24,8 +24,8 @@ import org.bpelunit.framework.model.test.report.ITestArtefact;
 import org.bpelunit.framework.model.test.report.StateData;
 
 /**
- * A BPELUnit TestSuite is a collection of TestCases, along with the description of PUT and
- * partners, including deployment information for the PUT.
+ * A BPELUnit TestSuite is a collection of TestCases, along with the description
+ * of PUT and partners, including deployment information for the PUT.
  * 
  * @version $Id$
  * @author Philip Mayer
@@ -44,8 +44,8 @@ public class TestSuite implements ITestArtefact {
 	private ProcessUnderTest fProcessUnderTest;
 
 	/**
-	 * The test cases. Note: Must be a LinkedHashMap, as ordering is important. Maps the
-	 * all-lowercase test case name to the test case object.
+	 * The test cases. Note: Must be a LinkedHashMap, as ordering is important.
+	 * Maps the all-lowercase test case name to the test case object.
 	 */
 	private LinkedHashMap<String, TestCase> fTestCaseMap;
 
@@ -91,27 +91,28 @@ public class TestSuite implements ITestArtefact {
 
 	// ****************************** Initialization **************************
 
-	public TestSuite(String suiteName, URL suiteBaseURL, ProcessUnderTest suiteProcessUnderTest) {
+	public TestSuite(String suiteName, URL suiteBaseURL,
+			ProcessUnderTest suiteProcessUnderTest) {
 
-		fStatus= ArtefactStatus.createInitialStatus();
-		fResultListeners= new ArrayList<ITestResultListener>();
-		fLogger= Logger.getLogger(getClass());
+		fStatus = ArtefactStatus.createInitialStatus();
+		fResultListeners = new ArrayList<ITestResultListener>();
+		fLogger = Logger.getLogger(getClass());
 
-		fName= suiteName;
-		fProcessUnderTest= suiteProcessUnderTest;
-		fCurrentlyRunning= false;
+		fName = suiteName;
+		fProcessUnderTest = suiteProcessUnderTest;
+		fCurrentlyRunning = false;
 
 		// BaseURL
-		int portNumber= suiteBaseURL.getPort();
+		int portNumber = suiteBaseURL.getPort();
 		if (portNumber == -1)
-			portNumber= BPELUnitConstants.DEFAULT_BASE_PORT;
+			portNumber = BPELUnitConstants.DEFAULT_BASE_PORT;
 
-		String rootPath= suiteBaseURL.getPath();
+		String rootPath = suiteBaseURL.getPath();
 		if (!rootPath.endsWith("/"))
-			rootPath+= "/";
-		System.out.println("ROOTPATH="+rootPath);
-		fLocalServer= new LocalHTTPServer(portNumber, rootPath);
-		fTestCaseMap= new LinkedHashMap<String, TestCase>();
+			rootPath += "/";
+		System.out.println("ROOTPATH=" + rootPath);
+		fLocalServer = new LocalHTTPServer(portNumber, rootPath);
+		fTestCaseMap = new LinkedHashMap<String, TestCase>();
 	}
 
 	public void addTestCase(TestCase test) {
@@ -119,34 +120,37 @@ public class TestSuite implements ITestArtefact {
 	}
 
 	/**
-	 * Filters this test suite to only run the test case with the specified name.
+	 * Filters this test suite to only run the test case with the specified
+	 * name.
 	 * 
 	 * Convenience method for {@link #setFilter(List)}.
 	 * 
 	 * @param testCaseName
-	 * @throws TestCaseNotFoundException If a test case with that name was not found.
+	 * @throws TestCaseNotFoundException
+	 *             If a test case with that name was not found.
 	 */
 	public void setFilter(String testCaseName) throws TestCaseNotFoundException {
-		List<String> tempList= new ArrayList<String>();
+		List<String> tempList = new ArrayList<String>();
 		tempList.add(testCaseName);
 		setFilter(tempList);
 	}
 
-
 	/**
-	 * Filters this test suite to only run the test cases with the names specified in the list (in
-	 * that order).
+	 * Filters this test suite to only run the test cases with the names
+	 * specified in the list (in that order).
 	 * 
 	 * @see #setFilter(String)
 	 * @param testCaseNames
-	 * @throws TestCaseNotFoundException If one of the test cases does not exist.
+	 * @throws TestCaseNotFoundException
+	 *             If one of the test cases does not exist.
 	 */
-	public void setFilter(List<String> testCaseNames) throws TestCaseNotFoundException {
-		List<TestCase> filtered= new ArrayList<TestCase>();
+	public void setFilter(List<String> testCaseNames)
+			throws TestCaseNotFoundException {
+		List<TestCase> filtered = new ArrayList<TestCase>();
 		for (String name : testCaseNames)
 			addTestCaseToFilter(filtered, name);
 
-		fTestCaseFilter= filtered;
+		fTestCaseFilter = filtered;
 	}
 
 	// ************ Running *************
@@ -157,13 +161,16 @@ public class TestSuite implements ITestArtefact {
 		try {
 			fLocalServer.startServer();
 		} catch (Exception e) {
-			fLogger.error("Error starting local HTTP server: " + e.getMessage());
-			throw new DeploymentException("Could not start local HTTP server - maybe the address is in use? ", e);
+			fLogger
+					.error("Error starting local HTTP server: "
+							+ e.getMessage());
+			throw new DeploymentException(
+					"Could not start local HTTP server - maybe the address is in use? ",
+					e);
 		}
 
 		fLogger.info("Now deploying PUT: " + fProcessUnderTest);
 		fProcessUnderTest.deploy();
-
 	}
 
 	public void shutDown() throws DeploymentException {
@@ -188,25 +195,25 @@ public class TestSuite implements ITestArtefact {
 	public void run() {
 
 		fLogger.info("Now starting test suite: " + this);
-		fCurrentTestCase= null;
-		fCurrentlyRunning= true;
+		fCurrentTestCase = null;
+		fCurrentlyRunning = true;
 
-		boolean error= false;
-		boolean failure= false;
+		boolean error = false;
+		boolean failure = false;
 
 		if (fTestCaseFilter == null)
-			fTestCaseFilter= new ArrayList<TestCase>(fTestCaseMap.values());
+			fTestCaseFilter = new ArrayList<TestCase>(fTestCaseMap.values());
 
 		for (TestCase testCase : fTestCaseFilter) {
-			fCurrentTestCase= testCase;
+			fCurrentTestCase = testCase;
 			testCase.run();
 			if (testCase.getStatus().isError()) {
-				error= true;
+				error = true;
 				if (BPELUnitRunner.isHaltOnError())
 					break;
 			}
 			if (testCase.getStatus().isFailure()) {
-				failure= true;
+				failure = true;
 				if (BPELUnitRunner.isHaltOnFailure())
 					break;
 			}
@@ -215,18 +222,20 @@ public class TestSuite implements ITestArtefact {
 				break;
 		}
 
-		fCurrentTestCase= null;
+		fCurrentTestCase = null;
 
 		if (error)
-			fStatus= ArtefactStatus.createErrorStatus("A test case had an error");
+			fStatus = ArtefactStatus
+					.createErrorStatus("A test case had an error");
 		else if (failure)
-			fStatus= ArtefactStatus.createFailedStatus("A test case had a failure");
+			fStatus = ArtefactStatus
+					.createFailedStatus("A test case had a failure");
 		else if (fAbortedByUser)
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted by user");
+			fStatus = ArtefactStatus.createAbortedStatus("Aborted by user");
 		else
-			fStatus= ArtefactStatus.createPassedStatus();
+			fStatus = ArtefactStatus.createPassedStatus();
 
-		fCurrentlyRunning= false;
+		fCurrentlyRunning = false;
 		fLogger.info("Now stopping test suite: " + this);
 	}
 
@@ -264,7 +273,7 @@ public class TestSuite implements ITestArtefact {
 
 	public void abortTest() {
 		if (isRunning()) {
-			fAbortedByUser= true;
+			fAbortedByUser = true;
 			if (fCurrentTestCase != null)
 				fCurrentTestCase.abortTest();
 		}
@@ -285,7 +294,7 @@ public class TestSuite implements ITestArtefact {
 	}
 
 	public List<ITestArtefact> getChildren() {
-		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
+		List<ITestArtefact> children = new ArrayList<ITestArtefact>();
 		for (TestCase testCase : fTestCaseMap.values()) {
 			children.add(testCase);
 		}
@@ -313,25 +322,29 @@ public class TestSuite implements ITestArtefact {
 
 	// *********************** Other ******************************
 
-	private void addTestCaseToFilter(List<TestCase> filtered, String name) throws TestCaseNotFoundException {
-		TestCase testCase= fTestCaseMap.get(name.toLowerCase());
+	private void addTestCaseToFilter(List<TestCase> filtered, String name)
+			throws TestCaseNotFoundException {
+		TestCase testCase = fTestCaseMap.get(name.toLowerCase());
 		if (testCase != null) {
 			filtered.add(testCase);
 		} else {
-			throw new TestCaseNotFoundException("Test Case with name \"" + name + "\" does not exist in this suite.");
+			throw new TestCaseNotFoundException("Test Case with name \"" + name
+					+ "\" does not exist in this suite.");
 		}
 	}
 
 	@Override
 	public String toString() {
-		return "TestSuite \"" + getName() + "\" (" + getTestCaseCount() + " test cases)";
+		return "TestSuite \"" + getName() + "\" (" + getTestCaseCount()
+				+ " test cases)";
 	}
 
-//	//HIER
-	public List<String> getTestCases(){
-		List<String> testCases=new ArrayList<String>();
-		for (Iterator<TestCase> iter = fTestCaseMap.values().iterator(); iter.hasNext();) {
-			testCases.add(iter.next().getName());	
+	// //HIER
+	public List<String> getTestCases() {
+		List<String> testCases = new ArrayList<String>();
+		for (Iterator<TestCase> iter = fTestCaseMap.values().iterator(); iter
+				.hasNext();) {
+			testCases.add(iter.next().getName());
 		}
 		return testCases;
 	}

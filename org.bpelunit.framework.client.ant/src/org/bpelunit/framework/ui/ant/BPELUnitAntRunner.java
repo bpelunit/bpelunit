@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -16,8 +17,10 @@ import org.apache.log4j.PatternLayout;
 import org.apache.log4j.WriterAppender;
 import org.apache.log4j.varia.NullAppender;
 import org.bpelunit.framework.base.BPELUnitBaseRunner;
+import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.result.ITestResultListener;
 import org.bpelunit.framework.control.result.XMLResultProducer;
+import org.bpelunit.framework.control.util.ExtensionRegistry;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -212,6 +215,4 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 		// TODO Auto-generated method stub
 		
 	}
-
-
 }

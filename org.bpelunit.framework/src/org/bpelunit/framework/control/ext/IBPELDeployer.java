@@ -5,7 +5,10 @@
  */
 package org.bpelunit.framework.control.ext;
 
-import java.util.Map;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
@@ -30,6 +33,35 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  */
 public interface IBPELDeployer {
 
+	/** 
+	 * This annotation can be added to any deployer class to indicate 
+	 * the capabilities of the deployer that are not exposed via the
+	 * interface
+	 * 
+	 * @author dluebke
+	 */
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.TYPE) 
+	public @interface IBPELDeployerCapabilities {
+		boolean canDeploy() default false;
+		boolean canMeasureTestCoverage() default false;
+		boolean canIntroduceMocks() default false;
+	}
+	
+	/**
+	 * This annotation must be used to identify configuration
+	 * parameters by annotating the setters. The setters must be of the form
+	 * <code>public void set${propertyName}(String value)</code> 
+	 * 
+	 * @author dluebke
+	 */
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.METHOD)
+	public @interface IBPELDeployerOption {
+		String defaultValue() default "";
+		boolean testSuiteSpecific() default false;
+	}
+	
 	/**
 	 * Deploy the PUT. This method must block until the PUT is fully deployed
 	 * and ready to accept incoming calls. In case of an error, a
@@ -71,30 +103,5 @@ public interface IBPELDeployer {
 	 * @param options
 	 *            the options
 	 */
-	public void setConfiguration(Map<String, String> options);
-
-	/**
-	 * Returns an array of possible configuration values that might be passed
-	 * into the setConfiguration method. The return value must not be null. If
-	 * there are no configuration parameters, implementations shall return an
-	 * empty string array instead.
-	 * 
-	 * @see #setConfiguration(Map)
-	 * @return an array containing all valid configuratino parameters for this
-	 *         deployer, never null
-	 */
-	public String[] getConfigurationParameters();
-
-	/**
-	 * Returns the default value for a given parameter if one exists. ""
-	 * otherwise. If the given parameter name is unknown to the deployer,
-	 * it shall return an empty string ("").
-	 * 
-	 * @see #setConfiguration(Map)
-	 * @see #getConfigurationParameters()
-	 * @param parameter
-	 *            the configuration parameter (must not be null)
-	 * @return the default value or "" if none exists, never null
-	 */
-	public String getDefaultValueForParameter(String parameter);
+//	public void setConfiguration(Map<String, String> options);
 }

@@ -5,6 +5,8 @@
  */
 package org.bpelunit.toolsupport.editors.wizards;
 
+import org.bpelunit.framework.client.eclipse.ExtensionControl;
+import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
 import org.bpelunit.toolsupport.editors.wizards.pages.DeploymentOptionWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -25,7 +27,7 @@ public class DeploymentOptionWizard extends Wizard {
 		super();
 		setWindowTitle("Configure the deployment");
 		setHelpAvailable(false);
-		fPutInfo= information;
+		fPutInfo = information;
 	}
 
 	@Override
@@ -35,7 +37,7 @@ public class DeploymentOptionWizard extends Wizard {
 
 	@Override
 	public void addPages() {
-		fPage= new DeploymentOptionWizardPage("Deployment Options");
+		fPage = new DeploymentOptionWizardPage("Deployment Options");
 		addPage(fPage);
 		fPage.init(fPutInfo);
 	}

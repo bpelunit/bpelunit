@@ -7,12 +7,12 @@ package org.bpelunit.framework.control.deploy.oracle;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
@@ -24,6 +24,7 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  * @author Philip Mayer
  * 
  */
+@IBPELDeployerCapabilities(canDeploy=true)
 public class OracleDeployer implements IBPELDeployer {
 
 	private static final String KEYWORD_UNDEPLOY = "undeploy";
@@ -33,23 +34,44 @@ public class OracleDeployer implements IBPELDeployer {
 	private static final String ORACLE_BIN_DIRECTORY = "bin/";
 
 	// put config
-	private static final String fsBPELJARPath = "BPELJARFile";
-
-	// general config
-	private static final String fsOracleDirectory = "OracleDirectory";
-	private static final String fsOracleDomain = "OracleDomain";
-	private static final String fsOracleDomainPassword = "OracleDomainPassword";
+//	private static final String fsBPELJARPath = "BPELJARFile";
+//
+//	// general config
+//	private static final String fsOracleDirectory = "OracleDirectory";
+//	private static final String fsOracleDomain = "OracleDomain";
+//	private static final String fsOracleDomainPassword = "OracleDomainPassword";
 
 	private Logger fLogger = Logger.getLogger(this.getClass());
 
-	private Map<String, String> fDeploymentOptions;
+	// private Map<String, String> fDeploymentOptions;
 	private String fProcessName;
 	private String fBinDir;
 	private String fBPELFilePath;
 	private String fScriptFilePath;
 	private String fDomain;
 	private String fPassword;
+	private String fOracleDirectory;
 
+	@IBPELDeployerOption(testSuiteSpecific=true)
+	public void setBPELJARPath(String value) {
+		this.fBPELFilePath = value;
+	}
+
+	@IBPELDeployerOption
+	public void setOracleDirectory(String value) {
+		this.fOracleDirectory = value;
+	}
+	
+	@IBPELDeployerOption
+	public void setOracleDomain(String value) {
+		this.fDomain = value;
+	}
+	
+	@IBPELDeployerOption
+	public void setOracleDomainPassword(String value) {
+		this.fPassword = value;
+	}
+	
 	public void deploy(String path, ProcessUnderTest processUnderTest)
 			throws DeploymentException {
 
@@ -63,28 +85,25 @@ public class OracleDeployer implements IBPELDeployer {
 		fLogger.info("Oracle BPEL deployer got deploy request for PUT "
 				+ processUnderTest);
 
-		check(processUnderTest.getDeploymentOption(fsBPELJARPath),
+		check(fBPELFilePath,
 				"BPEL JAR file");
-		check(fDeploymentOptions.get(fsOracleDirectory), "Oracle Directory");
+		check(fOracleDirectory, "Oracle Directory");
 
-		if (!new File(fDeploymentOptions.get(fsOracleDirectory)).exists())
+		if (!new File(fOracleDirectory).exists())
 			throw new DeploymentException(
 					"The specified Oracle Directory does not exist.");
 
 		fProcessName = processUnderTest.getName();
-		fBPELFilePath = FilenameUtils.concat(path, processUnderTest
-				.getDeploymentOption(fsBPELJARPath));
-		fScriptFilePath = FilenameUtils.concat(fDeploymentOptions
-				.get(fsOracleDirectory), FilenameUtils.concat(
+		fBPELFilePath = FilenameUtils.concat(path, fBPELFilePath);
+		fScriptFilePath = FilenameUtils.concat(fOracleDirectory, FilenameUtils.concat(
 				ORACLE_BIN_DIRECTORY, BPELDEPLOY_SCRIPT_NAME));
-		fDomain = fDeploymentOptions.get(fsOracleDomain);
-		fPassword = fDeploymentOptions.get(fsOracleDomainPassword);
 
-		fBinDir = fDeploymentOptions.get(fsOracleDirectory);
+		fBinDir = fOracleDirectory;
 		if (fBinDir.endsWith("/") || fBinDir.endsWith("\\"))
 			fBinDir = fBinDir.substring(0, fBinDir.length());
 		fBinDir = FilenameUtils.separatorsToSystem(fBinDir);
 
+		// XXX necessary? is checked before
 		check(fBPELFilePath, "BPEL JAR file");
 
 		if (!new File(fBPELFilePath).exists())
@@ -187,20 +206,5 @@ public class OracleDeployer implements IBPELDeployer {
 			throw new DeploymentException(
 					"Oracle deployment configuration is missing the "
 							+ description + ".");
-	}
-
-	public void setConfiguration(Map<String, String> options) {
-		fDeploymentOptions = options;
-	}
-
-	@Override
-	public String[] getConfigurationParameters() {
-		return new String[] { fsBPELJARPath, fsOracleDirectory, fsOracleDomain,
-				fsOracleDomainPassword };
-	}
-
-	@Override
-	public String getDefaultValueForParameter(String parameter) {
-		return "";
 	}
 }

@@ -15,6 +15,7 @@ import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
+import org.bpelunit.framework.control.util.ExtensionRegistry;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -267,6 +268,17 @@ public abstract class BPELUnitRunner {
 			throws SpecificationException;
 
 	/**
+	 * Returns the global configuration for a given deployer. 
+	 * 
+	 * @param deployer
+	 * @return
+	 */
+	public Map<String, String> getGlobalConfigurationForDeployer(
+			IBPELDeployer deployer) {
+		return ExtensionRegistry.getGlobalConfigurationForDeployer(deployer);
+	}
+	
+	/**
 	 * Returns the configured timeout
 	 * 
 	 * @return timeout in milliseconds
@@ -325,5 +337,4 @@ public abstract class BPELUnitRunner {
 					"Could not initialize XML Parser Component.", e);
 		}
 	}
-
 }

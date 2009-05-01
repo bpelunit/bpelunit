@@ -36,8 +36,8 @@ import org.bpelunit.framework.exception.SpecificationException;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
- * Implementation of the BPELUnitRunner for use in Eclipse. Uses an Eclipse-based implementation of
- * extension loading and preference storage.
+ * Implementation of the BPELUnitRunner for use in Eclipse. Uses an
+ * Eclipse-based implementation of extension loading and preference storage.
  * 
  * @version $Id$
  * @author Philip Mayer
@@ -68,55 +68,62 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 
 	@Override
 	public void configureLogging() {
-		Logger rootLogger= Logger.getRootLogger();
+		Logger rootLogger = Logger.getRootLogger();
 		rootLogger.removeAllAppenders();
 
 	}
 
 	public void configureLogging(Level level, Appender appender) {
-		Logger rootLogger= Logger.getRootLogger();
+		Logger rootLogger = Logger.getRootLogger();
 		rootLogger.removeAllAppenders();
 		rootLogger.addAppender(appender);
 		rootLogger.setLevel(level);
 	}
 
 	@Override
-	public IBPELDeployer createNewDeployer(String type) throws SpecificationException {
-		DeployerExtension deployer= ExtensionControl.findDeployerExtension(type);
+	public IBPELDeployer createNewDeployer(String type)
+			throws SpecificationException {
+		DeployerExtension deployer = ExtensionControl
+				.findDeployerExtension(type);
 		if (deployer != null) {
-			IBPELDeployer newDeployer= deployer.createNew();
-			IPreferenceStore ps= BPELUnitActivator.getDefault().getPreferenceStore();
-			newDeployer.setConfiguration(ExtensionUtil.deserializeMap(ps.getString(type)));
+			IBPELDeployer newDeployer = deployer.createNew();
 			return newDeployer;
 		} else
-			throw new SpecificationException("Could not find a deployer for type " + type);
+			throw new SpecificationException(
+					"Could not find a deployer for type " + type);
 	}
 
 	@Override
-	public IHeaderProcessor createNewHeaderProcessor(String name) throws SpecificationException {
-		HeaderProcessorExtension hproc= ExtensionControl.findHeaderProcessorExtension(name);
+	public IHeaderProcessor createNewHeaderProcessor(String name)
+			throws SpecificationException {
+		HeaderProcessorExtension hproc = ExtensionControl
+				.findHeaderProcessorExtension(name);
 		if (hproc != null) {
 			return hproc.createNew();
 		} else
-			throw new SpecificationException("Could not find a header processor for type " + name);
+			throw new SpecificationException(
+					"Could not find a header processor for type " + name);
 	}
 
 	@Override
-	public ISOAPEncoder createNewSOAPEncoder(String styleEncoding) throws SpecificationException {
-		SOAPEncoderExtension soapEnc= ExtensionControl.findSOAPEncoderExtension(styleEncoding);
+	public ISOAPEncoder createNewSOAPEncoder(String styleEncoding)
+			throws SpecificationException {
+		SOAPEncoderExtension soapEnc = ExtensionControl
+				.findSOAPEncoderExtension(styleEncoding);
 		if (soapEnc != null) {
 			return soapEnc.createNew();
 		} else
-			throw new SpecificationException("Could not find a SOAP Encoder for type " + styleEncoding);
+			throw new SpecificationException(
+					"Could not find a SOAP Encoder for type " + styleEncoding);
 	}
 
 	@Override
 	public void configureCoverageTool() throws ConfigurationException {
-		// TODO Auto-generated method stub
-		
+		// TODO Check Auto-generated method stub
 	}
 
 	public void configureCoverageTool(BPELUnitActivator plugin) {
+		// TODO Refactor -> Move up and make Strategy pattern with map
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		List<String> list = new ArrayList<String>();
 		IPreferenceStore preference = plugin.getPreferenceStore();
@@ -174,16 +181,35 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 		if (preference.getBoolean(CompensationMetric.METRIC_NAME)) {
 			map.put(CompensationMetric.METRIC_NAME, null);
 		}
-		
-		TestCaseRunner.wait_time_for_coverage_markers=preference.getInt(PreferenceConstants.P_COVERAGE_WAIT_TIME);
 
-		ICoverageMeasurementTool coverageTool=new CoverageMeasurementTool();
+		TestCaseRunner.wait_time_for_coverage_markers = preference
+				.getInt(PreferenceConstants.P_COVERAGE_WAIT_TIME);
+
+		ICoverageMeasurementTool coverageTool = new CoverageMeasurementTool();
 		BPELUnitRunner.setCoverageMeasurmentTool(coverageTool);
 		try {
-		coverageTool.configureMetrics(map);
+			coverageTool.configureMetrics(map);
 		} catch (ConfigurationException e) {
 		}
 
+	}
+
+	@Override
+	public Map<String, String> getGlobalConfigurationForDeployer(
+			IBPELDeployer deployer) {
+		IPreferenceStore ps = BPELUnitActivator.getDefault()
+				.getPreferenceStore();
+		String type = ExtensionControl.getDeployerType(deployer);
+		if(type == null) {
+			return null;
+		}
+		
+		String serializedMap = ps.getString(type);
+		if(serializedMap == null) {
+			return null;
+		}
+		
+		return ExtensionUtil.deserializeMap(serializedMap);
 	}
 
 }

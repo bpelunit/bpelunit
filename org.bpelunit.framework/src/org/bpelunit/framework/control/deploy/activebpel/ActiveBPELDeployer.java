@@ -7,7 +7,6 @@ package org.bpelunit.framework.control.deploy.activebpel;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import javax.xml.soap.SOAPException;
 
@@ -21,6 +20,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
@@ -32,21 +32,18 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  * @author Philip Mayer
  * 
  */
+@IBPELDeployerCapabilities(canDeploy=true,canMeasureTestCoverage=true)
 public class ActiveBPELDeployer implements IBPELDeployer {
-
-	// put config
-	private static final String fsBPRFile = "BPRFile";
-
-	// general config
-	private static final String fsDeploymentDirectory = "ActiveBPELDeploymentDirectory";
-
-	private static final String fsDeploymentServiceURL = "ActiveBPELDeploymentServiceURL";
-
-	private static final String DEFAULT_DEPLOYMENT_URL = "http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR";
+	
+//	// put config
+//	private static final String fsBPRFile = "BPRFile";
+//
+//	// general config
+//	private static final String fsDeploymentDirectory = "ActiveBPELDeploymentDirectory";
+//
+//	private static final String fsDeploymentServiceURL = "ActiveBPELDeploymentServiceURL";
 
 	private Logger fLogger = Logger.getLogger(getClass());
-
-	private Map<String, String> fDeploymentOptions;
 
 	private String fResultingFile;
 
@@ -56,13 +53,23 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	private String fDeploymentAdminServiceURL;
 
+	@IBPELDeployerOption(testSuiteSpecific=false)
+	public void setBPRFile(String bprFile) {
+		this.fBPRFile = bprFile;
+	}
+
+	@IBPELDeployerOption
+	public void setDeploymentDirectory(String deploymentDirectory) {
+		this.fDeploymentDirectory = deploymentDirectory;
+	}
+	
+	@IBPELDeployerOption(defaultValue="http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR")
+	public void setDeploymentAdminServiceURL(String deploymentAdminServiceURL) {
+		this.fDeploymentAdminServiceURL = deploymentAdminServiceURL;
+	}
+	
 	public void deploy(String pathToTest, ProcessUnderTest put) throws DeploymentException {
 		fLogger.info("ActiveBPEL deployer got request to deploy " + put);
-
-		fBPRFile = put.getDeploymentOption(fsBPRFile);
-		fDeploymentDirectory = fDeploymentOptions.get(fsDeploymentDirectory);
-		fDeploymentAdminServiceURL = fDeploymentOptions
-				.get(fsDeploymentServiceURL);
 
 		check(fBPRFile, "BPR File");
 		check(fDeploymentDirectory, "deployment directory path");
@@ -186,27 +193,4 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 					"ActiveBPEL deployment configuration is missing the "
 							+ description + ".");
 	}
-
-	public void setConfiguration(Map<String, String> options) {
-		fDeploymentOptions = options;
-	}
-
-	@Override
-	public String[] getConfigurationParameters() {
-		return new String[] { fsBPRFile, fsDeploymentDirectory, fsDeploymentServiceURL };
-	}
-
-	@Override
-	public String getDefaultValueForParameter(String parameter) {
-		if(parameter == null) {
-			throw new NullPointerException("the parameter name must not be null");
-		}
-		
-		if(fsDeploymentServiceURL.equals(parameter)) {
-			return DEFAULT_DEPLOYMENT_URL;
-		}
-		
-		return "";
-	}
-
 }
