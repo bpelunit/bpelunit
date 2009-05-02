@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
+import org.bpelunit.framework.client.eclipse.dialog.field.DeployerOptionModifyListener;
 import org.bpelunit.framework.client.eclipse.dialog.field.SelectionField;
 import org.bpelunit.framework.client.eclipse.dialog.field.TextField;
 import org.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
@@ -110,6 +111,13 @@ public class OptionTableFieldEditor extends FieldEditor {
 	 */
 	private boolean fChanged;
 
+	/**
+	 * The class of the currently selected deployer inv: (fCurrentDeployer !=
+	 * null && fCurrentDeployerClass == fCurrentDeployer.getClass()) ||
+	 * (fCurrentDeployer == null && fCurrentDeployerClass == null))
+	 */
+	private Class<? extends IBPELDeployer> fCurrentDeployerClass;
+
 	class OptionLabelProvider extends LabelProvider implements
 			ITableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
@@ -136,7 +144,7 @@ public class OptionTableFieldEditor extends FieldEditor {
 	class OptionContentProvider implements IStructuredContentProvider {
 
 		public Object[] getElements(Object inputElement) {
-			return ((List<Object>) inputElement).toArray();
+			return ((List<?>) inputElement).toArray();
 		}
 
 		public void dispose() {
@@ -354,7 +362,7 @@ public class OptionTableFieldEditor extends FieldEditor {
 	protected void removePressed() {
 		IStructuredSelection sel = (IStructuredSelection) fTable.getSelection();
 		fTable.getControl().setRedraw(false);
-		for (Iterator i = sel.iterator(); i.hasNext();) {
+		for (Iterator<?> i = sel.iterator(); i.hasNext();) {
 			ConfigurationOption var = (ConfigurationOption) i.next();
 			fConfigurationOptions.remove(var);
 			fChanged = true;
@@ -375,24 +383,18 @@ public class OptionTableFieldEditor extends FieldEditor {
 
 	private String[] editProperty(ConfigurationOption currentProperty) {
 
-		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
-				"Add a property");
-
 		String initialKey = currentProperty != null ? currentProperty.getKey()
 				: null;
 		String initialValue = currentProperty != null ? currentProperty
 				.getValue() : null;
 
-		String[] options = new String[0];
-		try {
-			IBPELDeployer deployer = fCurrentDeployer.createNew();
-			options = ExtensionRegistry.getPossibleConfigurationOptions(
-					deployer.getClass(), false).toArray(options);
-		} catch (Exception e) {
-			// by not doing anything, no suggested keys will be displayed.
-			// TODO DL ? show a message box?
-			e.printStackTrace();
-		}
+		String title = initialKey == null ? "Add Property" : "Edit Property";
+
+		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
+				title);
+
+		String[] options = ExtensionRegistry.getPossibleConfigurationOptions(
+				fCurrentDeployerClass, false).toArray(new String[0]);
 
 		SelectionField selField = new SelectionField(dialog, "Key", initialKey,
 				"Keys...", options);
@@ -404,6 +406,8 @@ public class OptionTableFieldEditor extends FieldEditor {
 		valueField.setValidator(new NotEmptyValidator("Value"));
 		dialog.addField(valueField);
 
+		selField.addModifyListener(new DeployerOptionModifyListener(selField, valueField, fCurrentDeployerClass));
+		
 		if (dialog.open() != Window.OK)
 			return null;
 
@@ -508,6 +512,12 @@ public class OptionTableFieldEditor extends FieldEditor {
 		}
 
 		fCurrentDeployer = deployerExtension;
+		try {
+			fCurrentDeployerClass = deployerExtension.createNew().getClass();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fCurrentDeployerClass = null;
+		}
 		fChanged = false;
 		if (getPreferenceStore() != null)
 			doLoad();

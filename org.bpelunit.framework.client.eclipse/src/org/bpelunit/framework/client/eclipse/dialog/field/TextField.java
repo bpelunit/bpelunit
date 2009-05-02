@@ -88,4 +88,7 @@ public class TextField extends Field {
 		return fCurrentSelection;
 	}
 
+	public void setText(String text) {
+		this.fText.setText(text);
+	}
 }

@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.bpelunit.framework.client.eclipse.ExtensionControl;
 import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
+import org.bpelunit.framework.client.eclipse.dialog.field.DeployerOptionModifyListener;
 import org.bpelunit.framework.client.eclipse.dialog.field.SelectionField;
 import org.bpelunit.framework.client.eclipse.dialog.field.TextField;
 import org.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
@@ -73,6 +74,7 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 	private ListDialogField fSelectionField;
 	private XMLPUTDeploymentInformation fPutInfo;
 	private String[] fPossibleParameterNames = null;
+	private Class<? extends IBPELDeployer> fDeployerClass;
 
 	public DeploymentOptionWizardPage(String pageName) {
 		super(pageName);
@@ -154,22 +156,25 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
 				title);
 
-		SelectionField field = new SelectionField(dialog, "Key", initialKey,
+		SelectionField keyField = new SelectionField(dialog, "Key", initialKey,
 				"Keys...", this.fPossibleParameterNames);
-		field.setValidator(new NotEmptyValidator("Key"));
-		dialog.addField(field);
+		keyField.setValidator(new NotEmptyValidator("Key"));
+		dialog.addField(keyField);
 
-		TextField field2 = new TextField(dialog, "Value", initialValue,
+		TextField valueField = new TextField(dialog, "Value", initialValue,
 				TextField.Style.SINGLE); // TODO
-		field2.setValidator(new NotEmptyValidator("Value"));
-		dialog.addField(field2);
+		valueField.setValidator(new NotEmptyValidator("Value"));
+		dialog.addField(valueField);
 
+		keyField.addModifyListener(new DeployerOptionModifyListener(keyField, valueField,
+				fDeployerClass));
+		
 		if (dialog.open() != Window.OK)
 			return null;
 
 		String[] s = new String[2];
-		s[0] = field.getSelection();
-		s[1] = field2.getSelection();
+		s[0] = keyField.getSelection();
+		s[1] = valueField.getSelection();
 		return s;
 	}
 
@@ -195,6 +200,7 @@ public class DeploymentOptionWizardPage extends StructuredActivityWizardPage {
 			String deployerName = fPutInfo.getType();
 			IBPELDeployer deployer = ExtensionControl.findDeployerExtension(
 					deployerName).createNew();
+			fDeployerClass = deployer.getClass();
 			this.fPossibleParameterNames = ExtensionRegistry
 					.getPossibleConfigurationOptions(deployer.getClass(), true)
 					.toArray(new String[0]);

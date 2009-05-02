@@ -5,6 +5,9 @@
  */
 package org.bpelunit.framework.client.eclipse.dialog.field;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
 import org.bpelunit.framework.client.eclipse.dialog.Field;
 import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
@@ -74,6 +77,7 @@ public class SelectionField extends Field {
 
 	private String fCurrentSelection;
 	private String[] fChoices;
+	private List<ModifyListener> fModifyListeners = new ArrayList<ModifyListener>();
 
 	public SelectionField(FieldBasedInputDialog inputDialog, String labelText, String initialValue, String buttonTitle, final String[] choices) {
 		super(inputDialog, labelText, initialValue);
@@ -112,6 +116,10 @@ public class SelectionField extends Field {
 			public void modifyText(ModifyEvent e) {
 				fCurrentSelection= fText.getText();
 				getDialog().validateFields();
+				
+				for(ModifyListener ml : fModifyListeners) {
+					ml.modifyText(e);
+				}
 			}
 		});
 
@@ -149,4 +157,7 @@ public class SelectionField extends Field {
 		return fCurrentSelection;
 	}
 
+	public void addModifyListener(ModifyListener ml) {
+		this.fModifyListeners.add(ml);
+	}
 }
