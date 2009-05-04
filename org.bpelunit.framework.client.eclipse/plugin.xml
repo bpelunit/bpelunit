@@ -145,7 +145,7 @@
             id="ode"
             name="ODE Deployer"
             general_options="ODEDeploymentServiceURL"
-            suite_options="BundleLocation"
+            suite_options="DeploymentArchive"
             />
       <bpelDeployer
             deployerClass="org.bpelunit.framework.control.deploy.simple.TestModeDeployer"

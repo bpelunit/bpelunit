@@ -77,7 +77,7 @@ public class ODEDeployer implements IBPELDeployer {
 			throws DeploymentException {
 		fLogger.info("ODE deployer got request to deploy " + put);
 
-		check(fArchive, "Bundle Location");
+		check(fArchive, "Archive Location");
 		check(fDeploymentAdminServiceURL, "deployment admin server URL");
 
 		boolean archiveCreated = false;
@@ -106,7 +106,7 @@ public class ODEDeployer implements IBPELDeployer {
 				archiveCreated = true; // Separate zip file was created
 			} else {
 				throw new DeploymentException(
-						"Unknown bundle format for the bundle " + fArchive);
+						"Unknown archive format for the archive " + fArchive);
 			}
 		}
 
