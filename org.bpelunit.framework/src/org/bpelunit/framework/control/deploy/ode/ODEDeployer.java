@@ -11,7 +11,6 @@ import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
-import java.util.Map;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPException;
@@ -27,7 +26,6 @@ import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
-import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerOption;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
@@ -41,7 +39,7 @@ import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;
 
 /**
- * ODE Deployer-deploys a process to an ODE server.
+ * ODE Deployer-deploys/undeploys a process to an ODE server.
  * 
  * @author Buddhika Chamith
  */
@@ -49,21 +47,13 @@ import de.schlichtherle.io.File;
 @IBPELDeployerCapabilities(canDeploy = true, canMeasureTestCoverage = false)
 public class ODEDeployer implements IBPELDeployer {
 
-	// put config
-	private static final String fsBundle = "BundleLocation";
-
-	// general config
-	private static final String fsDeploymentServiceURL = "ODEDeploymentServiceURL";
-
 	private Logger fLogger = Logger.getLogger(getClass());
-
-	private Map<String, String> fDeploymentOptions;
 
 	private String fProcessId;
 
 	private String fPackageId;
 
-	private String fBundle;
+	private String fArchive;
 
 	private String fDeploymentAdminServiceURL;
 
@@ -74,8 +64,8 @@ public class ODEDeployer implements IBPELDeployer {
 	}
 
 	@IBPELDeployerOption(testSuiteSpecific = true)
-	public void setBundleLocation(String bundle) {
-		this.fBundle = bundle;
+	public void setDeploymentArchive(String archive) {
+		this.fArchive = archive;
 	}
 
 	@IBPELDeployerOption(defaultValue = "http://localhost:8080/ode/processes/DeploymentService")
@@ -87,23 +77,24 @@ public class ODEDeployer implements IBPELDeployer {
 			throws DeploymentException {
 		fLogger.info("ODE deployer got request to deploy " + put);
 
-		fBundle = put.getDeploymentOption(fsBundle);
-
-		check(fBundle, "Bundle Location");
+		check(fArchive, "Bundle Location");
 		check(fDeploymentAdminServiceURL, "deployment admin server URL");
 
 		boolean archiveCreated = false;
 
-		if (!FilenameUtils.getName(fBundle).contains(".zip")) {
-			// if the bundle is a directory not a zip file
+		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
+				.getFullPath(fArchive));
 
-			File dir = new File(fBundle);
+		if (!FilenameUtils.getName(fArchive).contains(".zip")) {
+			// if the deployment is a directory not a zip file
+
+			File dir = new File(FilenameUtils.concat(pathToArchive, fArchive));
 			if (dir.isDirectory()) {
 				// creates a zip file in the same location as directory
 
 				File zipFile = new File(dir.getAbsolutePath() + ".zip");
 				dir.copyAllTo(zipFile);
-				fBundle = zipFile.getAbsolutePath();
+				fArchive = zipFile.getAbsolutePath();
 
 				try {
 					File.umount(true, true, true, true);
@@ -115,13 +106,11 @@ public class ODEDeployer implements IBPELDeployer {
 				archiveCreated = true; // Separate zip file was created
 			} else {
 				throw new DeploymentException(
-						"Unknown bundle format for the bundle " + fBundle);
+						"Unknown bundle format for the bundle " + fArchive);
 			}
 		}
 
-		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
-				.getFullPath(fBundle));
-		fBundle = FilenameUtils.getName(fBundle);
+		fArchive = FilenameUtils.getName(fArchive);
 		boolean fileReplaced = false;
 
 		// process the bundle for replacing wsdl eprs here. requires base url
@@ -143,11 +132,11 @@ public class ODEDeployer implements IBPELDeployer {
 		}
 
 		File uploadingFile = new File(FilenameUtils.concat(pathToArchive,
-				fBundle));
+				fArchive));
 
 		if (!uploadingFile.exists())
 			throw new DeploymentException(
-					"ODE deployer could not find zip file " + fBundle);
+					"ODE deployer could not find zip file " + fArchive);
 
 		HttpClient client = new HttpClient();
 		PostMethod method = new PostMethod(fDeploymentAdminServiceURL);
@@ -255,10 +244,6 @@ public class ODEDeployer implements IBPELDeployer {
 		}
 	}
 
-	public void setConfiguration(Map<String, String> options) {
-		fDeploymentOptions = options;
-	}
-
 	// *****Private helper methods*****
 
 	private String extractProcessId(String responseBody) throws IOException {
@@ -326,8 +311,8 @@ public class ODEDeployer implements IBPELDeployer {
 			// processId is in the form HelloBPELProcess-1. Extract out version.
 		}
 
-		if (fBundle.contains(".")) {
-			packageName = fBundle.split("\\.")[0];
+		if (fArchive.contains(".")) {
+			packageName = fArchive.split("\\.")[0];
 			// fBundle is in the form HelloBPEL.zip. Take out .zip part.
 		}
 
