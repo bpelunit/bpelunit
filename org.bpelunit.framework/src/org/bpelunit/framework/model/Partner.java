@@ -98,7 +98,11 @@ public class Partner {
 
 		return new SOAPOperationCallIdentifier(fWSDLDefinition, service, port, operationName, direction);
 	}
-
+	
+	public Definition getWSDLDefinition(){
+		return fWSDLDefinition;
+	}
+	
 	@Override
 	public String toString() {
 		return getName();

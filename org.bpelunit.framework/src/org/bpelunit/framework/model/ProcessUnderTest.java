@@ -10,10 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bpelunit.framework.BPELUnitRunner;
+import org.bpelunit.framework.control.deploy.helpers.IDeployment;
+import org.bpelunit.framework.control.deploy.helpers.PartnerLink;
 import org.bpelunit.framework.control.ext.DeploymentOption;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.util.ExtensionRegistry;
 import org.bpelunit.framework.exception.DeploymentException;
+import org.bpelunit.framework.exception.EndPointException;
 import org.bpelunit.framework.exception.SpecificationException;
 
 /**
@@ -51,10 +55,13 @@ public class ProcessUnderTest extends Partner {
 	private boolean isDeployed;
 
 	/**
-	 * The global configuration options for the deployer that shall be considered when doing the deployment.
-	 * inv: fGlobalConfiguration != null
+	 * The global configuration options for the deployer that shall be
+	 * considered when doing the deployment. inv: fGlobalConfiguration != null
 	 */
 	private Map<String, String> fGlobalConfiguration = new HashMap<String, String>();
+
+	// added
+	private Map<String, Partner> fPartners;
 
 	public ProcessUnderTest(String name, String testBasePath, String wsdlFile,
 			String baseURL) throws SpecificationException {
@@ -83,6 +90,24 @@ public class ProcessUnderTest extends Partner {
 
 		ExtensionRegistry.configureDeployer(fDeployer, options);
 
+		// changing end point logic goes here.
+		if (BPELUnitRunner.changeEndpoints()) {
+			IDeployment deployment = fDeployer.getDeployment(this);
+			PartnerLink[] partnerLinks = deployment.getPartnerLinks();
+			Partner[] partners = fPartners.values().toArray(new Partner[] {});
+			Map<Partner, PartnerLink> linkMap = getLinkMapping(partners,
+					partnerLinks);
+
+			try {
+				for (Partner p : linkMap.keySet()) {
+					PartnerLink pl = linkMap.get(p);
+					deployment.replaceEndpoints(pl, p);
+				}
+			} catch (EndPointException e) {
+				throw new DeploymentException("Error in changing endpoints.", e);
+			}
+		}
+
 		fDeployer.deploy(getBasePath(), this);
 		// if no exception was thrown, the service is deployed.
 		isDeployed = true;
@@ -103,10 +128,10 @@ public class ProcessUnderTest extends Partner {
 	}
 
 	public String getDeploymentOption(String key) {
-		if(key == null) {
+		if (key == null) {
 			return null;
 		}
-		
+
 		for (DeploymentOption option : fXMLDeploymentOptions) {
 			if (key.equals(option.getKey())) {
 				return option.getValue();
@@ -119,13 +144,46 @@ public class ProcessUnderTest extends Partner {
 		return fDeployer;
 	}
 
-	public void setGlobalConfiguration(
-			Map<String, String> globalConfiguration) {
-		if(globalConfiguration != null) {
+	public void setGlobalConfiguration(Map<String, String> globalConfiguration) {
+		if (globalConfiguration != null) {
 			this.fGlobalConfiguration = globalConfiguration;
 		} else {
 			this.fGlobalConfiguration = new HashMap<String, String>();
 		}
 	}
 
+	public void setPartners(Map<String, Partner> partners) {
+		this.fPartners = partners;
+	}
+
+	public Map<String, Partner> getPartners() {
+		return this.fPartners;
+	}
+
+	/**
+	 * This operation maps the Partner objects the corresponding PartnerLink
+	 * object. Any algorithm can be used to achieve this according to the
+	 * requirements. Currently Partner and PartnerLink are matched using their
+	 * names.
+	 * 
+	 * @param partners
+	 *            Array of Partner objects to be matched
+	 * @param partnerLinks
+	 *            Array of PartnerLink objects to be matched
+	 * @return
+	 */
+	public Map<Partner, PartnerLink> getLinkMapping(Partner[] partners,
+			PartnerLink[] partnerLinks) {
+		Map<Partner, PartnerLink> linkMap = new HashMap<Partner, PartnerLink>();
+		for (Partner p : partners) {
+			for (PartnerLink pl : partnerLinks) {
+				if (p.getName().equals(pl.getName())) {
+					linkMap.put(p, pl);
+					break;
+				}
+			}
+		}
+
+		return linkMap;
+	}
 }

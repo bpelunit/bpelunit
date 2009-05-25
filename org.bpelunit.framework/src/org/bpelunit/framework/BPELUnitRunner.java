@@ -88,6 +88,8 @@ public abstract class BPELUnitRunner {
 	private static boolean fHaltOnFailure = false;
 
 	private static boolean fMeasureCoverage = false;
+	
+	private static boolean fChangeEndpoints=true;
 
 	private static ICoverageMeasurementTool coverageMeasurmentTool = null;
 
@@ -316,6 +318,10 @@ public abstract class BPELUnitRunner {
 
 	public static boolean measureTestCoverage() {
 		return fMeasureCoverage;
+	}
+	
+	public static boolean changeEndpoints(){
+		return fChangeEndpoints;
 	}
 	
 	public static void setCoverageMeasurmentTool(ICoverageMeasurementTool tool){

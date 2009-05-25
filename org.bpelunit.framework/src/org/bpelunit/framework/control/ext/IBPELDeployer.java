@@ -10,6 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.bpelunit.framework.control.deploy.helpers.IDeployment;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
 
@@ -33,25 +34,26 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  */
 public interface IBPELDeployer {
 
-	/** 
-	 * This annotation can be added to any deployer class to indicate 
-	 * the capabilities of the deployer that are not exposed via the
-	 * interface
+	/**
+	 * This annotation can be added to any deployer class to indicate the
+	 * capabilities of the deployer that are not exposed via the interface
 	 * 
 	 * @author dluebke
 	 */
 	@Retention(RetentionPolicy.RUNTIME)
-	@Target(ElementType.TYPE) 
+	@Target(ElementType.TYPE)
 	public @interface IBPELDeployerCapabilities {
 		boolean canDeploy() default false;
+
 		boolean canMeasureTestCoverage() default false;
+
 		boolean canIntroduceMocks() default false;
 	}
-	
+
 	/**
-	 * This annotation must be used to identify configuration
-	 * parameters by annotating the setters. The setters must be of the form
-	 * <code>public void set${propertyName}(String value)</code> 
+	 * This annotation must be used to identify configuration parameters by
+	 * annotating the setters. The setters must be of the form
+	 * <code>public void set${propertyName}(String value)</code>
 	 * 
 	 * @author dluebke
 	 */
@@ -59,9 +61,10 @@ public interface IBPELDeployer {
 	@Target(ElementType.METHOD)
 	public @interface IBPELDeployerOption {
 		String defaultValue() default "";
+
 		boolean testSuiteSpecific() default false;
 	}
-	
+
 	/**
 	 * Deploy the PUT. This method must block until the PUT is fully deployed
 	 * and ready to accept incoming calls. In case of an error, a
@@ -103,5 +106,18 @@ public interface IBPELDeployer {
 	 * @param options
 	 *            the options
 	 */
-//	public void setConfiguration(Map<String, String> options);
+
+	// public void setConfiguration(Map<String, String> options);
+	/**
+	 * Gets the corresponding IDeployment implementation for this deployer.
+	 * 
+	 * @param processUnderTest
+	 *            ProcessUnderTest object corresponding to the process to be
+	 *            deployed. This holds information such as partners of the
+	 *            process which are required for initializing the IDeployment
+	 *            implementation class.
+	 */
+	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
+			throws DeploymentException;
+
 }

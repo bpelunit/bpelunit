@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPException;
@@ -24,10 +26,13 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
+import org.bpelunit.framework.control.deploy.helpers.IDeployment;
+import org.bpelunit.framework.control.deploy.helpers.ODEDeployment;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
+import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.ProcessUnderTest;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -58,6 +63,8 @@ public class ODEDeployer implements IBPELDeployer {
 	private String fDeploymentAdminServiceURL;
 
 	private ODERequestEntityFactory fFactory;
+
+	private ODEDeployment fDeployment;
 
 	public ODEDeployer() {
 		fFactory = ODERequestEntityFactory.newInstance();
@@ -244,6 +251,25 @@ public class ODEDeployer implements IBPELDeployer {
 		}
 	}
 
+	public IDeployment getDeployment(ProcessUnderTest put)
+			throws DeploymentException {
+		if (fDeployment == null) {
+			Map<String, Partner> partnerList = put.getPartners();
+			Partner[] partners = new Partner[partnerList.values().size()];
+			partners = (Partner[]) (new ArrayList<Partner>(partnerList.values())
+					.toArray(partners));
+
+			if (partners != null && fArchive != null) {
+				fDeployment = new ODEDeployment(partners, fArchive);
+			} else {
+				throw new DeploymentException(
+						"Problem creating ODEDeployment: ", null);
+			}
+		}
+
+		return this.fDeployment;
+	}
+
 	// *****Private helper methods*****
 
 	private String extractProcessId(String responseBody) throws IOException {
@@ -268,28 +294,24 @@ public class ODEDeployer implements IBPELDeployer {
 		return processId;
 	}
 
-	private QName extractQName(String qnameStr, Element idElement) {
-		final int NAMESPACE = 0;
-		final int LOCAL_PART = 1;
+	private QName extractQName(String serviceName, Element idElement) {
+		final int NS_URI = 0;
+		final int LOCALNAME = 1;
 
-		if (qnameStr.contains(":")) {
-			String[] tokens = qnameStr.split(":");
+		String tokens[];
 
-			if (isUri(tokens[NAMESPACE])) { // if the namespace uri is directly
-				// used in text node qname value
-				return new QName(tokens[NAMESPACE], tokens[LOCAL_PART]);
-			} else { // if a namespace prefix is used in text node qname value
-				// prefix may be defined in id element
-				String uriStr = idElement.getNamespace(tokens[NAMESPACE])
-						.getURI();
+		if (serviceName.contains(":")) {
+			tokens = serviceName.split(":");
 
-				if (isUri(uriStr)) {
-					return new QName(uriStr, tokens[LOCAL_PART]);
-				}
+			if (isUri(tokens[NS_URI]) && !isPrefix(tokens[NS_URI], idElement)) {
+				return new QName(tokens[NS_URI], tokens[LOCALNAME]);
+			} else {
+				String namespace = getPrefixValue(tokens[NS_URI], idElement);
+				return new QName(namespace, tokens[LOCALNAME]);
 			}
 		}
 
-		return new QName(null, qnameStr); // just the local part is present
+		return new QName(null, serviceName);
 	}
 
 	private boolean isUri(String uriStr) {
@@ -300,6 +322,22 @@ public class ODEDeployer implements IBPELDeployer {
 		}
 
 		return true;
+	}
+	
+	private boolean isPrefix(String uriStr,Element service){
+		
+		if(service !=null && service.getNamespace(uriStr) != null){
+			return true;
+		}
+		return false;
+	}
+	
+	private String getPrefixValue(String prefix,Element service){
+
+		if(service !=null && service.getNamespace(prefix) != null){
+			return service.getNamespace(prefix).getURI();
+		}
+		return null;
 	}
 
 	private String extractPackageId(String processId) {
@@ -326,4 +364,5 @@ public class ODEDeployer implements IBPELDeployer {
 					"ODE deployment configuration is missing the "
 							+ description + ".");
 	}
+
 }

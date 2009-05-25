@@ -214,6 +214,12 @@ public class SpecificationLoader {
 		suitePartners.put(processUnderTest.getName(), processUnderTest);
 
 		/*
+		 * Add partners of the process to put in order to facilitate end point
+		 * replacement
+		 */
+		processUnderTest.setPartners(suitePartners);
+
+		/*
 		 * The Client. Note that the client uses the PUT's WSDL. This is
 		 * intended as the clients activities will all deal with the partners
 		 * operations.
