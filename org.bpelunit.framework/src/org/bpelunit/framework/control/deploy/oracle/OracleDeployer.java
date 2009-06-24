@@ -12,6 +12,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDeployment;
 import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
@@ -24,7 +25,7 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  * @author Philip Mayer
  * 
  */
-@IBPELDeployerCapabilities(canDeploy=true)
+@IBPELDeployerCapabilities(canDeploy = true)
 public class OracleDeployer implements IBPELDeployer {
 
 	private static final String KEYWORD_UNDEPLOY = "undeploy";
@@ -34,12 +35,13 @@ public class OracleDeployer implements IBPELDeployer {
 	private static final String ORACLE_BIN_DIRECTORY = "bin/";
 
 	// put config
-//	private static final String fsBPELJARPath = "BPELJARFile";
-//
-//	// general config
-//	private static final String fsOracleDirectory = "OracleDirectory";
-//	private static final String fsOracleDomain = "OracleDomain";
-//	private static final String fsOracleDomainPassword = "OracleDomainPassword";
+	// private static final String fsBPELJARPath = "BPELJARFile";
+	//
+	// // general config
+	// private static final String fsOracleDirectory = "OracleDirectory";
+	// private static final String fsOracleDomain = "OracleDomain";
+	// private static final String fsOracleDomainPassword =
+	// "OracleDomainPassword";
 
 	private Logger fLogger = Logger.getLogger(this.getClass());
 
@@ -52,7 +54,7 @@ public class OracleDeployer implements IBPELDeployer {
 	private String fPassword;
 	private String fOracleDirectory;
 
-	@IBPELDeployerOption(testSuiteSpecific=true)
+	@IBPELDeployerOption(testSuiteSpecific = true)
 	public void setBPELJARPath(String value) {
 		this.fBPELFilePath = value;
 	}
@@ -61,17 +63,17 @@ public class OracleDeployer implements IBPELDeployer {
 	public void setOracleDirectory(String value) {
 		this.fOracleDirectory = value;
 	}
-	
+
 	@IBPELDeployerOption
 	public void setOracleDomain(String value) {
 		this.fDomain = value;
 	}
-	
+
 	@IBPELDeployerOption
 	public void setOracleDomainPassword(String value) {
 		this.fPassword = value;
 	}
-	
+
 	public void deploy(String path, ProcessUnderTest processUnderTest)
 			throws DeploymentException {
 
@@ -85,8 +87,7 @@ public class OracleDeployer implements IBPELDeployer {
 		fLogger.info("Oracle BPEL deployer got deploy request for PUT "
 				+ processUnderTest);
 
-		check(fBPELFilePath,
-				"BPEL JAR file");
+		check(fBPELFilePath, "BPEL JAR file");
 		check(fOracleDirectory, "Oracle Directory");
 
 		if (!new File(fOracleDirectory).exists())
@@ -95,8 +96,8 @@ public class OracleDeployer implements IBPELDeployer {
 
 		fProcessName = processUnderTest.getName();
 		fBPELFilePath = FilenameUtils.concat(path, fBPELFilePath);
-		fScriptFilePath = FilenameUtils.concat(fOracleDirectory, FilenameUtils.concat(
-				ORACLE_BIN_DIRECTORY, BPELDEPLOY_SCRIPT_NAME));
+		fScriptFilePath = FilenameUtils.concat(fOracleDirectory, FilenameUtils
+				.concat(ORACLE_BIN_DIRECTORY, BPELDEPLOY_SCRIPT_NAME));
 
 		fBinDir = fOracleDirectory;
 		if (fBinDir.endsWith("/") || fBinDir.endsWith("\\"))
@@ -139,6 +140,17 @@ public class OracleDeployer implements IBPELDeployer {
 					fDomain, fPassword);
 			runExternal(cmd);
 		}
+	}
+
+	public String getArchiveLocation(String pathToTest) {
+		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
+				.getFullPath(fBPELFilePath));
+		String archiveName = FilenameUtils.getName(fBPELFilePath);
+		return FilenameUtils.concat(pathToArchive, archiveName);
+	}
+
+	public void setArchiveLocation(String archive) {
+		this.fBPELFilePath = archive;
 	}
 
 	// ********************* Internals ********************
@@ -206,5 +218,11 @@ public class OracleDeployer implements IBPELDeployer {
 			throw new DeploymentException(
 					"Oracle deployment configuration is missing the "
 							+ description + ".");
+	}
+
+	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
+			throws DeploymentException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

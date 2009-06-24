@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDeployment;
 import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
@@ -30,7 +31,6 @@ import org.bpelunit.framework.model.ProcessUnderTest;
 @IBPELDeployerCapabilities
 public class FixedDeployer implements IBPELDeployer {
 
-	@Override
 	public void deploy(String path, ProcessUnderTest processUnderTest)
 			throws DeploymentException {
 		// do nothing.
@@ -42,7 +42,6 @@ public class FixedDeployer implements IBPELDeployer {
 		}
 	}
 
-	@Override
 	public void undeploy(String path, ProcessUnderTest processUnderTest)
 			throws DeploymentException {
 		// do nothing.
@@ -51,4 +50,20 @@ public class FixedDeployer implements IBPELDeployer {
 	public void setConfiguration(Map<String, String> options) {
 		// do nothing.
 	}
+
+	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
+			throws DeploymentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getArchiveLocation(String pathToTest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setArchiveLocation(String archive) {
+		// do nothing.
+	}
+
 }

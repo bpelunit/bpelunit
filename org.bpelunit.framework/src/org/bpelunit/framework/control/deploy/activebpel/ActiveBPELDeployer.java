@@ -16,10 +16,12 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDeployment;
 import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
@@ -32,16 +34,18 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  * @author Philip Mayer
  * 
  */
-@IBPELDeployerCapabilities(canDeploy=true,canMeasureTestCoverage=true)
+@IBPELDeployerCapabilities(canDeploy = true, canMeasureTestCoverage = true)
 public class ActiveBPELDeployer implements IBPELDeployer {
-	
-//	// put config
-//	private static final String fsBPRFile = "BPRFile";
-//
-//	// general config
-//	private static final String fsDeploymentDirectory = "ActiveBPELDeploymentDirectory";
-//
-//	private static final String fsDeploymentServiceURL = "ActiveBPELDeploymentServiceURL";
+
+	// // put config
+	// private static final String fsBPRFile = "BPRFile";
+	//
+	// // general config
+	// private static final String fsDeploymentDirectory =
+	// "ActiveBPELDeploymentDirectory";
+	//
+	// private static final String fsDeploymentServiceURL =
+	// "ActiveBPELDeploymentServiceURL";
 
 	private Logger fLogger = Logger.getLogger(getClass());
 
@@ -53,7 +57,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	private String fDeploymentAdminServiceURL;
 
-	@IBPELDeployerOption(testSuiteSpecific=false)
+	@IBPELDeployerOption(testSuiteSpecific = false)
 	public void setBPRFile(String bprFile) {
 		this.fBPRFile = bprFile;
 	}
@@ -62,42 +66,49 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	public void setDeploymentDirectory(String deploymentDirectory) {
 		this.fDeploymentDirectory = deploymentDirectory;
 	}
-	
-	@IBPELDeployerOption(defaultValue="http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR")
+
+	@IBPELDeployerOption(defaultValue = "http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR")
 	public void setDeploymentAdminServiceURL(String deploymentAdminServiceURL) {
 		this.fDeploymentAdminServiceURL = deploymentAdminServiceURL;
 	}
-	
-	public void deploy(String pathToTest, ProcessUnderTest put) throws DeploymentException {
+
+	public void deploy(String pathToTest, ProcessUnderTest put)
+			throws DeploymentException {
 		fLogger.info("ActiveBPEL deployer got request to deploy " + put);
 
 		check(fBPRFile, "BPR File");
 		check(fDeploymentDirectory, "deployment directory path");
 		check(fDeploymentAdminServiceURL, "deployment admin server URL");
 
-		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
-				.getFullPath(fBPRFile));
-		fBPRFile = FilenameUtils.getName(fBPRFile);
+		// changed the way the archive location is obtained.
+		/*
+		 * String pathToArchive = FilenameUtils.concat(archivePath,
+		 * FilenameUtils .getFullPath(fBPRFile)); fBPRFile =
+		 * FilenameUtils.getName(fBPRFile);
+		 */
+		// fBPRFile = pathToTest;
 		boolean fileReplaced = false;
+		String archivePath = getArchiveLocation(pathToTest);
 
-		if (BPELUnitRunner.measureTestCoverage()) {
-			ICoverageMeasurementTool coverageTool = BPELUnitRunner
-			.getCoverageMeasurmentTool();
-			try {
-				
-				String newFile;
-				newFile = coverageTool.prepareArchiveForCoverageMeasurement(
-						pathToArchive, FilenameUtils.getName(fBPRFile), this);
-				fBPRFile = newFile;
-				fileReplaced = true;
-			} catch (Exception e) {
-				coverageTool.setErrorStatus("Coverage measurmetn is failed. An error occurred when annotation for coverage: "
-								+ e.getMessage());
-//				e.printStackTrace();
-			}
-		}
-		File uploadingFile = new File(FilenameUtils.concat(pathToArchive,
-				fBPRFile));
+		// this has been moved to ProcessUnderTest deploy() method.
+		/*
+		 * if (BPELUnitRunner.measureTestCoverage()) { ICoverageMeasurementTool
+		 * coverageTool = BPELUnitRunner .getCoverageMeasurmentTool(); try {
+		 * 
+		 * String newFile;
+		 * 
+		 * newFile = coverageTool.prepareArchiveForCoverageMeasurement(
+		 * pathToArchive, FilenameUtils.getName(fBPRFile), this);
+		 * 
+		 * archivePath = coverageTool
+		 * .prepareArchiveForCoverageMeasurement(pathToTest,
+		 * getDeployment(put)); fBPRFile = archivePath; fileReplaced = true; }
+		 * catch (Exception e) { coverageTool.setErrorStatus(
+		 * "Coverage measurmetn is failed. An error occurred when annotation for coverage: "
+		 * + e.getMessage()); // e.printStackTrace(); } }
+		 */
+
+		File uploadingFile = new File(archivePath);
 
 		if (!uploadingFile.exists())
 			throw new DeploymentException(
@@ -186,11 +197,29 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	}
 
+	// new method to get Archive Location.
+	public String getArchiveLocation(String pathToTest) {
+		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
+				.getFullPath(fBPRFile));
+		String archiveName = FilenameUtils.getName(fBPRFile);
+		return FilenameUtils.concat(pathToArchive, archiveName);
+	}
+
+	public void setArchiveLocation(String archive) {
+		this.fBPRFile = archive;
+	}
+
 	private void check(String toCheck, String description)
 			throws DeploymentException {
 		if (toCheck == null)
 			throw new DeploymentException(
 					"ActiveBPEL deployment configuration is missing the "
 							+ description + ".");
+	}
+
+	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
+			throws DeploymentException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
