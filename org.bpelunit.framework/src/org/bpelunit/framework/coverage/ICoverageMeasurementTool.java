@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDeployment;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.coverage.exceptions.CoverageMeasurementException;
 import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import org.bpelunit.framework.exception.ConfigurationException;
+import org.bpelunit.framework.model.ProcessUnderTest;
 
 /*
  * Die Schnittstelle zum Einbinden der Testabdeckungsmessung.
@@ -27,8 +29,8 @@ public interface ICoverageMeasurementTool {
 	 * Methode zum Konfigurieren der Metrik, die erhoben werden sollen.
 	 * 
 	 * @param configMap Map (Metrikname,Liste), wobei die Liste entweder
-	 * Zusatzinformationen enthält oder zu null evaluiert. Bei
-	 * Aktivitätsabdeckung sind die Basisaktivitäten, die berücksichtigt werden
+	 * Zusatzinformationen enthï¿½lt oder zu null evaluiert. Bei
+	 * Aktivitï¿½tsabdeckung sind die Basisaktivitï¿½ten, die berï¿½cksichtigt werden
 	 * sollen, in der Liste eingetragen. @throws ConfigurationException
 	 */
 	// TODO Nochmal checken
@@ -45,7 +47,7 @@ public interface ICoverageMeasurementTool {
 
 	/*
 	 * 
-	 * @param encoder SOAPEncoder für die Dekodierung der Nachrichten mit
+	 * @param encoder SOAPEncoder fï¿½r die Dekodierung der Nachrichten mit
 	 * Coverage-Marken
 	 */
 	/**
@@ -81,28 +83,34 @@ public interface ICoverageMeasurementTool {
 	public abstract String getEncodingStyle();
 
 	/**
-	 * Präpariert das Deployment-Archiv für die Messung der Abdeckung beim
+	 * Prï¿½pariert das Deployment-Archiv fï¿½r die Messung der Abdeckung beim
 	 * Testen des BPEL-Prozesses. Die Instrumentierung wird auf einer Kopie
-	 * durchgeführt.
+	 * durchgefï¿½hrt.
 	 * 
 	 * @param pathToArchive
 	 * @param archiveFile
 	 * @param deployer
-	 * @return Name der präparierten Archivdatei
+	 * @return Name der prï¿½parierten Archivdatei
 	 * @throws CoverageMeasurementException
 	 */
 	// TODO Instrumentierung?
+	/*
+	 * public abstract String prepareArchiveForCoverageMeasurement( String
+	 * pathToArchive, String archiveFile, IBPELDeployer deployer) throws
+	 * CoverageMeasurementException;
+	 */
+
 	public abstract String prepareArchiveForCoverageMeasurement(
-			String pathToArchive, String archiveFile, IBPELDeployer deployer)
+			String pathToArchive, ProcessUnderTest put, IBPELDeployer deployer)
 			throws CoverageMeasurementException;
 
 	public abstract void setErrorStatus(String message);
 
 	/*
-	 * Setzt den Testfall, der gerade ausgeführt wird. Dadurch ist es möglich,
+	 * Setzt den Testfall, der gerade ausgefï¿½hrt wird. Dadurch ist es mï¿½glich,
 	 * die Testabdeckung von jedem Testfalls zu bestimmen.
 	 * 
-	 * @param testCase Testfall, der gerade ausgeführt wird.
+	 * @param testCase Testfall, der gerade ausgefï¿½hrt wird.
 	 */
 	/**
 	 * Sets the current test case.
@@ -115,7 +123,7 @@ public interface ICoverageMeasurementTool {
 	public abstract void setCurrentTestCase(String testCase);
 
 	/*
-	 * Empfängt SOAP-Nachrichten mit Coverage Marken während der Testausführung
+	 * Empfï¿½ngt SOAP-Nachrichten mit Coverage Marken wï¿½hrend der Testausfï¿½hrung
 	 * 
 	 * @param body Nachricht mit Coverage-Marken
 	 */
@@ -128,10 +136,10 @@ public interface ICoverageMeasurementTool {
 	public abstract void putMessage(String message);
 
 	/*
-	 * Generiert Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im
+	 * Generiert Statistiken (nach dem Testlauf) fï¿½r alle BPEL-Dateien, die im
 	 * Archive sind.
 	 * 
-	 * @return Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im
+	 * @return Statistiken (nach dem Testlauf) fï¿½r alle BPEL-Dateien, die im
 	 * Archive sind.
 	 */
 	/**

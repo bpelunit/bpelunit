@@ -4,8 +4,9 @@
  * 
  */
 
-package org.bpelunit.framework.control.deploy.helpers;
+package org.bpelunit.framework.control.ext;
 
+import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
 import org.bpelunit.framework.exception.EndPointException;
 import org.bpelunit.framework.model.Partner;
 
@@ -42,7 +43,7 @@ public interface IDeployment {
 	public void replaceEndpoints(PartnerLink pl, Partner p)
 			throws EndPointException;
 
-	public void addLoggingService();
+	public void addLoggingService(String wsdl) throws ArchiveFileException;
 
 	/**
 	 * This method returns a the details about the partnerlinks that process
@@ -54,5 +55,9 @@ public interface IDeployment {
 	 * @return created PartnerLinks
 	 */
 	public PartnerLink[] getPartnerLinks();
+
+	public String getArchive();
+
+	public Partner[] getPartners();
 
 }

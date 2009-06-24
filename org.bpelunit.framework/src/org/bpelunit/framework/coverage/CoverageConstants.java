@@ -15,9 +15,14 @@ public class CoverageConstants {
 	 */
 	public static final int DEFAULT_WAITTIME = 500;
 
-	//***********************WSDL for Coverage Logging Service **************************************
-	
+	// ***********************WSDL for Coverage Logging Service
+	// **************************************
+
 	public static final String PARTNERLINK_NAMESPACE = "http://schemas.xmlsoap.org/ws/2003/03/addressing";
+
+	public static final String BPEL_NS = "http://docs.oasis-open.org/wsbpel/2.0/process/executable";
+
+	public static final String WSDL_IMPORT_TYPE = "http://schemas.xmlsoap.org/wsdl/";
 
 	public static final Namespace COVERAGETOOL_NAMESPACE = Namespace
 			.getNamespace("cov",
@@ -64,8 +69,7 @@ public class CoverageConstants {
 
 	public static final String MESSAGETYPE_OF_REGISTER_MESSAGE = MESSAGETYPE_OF_REPORTING_MESSAGE;
 
-	
-	//***********************Configuration of Commandline-Clients
+	// ***********************Configuration of Commandline-Clients
 	public static final Namespace NAMESPACE_CONFIGURATION = Namespace
 			.getNamespace("http://www.bpelunit.org/schema/coverageMetricsConfiguration");
 

@@ -15,6 +15,7 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.Text;
 
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
@@ -26,30 +27,33 @@ import org.w3c.dom.NodeList;
 
 /**
  * <p>
- * This class implements an Encoder for SOAP messages in document/literal style. The WSDL specifying
- * the target web service must be structured as specified in the WS-I Basic Profile, which has the
- * following implications for this encoder:
+ * This class implements an Encoder for SOAP messages in document/literal style.
+ * The WSDL specifying the target web service must be structured as specified in
+ * the WS-I Basic Profile, which has the following implications for this
+ * encoder:
  * </p>
  * 
  * <p>
- * The operation which defines the message must be a document/literal operation, as defined in
- * section 5.3 of WS-I BP.
+ * The operation which defines the message must be a document/literal operation,
+ * as defined in section 5.3 of WS-I BP.
  * </p>
  * <p>
  * <ul>
- * <li>The style attribute must be "document", and the use attributes must be "literal".</li>
- * <li>The soap:body elements must have at most one part specified, or none, in which case the
- * corresponding message must only have one part specified (this is not strictly required by this
- * encoder - more parts are allowed).</li>
- * <li>The referenced parts in the messages MUST(!) be specified with the "element" attribute:
- * <i>R2204 A document-literal binding in a DESCRIPTION MUST refer, in each of its soapbind:body
- * element(s), only to wsdl:part element(s) that have been defined using the element attribute.</i></li>
+ * <li>The style attribute must be "document", and the use attributes must be
+ * "literal".</li>
+ * <li>The soap:body elements must have at most one part specified, or none, in
+ * which case the corresponding message must only have one part specified (this
+ * is not strictly required by this encoder - more parts are allowed).</li>
+ * <li>The referenced parts in the messages MUST(!) be specified with the
+ * "element" attribute: <i>R2204 A document-literal binding in a DESCRIPTION
+ * MUST refer, in each of its soapbind:body element(s), only to wsdl:part
+ * element(s) that have been defined using the element attribute.</i></li>
  * </ul>
  * </p>
  * 
  * <p>
- * The last point is most relevant, as this allows the encoder to just copy the literal elements
- * into the SOAP Body or Fault Detail, no questions asked.
+ * The last point is most relevant, as this allows the encoder to just copy the
+ * literal elements into the SOAP Body or Fault Detail, no questions asked.
  * </p>
  * 
  * @version $Id$
@@ -58,66 +62,85 @@ import org.w3c.dom.NodeList;
  */
 public class DocumentLiteralEncoder implements ISOAPEncoder {
 
-	public SOAPMessage construct(SOAPOperationCallIdentifier operation, Element literalElement) throws SOAPEncodingException {
+	public SOAPMessage construct(SOAPOperationCallIdentifier operation,
+			Element literalElement) throws SOAPEncodingException {
 
 		try {
 
-			MessageFactory mFactory= BPELUnitUtil.getMessageFactoryInstance();
-			SOAPFactory sFactory= SOAPFactory.newInstance();
+			MessageFactory mFactory = BPELUnitUtil.getMessageFactoryInstance();
+			SOAPFactory sFactory = SOAPFactory.newInstance();
 
-			SOAPMessage message= mFactory.createMessage();
-			SOAPBody body= message.getSOAPBody();
+			SOAPMessage message = mFactory.createMessage();
+			SOAPBody body = message.getSOAPBody();
 			SOAPElement data;
 			if (operation.isFault()) {
-				SOAPFault fault= body.addFault(new QName(BPELUnitConstants.SOAP_1_1_NAMESPACE, BPELUnitConstants.SOAP_FAULT_CODE_CLIENT),
+				SOAPFault fault = body.addFault(new QName(
+						BPELUnitConstants.SOAP_1_1_NAMESPACE,
+						BPELUnitConstants.SOAP_FAULT_CODE_CLIENT),
 						BPELUnitConstants.SOAP_FAULT_DESCRIPTION);
-				data= fault.addDetail();
+				data = fault.addDetail();
 			} else
-				data= body;
+				data = body;
 
-			NodeList nodes= literalElement.getChildNodes();
-			for (int i= 0; i < nodes.getLength(); i++) {
-				SOAPElement soapElement= sFactory.createElement((Element) nodes.item(i));
+			NodeList nodes = literalElement.getChildNodes();
+			for (int i = 0; i < nodes.getLength(); i++) {
+				SOAPElement soapElement = sFactory
+						.createElement((Element) nodes.item(i));
 				data.addChildElement(soapElement);
 			}
 
 			return message;
 		} catch (SOAPException e) {
-			throw new SOAPEncodingException("A SOAPException occurred in the DocumentLiteralEncoder while encoding to operation " + operation, e);
+			throw new SOAPEncodingException(
+					"A SOAPException occurred in the DocumentLiteralEncoder while encoding to operation "
+							+ operation, e);
 		}
 	}
 
-
-	public Element deconstruct(SOAPOperationCallIdentifier operation, SOAPMessage message) throws SOAPEncodingException {
+	public Element deconstruct(SOAPOperationCallIdentifier operation,
+			SOAPMessage message) throws SOAPEncodingException {
 
 		try {
-			SOAPBody body= message.getSOAPBody();
+			SOAPBody body = message.getSOAPBody();
 			SOAPElement data;
 
 			if (operation.isFault()) {
 				// a fault is expected
-				SOAPFault fault= body.getFault();
+				SOAPFault fault = body.getFault();
 				if (fault == null)
-					throw new SOAPEncodingException("A fault was expected in operation " + this + ", but none was found in input data.");
+					throw new SOAPEncodingException(
+							"A fault was expected in operation " + this
+									+ ", but none was found in input data.");
 				else
-					data= body.getFault().getDetail();
+					data = body.getFault().getDetail();
 			} else
-				data= body;
+				data = body;
 
-			Element rawRoot= BPELUnitUtil.generateDummyElementNode();
-			for (Iterator i= data.getChildElements(); i.hasNext();) {
-				Object current= i.next();
+			Element rawRoot = BPELUnitUtil.generateDummyElementNode();
+			for (Iterator i = data.getChildElements(); i.hasNext();) {
+				Object current = i.next();
 				if (current instanceof SOAPElement) {
-					SOAPElement element= (SOAPElement) current;
-					rawRoot.appendChild(rawRoot.getOwnerDocument().importNode(element, true));
+					SOAPElement element = (SOAPElement) current;
+					rawRoot.appendChild(rawRoot.getOwnerDocument().importNode(
+							element, true));
 				}
+
+				// Possible bug here. Without the codes below the results show
+				// 0% completion.
+				/*
+				 * if(current instanceof Text){ Text element=(Text)current;
+				 * rawRoot
+				 * .appendChild(rawRoot.getOwnerDocument().importNode(element,
+				 * true)); }
+				 */
 
 			}
 			return rawRoot;
 		} catch (SOAPException e) {
-			throw new SOAPEncodingException("A SOAPException occurred in the DocumentLiteralEncoder while decoding for operation " + operation);
+			throw new SOAPEncodingException(
+					"A SOAPException occurred in the DocumentLiteralEncoder while decoding for operation "
+							+ operation);
 		}
 	}
-
 
 }

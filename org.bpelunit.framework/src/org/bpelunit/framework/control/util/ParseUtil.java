@@ -16,13 +16,17 @@ import javax.wsdl.WSDLException;
 import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 
+import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.xml.sax.InputSource;
 
 import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
+import de.schlichtherle.io.FileWriter;
 
 public class ParseUtil {
 
@@ -178,5 +182,23 @@ public class ParseUtil {
 		}
 
 		return def;
+	}
+	
+	public static void writeDocument(Document doc, String filename) throws IOException{
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(filename);
+
+			XMLOutputter xmlOutputter = new XMLOutputter(Format
+					.getPrettyFormat());
+			xmlOutputter.output(doc, writer);
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+				}
+			}
+		}
 	}
 }

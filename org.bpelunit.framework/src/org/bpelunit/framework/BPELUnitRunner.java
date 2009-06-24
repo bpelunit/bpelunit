@@ -27,7 +27,8 @@ import org.bpelunit.framework.model.test.TestSuite;
  * the runner must be sub-classed, then instantiated and run.
  * </p>
  * <p>
- * BPELUnit Core options: <table>
+ * BPELUnit Core options:
+ * <table>
  * <tr>
  * <td><b>Option</b></td>
  * <td><b>Values</b></td>
@@ -88,8 +89,8 @@ public abstract class BPELUnitRunner {
 	private static boolean fHaltOnFailure = false;
 
 	private static boolean fMeasureCoverage = false;
-	
-	private static boolean fChangeEndpoints=true;
+
+	private static boolean fChangeEndpoints = true;
 
 	private static ICoverageMeasurementTool coverageMeasurmentTool = null;
 
@@ -141,7 +142,7 @@ public abstract class BPELUnitRunner {
 				&& (measureCoverage.equalsIgnoreCase("true"))) {
 			fMeasureCoverage = true;
 			System.out.println("MEASURECOVERAGE=TRUE");
-		}else{
+		} else {
 			System.out.println("MEASURECOVERAGE=FALSE");
 		}
 
@@ -163,7 +164,6 @@ public abstract class BPELUnitRunner {
 
 		configureExtensions();
 		configureDeployers();
-
 
 		if (fMeasureCoverage) {
 			try {
@@ -270,7 +270,7 @@ public abstract class BPELUnitRunner {
 			throws SpecificationException;
 
 	/**
-	 * Returns the global configuration for a given deployer. 
+	 * Returns the global configuration for a given deployer.
 	 * 
 	 * @param deployer
 	 * @return
@@ -279,7 +279,7 @@ public abstract class BPELUnitRunner {
 			IBPELDeployer deployer) {
 		return ExtensionRegistry.getGlobalConfigurationForDeployer(deployer);
 	}
-	
+
 	/**
 	 * Returns the configured timeout
 	 * 
@@ -319,16 +319,16 @@ public abstract class BPELUnitRunner {
 	public static boolean measureTestCoverage() {
 		return fMeasureCoverage;
 	}
-	
-	public static boolean changeEndpoints(){
+
+	public static boolean changeEndpoints() {
 		return fChangeEndpoints;
 	}
-	
-	public static void setCoverageMeasurmentTool(ICoverageMeasurementTool tool){
-		coverageMeasurmentTool=tool;
+
+	public static void setCoverageMeasurmentTool(ICoverageMeasurementTool tool) {
+		coverageMeasurmentTool = tool;
 	}
-	
-	public static ICoverageMeasurementTool getCoverageMeasurmentTool(){
+
+	public static ICoverageMeasurementTool getCoverageMeasurmentTool() {
 		return coverageMeasurmentTool;
 	}
 

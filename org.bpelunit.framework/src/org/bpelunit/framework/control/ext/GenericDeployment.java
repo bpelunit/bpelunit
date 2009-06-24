@@ -4,7 +4,7 @@
  * 
  */
 
-package org.bpelunit.framework.control.deploy.helpers;
+package org.bpelunit.framework.control.ext;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -68,6 +68,10 @@ public abstract class GenericDeployment implements IDeployment {
 	 */
 	public void replaceEndpoints(PartnerLink pl, Partner p)
 			throws EndPointException {
+
+		/*
+		 * if(p instanceof ProcessUnderTest){ String simulatedURL=p. }
+		 */
 
 		// get the simulated URL from the Partner
 		String simulatedURL = p.getSimulatedURL();
@@ -142,15 +146,15 @@ public abstract class GenericDeployment implements IDeployment {
 
 	}
 
-	// ********** protected assessor methods *******************
-
-	protected String getArchive() {
+	public String getArchive() {
 		return this.fArchive;
 	}
 
-	protected Partner[] getPartners() {
+	public Partner[] getPartners() {
 		return this.fPartners;
 	}
+
+	// ********** protected assessor methods *******************
 
 	protected Partner getProcessUnderTest() {
 		return this.fPut;

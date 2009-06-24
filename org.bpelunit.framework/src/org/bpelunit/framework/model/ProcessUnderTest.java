@@ -11,11 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.deploy.helpers.IDeployment;
-import org.bpelunit.framework.control.deploy.helpers.PartnerLink;
 import org.bpelunit.framework.control.ext.DeploymentOption;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDeployment;
+import org.bpelunit.framework.control.ext.PartnerLink;
 import org.bpelunit.framework.control.util.ExtensionRegistry;
+import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.EndPointException;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -60,8 +61,16 @@ public class ProcessUnderTest extends Partner {
 	 */
 	private Map<String, String> fGlobalConfiguration = new HashMap<String, String>();
 
-	// added
+	/**
+	 * Map of partners of this process including the process itself.
+	 */
 	private Map<String, Partner> fPartners;
+
+	/**
+	 * Will be different from the simulated URL. In case of actual deployment to
+	 * a process engine, this will be a process engine specific URL.
+	 */
+	private String fDeploymentURL;
 
 	public ProcessUnderTest(String name, String testBasePath, String wsdlFile,
 			String baseURL) throws SpecificationException {
@@ -105,6 +114,29 @@ public class ProcessUnderTest extends Partner {
 				}
 			} catch (EndPointException e) {
 				throw new DeploymentException("Error in changing endpoints.", e);
+			}
+		}
+
+		if (BPELUnitRunner.measureTestCoverage()) {
+			ICoverageMeasurementTool coverageTool = BPELUnitRunner
+					.getCoverageMeasurmentTool();
+			try {
+
+				String newFile;
+				/*
+				 * newFile = coverageTool.prepareArchiveForCoverageMeasurement(
+				 * pathToArchive, FilenameUtils.getName(fBPRFile), this);
+				 */
+				newFile = coverageTool.prepareArchiveForCoverageMeasurement(
+						fDeployer.getArchiveLocation(getBasePath()), this,
+						fDeployer);
+				fDeployer.setArchiveLocation(newFile);
+
+			} catch (Exception e) {
+				coverageTool
+						.setErrorStatus("Coverage measurmetn is failed. An error occurred when annotation for coverage: "
+								+ e.getMessage());
+				// e.printStackTrace();
 			}
 		}
 
@@ -158,6 +190,14 @@ public class ProcessUnderTest extends Partner {
 
 	public Map<String, Partner> getPartners() {
 		return this.fPartners;
+	}
+
+	public void setDeploymentURL(String url) {
+		this.fDeploymentURL = url;
+	}
+
+	public String getDeploymentURL() {
+		return this.fDeploymentURL;
 	}
 
 	/**

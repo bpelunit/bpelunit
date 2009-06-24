@@ -10,7 +10,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.bpelunit.framework.control.deploy.helpers.IDeployment;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.ProcessUnderTest;
 
@@ -70,13 +69,13 @@ public interface IBPELDeployer {
 	 * and ready to accept incoming calls. In case of an error, a
 	 * <code>DeploymentException</code> must be thrown.
 	 * 
-	 * @param testPath
-	 *            path in the file system to the test files
+	 * @param archivePath
+	 *            absolute path in the file system to the test 
 	 * @param processUnderTest
 	 *            the PUT
 	 * @throws DeploymentException
 	 */
-	public void deploy(String testPath, ProcessUnderTest processUnderTest)
+	public void deploy(String pathToTest, ProcessUnderTest processUnderTest)
 			throws DeploymentException;
 
 	/**
@@ -119,5 +118,9 @@ public interface IBPELDeployer {
 	 */
 	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
 			throws DeploymentException;
+	
+	public String getArchiveLocation(String pathToTest);
+	
+	public void setArchiveLocation(String archive);
 
 }

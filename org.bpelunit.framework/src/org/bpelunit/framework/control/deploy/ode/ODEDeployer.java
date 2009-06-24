@@ -26,9 +26,8 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.deploy.helpers.IDeployment;
-import org.bpelunit.framework.control.deploy.helpers.ODEDeployment;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDeployment;
 import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
@@ -64,8 +63,6 @@ public class ODEDeployer implements IBPELDeployer {
 
 	private ODERequestEntityFactory fFactory;
 
-	private ODEDeployment fDeployment;
-
 	public ODEDeployer() {
 		fFactory = ODERequestEntityFactory.newInstance();
 	}
@@ -89,19 +86,23 @@ public class ODEDeployer implements IBPELDeployer {
 
 		boolean archiveCreated = false;
 
-		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
-				.getFullPath(fArchive));
+		/*
+		 * String pathToArchive = FilenameUtils.concat(archivePath,
+		 * FilenameUtils .getFullPath(fArchive));
+		 */
+		String archivePath = getArchiveLocation(pathToTest);
 
-		if (!FilenameUtils.getName(fArchive).contains(".zip")) {
+		if (!FilenameUtils.getName(archivePath).contains(".zip")) {
 			// if the deployment is a directory not a zip file
 
-			File dir = new File(FilenameUtils.concat(pathToArchive, fArchive));
+			File dir = new File(archivePath);
 			if (dir.isDirectory()) {
 				// creates a zip file in the same location as directory
 
 				File zipFile = new File(dir.getAbsolutePath() + ".zip");
 				dir.copyAllTo(zipFile);
-				fArchive = zipFile.getAbsolutePath();
+				archivePath = zipFile.getAbsolutePath();
+				fArchive += ".zip";
 
 				try {
 					File.umount(true, true, true, true);
@@ -117,7 +118,7 @@ public class ODEDeployer implements IBPELDeployer {
 			}
 		}
 
-		fArchive = FilenameUtils.getName(fArchive);
+		// fArchive = pathToTest;
 		boolean fileReplaced = false;
 
 		// process the bundle for replacing wsdl eprs here. requires base url
@@ -129,17 +130,16 @@ public class ODEDeployer implements IBPELDeployer {
 		// service name of the process in process wsdl. alternatively can use
 		// inputs from deploymentsoptions.
 
-		// test coverage logic. for now just raise an error
+		// test coverage logic. Moved to ProcessUnderTest deploy() method.
 
-		if (BPELUnitRunner.measureTestCoverage()) {
-			ICoverageMeasurementTool tool = BPELUnitRunner
-					.getCoverageMeasurmentTool();
-			tool
-					.setErrorStatus("Test coverage for ODE Deployer is not implemented!");
-		}
+		/*
+		 * if (BPELUnitRunner.measureTestCoverage()) { ICoverageMeasurementTool
+		 * tool = BPELUnitRunner .getCoverageMeasurmentTool(); tool
+		 * .setErrorStatus
+		 * ("Test coverage for ODE Deployer is not implemented!"); }
+		 */
 
-		File uploadingFile = new File(FilenameUtils.concat(pathToArchive,
-				fArchive));
+		File uploadingFile = new File(archivePath);
 
 		if (!uploadingFile.exists())
 			throw new DeploymentException(
@@ -253,21 +253,33 @@ public class ODEDeployer implements IBPELDeployer {
 
 	public IDeployment getDeployment(ProcessUnderTest put)
 			throws DeploymentException {
-		if (fDeployment == null) {
-			Map<String, Partner> partnerList = put.getPartners();
-			Partner[] partners = new Partner[partnerList.values().size()];
-			partners = (Partner[]) (new ArrayList<Partner>(partnerList.values())
-					.toArray(partners));
 
-			if (partners != null && fArchive != null) {
-				fDeployment = new ODEDeployment(partners, fArchive);
-			} else {
-				throw new DeploymentException(
-						"Problem creating ODEDeployment: ", null);
-			}
+		IDeployment deployment;
+		Map<String, Partner> partnerList = put.getPartners();
+		Partner[] partners = new Partner[partnerList.values().size()];
+		partners = (Partner[]) (new ArrayList<Partner>(partnerList.values())
+				.toArray(partners));
+
+		if (partners != null && fArchive != null) {
+			deployment = new ODEDeployment(partners, getArchiveLocation(put
+					.getBasePath()));
+		} else {
+			throw new DeploymentException("Problem creating ODEDeployment: ",
+					null);
 		}
 
-		return this.fDeployment;
+		return deployment;
+	}
+
+	public String getArchiveLocation(String pathToTest) {
+		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
+				.getFullPath(fArchive));
+		String archiveName = FilenameUtils.getName(fArchive);
+		return FilenameUtils.concat(pathToArchive, archiveName);
+	}
+
+	public void setArchiveLocation(String archive) {
+		this.fArchive = archive;
 	}
 
 	// *****Private helper methods*****
@@ -323,18 +335,18 @@ public class ODEDeployer implements IBPELDeployer {
 
 		return true;
 	}
-	
-	private boolean isPrefix(String uriStr,Element service){
-		
-		if(service !=null && service.getNamespace(uriStr) != null){
+
+	private boolean isPrefix(String uriStr, Element service) {
+
+		if (service != null && service.getNamespace(uriStr) != null) {
 			return true;
 		}
 		return false;
 	}
-	
-	private String getPrefixValue(String prefix,Element service){
 
-		if(service !=null && service.getNamespace(prefix) != null){
+	private String getPrefixValue(String prefix, Element service) {
+
+		if (service != null && service.getNamespace(prefix) != null) {
 			return service.getNamespace(prefix).getURI();
 		}
 		return null;
@@ -349,9 +361,13 @@ public class ODEDeployer implements IBPELDeployer {
 			// processId is in the form HelloBPELProcess-1. Extract out version.
 		}
 
-		if (fArchive.contains(".")) {
-			packageName = fArchive.split("\\.")[0];
+		File archive = new File(fArchive);
+
+		if (fArchive.contains(".")) { // For zip deployments
+			packageName = archive.getName().split("\\.")[0];
 			// fBundle is in the form HelloBPEL.zip. Take out .zip part.
+		} else { // For directory deployments
+			packageName = archive.getName();
 		}
 
 		return packageName + "-" + version; // this is the deployed package id.
