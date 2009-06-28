@@ -56,7 +56,8 @@ import org.w3c.dom.NodeList;
  * literal elements into the SOAP Body or Fault Detail, no questions asked.
  * </p>
  * 
- * @version $Id$
+ * @version $Id: DocumentLiteralEncoder.java 226 2009-06-24 14:59:09Z cbuddhika
+ *          $
  * @author Philip Mayer
  * 
  */
@@ -125,14 +126,11 @@ public class DocumentLiteralEncoder implements ISOAPEncoder {
 							element, true));
 				}
 
-				// Possible bug here. Without the codes below the results show
-				// 0% completion.
-				/*
-				 * if(current instanceof Text){ Text element=(Text)current;
-				 * rawRoot
-				 * .appendChild(rawRoot.getOwnerDocument().importNode(element,
-				 * true)); }
-				 */
+				if (current instanceof Text) {
+					Text element = (Text) current;
+					rawRoot.appendChild(rawRoot.getOwnerDocument().importNode(
+							element, true));
+				}
 
 			}
 			return rawRoot;
