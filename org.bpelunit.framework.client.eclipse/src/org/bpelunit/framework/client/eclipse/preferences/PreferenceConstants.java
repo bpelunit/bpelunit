@@ -39,5 +39,7 @@ public class PreferenceConstants {
 	public static final String P_COVERAGE_MEASURMENT= "CoverageMeasurment";
 	
 	public static final String P_COVERAGE_WAIT_TIME= "WaitTime";
+	
+	public static final String P_ENDPOINT_MODIFICATION = "EndpointModification";
 
 }

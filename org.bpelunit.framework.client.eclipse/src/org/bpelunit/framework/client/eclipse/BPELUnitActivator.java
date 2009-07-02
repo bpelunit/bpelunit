@@ -89,7 +89,9 @@ public class BPELUnitActivator extends AbstractUIPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -99,7 +101,9 @@ public class BPELUnitActivator extends AbstractUIPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
@@ -197,21 +201,21 @@ public class BPELUnitActivator extends AbstractUIPlugin {
 				}
 			}
 		}
-		
-//		Display.getDefault().syncExec(new Runnable() {
-//			// Add to UI
-//			public void run() {
-//				try {
-//					BPELUnitCoverageResultView view = findBPELUnitCoverageView();
-//					if(view!=null){
-//						view.initialize();
-//					}
-//				} catch (PartInitException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+
+		// Display.getDefault().syncExec(new Runnable() {
+		// // Add to UI
+		// public void run() {
+		// try {
+		// BPELUnitCoverageResultView view = findBPELUnitCoverageView();
+		// if(view!=null){
+		// view.initialize();
+		// }
+		// } catch (PartInitException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		// });
 
 		// Set new current session
 		fCurrentSession = session;
@@ -309,6 +313,11 @@ public class BPELUnitActivator extends AbstractUIPlugin {
 		if (getPreferenceStore().getBoolean(
 				PreferenceConstants.P_COVERAGE_MEASURMENT))
 			options.put(BPELUnitRunner.MEASURE_COVERAGE, "true");
+
+		if (getPreferenceStore().getBoolean(
+				PreferenceConstants.P_ENDPOINT_MODIFICATION))
+			options.put(BPELUnitRunner.CHANGE_ENDPOINTS, "true");
+
 		fUnitCore.initialize(options);
 
 		return fUnitCore;
@@ -365,7 +374,7 @@ public class BPELUnitActivator extends AbstractUIPlugin {
 			public void run() {
 				try {
 					BPELUnitCoverageResultView view = findBPELUnitCoverageView();
-					if(view!=null){
+					if (view != null) {
 						view.initialize();
 					}
 				} catch (PartInitException e) {
@@ -374,7 +383,7 @@ public class BPELUnitActivator extends AbstractUIPlugin {
 				}
 			}
 		});
-		
+
 	}
 
 }
