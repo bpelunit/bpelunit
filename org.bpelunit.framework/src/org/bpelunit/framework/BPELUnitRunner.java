@@ -77,6 +77,8 @@ public abstract class BPELUnitRunner {
 
 	public static final String MEASURE_COVERAGE = "MEASURE_COVERAGE";
 
+	public static final String CHANGE_ENDPOINTS = "CHANGE_ENDPOINTS";
+
 	/*
 	 * Default values of options:
 	 */
@@ -90,7 +92,7 @@ public abstract class BPELUnitRunner {
 
 	private static boolean fMeasureCoverage = false;
 
-	private static boolean fChangeEndpoints = true;
+	private static boolean fChangeEndpoints = false;
 
 	private static ICoverageMeasurementTool coverageMeasurmentTool = null;
 
@@ -144,6 +146,12 @@ public abstract class BPELUnitRunner {
 			System.out.println("MEASURECOVERAGE=TRUE");
 		} else {
 			System.out.println("MEASURECOVERAGE=FALSE");
+		}
+
+		String changeEndpoints = options.get(CHANGE_ENDPOINTS);
+		if ((changeEndpoints != null)
+				&& (changeEndpoints.equalsIgnoreCase("true"))) {
+			fChangeEndpoints = true;
 		}
 
 		fGlobalTimeout = BPELUnitConstants.TIMEOUT;
