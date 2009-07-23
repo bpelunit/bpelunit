@@ -12,7 +12,4 @@ public interface ComplexType extends Type {
 
 	public abstract List<Attribute> getAttributes();
 
-	@Override
-	public abstract ComplexType clone();
-
 }

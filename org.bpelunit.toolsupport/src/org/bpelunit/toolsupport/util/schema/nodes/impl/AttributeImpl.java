@@ -58,15 +58,6 @@ public class AttributeImpl extends SchemaNodeImpl implements Attribute {
 	}
 
 	@Override
-	public Attribute clone() {
-		AttributeImpl clone = new AttributeImpl(this.getTargetNamespace(), this.getLocalPart());
-		clone.defaultValue = this.defaultValue;
-		clone.fixedValue = this.fixedValue;
-		clone.type = this.type.clone();
-		return clone;
-	}
-
-	@Override
 	public String getValue() {
 		if (this.fixedValue != null) {
 			return this.fixedValue;

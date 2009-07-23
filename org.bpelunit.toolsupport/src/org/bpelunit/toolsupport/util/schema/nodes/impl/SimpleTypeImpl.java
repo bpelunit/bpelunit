@@ -38,9 +38,4 @@ public class SimpleTypeImpl extends TypeImpl implements SimpleType {
 	public boolean isSimpleType() {
 		return true;
 	}
-
-	@Override
-	public SimpleType clone() {
-		return new SimpleTypeImpl(this.getTargetNamespace(), this.getLocalPart());
-	}
 }

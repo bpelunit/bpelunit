@@ -9,6 +9,4 @@ public interface Type extends SchemaNode {
 
 	public abstract SimpleType getAsSimpleType();
 
-	public abstract Type clone();
-
 }

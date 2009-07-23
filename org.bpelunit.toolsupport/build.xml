@@ -5,7 +5,6 @@
 	<property name="dir.bin.test" location="bin-tests" />
 	<property name="dir.bin.instrumented" location="bin-instrumented/" />
 	<property name="dir.bin" location="bin-ant/" />
-	<property name="dir.lib" location="libs" />
 	<property name="dir.build.lib" location="build.lib" />
 	<property name="dir.report.junit" location="report-junit/" />
 	<property name="dir.report.coverage" value="report-coverage/" />
@@ -14,9 +13,6 @@
 	<path id="project.classpath">
 		<pathelement location="bin" />
 		<fileset dir="${dir.bpelunit.framework}/lib">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="lib">
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="build.lib">
@@ -32,7 +28,6 @@
 	<taskdef classpath="build.lib/cobertura.jar:build.lib/asm-3.0.jar:build.lib/asm-tree-3.0.jar:build.lib/jakarta-oro-2.0.8.jar:build.lib/log4j-1.2.9.jar" resource="tasks.properties" />
 
 	<target name="init">
-		<mkdir dir="${dir.lib}" />
 		<mkdir dir="${dir.bin}" />
 		<mkdir dir="${dir.report.coverage}" />
 		<mkdir dir="${dir.bin.instrumented}" />

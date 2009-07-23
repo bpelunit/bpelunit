@@ -98,18 +98,6 @@ public class ElementImpl extends SchemaNodeImpl implements Element {
 	}
 
 	@Override
-	public Element clone() {
-		ElementImpl clone = new ElementImpl(this.getTargetNamespace(), this.getLocalPart());
-		clone.defaultValue = this.defaultValue;
-		clone.fixedValue = this.fixedValue;
-		clone.isNillable = this.isNillable;
-		clone.maxOccurs = this.maxOccurs;
-		clone.minOccurs = this.minOccurs;
-		clone.type = this.type.clone();
-		return clone;
-	}
-
-	@Override
 	public String toXMLString(Map<String, String> namespaces) {
 		return this.toXMLString(namespaces, "\n");
 	}
@@ -138,10 +126,12 @@ public class ElementImpl extends SchemaNodeImpl implements Element {
 			String innerIndent = indent + "\t";
 			for (Element element : complex.getElements()) {
 				for (int i = 0; i < Math.max(1, element.getMinOccurs()); i++) {
-					start += innerIndent + element.toXMLString(namespaces, innerIndent);
+					start += innerIndent
+							+ element.toXMLString(namespaces, innerIndent);
 				}
 			}
-			start += indent + "</" + namespace + ":" + this.getLocalPart() + ">";
+			start += indent + "</" + namespace + ":" + this.getLocalPart()
+					+ ">";
 		} else {
 			start += "></" + namespace + ":" + this.getLocalPart() + ">";
 		}

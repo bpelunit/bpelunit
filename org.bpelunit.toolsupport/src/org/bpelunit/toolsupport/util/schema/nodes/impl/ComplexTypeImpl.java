@@ -65,20 +65,4 @@ public class ComplexTypeImpl extends TypeImpl implements ComplexType {
 	public boolean isSimpleType() {
 		return false;
 	}
-
-	@Override
-	public ComplexType clone() {
-		ComplexTypeImpl clone = new ComplexTypeImpl(this.getTargetNamespace(), this.getLocalPart());
-		clone.attributes = new ArrayList<Attribute>();
-		for (Attribute attribute : this.attributes) {
-			clone.attributes.add(attribute.clone());
-		}
-
-		clone.elements = new ArrayList<Element>();
-		for (Element element : this.elements) {
-			clone.elements.add(element.clone());
-		}
-		return clone;
-	}
-
 }

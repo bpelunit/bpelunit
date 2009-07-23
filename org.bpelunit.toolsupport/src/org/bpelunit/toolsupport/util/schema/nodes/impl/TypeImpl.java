@@ -14,7 +14,4 @@ public abstract class TypeImpl extends SchemaNodeImpl implements Type {
 		super(targetNamespace, localPart);
 	}
 
-	@Override
-	public abstract Type clone();
-
 }

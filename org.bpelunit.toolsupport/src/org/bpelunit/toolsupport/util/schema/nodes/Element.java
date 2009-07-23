@@ -30,8 +30,7 @@ public interface Element extends SchemaNode {
 
 	public abstract String toXMLString(Map<String, String> namespaces);
 
-	public abstract String toXMLString(Map<String, String> namespaces, String indent);
-
-	public abstract Element clone();
+	public abstract String toXMLString(Map<String, String> namespaces,
+			String indent);
 
 }

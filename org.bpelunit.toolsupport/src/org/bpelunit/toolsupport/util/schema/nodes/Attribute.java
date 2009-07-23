@@ -14,8 +14,6 @@ public interface Attribute extends SchemaNode {
 
 	public abstract String getFixedValue();
 
-	public abstract Attribute clone();
-
 	public abstract String getValue();
 
 }
