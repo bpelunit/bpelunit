@@ -11,6 +11,7 @@ import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
 import org.bpelunit.toolsupport.editors.wizards.ActivityWizard;
 import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import org.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
+import org.bpelunit.toolsupport.editors.wizards.components.InputElementChangeListener;
 import org.bpelunit.toolsupport.editors.wizards.components.SendComponent;
 import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
 import org.bpelunit.toolsupport.util.ToolUtil;
@@ -23,77 +24,87 @@ import org.eclipse.swt.widgets.Composite;
  * @author Philip Mayer
  * 
  */
-public class SendSimpleWizardPage extends ActivityWizardPage implements IComponentListener {
+public class SendSimpleWizardPage extends ActivityWizardPage implements
+		IComponentListener {
 
 	private SendComponent fSendComponent;
 	private XMLSendActivity fSendActivity;
 
-	public SendSimpleWizardPage(XMLSendActivity sendActivity, ActivityEditMode mode, String pageName) {
+	public SendSimpleWizardPage(XMLSendActivity sendActivity,
+			ActivityEditMode mode, String pageName) {
 		super(pageName, mode);
-		setDescription("Enter the data to be sent.");
-		fSendActivity= sendActivity;
+		this.setDescription("Enter the data to be sent.");
+		this.fSendActivity = sendActivity;
 	}
 
 	@Override
 	protected void createFieldControls(Composite composite, int nColumns) {
 
-		fSendComponent= new SendComponent(this, getFontMetrics());
-		fSendComponent.init(fSendActivity);
-		fSendComponent.createControls(composite, nColumns);
-		fSendComponent.addComponentListener(this);
+		this.fSendComponent = new SendComponent(this, this.getFontMetrics());
+		this.fSendComponent.init(this.fSendActivity);
+		this.fSendComponent.createControls(composite, nColumns);
+		this.fSendComponent.addComponentListener(this);
 
-		valueChanged(null);
+		this.valueChanged(null);
+
 	}
 
 	public void valueChanged(DialogField field) {
 
-		if (fSendComponent != null) {
-			String xmlText= fSendComponent.getXmlText();
+		if (this.fSendComponent != null) {
+			String xmlText = this.fSendComponent.getXmlText();
 			try {
-				ToolUtil.parseSendBlockWithException(getTestSuite(), xmlText);
+				ToolUtil.parseSendBlockWithException(this.getTestSuite(),
+						xmlText);
 			} catch (Exception e) {
-				setErrorMessage("Not valid XML: " + e.getMessage());
-				setPageComplete(false);
+				this.setErrorMessage("Not valid XML: " + e.getMessage());
+				this.setPageComplete(false);
 				return;
 			}
 
-			String delaySequence= fSendComponent.getDelaySequence().trim();
+			String delaySequence = this.fSendComponent.getDelaySequence()
+					.trim();
 			if (!"".equals(delaySequence)) {
-				String[] sequence= delaySequence.split(",");
+				String[] sequence = delaySequence.split(",");
 				for (String element : sequence) {
 					try {
 						Integer.parseInt(element.trim());
 					} catch (NumberFormatException e) {
-						fail("Delay Sequence must be a comma-separate integer list.");
+						this
+								.fail("Delay Sequence must be a comma-separate integer list.");
 						return;
 					}
 				}
 			}
 		}
 
-		setErrorMessage(null);
-		setPageComplete(true);
+		this.setErrorMessage(null);
+		this.setPageComplete(true);
 	}
 
 	private void fail(String string) {
-		setErrorMessage(string);
-		setPageComplete(false);
+		this.setErrorMessage(string);
+		this.setPageComplete(false);
 	}
 
 	private XMLTestSuite getTestSuite() {
-		return ((ActivityWizard) getWizard()).getEditor().getTestSuite();
+		return ((ActivityWizard) this.getWizard()).getEditor().getTestSuite();
 	}
 
 	public String getSendXML() {
-		return fSendComponent.getXmlText();
+		return this.fSendComponent.getXmlText();
 	}
 
 	public String getDelaySequence() {
-		return fSendComponent.getDelaySequence();
+		return this.fSendComponent.getDelaySequence();
 	}
 
 	@Override
 	public WizardPageCode getCode() {
 		return WizardPageCode.SEND;
+	}
+
+	public InputElementChangeListener getInputElementChangeListener() {
+		return this.fSendComponent;
 	}
 }

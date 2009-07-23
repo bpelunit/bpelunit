@@ -9,11 +9,13 @@ import org.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import org.bpelunit.toolsupport.editors.TestSuitePage;
 import org.bpelunit.toolsupport.editors.wizards.pages.ReceiveCompleteWizardPage;
 import org.bpelunit.toolsupport.editors.wizards.pages.SendSimpleWizardPage;
+import org.eclipse.swt.widgets.Composite;
 
 /**
  * A wizard for editing a receive/send syncronous activity.
  * 
- * @version $Id$
+ * @version $Id: ReceiveSendSyncActivityWizard.java 81 2007-06-03 10:07:37Z
+ *          asalnikow $
  * @author Philip Mayer
  * 
  */
@@ -22,24 +24,29 @@ public class ReceiveSendSyncActivityWizard extends TwoWayActivityWizard {
 	private SendSimpleWizardPage fSendPage;
 	private ReceiveCompleteWizardPage fReceivePage;
 
-	public ReceiveSendSyncActivityWizard(TestSuitePage page, ActivityEditMode mode, XMLTwoWayActivity twoWayActivity) {
+	public ReceiveSendSyncActivityWizard(TestSuitePage page,
+			ActivityEditMode mode, XMLTwoWayActivity twoWayActivity) {
 		super(page, mode, twoWayActivity);
 	}
 
 	@Override
 	public boolean performFinish() {
 
-		XMLTwoWayActivity twoWayActivity= getTwoWayActivity();
+		XMLTwoWayActivity twoWayActivity = this.getTwoWayActivity();
 
-		transferOperation(fReceivePage, twoWayActivity);
-		transferFault(fReceivePage.getSendFault(), twoWayActivity.getSend());
-		transferFault(fReceivePage.getReceiveFault(), twoWayActivity.getReceive());
+		this.transferOperation(this.fReceivePage, twoWayActivity);
+		this.transferFault(this.fReceivePage.getSendFault(), twoWayActivity
+				.getSend());
+		this.transferFault(this.fReceivePage.getReceiveFault(), twoWayActivity
+				.getReceive());
 
-		transferLiteralSendData(fSendPage.getSendXML(), twoWayActivity.getSend());
-		transferDelay(fSendPage.getDelaySequence(), twoWayActivity.getSend());
+		this.transferLiteralSendData(this.fSendPage.getSendXML(),
+				twoWayActivity.getSend());
+		this.transferDelay(this.fSendPage.getDelaySequence(), twoWayActivity
+				.getSend());
 
-		processHeaderPage();
-		processDataCopyPage();
+		this.processHeaderPage();
+		this.processDataCopyPage();
 
 		return true;
 	}
@@ -53,14 +60,24 @@ public class ReceiveSendSyncActivityWizard extends TwoWayActivityWizard {
 	public void addPages() {
 		super.addPages();
 
-		fReceivePage= new ReceiveCompleteWizardPage(getTwoWayActivity(), getTwoWayActivity().getReceive(), getMode(), getPageName());
-		addPage(fReceivePage);
+		this.fReceivePage = new ReceiveCompleteWizardPage(this
+				.getTwoWayActivity(), this.getTwoWayActivity().getReceive(),
+				this.getMode(), this.getPageName());
+		this.addPage(this.fReceivePage);
 
-		fSendPage= new SendSimpleWizardPage(getTwoWayActivity().getSend(), getMode(), getPageName());
-		addPage(fSendPage);
+		this.fSendPage = new SendSimpleWizardPage(this.getTwoWayActivity()
+				.getSend(), this.getMode(), this.getPageName());
+		this.addPage(this.fSendPage);
 
-		addHeaderProcessorPage();
-		addDataCopyPage();
+		this.addHeaderProcessorPage();
+		this.addDataCopyPage();
+	}
+
+	@Override
+	public void createPageControls(Composite pageContainer) {
+		super.createPageControls(pageContainer);
+		this.fReceivePage.addOperationListener(this.fSendPage
+				.getInputElementChangeListener());
 	}
 
 }

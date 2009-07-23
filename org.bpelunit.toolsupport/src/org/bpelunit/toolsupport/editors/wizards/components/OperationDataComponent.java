@@ -20,6 +20,8 @@ import org.bpelunit.framework.control.util.ActivityUtil;
 import org.bpelunit.framework.xml.suite.XMLActivity;
 import org.bpelunit.framework.xml.suite.XMLTrack;
 import org.bpelunit.toolsupport.ToolSupportActivator;
+import org.bpelunit.toolsupport.editors.wizards.ReceiveSendAsyncActivityWizard;
+import org.bpelunit.toolsupport.editors.wizards.ReceiveSendSyncActivityWizard;
 import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
 import org.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
 import org.bpelunit.toolsupport.editors.wizards.fields.IStringButtonAdapter;
@@ -171,11 +173,9 @@ public class OperationDataComponent extends DataComponent {
 	public void handleOperationFieldChanged(DialogField field) {
 		this.fOperation = this.fOperationDialogField.getText();
 		if (this.validateOperation(Verify.ALL)) {
-			Element inputElement = this.getWSDLParser()
-					.getInputElementForOperation(this.getService(),
-							this.getPort(), this.getOperation());
+			Element element = this.getElementForOperation();
 			for (InputElementChangeListener listener : this.inputElementChangeListeners) {
-				listener.inputElementChanged(inputElement);
+				listener.inputElementChanged(element);
 			}
 		}
 	}
@@ -189,11 +189,22 @@ public class OperationDataComponent extends DataComponent {
 		this.inputElementChangeListeners.add(listener);
 		if (this.validateOperation(Verify.ALL)
 				&& listener instanceof SendComponent) {
-			Element inputElement = this.getWSDLParser()
-					.getInputElementForOperation(this.getService(),
-							this.getPort(), this.getOperation());
-			((SendComponent) listener).setInputElement(inputElement, false);
+			((SendComponent) listener).setInputElement(this
+					.getElementForOperation(), false);
 		}
+	}
+
+	private Element getElementForOperation() {
+		Element element = null;
+		if (this.getWizard() instanceof ReceiveSendAsyncActivityWizard
+				|| this.getWizard() instanceof ReceiveSendSyncActivityWizard) {
+			element = this.getWSDLParser().getOutputElementForOperation(
+					this.getService(), this.getPort(), this.getOperation());
+		} else {
+			element = this.getWSDLParser().getInputElementForOperation(
+					this.getService(), this.getPort(), this.getOperation());
+		}
+		return element;
 	}
 
 	public void removeOperationListener(InputElementChangeListener listener) {

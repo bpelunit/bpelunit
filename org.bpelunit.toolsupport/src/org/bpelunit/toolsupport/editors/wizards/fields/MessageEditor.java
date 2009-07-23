@@ -38,14 +38,14 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-// TODO: bei ctrl+enter neue Zeile einfügen und in diese springen.
-// TODO: Beim verlassen eines Attribute Editors, diesen disposen, kommt sonst zu seltsamen Effekten wenn beispielsweise eine neue Operation aus gewählt wird
-// TODO: überschreiben Button, der Baum ins xml-Literal schreibt
-// TODO: Größen anpassung der Textfelder noch nicht ganz perfekt
-// TODO: Wizardgröße bei Start anpassen, darf etwas breiter sein und mal testen wies mit ner größen Begrenzung aussieht.
-// TODO: Buttongröße anpassen
-// TODO: durchsteppen mit den Cursor-Tasten bei den Buttons reparieren
-// TODO: Validieren der Eingabe im MessageEditor anhand des Schemas
+// TODO MessageEditor: bei ctrl+enter neue Zeile einfügen und in diese springen.
+// TODO MessageEditor: Beim verlassen eines Attribute Editors, diesen disposen, kommt sonst zu seltsamen Effekten wenn beispielsweise eine neue Operation aus gewählt wird
+// TODO MessageEditor: überschreiben Button, der Baum ins xml-Literal schreibt
+// TODO MessageEditor: Größen anpassung der Textfelder noch nicht ganz perfekt
+// TODO MessageEditor: Wizardgröße bei Start anpassen, darf etwas breiter sein und mal testen wies mit ner größen Begrenzung aussieht.
+// TODO MessageEditor: Buttongröße anpassen
+// TODO MessageEditor: durchsteppen mit den Cursor-Tasten bei den Buttons reparieren
+// TODO MessageEditor: Validieren der Eingabe im MessageEditor anhand des Schemas
 public class MessageEditor extends Composite {
 
 	private final class XMLTreeSelectionListener extends SelectionAdapter {
