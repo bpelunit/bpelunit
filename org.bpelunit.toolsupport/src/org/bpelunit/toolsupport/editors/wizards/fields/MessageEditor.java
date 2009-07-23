@@ -75,25 +75,30 @@ public class MessageEditor extends Composite {
 			if (item == null) {
 				return;
 			}
-			boolean itemDisabled = MessageEditor.this.isItemDisabled(item.getParentItem());
+			boolean itemDisabled = MessageEditor.this.isItemDisabled(item
+					.getParentItem());
 			if (item.getParentItem() != null && itemDisabled) {
 				return;
 			}
 
-			Element element = (Element) item.getData(TREE_ITEM_FOR_ELEMENT_CONTENT);
+			Element element = (Element) item
+					.getData(TREE_ITEM_FOR_ELEMENT_CONTENT);
 			if (element != null && !MessageEditor.this.isItemDisabled(item)) {
 				// item displays the inner text of a tag and is not disabled.
 				this.getInnerTextEditor(item, element);
-			} else if ((element = (Element) item.getData(TREE_ITEM_FOR_START_TAG)) != null) {
+			} else if ((element = (Element) item
+					.getData(TREE_ITEM_FOR_START_TAG)) != null) {
 				this.getAttributeEditor(item, element);
 			}
 		}
 
-		private void getAttributeEditor(final TreeItem item, final Element element) {
+		private void getAttributeEditor(final TreeItem item,
+				final Element element) {
 			boolean itemDisabled = MessageEditor.this.isItemDisabled(item);
 			Color color = MessageEditor.this.getColor(itemDisabled);
 
-			final Composite composite = new Composite(MessageEditor.this.getTree(), SWT.NULL);
+			final Composite composite = new Composite(MessageEditor.this
+					.getTree(), SWT.NULL);
 			List<Control> tabList = new ArrayList<Control>();
 			composite.setLayout(this.createRowLayout());
 			Label label = new Label(composite, SWT.NULL);
@@ -103,8 +108,8 @@ public class MessageEditor extends Composite {
 			if (complex != null) {
 				for (int i = 0; i < complex.getAttributes().size(); i++) {
 					Attribute attribute = complex.getAttributes().get(i);
-					Text text = this.createAttributeInput(item, composite, attribute, color,
-							!itemDisabled);
+					Text text = this.createAttributeInput(item, composite,
+							attribute, color, !itemDisabled);
 					if (text != null) {
 						tabList.add(text);
 					}
@@ -121,11 +126,12 @@ public class MessageEditor extends Composite {
 			this.editor.setEditor(composite, item);
 		}
 
-		private void addNumberChangeButtons(final TreeItem item, final Composite composite,
-				List<Control> tabList) {
+		private void addNumberChangeButtons(final TreeItem item,
+				final Composite composite, List<Control> tabList) {
 			if (MessageEditor.this.isCloneable(item)) {
 				Button button = new Button(composite, SWT.PUSH);
-				button.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_ADD));
+				button.setImage(ToolSupportActivator
+						.getImage(ToolSupportActivator.IMAGE_ADD));
 				button.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
@@ -151,13 +157,15 @@ public class MessageEditor extends Composite {
 			}
 		}
 
-		private Text createAttributeInput(final TreeItem item, final Composite composite,
-				Attribute attribute, Color color, boolean isAttributeEditable) {
+		private Text createAttributeInput(final TreeItem item,
+				final Composite composite, Attribute attribute, Color color,
+				boolean isAttributeEditable) {
 			Label label = new Label(composite, SWT.NULL);
 			label.setText(" " + attribute.getLocalPart() + "=\"");
 			label.setForeground(color);
-			String attributeValue = (String) item.getData(ATTRIBUTE_VALUE_KEY_PREFIX
-					+ attribute.getLocalPart());
+			String attributeValue = (String) item
+					.getData(ATTRIBUTE_VALUE_KEY_PREFIX
+							+ attribute.getLocalPart());
 			attributeValue = (attributeValue == null) ? "" : attributeValue;
 			if (isAttributeEditable) {
 				Text text = new Text(composite, SWT.MULTI | SWT.BORDER);
@@ -187,7 +195,8 @@ public class MessageEditor extends Composite {
 							Control[] tabList = composite.getTabList();
 							for (int j = 0; j < tabList.length; j++) {
 								if (tabList[j] == event.getSource()) {
-									int nextIndex = (j + 1 >= tabList.length) ? 0 : j + 1;
+									int nextIndex = (j + 1 >= tabList.length) ? 0
+											: j + 1;
 									tabList[nextIndex].setFocus();
 								}
 							}
@@ -217,7 +226,8 @@ public class MessageEditor extends Composite {
 		}
 
 		private void getInnerTextEditor(final TreeItem item, Element element) {
-			final Text text = new Text(MessageEditor.this.getTree(), SWT.MULTI | SWT.BORDER);
+			final Text text = new Text(MessageEditor.this.getTree(), SWT.MULTI
+					| SWT.BORDER);
 			text.setText(item.getText());
 			text.setVisible(true);
 			text.setFocus();
@@ -283,7 +293,8 @@ public class MessageEditor extends Composite {
 			if (this.attribute == null) {
 				key = MessageEditor.ELEMENT_VALUE_KEY;
 			} else {
-				key = MessageEditor.ATTRIBUTE_VALUE_KEY_PREFIX + this.attribute.getLocalPart();
+				key = MessageEditor.ATTRIBUTE_VALUE_KEY_PREFIX
+						+ this.attribute.getLocalPart();
 			}
 			this.item.setData(key, text.getText());
 			MessageEditor.this.setItemText(this.item);
@@ -332,7 +343,8 @@ public class MessageEditor extends Composite {
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		this.setEnabled(true);
 		this.setLayout(new FillLayout());
-		this.disabledColor = new Color(this.getForeground().getDevice(), 180, 180, 180);
+		this.disabledColor = new Color(this.getForeground().getDevice(), 180,
+				180, 180);
 		this.normalColor = new Color(this.getForeground().getDevice(), 0, 0, 0);
 
 		this.tree = new Tree(this, SWT.SINGLE);
@@ -353,9 +365,11 @@ public class MessageEditor extends Composite {
 		this.tree.addListener(SWT.MeasureItem, new Listener() {
 			public void handleEvent(Event event) {
 				if (event.index == 0) {
-					Image trailingImage = MessageEditor.this.getImage((TreeItem) event.item);
+					Image trailingImage = MessageEditor.this
+							.getImage((TreeItem) event.item);
 					if (trailingImage != null) {
-						event.width += trailingImage.getBounds().width + IMAGE_MARGIN;
+						event.width += trailingImage.getBounds().width
+								+ IMAGE_MARGIN;
 					}
 				}
 			}
@@ -363,10 +377,12 @@ public class MessageEditor extends Composite {
 		this.tree.addListener(SWT.PaintItem, new Listener() {
 			public void handleEvent(Event event) {
 				if (event.index == 0) {
-					Image trailingImage = MessageEditor.this.getImage((TreeItem) event.item);
+					Image trailingImage = MessageEditor.this
+							.getImage((TreeItem) event.item);
 					if (trailingImage != null) {
 						int x = event.x + event.width + IMAGE_MARGIN;
-						int itemHeight = MessageEditor.this.getTree().getItemHeight();
+						int itemHeight = MessageEditor.this.getTree()
+								.getItemHeight();
 						int imageHeight = trailingImage.getBounds().height;
 						int y = event.y + (itemHeight - imageHeight) / 2;
 						event.gc.drawImage(trailingImage, x, y);
@@ -442,7 +458,8 @@ public class MessageEditor extends Composite {
 	}
 
 	protected boolean isItemDisabled(TreeItem item) {
-		return Boolean.parseBoolean((String) item.getData(TREE_ITEM_IS_DISABLED));
+		return Boolean.parseBoolean((String) item
+				.getData(TREE_ITEM_IS_DISABLED));
 	}
 
 	private Integer getElementCount(Element element) {
@@ -557,7 +574,7 @@ public class MessageEditor extends Composite {
 		return this.tree;
 	}
 
-	public void displayElement(Element inputElement) {
+	public void displayElement(Element inputElement, boolean notifyListener) {
 		this.selectionListener.disposeEditor();
 		this.tree.removeAll();
 		this.elementCount = new HashMap<Element, Integer>();
@@ -565,7 +582,9 @@ public class MessageEditor extends Composite {
 
 		this.expandTreeItem(this.tree.getTopItem());
 		this.layout();
-		this.notifyStringValueListeners();
+		if (notifyListener) {
+			this.notifyStringValueListeners();
+		}
 	}
 
 	public void updateItems() {
@@ -604,14 +623,15 @@ public class MessageEditor extends Composite {
 		if (element.getType().isComplexType()) {
 			ComplexType complex = element.getType().getAsComplexType();
 			for (Attribute attribute : complex.getAttributes()) {
-				startTag.setData(ATTRIBUTE_VALUE_KEY_PREFIX + attribute.getLocalPart(), attribute
-						.getValue());
+				startTag.setData(ATTRIBUTE_VALUE_KEY_PREFIX
+						+ attribute.getLocalPart(), attribute.getValue());
 			}
 			for (Element child : complex.getElements()) {
 				this.displayElement(child, startTag, startTag.getItemCount());
 			}
 		} else {
-			TreeItem inner = this.createTreeItem(startTag, startTag.getItemCount());
+			TreeItem inner = this.createTreeItem(startTag, startTag
+					.getItemCount());
 			inner.setData(TREE_ITEM_FOR_ELEMENT_CONTENT, element);
 			this.setItemText(inner);
 		}
@@ -635,8 +655,8 @@ public class MessageEditor extends Composite {
 	}
 
 	protected String getTagName(Element element) {
-		return this.namespaceEditor.getPreffix(element.getTargetNamespace()) + ":"
-				+ element.getLocalPart();
+		return this.namespaceEditor.getPreffix(element.getTargetNamespace())
+				+ ":" + element.getLocalPart();
 	}
 
 	private boolean isEditable(TreeItem item) {
@@ -650,7 +670,8 @@ public class MessageEditor extends Composite {
 		if (item.getData(TREE_ITEM_FOR_START_TAG) != null) {
 			Element element = (Element) item.getData(TREE_ITEM_FOR_START_TAG);
 			if (element.getType().isComplexType()) {
-				return !element.getType().getAsComplexType().getAttributes().isEmpty();
+				return !element.getType().getAsComplexType().getAttributes()
+						.isEmpty();
 			}
 		}
 		return false;
@@ -667,7 +688,8 @@ public class MessageEditor extends Composite {
 
 	protected Image getImage(TreeItem item) {
 		String imageName = null;
-		if (item.getParentItem() == null || this.isItemDisabled(item.getParentItem())) {
+		if (item.getParentItem() == null
+				|| this.isItemDisabled(item.getParentItem())) {
 			// if parentItem is disabled, all children of parentItem can't be
 			// changed. So display no images
 			return null;
@@ -675,7 +697,8 @@ public class MessageEditor extends Composite {
 		if (this.isItemDisabled(item) && MessageEditor.this.isCloneable(item)) {
 			// item is already disabled, so no need for the delete Image
 			imageName = ToolSupportActivator.IMAGE_ADD;
-		} else if (MessageEditor.this.isEditable(item) && MessageEditor.this.isCloneable(item)) {
+		} else if (MessageEditor.this.isEditable(item)
+				&& MessageEditor.this.isCloneable(item)) {
 			imageName = ToolSupportActivator.IMAGE_EDITABLE_CLONEABLE;
 		} else if (MessageEditor.this.isEditable(item)) {
 			imageName = ToolSupportActivator.IMAGE_EDITABLE;
@@ -692,7 +715,8 @@ public class MessageEditor extends Composite {
 		String text = "";
 
 		if (item.getData(TREE_ITEM_FOR_START_TAG) != null) {
-			text = this.setStartTagText(item, (Element) item.getData(TREE_ITEM_FOR_START_TAG));
+			text = this.setStartTagText(item, (Element) item
+					.getData(TREE_ITEM_FOR_START_TAG));
 		} else if (item.getData(TREE_ITEM_FOR_END_TAG) != null) {
 			Element element = (Element) item.getData(TREE_ITEM_FOR_END_TAG);
 			text = "</" + this.getTagName(element) + ">";
@@ -710,8 +734,9 @@ public class MessageEditor extends Composite {
 			ComplexType complex = element.getType().getAsComplexType();
 			for (Attribute attribute : complex.getAttributes()) {
 				text += " " + attribute.getLocalPart() + "=\"";
-				String attributeValue = (String) item.getData(ATTRIBUTE_VALUE_KEY_PREFIX
-						+ attribute.getLocalPart());
+				String attributeValue = (String) item
+						.getData(ATTRIBUTE_VALUE_KEY_PREFIX
+								+ attribute.getLocalPart());
 				text += (attributeValue == null) ? "" : attributeValue;
 				text += "\"";
 			}
