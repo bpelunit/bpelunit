@@ -29,92 +29,101 @@ public class SendCompleteWizardPage extends OperationWizardPage {
 	private XMLSendActivity fSendActivity;
 
 	/**
-	 * Creates a new send wizard page showing an operation and send control. The operation
-	 * information will be initialized from the first given activity, the send information will be
-	 * initialized from the second given activity.
+	 * Creates a new send wizard page showing an operation and send control. The
+	 * operation information will be initialized from the first given activity,
+	 * the send information will be initialized from the second given activity.
 	 * 
 	 * @param operationActivity
 	 * @param sendActivity
 	 * @param pageName
 	 */
-	public SendCompleteWizardPage(XMLActivity operationActivity, XMLSendActivity sendActivity, ActivityEditMode mode, String pageName) {
+	public SendCompleteWizardPage(XMLActivity operationActivity, XMLSendActivity sendActivity,
+			ActivityEditMode mode, String pageName) {
 		super(operationActivity, mode, pageName);
-		fSendActivity= sendActivity;
+		this.fSendActivity = sendActivity;
 	}
 
 	@Override
 	protected void createFieldControls(Composite composite, int nColumns) {
 		super.createFieldControls(composite, nColumns);
 
-		fSendComponent= new SendComponent(this, getFontMetrics());
-		fSendComponent.init(getSendActivity());
-		fSendComponent.createControls(composite, nColumns);
-		fSendComponent.addComponentListener(this);
+		this.fSendComponent = new SendComponent(this, this.getFontMetrics());
+		this.fSendComponent.init(this.getSendActivity());
+		this.fSendComponent.createControls(composite, nColumns);
+		this.fSendComponent.addComponentListener(this);
 
-		valueChanged(null);
+		this.valueChanged(null);
+		this.getOperationDataComponent().addOperationListener(this.fSendComponent);
 	}
 
 	private XMLSendActivity getSendActivity() {
-		return fSendActivity;
+		return this.fSendActivity;
 	}
 
 	@Override
 	public void valueChanged(DialogField field) {
 		super.valueChanged(field);
 
-		if (isPageComplete()) { // TODO this is because of errors from "above"
+		if (this.isPageComplete()) { // TODO this is because of errors from
+			// "above"
 			// (operation!) - but what about updating the
 			// message?!
-			if (fSendComponent != null) {
-				String xmlText= fSendComponent.getXmlText();
+			if (this.fSendComponent != null) {
+				String xmlText = this.fSendComponent.getXmlText();
 				try {
-					ToolUtil.parseSendBlockWithException(getTestSuite(), xmlText);
+					ToolUtil.parseSendBlockWithException(this.getTestSuite(), xmlText);
 				} catch (Exception e) {
-					fail("Not valid XML: " + e.getMessage());
+					this.fail("Not valid XML: " + e.getMessage());
 					return;
 				}
 
-				String delaySequence= fSendComponent.getDelaySequence().trim();
+				String delaySequence = this.fSendComponent.getDelaySequence().trim();
 				/*
-				 * If the delay sequence is completely empty, no delay will be introduced
+				 * If the delay sequence is completely empty, no delay will be
+				 * introduced
 				 */
 				if (!"".equals(delaySequence)) {
-					String[] sequence= delaySequence.split(",");
+					String[] sequence = delaySequence.split(",");
 					for (String element : sequence) {
 						try {
 							Integer.parseInt(element.trim());
 						} catch (NumberFormatException e) {
-							fail("Delay Sequence must be a comma-separate integer list.");
+							this.fail("Delay Sequence must be a comma-separate integer list.");
 							return;
 						}
 					}
 				}
 			}
 
-			setErrorMessage(null);
-			setPageComplete(true);
+			this.setErrorMessage(null);
+			this.setPageComplete(true);
 		}
 	}
 
 	private XMLTestSuite getTestSuite() {
-		return ((ActivityWizard) getWizard()).getEditor().getTestSuite();
+		return ((ActivityWizard) this.getWizard()).getEditor().getTestSuite();
 	}
 
 	private void fail(String string) {
-		setErrorMessage(string);
-		setPageComplete(false);
+		this.setErrorMessage(string);
+		this.setPageComplete(false);
 	}
 
 	public String getSendXML() {
-		return fSendComponent.getXmlText();
+		return this.fSendComponent.getXmlText();
+	}
+
+	public void setSendXML(String xml) {
+		this.fSendComponent.setXmlText(xml);
 	}
 
 	public String getDelaySequence() {
-		return fSendComponent.getDelaySequence();
+		return this.fSendComponent.getDelaySequence();
 	}
 
 	@Override
 	public WizardPageCode getCode() {
 		return WizardPageCode.SEND;
 	}
+
 }

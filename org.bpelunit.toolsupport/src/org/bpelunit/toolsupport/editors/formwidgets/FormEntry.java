@@ -42,7 +42,7 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 public class FormEntry {
 	private Control fLabel;
 	private Text fText;
-	private Button fBrowse;
+	private Button fBrowse;  
 	private String fValue= ""; //$NON-NLS-1$
 	private boolean fDirty;
 	boolean fIgnoreModify= false;

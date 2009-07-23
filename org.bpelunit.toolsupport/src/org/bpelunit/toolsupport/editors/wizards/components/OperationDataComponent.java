@@ -5,6 +5,7 @@
  */
 package org.bpelunit.toolsupport.editors.wizards.components;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,8 @@ import org.bpelunit.toolsupport.editors.wizards.fields.LayoutUtil;
 import org.bpelunit.toolsupport.editors.wizards.fields.SelectionButtonDialogField;
 import org.bpelunit.toolsupport.editors.wizards.fields.StringButtonDialogField;
 import org.bpelunit.toolsupport.util.WSDLReadingException;
+import org.bpelunit.toolsupport.util.schema.WSDLParser;
+import org.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,8 +45,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 /**
- * The OperationDataComponent allows the user to select a WSDL service, port, and operation for a
- * given partner, and
+ * The OperationDataComponent allows the user to select a WSDL service, port,
+ * and operation for a given partner, and
  * 
  * @version $Id$
  * @author Philip Mayer
@@ -54,11 +57,11 @@ public class OperationDataComponent extends DataComponent {
 	private class ServiceListener implements IStringButtonAdapter, IDialogFieldListener {
 
 		public void changeControlPressed(DialogField field) {
-			openServiceChooser(field);
+			OperationDataComponent.this.openServiceChooser(field);
 		}
 
 		public void dialogFieldChanged(DialogField field) {
-			handleServiceFieldChanged(field);
+			OperationDataComponent.this.handleServiceFieldChanged(field);
 		}
 
 	}
@@ -66,11 +69,11 @@ public class OperationDataComponent extends DataComponent {
 	private class PortListener implements IStringButtonAdapter, IDialogFieldListener {
 
 		public void changeControlPressed(DialogField field) {
-			openPortChooser(field);
+			OperationDataComponent.this.openPortChooser(field);
 		}
 
 		public void dialogFieldChanged(DialogField field) {
-			handlePortFieldChanged(field);
+			OperationDataComponent.this.handlePortFieldChanged(field);
 		}
 
 	}
@@ -78,11 +81,11 @@ public class OperationDataComponent extends DataComponent {
 	private class OperationListener implements IStringButtonAdapter, IDialogFieldListener {
 
 		public void changeControlPressed(DialogField field) {
-			openOperationChooser(field);
+			OperationDataComponent.this.openOperationChooser(field);
 		}
 
 		public void dialogFieldChanged(DialogField field) {
-			handleOperationFieldChanged(field);
+			OperationDataComponent.this.handleOperationFieldChanged(field);
 		}
 	}
 
@@ -93,12 +96,13 @@ public class OperationDataComponent extends DataComponent {
 		}
 
 		public String getText(Object element) {
-			if (element instanceof QName)
+			if (element instanceof QName) {
 				return ((QName) element).getLocalPart();
-			else if (element instanceof String)
+			} else if (element instanceof String) {
 				return ((String) element);
-			else
+			} else {
 				return "Unknown Type";
+			}
 
 		}
 
@@ -121,8 +125,8 @@ public class OperationDataComponent extends DataComponent {
 		DEF, SERVICE, PORT, ALL
 	}
 
-	private static final String SEND_NAME= "send";
-	private static final String RECEIVE_NAME= "receive";
+	private static final String SEND_NAME = "send";
+	private static final String RECEIVE_NAME = "receive";
 
 	private StringButtonDialogField fServiceDialogField;
 	private StringButtonDialogField fPortDialogField;
@@ -138,27 +142,54 @@ public class OperationDataComponent extends DataComponent {
 	private SelectionButtonDialogField fSendFaultField;
 	private SelectionButtonDialogField fReceiveFaultField;
 
+	private List<InputElementChangeListener> inputElementChangeListeners = new ArrayList<InputElementChangeListener>();
+
 	public OperationDataComponent(IWizardPage wizard, FontMetrics metrics) {
 		super(wizard, metrics);
 	}
 
 	public void handleServiceFieldChanged(DialogField field) {
 
-		Definition def= getDefinition();
-		if (def != null)
-			fService= new QName(def.getTargetNamespace(), fServiceDialogField.getText());
+		Definition def = this.getDefinition();
+		if (def != null) {
+			this.fService = new QName(def.getTargetNamespace(), this.fServiceDialogField.getText());
+		}
 
-		validateOperation(Verify.ALL);
+		this.validateOperation(Verify.ALL);
 	}
 
 	public void handlePortFieldChanged(DialogField field) {
-		fPort= fPortDialogField.getText();
-		validateOperation(Verify.ALL);
+		this.fPort = this.fPortDialogField.getText();
+		this.validateOperation(Verify.ALL);
 	}
 
 	public void handleOperationFieldChanged(DialogField field) {
-		fOperation= fOperationDialogField.getText();
-		validateOperation(Verify.ALL);
+		this.fOperation = this.fOperationDialogField.getText();
+		if (this.validateOperation(Verify.ALL)) {
+			Element inputElement = this.getWSDLParser().getInputElementForOperation(
+					this.getService(), this.getPort(), this.getOperation());
+			for (InputElementChangeListener listener : this.inputElementChangeListeners) {
+				listener.inputElementChanged(inputElement);
+			}
+		}
+	}
+
+	public void addOperationListener(InputElementChangeListener listener) {
+		for (InputElementChangeListener ol : this.inputElementChangeListeners) {
+			if (ol == listener) {
+				return;
+			}
+		}
+		this.inputElementChangeListeners.add(listener);
+		if (this.validateOperation(Verify.ALL)) {
+			Element inputElement = this.getWSDLParser().getInputElementForOperation(
+					this.getService(), this.getPort(), this.getOperation());
+			listener.inputElementChanged(inputElement);
+		}
+	}
+
+	public void removeOperationListener(InputElementChangeListener listener) {
+		this.inputElementChangeListeners.remove(listener);
 	}
 
 	/**
@@ -169,105 +200,108 @@ public class OperationDataComponent extends DataComponent {
 	 */
 	private boolean validateOperation(Verify v) {
 
-		XMLTrack track= ActivityUtil.getEnclosingTrack(fActivity);
+		XMLTrack track = ActivityUtil.getEnclosingTrack(this.fActivity);
 
 		if (track == null) {
-			setProblem("Partner Track not found.");
+			this.setProblem("Partner Track not found.");
 			return false;
 		}
 
 		Definition def;
 		try {
-			def= getEditor().getWsdlForPartner(track);
+			def = this.getEditor().getWsdlForPartner(track);
 		} catch (WSDLReadingException e) {
-			String msg= e.getMessage() + e.getCause() != null ? e.getCause().getMessage() : "";
-			setProblem(msg);
+			String msg = e.getMessage() + e.getCause() != null ? e.getCause().getMessage() : "";
+			this.setProblem(msg);
 			return false;
 		}
 
 		if (def == null) {
-			setProblem("WSDL definition was not found for this partner track.");
+			this.setProblem("WSDL definition was not found for this partner track.");
 			return false;
 		}
 
 		if (v.equals(Verify.DEF)) {
-			setNoProblem();
+			this.setNoProblem();
 			return true;
 		}
 
-		if (isEmpty(fService)) {
-			setProblem("Enter a service name.");
+		if (this.isEmpty(this.fService)) {
+			this.setProblem("Enter a service name.");
 			return false;
 		}
 
-		Service service= def.getService(fService);
+		Service service = def.getService(this.fService);
 		if (service == null) {
-			setProblem("Could not locate Service with name " + fService.toString());
+			this.setProblem("Could not locate Service with name " + this.fService.toString());
 			return false;
 		}
 
 		if (v.equals(Verify.SERVICE)) {
-			setNoProblem();
+			this.setNoProblem();
 			return true;
 		}
 
-		if (isEmpty(fPort)) {
-			setProblem("Enter a port name.");
+		if (this.isEmpty(this.fPort)) {
+			this.setProblem("Enter a port name.");
 			return false;
 		}
 
-		Port port= getDefinition().getService(fService).getPort(fPort);
+		Port port = this.getDefinition().getService(this.fService).getPort(this.fPort);
 		if (port == null) {
-			setProblem("Could not locate port with name " + fPort);
+			this.setProblem("Could not locate port with name " + this.fPort);
 			return false;
 		}
 
 		if (v.equals(Verify.PORT)) {
-			setNoProblem();
+			this.setNoProblem();
 			return true;
 		}
 
-		if (isEmpty(fOperation)) {
-			setProblem("Enter an operation name");
+		if (this.isEmpty(this.fOperation)) {
+			this.setProblem("Enter an operation name");
 			return false;
 		}
 
-		Binding binding= getDefinition().getService(fService).getPort(fPort).getBinding();
-		if ( (binding == null) || (binding.getBindingOperation(fOperation, null, null)) == null) {
-			setProblem("Could not locate operation with name " + fOperation);
+		Binding binding = this.getDefinition().getService(this.fService).getPort(this.fPort)
+				.getBinding();
+		if ((binding == null) || (binding.getBindingOperation(this.fOperation, null, null)) == null) {
+			this.setProblem("Could not locate operation with name " + this.fOperation);
 			return false;
 		}
 
-		setNoProblem();
+		this.setNoProblem();
 		return true;
 	}
 
 	public void openServiceChooser(DialogField field) {
 
-		Definition def= getDefinition();
+		Definition def = this.getDefinition();
 		if (def == null) {
-			MessageDialog.openError(getShell(), "Error", "Partner Definition is incorrect; Problem loading WSDL.");
+			MessageDialog.openError(this.getShell(), "Error",
+					"Partner Definition is incorrect; Problem loading WSDL.");
 			return;
 		}
 		/*
 		 * The map is Map<QName, javax.wsdl.Service>.
 		 */
-		Map services= def.getServices();
+		Map services = def.getServices();
 
 		if (services != null) {
-			ElementListSelectionDialog dialog= new ElementListSelectionDialog(getShell(), new SimpleLabelProvider());
+			ElementListSelectionDialog dialog = new ElementListSelectionDialog(this.getShell(),
+					new SimpleLabelProvider());
 			dialog.setElements(services.keySet().toArray());
 			dialog.setTitle("Services for this partner");
 			dialog.setMessage("Select one of the services to set it.");
 			dialog.setMultipleSelection(false);
-			int code= dialog.open();
+			int code = dialog.open();
 			if (code == IDialogConstants.OK_ID) {
-				Object[] res= dialog.getResult();
+				Object[] res = dialog.getResult();
 				if (res != null && res.length > 0) {
-					QName serviceName= (QName) res[0];
-					fService= serviceName;
-					updateFields();
-					validateOperation(Verify.ALL);
+					QName serviceName = (QName) res[0];
+					this.fService = serviceName;
+					this.updateFields();
+					this.validateOperation(Verify.ALL);
 				}
 			}
 		}
@@ -275,38 +309,43 @@ public class OperationDataComponent extends DataComponent {
 
 	private void openPortChooser(DialogField field) {
 
-		if (validateOperation(Verify.SERVICE)) {
-			Map ports= getDefinition().getService(fService).getPorts();
-			String str= openStringChooser(ports.keySet().toArray());
+		if (this.validateOperation(Verify.SERVICE)) {
+			Map ports = this.getDefinition().getService(this.fService).getPorts();
+			String str = this.openStringChooser(ports.keySet().toArray());
 			if (str != null) {
-				fPort= str;
+				this.fPort = str;
 			}
-			updateFields();
-			validateOperation(Verify.ALL);
-		} else
-			MessageDialog.openError(getShell(), "Error", "Please select a valid service first.");
+			this.updateFields();
+			this.validateOperation(Verify.ALL);
+		} else {
+			MessageDialog.openError(this.getShell(), "Error",
+					"Please select a valid service first.");
+		}
 	}
 
 	public void openOperationChooser(DialogField field) {
 
-		if (validateOperation(Verify.PORT)) {
-			List operations= getDefinition().getService(fService).getPort(fPort).getBinding().getBindingOperations();
+		if (this.validateOperation(Verify.PORT)) {
+			List operations = this.getDefinition().getService(this.fService).getPort(this.fPort)
+					.getBinding().getBindingOperations();
 
-			String[] options= new String[operations.size()];
-			int i= 0;
+			String[] options = new String[operations.size()];
+			int i = 0;
 			for (Object object : operations) {
-				options[i]= ((BindingOperation) object).getName();
+				options[i] = ((BindingOperation) object).getName();
 				i++;
 			}
 
-			String str= openStringChooser(options);
+			String str = this.openStringChooser(options);
 			if (str != null) {
-				fOperation= str;
+				this.fOperation = str;
 			}
-			updateFields();
-			validateOperation(Verify.ALL);
-		} else
-			MessageDialog.openError(getShell(), "Error", "Please select a valid service and port first.");
+			this.updateFields();
+			this.validateOperation(Verify.ALL);
+		} else {
+			MessageDialog.openError(this.getShell(), "Error",
+					"Please select a valid service and port first.");
+		}
 	}
 
 	private boolean isEmpty(String something) {
@@ -318,14 +357,15 @@ public class OperationDataComponent extends DataComponent {
 	}
 
 	private String openStringChooser(Object[] values) {
-		ElementListSelectionDialog dialog= new ElementListSelectionDialog(getShell(), new SimpleLabelProvider());
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(this.getShell(),
+				new SimpleLabelProvider());
 		dialog.setElements(values);
 		dialog.setTitle("Services for this partner");
 		dialog.setMessage("Select one of the services to set it.");
 		dialog.setMultipleSelection(false);
-		int code= dialog.open();
+		int code = dialog.open();
 		if (code == IDialogConstants.OK_ID) {
-			Object[] res= dialog.getResult();
+			Object[] res = dialog.getResult();
 			if (res != null && res.length > 0) {
 				return (String) res[0];
 			}
@@ -334,163 +374,176 @@ public class OperationDataComponent extends DataComponent {
 	}
 
 	private void updateFields() {
-		if (fService != null)
-			fServiceDialogField.setText(fService.getLocalPart());
-		if (fPort != null)
-			fPortDialogField.setText(fPort);
-		if (fOperation != null)
-			fOperationDialogField.setText(fOperation);
+		if (this.fService != null) {
+			this.fServiceDialogField.setText(this.fService.getLocalPart());
+		}
+		if (this.fPort != null) {
+			this.fPortDialogField.setText(this.fPort);
+		}
+		if (this.fOperation != null) {
+			this.fOperationDialogField.setText(this.fOperation);
+		}
 	}
 
-	private Definition getDefinition() {
-		XMLTrack track= ActivityUtil.getEnclosingTrack(fActivity);
+	public Definition getDefinition() {
+		XMLTrack track = ActivityUtil.getEnclosingTrack(this.fActivity);
 
 		if (track == null) {
-			setProblem("Partner Track not found - cannot continue.");
+			this.setProblem("Partner Track not found - cannot continue.");
 			return null;
 		}
 
 		Definition wsdlForPartner;
 		try {
-			wsdlForPartner= getEditor().getWsdlForPartner(track);
+			wsdlForPartner = this.getEditor().getWsdlForPartner(track);
 			return wsdlForPartner;
 		} catch (WSDLReadingException e) {
-			String msg= e.getMessage() + e.getCause() != null ? e.getCause().getMessage() : "";
-			setProblem(msg);
+			String msg = e.getMessage() + e.getCause() != null ? e.getCause().getMessage() : "";
+			this.setProblem(msg);
 			return null;
 		}
 	}
 
+	public WSDLParser getWSDLParser() {
+		return this.getEditor().getWSDLParserForDefinition(this.getDefinition());
+	}
+
 	public void init(XMLActivity activity) {
 
-		fActivity= activity;
+		this.fActivity = activity;
 
 		try {
-			fService= activity.getService();
-			fPort= activity.getPort();
-			fOperation= activity.getOperation();
+			this.fService = activity.getService();
+			this.fPort = activity.getPort();
+			this.fOperation = activity.getOperation();
 		} catch (Exception e) {
 			// nay happen in getService(), if the prefix is not bound
 		}
 
-		if (fService == null) {
+		if (this.fService == null) {
 			// an exception occurred
-			fPort= null;
-			fOperation= null;
+			this.fPort = null;
+			this.fOperation = null;
 		}
 
-		ServiceListener serviceAdapter= new ServiceListener();
-		fServiceDialogField= new StringButtonDialogField(serviceAdapter);
-		fServiceDialogField.setDialogFieldListener(serviceAdapter);
-		fServiceDialogField.setLabelText("Service");
-		fServiceDialogField.setButtonLabel("Choose...");
+		ServiceListener serviceAdapter = new ServiceListener();
+		this.fServiceDialogField = new StringButtonDialogField(serviceAdapter);
+		this.fServiceDialogField.setDialogFieldListener(serviceAdapter);
+		this.fServiceDialogField.setLabelText("Service");
+		this.fServiceDialogField.setButtonLabel("Choose...");
 
-		PortListener portListener= new PortListener();
-		fPortDialogField= new StringButtonDialogField(portListener);
-		fPortDialogField.setDialogFieldListener(portListener);
-		fPortDialogField.setLabelText("Port");
-		fPortDialogField.setButtonLabel("Choose...");
+		PortListener portListener = new PortListener();
+		this.fPortDialogField = new StringButtonDialogField(portListener);
+		this.fPortDialogField.setDialogFieldListener(portListener);
+		this.fPortDialogField.setLabelText("Port");
+		this.fPortDialogField.setButtonLabel("Choose...");
 
-		OperationListener operationListener= new OperationListener();
-		fOperationDialogField= new StringButtonDialogField(operationListener);
-		fOperationDialogField.setDialogFieldListener(operationListener);
-		fOperationDialogField.setLabelText("Operation");
-		fOperationDialogField.setButtonLabel("Choose...");
+		OperationListener operationListener = new OperationListener();
+		this.fOperationDialogField = new StringButtonDialogField(operationListener);
+		this.fOperationDialogField.setDialogFieldListener(operationListener);
+		this.fOperationDialogField.setLabelText("Operation");
+		this.fOperationDialogField.setButtonLabel("Choose...");
 
 		// Faults:
 
-		fSendFaultField= new SelectionButtonDialogField(SWT.CHECK);
-		fSendFaultField.setLabelText("Use fault element for " + SEND_NAME + " operation");
-		fReceiveFaultField= new SelectionButtonDialogField(SWT.CHECK);
-		fReceiveFaultField.setLabelText("Use fault element for " + RECEIVE_NAME + " operation");
+		this.fSendFaultField = new SelectionButtonDialogField(SWT.CHECK);
+		this.fSendFaultField.setLabelText("Use fault element for " + SEND_NAME + " operation");
+		this.fReceiveFaultField = new SelectionButtonDialogField(SWT.CHECK);
+		this.fReceiveFaultField
+				.setLabelText("Use fault element for " + RECEIVE_NAME + " operation");
 
-		fSendFaultField.setSelection(ActivityUtil.getSendFault(fActivity));
-		fReceiveFaultField.setSelection(ActivityUtil.getReceiveFault(fActivity));
+		this.fSendFaultField.setSelection(ActivityUtil.getSendFault(this.fActivity));
+		this.fReceiveFaultField.setSelection(ActivityUtil.getReceiveFault(this.fActivity));
 
-		updateFields();
-		validateOperation(Verify.ALL);
+		this.updateFields();
+		this.validateOperation(Verify.ALL);
 	}
 
 	@Override
 	public Composite createControls(Composite composite, int nColumns) {
 
-		String niceName= ActivityUtil.getNiceName(fActivity) + " operation";
-		Group operationGroup= createGroup(composite, niceName, nColumns, new GridData(SWT.FILL, SWT.BEGINNING, true, false));
+		String niceName = ActivityUtil.getNiceName(this.fActivity) + " operation";
+		Group operationGroup = this.createGroup(composite, niceName, nColumns, new GridData(
+				SWT.FILL, SWT.BEGINNING, true, false));
 
-		fServiceDialogField.doFillIntoGrid(operationGroup, nColumns);
-		Text text0= fServiceDialogField.getTextControl(null);
-		LayoutUtil.setWidthHint(text0, getMaxFieldWidth());
+		this.fServiceDialogField.doFillIntoGrid(operationGroup, nColumns);
+		Text text0 = this.fServiceDialogField.getTextControl(null);
+		LayoutUtil.setWidthHint(text0, this.getMaxFieldWidth());
 		LayoutUtil.setHorizontalGrabbing(text0);
 
-		fPortDialogField.doFillIntoGrid(operationGroup, nColumns);
-		Text text1= fPortDialogField.getTextControl(null);
-		LayoutUtil.setWidthHint(text1, Dialog.convertWidthInCharsToPixels(getFontMetrics(), 30));
+		this.fPortDialogField.doFillIntoGrid(operationGroup, nColumns);
+		Text text1 = this.fPortDialogField.getTextControl(null);
+		LayoutUtil.setWidthHint(text1, Dialog
+				.convertWidthInCharsToPixels(this.getFontMetrics(), 30));
 
-		fOperationDialogField.doFillIntoGrid(operationGroup, nColumns);
-		Text text2= fOperationDialogField.getTextControl(null);
-		LayoutUtil.setWidthHint(text2, Dialog.convertWidthInCharsToPixels(getFontMetrics(), 30));
+		this.fOperationDialogField.doFillIntoGrid(operationGroup, nColumns);
+		Text text2 = this.fOperationDialogField.getTextControl(null);
+		LayoutUtil.setWidthHint(text2, Dialog
+				.convertWidthInCharsToPixels(this.getFontMetrics(), 30));
 
-		if (ActivityUtil.isReceiveFirstActivity(fActivity))
-			fReceiveFaultField.doFillIntoGrid(operationGroup, nColumns);
-		else
-			fSendFaultField.doFillIntoGrid(operationGroup, nColumns);
+		if (ActivityUtil.isReceiveFirstActivity(this.fActivity)) {
+			this.fReceiveFaultField.doFillIntoGrid(operationGroup, nColumns);
+		} else {
+			this.fSendFaultField.doFillIntoGrid(operationGroup, nColumns);
+		}
 
-		if (ActivityUtil.isTwoWayActivity(fActivity)) {
-			if (ActivityUtil.isReceiveFirstActivity(fActivity))
-				fSendFaultField.doFillIntoGrid(operationGroup, nColumns);
-			else
-				fReceiveFaultField.doFillIntoGrid(operationGroup, nColumns);
+		if (ActivityUtil.isTwoWayActivity(this.fActivity)) {
+			if (ActivityUtil.isReceiveFirstActivity(this.fActivity)) {
+				this.fSendFaultField.doFillIntoGrid(operationGroup, nColumns);
+			} else {
+				this.fReceiveFaultField.doFillIntoGrid(operationGroup, nColumns);
+			}
 		}
 
 		return operationGroup;
 	}
 
 	public QName getService() {
-		return fService;
+		return this.fService;
 	}
 
 	public String getPort() {
-		return fPort;
+		return this.fPort;
 	}
 
 	public String getOperation() {
-		return fOperation;
+		return this.fOperation;
 	}
 
 	public boolean getSendFault() {
-		return fSendFaultField.isSelected();
+		return this.fSendFaultField.isSelected();
 	}
 
 	public boolean getReceiveFault() {
-		return fReceiveFaultField.isSelected();
+		return this.fReceiveFaultField.isSelected();
 	}
 
 	private void setProblem(String string) {
-		setErrorMessage(string);
-		setPageComplete(false);
-		fireValueChanged(null);
+		this.setErrorMessage(string);
+		this.setPageComplete(false);
+		this.fireValueChanged(null);
 	}
 
 	private void setNoProblem() {
-		setErrorMessage(null);
-		setPageComplete(true);
-		fireValueChanged(null);
+		this.setErrorMessage(null);
+		this.setPageComplete(true);
+		this.fireValueChanged(null);
 	}
 
 	public String getErrorMessage() {
-		return fErrorMessage;
+		return this.fErrorMessage;
 	}
 
 	public boolean isPageComplete() {
-		return fPageComplete;
+		return this.fPageComplete;
 	}
 
 	private void setPageComplete(boolean isComplete) {
-		fPageComplete= isComplete;
+		this.fPageComplete = isComplete;
 	}
 
 	private void setErrorMessage(String string) {
-		fErrorMessage= string;
+		this.fErrorMessage = string;
 	}
 
 }

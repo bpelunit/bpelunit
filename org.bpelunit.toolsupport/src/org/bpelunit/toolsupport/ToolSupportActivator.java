@@ -24,11 +24,20 @@ import org.osgi.framework.BundleContext;
 public class ToolSupportActivator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID= "org.bpelunit.toolsupport";
+	public static final String PLUGIN_ID = "org.bpelunit.toolsupport";
 
-	public static final String IMAGE_DEPLOYER= "img_deployer";
-	public static final String IMAGE_TESTCASE= "img_testcase";
-	public static final String IMAGE_ACTIVITY= "img_activity";
+	public static final String IMAGE_DEPLOYER = "img_deployer";
+	public static final String IMAGE_TESTCASE = "img_testcase";
+	public static final String IMAGE_ACTIVITY = "img_activity";
+	public static final String IMAGE_ARROW_LEFT = "img_arrow_left";
+	public static final String IMAGE_ARROW_RIGHT = "img_arrow_right";
+
+	public static final String IMAGE_LOCK = "img_lock";
+	public static final String IMAGE_EDITABLE = "img_editable";
+	public static final String IMAGE_CLONEABLE = "img_cloneable";
+	public static final String IMAGE_ADD = "img_add";
+	public static final String IMAGE_DELETE = "img_delete";
+	public static final String IMAGE_EDITABLE_CLONEABLE = "img_editable_cloneable";
 
 	// The shared instance
 	private static ToolSupportActivator fgPlugin;
@@ -37,13 +46,15 @@ public class ToolSupportActivator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public ToolSupportActivator() {
-		fgPlugin= this;
+		fgPlugin = this;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -53,11 +64,13 @@ public class ToolSupportActivator extends AbstractUIPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		fgPlugin= null;
+		fgPlugin = null;
 		super.stop(context);
 	}
 
@@ -71,9 +84,11 @@ public class ToolSupportActivator extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given plug-in relative path
+	 * Returns an image descriptor for the image file at the given plug-in
+	 * relative path
 	 * 
-	 * @param path the path
+	 * @param path
+	 *            the path
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
@@ -89,13 +104,15 @@ public class ToolSupportActivator extends AbstractUIPlugin {
 	}
 
 	public static void log(Throwable e) {
-		if (e instanceof InvocationTargetException)
-			e= ((InvocationTargetException) e).getTargetException();
-		IStatus status= null;
-		if (e instanceof CoreException)
-			status= ((CoreException) e).getStatus();
-		else
-			status= getErrorStatus(e);
+		if (e instanceof InvocationTargetException) {
+			e = ((InvocationTargetException) e).getTargetException();
+		}
+		IStatus status = null;
+		if (e instanceof CoreException) {
+			status = ((CoreException) e).getStatus();
+		} else {
+			status = getErrorStatus(e);
+		}
 		log(status);
 	}
 
@@ -112,9 +129,9 @@ public class ToolSupportActivator extends AbstractUIPlugin {
 	}
 
 	public static Display getDisplay() {
-		Display display= Display.getCurrent();
+		Display display = Display.getCurrent();
 		if (display == null) {
-			display= Display.getDefault();
+			display = Display.getDefault();
 		}
 		return display;
 	}
@@ -125,5 +142,14 @@ public class ToolSupportActivator extends AbstractUIPlugin {
 		reg.put(IMAGE_DEPLOYER, getImageDescriptor("icons/deployer.gif"));
 		reg.put(IMAGE_TESTCASE, getImageDescriptor("icons/testCase.gif"));
 		reg.put(IMAGE_ACTIVITY, getImageDescriptor("icons/activity.gif"));
+		reg.put(IMAGE_LOCK, getImageDescriptor("icons/lock.gif"));
+		reg.put(IMAGE_EDITABLE, getImageDescriptor("icons/editable.gif"));
+		reg.put(IMAGE_CLONEABLE, getImageDescriptor("icons/clonable.gif"));
+		reg.put(IMAGE_ADD, getImageDescriptor("icons/add.gif"));
+		reg.put(IMAGE_DELETE, getImageDescriptor("icons/delete.gif"));
+		reg.put(IMAGE_EDITABLE_CLONEABLE, getImageDescriptor("icons/editable_cloneable.gif"));
+		reg.put(IMAGE_ARROW_LEFT, getImageDescriptor("icons/arrow_left.gif"));
+		reg.put(IMAGE_ARROW_RIGHT, getImageDescriptor("icons/arrow_right.gif"));
+
 	}
 }

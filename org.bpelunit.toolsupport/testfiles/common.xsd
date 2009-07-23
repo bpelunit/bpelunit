@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+				attributeFormDefault="qualified"
+				elementFormDefault="qualified"
+				xmlns:ns0="http://common.types.suppliersguild.org/xsd"
+				targetNamespace="http://common.types.suppliersguild.org/xsd">
+		<xs:complexType name="Product">
+		   <xs:sequence>
+			  <xs:element minOccurs="0" name="productId" nillable="true" type="xs:string"/>
+			  <xs:element minOccurs="0" name="vendor" nillable="true" type="xs:string"/>
+		   </xs:sequence>
+		</xs:complexType>
+		<xs:complexType name="Amount">
+		   <xs:sequence>
+			  <xs:element minOccurs="0" name="amount" type="xs:int"/>
+			  <xs:element minOccurs="0" name="unit" nillable="true" type="ns0:Unit"/>
+		   </xs:sequence>
+		</xs:complexType>
+		<xs:complexType name="Unit">
+		   <xs:sequence>
+			  <xs:element minOccurs="0" name="kind" type="xs:int"/>
+		   </xs:sequence>
+		</xs:complexType>
+		<xs:complexType name="Money">
+		   <xs:sequence>
+			  <xs:element minOccurs="0" name="amount" type="xs:int"/>
+			  <xs:element minOccurs="0" name="currency" nillable="true" type="ns0:Currency"/>
+		   </xs:sequence>
+		</xs:complexType>
+		<xs:complexType name="Currency">
+		   <xs:sequence>
+			  <xs:element minOccurs="0" name="rate" type="xs:double"/>
+		   </xs:sequence>
+		</xs:complexType>
+	 </xs:schema>
+      

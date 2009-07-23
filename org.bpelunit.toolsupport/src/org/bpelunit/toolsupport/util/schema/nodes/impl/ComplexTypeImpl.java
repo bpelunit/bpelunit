@@ -1,0 +1,84 @@
+package org.bpelunit.toolsupport.util.schema.nodes.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
+import org.bpelunit.toolsupport.util.schema.nodes.Attribute;
+import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
+import org.bpelunit.toolsupport.util.schema.nodes.Element;
+import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+
+public class ComplexTypeImpl extends TypeImpl implements ComplexType {
+
+	private List<Element> elements = new ArrayList<Element>();
+
+	private List<Attribute> attributes = new ArrayList<Attribute>();
+
+	public ComplexTypeImpl(QName qName) {
+		super(qName);
+	}
+
+	public ComplexTypeImpl(String targetNamespace, String localPart) {
+		super(targetNamespace, localPart);
+	}
+
+	@Override
+	public void addElement(Element element) {
+		this.elements.add(element);
+	}
+
+	@Override
+	public List<Element> getElements() {
+		return this.elements;
+	}
+
+	@Override
+	public void addAttribute(Attribute attribute) {
+		this.attributes.add(attribute);
+	}
+
+	@Override
+	public List<Attribute> getAttributes() {
+		return this.attributes;
+	}
+
+	@Override
+	public ComplexType getAsComplexType() {
+
+		return this;
+	}
+
+	@Override
+	public SimpleType getAsSimpleType() {
+		return null;
+	}
+
+	@Override
+	public boolean isComplexType() {
+		return true;
+
+	}
+
+	@Override
+	public boolean isSimpleType() {
+		return false;
+	}
+
+	@Override
+	public ComplexType clone() {
+		ComplexTypeImpl clone = new ComplexTypeImpl(this.getTargetNamespace(), this.getLocalPart());
+		clone.attributes = new ArrayList<Attribute>();
+		for (Attribute attribute : this.attributes) {
+			clone.attributes.add(attribute.clone());
+		}
+
+		clone.elements = new ArrayList<Element>();
+		for (Element element : this.elements) {
+			clone.elements.add(element.clone());
+		}
+		return clone;
+	}
+
+}

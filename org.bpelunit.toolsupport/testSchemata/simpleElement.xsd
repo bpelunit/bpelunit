@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://schematest.bpelunit.org"
+			xmlns="http://schematest.bpelunit.org"
+			elementFormDefault="qualified">
+
+	<xs:element name="name" type="xs:string"/>
+	<xs:element name="lastname" type="xs:string"/>
+	<xs:element name="age" type="xs:integer"/>
+	<xs:element name="dateborn" type="xs:date"/>
+</xs:schema>

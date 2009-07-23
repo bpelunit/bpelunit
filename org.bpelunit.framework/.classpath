@@ -2,6 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
+	<classpathentry exported="true" kind="lib" path="lib/relaxngDatatype.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xsom14.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/truezip-6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jdom.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/activation.jar"/>
