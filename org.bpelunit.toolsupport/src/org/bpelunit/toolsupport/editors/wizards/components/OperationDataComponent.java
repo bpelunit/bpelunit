@@ -148,7 +148,7 @@ public class OperationDataComponent extends DataComponent {
 	private SelectionButtonDialogField fSendFaultField;
 	private SelectionButtonDialogField fReceiveFaultField;
 
-	private List<InputElementChangeListener> inputElementChangeListeners = new ArrayList<InputElementChangeListener>();
+	private List<OperationChangeListener> operationChangeListener = new ArrayList<OperationChangeListener>();
 
 	public OperationDataComponent(IWizardPage wizard, FontMetrics metrics) {
 		super(wizard, metrics);
@@ -174,22 +174,22 @@ public class OperationDataComponent extends DataComponent {
 		this.fOperation = this.fOperationDialogField.getText();
 		if (this.validateOperation(Verify.ALL)) {
 			Element element = this.getElementForOperation();
-			for (InputElementChangeListener listener : this.inputElementChangeListeners) {
-				listener.inputElementChanged(element);
+			for (OperationChangeListener listener : this.operationChangeListener) {
+				listener.operationChanged(element);
 			}
 		}
 	}
 
-	public void addOperationListener(InputElementChangeListener listener) {
-		for (InputElementChangeListener ol : this.inputElementChangeListeners) {
+	public void addOperationListener(OperationChangeListener listener) {
+		for (OperationChangeListener ol : this.operationChangeListener) {
 			if (ol == listener) {
 				return;
 			}
 		}
-		this.inputElementChangeListeners.add(listener);
+		this.operationChangeListener.add(listener);
 		if (this.validateOperation(Verify.ALL)
 				&& listener instanceof SendComponent) {
-			((SendComponent) listener).setInputElement(this
+			((SendComponent) listener).setOperationMessage(this
 					.getElementForOperation(), false);
 		}
 	}
@@ -207,8 +207,8 @@ public class OperationDataComponent extends DataComponent {
 		return element;
 	}
 
-	public void removeOperationListener(InputElementChangeListener listener) {
-		this.inputElementChangeListeners.remove(listener);
+	public void removeOperationListener(OperationChangeListener listener) {
+		this.operationChangeListener.remove(listener);
 	}
 
 	/**

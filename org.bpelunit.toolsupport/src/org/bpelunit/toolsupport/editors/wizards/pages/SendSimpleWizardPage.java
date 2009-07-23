@@ -11,7 +11,7 @@ import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
 import org.bpelunit.toolsupport.editors.wizards.ActivityWizard;
 import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import org.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
-import org.bpelunit.toolsupport.editors.wizards.components.InputElementChangeListener;
+import org.bpelunit.toolsupport.editors.wizards.components.OperationChangeListener;
 import org.bpelunit.toolsupport.editors.wizards.components.SendComponent;
 import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
 import org.bpelunit.toolsupport.util.ToolUtil;
@@ -104,7 +104,7 @@ public class SendSimpleWizardPage extends ActivityWizardPage implements
 		return WizardPageCode.SEND;
 	}
 
-	public InputElementChangeListener getInputElementChangeListener() {
+	public OperationChangeListener getOperationChangeListener() {
 		return this.fSendComponent;
 	}
 }

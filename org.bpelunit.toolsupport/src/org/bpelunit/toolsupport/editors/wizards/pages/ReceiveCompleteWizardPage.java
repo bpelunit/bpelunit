@@ -9,7 +9,7 @@ import org.bpelunit.framework.xml.suite.XMLActivity;
 import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
 import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
 import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
-import org.bpelunit.toolsupport.editors.wizards.components.InputElementChangeListener;
+import org.bpelunit.toolsupport.editors.wizards.components.OperationChangeListener;
 import org.bpelunit.toolsupport.editors.wizards.components.ReceiveComponent;
 import org.eclipse.swt.widgets.Composite;
 
@@ -62,7 +62,7 @@ public class ReceiveCompleteWizardPage extends OperationWizardPage {
 		return WizardPageCode.RECEIVE;
 	}
 
-	public void addOperationListener(InputElementChangeListener listener) {
+	public void addOperationListener(OperationChangeListener listener) {
 		this.getOperationDataComponent().addOperationListener(listener);
 	}
 }

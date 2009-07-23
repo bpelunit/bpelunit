@@ -50,7 +50,7 @@ import org.eclipse.swt.widgets.Text;
  * 
  */
 public class SendComponent extends DataComponent implements
-		IHyperLinkFieldListener, InputElementChangeListener,
+		IHyperLinkFieldListener, OperationChangeListener,
 		StringValueListener {
 
 	private TextDialogField fSendField;
@@ -284,11 +284,11 @@ public class SendComponent extends DataComponent implements
 	}
 
 	@Override
-	public void inputElementChanged(Element input) {
-		this.setInputElement(input, true);
+	public void operationChanged(Element input) {
+		this.setOperationMessage(input, true);
 	}
 
-	public void setInputElement(Element inputElement, boolean notifyListener) {
+	public void setOperationMessage(Element inputElement, boolean notifyListener) {
 		this.messageEditor.displayElement(inputElement, notifyListener);
 
 	}

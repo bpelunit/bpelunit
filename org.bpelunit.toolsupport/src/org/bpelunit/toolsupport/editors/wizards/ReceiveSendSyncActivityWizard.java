@@ -77,7 +77,7 @@ public class ReceiveSendSyncActivityWizard extends TwoWayActivityWizard {
 	public void createPageControls(Composite pageContainer) {
 		super.createPageControls(pageContainer);
 		this.fReceivePage.addOperationListener(this.fSendPage
-				.getInputElementChangeListener());
+				.getOperationChangeListener());
 	}
 
 }
