@@ -39,6 +39,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
@@ -48,7 +49,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.xml.sax.SAXException;
 
-import com.ibm.wsdl.Constants;
 /**
  * The BPELUnit Editor.
  * 
@@ -113,10 +113,12 @@ public class BPELUnitEditor extends FormEditor {
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
+	public void init(IEditorSite site, IEditorInput editorInput)
+			throws PartInitException {
 
 		if (!(editorInput instanceof IFileEditorInput)) {
-			throw new PartInitException("Invalid Input: Must be IFileEditorInput");
+			throw new PartInitException(
+					"Invalid Input: Must be IFileEditorInput");
 		}
 
 		IFile baseFile = ((IFileEditorInput) editorInput).getFile();
@@ -130,11 +132,13 @@ public class BPELUnitEditor extends FormEditor {
 		this.setPartName(baseFile.getName());
 
 		if (!baseFile.exists()) {
-			throw new PartInitException("Invalid Input: File " + baseFile + " does not exist.");
+			throw new PartInitException("Invalid Input: File " + baseFile
+					+ " does not exist.");
 		}
 
 		try {
-			this.fDocument = XMLTestSuiteDocument.Factory.parse(baseFile.getContents());
+			this.fDocument = XMLTestSuiteDocument.Factory.parse(baseFile
+					.getContents());
 			if (this.needsBasicRestructuring(this.fDocument)) {
 				this.fTestSuitePage.markDirty();
 			}
@@ -151,10 +155,12 @@ public class BPELUnitEditor extends FormEditor {
 	protected void addPages() {
 
 		try {
-			this.fTestSuitePage = new TestSuitePage(this, "testSuitePage", "Test Suite");
+			this.fTestSuitePage = new TestSuitePage(this, "testSuitePage",
+					"Test Suite");
 			this.addPage(this.fTestSuitePage);
 			this.fXmlEditorPage = new XMLEditor();
-			int index = this.addPage(this.fXmlEditorPage, this.getEditorInput());
+			int index = this
+					.addPage(this.fXmlEditorPage, this.getEditorInput());
 			this.setPageText(index, "Source");
 
 			/*
@@ -254,8 +260,8 @@ public class BPELUnitEditor extends FormEditor {
 		 */
 		if (force || this.isDirty() || this.fDocument == null) {
 
-			IDocument document = this.fXmlEditorPage.getDocumentProvider().getDocument(
-					this.getEditorInput());
+			IDocument document = this.fXmlEditorPage.getDocumentProvider()
+					.getDocument(this.getEditorInput());
 			String string = document.get();
 			try {
 				this.fDocument = XMLTestSuiteDocument.Factory.parse(string);
@@ -267,8 +273,8 @@ public class BPELUnitEditor extends FormEditor {
 					listener.modelChanged();
 				}
 			} catch (Exception e) {
-				ErrorDialog.openError(this.getShell(), "Trouble parsing XML", e.getMessage(),
-						ToolSupportActivator.getErrorStatus(e));
+				ErrorDialog.openError(this.getShell(), "Trouble parsing XML", e
+						.getMessage(), ToolSupportActivator.getErrorStatus(e));
 				return false;
 			}
 		}
@@ -315,15 +321,17 @@ public class BPELUnitEditor extends FormEditor {
 
 	private void model2src(boolean force) {
 		if ((force || this.isDirty()) && (this.fDocument != null)) {
-			IDocument document = this.fXmlEditorPage.getDocumentProvider().getDocument(
-					this.getEditorInput());
+			IDocument document = this.fXmlEditorPage.getDocumentProvider()
+					.getDocument(this.getEditorInput());
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			try {
-				this.fDocument.save(output, BPELUnitUtil.getDefaultXMLOptions());
+				this.fDocument
+						.save(output, BPELUnitUtil.getDefaultXMLOptions());
 				document.set(output.toString());
 			} catch (IOException e) {
-				ErrorDialog.openError(this.getShell(), "Error", "Error writing XML model to file",
-						ToolSupportActivator.getErrorStatus(e));
+				ErrorDialog.openError(this.getShell(), "Error",
+						"Error writing XML model to file", ToolSupportActivator
+								.getErrorStatus(e));
 			}
 		}
 	}
@@ -340,8 +348,8 @@ public class BPELUnitEditor extends FormEditor {
 
 		if (track instanceof XMLPartnerTrack) {
 			XMLPartnerTrack partner = (XMLPartnerTrack) track;
-			XMLPartnerDeploymentInformation[] partnerList = this.getTestSuite().getDeployment()
-					.getPartnerArray();
+			XMLPartnerDeploymentInformation[] partnerList = this.getTestSuite()
+					.getDeployment().getPartnerArray();
 			for (XMLPartnerDeploymentInformation information : partnerList) {
 				if (information.getName().equals(partner.getName())) {
 					return information.getWsdl();
@@ -354,7 +362,8 @@ public class BPELUnitEditor extends FormEditor {
 
 	}
 
-	public Definition getWsdlForPartner(XMLTrack track) throws WSDLReadingException {
+	public Definition getWsdlForPartner(XMLTrack track)
+			throws WSDLReadingException {
 
 		String wsdl = this.getWSDLString(track);
 		if (wsdl == null || "".equals(wsdl)) {
@@ -378,12 +387,14 @@ public class BPELUnitEditor extends FormEditor {
 		}
 
 		if (this.notFound(resource)) {
-			resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+			resource = ResourcesPlugin.getWorkspace().getRoot()
+					.findMember(path);
 		}
 
 		// all hope failed...
 		if (this.notFound(resource)) {
-			throw new WSDLReadingException("Cannot find WSDL file with file path " + wsdl);
+			throw new WSDLReadingException(
+					"Cannot find WSDL file with file path " + wsdl);
 		}
 
 		IFile file = (IFile) resource;
@@ -401,19 +412,27 @@ public class BPELUnitEditor extends FormEditor {
 
 				definition = reader.readWSDL(null, fileName);
 				this.fWSDLDefinitions.put(file, definition);
+
 				WSDLParser parser = new WSDLParser(definition);
 				this.fWSDLParser.put(definition, parser);
 
 			} catch (WSDLException e) {
-				throw new WSDLReadingException("Error loading WSDL file for partner", e);
+				throw new WSDLReadingException(
+						"Error loading WSDL file for partner", e);
 			} catch (SAXException e) {
-				e.printStackTrace();
-				throw new WSDLReadingException("Error loading schema in WSDL", e);
+				MessageDialog dialog = new MessageDialog(this.getShell(),
+						"Invalid Schema", null, e.getMessage(),
+						MessageDialog.ERROR, new String[] { "OK" }, 0);
+				dialog.open();
+				throw new WSDLReadingException(
+						"Error reading Schemata in WSDL: " + e.getMessage(), e);
 			} catch (TransformerException e) {
-				e.printStackTrace();
-				throw new WSDLReadingException("Error loading schema in WSDL", e);
-			} catch (Exception e) {
-				e.printStackTrace();
+				MessageDialog dialog = new MessageDialog(this.getShell(),
+						"Invalid Schema", null, e.getMessage(),
+						MessageDialog.ERROR, new String[] { "OK" }, 0);
+				dialog.open();
+				throw new WSDLReadingException(
+						"Error reading Schemata in WSDL: " + e.getMessage(), e);
 			}
 		}
 		return definition;

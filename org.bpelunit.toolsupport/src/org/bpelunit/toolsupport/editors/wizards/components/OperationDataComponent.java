@@ -174,8 +174,10 @@ public class OperationDataComponent extends DataComponent {
 		this.fOperation = this.fOperationDialogField.getText();
 		if (this.validateOperation(Verify.ALL)) {
 			Element element = this.getElementForOperation();
-			for (OperationChangeListener listener : this.operationChangeListener) {
-				listener.operationChanged(element);
+			if (element != null) {
+				for (OperationChangeListener listener : this.operationChangeListener) {
+					listener.operationChanged(element);
+				}
 			}
 		}
 	}
@@ -187,22 +189,26 @@ public class OperationDataComponent extends DataComponent {
 			}
 		}
 		this.operationChangeListener.add(listener);
+		Element element = this.getElementForOperation();
 		if (this.validateOperation(Verify.ALL)
-				&& listener instanceof SendComponent) {
-			((SendComponent) listener).setOperationMessage(this
-					.getElementForOperation(), false);
+				&& listener instanceof SendComponent && element != null) {
+			((SendComponent) listener).setOperationMessage(element, false);
 		}
 	}
 
 	private Element getElementForOperation() {
 		Element element = null;
+		WSDLParser parser = this.getWSDLParser();
+		if (parser == null) {
+			return null;
+		}
 		if (this.getWizard() instanceof ReceiveSendAsyncActivityWizard
 				|| this.getWizard() instanceof ReceiveSendSyncActivityWizard) {
-			element = this.getWSDLParser().getOutputElementForOperation(
-					this.getService(), this.getPort(), this.getOperation());
+			element = parser.getOutputElementForOperation(this.getService(),
+					this.getPort(), this.getOperation());
 		} else {
-			element = this.getWSDLParser().getInputElementForOperation(
-					this.getService(), this.getPort(), this.getOperation());
+			element = parser.getInputElementForOperation(this.getService(),
+					this.getPort(), this.getOperation());
 		}
 		return element;
 	}

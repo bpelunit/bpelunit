@@ -48,7 +48,7 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
  */
 public class SchemaParser {
 
-	private ErrorReporter errorHandler = new ErrorReporter(System.out);
+	private ErrorReporter errorHandler = new ErrorReporter();
 	private SchemaElementManager elementManager = new SchemaElementManagerImpl();
 
 	public void setErrorHandler(ErrorReporter errorHandler) {

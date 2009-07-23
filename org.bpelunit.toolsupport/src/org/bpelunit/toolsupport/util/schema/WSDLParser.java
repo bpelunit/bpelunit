@@ -60,7 +60,7 @@ public class WSDLParser {
 		this.elements = parser.getElements();
 
 		XSOMParser reader = new XSOMParser();
-		reader.setErrorHandler(new ErrorReporter(System.out));
+		reader.setErrorHandler(new ErrorReporter());
 		reader.setAnnotationParser(new DomAnnotationParserFactory());
 
 		Map<String, String> namespaces = this.definition.getNamespaces();
@@ -112,6 +112,9 @@ public class WSDLParser {
 	public Element getInputElementForOperation(QName service, String port,
 			String operationName) {
 		Operation operation = this.getOperation(service, port, operationName);
+		if (operation == null) {
+			return null;
+		}
 		Part part = (Part) operation.getInput().getMessage().getParts()
 				.values().iterator().next();
 		return this.elements.get(part.getElementName());
@@ -119,15 +122,22 @@ public class WSDLParser {
 
 	private Operation getOperation(QName service, String port,
 			String operationName) {
-		Operation operation = this.definition.getService(service).getPort(port)
-				.getBinding().getBindingOperation(operationName, null, null)
-				.getOperation();
-		return operation;
+		try {
+			Operation operation = this.definition.getService(service).getPort(
+					port).getBinding().getBindingOperation(operationName, null,
+					null).getOperation();
+			return operation;
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	public Element getOutputElementForOperation(QName service, String port,
 			String operationName) {
 		Operation operation = this.getOperation(service, port, operationName);
+		if (operation == null) {
+			return null;
+		}
 		Part part = (Part) operation.getOutput().getMessage().getParts()
 				.values().iterator().next();
 		return this.elements.get(part.getElementName());
