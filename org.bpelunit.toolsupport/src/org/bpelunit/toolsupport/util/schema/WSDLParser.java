@@ -28,7 +28,6 @@ import org.xml.sax.SAXException;
 import com.sun.xml.xsom.parser.XSOMParser;
 import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 
-//TODO MessageEditor: Fehlerbehandlung: ungültige Schemata melden, Zeilennummern der Exceptions anpassen.
 public class WSDLParser {
 	private Definition definition;
 	private HashMap<QName, ComplexType> complexTypes;
