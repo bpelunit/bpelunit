@@ -40,6 +40,12 @@ import org.eclipse.swt.widgets.TreeItem;
 
 public class MessageEditor extends Composite {
 
+	/**
+	 * Displays editor for selected TreeItem if this is editable.
+	 * 
+	 * @author cvolhard
+	 * 
+	 */
 	private final class XMLTreeSelectionListener extends SelectionAdapter {
 		private final TreeEditor editor;
 
@@ -76,14 +82,22 @@ public class MessageEditor extends Composite {
 					.getData(TREE_ITEM_FOR_ELEMENT_CONTENT);
 			if (element != null && !MessageEditor.this.isItemDisabled(item)) {
 				// item displays the inner text of a tag and is not disabled.
-				this.getInnerTextEditor(item, element);
+				this.getInnerTextEditor(item);
 			} else if ((element = (Element) item
 					.getData(TREE_ITEM_FOR_START_TAG)) != null) {
-				this.getAttributeEditor(item, element);
+				this.getStartTagEditor(item, element);
 			}
 		}
 
-		private void getAttributeEditor(final TreeItem item,
+		/**
+		 * Displays editor for the a start tag with buttons for adding a new
+		 * element of this type, or removing this element. If the element
+		 * contains attributes a input field for every attribute is displayed
+		 * 
+		 * @param item
+		 * @param element
+		 */
+		private void getStartTagEditor(final TreeItem item,
 				final Element element) {
 			boolean itemDisabled = MessageEditor.this.isItemDisabled(item);
 			Color color = MessageEditor.this.getColor(itemDisabled);
@@ -97,6 +111,7 @@ public class MessageEditor extends Composite {
 			label.setForeground(color);
 			ComplexType complex = element.getType().getAsComplexType();
 			if (complex != null) {
+				// display input fields and labels for every attribute
 				for (int i = 0; i < complex.getAttributes().size(); i++) {
 					Attribute attribute = complex.getAttributes().get(i);
 					Text text = this.createAttributeInput(item, composite,
@@ -117,6 +132,14 @@ public class MessageEditor extends Composite {
 			this.editor.setEditor(composite, item);
 		}
 
+		/**
+		 * adds a add and/or a remove button to <code>composite</code>
+		 * 
+		 * @param item
+		 *            the selected TreeItem
+		 * @param composite
+		 * @param tabList
+		 */
 		private void addNumberChangeButtons(final TreeItem item,
 				final Composite composite, List<Control> tabList) {
 			if (MessageEditor.this.isCloneable(item)) {
@@ -148,6 +171,20 @@ public class MessageEditor extends Composite {
 			}
 		}
 
+		/**
+		 * Adds label with the localPart of the <code>attribute</code> and a
+		 * editable input field with the value of the attribute of the selected
+		 * item to <code>composite</code>.
+		 * 
+		 * @param item
+		 *            the selected TreeItem
+		 * @param composite
+		 * @param attribute
+		 * @param color
+		 *            color of the text
+		 * @param isAttributeEditable
+		 * @return
+		 */
 		private Text createAttributeInput(final TreeItem item,
 				final Composite composite, Attribute attribute, Color color,
 				boolean isAttributeEditable) {
@@ -169,11 +206,13 @@ public class MessageEditor extends Composite {
 					public void keyPressed(KeyEvent event) {
 						switch (event.keyCode) {
 						case SWT.ARROW_DOWN:
+							// select the next item
 							if (MessageEditor.this.selectNext(item)) {
 								composite.dispose();
 							}
 							break;
 						case SWT.ARROW_UP:
+							// select the previous item
 							if (MessageEditor.this.selectPrevious(item)) {
 								composite.dispose();
 							}
@@ -216,7 +255,12 @@ public class MessageEditor extends Composite {
 			return layout;
 		}
 
-		private void getInnerTextEditor(final TreeItem item, Element element) {
+		/**
+		 * Displays a text field for the inner text of the <code>item</code>.
+		 * 
+		 * @param item
+		 */
+		private void getInnerTextEditor(final TreeItem item) {
 			final Text text = new Text(MessageEditor.this.getTree(), SWT.MULTI
 					| SWT.BORDER);
 			text.setText(item.getText());
@@ -353,6 +397,8 @@ public class MessageEditor extends Composite {
 
 		this.selectionListener = new XMLTreeSelectionListener(editor);
 		this.tree.addSelectionListener(this.selectionListener);
+
+		// listener for displaying images
 		this.tree.addListener(SWT.MeasureItem, new Listener() {
 			public void handleEvent(Event event) {
 				if (event.index == 0) {
@@ -365,6 +411,7 @@ public class MessageEditor extends Composite {
 				}
 			}
 		});
+		// listener for displaying images
 		this.tree.addListener(SWT.PaintItem, new Listener() {
 			public void handleEvent(Event event) {
 				if (event.index == 0) {
@@ -383,16 +430,27 @@ public class MessageEditor extends Composite {
 		});
 	}
 
+	/**
+	 * Removes the Element represented by <code>item</code> from the tree.
+	 * <code>item</code> has to represent the start tag of element. If this
+	 * Element is the last one of this type in the parent Element, it is
+	 * disabled and not removed.
+	 * 
+	 * @param item
+	 */
 	protected void removeItem(TreeItem item) {
 		Element element = (Element) item.getData(TREE_ITEM_FOR_START_TAG);
 		Integer count = this.getElementCount(element);
 		TreeItem parent = item.getParentItem();
 		TreeItem closingItem = parent.getItem(this.getItemIndex(item) + 1);
 		if (count > 0) {
+			// parent element contains more of this type, so remove this
 			item.dispose();
 			closingItem.dispose();
 			this.removeElement(element);
 		} else {
+			// parent element contains no more of this type, so disable it so
+			// that it is possible to add a element of this type again later
 			item.setData(TREE_ITEM_IS_DISABLED, "true");
 			closingItem.setData(TREE_ITEM_IS_DISABLED, "true");
 			item.setData(TREE_ITEM_CHILDREN, item.getItems());
