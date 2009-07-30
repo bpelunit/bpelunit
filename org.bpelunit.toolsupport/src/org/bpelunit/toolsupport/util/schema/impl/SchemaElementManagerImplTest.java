@@ -133,18 +133,18 @@ public class SchemaElementManagerImplTest {
 	@Test
 	public void testWasLastComplexCreated() throws Exception {
 		this.manager.getComplexType("http://my.own.namespace.org", "person");
-		assertTrue(this.manager.wasLastComplexCreated());
+		assertTrue(this.manager.wasLastComplexNewCreated());
 
 		this.manager.getComplexType("http://my.own.namespace.org", "person");
-		assertFalse(this.manager.wasLastComplexCreated());
+		assertFalse(this.manager.wasLastComplexNewCreated());
 
 		this.manager.getComplexType("http://my.own.namespace.org", "person2");
-		assertTrue(this.manager.wasLastComplexCreated());
+		assertTrue(this.manager.wasLastComplexNewCreated());
 
 		this.manager.getComplexType("http://my.own.namespace.org", "person2");
-		assertFalse(this.manager.wasLastComplexCreated());
+		assertFalse(this.manager.wasLastComplexNewCreated());
 
 		this.manager.getComplexType("http://my.own.namespace.org", "person");
-		assertFalse(this.manager.wasLastComplexCreated());
+		assertFalse(this.manager.wasLastComplexNewCreated());
 	}
 }

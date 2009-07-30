@@ -16,10 +16,19 @@ public interface Element extends SchemaNode {
 
 	public abstract int getMaxOccurs();
 
+	/**
+	 * 
+	 * @param defaultValue
+	 * @see Attribute#setDefaultValue(String)
+	 */
 	public abstract void setDefaultValue(String defaultValue);
 
 	public abstract String getDefaultValue();
 
+	/**
+	 * @see Attribute#setFixedValue(String)
+	 * @param fixedValue
+	 */
 	public abstract void setFixedValue(String fixedValue);
 
 	public abstract String getFixedValue();

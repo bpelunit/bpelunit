@@ -615,7 +615,8 @@ public class MessageEditor extends Composite {
 			ComplexType complex = element.getType().getAsComplexType();
 			for (Attribute attribute : complex.getAttributes()) {
 				startTag.setData(ATTRIBUTE_VALUE_KEY_PREFIX
-						+ attribute.getLocalPart(), attribute.getValue());
+						+ attribute.getLocalPart(), attribute
+						.getDefaultOrFixedValue());
 			}
 			for (Element child : complex.getElements()) {
 				this.displayElement(child, startTag, startTag.getItemCount());

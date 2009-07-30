@@ -32,7 +32,8 @@ public class SchemaElementManagerImpl implements SchemaElementManager {
 
 	@Override
 	public SimpleType getSimpleType(String localPart) {
-		return this.getSimpleType(new QName(SchemaNode.XML_SCHEMA_NAMESPACE, localPart));
+		return this.getSimpleType(new QName(SchemaNode.XML_SCHEMA_NAMESPACE,
+				localPart));
 	}
 
 	@Override
@@ -43,11 +44,12 @@ public class SchemaElementManagerImpl implements SchemaElementManager {
 	@Override
 	public ComplexType getComplexType(QName qName) {
 		ComplexType complexType = this.complexTypes.get(qName);
-		this.wasLastComplexCreated = false;
 		if (complexType == null) {
 			complexType = new ComplexTypeImpl(qName);
 			this.complexTypes.put(qName, complexType);
 			this.wasLastComplexCreated = true;
+		} else {
+			this.wasLastComplexCreated = false;
 		}
 		return complexType;
 	}
@@ -90,7 +92,7 @@ public class SchemaElementManagerImpl implements SchemaElementManager {
 	}
 
 	@Override
-	public boolean wasLastComplexCreated() {
+	public boolean wasLastComplexNewCreated() {
 		return this.wasLastComplexCreated;
 	}
 

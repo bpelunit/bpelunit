@@ -58,12 +58,12 @@ public class AttributeImpl extends SchemaNodeImpl implements Attribute {
 	}
 
 	@Override
-	public String getValue() {
-		if (this.fixedValue != null) {
-			return this.fixedValue;
-		}
+	public String getDefaultOrFixedValue() {
 		if (this.defaultValue != null) {
 			return this.defaultValue;
+		}
+		if (this.fixedValue != null) {
+			return this.fixedValue;
 		}
 		return "";
 	}

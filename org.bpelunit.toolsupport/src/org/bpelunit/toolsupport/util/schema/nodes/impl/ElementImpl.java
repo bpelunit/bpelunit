@@ -112,14 +112,11 @@ public class ElementImpl extends SchemaNodeImpl implements Element {
 
 		if (this.type instanceof ComplexType) {
 			ComplexType complex = (ComplexType) this.type;
+
+			// add the attributes to the string
 			for (Attribute attribute : complex.getAttributes()) {
-				start += " " + attribute.getLocalPart() + "=\"";
-				if (attribute.getFixedValue() != null) {
-					start += attribute.getFixedValue();
-				} else if (attribute.getDefaultValue() != null) {
-					start += attribute.getDefaultValue();
-				}
-				start += "\"";
+				start += " " + attribute.getLocalPart() + "=\""
+						+ attribute.getDefaultOrFixedValue() + "\"";
 			}
 			start += ">";
 

@@ -28,30 +28,73 @@ import org.xml.sax.SAXException;
 import com.sun.xml.xsom.parser.XSOMParser;
 import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 
+/**
+ * Parses all schemata in the Definition of a WSDL and manages the Elements and
+ * Types of the schemata. Connects the operations of the service with the input
+ * and output messages.
+ * 
+ * @author cvolhard
+ * 
+ */
 public class WSDLParser {
 	private Definition definition;
 	private HashMap<QName, ComplexType> complexTypes;
 	private HashMap<QName, SimpleType> simpleTypes;
 	private HashMap<QName, Element> elements;
 
+	/**
+	 * Creates the WSDL-Parser for <code>definition</code>. Parses all the
+	 * Schemata using a {@link SchemaParser}.
+	 * 
+	 * @param definition
+	 * @throws SAXException
+	 * @throws TransformerException
+	 */
 	public WSDLParser(Definition definition) throws SAXException,
 			TransformerException {
 		this.definition = definition;
 		this.readSchemata();
 	}
 
+	/**
+	 * Returns a HashMap containing all ComplexTypes from all Schemata. The
+	 * QNames are used as key.
+	 * 
+	 * @see SchemaElementManager#getComplexTypes()
+	 * @return
+	 */
 	HashMap<QName, ComplexType> getComplexTypes() {
 		return this.complexTypes;
 	}
 
+	/**
+	 * Returns a HashMap containing all SimpleTypes from all Schemata. The
+	 * QNames are used as key.
+	 * 
+	 * @see SchemaElementManager#getSimpleTypes()
+	 * @return
+	 */
 	HashMap<QName, SimpleType> getSimpleTypes() {
 		return this.simpleTypes;
 	}
 
+	/**
+	 * Returns a HashMap containing all root Elements from all Schemata. The
+	 * QNames are used as key.
+	 * 
+	 * @see SchemaElementManager#getElements()
+	 * @return
+	 */
 	HashMap<QName, Element> getElements() {
 		return this.elements;
 	}
 
+	/**
+	 * Reads all Schemata contained in the Definition.
+	 * 
+	 * @throws SAXException
+	 * @throws TransformerException
+	 */
 	@SuppressWarnings("unchecked")
 	private void readSchemata() throws SAXException, TransformerException {
 		SchemaParser parser = new SchemaParser();
@@ -60,7 +103,7 @@ public class WSDLParser {
 		this.elements = parser.getElements();
 
 		XSOMParser reader = new XSOMParser();
-		reader.setErrorHandler(new ErrorReporter());
+		reader.setErrorHandler(new ErrorAdapter());
 		reader.setAnnotationParser(new DomAnnotationParserFactory());
 
 		Map<String, String> namespaces = this.definition.getNamespaces();
@@ -69,6 +112,8 @@ public class WSDLParser {
 				Schema schema = (Schema) tmp;
 
 				org.w3c.dom.Element schemaElement = schema.getElement();
+
+				// inherit the namespaces from the definitions-tag
 				this.addNamespaces(namespaces, schemaElement);
 
 				StringReader stringReader = this
@@ -94,6 +139,16 @@ public class WSDLParser {
 		return stringReader;
 	}
 
+	/**
+	 * Adds every namespace in <code>namespaces</code> to the
+	 * <code>schemaElement</code>, if a namespace with this prefix not already
+	 * exists.
+	 * 
+	 * @param namespaces
+	 *            namespaces from the definitions-Tag of the WSDL.
+	 * @param schemaElement
+	 *            representing on schema element of the WSDL
+	 */
 	@SuppressWarnings("unchecked")
 	private void addNamespaces(Map<String, String> namespaces,
 			org.w3c.dom.Element schemaElement) {
@@ -109,6 +164,21 @@ public class WSDLParser {
 		}
 	}
 
+	/**
+	 * Gets the Element of the first part of the input message of operation
+	 * identified by <code>service</code>, <code>port</code> and
+	 * <code>operationName</code> (first part because of the WS-I standard).
+	 * 
+	 * 
+	 * @param service
+	 *            QName of the service
+	 * @param port
+	 *            name of the port
+	 * @param operationName
+	 *            name of the operation
+	 * @return
+	 * @see #getOutputElementForOperation(QName, String, String)
+	 */
 	public Element getInputElementForOperation(QName service, String port,
 			String operationName) {
 		Operation operation = this.getOperation(service, port, operationName);
@@ -120,6 +190,18 @@ public class WSDLParser {
 		return this.elements.get(part.getElementName());
 	}
 
+	/**
+	 * Returns the Operation identified by <code>service</code>,
+	 * <code>port</code> and <code>operationName</code>
+	 * 
+	 * @param service
+	 *            QName of the service
+	 * @param port
+	 *            name of the port
+	 * @param operationName
+	 *            name of the operation
+	 * @return
+	 */
 	private Operation getOperation(QName service, String port,
 			String operationName) {
 		try {
@@ -132,6 +214,21 @@ public class WSDLParser {
 		}
 	}
 
+	/**
+	 * Gets the Element of the first part of the output message of operation
+	 * identified by <code>service</code>, <code>port</code> and
+	 * <code>operationName</code> (first part because of the WS-I standard).
+	 * 
+	 * 
+	 * @param service
+	 *            QName of the service
+	 * @param port
+	 *            name of the port
+	 * @param operationName
+	 *            name of the operation
+	 * @return
+	 * @see #getInputElementForOperation(QName, String, String)
+	 */
 	public Element getOutputElementForOperation(QName service, String port,
 			String operationName) {
 		Operation operation = this.getOperation(service, port, operationName);
