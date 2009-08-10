@@ -16,10 +16,13 @@ import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IDeployment;
 import org.bpelunit.framework.control.ext.PartnerLink;
 import org.bpelunit.framework.control.util.ExtensionRegistry;
+import org.bpelunit.framework.coverage.ArchiveUtil;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.EndPointException;
 import org.bpelunit.framework.exception.SpecificationException;
+
+import de.schlichtherle.io.File;
 
 /**
  * The ProcessUnderTest is the internal representation of the BPEL process which
@@ -117,12 +120,14 @@ public class ProcessUnderTest extends Partner {
 			}
 		}
 
+		boolean archiveCopied = false;
+		String newFile = null;
+
 		if (BPELUnitRunner.measureTestCoverage()) {
 			ICoverageMeasurementTool coverageTool = BPELUnitRunner
 					.getCoverageMeasurmentTool();
 			try {
 
-				String newFile;
 				/*
 				 * newFile = coverageTool.prepareArchiveForCoverageMeasurement(
 				 * pathToArchive, FilenameUtils.getName(fBPRFile), this);
@@ -131,6 +136,7 @@ public class ProcessUnderTest extends Partner {
 						fDeployer.getArchiveLocation(getBasePath()), this,
 						fDeployer);
 				fDeployer.setArchiveLocation(newFile);
+				archiveCopied = true;
 
 			} catch (Exception e) {
 				coverageTool
@@ -142,6 +148,11 @@ public class ProcessUnderTest extends Partner {
 
 		fDeployer.deploy(getBasePath(), this);
 		// if no exception was thrown, the service is deployed.
+
+		if (archiveCopied) {
+			ArchiveUtil.deleteArchive(newFile);
+		}
+
 		isDeployed = true;
 	}
 

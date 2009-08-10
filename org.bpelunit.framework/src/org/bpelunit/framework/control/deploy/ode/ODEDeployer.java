@@ -29,6 +29,7 @@ import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IDeployment;
 import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
+import org.bpelunit.framework.coverage.ArchiveUtil;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.Partner;
@@ -102,7 +103,8 @@ public class ODEDeployer implements IBPELDeployer {
 				File zipFile = new File(dir.getAbsolutePath() + ".zip");
 				dir.copyAllTo(zipFile);
 				archivePath = zipFile.getAbsolutePath();
-				fArchive += ".zip";
+
+				fArchive += ".zip";// Newly created zip archive.
 
 				try {
 					File.umount(true, true, true, true);
@@ -119,7 +121,7 @@ public class ODEDeployer implements IBPELDeployer {
 		}
 
 		// fArchive = pathToTest;
-		boolean fileReplaced = false;
+		// boolean fileReplaced = false;
 
 		// process the bundle for replacing wsdl eprs here. requires base url
 		// string from specification loader.
@@ -188,7 +190,8 @@ public class ODEDeployer implements IBPELDeployer {
 					+ e.getMessage(), e);
 		} finally {
 			method.releaseConnection();
-			if (fileReplaced && uploadingFile.exists() || archiveCreated) {
+
+			if (uploadingFile.exists() && archiveCreated) {
 				uploadingFile.deleteAll();
 			}
 		}

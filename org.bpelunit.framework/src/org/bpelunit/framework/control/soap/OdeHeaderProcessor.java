@@ -54,7 +54,7 @@ public class OdeHeaderProcessor implements IHeaderProcessor {
 	 * @see org.bpelunit.framework.control.ext.IHeaderProcessor#processReceive(org.bpelunit.framework.model.test.activity.ActivityContext,
 	 *      javax.xml.soap.SOAPMessage)
 	 */
-	@Override
+	//@Override
 	public void processReceive(ActivityContext context, SOAPMessage message)
 			throws HeaderProcessingException {
 		if (context.getUserData(KEY_ODE_SENT).equals("true")) {
@@ -114,7 +114,7 @@ public class OdeHeaderProcessor implements IHeaderProcessor {
 	 * @see org.bpelunit.framework.control.ext.IHeaderProcessor#processSend(org.bpelunit.framework.model.test.activity.ActivityContext,
 	 *      org.bpelunit.framework.control.ext.SendPackage)
 	 */
-	@Override
+	//@Override
 	public void processSend(ActivityContext context, SendPackage message)
 			throws HeaderProcessingException {
 
@@ -209,7 +209,7 @@ public class OdeHeaderProcessor implements IHeaderProcessor {
 	 * @see org.bpelunit.framework.control.ext.IHeaderProcessor#setProperty(java.lang.String,
 	 *      java.lang.String)
 	 */
-	@Override
+	//@Override
 	public void setProperty(String name, String value) {
 		return; // so far we have no properties
 	}

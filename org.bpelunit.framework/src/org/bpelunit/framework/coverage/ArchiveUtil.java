@@ -51,11 +51,36 @@ public class ArchiveUtil {
 		}
 	}
 
+	public static void deleteArchive(String archive) {
+		if (archive == null) {
+			return;
+		}
+
+		if (archive.endsWith(".zip")) {
+			new File(archive).deleteAll();
+		} else {
+			deleteDir(new File(archive));
+		}
+	}
+
 	public static void closeArchives() {
 		try {
 			de.schlichtherle.io.File.umount(true, true, true, true);
 		} catch (ArchiveException e) {
 		}
+	}
+
+	private static boolean deleteDir(File dir) {
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			for (int i = 0; i < children.length; i++) {
+				boolean success = deleteDir(new File(dir, children[i]));
+				if (!success) {
+					return false;
+				}
+			}
+		}
+		return dir.delete();
 	}
 
 }
