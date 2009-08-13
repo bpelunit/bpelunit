@@ -28,6 +28,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.FontMetrics;
@@ -49,19 +51,18 @@ import org.eclipse.swt.widgets.Text;
  * @author Philip Mayer
  * 
  */
-public class SendComponent extends DataComponent implements
-		IHyperLinkFieldListener, OperationChangeListener,
-		StringValueListener {
+public class SendComponent extends DataComponent implements IHyperLinkFieldListener,
+		OperationChangeListener, StringValueListener {
 
-	private TextDialogField fSendField;
-	private XMLSendActivity fSendData;
-	private StringDialogField fDelayStringField;
-	private SelectionButtonDialogField fDelaySelectionField;
-	private SelectionButtonDialogField enterLiteralXMLCheckBox;
+	protected TextDialogField fSendField;
+	protected XMLSendActivity fSendData;
+	protected StringDialogField fDelayStringField;
+	protected SelectionButtonDialogField fDelaySelectionField;
+	protected SelectionButtonDialogField enterLiteralXMLCheckBox;
 
-	private boolean fDelaySelected;
+	protected boolean fDelaySelected;
 	protected MessageEditor messageEditor;
-	private TabItem literalXMLTab;
+	protected TabItem literalXMLTab;
 	private TabItem messageEditorTab;
 
 	public SendComponent(IWizardPage wizard, FontMetrics metrics) {
@@ -86,54 +87,50 @@ public class SendComponent extends DataComponent implements
 		//
 		// fDelayStringField
 		this.fDelayStringField = new StringDialogField(true);
-		this.fDelayStringField
-				.setDialogFieldListener(new IDialogFieldListener() {
+		this.fDelayStringField.setDialogFieldListener(new IDialogFieldListener() {
 
-					public void dialogFieldChanged(DialogField field) {
-						if (SendComponent.this.fDelaySelected) {
-							SendComponent.this.fireValueChanged(field);
-						}
-					}
-				});
+			public void dialogFieldChanged(DialogField field) {
+				if (SendComponent.this.fDelaySelected) {
+					SendComponent.this.fireValueChanged(field);
+				}
+			}
+		});
 
 		//
 		// fDelaySelectionField
 		this.fDelaySelectionField = new SelectionButtonDialogField(SWT.CHECK);
 		this.fDelaySelectionField.attachDialogField(this.fDelayStringField);
 		this.fDelaySelectionField.setLabelText("Vary send delay");
-		this.fDelaySelectionField
-				.setDialogFieldListener(new IDialogFieldListener() {
+		this.fDelaySelectionField.setDialogFieldListener(new IDialogFieldListener() {
 
-					public void dialogFieldChanged(DialogField field) {
-						SendComponent.this.fDelaySelected = SendComponent.this.fDelaySelectionField
-								.isEnabled();
-						SendComponent.this.fDelayStringField.setText("");
-						SendComponent.this.fireValueChanged(field);
-					}
-				});
+			public void dialogFieldChanged(DialogField field) {
+				SendComponent.this.fDelaySelected = SendComponent.this.fDelaySelectionField
+						.isEnabled();
+				SendComponent.this.fDelayStringField.setText("");
+				SendComponent.this.fireValueChanged(field);
+			}
+		});
 
 		//
 		// enterLiteralXMLCheckBox
 		this.enterLiteralXMLCheckBox = new SelectionButtonDialogField(SWT.CHECK);
 		this.enterLiteralXMLCheckBox.setLabelText("Enter XML literal");
 		this.enterLiteralXMLCheckBox.setSelection(false);
-		this.enterLiteralXMLCheckBox
-				.setDialogFieldListener(new IDialogFieldListener() {
+		this.enterLiteralXMLCheckBox.setDialogFieldListener(new IDialogFieldListener() {
 
-					@Override
-					public void dialogFieldChanged(DialogField field) {
-						SendComponent.this.setInputType();
+			@Override
+			public void dialogFieldChanged(DialogField field) {
+				SendComponent.this.setInputType();
 
-					}
-				});
+			}
+		});
 
 		this.initValues();
 	}
 
 	protected void setInputType() {
 		boolean selected = this.enterLiteralXMLCheckBox.isSelected();
-		Image image = ToolSupportActivator
-				.getImage(ToolSupportActivator.IMAGE_LOCK);
+		Image image = ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_LOCK);
 		if (selected) {
 			this.messageEditorTab.setImage(image);
 			this.literalXMLTab.setImage(null);
@@ -149,7 +146,7 @@ public class SendComponent extends DataComponent implements
 
 		XMLAnyElement data = this.fSendData.getData();
 		if (data == null) {
-			this.fSendData.addNewData();
+			data = this.fSendData.addNewData();
 		}
 
 		if (!data.newCursor().toFirstChild()) {
@@ -182,8 +179,8 @@ public class SendComponent extends DataComponent implements
 
 	@Override
 	public Composite createControls(Composite composite, int nColumns) {
-		Group group = this.createGroup(composite, "Data to be sent", nColumns,
-				new GridData(SWT.FILL, SWT.FILL, true, true));
+		Group group = this.createGroup(composite, "Data to be sent", nColumns, new GridData(
+				SWT.FILL, SWT.FILL, true, true));
 
 		this.enterLiteralXMLCheckBox.doFillIntoGrid(group, 1);
 
@@ -191,16 +188,12 @@ public class SendComponent extends DataComponent implements
 		label.setText("Message Editor");
 
 		Button button = new Button(group, SWT.NULL);
-		button.setImage(ToolSupportActivator
-				.getImage(ToolSupportActivator.IMAGE_ARROW_LEFT));
-		button
-				.setToolTipText("Reset the \"XML to be sent\" with the XML from the Message Editor");
+		button.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_ARROW_LEFT));
+		button.setToolTipText("Reset the \"XML to be sent\" with the XML from the Message Editor");
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SendComponent.this
-						.valueChanged(SendComponent.this.messageEditor
-								.getMessageAsXML());
+				SendComponent.this.valueChanged(SendComponent.this.messageEditor.getMessageAsXML());
 			}
 		});
 
@@ -208,6 +201,14 @@ public class SendComponent extends DataComponent implements
 		label.setText("XML to be sent");
 
 		TabFolder tabFolder = new TabFolder(group, SWT.TOP);
+		tabFolder.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (e.item == SendComponent.this.literalXMLTab) {
+					SendComponent.this.fSendField.getTextControl(null).setFocus();
+				}
+			}
+		});
 		GridData gd = new GridData();
 		gd.horizontalAlignment = GridData.FILL;
 		gd.verticalAlignment = GridData.FILL;
@@ -216,8 +217,7 @@ public class SendComponent extends DataComponent implements
 		gd.horizontalSpan = nColumns;
 		tabFolder.setLayoutData(gd);
 
-		this.messageEditor = new MessageEditor(tabFolder, SWT.NULL, this
-				.getTestSuite());
+		this.messageEditor = new MessageEditor(tabFolder, SWT.NULL, this.getTestSuite());
 		this.messageEditor.addStringValueListener(this);
 		this.messageEditorTab = new TabItem(tabFolder, SWT.NULL);
 		this.messageEditorTab.setControl(this.messageEditor);
@@ -227,14 +227,24 @@ public class SendComponent extends DataComponent implements
 		this.literalXMLTab = new TabItem(tabFolder, SWT.NULL);
 		Text text = this.fSendField.getTextControl(null);
 		text.setEditable(false);
+		text.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (SendComponent.this.enterLiteralXMLCheckBox.isSelected()) {
+					String xml = SendComponent.this.getXmlText();
+					SendComponent.this.messageEditor.setXML(xml);
+				}
+			}
+		});
+		text.setFocus();
 		this.literalXMLTab.setControl(text);
 		this.literalXMLTab.setText("XML to be sent");
 
 		tabFolder.setSelection(1);
 		this.enterLiteralXMLCheckBox.setSelection(true);
 
-		LayoutUtil.setHeightHint(text, Dialog.convertHeightInCharsToPixels(this
-				.getFontMetrics(), 6));
+		LayoutUtil.setHeightHint(text, Dialog
+				.convertHeightInCharsToPixels(this.getFontMetrics(), 6));
 		LayoutUtil.setWidthHint(text, this.getMaxFieldWidth());
 		LayoutUtil.setHorizontalGrabbing(text);
 
@@ -244,8 +254,7 @@ public class SendComponent extends DataComponent implements
 		inner.setLayout(new GridLayout(3, false));
 
 		this.fDelaySelectionField.doFillIntoGrid(inner, 1);
-		Button selectionButton = this.fDelaySelectionField
-				.getSelectionButton(null);
+		Button selectionButton = this.fDelaySelectionField.getSelectionButton(null);
 		LayoutUtil.setVerticalAlign(selectionButton, GridData.CENTER);
 
 		this.fDelayStringField.doFillIntoGrid(inner, 2);
@@ -253,8 +262,7 @@ public class SendComponent extends DataComponent implements
 		LayoutUtil.setWidthHint(textControl, this.getMaxFieldWidth());
 		LayoutUtil.setHorizontalGrabbing(textControl);
 
-		HyperlinkField field = new HyperlinkField(
-				"Configure Namespace Prefixes...");
+		HyperlinkField field = new HyperlinkField("Configure Namespace Prefixes...");
 		field.setHyperLinkFieldListener(this);
 		field.createControl(group, nColumns, GridData.BEGINNING);
 
@@ -275,8 +283,7 @@ public class SendComponent extends DataComponent implements
 	}
 
 	public void hyperLinkActivated() {
-		WizardDialog d = new WizardDialog(this.getShell(), new NamespaceWizard(
-				this.getTestSuite()));
+		WizardDialog d = new WizardDialog(this.getShell(), new NamespaceWizard(this.getTestSuite()));
 		if (d.open() == Window.OK) {
 			this.fireValueChanged(this.fSendField);
 		}

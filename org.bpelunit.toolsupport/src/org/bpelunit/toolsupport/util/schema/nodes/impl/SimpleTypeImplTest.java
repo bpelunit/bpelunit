@@ -25,7 +25,7 @@ public class SimpleTypeImplTest extends SchemaNodeTestAbstract {
 	@Test
 	public void testSimpleTypeImplString() {
 
-		assertEquals(SchemaNode.XML_SCHEMA_NAMESPACE, this.simple.getTargetNamespace());
+		assertEquals(SchemaNode.XML_SCHEMA_NAMESPACE, this.simple.getNamespace());
 		assertEquals("string", this.simple.getLocalPart());
 	}
 

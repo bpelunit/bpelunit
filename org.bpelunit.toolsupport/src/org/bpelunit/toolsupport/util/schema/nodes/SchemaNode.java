@@ -8,7 +8,7 @@ public interface SchemaNode {
 
 	public abstract String getLocalPart();
 
-	public abstract String getTargetNamespace();
+	public abstract String getNamespace();
 
 	public abstract QName getQName();
 

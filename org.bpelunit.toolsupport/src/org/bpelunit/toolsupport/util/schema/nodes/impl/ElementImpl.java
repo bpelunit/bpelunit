@@ -104,9 +104,9 @@ public class ElementImpl extends SchemaNodeImpl implements Element {
 
 	@Override
 	public String toXMLString(Map<String, String> namespaces, String indent) {
-		String namespace = namespaces.get(this.getTargetNamespace());
+		String namespace = namespaces.get(this.getNamespace());
 		if (namespace == null) {
-			namespace = this.getTargetNamespace();
+			namespace = this.getNamespace();
 		}
 		String start = "<" + namespace + ":" + this.getLocalPart();
 

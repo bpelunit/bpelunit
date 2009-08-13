@@ -56,36 +56,36 @@ public class SchemaParserTest {
 		Element element = this.elements.get(new QName(targetNs, "name"));
 		assertNotNull(element);
 		assertEquals("name", element.getLocalPart());
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("string", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 		// Element lastname in targetNs must exist, must be type string from
 		// schemaNs
 		element = this.elements.get(new QName(targetNs, "lastname"));
 		assertNotNull(element);
 		assertEquals("lastname", element.getLocalPart());
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("string", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 		// Element age in targetNs must exist, must be type integer from
 		// schemaNs
 		element = this.elements.get(new QName(targetNs, "age"));
 		assertNotNull(element);
 		assertEquals("age", element.getLocalPart());
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("integer", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 		// Element datebron in targetNs must exist, must be type date from
 		// schemaNs
 		element = this.elements.get(new QName(targetNs, "dateborn"));
 		assertNotNull(element);
 		assertEquals("dateborn", element.getLocalPart());
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("date", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 	}
 
 	@Test
@@ -109,7 +109,7 @@ public class SchemaParserTest {
 		// Type must be ProductType in targetNs
 		ComplexType complex = (ComplexType) element.getType();
 		assertEquals("ProductType", complex.getLocalPart());
-		assertEquals(targetNs, complex.getTargetNamespace());
+		assertEquals(targetNs, complex.getNamespace());
 		assertSame(this.complexTypes.get(complex.getQName()), complex);
 
 		// Type must have one attribute productId in targetNs, type of the
@@ -118,9 +118,9 @@ public class SchemaParserTest {
 		assertEquals(1, attributes.size());
 		Attribute attribute = attributes.get(0);
 		assertEquals("productId", attribute.getLocalPart());
-		assertEquals(targetNs, attribute.getTargetNamespace());
+		assertEquals(targetNs, attribute.getNamespace());
 		assertEquals("positiveInteger", attribute.getType().getLocalPart());
-		assertEquals(schemaNs, attribute.getType().getTargetNamespace());
+		assertEquals(schemaNs, attribute.getType().getNamespace());
 
 	}
 
@@ -146,7 +146,7 @@ public class SchemaParserTest {
 		// does not have any localPart
 		ComplexType complex = (ComplexType) element.getType();
 		assertNull(complex.getLocalPart());
-		assertEquals(targetNs, complex.getTargetNamespace());
+		assertEquals(targetNs, complex.getNamespace());
 
 		// complexType has to contain two element
 		List<Element> nestedElements = complex.getElements();
@@ -156,19 +156,19 @@ public class SchemaParserTest {
 		element = nestedElements.get(0);
 		assertNotNull(element);
 		assertEquals("string", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 		// Element lastname in targetNs must exist
 		element = nestedElements.get(1);
 		assertNotNull(element);
 		assertEquals("string", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 		// Element address in targetNs must exist
 		element = nestedElements.get(2);
 		assertNotNull(element);
 		assertEquals("AddressType", element.getType().getLocalPart());
-		assertEquals(targetNs, element.getType().getTargetNamespace());
+		assertEquals(targetNs, element.getType().getNamespace());
 
 		// complexType of address must be the same complexType like the
 		// AddressType in the complexTypes
@@ -177,7 +177,7 @@ public class SchemaParserTest {
 
 		// AddressType must be in targetNs, must contain two elements and no
 		// attributes
-		assertEquals(targetNs, complex.getTargetNamespace());
+		assertEquals(targetNs, complex.getNamespace());
 		assertEquals("AddressType", complex.getLocalPart());
 		assertEquals(0, complex.getAttributes().size());
 		assertEquals(2, complex.getElements().size());
@@ -186,19 +186,19 @@ public class SchemaParserTest {
 		// schemaNs
 		element = complex.getElements().get(0);
 		assertNotNull(element);
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("zip", element.getLocalPart());
 		assertEquals("string", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 		// AddressType must contain a element named city which type is string in
 		// schemaNs
 		element = complex.getElements().get(1);
 		assertNotNull(element);
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("city", element.getLocalPart());
 		assertEquals("string", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 	}
 
@@ -224,7 +224,7 @@ public class SchemaParserTest {
 		// does not have any localPart
 		ComplexType complex = (ComplexType) element.getType();
 		assertNull(complex.getLocalPart());
-		assertEquals(targetNs, complex.getTargetNamespace());
+		assertEquals(targetNs, complex.getNamespace());
 
 		// complexType has to contain two element
 		List<Element> nestedElements = complex.getElements();
@@ -234,13 +234,13 @@ public class SchemaParserTest {
 		element = nestedElements.get(0);
 		assertNotNull(element);
 		assertEquals("string", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 		// Element lastname in targetNs must exist
 		element = nestedElements.get(1);
 		assertNotNull(element);
 		assertEquals("string", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 		// Element address in targetNs must exist
 		element = nestedElements.get(2);
@@ -249,7 +249,7 @@ public class SchemaParserTest {
 
 		// complex must be in targetNs, must contain two elements and no
 		// attributes
-		assertEquals(targetNs, complex.getTargetNamespace());
+		assertEquals(targetNs, complex.getNamespace());
 		assertEquals(0, complex.getAttributes().size());
 		assertEquals(2, complex.getElements().size());
 
@@ -257,19 +257,19 @@ public class SchemaParserTest {
 		// schemaNs
 		element = complex.getElements().get(0);
 		assertNotNull(element);
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("zip", element.getLocalPart());
 		assertEquals("string", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 		// AddressType must contain a element named city which type is string in
 		// schemaNs
 		element = complex.getElements().get(1);
 		assertNotNull(element);
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("city", element.getLocalPart());
 		assertEquals("string", element.getType().getLocalPart());
-		assertEquals(schemaNs, element.getType().getTargetNamespace());
+		assertEquals(schemaNs, element.getType().getNamespace());
 
 	}
 
@@ -281,7 +281,7 @@ public class SchemaParserTest {
 		assertEquals(1, this.simpleTypes.size());
 		SimpleType stringType = this.simpleTypes.get(new QName(schemaNs, "string"));
 		assertEquals("string", stringType.getLocalPart());
-		assertEquals(schemaNs, stringType.getTargetNamespace());
+		assertEquals(schemaNs, stringType.getNamespace());
 
 		// there have to be 2 complexTypes
 		assertEquals(2, this.complexTypes.size());
@@ -289,45 +289,45 @@ public class SchemaParserTest {
 		// check ComplexType LocationType
 		ComplexType locationType = this.complexTypes.get(new QName(targetNs, "LocationType"));
 		assertEquals("LocationType", locationType.getLocalPart());
-		assertEquals(targetNs, locationType.getTargetNamespace());
+		assertEquals(targetNs, locationType.getNamespace());
 		assertEquals(0, locationType.getAttributes().size());
 		assertEquals(2, locationType.getElements().size());
 
 		// check nested element city of LocationType
 		Element nested = locationType.getElements().get(0);
 		assertSame(stringType, nested.getType());
-		assertEquals(targetNs, nested.getTargetNamespace());
+		assertEquals(targetNs, nested.getNamespace());
 		assertEquals("city", nested.getLocalPart());
 
 		// check nested element zip of LocationType
 		nested = locationType.getElements().get(1);
 		assertSame(stringType, nested.getType());
-		assertEquals(targetNs, nested.getTargetNamespace());
+		assertEquals(targetNs, nested.getNamespace());
 		assertEquals("zip", nested.getLocalPart());
 
 		// check ComplexType PersonType
 		ComplexType personType = this.complexTypes.get(new QName(targetNs, "PersonType"));
 		assertEquals("PersonType", personType.getLocalPart());
-		assertEquals(targetNs, locationType.getTargetNamespace());
+		assertEquals(targetNs, locationType.getNamespace());
 
 		// check attributes of PersonType
 		assertEquals(2, personType.getAttributes().size());
 		Attribute attribute = this.findAttribute(personType.getAttributes(), targetNs, "personId");
 		assertSame(stringType, attribute.getType());
 		assertEquals("personId", attribute.getLocalPart());
-		assertEquals(targetNs, attribute.getTargetNamespace());
+		assertEquals(targetNs, attribute.getNamespace());
 		assertNull(attribute.getFixedValue());
 		assertEquals("-1", attribute.getDefaultValue());
 		attribute = this.findAttribute(personType.getAttributes(), targetNs, "lang");
 		assertSame(stringType, attribute.getType());
 		assertEquals("lang", attribute.getLocalPart());
-		assertEquals(targetNs, attribute.getTargetNamespace());
+		assertEquals(targetNs, attribute.getNamespace());
 		assertEquals("DE", attribute.getFixedValue());
 
 		// check nested element firstname of PersonType
 		nested = personType.getElements().get(0);
 		assertSame(stringType, nested.getType());
-		assertEquals(targetNs, nested.getTargetNamespace());
+		assertEquals(targetNs, nested.getNamespace());
 		assertEquals("firstname", nested.getLocalPart());
 		assertEquals(1, nested.getMinOccurs());
 		assertEquals(2, nested.getMaxOccurs());
@@ -336,7 +336,7 @@ public class SchemaParserTest {
 		// check nested element lastname of PersonType
 		nested = personType.getElements().get(1);
 		assertSame(stringType, nested.getType());
-		assertEquals(targetNs, nested.getTargetNamespace());
+		assertEquals(targetNs, nested.getNamespace());
 		assertEquals("lastname", nested.getLocalPart());
 		assertEquals(1, nested.getMinOccurs());
 		assertEquals(1, nested.getMaxOccurs());
@@ -345,7 +345,7 @@ public class SchemaParserTest {
 		// check nested element location of PersonType
 		nested = personType.getElements().get(2);
 		assertSame(locationType, nested.getType());
-		assertEquals(targetNs, nested.getTargetNamespace());
+		assertEquals(targetNs, nested.getNamespace());
 		assertEquals("location", nested.getLocalPart());
 		assertEquals(2, nested.getMinOccurs());
 		assertEquals(0, nested.getMaxOccurs());
@@ -355,22 +355,22 @@ public class SchemaParserTest {
 		assertEquals(3, this.elements.size());
 		Element element = this.elements.get(new QName(targetNs, "employee"));
 		assertSame(personType, element.getType());
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("employee", element.getLocalPart());
 		element = this.elements.get(new QName(targetNs, "student"));
 		assertSame(personType, element.getType());
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("student", element.getLocalPart());
 		element = this.elements.get(new QName(targetNs, "member"));
 		assertSame(personType, element.getType());
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals("member", element.getLocalPart());
 
 	}
 
 	private Attribute findAttribute(List<Attribute> e, String namespace, String name) {
 		for (Attribute attribute : e) {
-			if (namespace.equals(attribute.getTargetNamespace())
+			if (namespace.equals(attribute.getNamespace())
 					&& name.equals(attribute.getLocalPart())) {
 				return attribute;
 			}

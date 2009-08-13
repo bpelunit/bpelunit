@@ -48,7 +48,7 @@ public class SchemaElementManagerImplTest {
 		String localPart = "integer";
 		SimpleType simple = this.manager.getSimpleType(localPart);
 		assertNotNull("If this SimpleType does not exists the manager has to create one", simple);
-		assertEquals(SchemaNode.XML_SCHEMA_NAMESPACE, simple.getTargetNamespace());
+		assertEquals(SchemaNode.XML_SCHEMA_NAMESPACE, simple.getNamespace());
 		assertEquals(localPart, simple.getLocalPart());
 
 		assertSame("a further call has to return the same SimpleType", simple, this.manager
@@ -65,7 +65,7 @@ public class SchemaElementManagerImplTest {
 		String targetNs = "http://my.own.namespace.org";
 		SimpleType simple = this.manager.getSimpleType(targetNs, localPart);
 		assertNotNull("If this SimpleType does not exists the manager has to create one", simple);
-		assertEquals(targetNs, simple.getTargetNamespace());
+		assertEquals(targetNs, simple.getNamespace());
 		assertEquals(localPart, simple.getLocalPart());
 
 		assertSame("a further call has to return the same SimpleType", simple, this.manager
@@ -93,7 +93,7 @@ public class SchemaElementManagerImplTest {
 		String localPart = "PersonType";
 		ComplexType complex = this.manager.getComplexType(targetNs, localPart);
 		assertNotNull("If this ComplexType does not exists the manager has to create one", complex);
-		assertEquals(targetNs, complex.getTargetNamespace());
+		assertEquals(targetNs, complex.getNamespace());
 		assertEquals(localPart, complex.getLocalPart());
 
 		assertSame("a further call has to return the same ComplexType", complex, this.manager
@@ -121,7 +121,7 @@ public class SchemaElementManagerImplTest {
 		String localPart = "person";
 		Element element = this.manager.getElement(targetNs, localPart);
 		assertNotNull("If this Element does not exists the manager has to create one", element);
-		assertEquals(targetNs, element.getTargetNamespace());
+		assertEquals(targetNs, element.getNamespace());
 		assertEquals(localPart, element.getLocalPart());
 
 		assertSame("a further call has to return the same Element", element, this.manager

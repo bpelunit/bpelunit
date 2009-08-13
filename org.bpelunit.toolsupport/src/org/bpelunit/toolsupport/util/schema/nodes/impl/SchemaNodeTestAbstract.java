@@ -20,7 +20,7 @@ public abstract class SchemaNodeTestAbstract {
 	public void testSchemaNodeImplQName() {
 		SchemaNode node = this.constructSchemaNode(this.qName);
 		assertEquals(this.qName, node.getQName());
-		assertEquals(this.targetNs, node.getTargetNamespace());
+		assertEquals(this.targetNs, node.getNamespace());
 		assertEquals(this.localPart, node.getLocalPart());
 	}
 
@@ -28,14 +28,14 @@ public abstract class SchemaNodeTestAbstract {
 	public void testSchemaNodeImplStringString() {
 		SchemaNode node = this.constructSchemaNode(this.targetNs, this.localPart);
 		assertEquals(this.qName, node.getQName());
-		assertEquals(this.targetNs, node.getTargetNamespace());
+		assertEquals(this.targetNs, node.getNamespace());
 		assertEquals(this.localPart, node.getLocalPart());
 	}
 
 	@Test
 	public void testNullTargetNamespace() throws Exception {
 		SchemaNode node = this.constructSchemaNode(null, this.localPart);
-		assertEquals(null, node.getTargetNamespace());
+		assertEquals(null, node.getNamespace());
 		assertEquals(this.localPart, node.getLocalPart());
 		assertEquals(new QName("", this.localPart), node.getQName());
 	}

@@ -32,7 +32,7 @@ public abstract class SchemaNodeImpl implements SchemaNode {
 	}
 
 	@Override
-	public String getTargetNamespace() {
+	public String getNamespace() {
 		return this.targetNamespace;
 	}
 
