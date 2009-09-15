@@ -900,6 +900,10 @@ public class MessageEditor extends Composite {
 		}
 	}
 
+	public boolean isXMLValid() {
+		return this.tree.getItemCount() >= 2;
+	}
+
 	public void setXML(String xml) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;

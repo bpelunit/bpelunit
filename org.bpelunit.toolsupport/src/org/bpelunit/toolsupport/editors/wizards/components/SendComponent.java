@@ -24,6 +24,7 @@ import org.bpelunit.toolsupport.editors.wizards.fields.StringDialogField;
 import org.bpelunit.toolsupport.editors.wizards.fields.TextDialogField;
 import org.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -131,9 +132,19 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		boolean selected = this.enterLiteralXMLCheckBox.isSelected();
 		Image image = ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_LOCK);
 		if (selected) {
+
 			this.messageEditorTab.setImage(image);
 			this.literalXMLTab.setImage(null);
 		} else {
+			if (!this.messageEditor.isXMLValid()) {
+				boolean reset = MessageDialog
+						.openQuestion(this.getShell(), "Reset XML?",
+								"Continuing will reset the XML to the default message of the selected Operation. Continue anyway?");
+				if (!reset) {
+					this.enterLiteralXMLCheckBox.setSelection(true);
+					return;
+				}
+			}
 			this.messageEditorTab.setImage(null);
 			this.literalXMLTab.setImage(image);
 		}
