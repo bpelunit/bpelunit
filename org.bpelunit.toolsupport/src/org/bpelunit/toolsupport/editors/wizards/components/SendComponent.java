@@ -39,7 +39,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
@@ -183,22 +182,6 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 				SWT.FILL, SWT.FILL, true, true));
 
 		this.enterLiteralXMLCheckBox.doFillIntoGrid(group, 1);
-
-		Label label = new Label(group, SWT.RIGHT);
-		label.setText("Message Editor");
-
-		Button button = new Button(group, SWT.NULL);
-		button.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_ARROW_LEFT));
-		button.setToolTipText("Reset the \"XML to be sent\" with the XML from the Message Editor");
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				SendComponent.this.valueChanged(SendComponent.this.messageEditor.getMessageAsXML());
-			}
-		});
-
-		label = new Label(group, SWT.LEFT);
-		label.setText("XML to be sent");
 
 		TabFolder tabFolder = new TabFolder(group, SWT.TOP);
 		tabFolder.addSelectionListener(new SelectionAdapter() {
