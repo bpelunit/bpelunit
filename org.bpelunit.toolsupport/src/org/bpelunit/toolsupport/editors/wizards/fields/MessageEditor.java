@@ -28,11 +28,12 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -50,7 +51,7 @@ import org.xml.sax.SAXException;
 public class MessageEditor extends Composite {
 
 	/**
-	 * Displays editor for selected TreeItem if this is editable.
+	 * Displays editor for selected TreeItem if this is EDITABLE.
 	 * 
 	 * @author cvolhard
 	 * 
@@ -62,7 +63,7 @@ public class MessageEditor extends Composite {
 			this.editor = editor;
 		}
 
-		public void disposeEditor() {
+		protected void disposeEditor() {
 			Control oldEditor = this.editor.getEditor();
 			if (oldEditor != null) {
 				oldEditor.dispose();
@@ -82,6 +83,7 @@ public class MessageEditor extends Composite {
 			if (item == null) {
 				return;
 			}
+
 			if (item.getParentItem() != null
 					&& MessageEditor.this.isItemDisabled(item.getParentItem())) {
 				return;
@@ -92,6 +94,26 @@ public class MessageEditor extends Composite {
 				// item displays the inner text of a tag and is not disabled.
 				this.getInnerTextEditor(item);
 			} else if ((element = (Element) item.getData(TREE_ITEM_FOR_START_TAG)) != null) {
+
+				int imagePosition = (Integer) item.getData(TREE_ITEM_IMAGE_POSITION);
+				if (imagePosition > 0) {
+					Point mousePosition = MessageEditor.this.mouseDownPosition;
+
+					// reset necessary, because this method will be called
+					// againg
+					MessageEditor.this.mouseDownPosition = new Point(0, 0);
+
+					if (MessageEditor.this.isInAddButton(imagePosition, mousePosition)) {
+						MessageEditor.this.cloneItem(item);
+						return;
+					}
+
+					if (MessageEditor.this.isInDeleteButton(imagePosition, mousePosition)) {
+						MessageEditor.this.removeItem(item);
+						return;
+
+					}
+				}
 				this.getStartTagEditor(item, element);
 			}
 		}
@@ -129,7 +151,34 @@ public class MessageEditor extends Composite {
 			label = new Label(composite, SWT.NULL);
 			label.setText(label.getText() + ">");
 			label.setForeground(color);
-			this.addNumberChangeButtons(item, composite, tabList);
+			if (item.getData(TREE_ITEM_FOR_START_TAG) != null) {
+				label = new Label(composite, SWT.NULL);
+				label.setText(" ");
+				label = new Label(composite, SWT.NULL);
+				label.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_ADD));
+				label.setCursor(new Cursor(MessageEditor.this.getDisplay(), SWT.CURSOR_HAND));
+				label.setToolTipText("Add another tag of this kind.");
+				label.addListener(SWT.MouseUp, new Listener() {
+					@Override
+					public void handleEvent(Event arg0) {
+						MessageEditor.this.cloneItem(item);
+					}
+				});
+
+				label = new Label(composite, SWT.NULL);
+				label.setText(" ");
+				label = new Label(composite, SWT.NULL);
+				label.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_DELETE));
+				label.setCursor(new Cursor(MessageEditor.this.getDisplay(), SWT.CURSOR_HAND));
+				label.setToolTipText("Remove this tag.");
+				label.addListener(SWT.MouseUp, new Listener() {
+					@Override
+					public void handleEvent(Event arg0) {
+						MessageEditor.this.removeItem(item);
+						XMLTreeSelectionListener.this.disposeEditor();
+					}
+				});
+			}
 			Control[] tmpTabList = new Control[tabList.size()];
 			tabList.toArray(tmpTabList);
 			composite.setTabList(tmpTabList);
@@ -138,46 +187,8 @@ public class MessageEditor extends Composite {
 		}
 
 		/**
-		 * adds a add and/or a remove button to <code>composite</code>
-		 * 
-		 * @param item
-		 *            the selected TreeItem
-		 * @param composite
-		 * @param tabList
-		 */
-		private void addNumberChangeButtons(final TreeItem item, final Composite composite,
-				List<Control> tabList) {
-			if (MessageEditor.this.isCloneable(item)) {
-				Button button = new Button(composite, SWT.PUSH);
-				button.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_ADD));
-				button.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						MessageEditor.this.cloneItem(item);
-
-					}
-				});
-				tabList.add(button);
-				// add delete-button only if item is not disabled.
-				if (!MessageEditor.this.isItemDisabled(item)) {
-					button = new Button(composite, SWT.PUSH);
-					button.setImage(ToolSupportActivator
-							.getImage(ToolSupportActivator.IMAGE_DELETE));
-					button.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							MessageEditor.this.removeItem(item);
-
-						}
-					});
-					tabList.add(button);
-				}
-			}
-		}
-
-		/**
 		 * Adds label with the localPart of the <code>attribute</code> and a
-		 * editable input field with the value of the attribute of the selected
+		 * EDITABLE input field with the value of the attribute of the selected
 		 * item to <code>composite</code>.
 		 * 
 		 * @param item
@@ -312,12 +323,12 @@ public class MessageEditor extends Composite {
 		private Attribute attribute = null;
 		private TreeItem item;
 
-		public ChangeListener(Attribute attribute, TreeItem item) {
+		protected ChangeListener(Attribute attribute, TreeItem item) {
 			this.attribute = attribute;
 			this.item = item;
 		}
 
-		public ChangeListener(TreeItem item) {
+		protected ChangeListener(TreeItem item) {
 			this.item = item;
 		}
 
@@ -361,6 +372,7 @@ public class MessageEditor extends Composite {
 	private static final String TREE_ITEM_FOR_ELEMENT_CONTENT = "inner";
 	private static final String TREE_ITEM_IS_DISABLED = "null";
 	private static final String TREE_ITEM_CHILDREN = "children";
+	private static final String TREE_ITEM_IMAGE_POSITION = "imagePosition";
 
 	private Tree tree;
 	private NamespaceEditor namespaceEditor;
@@ -370,6 +382,8 @@ public class MessageEditor extends Composite {
 	private Color disabledColor;
 	private Color normalColor;
 	private Element displayedElement;
+	protected Point mouseDownPosition;
+	protected TreeItemToolTip treeItemToolTip;
 
 	public MessageEditor(Composite parent, int style, XMLTestSuite suite) {
 		super(parent, style);
@@ -396,8 +410,36 @@ public class MessageEditor extends Composite {
 		this.selectionListener = new XMLTreeSelectionListener(editor);
 		this.tree.addSelectionListener(this.selectionListener);
 
+		this.tree.addListener(SWT.MouseDown, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				MessageEditor.this.mouseDownPosition = new Point(arg0.x, arg0.y);
+			}
+		});
+
+		this.tree.addListener(SWT.MouseMove, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				Point mousePosition = new Point(arg0.x, arg0.y);
+				TreeItem item = MessageEditor.this.getTree().getItem(mousePosition);
+				Integer imagePosition = (Integer) item.getData(TREE_ITEM_IMAGE_POSITION);
+				if (MessageEditor.this.isInAddButton(imagePosition, mousePosition)) {
+					MessageEditor.this.setCursor(SWT.CURSOR_HAND);
+					MessageEditor.this.treeItemToolTip.setText("Add another kind of this tag.");
+				} else if (MessageEditor.this.isInDeleteButton(imagePosition, mousePosition)) {
+					MessageEditor.this.setCursor(SWT.CURSOR_HAND);
+					MessageEditor.this.treeItemToolTip.setText("Remove this tag.");
+				} else {
+					MessageEditor.this.setCursor(SWT.CURSOR_ARROW);
+					MessageEditor.this.treeItemToolTip.setText("");
+				}
+			}
+
+		});
+
 		// listener for displaying images
 		this.tree.addListener(SWT.MeasureItem, new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				if (event.index == 0) {
 					Image trailingImage = MessageEditor.this.getImage((TreeItem) event.item);
@@ -409,19 +451,31 @@ public class MessageEditor extends Composite {
 		});
 		// listener for displaying images
 		this.tree.addListener(SWT.PaintItem, new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				if (event.index == 0) {
-					Image trailingImage = MessageEditor.this.getImage((TreeItem) event.item);
+					TreeItem item = (TreeItem) event.item;
+					Image trailingImage = MessageEditor.this.getImage(item);
 					if (trailingImage != null) {
 						int x = event.x + event.width + IMAGE_MARGIN;
 						int itemHeight = MessageEditor.this.getTree().getItemHeight();
 						int imageHeight = trailingImage.getBounds().height;
 						int y = event.y + (itemHeight - imageHeight) / 2;
 						event.gc.drawImage(trailingImage, x, y);
+						item.setData(TREE_ITEM_IMAGE_POSITION, x);
+					} else {
+						item.setData(TREE_ITEM_IMAGE_POSITION, -1);
 					}
 				}
 			}
 		});
+
+		this.treeItemToolTip = new TreeItemToolTip(this.tree);
+
+		this.tree.addListener(SWT.Dispose, this.treeItemToolTip);
+		this.tree.addListener(SWT.KeyDown, this.treeItemToolTip);
+		this.tree.addListener(SWT.MouseMove, this.treeItemToolTip);
+		this.tree.addListener(SWT.MouseHover, this.treeItemToolTip);
 	}
 
 	/**
@@ -445,8 +499,10 @@ public class MessageEditor extends Composite {
 
 			this.setDisabled(item, true);
 			closingItem.setForeground(this.disabledColor);
-			this.selectionListener.disposeEditor();
 
+			// set cursor back to default, otherwise the hand-cursor would be
+			// shown althoug there may be nothing to click
+			this.setCursor(SWT.CURSOR_ARROW);
 		} else {
 			// parent element contains more of this type, so remove this
 			item.dispose();
@@ -727,7 +783,11 @@ public class MessageEditor extends Composite {
 		} else {
 			TreeItem inner = this.createTreeItem(startTag, startTag.getItemCount());
 			inner.setData(TREE_ITEM_FOR_ELEMENT_CONTENT, element);
-			inner.setData(ELEMENT_VALUE_KEY, domElement.getFirstChild().getNodeValue().trim());
+			String value = "";
+			if (domElement.getFirstChild() != null) {
+				value = domElement.getFirstChild().getNodeValue().trim();
+			}
+			inner.setData(ELEMENT_VALUE_KEY, value);
 			this.setItemText(inner);
 		}
 		this.setItemText(startTag);
@@ -783,7 +843,7 @@ public class MessageEditor extends Composite {
 		return false;
 	}
 
-	protected boolean isCloneable(TreeItem item) {
+	private boolean isCloneable(TreeItem item) {
 		if (item == null || item.getData(TREE_ITEM_FOR_END_TAG) != null
 				|| item.getData(TREE_ITEM_FOR_ELEMENT_CONTENT) != null) {
 			return false;
@@ -1009,5 +1069,29 @@ public class MessageEditor extends Composite {
 		String prefix = this.namespaceEditor.getPreffix(namespace);
 		String tagName = prefix + ":" + schemaElement.getLocalPart();
 		return tagName.equals(domElement.getNodeName());
+	}
+
+	protected boolean isInAddButton(int imagePosition, Point mousePosition) {
+		if (this.isInButton(mousePosition)) {
+			return imagePosition < mousePosition.x && mousePosition.x < imagePosition + 13;
+		}
+		return false;
+	}
+
+	protected boolean isInDeleteButton(int imagePosition, Point mousePosition) {
+		if (this.isInButton(mousePosition)) {
+			return imagePosition + 16 <= mousePosition.x
+					&& mousePosition.x < imagePosition + 13 + 16;
+		}
+		return false;
+	}
+
+	private boolean isInButton(Point mousePosition) {
+		int itemHeight = this.tree.getItemHeight();
+		return 2 < mousePosition.y % itemHeight && mousePosition.y % itemHeight < 14;
+	}
+
+	protected void setCursor(int cursor) {
+		this.setCursor(new Cursor(MessageEditor.this.getDisplay(), cursor));
 	}
 }

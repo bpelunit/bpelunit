@@ -29,8 +29,6 @@ public class ToolSupportActivator extends AbstractUIPlugin {
 	public static final String IMAGE_DEPLOYER = "img_deployer";
 	public static final String IMAGE_TESTCASE = "img_testcase";
 	public static final String IMAGE_ACTIVITY = "img_activity";
-	public static final String IMAGE_ARROW_LEFT = "img_arrow_left";
-	public static final String IMAGE_ARROW_RIGHT = "img_arrow_right";
 
 	public static final String IMAGE_LOCK = "img_lock";
 	public static final String IMAGE_EDITABLE = "img_editable";
@@ -144,12 +142,9 @@ public class ToolSupportActivator extends AbstractUIPlugin {
 		reg.put(IMAGE_ACTIVITY, getImageDescriptor("icons/activity.gif"));
 		reg.put(IMAGE_LOCK, getImageDescriptor("icons/lock.gif"));
 		reg.put(IMAGE_EDITABLE, getImageDescriptor("icons/editable.gif"));
-		reg.put(IMAGE_CLONEABLE, getImageDescriptor("icons/clonable.gif"));
-		reg.put(IMAGE_ADD, getImageDescriptor("icons/add.gif"));
+		reg.put(IMAGE_CLONEABLE, getImageDescriptor("icons/add_delete.gif"));
+		reg.put(IMAGE_ADD, getImageDescriptor("icons/add_border.gif"));
 		reg.put(IMAGE_DELETE, getImageDescriptor("icons/delete.gif"));
-		reg.put(IMAGE_EDITABLE_CLONEABLE, getImageDescriptor("icons/editable_cloneable.gif"));
-		reg.put(IMAGE_ARROW_LEFT, getImageDescriptor("icons/arrow_left.gif"));
-		reg.put(IMAGE_ARROW_RIGHT, getImageDescriptor("icons/arrow_right.gif"));
-
+		reg.put(IMAGE_EDITABLE_CLONEABLE, getImageDescriptor("icons/add_delete_edit.gif"));
 	}
 }
