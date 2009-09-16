@@ -22,6 +22,7 @@ import org.bpelunit.toolsupport.editors.wizards.fields.MessageEditor;
 import org.bpelunit.toolsupport.editors.wizards.fields.SelectionButtonDialogField;
 import org.bpelunit.toolsupport.editors.wizards.fields.StringDialogField;
 import org.bpelunit.toolsupport.editors.wizards.fields.TextDialogField;
+import org.bpelunit.toolsupport.editors.wizards.pages.OperationWizardPage;
 import org.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -64,6 +65,7 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 	protected MessageEditor messageEditor;
 	protected TabItem literalXMLTab;
 	private TabItem messageEditorTab;
+	private TabFolder tabFolder;
 
 	public SendComponent(IWizardPage wizard, FontMetrics metrics) {
 		super(wizard, metrics);
@@ -129,6 +131,10 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 	}
 
 	protected void setInputType() {
+		this.setInputType(true);
+	}
+
+	protected void setInputType(boolean update) {
 		boolean selected = this.enterLiteralXMLCheckBox.isSelected();
 		Image image = ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_LOCK);
 		if (selected) {
@@ -136,7 +142,7 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 			this.messageEditorTab.setImage(image);
 			this.literalXMLTab.setImage(null);
 		} else {
-			if (!this.messageEditor.isXMLValid()) {
+			if (!this.messageEditor.isXMLValid() && update) {
 				boolean reset = MessageDialog
 						.openQuestion(this.getShell(), "Reset XML?",
 								"Continuing will reset the XML to the default message of the selected Operation. Continue anyway?");
@@ -192,10 +198,8 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		Group group = this.createGroup(composite, "Data to be sent", nColumns, new GridData(
 				SWT.FILL, SWT.FILL, true, true));
 
-		this.enterLiteralXMLCheckBox.doFillIntoGrid(group, 1);
-
-		TabFolder tabFolder = new TabFolder(group, SWT.TOP);
-		tabFolder.addSelectionListener(new SelectionAdapter() {
+		this.tabFolder = new TabFolder(group, SWT.TOP);
+		this.tabFolder.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (e.item == SendComponent.this.literalXMLTab) {
@@ -204,21 +208,27 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 			}
 		});
 		GridData gd = new GridData();
+		gd.minimumHeight = 200;
 		gd.horizontalAlignment = GridData.FILL;
 		gd.verticalAlignment = GridData.FILL;
 		gd.grabExcessHorizontalSpace = true;
 		gd.grabExcessVerticalSpace = true;
 		gd.horizontalSpan = nColumns;
-		tabFolder.setLayoutData(gd);
+		this.tabFolder.setLayoutData(gd);
 
-		this.messageEditor = new MessageEditor(tabFolder, SWT.NULL, this.getTestSuite());
+		this.messageEditor = new MessageEditor(this.tabFolder, SWT.NULL, this.getTestSuite());
+		if (this.getWizardPage() instanceof OperationWizardPage) {
+			OperationWizardPage comp = (OperationWizardPage) this.getWizardPage();
+			comp.getOperationDataComponent().addOperationListener(this);
+		}
+		this.messageEditor.setXML(this.fSendField.getText());
 		this.messageEditor.addStringValueListener(this);
-		this.messageEditorTab = new TabItem(tabFolder, SWT.NULL);
+		this.messageEditorTab = new TabItem(this.tabFolder, SWT.NULL);
 		this.messageEditorTab.setControl(this.messageEditor);
 		this.messageEditorTab.setText("Message Editor");
 
-		this.fSendField.doFillIntoGrid(tabFolder, nColumns);
-		this.literalXMLTab = new TabItem(tabFolder, SWT.NULL);
+		this.fSendField.doFillIntoGrid(this.tabFolder, nColumns);
+		this.literalXMLTab = new TabItem(this.tabFolder, SWT.NULL);
 		Text text = this.fSendField.getTextControl(null);
 		text.setEditable(false);
 		text.addFocusListener(new FocusAdapter() {
@@ -234,8 +244,7 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		this.literalXMLTab.setControl(text);
 		this.literalXMLTab.setText("XML to be sent");
 
-		tabFolder.setSelection(1);
-		this.enterLiteralXMLCheckBox.setSelection(true);
+		this.tabFolder.setSelection(0);
 
 		LayoutUtil.setHeightHint(text, Dialog
 				.convertHeightInCharsToPixels(this.getFontMetrics(), 6));
@@ -245,13 +254,17 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		Composite inner = new Composite(group, SWT.NULL);
 		GridData gridData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
 		inner.setLayoutData(gridData);
-		inner.setLayout(new GridLayout(3, false));
+		inner.setLayout(new GridLayout(10, false));
+
+		this.enterLiteralXMLCheckBox.doFillIntoGrid(inner, 1);
+		DialogField.createEmptySpace(inner, 7);
 
 		this.fDelaySelectionField.doFillIntoGrid(inner, 1);
 		Button selectionButton = this.fDelaySelectionField.getSelectionButton(null);
 		LayoutUtil.setVerticalAlign(selectionButton, GridData.CENTER);
 
-		this.fDelayStringField.doFillIntoGrid(inner, 2);
+		this.fDelayStringField.doFillIntoGrid(inner, 1);
+
 		Text textControl = this.fDelayStringField.getTextControl(null);
 		LayoutUtil.setWidthHint(textControl, this.getMaxFieldWidth());
 		LayoutUtil.setHorizontalGrabbing(textControl);
@@ -260,7 +273,6 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		field.setHyperLinkFieldListener(this);
 		field.createControl(group, nColumns, GridData.BEGINNING);
 
-		this.setInputType();
 		return group;
 	}
 
@@ -291,7 +303,6 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 
 	public void setOperationMessage(Element inputElement, boolean notifyListener) {
 		this.messageEditor.displayElement(inputElement, notifyListener);
-
 	}
 
 	@Override

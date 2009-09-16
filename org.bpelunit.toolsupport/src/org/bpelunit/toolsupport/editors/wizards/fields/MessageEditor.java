@@ -376,7 +376,7 @@ public class MessageEditor extends Composite {
 
 	private Tree tree;
 	private NamespaceEditor namespaceEditor;
-	protected boolean isEditable;
+	protected boolean isEditable = true;
 	private XMLTreeSelectionListener selectionListener;
 	private List<StringValueListener> listeners = new ArrayList<StringValueListener>();
 	private Color disabledColor;
@@ -384,6 +384,7 @@ public class MessageEditor extends Composite {
 	private Element displayedElement;
 	protected Point mouseDownPosition;
 	protected TreeItemToolTip treeItemToolTip;
+	private String xml;
 
 	public MessageEditor(Composite parent, int style, XMLTestSuite suite) {
 		super(parent, style);
@@ -677,6 +678,8 @@ public class MessageEditor extends Composite {
 			if (notifyListener) {
 				this.notifyStringValueListeners();
 			}
+		} else {
+			this.setXML();
 		}
 	}
 
@@ -965,11 +968,16 @@ public class MessageEditor extends Composite {
 	}
 
 	public void setXML(String xml) {
+		this.xml = xml;
+		this.setXML();
+	}
+
+	private void setXML() {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;
 		try {
 			builder = factory.newDocumentBuilder();
-			Document document = builder.parse(new InputSource(new StringReader(xml)));
+			Document document = builder.parse(new InputSource(new StringReader(this.xml)));
 			org.w3c.dom.Element root = document.getDocumentElement();
 			if (this.areNamesEqual(root, this.displayedElement)) {
 				if (this.compareElements(root, this.displayedElement)) {
@@ -988,12 +996,15 @@ public class MessageEditor extends Composite {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			this.displayError(e.getMessage());
+			if ("Premature end of file.".equals(e.getMessage())) {
+				this.displayError("Please choose operation.");
+			} else {
+				this.displayError(e.getMessage());
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	private void displayError(String errorMsg) {

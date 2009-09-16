@@ -83,7 +83,7 @@ public class OperationWizardPage extends ActivityWizardPage implements IComponen
 		return this.fOperationActivity;
 	}
 
-	protected OperationDataComponent getOperationDataComponent() {
+	public OperationDataComponent getOperationDataComponent() {
 		return this.fOperationsComponent;
 	}
 

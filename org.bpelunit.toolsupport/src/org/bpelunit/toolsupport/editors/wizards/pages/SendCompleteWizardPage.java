@@ -53,7 +53,6 @@ public class SendCompleteWizardPage extends OperationWizardPage {
 		this.fSendComponent.addComponentListener(this);
 
 		this.valueChanged(null);
-		this.getOperationDataComponent().addOperationListener(this.fSendComponent);
 	}
 
 	private XMLSendActivity getSendActivity() {
