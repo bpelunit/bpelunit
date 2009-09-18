@@ -131,10 +131,6 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 	}
 
 	protected void setInputType() {
-		this.setInputType(true);
-	}
-
-	protected void setInputType(boolean update) {
 		boolean selected = this.enterLiteralXMLCheckBox.isSelected();
 		Image image = ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_LOCK);
 		if (selected) {
@@ -142,7 +138,7 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 			this.messageEditorTab.setImage(image);
 			this.literalXMLTab.setImage(null);
 		} else {
-			if (!this.messageEditor.isXMLValid() && update) {
+			if (!this.messageEditor.isXMLValid()) {
 				boolean reset = MessageDialog
 						.openQuestion(this.getShell(), "Reset XML?",
 								"Continuing will reset the XML to the default message of the selected Operation. Continue anyway?");
@@ -244,8 +240,6 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		this.literalXMLTab.setControl(text);
 		this.literalXMLTab.setText("XML to be sent");
 
-		this.tabFolder.setSelection(0);
-
 		LayoutUtil.setHeightHint(text, Dialog
 				.convertHeightInCharsToPixels(this.getFontMetrics(), 6));
 		LayoutUtil.setWidthHint(text, this.getMaxFieldWidth());
@@ -257,6 +251,11 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		inner.setLayout(new GridLayout(10, false));
 
 		this.enterLiteralXMLCheckBox.doFillIntoGrid(inner, 1);
+		if (!this.messageEditor.isXMLValid() && !this.fSendField.getText().isEmpty()) {
+			this.enterLiteralXMLCheckBox.setSelection(true);
+			this.setInputType();
+			this.tabFolder.setSelection(1);
+		}
 		DialogField.createEmptySpace(inner, 7);
 
 		this.fDelaySelectionField.doFillIntoGrid(inner, 1);
