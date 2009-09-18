@@ -29,6 +29,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -95,6 +97,8 @@ public class MessageEditor extends Composite {
 				this.getInnerTextEditor(item);
 			} else if ((element = (Element) item.getData(TREE_ITEM_FOR_START_TAG)) != null) {
 
+				// check if the click hit a Button, if so perform the according
+				// action and do not display the editor
 				int imagePosition = (Integer) item.getData(TREE_ITEM_IMAGE_POSITION);
 				if (imagePosition > 0) {
 					Point mousePosition = MessageEditor.this.mouseDownPosition;
@@ -127,63 +131,85 @@ public class MessageEditor extends Composite {
 		 * @param element
 		 */
 		private void getStartTagEditor(final TreeItem item, final Element element) {
+			ComplexType complex = element.getType().getAsComplexType();
+			if (complex == null || complex.getAttributes().isEmpty()) {
+				// nothing to edit, so do not display the editor
+				return;
+			}
+
 			boolean itemDisabled = MessageEditor.this.isItemDisabled(item);
 			Color color = MessageEditor.this.getColor(itemDisabled);
 
-			final Composite composite = new Composite(MessageEditor.this.getTree(), SWT.NULL);
+			final Composite composite = new Composite(MessageEditor.this.getTree(), SWT.BORDER_DOT);
 			List<Control> tabList = new ArrayList<Control>();
 			composite.setLayout(this.createRowLayout());
-			Label label = new Label(composite, SWT.NULL);
-			label.setText("<" + MessageEditor.this.getTagName(element));
-			label.setForeground(color);
-			ComplexType complex = element.getType().getAsComplexType();
-			if (complex != null) {
-				// display input fields and labels for every attribute
-				for (int i = 0; i < complex.getAttributes().size(); i++) {
-					Attribute attribute = complex.getAttributes().get(i);
-					Text text = this.createAttributeInput(item, composite, attribute, color,
-							!itemDisabled);
-					if (text != null) {
-						tabList.add(text);
-					}
+			this.addLabel(composite, color, "<" + MessageEditor.this.getTagName(element));
+
+			// display input fields and labels for every attribute
+			for (int i = 0; i < complex.getAttributes().size(); i++) {
+				Attribute attribute = complex.getAttributes().get(i);
+				Text text = this.createAttributeInput(item, composite, attribute, color,
+						!itemDisabled);
+				if (text != null) {
+					tabList.add(text);
 				}
 			}
-			label = new Label(composite, SWT.NULL);
-			label.setText(label.getText() + ">");
-			label.setForeground(color);
-			if (item.getData(TREE_ITEM_FOR_START_TAG) != null) {
-				label = new Label(composite, SWT.NULL);
-				label.setText(" ");
-				label = new Label(composite, SWT.NULL);
-				label.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_ADD));
-				label.setCursor(new Cursor(MessageEditor.this.getDisplay(), SWT.CURSOR_HAND));
-				label.setToolTipText("Add another tag of this kind.");
-				label.addListener(SWT.MouseUp, new Listener() {
-					@Override
-					public void handleEvent(Event arg0) {
-						MessageEditor.this.cloneItem(item);
-					}
-				});
 
-				label = new Label(composite, SWT.NULL);
-				label.setText(" ");
-				label = new Label(composite, SWT.NULL);
-				label.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_DELETE));
-				label.setCursor(new Cursor(MessageEditor.this.getDisplay(), SWT.CURSOR_HAND));
-				label.setToolTipText("Remove this tag.");
-				label.addListener(SWT.MouseUp, new Listener() {
-					@Override
-					public void handleEvent(Event arg0) {
-						MessageEditor.this.removeItem(item);
-						XMLTreeSelectionListener.this.disposeEditor();
-					}
-				});
+			this.addLabel(composite, color, ">");
+			if (item.getData(TREE_ITEM_FOR_START_TAG) != null && item.getParentItem() != null) {
+				this.addButtons(item, composite);
 			}
-			Control[] tmpTabList = new Control[tabList.size()];
-			tabList.toArray(tmpTabList);
-			composite.setTabList(tmpTabList);
-			tabList.get(0).setFocus();
+			if (!tabList.isEmpty()) {
+				Control[] tmpTabList = new Control[tabList.size()];
+				tabList.toArray(tmpTabList);
+				composite.setTabList(tmpTabList);
+				tabList.get(0).setFocus();
+			}
 			this.editor.setEditor(composite, item);
+		}
+
+		private Label addLabel(final Composite composite, String text) {
+			Label label = new Label(composite, SWT.NULL);
+			label.setText(text);
+			return label;
+		}
+
+		private Label addLabel(final Composite composite, Color color, String text) {
+			Label label = this.addLabel(composite, text);
+			label.setForeground(color);
+			return label;
+		}
+
+		private void addButtons(final TreeItem item, final Composite composite) {
+			this.addLabel(composite, "   ");
+			Label label = new Label(composite, SWT.NULL);
+			label.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_ADD));
+			label.setCursor(new Cursor(MessageEditor.this.getDisplay(), SWT.CURSOR_HAND));
+			label.setToolTipText("Add another tag of this kind.");
+			label.addListener(SWT.MouseUp, new Listener() {
+				@Override
+				public void handleEvent(Event arg0) {
+					MessageEditor.this.cloneItem(item);
+				}
+			});
+
+			label = this.addLabel(composite, " ");
+			Font oldFont = label.getFont();
+			FontData fontData = oldFont.getFontData()[0];
+			fontData.height *= .75;
+			label.setFont(new Font(oldFont.getDevice(), fontData));
+
+			label = new Label(composite, SWT.NULL);
+			label.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_DELETE));
+			label.setCursor(new Cursor(MessageEditor.this.getDisplay(), SWT.CURSOR_HAND));
+			label.setToolTipText("Remove this tag.");
+			label.addListener(SWT.MouseUp, new Listener() {
+				@Override
+				public void handleEvent(Event arg0) {
+					MessageEditor.this.removeItem(item);
+					XMLTreeSelectionListener.this.disposeEditor();
+				}
+			});
 		}
 
 		/**
@@ -202,16 +228,15 @@ public class MessageEditor extends Composite {
 		 */
 		private Text createAttributeInput(final TreeItem item, final Composite composite,
 				Attribute attribute, Color color, boolean isAttributeEditable) {
-			Label label = new Label(composite, SWT.NULL);
-			label.setText(" " + attribute.getLocalPart() + "=\"");
-			label.setForeground(color);
+			this.addLabel(composite, color, " " + attribute.getLocalPart() + "=\"");
 			String attributeValue = (String) item.getData(ATTRIBUTE_VALUE_KEY_PREFIX
 					+ attribute.getLocalPart());
 			attributeValue = (attributeValue == null) ? "" : attributeValue;
 			if (isAttributeEditable) {
-				Text text = new Text(composite, SWT.MULTI | SWT.BORDER);
+				final Text text = new Text(composite, SWT.SINGLE);
 				text.setText(attributeValue);
-				text.addModifyListener(new ChangeListener(attribute, item));
+				final ChangeListener changeListener = new ChangeListener(attribute, item);
+				text.addModifyListener(changeListener);
 				text.addFocusListener(new TextFocusListener());
 				text.addKeyListener(new KeyAdapter() {
 
@@ -247,14 +272,10 @@ public class MessageEditor extends Composite {
 						}
 					}
 				});
-				label = new Label(composite, SWT.NULL);
-				label.setText("\"");
-				label.setForeground(color);
+				this.addLabel(composite, color, "\"");
 				return text;
 			}
-			label = new Label(composite, SWT.NULL);
-			label.setText(attributeValue + "\"");
-			label.setForeground(color);
+			this.addLabel(composite, color, attributeValue + "\"");
 			return null;
 		}
 
@@ -262,7 +283,8 @@ public class MessageEditor extends Composite {
 			RowLayout layout = new RowLayout(SWT.HORIZONTAL);
 			layout.fill = false;
 			layout.spacing = 0;
-			layout.marginTop = 0;
+			layout.marginLeft = 2;
+			layout.marginTop = 2;
 			layout.wrap = false;
 			return layout;
 		}
@@ -273,21 +295,20 @@ public class MessageEditor extends Composite {
 		 * @param item
 		 */
 		private void getInnerTextEditor(final TreeItem item) {
-			final Text text = new Text(MessageEditor.this.getTree(), SWT.MULTI | SWT.BORDER);
+			final Composite composite = new Composite(MessageEditor.this.getTree(), SWT.NULL);
+			composite.setLayout(this.createRowLayout());
+
+			final Text text = new Text(composite, SWT.SINGLE);
 			text.setText(item.getText());
+
 			text.setVisible(true);
-			text.setFocus();
 
 			text.addModifyListener(new ChangeListener(item));
+			// text.addFocusListener(new TextFocusListener());
 			text.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent event) {
-					text.dispose();
-				}
-
-				@Override
-				public void focusGained(FocusEvent e) {
-					text.setSelection(0);
+					composite.dispose();
 				}
 			});
 
@@ -314,7 +335,11 @@ public class MessageEditor extends Composite {
 					}
 				}
 			});
-			this.editor.setEditor(text, item);
+			this.editor.setEditor(composite, item);
+			text.pack();
+			composite.pack();
+			text.setSelection(text.getText().length());
+			text.setFocus();
 		}
 	}
 
@@ -342,11 +367,16 @@ public class MessageEditor extends Composite {
 				key = MessageEditor.ATTRIBUTE_VALUE_KEY_PREFIX + this.attribute.getLocalPart();
 			}
 			this.item.setData(key, text.getText());
-			MessageEditor.this.setItemText(this.item);
+
 			text.pack();
-			if (this.attribute != null) {
-				text.getParent().pack();
-			}
+			text.getParent().pack();
+
+			// Workaround to prevent that the first letter in the text field is
+			// hidden
+			text.setSelection(0);
+			text.setSelection(text.getText().length());
+
+			MessageEditor.this.setItemText(this.item);
 			MessageEditor.this.notifyStringValueListeners();
 		}
 	}
@@ -355,7 +385,8 @@ public class MessageEditor extends Composite {
 
 		@Override
 		public void focusGained(FocusEvent e) {
-			((Text) e.widget).selectAll();
+			Text text = (Text) e.widget;
+			text.setSelection(text.getText().length());
 		}
 
 		@Override
@@ -397,6 +428,12 @@ public class MessageEditor extends Composite {
 
 		this.tree = new Tree(this, SWT.SINGLE);
 		this.tree.setBackground(this.getBackground());
+
+		// Font oldFont = this.tree.getFont();
+		// FontData fontData = oldFont.getFontData()[0];
+		// fontData.height += 3;
+		// this.tree.setFont(new Font(oldFont.getDevice(), fontData));
+
 		// this.tree.setHeaderVisible(true);
 
 		// TreeColumn treeColumn = new TreeColumn(this.tree, SWT.LEFT);
@@ -423,13 +460,25 @@ public class MessageEditor extends Composite {
 			public void handleEvent(Event arg0) {
 				Point mousePosition = new Point(arg0.x, arg0.y);
 				TreeItem item = MessageEditor.this.getTree().getItem(mousePosition);
-				Integer imagePosition = (Integer) item.getData(TREE_ITEM_IMAGE_POSITION);
-				if (MessageEditor.this.isInAddButton(imagePosition, mousePosition)) {
-					MessageEditor.this.setCursor(SWT.CURSOR_HAND);
-					MessageEditor.this.treeItemToolTip.setText("Add another kind of this tag.");
-				} else if (MessageEditor.this.isInDeleteButton(imagePosition, mousePosition)) {
-					MessageEditor.this.setCursor(SWT.CURSOR_HAND);
-					MessageEditor.this.treeItemToolTip.setText("Remove this tag.");
+				if (item != null) {
+					Object data = item.getData(TREE_ITEM_IMAGE_POSITION);
+					Integer imagePosition = (data == null) ? 0 : (Integer) data;
+					if (MessageEditor.this.isInAddButton(imagePosition, mousePosition)) {
+						if (MessageEditor.this.isCloneable(item)) {
+							MessageEditor.this.setCursor(SWT.CURSOR_HAND);
+							MessageEditor.this.treeItemToolTip
+									.setText("Add another kind of this tag.");
+						} else {
+							MessageEditor.this.setCursor(SWT.CURSOR_ARROW);
+							MessageEditor.this.treeItemToolTip.setText("");
+						}
+					} else if (MessageEditor.this.isInDeleteButton(imagePosition, mousePosition)) {
+						MessageEditor.this.setCursor(SWT.CURSOR_HAND);
+						MessageEditor.this.treeItemToolTip.setText("Remove this tag.");
+					} else {
+						MessageEditor.this.setCursor(SWT.CURSOR_ARROW);
+						MessageEditor.this.treeItemToolTip.setText("");
+					}
 				} else {
 					MessageEditor.this.setCursor(SWT.CURSOR_ARROW);
 					MessageEditor.this.treeItemToolTip.setText("");
@@ -447,6 +496,7 @@ public class MessageEditor extends Composite {
 					if (trailingImage != null) {
 						event.width += trailingImage.getBounds().width + IMAGE_MARGIN;
 					}
+					event.height = 18;
 				}
 			}
 		});
@@ -571,7 +621,11 @@ public class MessageEditor extends Composite {
 	}
 
 	protected boolean isItemDisabled(TreeItem item) {
-		return Boolean.parseBoolean((String) item.getData(TREE_ITEM_IS_DISABLED));
+		if (item == null) {
+			return false;
+		}
+		Object data = item.getData(TREE_ITEM_IS_DISABLED);
+		return Boolean.parseBoolean((String) data);
 	}
 
 	private int getItemIndex(TreeItem item) {
@@ -834,6 +888,10 @@ public class MessageEditor extends Composite {
 				|| this.isItemDisabled(item)) {
 			return false;
 		}
+		if (this.tree.getSelection().length > 0 && this.tree.getSelection()[0] == item) {
+			return false;
+		}
+
 		if (item.getData(TREE_ITEM_FOR_ELEMENT_CONTENT) != null) {
 			return true;
 		}
@@ -856,20 +914,29 @@ public class MessageEditor extends Composite {
 	}
 
 	protected Image getImage(TreeItem item) {
+
 		String imageName = null;
-		if (item.getParentItem() == null || this.isItemDisabled(item.getParentItem())) {
+		if (item.getParentItem() == null) {
+		}
+
+		if (this.isItemDisabled(item.getParentItem())) {
 			// if parentItem is disabled, all children of parentItem can't be
 			// changed. So display no images
 			return null;
 		}
-		if (this.isItemDisabled(item) && MessageEditor.this.isCloneable(item)) {
+
+		boolean itemDisabled = this.isItemDisabled(item);
+		boolean cloneable = MessageEditor.this.isCloneable(item);
+		boolean editable = MessageEditor.this.isEditable(item);
+
+		if (itemDisabled && cloneable) {
 			// item is already disabled, so no need for the delete Image
 			imageName = ToolSupportActivator.IMAGE_ADD;
-		} else if (MessageEditor.this.isEditable(item) && MessageEditor.this.isCloneable(item)) {
+		} else if (editable && cloneable) {
 			imageName = ToolSupportActivator.IMAGE_EDITABLE_CLONEABLE;
-		} else if (MessageEditor.this.isEditable(item)) {
+		} else if (editable) {
 			imageName = ToolSupportActivator.IMAGE_EDITABLE;
-		} else if (MessageEditor.this.isCloneable(item)) {
+		} else if (cloneable) {
 			imageName = ToolSupportActivator.IMAGE_CLONEABLE;
 		}
 		if (imageName != null) {
