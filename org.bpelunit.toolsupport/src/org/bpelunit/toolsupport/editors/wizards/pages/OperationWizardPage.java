@@ -10,11 +10,14 @@ import javax.xml.namespace.QName;
 
 import org.bpelunit.framework.xml.suite.XMLActivity;
 import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
+import org.bpelunit.toolsupport.editors.wizards.ReceiveSendAsyncActivityWizard;
+import org.bpelunit.toolsupport.editors.wizards.ReceiveSendSyncActivityWizard;
 import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import org.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
 import org.bpelunit.toolsupport.editors.wizards.components.OperationDataComponent;
 import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
 import org.bpelunit.toolsupport.util.schema.WSDLParser;
+import org.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -90,5 +93,22 @@ public class OperationWizardPage extends ActivityWizardPage implements IComponen
 	@Override
 	public WizardPageCode getCode() {
 		return WizardPageCode.OPERATION;
+	}
+
+	public Element getElementForOperation() {
+		Element element = null;
+		WSDLParser parser = this.getWSDLParser();
+		if (parser == null) {
+			return null;
+		}
+		if (this.getWizard() instanceof ReceiveSendAsyncActivityWizard
+				|| this.getWizard() instanceof ReceiveSendSyncActivityWizard) {
+			element = parser.getOutputElementForOperation(this.getService(), this.getPort(), this
+					.getOperation());
+		} else {
+			element = parser.getInputElementForOperation(this.getService(), this.getPort(), this
+					.getOperation());
+		}
+		return element;
 	}
 }

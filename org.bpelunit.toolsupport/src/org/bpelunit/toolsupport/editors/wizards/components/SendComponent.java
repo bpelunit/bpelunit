@@ -225,6 +225,7 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 
 		this.fSendField.doFillIntoGrid(this.tabFolder, nColumns);
 		this.literalXMLTab = new TabItem(this.tabFolder, SWT.NULL);
+		this.literalXMLTab.setImage(ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_LOCK));
 		Text text = this.fSendField.getTextControl(null);
 		text.setEditable(false);
 		text.addFocusListener(new FocusAdapter() {
@@ -271,6 +272,21 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		HyperlinkField field = new HyperlinkField("Configure Namespace Prefixes...");
 		field.setHyperLinkFieldListener(this);
 		field.createControl(group, nColumns, GridData.BEGINNING);
+
+		// If the WSDL contains only one service with one port and one
+		// operation, theses values are preselected. If this is the case, the
+		// InputElement of the Operation must be displayed from the
+		// MessageEditor
+		if (this.getWizardPage() instanceof OperationWizardPage) {
+			// This can only happen, if WizardPage is a OperationWizardPage. In
+			// the other cases, the operation is already saved and displayed
+			// automatically.
+			OperationWizardPage wizardPage = (OperationWizardPage) this.getWizardPage();
+			Element element = wizardPage.getElementForOperation();
+			if (element != null && this.fSendField.getText().isEmpty()) {
+				this.messageEditor.displayElement(element, true);
+			}
+		}
 
 		return group;
 	}
