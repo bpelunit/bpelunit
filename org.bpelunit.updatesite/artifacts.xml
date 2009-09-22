@@ -3,15 +3,21 @@
 <repository name='BPELUnit Update Site - artifacts' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1253271760375'/>
+    <property name='p2.timestamp' value='1253634466078'/>
   </properties>
   <mappings size='3'>
     <rule filter='(&amp; (classifier=osgi.bundle))' output='${repoUrl}/plugins/${id}_${version}.jar'/>
     <rule filter='(&amp; (classifier=binary))' output='${repoUrl}/binary/${id}_${version}'/>
     <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
   </mappings>
-  <artifacts size='12'>
-    <artifact classifier='osgi.bundle' id='org.bpelunit.toolsupport' version='1.2.0'>
+  <artifacts size='19'>
+    <artifact classifier='org.eclipse.update.feature' id='org.bpelunit.eclipse.feature' version='1.2.1'>
+      <properties size='2'>
+        <property name='artifact.size' value='5053'/>
+        <property name='download.size' value='5053'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.bpelunit.toolsupport' version='1.2.1'>
       <properties size='3'>
         <property name='artifact.size' value='554433'/>
         <property name='download.size' value='554433'/>
@@ -25,21 +31,7 @@
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.bpelunit.toolsupport' version='1.2.0'>
-      <properties size='3'>
-        <property name='artifact.size' value='474017'/>
-        <property name='download.size' value='474017'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
     <artifact classifier='osgi.bundle' id='org.bpelunit.framework' version='1.1.0'>
-      <properties size='3'>
-        <property name='artifact.size' value='5342251'/>
-        <property name='download.size' value='5342251'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.bpelunit.framework' version='1.2.0'>
       <properties size='3'>
         <property name='artifact.size' value='5342251'/>
         <property name='download.size' value='5342251'/>
@@ -53,20 +45,13 @@
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
-    <artifact classifier='org.eclipse.update.feature' id='org.bpelunit.eclipse.feature' version='1.2.0'>
-      <properties size='2'>
-        <property name='artifact.size' value='5052'/>
-        <property name='download.size' value='5052'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.bpelunit.framework.client.eclipse' version='1.2.0'>
-      <properties size='3'>
-        <property name='artifact.size' value='341881'/>
-        <property name='download.size' value='341881'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
     <artifact classifier='org.eclipse.update.feature' id='org.bpelunit.eclipse.feature' version='1.1.0'>
+      <properties size='2'>
+        <property name='artifact.size' value='4976'/>
+        <property name='download.size' value='4976'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='org.bpelunit.eclipse.feature' version='1.2.1'>
       <properties size='2'>
         <property name='artifact.size' value='4976'/>
         <property name='download.size' value='4976'/>
@@ -79,13 +64,75 @@
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
-    <artifact classifier='org.eclipse.update.feature' id='org.bpelunit.eclipse.feature' version='1.2.0'>
-      <properties size='2'>
-        <property name='artifact.size' value='4976'/>
-        <property name='download.size' value='4976'/>
+    <artifact classifier='osgi.bundle' id='org.bpelunit.toolsupport' version='1.2.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='555525'/>
+        <property name='download.size' value='555525'/>
+        <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
     <artifact classifier='osgi.bundle' id='org.bpelunit.framework' version='1.2.0'>
+      <properties size='3'>
+        <property name='artifact.size' value='5719922'/>
+        <property name='download.size' value='5719922'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.bpelunit.toolsupport' version='1.2.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='474017'/>
+        <property name='download.size' value='474017'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='org.bpelunit.eclipse.feature' version='1.2.1'>
+      <properties size='2'>
+        <property name='artifact.size' value='5052'/>
+        <property name='download.size' value='5052'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.bpelunit.framework' version='1.2.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='5719967'/>
+        <property name='download.size' value='5719967'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.bpelunit.toolsupport' version='1.2.0'>
+      <properties size='3'>
+        <property name='artifact.size' value='554433'/>
+        <property name='download.size' value='554433'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='org.bpelunit.eclipse.feature' version='1.2.0'>
+      <properties size='2'>
+        <property name='artifact.size' value='5052'/>
+        <property name='download.size' value='5052'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.bpelunit.framework.client.eclipse' version='1.2.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='344946'/>
+        <property name='download.size' value='344946'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.bpelunit.framework' version='1.2.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='5342251'/>
+        <property name='download.size' value='5342251'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.bpelunit.framework.client.eclipse' version='1.2.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='341881'/>
+        <property name='download.size' value='341881'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.bpelunit.framework' version='1.2.1'>
       <properties size='3'>
         <property name='artifact.size' value='5719922'/>
         <property name='download.size' value='5719922'/>

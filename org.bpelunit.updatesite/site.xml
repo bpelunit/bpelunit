@@ -3,7 +3,7 @@
    <description url="http://update.bpelunit.net">
       The BPELUnit Update Site.
    </description>
-   <feature url="features/org.bpelunit.eclipse.feature_1.2.0.jar" id="org.bpelunit.eclipse.feature" version="1.2.0">
+   <feature url="features/org.bpelunit.eclipse.feature_1.2.1.jar" id="org.bpelunit.eclipse.feature" version="1.2.1">
       <category name="BPELUnit"/>
    </feature>
    <category-def name="BPELUnit" label="BPELUnit"/>

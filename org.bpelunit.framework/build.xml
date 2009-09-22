@@ -43,7 +43,7 @@
 		<property name="build.result.folder" value="${basedir}"/>
 		<property name="temp.folder" value="${basedir}/temp.folder"/>
 		<property name="plugin.destination" value="${basedir}"/>
-		<property name="plugin.nameAndVersion" value="org.bpelunit.framework_1.2.0"/>
+		<property name="plugin.nameAndVersion" value="org.bpelunit.framework_1.2.1"/>
 	</target>
 
 	<target name="properties" if="eclipse.running">
