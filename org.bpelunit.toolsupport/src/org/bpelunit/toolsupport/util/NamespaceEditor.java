@@ -16,7 +16,7 @@ public class NamespaceEditor {
 		this.baseSuite = suite;
 	}
 
-	public String getPreffix(String url) {
+	public String getPrefix(String url) {
 		for (Entry<String, String> entry : this.getNamespacesFromSuite().entrySet()) {
 			if (entry.getValue() != null && entry.getValue().equals(url)) {
 				return entry.getKey();

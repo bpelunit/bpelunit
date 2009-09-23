@@ -106,6 +106,7 @@ public class WSDLParser {
 		reader.setAnnotationParser(new DomAnnotationParserFactory());
 
 		Map<String, String> namespaces = this.definition.getNamespaces();
+		// for all schemas in the WSDL ...
 		for (Object tmp : this.definition.getTypes().getExtensibilityElements()) {
 			if (tmp instanceof Schema) {
 				Schema schema = (Schema) tmp;
@@ -115,8 +116,7 @@ public class WSDLParser {
 				// inherit the namespaces from the definitions-tag
 				this.addNamespaces(namespaces, schemaElement);
 
-				StringReader stringReader = this.getStringReaderFromElement(schemaElement);
-				reader.parse(stringReader);
+				reader.parse(this.getStringReaderFromElement(schemaElement));
 				parser.readSchemata(reader.getResult());
 			}
 		}

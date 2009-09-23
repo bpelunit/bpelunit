@@ -307,8 +307,9 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		WizardDialog d = new WizardDialog(this.getShell(), new NamespaceWizard(this.getTestSuite()));
 		if (d.open() == Window.OK) {
 			this.fireValueChanged(this.fSendField);
+			// Message Editor does not take part in fireValueChanged Listeners as those update far too often
+			this.messageEditor.updateItems();
 		}
-		this.messageEditor.updateItems();
 	}
 
 	@Override

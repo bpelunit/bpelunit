@@ -94,7 +94,7 @@ public class SchemaParser {
 	}
 
 	/**
-	 * Parses all Schemata contained in <code>file</code>.
+	 * Parses all Schemata contained in <code>file</code>. So far used for testing only. 
 	 * 
 	 * @param file
 	 * @throws SAXException
@@ -127,7 +127,7 @@ public class SchemaParser {
 	 * @param schema
 	 */
 	private void readSchema(XSSchema schema) {
-		// ignore the built in datatypes
+		// ignore the built-in datatypes returned by XSOM by default, we will create them as needed
 		if (SchemaNode.XML_SCHEMA_NAMESPACE.equals(schema.getTargetNamespace())) {
 			return;
 		}
@@ -150,6 +150,7 @@ public class SchemaParser {
 	private Element readElement(XSElementDecl decl, boolean isNested) {
 		Element element;
 		if (isNested) {
+			// is anonymous element, doesn't need to be known by ElementManager
 			element = new ElementImpl(decl.getTargetNamespace(), decl.getName());
 			element.setNillable(decl.isNillable());
 		} else {
@@ -177,7 +178,7 @@ public class SchemaParser {
 
 		/*
 		 * If name is null, the xsComplex is anonymous. Therefore it can only
-		 * apear in this element. If name is not null, it can appear in other
+		 * appear in this element. If name is not null, it can appear in other
 		 * elements, therefore the manager has to create it.
 		 */
 		ComplexType complex;
@@ -187,10 +188,12 @@ public class SchemaParser {
 		} else {
 			complex = this.elementManager.getComplexType(targetNamespace, name);
 			if (!this.elementManager.wasLastComplexNewCreated()) {
+				// has been filled already, we can stop here -- otherwise, continue below
 				return complex;
 			}
 		}
 
+		// insert children elements and attributes of the complex type
 		for (XSAttributeUse attributeUse : xsComplex.getAttributeUses()) {
 			complex.addAttribute(this.readAttribute(targetNamespace,
 					attributeUse.getDecl()));

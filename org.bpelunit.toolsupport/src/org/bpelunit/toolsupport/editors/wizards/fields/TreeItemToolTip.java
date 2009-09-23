@@ -82,6 +82,7 @@ public class TreeItemToolTip implements Listener {
 				this.label.addListener(SWT.MouseDown, this.labelListener);
 				Point size = this.tip.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 				Point pt = this.tree.toDisplay(event.x, event.y);
+				// TODO: use height of cursor instead of 20. Until now, there exists no method to get the cursor size
 				this.tip.setBounds(pt.x, pt.y + 20, size.x, size.y);
 				this.tip.setVisible(true);
 			}

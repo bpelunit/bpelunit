@@ -94,7 +94,7 @@ public class MessageEditor extends Composite {
 			Element element = (Element) item.getData(TREE_ITEM_FOR_ELEMENT_CONTENT);
 			if (element != null && !MessageEditor.this.isItemDisabled(item)) {
 				// item displays the inner text of a tag and is not disabled.
-				this.getInnerTextEditor(item);
+				this.createInnerTextEditor(item);
 			} else if ((element = (Element) item.getData(TREE_ITEM_FOR_START_TAG)) != null) {
 
 				// check if the click hit a Button, if so perform the according
@@ -103,8 +103,7 @@ public class MessageEditor extends Composite {
 				if (imagePosition > 0) {
 					Point mousePosition = MessageEditor.this.mouseDownPosition;
 
-					// reset necessary, because this method will be called
-					// againg
+					// reset necessary, because this method will be called again
 					MessageEditor.this.mouseDownPosition = new Point(0, 0);
 
 					if (MessageEditor.this.isInAddButton(imagePosition, mousePosition)) {
@@ -118,7 +117,7 @@ public class MessageEditor extends Composite {
 
 					}
 				}
-				this.getStartTagEditor(item, element);
+				this.createStartTagEditor(item, element);
 			}
 		}
 
@@ -130,7 +129,7 @@ public class MessageEditor extends Composite {
 		 * @param item
 		 * @param element
 		 */
-		private void getStartTagEditor(final TreeItem item, final Element element) {
+		private void createStartTagEditor(final TreeItem item, final Element element) {
 			ComplexType complex = element.getType().getAsComplexType();
 			if (complex == null || complex.getAttributes().isEmpty()) {
 				// nothing to edit, so do not display the editor
@@ -235,8 +234,7 @@ public class MessageEditor extends Composite {
 			if (isAttributeEditable) {
 				final Text text = new Text(composite, SWT.SINGLE);
 				text.setText(attributeValue);
-				final ChangeListener changeListener = new ChangeListener(attribute, item);
-				text.addModifyListener(changeListener);
+				text.addModifyListener(new ChangeListener(attribute, item));
 				text.addFocusListener(new TextFocusListener());
 				text.addKeyListener(new KeyAdapter() {
 
@@ -294,7 +292,7 @@ public class MessageEditor extends Composite {
 		 * 
 		 * @param item
 		 */
-		private void getInnerTextEditor(final TreeItem item) {
+		private void createInnerTextEditor(final TreeItem item) {
 			final Composite composite = new Composite(MessageEditor.this.getTree(), SWT.NULL);
 			composite.setLayout(this.createRowLayout());
 
@@ -391,6 +389,7 @@ public class MessageEditor extends Composite {
 
 		@Override
 		public void focusLost(FocusEvent e) {
+			// really needed?
 			((Text) e.widget).setSelection(0);
 		}
 	}
@@ -428,18 +427,6 @@ public class MessageEditor extends Composite {
 
 		this.tree = new Tree(this, SWT.SINGLE);
 		this.tree.setBackground(this.getBackground());
-
-		// Font oldFont = this.tree.getFont();
-		// FontData fontData = oldFont.getFontData()[0];
-		// fontData.height += 3;
-		// this.tree.setFont(new Font(oldFont.getDevice(), fontData));
-
-		// this.tree.setHeaderVisible(true);
-
-		// TreeColumn treeColumn = new TreeColumn(this.tree, SWT.LEFT);
-		// treeColumn.setWidth(400);
-		// treeColumn = new TreeColumn(this.tree, SWT.RIGHT);
-		// treeColumn.setWidth(20);
 
 		final TreeEditor editor = new TreeEditor(this.tree);
 		editor.horizontalAlignment = SWT.LEFT;
@@ -553,7 +540,7 @@ public class MessageEditor extends Composite {
 			closingItem.setForeground(this.disabledColor);
 
 			// set cursor back to default, otherwise the hand-cursor would be
-			// shown althoug there may be nothing to click
+			// shown although there may be nothing to click
 			this.setCursor(SWT.CURSOR_ARROW);
 		} else {
 			// parent element contains more of this type, so remove this
@@ -880,7 +867,7 @@ public class MessageEditor extends Composite {
 	}
 
 	protected String getTagName(Element element) {
-		return this.namespaceEditor.getPreffix(element.getNamespace()) + ":"
+		return this.namespaceEditor.getPrefix(element.getNamespace()) + ":"
 				+ element.getLocalPart();
 	}
 
@@ -1023,12 +1010,13 @@ public class MessageEditor extends Composite {
 
 	public void setEditable(boolean b) {
 		this.isEditable = b;
-		if (this.isEditable && this.tree.getItemCount() < 2) {
+		if (this.isEditable && !this.isXMLValid() ) {
 			this.displayElement(this.displayedElement, true);
 		}
 	}
 
 	public boolean isXMLValid() {
+		// if itemCount is < 2, an error is currently being shown
 		return this.tree.getItemCount() >= 2;
 	}
 
@@ -1142,7 +1130,7 @@ public class MessageEditor extends Composite {
 			return false;
 		}
 		String namespace = schemaElement.getNamespace();
-		String prefix = this.namespaceEditor.getPreffix(namespace);
+		String prefix = this.namespaceEditor.getPrefix(namespace);
 		String tagName = prefix + ":" + schemaElement.getLocalPart();
 		return tagName.equals(domElement.getNodeName());
 	}
