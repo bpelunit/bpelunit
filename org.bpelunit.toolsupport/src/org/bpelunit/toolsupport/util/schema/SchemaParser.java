@@ -105,7 +105,7 @@ public class SchemaParser {
 		reader.setErrorHandler(this.errorHandler);
 		reader.setAnnotationParser(new DomAnnotationParserFactory());
 		reader.parse(file);
-		this.readSchemas(reader.getResult());
+		this.readSchemata(reader.getResult());
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class SchemaParser {
 	 * 
 	 * @param schemata
 	 */
-	public void readSchemas(XSSchemaSet schemata) {
+	public void readSchemata(XSSchemaSet schemata) {
 		for (XSSchema schema : schemata.getSchemas()) {
 			this.readSchema(schema);
 		}

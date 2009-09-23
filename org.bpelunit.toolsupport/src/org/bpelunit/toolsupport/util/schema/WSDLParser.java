@@ -50,8 +50,7 @@ public class WSDLParser {
 	 * @throws SAXException
 	 * @throws TransformerException
 	 */
-	public WSDLParser(Definition definition) throws SAXException,
-			TransformerException {
+	public WSDLParser(Definition definition) throws SAXException, TransformerException {
 		this.definition = definition;
 		this.readSchemata();
 	}
@@ -116,26 +115,32 @@ public class WSDLParser {
 				// inherit the namespaces from the definitions-tag
 				this.addNamespaces(namespaces, schemaElement);
 
-				StringReader stringReader = this
-						.getStringReaderFromElement(schemaElement);
+				StringReader stringReader = this.getStringReaderFromElement(schemaElement);
 				reader.parse(stringReader);
-				parser.readSchemas(reader.getResult());
+				parser.readSchemata(reader.getResult());
 			}
 		}
 	}
 
-	private StringReader getStringReaderFromElement(
-			org.w3c.dom.Element schemaElement)
-			throws TransformerFactoryConfigurationError,
-			TransformerConfigurationException, TransformerException {
-		DOMSource source = new DOMSource(schemaElement);
+	/**
+	 * Creates a StringReader for the passed Element.
+	 * 
+	 * @param element
+	 * @return
+	 * @throws TransformerFactoryConfigurationError
+	 * @throws TransformerConfigurationException
+	 * @throws TransformerException
+	 */
+	private StringReader getStringReaderFromElement(org.w3c.dom.Element element)
+			throws TransformerFactoryConfigurationError, TransformerConfigurationException,
+			TransformerException {
+		DOMSource source = new DOMSource(element);
 		StringWriter stringWriter = new StringWriter();
 		Result result = new StreamResult(stringWriter);
 		TransformerFactory factory = TransformerFactory.newInstance();
 		Transformer transformer = factory.newTransformer();
 		transformer.transform(source, result);
-		StringReader stringReader = new StringReader(stringWriter.getBuffer()
-				.toString());
+		StringReader stringReader = new StringReader(stringWriter.getBuffer().toString());
 		return stringReader;
 	}
 
@@ -150,15 +155,13 @@ public class WSDLParser {
 	 *            representing on schema element of the WSDL
 	 */
 	@SuppressWarnings("unchecked")
-	private void addNamespaces(Map<String, String> namespaces,
-			org.w3c.dom.Element schemaElement) {
+	private void addNamespaces(Map<String, String> namespaces, org.w3c.dom.Element schemaElement) {
 		for (Object o : namespaces.entrySet()) {
 			if (o instanceof Entry) {
 				Entry entry = (Entry) o;
 				String attribute = "xmlns:" + (String) entry.getKey();
 				if (schemaElement.getAttributeNode(attribute) == null) {
-					schemaElement.setAttribute(attribute, (String) entry
-							.getValue());
+					schemaElement.setAttribute(attribute, (String) entry.getValue());
 				}
 			}
 		}
@@ -179,14 +182,12 @@ public class WSDLParser {
 	 * @return
 	 * @see #getOutputElementForOperation(QName, String, String)
 	 */
-	public Element getInputElementForOperation(QName service, String port,
-			String operationName) {
+	public Element getInputElementForOperation(QName service, String port, String operationName) {
 		Operation operation = this.getOperation(service, port, operationName);
 		if (operation == null) {
 			return null;
 		}
-		Part part = (Part) operation.getInput().getMessage().getParts()
-				.values().iterator().next();
+		Part part = (Part) operation.getInput().getMessage().getParts().values().iterator().next();
 		return this.elements.get(part.getElementName());
 	}
 
@@ -202,12 +203,10 @@ public class WSDLParser {
 	 *            name of the operation
 	 * @return
 	 */
-	private Operation getOperation(QName service, String port,
-			String operationName) {
+	private Operation getOperation(QName service, String port, String operationName) {
 		try {
-			Operation operation = this.definition.getService(service).getPort(
-					port).getBinding().getBindingOperation(operationName, null,
-					null).getOperation();
+			Operation operation = this.definition.getService(service).getPort(port).getBinding()
+					.getBindingOperation(operationName, null, null).getOperation();
 			return operation;
 		} catch (NullPointerException e) {
 			return null;
@@ -229,14 +228,12 @@ public class WSDLParser {
 	 * @return
 	 * @see #getInputElementForOperation(QName, String, String)
 	 */
-	public Element getOutputElementForOperation(QName service, String port,
-			String operationName) {
+	public Element getOutputElementForOperation(QName service, String port, String operationName) {
 		Operation operation = this.getOperation(service, port, operationName);
 		if (operation == null) {
 			return null;
 		}
-		Part part = (Part) operation.getOutput().getMessage().getParts()
-				.values().iterator().next();
+		Part part = (Part) operation.getOutput().getMessage().getParts().values().iterator().next();
 		return this.elements.get(part.getElementName());
 	}
 }

@@ -108,7 +108,7 @@ public class MessageEditor extends Composite {
 					MessageEditor.this.mouseDownPosition = new Point(0, 0);
 
 					if (MessageEditor.this.isInAddButton(imagePosition, mousePosition)) {
-						MessageEditor.this.cloneItem(item);
+						MessageEditor.this.copyItem(item);
 						return;
 					}
 
@@ -189,7 +189,7 @@ public class MessageEditor extends Composite {
 			label.addListener(SWT.MouseUp, new Listener() {
 				@Override
 				public void handleEvent(Event arg0) {
-					MessageEditor.this.cloneItem(item);
+					MessageEditor.this.copyItem(item);
 				}
 			});
 
@@ -500,6 +500,7 @@ public class MessageEditor extends Composite {
 				}
 			}
 		});
+
 		// listener for displaying images
 		this.tree.addListener(SWT.PaintItem, new Listener() {
 			@Override
@@ -597,7 +598,7 @@ public class MessageEditor extends Composite {
 		return color;
 	}
 
-	protected void cloneItem(TreeItem item) {
+	protected void copyItem(TreeItem item) {
 		TreeItem parent = item.getParentItem();
 		int index = this.getItemIndex(item);
 		if (this.isItemDisabled(item)) {
@@ -904,7 +905,7 @@ public class MessageEditor extends Composite {
 		return false;
 	}
 
-	private boolean isCloneable(TreeItem item) {
+	protected boolean isCloneable(TreeItem item) {
 		if (item == null || item.getData(TREE_ITEM_FOR_END_TAG) != null
 				|| item.getData(TREE_ITEM_FOR_ELEMENT_CONTENT) != null) {
 			return false;
@@ -914,10 +915,7 @@ public class MessageEditor extends Composite {
 	}
 
 	protected Image getImage(TreeItem item) {
-
 		String imageName = null;
-		if (item.getParentItem() == null) {
-		}
 
 		if (this.isItemDisabled(item.getParentItem())) {
 			// if parentItem is disabled, all children of parentItem can't be
