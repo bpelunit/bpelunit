@@ -371,8 +371,9 @@ public class MessageEditor extends Composite {
 
 			// Workaround to prevent that the first letter in the text field is
 			// hidden
+			int position = text.getSelection().x;
 			text.setSelection(0);
-			text.setSelection(text.getText().length());
+			text.setSelection(Math.min(position, text.getText().length()));
 
 			MessageEditor.this.setItemText(this.item);
 			MessageEditor.this.notifyStringValueListeners();
@@ -710,16 +711,26 @@ public class MessageEditor extends Composite {
 
 	public void displayElement(Element inputElement, boolean notifyListener) {
 		this.displayedElement = inputElement;
+
 		if (this.isEditable) {
 			this.selectionListener.disposeEditor();
 			this.tree.removeAll();
-			this.displayElement(inputElement, null);
-
-			this.expandTreeItem(this.tree.getTopItem());
-			this.layout();
-			if (notifyListener) {
-				this.notifyStringValueListeners();
+			if (this.displayedElement == null) {
+				this.displayError("Selected Operation has no Input.");
+				if (this.isEditable) {
+					for (StringValueListener listener : this.listeners) {
+						listener.valueChanged("");
+					}
+				}
+			} else {
+				this.displayElement(inputElement, null);
+				this.expandTreeItem(this.tree.getTopItem());
+				this.layout();
+				if (notifyListener) {
+					this.notifyStringValueListeners();
+				}
 			}
+
 		} else {
 			this.setXML();
 		}
@@ -867,8 +878,11 @@ public class MessageEditor extends Composite {
 	}
 
 	protected String getTagName(Element element) {
-		return this.namespaceEditor.getPrefix(element.getNamespace()) + ":"
-				+ element.getLocalPart();
+		String prefix = this.namespaceEditor.getPrefix(element.getNamespace());
+		if (prefix.isEmpty()) {
+			return element.getLocalPart();
+		}
+		return prefix + ":" + element.getLocalPart();
 	}
 
 	private boolean isEditable(TreeItem item) {
@@ -1010,7 +1024,7 @@ public class MessageEditor extends Composite {
 
 	public void setEditable(boolean b) {
 		this.isEditable = b;
-		if (this.isEditable && !this.isXMLValid() ) {
+		if (this.isEditable && !this.isXMLValid()) {
 			this.displayElement(this.displayedElement, true);
 		}
 	}
@@ -1026,6 +1040,10 @@ public class MessageEditor extends Composite {
 	}
 
 	private void setXML() {
+		if (this.displayedElement == null) {
+			this.displayError("Selected Operation has no input.");
+			return;
+		}
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;
 		try {
@@ -1131,7 +1149,10 @@ public class MessageEditor extends Composite {
 		}
 		String namespace = schemaElement.getNamespace();
 		String prefix = this.namespaceEditor.getPrefix(namespace);
-		String tagName = prefix + ":" + schemaElement.getLocalPart();
+		String tagName = schemaElement.getLocalPart();
+		if (!prefix.isEmpty()) {
+			tagName = prefix + ":" + tagName;
+		}
 		return tagName.equals(domElement.getNodeName());
 	}
 

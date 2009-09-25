@@ -282,9 +282,14 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 			// the other cases, the operation is already saved and displayed
 			// automatically.
 			OperationWizardPage wizardPage = (OperationWizardPage) this.getWizardPage();
-			Element element = wizardPage.getElementForOperation();
-			if (element != null && this.fSendField.getText().isEmpty()) {
-				this.messageEditor.displayElement(element, true);
+			Element element;
+			try {
+				element = wizardPage.getElementForOperation();
+				if (this.fSendField.getText().isEmpty()) {
+					this.messageEditor.displayElement(element, true);
+				}
+			} catch (Exception e1) {
+				// no (existing) operation selected. Error is shown elsewhere.
 			}
 		}
 
@@ -307,7 +312,8 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		WizardDialog d = new WizardDialog(this.getShell(), new NamespaceWizard(this.getTestSuite()));
 		if (d.open() == Window.OK) {
 			this.fireValueChanged(this.fSendField);
-			// Message Editor does not take part in fireValueChanged Listeners as those update far too often
+			// Message Editor does not take part in fireValueChanged Listeners
+			// as those update far too often
 			this.messageEditor.updateItems();
 		}
 	}

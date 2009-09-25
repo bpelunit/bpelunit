@@ -2,6 +2,7 @@ package org.bpelunit.toolsupport.util.schema;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,6 +21,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.bpelunit.toolsupport.util.WSDLReadingException;
 import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
 import org.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
@@ -49,8 +51,10 @@ public class WSDLParser {
 	 * @param definition
 	 * @throws SAXException
 	 * @throws TransformerException
+	 * @throws WSDLReadingException
 	 */
-	public WSDLParser(Definition definition) throws SAXException, TransformerException {
+	public WSDLParser(Definition definition) throws SAXException, TransformerException,
+			WSDLReadingException {
 		this.definition = definition;
 		this.readSchemata();
 	}
@@ -93,9 +97,10 @@ public class WSDLParser {
 	 * 
 	 * @throws SAXException
 	 * @throws TransformerException
+	 * @throws WSDLReadingException
 	 */
 	@SuppressWarnings("unchecked")
-	private void readSchemata() throws SAXException, TransformerException {
+	private void readSchemata() throws SAXException, TransformerException, WSDLReadingException {
 		SchemaParser parser = new SchemaParser();
 		this.complexTypes = parser.getComplexTypes();
 		this.simpleTypes = parser.getSimpleTypes();
@@ -117,7 +122,13 @@ public class WSDLParser {
 				this.addNamespaces(namespaces, schemaElement);
 
 				reader.parse(this.getStringReaderFromElement(schemaElement));
-				parser.readSchemata(reader.getResult());
+				try {
+					parser.readSchemata(reader.getResult());
+				} catch (NullPointerException e) {
+					throw new WSDLReadingException("Corrupt Schema in WSDL", e);
+				} catch (Throwable e) {
+					// error occured, needed schmeta could be read, continue
+				}
 			}
 		}
 	}
@@ -180,14 +191,22 @@ public class WSDLParser {
 	 * @param operationName
 	 *            name of the operation
 	 * @return
+	 * @throws InvalidInputException
+	 * @throws NoSuchOperationException
 	 * @see #getOutputElementForOperation(QName, String, String)
 	 */
-	public Element getInputElementForOperation(QName service, String port, String operationName) {
+	public Element getInputElementForOperation(QName service, String port, String operationName)
+			throws InvalidInputException, NoSuchOperationException {
 		Operation operation = this.getOperation(service, port, operationName);
 		if (operation == null) {
+			throw new NoSuchOperationException("Operation " + operationName + "for port " + port
+					+ " in service " + service + " does not exists.");
+		}
+		Collection values = operation.getInput().getMessage().getParts().values();
+		if (values.isEmpty()) {
 			return null;
 		}
-		Part part = (Part) operation.getInput().getMessage().getParts().values().iterator().next();
+		Part part = (Part) values.iterator().next();
 		return this.elements.get(part.getElementName());
 	}
 
@@ -202,8 +221,23 @@ public class WSDLParser {
 	 * @param operationName
 	 *            name of the operation
 	 * @return
+	 * @throws InvalidInputException
 	 */
-	private Operation getOperation(QName service, String port, String operationName) {
+	private Operation getOperation(QName service, String port, String operationName)
+			throws InvalidInputException {
+		if (service == null || service.getLocalPart().isEmpty()
+				|| service.getNamespaceURI().isEmpty()) {
+			throw new InvalidInputException("Service must be set.");
+		}
+
+		if (port == null || port.isEmpty()) {
+			throw new InvalidInputException("Port must be set.");
+		}
+
+		if (operationName == null || operationName.isEmpty()) {
+			throw new InvalidInputException("operationName must be set.");
+		}
+
 		try {
 			Operation operation = this.definition.getService(service).getPort(port).getBinding()
 					.getBindingOperation(operationName, null, null).getOperation();
@@ -226,14 +260,22 @@ public class WSDLParser {
 	 * @param operationName
 	 *            name of the operation
 	 * @return
+	 * @throws InvalidInputException
+	 * @throws NoSuchOperationException
 	 * @see #getInputElementForOperation(QName, String, String)
 	 */
-	public Element getOutputElementForOperation(QName service, String port, String operationName) {
+	public Element getOutputElementForOperation(QName service, String port, String operationName)
+			throws InvalidInputException, NoSuchOperationException {
 		Operation operation = this.getOperation(service, port, operationName);
 		if (operation == null) {
+			throw new NoSuchOperationException("Operation " + operationName + "for port " + port
+					+ " in service " + service + " does not exists.");
+		}
+		Collection values = operation.getOutput().getMessage().getParts().values();
+		if (values.isEmpty()) {
 			return null;
 		}
-		Part part = (Part) operation.getOutput().getMessage().getParts().values().iterator().next();
+		Part part = (Part) values.iterator().next();
 		return this.elements.get(part.getElementName());
 	}
 }

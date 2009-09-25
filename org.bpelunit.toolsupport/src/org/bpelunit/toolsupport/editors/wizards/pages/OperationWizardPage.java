@@ -16,6 +16,8 @@ import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import org.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
 import org.bpelunit.toolsupport.editors.wizards.components.OperationDataComponent;
 import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import org.bpelunit.toolsupport.util.schema.InvalidInputException;
+import org.bpelunit.toolsupport.util.schema.NoSuchOperationException;
 import org.bpelunit.toolsupport.util.schema.WSDLParser;
 import org.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.eclipse.swt.widgets.Composite;
@@ -95,7 +97,7 @@ public class OperationWizardPage extends ActivityWizardPage implements IComponen
 		return WizardPageCode.OPERATION;
 	}
 
-	public Element getElementForOperation() {
+	public Element getElementForOperation() throws InvalidInputException, NoSuchOperationException {
 		Element element = null;
 		WSDLParser parser = this.getWSDLParser();
 		if (parser == null) {

@@ -169,12 +169,17 @@ public class OperationDataComponent extends DataComponent {
 		if (this.validateOperation(Verify.ALL)) {
 			if (this.getWizardPage() instanceof OperationWizardPage) {
 
-				Element element = ((OperationWizardPage) this.getWizardPage())
-						.getElementForOperation();
-				if (element != null) {
-					for (OperationChangeListener listener : this.operationChangeListener) {
-						listener.operationChanged(element);
+				Element element;
+				try {
+					element = ((OperationWizardPage) this.getWizardPage()).getElementForOperation();
+					if (element != null) {
+						for (OperationChangeListener listener : this.operationChangeListener) {
+							listener.operationChanged(element);
+						}
 					}
+				} catch (Exception e1) {
+					// no (existing) operation selected. Error is shown
+					// elsewhere.
 				}
 			}
 		}
@@ -188,10 +193,16 @@ public class OperationDataComponent extends DataComponent {
 		}
 		this.operationChangeListener.add(listener);
 		if (this.getWizardPage() instanceof OperationWizardPage) {
-			Element element = ((OperationWizardPage) this.getWizardPage()).getElementForOperation();
-			if (this.validateOperation(Verify.ALL) && listener instanceof SendComponent
-					&& element != null) {
-				((SendComponent) listener).setOperationMessage(element, false);
+			Element element;
+			try {
+				element = ((OperationWizardPage) this.getWizardPage()).getElementForOperation();
+				if (this.validateOperation(Verify.ALL) && listener instanceof SendComponent
+						&& element != null) {
+					((SendComponent) listener).setOperationMessage(element, false);
+				}
+			} catch (Exception e1) {
+				// no (existing) operation selected. Error is shown
+				// elsewhere.
 			}
 		}
 	}
