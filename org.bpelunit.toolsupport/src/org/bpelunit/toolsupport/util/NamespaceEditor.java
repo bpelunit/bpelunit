@@ -36,15 +36,19 @@ public class NamespaceEditor {
 	}
 
 	public boolean addNamespaceToSuite(String prefix, String url) {
-		XmlCursor cursor = this.baseSuite.newCursor();
-		cursor.toNextToken();
-		cursor.insertNamespace(prefix, url);
-		return true;
+		if (!"".equals(prefix) && !"".equals(url)) {
+			XmlCursor cursor = this.baseSuite.newCursor();
+			cursor.toNextToken();
+			cursor.insertNamespace(prefix, url);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public String addNamespaceToSuite(String url) {
 		if (url != null) {
-			String prefix = this.generatePreffix(url);
+			String prefix = this.generatePrefix(url);
 			this.addNamespaceToSuite(prefix, url);
 			return prefix;
 		}
@@ -76,7 +80,7 @@ public class NamespaceEditor {
 		return false;
 	}
 
-	private String generatePreffix(String url) {
+	private String generatePrefix(String url) {
 		int protocolPosition = url.indexOf("://www.");
 		if (protocolPosition == -1) {
 			protocolPosition = url.indexOf("://");
