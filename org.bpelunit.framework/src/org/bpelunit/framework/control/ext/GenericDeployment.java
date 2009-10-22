@@ -185,7 +185,7 @@ public abstract class GenericDeployment implements IDeployment {
 
 		for (File file : (File[]) dir.listFiles()) {
 			if (file.isDirectory()) {
-				populateServiceToWsdlMapping(dir);
+				populateServiceToWsdlMapping(file);
 			} else {
 				if (file.getName().endsWith(".wsdl")) {
 					Definition definition = ParseUtil.getWsdlDefinition(file
