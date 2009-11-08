@@ -173,7 +173,7 @@
 			<xs:documentation>A send activity</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="Activity">
+			<xs:extension base="SoapActivity">
 				<xs:annotation>
 					<xs:documentation>A send operation</xs:documentation>
 				</xs:annotation>
@@ -190,7 +190,7 @@
 			<xs:documentation>A receive activity</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="Activity">
+			<xs:extension base="SoapActivity">
 				<xs:annotation>
 					<xs:documentation>A receive operation</xs:documentation>
 				</xs:annotation>
@@ -206,7 +206,7 @@
 			<xs:documentation>A two-way activity</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="Activity">
+			<xs:extension base="SoapActivity">
 				<xs:annotation>
 					<xs:documentation>A (sync or async) two-way operation</xs:documentation>
 				</xs:annotation>
@@ -262,9 +262,24 @@
 		<xs:annotation>
 			<xs:documentation>A single activity</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="service" type="xs:QName" use="optional"/>
-		<xs:attribute name="port" type="xs:string" use="optional"/>
-		<xs:attribute name="operation" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="SoapActivity">
+		<xs:annotation>
+			<xs:documentation>A single activity</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="Activity">
+				<xs:attribute name="service" type="xs:QName"
+					use="optional" />
+
+				<xs:attribute name="port" type="xs:string"
+					use="optional" />
+
+				<xs:attribute name="operation" type="xs:string"
+					use="optional" />
+
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="Mapping">
 		<xs:annotation>
