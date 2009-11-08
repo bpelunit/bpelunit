@@ -183,6 +183,14 @@ public abstract class GenericDeployment implements IDeployment {
 	 */
 	private void populateServiceToWsdlMapping(File dir) throws IOException {
 
+		if(dir == null) {
+			return;
+		}
+		
+		if(!dir.exists()) {
+			throw new IOException("Could not find directory: " + dir.toString());
+		}
+		
 		for (File file : (File[]) dir.listFiles()) {
 			if (file.isDirectory()) {
 				populateServiceToWsdlMapping(file);

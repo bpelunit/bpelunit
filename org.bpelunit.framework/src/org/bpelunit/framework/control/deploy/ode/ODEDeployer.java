@@ -25,12 +25,9 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IDeployment;
 import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
-import org.bpelunit.framework.coverage.ArchiveUtil;
-import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.ProcessUnderTest;
@@ -93,7 +90,7 @@ public class ODEDeployer implements IBPELDeployer {
 		 */
 		String archivePath = getArchiveLocation(pathToTest);
 
-		if (!FilenameUtils.getName(archivePath).contains(".zip")) {
+		if (!FilenameUtils.getName(archivePath).endsWith(".zip")) {
 			// if the deployment is a directory not a zip file
 
 			File dir = new File(archivePath);
