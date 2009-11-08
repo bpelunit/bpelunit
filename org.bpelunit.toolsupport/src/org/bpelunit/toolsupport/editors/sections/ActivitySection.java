@@ -35,6 +35,7 @@ import org.bpelunit.framework.xml.suite.XMLSendActivity;
 import org.bpelunit.framework.xml.suite.XMLSoapActivity;
 import org.bpelunit.framework.xml.suite.XMLTrack;
 import org.bpelunit.framework.xml.suite.XMLTwoWayActivity;
+import org.bpelunit.framework.xml.suite.XMLWaitActivity;
 import org.bpelunit.toolsupport.ToolSupportActivator;
 import org.bpelunit.toolsupport.editors.TestSuitePage;
 import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
@@ -45,6 +46,7 @@ import org.bpelunit.toolsupport.editors.wizards.ReceiveSendSyncActivityWizard;
 import org.bpelunit.toolsupport.editors.wizards.SendOnlyWizard;
 import org.bpelunit.toolsupport.editors.wizards.SendReceiveAsyncActivityWizard;
 import org.bpelunit.toolsupport.editors.wizards.SendReceiveSyncActivityWizard;
+import org.bpelunit.toolsupport.editors.wizards.WaitActivityWizard;
 import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import org.bpelunit.toolsupport.util.WSDLReadingException;
 import org.eclipse.jface.action.Action;
@@ -62,6 +64,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
@@ -85,8 +88,7 @@ public class ActivitySection extends TreeSection {
 	private class ActivityLabelProvider implements ILabelProvider {
 
 		public Image getImage(Object element) {
-			return ToolSupportActivator
-					.getImage(ToolSupportActivator.IMAGE_ACTIVITY);
+			return ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_ACTIVITY);
 		}
 
 		public String getText(Object element) {
@@ -95,15 +97,18 @@ public class ActivitySection extends TreeSection {
 			} else if (element instanceof XMLMapping) {
 				return "Data Copy";
 			} else if (element instanceof XMLHeaderProcessor) {
-				return "Header Processor ("
-						+ ((XMLHeaderProcessor) element).getName() + ")";
+				return "Header Processor (" + ((XMLHeaderProcessor) element).getName() + ")";
 			} else if (element instanceof XMLCondition) {
 				return "Condition ("
 						+ StringUtils.abbreviate(BPELUnitUtil
-								.removeSpaceLineBreaks(((XMLCondition) element)
-										.getExpression()), 100) + ")";
+								.removeSpaceLineBreaks(((XMLCondition) element).getExpression()),
+								100) + ")";
 			}
-			return "";
+			if (element != null) {
+				return element.toString();
+			} else {
+				return "";
+			}
 		}
 
 		public void addListener(ILabelProviderListener listener) {
@@ -127,8 +132,7 @@ public class ActivitySection extends TreeSection {
 
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof XMLTrack) {
-				return ActivityUtil.getActivities((XMLTrack) inputElement)
-						.toArray();
+				return ActivityUtil.getActivities((XMLTrack) inputElement).toArray();
 			} else
 				return new Object[0];
 		}
@@ -146,6 +150,10 @@ public class ActivitySection extends TreeSection {
 				if (activity instanceof XMLReceiveActivity) {
 					XMLReceiveActivity rcvOp = (XMLReceiveActivity) activity;
 					return rcvOp.getConditionArray();
+				}
+				if (activity instanceof XMLWaitActivity) {
+					XMLWaitActivity waitAct = (XMLWaitActivity) activity;
+					return new Object[] { "Duration: " + waitAct.getWaitForMilliseconds() + "ms" };
 				}
 				if (ActivityUtil.isTwoWayActivity(activity)) {
 					XMLTwoWayActivity twoWayActivity = (XMLTwoWayActivity) activity;
@@ -175,10 +183,12 @@ public class ActivitySection extends TreeSection {
 		}
 
 		public boolean hasChildren(Object element) {
+			if (element instanceof XMLTwoWayActivity || element instanceof XMLWaitActivity)
+				return true;
+
 			if (element instanceof XMLReceiveActivity)
 				return ((XMLReceiveActivity) element).getConditionArray().length > 0;
-			if (element instanceof XMLTwoWayActivity)
-				return true;
+
 			return false;
 		}
 
@@ -187,8 +197,7 @@ public class ActivitySection extends TreeSection {
 	private XMLTrack fCurrentPartnerTrack;
 	private boolean fCtrlDown;
 
-	public ActivitySection(Composite parent, TestSuitePage page,
-			FormToolkit toolkit) {
+	public ActivitySection(Composite parent, TestSuitePage page, FormToolkit toolkit) {
 		super(parent, toolkit, page, true);
 		init();
 		fCtrlDown = false;
@@ -217,18 +226,15 @@ public class ActivitySection extends TreeSection {
 		WizardPageCode code = null;
 
 		if (viewerSelection instanceof XMLMapping) {
-			currentActivity = ActivityUtil
-					.getParentActivityFor(viewerSelection);
+			currentActivity = ActivityUtil.getParentActivityFor(viewerSelection);
 			code = WizardPageCode.DATACOPY;
 		}
 		if (viewerSelection instanceof XMLCondition) {
-			currentActivity = ActivityUtil
-					.getParentActivityFor(viewerSelection);
+			currentActivity = ActivityUtil.getParentActivityFor(viewerSelection);
 			code = WizardPageCode.RECEIVE;
 		}
 		if (viewerSelection instanceof XMLHeaderProcessor) {
-			currentActivity = ActivityUtil
-					.getParentActivityFor(viewerSelection);
+			currentActivity = ActivityUtil.getParentActivityFor(viewerSelection);
 			code = WizardPageCode.HEADERPROCESSOR;
 		}
 		if (ActivityUtil.isActivity(viewerSelection)) {
@@ -241,21 +247,17 @@ public class ActivitySection extends TreeSection {
 		 */
 		if (ActivityUtil.isChildActivity(currentActivity)) {
 			// User selected a child activity. Get parent activity
-			currentActivity = ActivityUtil
-					.getParentActivityFor(currentActivity);
+			currentActivity = ActivityUtil.getParentActivityFor(currentActivity);
 			if (code == null) {
-				if (ActivityUtil.isActivity(viewerSelection,
-						ActivityConstant.SEND))
+				if (ActivityUtil.isActivity(viewerSelection, ActivityConstant.SEND))
 					code = WizardPageCode.SEND;
-				if (ActivityUtil.isActivity(viewerSelection,
-						ActivityConstant.RECEIVE))
+				if (ActivityUtil.isActivity(viewerSelection, ActivityConstant.RECEIVE))
 					code = WizardPageCode.RECEIVE;
 			}
 		}
 
 		if (currentActivity != null) {
-			ActivityConstant activityConstant = ActivityUtil
-					.getActivityConstant(currentActivity);
+			ActivityConstant activityConstant = ActivityUtil.getActivityConstant(currentActivity);
 			/*
 			 * The wizard pages set their data directly in the XML activities,
 			 * it is therefore necessary to copy the activity beforehand, in
@@ -264,51 +266,48 @@ public class ActivitySection extends TreeSection {
 			 * navigating the tree structure (for example, for finding the
 			 * parent track of an activity).
 			 */
-			int currentActivityIndex = getActivityIndex(fCurrentPartnerTrack,
-					currentActivity);
+			int currentActivityIndex = getActivityIndex(fCurrentPartnerTrack, currentActivity);
 
 			// Clone:
 			XMLActivity copiedActivity = (XMLActivity) currentActivity.copy();
-			ActivityWizard wizard = null;
+			Wizard wizard = null;
 			switch (activityConstant) {
 			case SEND_ONLY:
 				wizard = new SendOnlyWizard(getPage(), ActivityEditMode.EDIT,
 						(XMLSendActivity) currentActivity);
 				break;
 			case RECEIVE_ONLY:
-				wizard = new ReceiveOnlyWizard(getPage(),
-						ActivityEditMode.EDIT,
+				wizard = new ReceiveOnlyWizard(getPage(), ActivityEditMode.EDIT,
 						(XMLReceiveActivity) currentActivity);
 				break;
 			case SEND_RECEIVE_SYNC:
-				wizard = new SendReceiveSyncActivityWizard(getPage(),
-						ActivityEditMode.EDIT,
+				wizard = new SendReceiveSyncActivityWizard(getPage(), ActivityEditMode.EDIT,
 						(XMLTwoWayActivity) currentActivity);
 				break;
 			case RECEIVE_SEND_SYNC:
-				wizard = new ReceiveSendSyncActivityWizard(getPage(),
-						ActivityEditMode.EDIT,
+				wizard = new ReceiveSendSyncActivityWizard(getPage(), ActivityEditMode.EDIT,
 						(XMLTwoWayActivity) currentActivity);
 				break;
 			case SEND_RECEIVE_ASYNC:
-				wizard = new SendReceiveAsyncActivityWizard(getPage(),
-						ActivityEditMode.EDIT,
+				wizard = new SendReceiveAsyncActivityWizard(getPage(), ActivityEditMode.EDIT,
 						(XMLTwoWayActivity) currentActivity);
 				break;
 			case RECEIVE_SEND_ASYNC:
-				wizard = new ReceiveSendAsyncActivityWizard(getPage(),
-						ActivityEditMode.EDIT,
+				wizard = new ReceiveSendAsyncActivityWizard(getPage(), ActivityEditMode.EDIT,
 						(XMLTwoWayActivity) currentActivity);
+				break;
+			case WAIT:
+				wizard = new WaitActivityWizard((XMLWaitActivity) currentActivity);
 				break;
 			}
 			if (wizard != null) {
 				if (code != null)
-					wizard.setStart(code);
+					((ActivityWizard) wizard).setStart(code);
 				if (openWizard(wizard)) {
 					adjust(true);
 				} else {
-					replaceActivity(fCurrentPartnerTrack, currentActivityIndex,
-							activityConstant, copiedActivity);
+					replaceActivity(fCurrentPartnerTrack, currentActivityIndex, activityConstant,
+							copiedActivity);
 					// Refresh viewer without marking stale
 					// Nodes have been replaced; the viewer still has the old
 					// ones in cache.
@@ -328,16 +327,14 @@ public class ActivitySection extends TreeSection {
 			removeActivity(fCurrentPartnerTrack, viewerSelection);
 		} // endif XMLActivity
 		else if (viewerSelection instanceof XMLMapping) {
-			XMLActivity activity = ActivityUtil
-					.getParentActivityFor(viewerSelection);
+			XMLActivity activity = ActivityUtil.getParentActivityFor(viewerSelection);
 			if (ActivityUtil.isTwoWayActivity(activity)) {
 				XMLTwoWayActivity op = (XMLTwoWayActivity) activity;
 				op.unsetMapping();
 			}
 		} // endif XMLMapping
 		else if (viewerSelection instanceof XMLHeaderProcessor) {
-			XMLActivity activity = ActivityUtil
-					.getParentActivityFor(viewerSelection);
+			XMLActivity activity = ActivityUtil.getParentActivityFor(viewerSelection);
 			if (ActivityUtil.isTwoWayActivity(activity)) {
 				XMLTwoWayActivity op = (XMLTwoWayActivity) activity;
 				op.unsetHeaderProcessor();
@@ -350,8 +347,8 @@ public class ActivitySection extends TreeSection {
 				XmlObject parent = cursor.getObject();
 				if (parent instanceof XMLReceiveActivity) {
 					XMLReceiveActivity rcvOp = (XMLReceiveActivity) parent;
-					int index = ActivityUtil.getIndexFor(rcvOp
-							.getConditionArray(), viewerSelection);
+					int index = ActivityUtil
+							.getIndexFor(rcvOp.getConditionArray(), viewerSelection);
 					if (index != -1)
 						rcvOp.removeCondition(index);
 				}
@@ -395,7 +392,7 @@ public class ActivitySection extends TreeSection {
 	}
 
 	private void removeActivity(XMLTrack track, Object activity) {
-
+		System.out.println("Removing activity " + activity);
 		int index = getActivityIndex(track, activity);
 		if (index != -1) {
 			switch (ActivityUtil.getActivityConstant(activity)) {
@@ -417,29 +414,30 @@ public class ActivitySection extends TreeSection {
 			case RECEIVE_SEND_ASYNC:
 				fCurrentPartnerTrack.removeReceiveSendAsynchronous(index);
 				break;
+			case WAIT:
+				System.out.println("Removing WAIT[" + index + "]");
+				fCurrentPartnerTrack.removeWait(index);
+				break;
 			}
 		}
 	}
 
-	private void replaceActivity(XMLTrack track, int index,
-			ActivityConstant type, XMLActivity theReplacement) {
+	private void replaceActivity(XMLTrack track, int index, ActivityConstant type,
+			XMLActivity theReplacement) {
 		if (index != -1) {
 			switch (type) {
 			case SEND_ONLY:
-				fCurrentPartnerTrack.setSendOnlyArray(index,
-						(XMLSendActivity) theReplacement);
+				fCurrentPartnerTrack.setSendOnlyArray(index, (XMLSendActivity) theReplacement);
 				break;
 			case RECEIVE_ONLY:
-				fCurrentPartnerTrack.setReceiveOnlyArray(index,
-						(XMLReceiveActivity) theReplacement);
+				fCurrentPartnerTrack
+						.setReceiveOnlyArray(index, (XMLReceiveActivity) theReplacement);
 				break;
 			case SEND_RECEIVE_SYNC:
-				fCurrentPartnerTrack.setSendReceiveArray(index,
-						(XMLTwoWayActivity) theReplacement);
+				fCurrentPartnerTrack.setSendReceiveArray(index, (XMLTwoWayActivity) theReplacement);
 				break;
 			case RECEIVE_SEND_SYNC:
-				fCurrentPartnerTrack.setReceiveSendArray(index,
-						(XMLTwoWayActivity) theReplacement);
+				fCurrentPartnerTrack.setReceiveSendArray(index, (XMLTwoWayActivity) theReplacement);
 				break;
 			case SEND_RECEIVE_ASYNC:
 				fCurrentPartnerTrack.setSendReceiveAsynchronousArray(index,
@@ -474,6 +472,9 @@ public class ActivitySection extends TreeSection {
 		case RECEIVE_SEND_ASYNC:
 			activities = fCurrentPartnerTrack.getReceiveSendAsynchronousArray();
 			break;
+		case WAIT:
+			activities = fCurrentPartnerTrack.getWaitArray();
+			break;
 		default:
 			return -1;
 		}
@@ -487,8 +488,7 @@ public class ActivitySection extends TreeSection {
 		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
 				"Create a new activity");
 
-		List<ActivityConstant> topLevelActivities = ActivityUtil
-				.getTopLevelActivities();
+		List<ActivityConstant> topLevelActivities = ActivityUtil.getTopLevelActivities();
 		String[] names = new String[topLevelActivities.size()];
 		int i = 0;
 		for (ActivityConstant constant : topLevelActivities) {
@@ -509,8 +509,7 @@ public class ActivitySection extends TreeSection {
 		nameField.setLabelProvider(new ILabelProvider() {
 
 			public Image getImage(Object element) {
-				return ToolSupportActivator
-						.getImage(ToolSupportActivator.IMAGE_ACTIVITY);
+				return ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_ACTIVITY);
 			}
 
 			public String getText(Object element) {
@@ -561,12 +560,9 @@ public class ActivitySection extends TreeSection {
 			setEnabled(BUTTON_ADD, true);
 			setEnabled(BUTTON_EDIT, true);
 			setEnabled(BUTTON_REMOVE, getIsRemoveEnabled(item));
-			if (ActivityUtil.isActivity(item)
-					&& !ActivityUtil.isChildActivity(item)) {
-				setEnabled(BUTTON_UP, ActivityUtil
-						.hasPrevious((XMLActivity) item));
-				setEnabled(BUTTON_DOWN, ActivityUtil
-						.hasNext((XMLActivity) item));
+			if (ActivityUtil.isActivity(item) && !ActivityUtil.isChildActivity(item)) {
+				setEnabled(BUTTON_UP, ActivityUtil.hasPrevious((XMLActivity) item));
+				setEnabled(BUTTON_DOWN, ActivityUtil.hasNext((XMLActivity) item));
 			} else {
 				setEnabled(BUTTON_UP, false);
 				setEnabled(BUTTON_DOWN, false);
@@ -620,12 +616,10 @@ public class ActivitySection extends TreeSection {
 				XmlCursor cursor = activity.newCursor();
 				if (cursor.toFirstChild()) {
 					XmlObject obj = cursor.getObject();
-					ActivityConstant type = ActivityUtil
-							.getActivityConstant(obj);
+					ActivityConstant type = ActivityUtil.getActivityConstant(obj);
 
-					XMLActivity newOne = ActivityUtil
-							.createNewTopLevelActivity(fCurrentPartnerTrack,
-									type);
+					XMLActivity newOne = ActivityUtil.createNewTopLevelActivity(
+							fCurrentPartnerTrack, type);
 					newOne.set(obj);
 
 					adjust(true);
@@ -633,8 +627,7 @@ public class ActivitySection extends TreeSection {
 
 			} catch (XmlException e) {
 				// simply do not paste.
-				MessageDialog.openError(getShell(), "Error",
-						"No activity in clipboard.");
+				MessageDialog.openError(getShell(), "Error", "No activity in clipboard.");
 			}
 		}
 		clipboard.dispose();
@@ -655,12 +648,10 @@ public class ActivitySection extends TreeSection {
 
 		// Add the new activity menu even if nothing is selected
 		if ((ssel.size() == 0)
-				|| ((ssel.size() == 1)
-						&& ActivityUtil.isActivity(ssel.getFirstElement()) && !ActivityUtil
+				|| ((ssel.size() == 1) && ActivityUtil.isActivity(ssel.getFirstElement()) && !ActivityUtil
 						.isChildActivity(ssel.getFirstElement()))) {
 
-			List<ActivityConstant> topLevelActivities = ActivityUtil
-					.getTopLevelActivities();
+			List<ActivityConstant> topLevelActivities = ActivityUtil.getTopLevelActivities();
 			for (final ActivityConstant constant : topLevelActivities) {
 				createAction(newMenu, constant.getNiceName(), new Action() {
 					@Override
@@ -770,8 +761,7 @@ public class ActivitySection extends TreeSection {
 			this.prefillDataIfOnlyOneChoiceExists(sendOp);
 
 			// Open the wizard
-			SendOnlyWizard wiz = new SendOnlyWizard(getPage(),
-					ActivityEditMode.ADD, sendOp);
+			SendOnlyWizard wiz = new SendOnlyWizard(getPage(), ActivityEditMode.ADD, sendOp);
 			if (!openWizard(wiz)) {
 				removeActivity(fCurrentPartnerTrack, sendOp);
 			} else
@@ -779,8 +769,7 @@ public class ActivitySection extends TreeSection {
 			break;
 		}
 		case RECEIVE_ONLY: {
-			XMLReceiveActivity receiveOp = fCurrentPartnerTrack
-					.addNewReceiveOnly();
+			XMLReceiveActivity receiveOp = fCurrentPartnerTrack.addNewReceiveOnly();
 			// Initialize the activity:
 			receiveOp.setService(new QName(""));
 			receiveOp.setPort("");
@@ -788,8 +777,8 @@ public class ActivitySection extends TreeSection {
 			this.prefillDataIfOnlyOneChoiceExists(receiveOp);
 
 			// Open the wizard
-			ReceiveOnlyWizard wiz = new ReceiveOnlyWizard(getPage(),
-					ActivityEditMode.ADD, receiveOp);
+			ReceiveOnlyWizard wiz = new ReceiveOnlyWizard(getPage(), ActivityEditMode.ADD,
+					receiveOp);
 			if (!openWizard(wiz)) {
 				removeActivity(fCurrentPartnerTrack, receiveOp);
 			} else
@@ -797,13 +786,12 @@ public class ActivitySection extends TreeSection {
 			break;
 		}
 		case SEND_RECEIVE_SYNC: {
-			XMLTwoWayActivity sendRcvOp = fCurrentPartnerTrack
-					.addNewSendReceive();
+			XMLTwoWayActivity sendRcvOp = fCurrentPartnerTrack.addNewSendReceive();
 			initializeTwoWay(sendRcvOp);
 
 			// Open the wizard
-			SendReceiveSyncActivityWizard wiz = new SendReceiveSyncActivityWizard(
-					getPage(), ActivityEditMode.ADD, sendRcvOp);
+			SendReceiveSyncActivityWizard wiz = new SendReceiveSyncActivityWizard(getPage(),
+					ActivityEditMode.ADD, sendRcvOp);
 			if (!openWizard(wiz)) {
 				removeActivity(fCurrentPartnerTrack, sendRcvOp);
 			} else
@@ -811,13 +799,12 @@ public class ActivitySection extends TreeSection {
 			break;
 		}
 		case RECEIVE_SEND_SYNC: {
-			XMLTwoWayActivity rcvSendOp = fCurrentPartnerTrack
-					.addNewReceiveSend();
+			XMLTwoWayActivity rcvSendOp = fCurrentPartnerTrack.addNewReceiveSend();
 			initializeTwoWay(rcvSendOp);
 
 			// Open the wizard
-			ReceiveSendSyncActivityWizard wiz = new ReceiveSendSyncActivityWizard(
-					getPage(), ActivityEditMode.ADD, rcvSendOp);
+			ReceiveSendSyncActivityWizard wiz = new ReceiveSendSyncActivityWizard(getPage(),
+					ActivityEditMode.ADD, rcvSendOp);
 			if (!openWizard(wiz)) {
 				removeActivity(fCurrentPartnerTrack, rcvSendOp);
 			} else
@@ -825,13 +812,12 @@ public class ActivitySection extends TreeSection {
 			break;
 		}
 		case SEND_RECEIVE_ASYNC: {
-			XMLTwoWayActivity sendRcvOp = fCurrentPartnerTrack
-					.addNewSendReceiveAsynchronous();
+			XMLTwoWayActivity sendRcvOp = fCurrentPartnerTrack.addNewSendReceiveAsynchronous();
 			initializeTwoWay(sendRcvOp);
 
 			// Open the wizard
-			SendReceiveAsyncActivityWizard wiz = new SendReceiveAsyncActivityWizard(
-					getPage(), ActivityEditMode.ADD, sendRcvOp);
+			SendReceiveAsyncActivityWizard wiz = new SendReceiveAsyncActivityWizard(getPage(),
+					ActivityEditMode.ADD, sendRcvOp);
 			if (!openWizard(wiz)) {
 				removeActivity(fCurrentPartnerTrack, sendRcvOp);
 			} else
@@ -839,19 +825,28 @@ public class ActivitySection extends TreeSection {
 			break;
 		}
 		case RECEIVE_SEND_ASYNC: {
-			XMLTwoWayActivity sendRcvOp = fCurrentPartnerTrack
-					.addNewReceiveSendAsynchronous();
+			XMLTwoWayActivity sendRcvOp = fCurrentPartnerTrack.addNewReceiveSendAsynchronous();
 			initializeTwoWay(sendRcvOp);
 
 			// Open the wizard
-			ReceiveSendAsyncActivityWizard wiz = new ReceiveSendAsyncActivityWizard(
-					getPage(), ActivityEditMode.ADD, sendRcvOp);
+			ReceiveSendAsyncActivityWizard wiz = new ReceiveSendAsyncActivityWizard(getPage(),
+					ActivityEditMode.ADD, sendRcvOp);
 			if (!openWizard(wiz)) {
 				removeActivity(fCurrentPartnerTrack, sendRcvOp);
 			} else
 				added = sendRcvOp;
 			break;
 		}
+		case WAIT:
+			XMLWaitActivity waitAct = fCurrentPartnerTrack.addNewWait();
+			initializeWait(waitAct);
+			WaitActivityWizard wiz = new WaitActivityWizard(waitAct);
+			if (!openWizard(wiz)) {
+				removeActivity(fCurrentPartnerTrack, waitAct);
+			} else {
+				added = waitAct;
+			}
+			break;
 		}
 		if (added != null) {
 			adjust(false);
@@ -860,25 +855,30 @@ public class ActivitySection extends TreeSection {
 		}
 	}
 
+	private void initializeWait(XMLWaitActivity waitAct) {
+		waitAct.setWaitForMilliseconds(1000);
+	}
+
 	/**
-	 * Functionality for choosing a service etc if only one service is
-	 * available in the WSDL -> saves much effort
+	 * Functionality for choosing a service etc if only one service is available
+	 * in the WSDL -> saves much effort
 	 * 
-	 * Because this WSDL4J version does not use generics, we suppress warnings here 
+	 * Because this WSDL4J version does not use generics, we suppress warnings
+	 * here
 	 */
 	@SuppressWarnings("unchecked")
 	private void prefillDataIfOnlyOneChoiceExists(XMLSoapActivity operation) {
 		XMLTrack track = ActivityUtil.getEnclosingTrack(operation);
-		if(track == null) {
+		if (track == null) {
 			return;
 		}
-		
+
 		try {
 			Definition wsdlForPartner = getEditor().getWsdlForPartner(track);
-			if(wsdlForPartner == null) {
+			if (wsdlForPartner == null) {
 				return;
 			}
-			
+
 			Map services = wsdlForPartner.getServices();
 			if (services.size() == 1) {
 				Service service = (Service) services.values().iterator().next();
@@ -889,11 +889,9 @@ public class ActivitySection extends TreeSection {
 					Port port = (Port) ports.values().iterator().next();
 					operation.setPort(port.getName());
 
-					List operations = port.getBinding().getPortType()
-							.getOperations();
+					List operations = port.getBinding().getPortType().getOperations();
 					if (operations.size() == 1) {
-						operation.setOperation(((Operation) operations.get(0))
-								.getName());
+						operation.setOperation(((Operation) operations.get(0)).getName());
 					}
 				}
 
@@ -904,10 +902,10 @@ public class ActivitySection extends TreeSection {
 	}
 
 	private void initializeTwoWay(XMLTwoWayActivity sendRcvOp) {
-		if(sendRcvOp == null) {
+		if (sendRcvOp == null) {
 			return;
 		}
-		
+
 		sendRcvOp.setService(new QName(""));
 		sendRcvOp.setPort("");
 		sendRcvOp.setOperation("");

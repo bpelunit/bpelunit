@@ -33,7 +33,7 @@ public abstract class ActivityWizard extends Wizard {
 	/**
 	 * The code of the startup page
 	 */
-	private WizardPageCode fStartupPageCode;
+	WizardPageCode fStartupPageCode;
 
 	/**
 	 * Activity edit mode
@@ -47,19 +47,9 @@ public abstract class ActivityWizard extends Wizard {
 		setWindowTitle(getPageName());
 	}
 
-	public BPELUnitEditor getEditor() {
-		return fPage.getSuiteEditor();
-	}
 
-	public XMLTestSuite getTestSuite() {
-		return getEditor().getTestSuite();
-	}
 
 	protected abstract String getPageName();
-
-	public void setStart(WizardPageCode code) {
-		fStartupPageCode= code;
-	}
 
 	@Override
 	public IWizardPage getStartingPage() {
@@ -112,4 +102,16 @@ public abstract class ActivityWizard extends Wizard {
 		return fMode;
 	}
 
+	public BPELUnitEditor getEditor() {
+		return fPage.getSuiteEditor();
+	}
+
+	public XMLTestSuite getTestSuite() {
+		return getEditor().getTestSuite();
+	}
+
+	public void setStart(WizardPageCode code) {
+		fStartupPageCode = code;
+	}
+	
 }

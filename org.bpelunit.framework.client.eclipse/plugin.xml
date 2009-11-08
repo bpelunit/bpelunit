@@ -189,5 +189,13 @@
             file="doc/reference.xml"
             primary="false"/>
    </extension>
+   <extension
+         point="org.bpelunit.framework.client.eclipse.headerProcessor">
+      <headerProcessor
+            id="org.bpelunit.framework.client.eclipse.odeHeaderProcessor"
+            name="Apache ODE Header Processor"
+            processorClass="org.bpelunit.framework.control.soap.OdeHeaderProcessor">
+      </headerProcessor>
+   </extension>
 
 </plugin>

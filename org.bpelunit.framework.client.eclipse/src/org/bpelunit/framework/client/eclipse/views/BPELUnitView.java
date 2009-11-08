@@ -82,9 +82,9 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 	class TestSessionChangedListener implements ISelectionChangedListener {
 
 		public void selectionChanged(SelectionChangedEvent event) {
-			ISelection selection= event.getSelection();
+			ISelection selection = event.getSelection();
 			if (selection instanceof IStructuredSelection) {
-				Object o= ((IStructuredSelection) selection).getFirstElement();
+				Object o = ((IStructuredSelection) selection).getFirstElement();
 				if (o instanceof ITestArtefact)
 					handleSelected((ITestArtefact) o);
 			}
@@ -98,67 +98,79 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 	}
 
 	/**
-	 * This is a callback that will allow us to create the viewer and initialize it.
+	 * This is a callback that will allow us to create the viewer and initialize
+	 * it.
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
 
-		GridLayout gridLayout= new GridLayout();
-		gridLayout.marginWidth= 0;
-		gridLayout.marginHeight= 0;
+		GridLayout gridLayout = new GridLayout();
+		gridLayout.marginWidth = 0;
+		gridLayout.marginHeight = 0;
 		parent.setLayout(gridLayout);
 
-		fTestInfoLabel= new Label(parent, SWT.LEFT);
+		fTestInfoLabel = new Label(parent, SWT.LEFT);
 		fTestInfoLabel.setText(" BPELUnit Eclipse Runner");
-		fTestInfoLabel.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+		fTestInfoLabel.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+				| GridData.HORIZONTAL_ALIGN_FILL));
 
-		fCounterComposite= createProgressCountPanel(parent);
-		fCounterComposite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-		SashForm sashForm= createSashForm(parent);
+		fCounterComposite = createProgressCountPanel(parent);
+		fCounterComposite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+				| GridData.HORIZONTAL_ALIGN_FILL));
+		SashForm sashForm = createSashForm(parent);
 		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		drillDownAdapter= new DrillDownAdapter(fTreeViewer);
+		drillDownAdapter = new DrillDownAdapter(fTreeViewer);
 		makeActions();
 		contributeToActionBars();
 
 	}
 
 	protected Composite createProgressCountPanel(Composite parent) {
-		Composite composite= new Composite(parent, SWT.NONE);
-		GridLayout layout= new GridLayout();
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout();
 		composite.setLayout(layout);
-		layout.numColumns= 1;
-		layout.verticalSpacing= 0;
+		layout.numColumns = 1;
+		layout.verticalSpacing = 0;
 
 		createImages();
 
-		fCounterPanel= new CounterPanel(composite);
-		fCounterPanel.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+		fCounterPanel = new CounterPanel(composite);
+		fCounterPanel.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+				| GridData.HORIZONTAL_ALIGN_FILL));
 
-		fTestCaseProgress= new ProgressPanel(composite, "Test Cases");
-		fActivityProgress= new ProgressPanel(composite, "Activities");
+		fTestCaseProgress = new ProgressPanel(composite, "Test Cases");
+		fActivityProgress = new ProgressPanel(composite, "Activities");
 
 		return composite;
 	}
 
 	private void createImages() {
-		fTestCaseIcons= create("testCase");
-		fPartnerTrackIcons= create("partnerTrack");
-		fActivityIcons= create("activity");
-		fDataPackageIcons= create("dataPackage");
+		fTestCaseIcons = create("testCase");
+		fPartnerTrackIcons = create("partnerTrack");
+		fActivityIcons = create("activity");
+		fDataPackageIcons = create("dataPackage");
 
-		fDetailViewIcon= createImage("icons/bpel.gif");
-		fStandardStatusIcon= createImage("icons/plainData.gif");
+		fDetailViewIcon = createImage("icons/bpel.gif");
+		fStandardStatusIcon = createImage("icons/plainData.gif");
 	}
 
 	private Map<StatusCode, Image> create(String name) {
-		Map<StatusCode, Image> map= new HashMap<StatusCode, Image>();
+		Map<StatusCode, Image> map = new HashMap<StatusCode, Image>();
 		map.put(StatusCode.PASSED, createImage("icons/" + name + "_pass.gif"));
-		map.put(StatusCode.INPROGRESS, createImage("icons/" + name + "_inprogress.gif"));
+		
+		if ("activity".equals(name)) {
+			// we need inprogress only for wait activity
+			map.put(StatusCode.INPROGRESS, createImage("icons/" + name
+					+ "_inprogress.gif"));
+		}
+		
 		map.put(StatusCode.ERROR, createImage("icons/" + name + "_err.gif"));
 		map.put(StatusCode.FAILED, createImage("icons/" + name + "_fail.gif"));
-		map.put(StatusCode.NOTYETSPECIFIED, createImage("icons/" + name + "_notyet.gif"));
-		map.put(StatusCode.ABORTED, createImage("icons/" + name + "_aborted.gif"));
+		map.put(StatusCode.NOTYETSPECIFIED, createImage("icons/" + name
+				+ "_notyet.gif"));
+		map.put(StatusCode.ABORTED, createImage("icons/" + name
+				+ "_aborted.gif"));
 		return map;
 	}
 
@@ -187,14 +199,15 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 	}
 
 	private SashForm createSashForm(Composite parent) {
-		fSashForm= new SashForm(parent, SWT.VERTICAL);
+		fSashForm = new SashForm(parent, SWT.VERTICAL);
 
-		ViewForm top= new ViewForm(fSashForm, SWT.NONE);
+		ViewForm top = new ViewForm(fSashForm, SWT.NONE);
 
-		Composite empty= new Composite(top, SWT.NONE);
+		Composite empty = new Composite(top, SWT.NONE);
 		empty.setLayout(new Layout() {
 			@Override
-			protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
+			protected Point computeSize(Composite composite, int wHint,
+					int hHint, boolean flushCache) {
 				return new Point(1, 1); // (0, 0) does not work with
 				// super-intelligent ViewForm
 			}
@@ -207,25 +220,26 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 		// makes ViewForm draw the horizontal separator line:
 		top.setTopLeft(empty);
 
-		fTreeViewer= new TreeViewer(top, SWT.V_SCROLL | SWT.SINGLE);
+		fTreeViewer = new TreeViewer(top, SWT.V_SCROLL | SWT.SINGLE);
 		fTreeViewer.setUseHashlookup(true);
 		fTreeViewer.setContentProvider(new TestSessionTreeContentProvider());
 		fTreeViewer.setLabelProvider(new TestSessionLabelProvider(this));
-		fTreeViewer.addSelectionChangedListener(new TestSessionChangedListener());
+		fTreeViewer
+				.addSelectionChangedListener(new TestSessionChangedListener());
 
 		top.setContent(fTreeViewer.getTree());
 
-		ViewForm bottom= new ViewForm(fSashForm, SWT.NONE);
+		ViewForm bottom = new ViewForm(fSashForm, SWT.NONE);
 
-		CLabel label= new CLabel(bottom, SWT.NONE);
+		CLabel label = new CLabel(bottom, SWT.NONE);
 		label.setText("Details:");
 		label.setImage(fDetailViewIcon);
 		bottom.setTopLeft(label);
 
-		ToolBar failureToolBar= new ToolBar(bottom, SWT.FLAT | SWT.WRAP);
+		ToolBar failureToolBar = new ToolBar(bottom, SWT.FLAT | SWT.WRAP);
 		bottom.setTopCenter(failureToolBar);
 
-		fDetailPane= new DetailPane(bottom, failureToolBar);
+		fDetailPane = new DetailPane(bottom, failureToolBar);
 		bottom.setContent(fDetailPane.getComposite());
 
 		fSashForm.setWeights(new int[] { 50, 50 });
@@ -233,7 +247,7 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 	}
 
 	private void contributeToActionBars() {
-		IActionBars bars= getViewSite().getActionBars();
+		IActionBars bars = getViewSite().getActionBars();
 		fillLocalPullDown(bars.getMenuManager());
 		fillLocalToolBar(bars.getToolBarManager());
 	}
@@ -244,7 +258,6 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 		manager.add(fReRunAction);
 	}
 
-
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(fStopTestAction);
 		manager.add(fReRunAction);
@@ -253,7 +266,7 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 	}
 
 	private void makeActions() {
-		fStopTestAction= new Action() {
+		fStopTestAction = new Action() {
 			@Override
 			public void run() {
 				fStopTestAction.setEnabled(false);
@@ -262,10 +275,11 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 		};
 		fStopTestAction.setText("Stop Test");
 		fStopTestAction.setToolTipText("Stops the current test execution");
-		fStopTestAction.setImageDescriptor(BPELUnitActivator.getImageDescriptor("icons/stop.gif"));
+		fStopTestAction.setImageDescriptor(BPELUnitActivator
+				.getImageDescriptor("icons/stop.gif"));
 		fStopTestAction.setEnabled(false);
 
-		fReRunAction= new Action() {
+		fReRunAction = new Action() {
 			@Override
 			public void run() {
 				fTestRunSession.relaunchTest();
@@ -273,7 +287,8 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 		};
 		fReRunAction.setText("Re-Run Last Test Suite");
 		fReRunAction.setToolTipText("Re-Runs the current test");
-		fReRunAction.setImageDescriptor(BPELUnitActivator.getImageDescriptor("icons/relaunch.gif"));
+		fReRunAction.setImageDescriptor(BPELUnitActivator
+				.getImageDescriptor("icons/relaunch.gif"));
 		fReRunAction.setEnabled(false);
 	}
 
@@ -286,13 +301,13 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 	}
 
 	/**
-	 * Registers a new launch session. This updates the view and registers it to the new suite as a
-	 * listener.
+	 * Registers a new launch session. This updates the view and registers it to
+	 * the new suite as a listener.
 	 * 
 	 */
 	public void registerLaunchSession(TestRunSession session) {
 
-		fTestRunSession= session;
+		fTestRunSession = session;
 
 		session.getSuite().addResultListener(this);
 
@@ -304,14 +319,16 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 		fActivityProgress.reset();
 
 		// Set counter panel
-		fCounterPanel.reset(session.getSuite().getName(), session.getSuite().getTestCaseCount());
+		fCounterPanel.reset(session.getSuite().getName(), session.getSuite()
+				.getTestCaseCount());
 
 		// Actions
 		fStopTestAction.setEnabled(true);
 		fReRunAction.setEnabled(true);
 
 		// Info
-		fTestInfoLabel.setText(" Now starting test: " + session.getSuite().getName());
+		fTestInfoLabel.setText(" Now starting test: "
+				+ session.getSuite().getName());
 	}
 
 	public void deregisterLaunchSession(TestRunSession session) {
@@ -319,7 +336,8 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 		fTestRunSession.getSuite().removeResultListener(this);
 		fStopTestAction.setEnabled(false);
 
-		fTestInfoLabel.setText(" Test run completed: " + session.getSuite().getName());
+		fTestInfoLabel.setText(" Test run completed: "
+				+ session.getSuite().getName());
 	}
 
 	public void progress(final ITestArtefact testArtefact) {
@@ -328,9 +346,11 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 			public void run() {
 
 				if (testArtefact instanceof Activity) {
-					fActivityProgress.stepForward(testArtefact.getStatus().hasProblems());
+					fActivityProgress.stepForward(testArtefact.getStatus()
+							.hasProblems());
 					fTreeViewer.reveal(testArtefact);
-					// Bug: Do not check for .isAborted() in activities; they might only
+					// Bug: Do not check for .isAborted() in activities; they
+					// might only
 					// be aborted due to some error in another activity. Don't
 					// make the bar gray in those cases.
 				}
@@ -344,9 +364,11 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				fTestCaseProgress.stepForward(testCase.getStatus().hasProblems());
+				fTestCaseProgress.stepForward(testCase.getStatus()
+						.hasProblems());
 				// Normally, a complete test case is only aborted
-				// if the user aborted it. In all other cases, it will have an error or failure.
+				// if the user aborted it. In all other cases, it will have an
+				// error or failure.
 				if (testCase.getStatus().isAborted())
 					abortTest();
 				fCounterPanel.addRun(testCase.getStatus().getCode());
@@ -360,7 +382,8 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 			public void run() {
 				fActivityProgress.reset(testCase.getActivityCount());
 				fTreeViewer.update(testCase, null);
-				fTestInfoLabel.setText(" Running tests of suite: " + fTestRunSession.getSuite().getName());
+				fTestInfoLabel.setText(" Running tests of suite: "
+						+ fTestRunSession.getSuite().getName());
 			}
 		});
 	}
@@ -373,7 +396,8 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 			return fPartnerTrackIcons.get(element.getStatus().getCode());
 		if (element instanceof Activity)
 			return fActivityIcons.get(element.getStatus().getCode());
-		if (element instanceof SendDataSpecification || element instanceof ReceiveDataSpecification)
+		if (element instanceof SendDataSpecification
+				|| element instanceof ReceiveDataSpecification)
 			return fDataPackageIcons.get(element.getStatus().getCode());
 
 		// Fall-through: StatusData, ReceiveCondition, DataCopy

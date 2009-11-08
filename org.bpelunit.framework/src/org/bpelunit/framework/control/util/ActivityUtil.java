@@ -42,7 +42,7 @@ public class ActivityUtil {
 		SEND_ONLY("sendOnly", "Send Asynchronous"), RECEIVE_ONLY("receiveOnly", "Receive Asynchronous"), SEND_RECEIVE_SYNC("sendReceive",
 				"Send/Receive Synchronous"), RECEIVE_SEND_SYNC("receiveSend", "Receive/Send Synchronous"), SEND_RECEIVE_ASYNC(
 				"sendReceiveAsynchronous", "Send/Receive Asynchronous"), RECEIVE_SEND_ASYNC("receiveSendAsynchronous", "Receive/Send Asynchronous"), SEND(
-				"send", "Send"), RECEIVE("receive", "Receive");
+				"send", "Send"), RECEIVE("receive", "Receive"), WAIT("wait", "Wait");
 
 		private String fXmlName;
 		private String fNiceName;
