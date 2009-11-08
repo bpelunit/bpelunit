@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLCopy extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLCopy.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s21B6514B5535163199D3BCDDAA42EFA0").resolveHandle("copy9f51type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLCopy.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("copy9f51type");
     
     /**
      * Gets the "from" attribute
@@ -115,19 +115,19 @@ public interface XMLCopy extends org.apache.xmlbeans.XmlObject
         public static org.bpelunit.framework.xml.suite.XMLCopy parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
           return (org.bpelunit.framework.xml.suite.XMLCopy) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.suite.XMLCopy parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.suite.XMLCopy) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.suite.XMLCopy parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.suite.XMLCopy) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }
         

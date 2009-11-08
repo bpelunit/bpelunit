@@ -11,9 +11,8 @@ package org.bpelunit.framework.xml.suite.impl;
  *
  * This is a complex type.
  */
-public class XMLSendActivityImpl extends org.bpelunit.framework.xml.suite.impl.XMLActivityImpl implements org.bpelunit.framework.xml.suite.XMLSendActivity
+public class XMLSendActivityImpl extends org.bpelunit.framework.xml.suite.impl.XMLSoapActivityImpl implements org.bpelunit.framework.xml.suite.XMLSendActivity
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLSendActivityImpl(org.apache.xmlbeans.SchemaType sType)
     {

@@ -16,16 +16,10 @@ package org.bpelunit.framework.xml.extension;
 public interface XMLBPELUnitCoreExtensions extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLBPELUnitCoreExtensions.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s21B6514B5535163199D3BCDDAA42EFA0").resolveHandle("bpelunitcoreextensionsdf41type");
-    
-    /**
-     * Gets a List of "deployer" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> getDeployerList();
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLBPELUnitCoreExtensions.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("bpelunitcoreextensionsdf41type");
     
     /**
      * Gets array of all "deployer" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.extension.XMLExtension[] getDeployerArray();
     
@@ -65,13 +59,7 @@ public interface XMLBPELUnitCoreExtensions extends org.apache.xmlbeans.XmlObject
     void removeDeployer(int i);
     
     /**
-     * Gets a List of "encoder" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> getEncoderList();
-    
-    /**
      * Gets array of all "encoder" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.extension.XMLExtension[] getEncoderArray();
     
@@ -111,13 +99,7 @@ public interface XMLBPELUnitCoreExtensions extends org.apache.xmlbeans.XmlObject
     void removeEncoder(int i);
     
     /**
-     * Gets a List of "headerProcessor" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> getHeaderProcessorList();
-    
-    /**
      * Gets array of all "headerProcessor" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.extension.XMLExtension[] getHeaderProcessorArray();
     
@@ -213,19 +195,19 @@ public interface XMLBPELUnitCoreExtensions extends org.apache.xmlbeans.XmlObject
         public static org.bpelunit.framework.xml.extension.XMLBPELUnitCoreExtensions parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
           return (org.bpelunit.framework.xml.extension.XMLBPELUnitCoreExtensions) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.extension.XMLBPELUnitCoreExtensions parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.extension.XMLBPELUnitCoreExtensions) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.extension.XMLBPELUnitCoreExtensions parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.extension.XMLBPELUnitCoreExtensions) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }
         

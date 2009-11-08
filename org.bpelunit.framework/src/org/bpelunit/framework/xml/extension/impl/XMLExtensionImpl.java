@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.extension.impl;
  */
 public class XMLExtensionImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.extension.XMLExtension
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLExtensionImpl(org.apache.xmlbeans.SchemaType sType)
     {

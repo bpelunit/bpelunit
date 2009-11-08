@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLTrack
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLTrackImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -35,54 +34,14 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     
     
     /**
-     * Gets a List of "sendOnly" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLSendActivity> getSendOnlyList()
-    {
-        final class SendOnlyList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLSendActivity>
-        {
-            public org.bpelunit.framework.xml.suite.XMLSendActivity get(int i)
-                { return XMLTrackImpl.this.getSendOnlyArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLSendActivity set(int i, org.bpelunit.framework.xml.suite.XMLSendActivity o)
-            {
-                org.bpelunit.framework.xml.suite.XMLSendActivity old = XMLTrackImpl.this.getSendOnlyArray(i);
-                XMLTrackImpl.this.setSendOnlyArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLSendActivity o)
-                { XMLTrackImpl.this.insertNewSendOnly(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLSendActivity remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLSendActivity old = XMLTrackImpl.this.getSendOnlyArray(i);
-                XMLTrackImpl.this.removeSendOnly(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLTrackImpl.this.sizeOfSendOnlyArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new SendOnlyList();
-        }
-    }
-    
-    /**
      * Gets array of all "sendOnly" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLSendActivity[] getSendOnlyArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLSendActivity> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLSendActivity>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(SENDONLY$0, targetList);
             org.bpelunit.framework.xml.suite.XMLSendActivity[] result = new org.bpelunit.framework.xml.suite.XMLSendActivity[targetList.size()];
             targetList.toArray(result);
@@ -191,54 +150,14 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
-     * Gets a List of "receiveOnly" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLReceiveActivity> getReceiveOnlyList()
-    {
-        final class ReceiveOnlyList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLReceiveActivity>
-        {
-            public org.bpelunit.framework.xml.suite.XMLReceiveActivity get(int i)
-                { return XMLTrackImpl.this.getReceiveOnlyArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLReceiveActivity set(int i, org.bpelunit.framework.xml.suite.XMLReceiveActivity o)
-            {
-                org.bpelunit.framework.xml.suite.XMLReceiveActivity old = XMLTrackImpl.this.getReceiveOnlyArray(i);
-                XMLTrackImpl.this.setReceiveOnlyArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLReceiveActivity o)
-                { XMLTrackImpl.this.insertNewReceiveOnly(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLReceiveActivity remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLReceiveActivity old = XMLTrackImpl.this.getReceiveOnlyArray(i);
-                XMLTrackImpl.this.removeReceiveOnly(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLTrackImpl.this.sizeOfReceiveOnlyArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new ReceiveOnlyList();
-        }
-    }
-    
-    /**
      * Gets array of all "receiveOnly" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLReceiveActivity[] getReceiveOnlyArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLReceiveActivity> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLReceiveActivity>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(RECEIVEONLY$2, targetList);
             org.bpelunit.framework.xml.suite.XMLReceiveActivity[] result = new org.bpelunit.framework.xml.suite.XMLReceiveActivity[targetList.size()];
             targetList.toArray(result);
@@ -347,54 +266,14 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
-     * Gets a List of "sendReceive" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getSendReceiveList()
-    {
-        final class SendReceiveList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>
-        {
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity get(int i)
-                { return XMLTrackImpl.this.getSendReceiveArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity set(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
-            {
-                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getSendReceiveArray(i);
-                XMLTrackImpl.this.setSendReceiveArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
-                { XMLTrackImpl.this.insertNewSendReceive(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getSendReceiveArray(i);
-                XMLTrackImpl.this.removeSendReceive(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLTrackImpl.this.sizeOfSendReceiveArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new SendReceiveList();
-        }
-    }
-    
-    /**
      * Gets array of all "sendReceive" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getSendReceiveArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(SENDRECEIVE$4, targetList);
             org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] result = new org.bpelunit.framework.xml.suite.XMLTwoWayActivity[targetList.size()];
             targetList.toArray(result);
@@ -503,54 +382,14 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
-     * Gets a List of "receiveSend" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getReceiveSendList()
-    {
-        final class ReceiveSendList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>
-        {
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity get(int i)
-                { return XMLTrackImpl.this.getReceiveSendArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity set(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
-            {
-                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getReceiveSendArray(i);
-                XMLTrackImpl.this.setReceiveSendArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
-                { XMLTrackImpl.this.insertNewReceiveSend(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getReceiveSendArray(i);
-                XMLTrackImpl.this.removeReceiveSend(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLTrackImpl.this.sizeOfReceiveSendArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new ReceiveSendList();
-        }
-    }
-    
-    /**
      * Gets array of all "receiveSend" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getReceiveSendArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(RECEIVESEND$6, targetList);
             org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] result = new org.bpelunit.framework.xml.suite.XMLTwoWayActivity[targetList.size()];
             targetList.toArray(result);
@@ -659,54 +498,14 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
-     * Gets a List of "receiveSendAsynchronous" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getReceiveSendAsynchronousList()
-    {
-        final class ReceiveSendAsynchronousList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>
-        {
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity get(int i)
-                { return XMLTrackImpl.this.getReceiveSendAsynchronousArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity set(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
-            {
-                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getReceiveSendAsynchronousArray(i);
-                XMLTrackImpl.this.setReceiveSendAsynchronousArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
-                { XMLTrackImpl.this.insertNewReceiveSendAsynchronous(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getReceiveSendAsynchronousArray(i);
-                XMLTrackImpl.this.removeReceiveSendAsynchronous(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLTrackImpl.this.sizeOfReceiveSendAsynchronousArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new ReceiveSendAsynchronousList();
-        }
-    }
-    
-    /**
      * Gets array of all "receiveSendAsynchronous" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getReceiveSendAsynchronousArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(RECEIVESENDASYNCHRONOUS$8, targetList);
             org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] result = new org.bpelunit.framework.xml.suite.XMLTwoWayActivity[targetList.size()];
             targetList.toArray(result);
@@ -815,54 +614,14 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
-     * Gets a List of "sendReceiveAsynchronous" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getSendReceiveAsynchronousList()
-    {
-        final class SendReceiveAsynchronousList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>
-        {
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity get(int i)
-                { return XMLTrackImpl.this.getSendReceiveAsynchronousArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity set(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
-            {
-                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getSendReceiveAsynchronousArray(i);
-                XMLTrackImpl.this.setSendReceiveAsynchronousArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
-                { XMLTrackImpl.this.insertNewSendReceiveAsynchronous(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getSendReceiveAsynchronousArray(i);
-                XMLTrackImpl.this.removeSendReceiveAsynchronous(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLTrackImpl.this.sizeOfSendReceiveAsynchronousArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new SendReceiveAsynchronousList();
-        }
-    }
-    
-    /**
      * Gets array of all "sendReceiveAsynchronous" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getSendReceiveAsynchronousArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(SENDRECEIVEASYNCHRONOUS$10, targetList);
             org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] result = new org.bpelunit.framework.xml.suite.XMLTwoWayActivity[targetList.size()];
             targetList.toArray(result);

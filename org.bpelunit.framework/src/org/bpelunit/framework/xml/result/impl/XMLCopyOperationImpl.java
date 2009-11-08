@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLCopyOperationImpl extends org.bpelunit.framework.xml.result.impl.XMLArtefactImpl implements org.bpelunit.framework.xml.result.XMLCopyOperation
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLCopyOperationImpl(org.apache.xmlbeans.SchemaType sType)
     {

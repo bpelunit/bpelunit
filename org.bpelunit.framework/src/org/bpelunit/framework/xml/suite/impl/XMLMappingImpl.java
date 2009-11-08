@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLMappingImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLMapping
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLMappingImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -25,54 +24,14 @@ public class XMLMappingImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     
     
     /**
-     * Gets a List of "copy" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLCopy> getCopyList()
-    {
-        final class CopyList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLCopy>
-        {
-            public org.bpelunit.framework.xml.suite.XMLCopy get(int i)
-                { return XMLMappingImpl.this.getCopyArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLCopy set(int i, org.bpelunit.framework.xml.suite.XMLCopy o)
-            {
-                org.bpelunit.framework.xml.suite.XMLCopy old = XMLMappingImpl.this.getCopyArray(i);
-                XMLMappingImpl.this.setCopyArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLCopy o)
-                { XMLMappingImpl.this.insertNewCopy(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLCopy remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLCopy old = XMLMappingImpl.this.getCopyArray(i);
-                XMLMappingImpl.this.removeCopy(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLMappingImpl.this.sizeOfCopyArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new CopyList();
-        }
-    }
-    
-    /**
      * Gets array of all "copy" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLCopy[] getCopyArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLCopy> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLCopy>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(COPY$0, targetList);
             org.bpelunit.framework.xml.suite.XMLCopy[] result = new org.bpelunit.framework.xml.suite.XMLCopy[targetList.size()];
             targetList.toArray(result);

@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.config.impl;
  */
 public class XMLTestConfigurationImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.config.XMLTestConfiguration
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLTestConfigurationImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -25,54 +24,14 @@ public class XMLTestConfigurationImpl extends org.apache.xmlbeans.impl.values.Xm
     
     
     /**
-     * Gets a List of "configuration" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.config.XMLConfiguration> getConfigurationList()
-    {
-        final class ConfigurationList extends java.util.AbstractList<org.bpelunit.framework.xml.config.XMLConfiguration>
-        {
-            public org.bpelunit.framework.xml.config.XMLConfiguration get(int i)
-                { return XMLTestConfigurationImpl.this.getConfigurationArray(i); }
-            
-            public org.bpelunit.framework.xml.config.XMLConfiguration set(int i, org.bpelunit.framework.xml.config.XMLConfiguration o)
-            {
-                org.bpelunit.framework.xml.config.XMLConfiguration old = XMLTestConfigurationImpl.this.getConfigurationArray(i);
-                XMLTestConfigurationImpl.this.setConfigurationArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.config.XMLConfiguration o)
-                { XMLTestConfigurationImpl.this.insertNewConfiguration(i).set(o); }
-            
-            public org.bpelunit.framework.xml.config.XMLConfiguration remove(int i)
-            {
-                org.bpelunit.framework.xml.config.XMLConfiguration old = XMLTestConfigurationImpl.this.getConfigurationArray(i);
-                XMLTestConfigurationImpl.this.removeConfiguration(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLTestConfigurationImpl.this.sizeOfConfigurationArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new ConfigurationList();
-        }
-    }
-    
-    /**
      * Gets array of all "configuration" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.config.XMLConfiguration[] getConfigurationArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.config.XMLConfiguration> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.config.XMLConfiguration>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(CONFIGURATION$0, targetList);
             org.bpelunit.framework.xml.config.XMLConfiguration[] result = new org.bpelunit.framework.xml.config.XMLConfiguration[targetList.size()];
             targetList.toArray(result);

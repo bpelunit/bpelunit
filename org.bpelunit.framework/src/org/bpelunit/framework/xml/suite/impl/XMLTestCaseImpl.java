@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLTestCaseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLTestCase
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLTestCaseImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -37,54 +36,14 @@ public class XMLTestCaseImpl extends org.apache.xmlbeans.impl.values.XmlComplexC
     
     
     /**
-     * Gets a List of "property" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLProperty> getPropertyList()
-    {
-        final class PropertyList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLProperty>
-        {
-            public org.bpelunit.framework.xml.suite.XMLProperty get(int i)
-                { return XMLTestCaseImpl.this.getPropertyArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLProperty set(int i, org.bpelunit.framework.xml.suite.XMLProperty o)
-            {
-                org.bpelunit.framework.xml.suite.XMLProperty old = XMLTestCaseImpl.this.getPropertyArray(i);
-                XMLTestCaseImpl.this.setPropertyArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLProperty o)
-                { XMLTestCaseImpl.this.insertNewProperty(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLProperty remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLProperty old = XMLTestCaseImpl.this.getPropertyArray(i);
-                XMLTestCaseImpl.this.removeProperty(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLTestCaseImpl.this.sizeOfPropertyArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new PropertyList();
-        }
-    }
-    
-    /**
      * Gets array of all "property" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLProperty[] getPropertyArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLProperty> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLProperty>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(PROPERTY$0, targetList);
             org.bpelunit.framework.xml.suite.XMLProperty[] result = new org.bpelunit.framework.xml.suite.XMLProperty[targetList.size()];
             targetList.toArray(result);
@@ -243,54 +202,14 @@ public class XMLTestCaseImpl extends org.apache.xmlbeans.impl.values.XmlComplexC
     }
     
     /**
-     * Gets a List of "partnerTrack" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLPartnerTrack> getPartnerTrackList()
-    {
-        final class PartnerTrackList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLPartnerTrack>
-        {
-            public org.bpelunit.framework.xml.suite.XMLPartnerTrack get(int i)
-                { return XMLTestCaseImpl.this.getPartnerTrackArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLPartnerTrack set(int i, org.bpelunit.framework.xml.suite.XMLPartnerTrack o)
-            {
-                org.bpelunit.framework.xml.suite.XMLPartnerTrack old = XMLTestCaseImpl.this.getPartnerTrackArray(i);
-                XMLTestCaseImpl.this.setPartnerTrackArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLPartnerTrack o)
-                { XMLTestCaseImpl.this.insertNewPartnerTrack(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLPartnerTrack remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLPartnerTrack old = XMLTestCaseImpl.this.getPartnerTrackArray(i);
-                XMLTestCaseImpl.this.removePartnerTrack(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLTestCaseImpl.this.sizeOfPartnerTrackArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new PartnerTrackList();
-        }
-    }
-    
-    /**
      * Gets array of all "partnerTrack" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLPartnerTrack[] getPartnerTrackArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLPartnerTrack> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLPartnerTrack>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(PARTNERTRACK$4, targetList);
             org.bpelunit.framework.xml.suite.XMLPartnerTrack[] result = new org.bpelunit.framework.xml.suite.XMLPartnerTrack[targetList.size()];
             targetList.toArray(result);

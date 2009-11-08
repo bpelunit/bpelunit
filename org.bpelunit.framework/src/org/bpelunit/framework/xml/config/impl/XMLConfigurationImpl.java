@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.config.impl;
  */
 public class XMLConfigurationImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.config.XMLConfiguration
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLConfigurationImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -27,54 +26,14 @@ public class XMLConfigurationImpl extends org.apache.xmlbeans.impl.values.XmlCom
     
     
     /**
-     * Gets a List of "property" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.config.XMLProperty> getPropertyList()
-    {
-        final class PropertyList extends java.util.AbstractList<org.bpelunit.framework.xml.config.XMLProperty>
-        {
-            public org.bpelunit.framework.xml.config.XMLProperty get(int i)
-                { return XMLConfigurationImpl.this.getPropertyArray(i); }
-            
-            public org.bpelunit.framework.xml.config.XMLProperty set(int i, org.bpelunit.framework.xml.config.XMLProperty o)
-            {
-                org.bpelunit.framework.xml.config.XMLProperty old = XMLConfigurationImpl.this.getPropertyArray(i);
-                XMLConfigurationImpl.this.setPropertyArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.config.XMLProperty o)
-                { XMLConfigurationImpl.this.insertNewProperty(i).set(o); }
-            
-            public org.bpelunit.framework.xml.config.XMLProperty remove(int i)
-            {
-                org.bpelunit.framework.xml.config.XMLProperty old = XMLConfigurationImpl.this.getPropertyArray(i);
-                XMLConfigurationImpl.this.removeProperty(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLConfigurationImpl.this.sizeOfPropertyArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new PropertyList();
-        }
-    }
-    
-    /**
      * Gets array of all "property" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.config.XMLProperty[] getPropertyArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.config.XMLProperty> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.config.XMLProperty>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(PROPERTY$0, targetList);
             org.bpelunit.framework.xml.config.XMLProperty[] result = new org.bpelunit.framework.xml.config.XMLProperty[targetList.size()];
             targetList.toArray(result);

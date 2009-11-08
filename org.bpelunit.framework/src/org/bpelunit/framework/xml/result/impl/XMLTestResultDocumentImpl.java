@@ -14,7 +14,6 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLTestResultDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.result.XMLTestResultDocument
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLTestResultDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {

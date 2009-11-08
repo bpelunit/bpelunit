@@ -14,7 +14,6 @@ package org.bpelunit.framework.xml.config.impl;
  */
 public class XMLTestConfigurationDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.config.XMLTestConfigurationDocument
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLTestConfigurationDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {

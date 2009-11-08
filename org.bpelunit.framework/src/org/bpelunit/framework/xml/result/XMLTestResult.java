@@ -16,16 +16,10 @@ package org.bpelunit.framework.xml.result;
 public interface XMLTestResult extends org.bpelunit.framework.xml.result.XMLArtefact
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestResult.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s21B6514B5535163199D3BCDDAA42EFA0").resolveHandle("testresult337etype");
-    
-    /**
-     * Gets a List of "testCase" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.result.XMLTestCase> getTestCaseList();
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestResult.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("testresult337etype");
     
     /**
      * Gets array of all "testCase" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.result.XMLTestCase[] getTestCaseArray();
     
@@ -121,19 +115,19 @@ public interface XMLTestResult extends org.bpelunit.framework.xml.result.XMLArte
         public static org.bpelunit.framework.xml.result.XMLTestResult parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
           return (org.bpelunit.framework.xml.result.XMLTestResult) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.result.XMLTestResult parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.result.XMLTestResult) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.result.XMLTestResult parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.result.XMLTestResult) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }
         

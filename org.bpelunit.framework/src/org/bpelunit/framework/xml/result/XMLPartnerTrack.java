@@ -16,16 +16,10 @@ package org.bpelunit.framework.xml.result;
 public interface XMLPartnerTrack extends org.bpelunit.framework.xml.result.XMLArtefact
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLPartnerTrack.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s21B6514B5535163199D3BCDDAA42EFA0").resolveHandle("partnertrack9a52type");
-    
-    /**
-     * Gets a List of "activity" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity> getActivityList();
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLPartnerTrack.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("partnertrack9a52type");
     
     /**
      * Gets array of all "activity" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity[] getActivityArray();
     
@@ -72,7 +66,7 @@ public interface XMLPartnerTrack extends org.bpelunit.framework.xml.result.XMLAr
     public interface Activity extends org.bpelunit.framework.xml.result.XMLActivity
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Activity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s21B6514B5535163199D3BCDDAA42EFA0").resolveHandle("activity8907elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Activity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("activity8907elemtype");
         
         /**
          * A factory class with static methods for creating instances
@@ -148,19 +142,19 @@ public interface XMLPartnerTrack extends org.bpelunit.framework.xml.result.XMLAr
         public static org.bpelunit.framework.xml.result.XMLPartnerTrack parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
           return (org.bpelunit.framework.xml.result.XMLPartnerTrack) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.result.XMLPartnerTrack parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.result.XMLPartnerTrack) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.result.XMLPartnerTrack parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.result.XMLPartnerTrack) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }
         

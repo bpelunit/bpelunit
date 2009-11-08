@@ -11,9 +11,8 @@ package org.bpelunit.framework.xml.suite.impl;
  *
  * This is a complex type.
  */
-public class XMLTwoWayActivityImpl extends org.bpelunit.framework.xml.suite.impl.XMLActivityImpl implements org.bpelunit.framework.xml.suite.XMLTwoWayActivity
+public class XMLTwoWayActivityImpl extends org.bpelunit.framework.xml.suite.impl.XMLSoapActivityImpl implements org.bpelunit.framework.xml.suite.XMLTwoWayActivity
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLTwoWayActivityImpl(org.apache.xmlbeans.SchemaType sType)
     {

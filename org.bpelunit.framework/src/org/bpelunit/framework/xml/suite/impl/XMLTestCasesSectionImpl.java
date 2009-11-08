@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLTestCasesSectionImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLTestCasesSection
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLTestCasesSectionImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -25,54 +24,14 @@ public class XMLTestCasesSectionImpl extends org.apache.xmlbeans.impl.values.Xml
     
     
     /**
-     * Gets a List of "testCase" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLTestCase> getTestCaseList()
-    {
-        final class TestCaseList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLTestCase>
-        {
-            public org.bpelunit.framework.xml.suite.XMLTestCase get(int i)
-                { return XMLTestCasesSectionImpl.this.getTestCaseArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLTestCase set(int i, org.bpelunit.framework.xml.suite.XMLTestCase o)
-            {
-                org.bpelunit.framework.xml.suite.XMLTestCase old = XMLTestCasesSectionImpl.this.getTestCaseArray(i);
-                XMLTestCasesSectionImpl.this.setTestCaseArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLTestCase o)
-                { XMLTestCasesSectionImpl.this.insertNewTestCase(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLTestCase remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLTestCase old = XMLTestCasesSectionImpl.this.getTestCaseArray(i);
-                XMLTestCasesSectionImpl.this.removeTestCase(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLTestCasesSectionImpl.this.sizeOfTestCaseArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new TestCaseList();
-        }
-    }
-    
-    /**
      * Gets array of all "testCase" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLTestCase[] getTestCaseArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLTestCase> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLTestCase>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(TESTCASE$0, targetList);
             org.bpelunit.framework.xml.suite.XMLTestCase[] result = new org.bpelunit.framework.xml.suite.XMLTestCase[targetList.size()];
             targetList.toArray(result);

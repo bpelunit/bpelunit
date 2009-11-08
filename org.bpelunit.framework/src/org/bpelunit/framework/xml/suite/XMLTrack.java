@@ -16,16 +16,10 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLTrack extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTrack.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s21B6514B5535163199D3BCDDAA42EFA0").resolveHandle("track70edtype");
-    
-    /**
-     * Gets a List of "sendOnly" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.suite.XMLSendActivity> getSendOnlyList();
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTrack.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("track70edtype");
     
     /**
      * Gets array of all "sendOnly" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLSendActivity[] getSendOnlyArray();
     
@@ -65,13 +59,7 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeSendOnly(int i);
     
     /**
-     * Gets a List of "receiveOnly" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.suite.XMLReceiveActivity> getReceiveOnlyList();
-    
-    /**
      * Gets array of all "receiveOnly" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLReceiveActivity[] getReceiveOnlyArray();
     
@@ -111,13 +99,7 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeReceiveOnly(int i);
     
     /**
-     * Gets a List of "sendReceive" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getSendReceiveList();
-    
-    /**
      * Gets array of all "sendReceive" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getSendReceiveArray();
     
@@ -157,13 +139,7 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeSendReceive(int i);
     
     /**
-     * Gets a List of "receiveSend" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getReceiveSendList();
-    
-    /**
      * Gets array of all "receiveSend" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getReceiveSendArray();
     
@@ -203,13 +179,7 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeReceiveSend(int i);
     
     /**
-     * Gets a List of "receiveSendAsynchronous" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getReceiveSendAsynchronousList();
-    
-    /**
      * Gets array of all "receiveSendAsynchronous" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getReceiveSendAsynchronousArray();
     
@@ -249,13 +219,7 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeReceiveSendAsynchronous(int i);
     
     /**
-     * Gets a List of "sendReceiveAsynchronous" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getSendReceiveAsynchronousList();
-    
-    /**
      * Gets array of all "sendReceiveAsynchronous" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getSendReceiveAsynchronousArray();
     
@@ -351,19 +315,19 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
         public static org.bpelunit.framework.xml.suite.XMLTrack parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
           return (org.bpelunit.framework.xml.suite.XMLTrack) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.suite.XMLTrack parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.suite.XMLTrack) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.suite.XMLTrack parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.suite.XMLTrack) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }
         

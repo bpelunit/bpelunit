@@ -11,9 +11,8 @@ package org.bpelunit.framework.xml.suite.impl;
  *
  * This is a complex type.
  */
-public class XMLReceiveActivityImpl extends org.bpelunit.framework.xml.suite.impl.XMLActivityImpl implements org.bpelunit.framework.xml.suite.XMLReceiveActivity
+public class XMLReceiveActivityImpl extends org.bpelunit.framework.xml.suite.impl.XMLSoapActivityImpl implements org.bpelunit.framework.xml.suite.XMLReceiveActivity
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLReceiveActivityImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -27,54 +26,14 @@ public class XMLReceiveActivityImpl extends org.bpelunit.framework.xml.suite.imp
     
     
     /**
-     * Gets a List of "condition" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLCondition> getConditionList()
-    {
-        final class ConditionList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLCondition>
-        {
-            public org.bpelunit.framework.xml.suite.XMLCondition get(int i)
-                { return XMLReceiveActivityImpl.this.getConditionArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLCondition set(int i, org.bpelunit.framework.xml.suite.XMLCondition o)
-            {
-                org.bpelunit.framework.xml.suite.XMLCondition old = XMLReceiveActivityImpl.this.getConditionArray(i);
-                XMLReceiveActivityImpl.this.setConditionArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLCondition o)
-                { XMLReceiveActivityImpl.this.insertNewCondition(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLCondition remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLCondition old = XMLReceiveActivityImpl.this.getConditionArray(i);
-                XMLReceiveActivityImpl.this.removeCondition(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLReceiveActivityImpl.this.sizeOfConditionArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new ConditionList();
-        }
-    }
-    
-    /**
      * Gets array of all "condition" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLCondition[] getConditionArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLCondition> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLCondition>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(CONDITION$0, targetList);
             org.bpelunit.framework.xml.suite.XMLCondition[] result = new org.bpelunit.framework.xml.suite.XMLCondition[targetList.size()];
             targetList.toArray(result);

@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLInfoImpl extends org.apache.xmlbeans.impl.values.JavaStringHolderEx implements org.bpelunit.framework.xml.result.XMLInfo
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLInfoImpl(org.apache.xmlbeans.SchemaType sType)
     {

@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.result.impl;
  */
 public class XMLArtefactImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.result.XMLArtefact
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLArtefactImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -33,54 +32,14 @@ public class XMLArtefactImpl extends org.apache.xmlbeans.impl.values.XmlComplexC
     
     
     /**
-     * Gets a List of "state" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.result.XMLInfo> getStateList()
-    {
-        final class StateList extends java.util.AbstractList<org.bpelunit.framework.xml.result.XMLInfo>
-        {
-            public org.bpelunit.framework.xml.result.XMLInfo get(int i)
-                { return XMLArtefactImpl.this.getStateArray(i); }
-            
-            public org.bpelunit.framework.xml.result.XMLInfo set(int i, org.bpelunit.framework.xml.result.XMLInfo o)
-            {
-                org.bpelunit.framework.xml.result.XMLInfo old = XMLArtefactImpl.this.getStateArray(i);
-                XMLArtefactImpl.this.setStateArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.result.XMLInfo o)
-                { XMLArtefactImpl.this.insertNewState(i).set(o); }
-            
-            public org.bpelunit.framework.xml.result.XMLInfo remove(int i)
-            {
-                org.bpelunit.framework.xml.result.XMLInfo old = XMLArtefactImpl.this.getStateArray(i);
-                XMLArtefactImpl.this.removeState(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLArtefactImpl.this.sizeOfStateArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new StateList();
-        }
-    }
-    
-    /**
      * Gets array of all "state" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.result.XMLInfo[] getStateArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.result.XMLInfo> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.result.XMLInfo>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(STATE$0, targetList);
             org.bpelunit.framework.xml.result.XMLInfo[] result = new org.bpelunit.framework.xml.result.XMLInfo[targetList.size()];
             targetList.toArray(result);

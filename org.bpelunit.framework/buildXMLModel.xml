@@ -51,7 +51,9 @@
     <!-- ========================== clean ==== -->
 
     <target name="clean">
+	<!-- Deleting this will destroy SVN files and make problems
 		<deltree dir="${src-dir}/org/bpelunit/framework/xml/"/>
+    -->
     </target>
 
     <!-- ========================== build ==== -->

@@ -16,16 +16,10 @@ package org.bpelunit.framework.xml.result;
 public interface XMLData extends org.bpelunit.framework.xml.result.XMLArtefact
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s21B6514B5535163199D3BCDDAA42EFA0").resolveHandle("datab8d9type");
-    
-    /**
-     * Gets a List of "xmlData" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.result.XMLData.XmlData> getXmlDataList();
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("datab8d9type");
     
     /**
      * Gets array of all "xmlData" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.result.XMLData.XmlData[] getXmlDataArray();
     
@@ -65,13 +59,7 @@ public interface XMLData extends org.bpelunit.framework.xml.result.XMLArtefact
     void removeXmlData(int i);
     
     /**
-     * Gets a List of "receiveCondition" elements
-     */
-    java.util.List<org.bpelunit.framework.xml.result.XMLReceiveCondition> getReceiveConditionList();
-    
-    /**
      * Gets array of all "receiveCondition" elements
-     * @deprecated
      */
     org.bpelunit.framework.xml.result.XMLReceiveCondition[] getReceiveConditionArray();
     
@@ -118,7 +106,7 @@ public interface XMLData extends org.bpelunit.framework.xml.result.XMLArtefact
     public interface XmlData extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XmlData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s21B6514B5535163199D3BCDDAA42EFA0").resolveHandle("xmldata53acelemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XmlData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("xmldata53acelemtype");
         
         /**
          * Gets the "name" attribute
@@ -214,19 +202,19 @@ public interface XMLData extends org.bpelunit.framework.xml.result.XMLArtefact
         public static org.bpelunit.framework.xml.result.XMLData parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
           return (org.bpelunit.framework.xml.result.XMLData) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.result.XMLData parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.result.XMLData) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.result.XMLData parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.result.XMLData) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }
         

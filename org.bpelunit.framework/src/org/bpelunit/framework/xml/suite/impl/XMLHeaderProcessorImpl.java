@@ -13,7 +13,6 @@ package org.bpelunit.framework.xml.suite.impl;
  */
 public class XMLHeaderProcessorImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.bpelunit.framework.xml.suite.XMLHeaderProcessor
 {
-    private static final long serialVersionUID = 1L;
     
     public XMLHeaderProcessorImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -27,54 +26,14 @@ public class XMLHeaderProcessorImpl extends org.apache.xmlbeans.impl.values.XmlC
     
     
     /**
-     * Gets a List of "property" elements
-     */
-    public java.util.List<org.bpelunit.framework.xml.suite.XMLProperty> getPropertyList()
-    {
-        final class PropertyList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLProperty>
-        {
-            public org.bpelunit.framework.xml.suite.XMLProperty get(int i)
-                { return XMLHeaderProcessorImpl.this.getPropertyArray(i); }
-            
-            public org.bpelunit.framework.xml.suite.XMLProperty set(int i, org.bpelunit.framework.xml.suite.XMLProperty o)
-            {
-                org.bpelunit.framework.xml.suite.XMLProperty old = XMLHeaderProcessorImpl.this.getPropertyArray(i);
-                XMLHeaderProcessorImpl.this.setPropertyArray(i, o);
-                return old;
-            }
-            
-            public void add(int i, org.bpelunit.framework.xml.suite.XMLProperty o)
-                { XMLHeaderProcessorImpl.this.insertNewProperty(i).set(o); }
-            
-            public org.bpelunit.framework.xml.suite.XMLProperty remove(int i)
-            {
-                org.bpelunit.framework.xml.suite.XMLProperty old = XMLHeaderProcessorImpl.this.getPropertyArray(i);
-                XMLHeaderProcessorImpl.this.removeProperty(i);
-                return old;
-            }
-            
-            public int size()
-                { return XMLHeaderProcessorImpl.this.sizeOfPropertyArray(); }
-            
-        }
-        
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return new PropertyList();
-        }
-    }
-    
-    /**
      * Gets array of all "property" elements
-     * @deprecated
      */
     public org.bpelunit.framework.xml.suite.XMLProperty[] getPropertyArray()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            java.util.List<org.bpelunit.framework.xml.suite.XMLProperty> targetList = new java.util.ArrayList<org.bpelunit.framework.xml.suite.XMLProperty>();
+            java.util.List targetList = new java.util.ArrayList();
             get_store().find_all_element_users(PROPERTY$0, targetList);
             org.bpelunit.framework.xml.suite.XMLProperty[] result = new org.bpelunit.framework.xml.suite.XMLProperty[targetList.size()];
             targetList.toArray(result);

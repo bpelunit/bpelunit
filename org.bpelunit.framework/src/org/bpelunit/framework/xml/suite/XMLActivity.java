@@ -16,97 +16,7 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLActivity extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLActivity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s21B6514B5535163199D3BCDDAA42EFA0").resolveHandle("activitycd77type");
-    
-    /**
-     * Gets the "service" attribute
-     */
-    javax.xml.namespace.QName getService();
-    
-    /**
-     * Gets (as xml) the "service" attribute
-     */
-    org.apache.xmlbeans.XmlQName xgetService();
-    
-    /**
-     * True if has "service" attribute
-     */
-    boolean isSetService();
-    
-    /**
-     * Sets the "service" attribute
-     */
-    void setService(javax.xml.namespace.QName service);
-    
-    /**
-     * Sets (as xml) the "service" attribute
-     */
-    void xsetService(org.apache.xmlbeans.XmlQName service);
-    
-    /**
-     * Unsets the "service" attribute
-     */
-    void unsetService();
-    
-    /**
-     * Gets the "port" attribute
-     */
-    java.lang.String getPort();
-    
-    /**
-     * Gets (as xml) the "port" attribute
-     */
-    org.apache.xmlbeans.XmlString xgetPort();
-    
-    /**
-     * True if has "port" attribute
-     */
-    boolean isSetPort();
-    
-    /**
-     * Sets the "port" attribute
-     */
-    void setPort(java.lang.String port);
-    
-    /**
-     * Sets (as xml) the "port" attribute
-     */
-    void xsetPort(org.apache.xmlbeans.XmlString port);
-    
-    /**
-     * Unsets the "port" attribute
-     */
-    void unsetPort();
-    
-    /**
-     * Gets the "operation" attribute
-     */
-    java.lang.String getOperation();
-    
-    /**
-     * Gets (as xml) the "operation" attribute
-     */
-    org.apache.xmlbeans.XmlString xgetOperation();
-    
-    /**
-     * True if has "operation" attribute
-     */
-    boolean isSetOperation();
-    
-    /**
-     * Sets the "operation" attribute
-     */
-    void setOperation(java.lang.String operation);
-    
-    /**
-     * Sets (as xml) the "operation" attribute
-     */
-    void xsetOperation(org.apache.xmlbeans.XmlString operation);
-    
-    /**
-     * Unsets the "operation" attribute
-     */
-    void unsetOperation();
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLActivity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("activitycd77type");
     
     /**
      * A factory class with static methods for creating instances
@@ -165,19 +75,19 @@ public interface XMLActivity extends org.apache.xmlbeans.XmlObject
         public static org.bpelunit.framework.xml.suite.XMLActivity parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
           return (org.bpelunit.framework.xml.suite.XMLActivity) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.suite.XMLActivity parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.suite.XMLActivity) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.bpelunit.framework.xml.suite.XMLActivity parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return (org.bpelunit.framework.xml.suite.XMLActivity) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }
         
-        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        /** @deprecated {@link XMLInputStream} */
         public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
           return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }
         
