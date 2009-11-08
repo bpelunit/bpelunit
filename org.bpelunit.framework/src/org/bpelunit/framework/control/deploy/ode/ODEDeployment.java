@@ -81,7 +81,7 @@ public class ODEDeployment extends GenericDeployment {
 	 * additionally the port within the service, if enough details are present
 	 * to determine it by parsing the ODE deployment descriptor deploy.xml.
 	 */
-	public PartnerLink[] getPartnerLinks() {
+	public PartnerLink[] getPartnerLinks() throws DeploymentException {
 		ArrayList<PartnerLink> links = new ArrayList<PartnerLink>();
 		Element envelope = fDescriptorDocument.getRootElement();
 
@@ -115,7 +115,7 @@ public class ODEDeployment extends GenericDeployment {
 			}
 		}
 
-		return null;
+		throw new DeploymentException("Could not find the process with the specified name in the deployment: " + getProcessUnderTest().getName());
 	}
 
 	// ******************** Private helper methods ****************************

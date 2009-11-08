@@ -7,6 +7,7 @@
 package org.bpelunit.framework.control.ext;
 
 import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
+import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.EndPointException;
 import org.bpelunit.framework.model.Partner;
 
@@ -53,8 +54,9 @@ public interface IDeployment {
 	 * different for different deployers.
 	 * 
 	 * @return created PartnerLinks
+	 * @throws DeploymentException 
 	 */
-	public PartnerLink[] getPartnerLinks();
+	public PartnerLink[] getPartnerLinks() throws DeploymentException;
 
 	public String getArchive();
 
