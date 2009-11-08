@@ -69,6 +69,7 @@ import org.bpelunit.framework.xml.suite.XMLPartnerTrack;
 import org.bpelunit.framework.xml.suite.XMLProperty;
 import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
 import org.bpelunit.framework.xml.suite.XMLSendActivity;
+import org.bpelunit.framework.xml.suite.XMLSoapActivity;
 import org.bpelunit.framework.xml.suite.XMLTestCase;
 import org.bpelunit.framework.xml.suite.XMLTestCasesSection;
 import org.bpelunit.framework.xml.suite.XMLTestSuite;
@@ -893,7 +894,7 @@ public class SpecificationLoader {
 		return partner.getOperation(service, port, operation, direction);
 	}
 
-	private QName getService(Activity parentActivity, XMLActivity xmlActivity)
+	private QName getService(Activity parentActivity, XMLSoapActivity xmlActivity)
 			throws SpecificationException {
 		QName service = null;
 		try {
