@@ -341,7 +341,6 @@ public class TestCaseRunner {
 	 * @param track
 	 */
 	public synchronized void done(PartnerTrack track) {
-		System.out.println("XXX Track Completed " + track.getName());
 		fPartnerTracks.put(track, PartnerTrackResult.COMPLETED);
 		notifyAll();
 	}
@@ -355,7 +354,6 @@ public class TestCaseRunner {
 	 */
 	public synchronized void doneWithFault(PartnerTrack track) {
 		fProblemOccurred = true;
-		System.out.println("XXX Track Completed With Fault " + track.getName());
 		fPartnerTracks.put(track, PartnerTrackResult.COMPLETED);
 		notifyAll();
 	}
@@ -401,12 +399,10 @@ public class TestCaseRunner {
 	private synchronized boolean allPartnerTracksCompleted() {
 		for (PartnerTrack head : fPartnerTracks.keySet()) {
 			if (fPartnerTracks.get(head).equals(PartnerTrackResult.RUNNING)) {
-				System.out.println("XXX Not all partner tracks completed");
 				return false;
 			}
 		}
 		
-		System.out.println("XXX All partner tracks completed");
 		return true;
 	}
 
