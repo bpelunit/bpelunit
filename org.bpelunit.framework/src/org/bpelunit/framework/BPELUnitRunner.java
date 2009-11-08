@@ -143,9 +143,9 @@ public abstract class BPELUnitRunner {
 		if ((measureCoverage != null)
 				&& (measureCoverage.equalsIgnoreCase("true"))) {
 			fMeasureCoverage = true;
-			System.out.println("MEASURECOVERAGE=TRUE");
+//			System.out.println("MEASURECOVERAGE=TRUE");
 		} else {
-			System.out.println("MEASURECOVERAGE=FALSE");
+//			System.out.println("MEASURECOVERAGE=FALSE");
 		}
 
 		String changeEndpoints = options.get(CHANGE_ENDPOINTS);

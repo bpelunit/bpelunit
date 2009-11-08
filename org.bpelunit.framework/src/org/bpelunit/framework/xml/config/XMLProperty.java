@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.config;
 public interface XMLProperty extends org.apache.xmlbeans.XmlString
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLProperty.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("propertyce6ftype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLProperty.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("propertyce6ftype");
     
     /**
      * Gets the "name" attribute

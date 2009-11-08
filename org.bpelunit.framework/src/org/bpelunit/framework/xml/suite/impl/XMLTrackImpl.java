@@ -31,6 +31,8 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         new javax.xml.namespace.QName("http://www.bpelunit.org/schema/testSuite", "receiveSendAsynchronous");
     private static final javax.xml.namespace.QName SENDRECEIVEASYNCHRONOUS$10 = 
         new javax.xml.namespace.QName("http://www.bpelunit.org/schema/testSuite", "sendReceiveAsynchronous");
+    private static final javax.xml.namespace.QName WAIT$12 = 
+        new javax.xml.namespace.QName("http://www.bpelunit.org/schema/testSuite", "wait");
     
     
     /**
@@ -726,6 +728,122 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             get_store().remove_element(SENDRECEIVEASYNCHRONOUS$10, i);
+        }
+    }
+    
+    /**
+     * Gets array of all "wait" elements
+     */
+    public org.bpelunit.framework.xml.suite.XMLWaitActivity[] getWaitArray()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            java.util.List targetList = new java.util.ArrayList();
+            get_store().find_all_element_users(WAIT$12, targetList);
+            org.bpelunit.framework.xml.suite.XMLWaitActivity[] result = new org.bpelunit.framework.xml.suite.XMLWaitActivity[targetList.size()];
+            targetList.toArray(result);
+            return result;
+        }
+    }
+    
+    /**
+     * Gets ith "wait" element
+     */
+    public org.bpelunit.framework.xml.suite.XMLWaitActivity getWaitArray(int i)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.bpelunit.framework.xml.suite.XMLWaitActivity target = null;
+            target = (org.bpelunit.framework.xml.suite.XMLWaitActivity)get_store().find_element_user(WAIT$12, i);
+            if (target == null)
+            {
+                throw new IndexOutOfBoundsException();
+            }
+            return target;
+        }
+    }
+    
+    /**
+     * Returns number of "wait" element
+     */
+    public int sizeOfWaitArray()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(WAIT$12);
+        }
+    }
+    
+    /**
+     * Sets array of all "wait" element
+     */
+    public void setWaitArray(org.bpelunit.framework.xml.suite.XMLWaitActivity[] waitArray)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            arraySetterHelper(waitArray, WAIT$12);
+        }
+    }
+    
+    /**
+     * Sets ith "wait" element
+     */
+    public void setWaitArray(int i, org.bpelunit.framework.xml.suite.XMLWaitActivity wait)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.bpelunit.framework.xml.suite.XMLWaitActivity target = null;
+            target = (org.bpelunit.framework.xml.suite.XMLWaitActivity)get_store().find_element_user(WAIT$12, i);
+            if (target == null)
+            {
+                throw new IndexOutOfBoundsException();
+            }
+            target.set(wait);
+        }
+    }
+    
+    /**
+     * Inserts and returns a new empty value (as xml) as the ith "wait" element
+     */
+    public org.bpelunit.framework.xml.suite.XMLWaitActivity insertNewWait(int i)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.bpelunit.framework.xml.suite.XMLWaitActivity target = null;
+            target = (org.bpelunit.framework.xml.suite.XMLWaitActivity)get_store().insert_element_user(WAIT$12, i);
+            return target;
+        }
+    }
+    
+    /**
+     * Appends and returns a new empty value (as xml) as the last "wait" element
+     */
+    public org.bpelunit.framework.xml.suite.XMLWaitActivity addNewWait()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.bpelunit.framework.xml.suite.XMLWaitActivity target = null;
+            target = (org.bpelunit.framework.xml.suite.XMLWaitActivity)get_store().add_element_user(WAIT$12);
+            return target;
+        }
+    }
+    
+    /**
+     * Removes the ith "wait" element
+     */
+    public void removeWait(int i)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(WAIT$12, i);
         }
     }
 }

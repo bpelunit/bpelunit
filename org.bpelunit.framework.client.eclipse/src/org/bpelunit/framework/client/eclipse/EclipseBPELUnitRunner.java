@@ -52,7 +52,6 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 	@Override
 	public void configureDeployers() throws ConfigurationException {
 		// done by Eclipse
-
 	}
 
 	@Override
@@ -63,14 +62,12 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 	@Override
 	public void configureInit() throws ConfigurationException {
 		// done by Eclipse
-
 	}
 
 	@Override
 	public void configureLogging() {
 		Logger rootLogger = Logger.getRootLogger();
 		rootLogger.removeAllAppenders();
-
 	}
 
 	public void configureLogging(Level level, Appender appender) {
@@ -190,8 +187,8 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 		try {
 			coverageTool.configureMetrics(map);
 		} catch (ConfigurationException e) {
+			// TODO Meaningful error dialog
 		}
-
 	}
 
 	@Override

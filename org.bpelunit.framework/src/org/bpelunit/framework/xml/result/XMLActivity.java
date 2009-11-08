@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.result;
 public interface XMLActivity extends org.bpelunit.framework.xml.result.XMLArtefact
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLActivity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("activity217etype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLActivity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("activity217etype");
     
     /**
      * Gets array of all "activity" elements

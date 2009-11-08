@@ -50,6 +50,7 @@ import org.bpelunit.framework.model.test.activity.SendAsync;
 import org.bpelunit.framework.model.test.activity.SendReceiveAsync;
 import org.bpelunit.framework.model.test.activity.SendReceiveSync;
 import org.bpelunit.framework.model.test.activity.TwoWayAsyncActivity;
+import org.bpelunit.framework.model.test.activity.Wait;
 import org.bpelunit.framework.model.test.data.DataCopyOperation;
 import org.bpelunit.framework.model.test.data.ReceiveCondition;
 import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
@@ -76,6 +77,7 @@ import org.bpelunit.framework.xml.suite.XMLTestSuite;
 import org.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 import org.bpelunit.framework.xml.suite.XMLTrack;
 import org.bpelunit.framework.xml.suite.XMLTwoWayActivity;
+import org.bpelunit.framework.xml.suite.XMLWaitActivity;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -448,11 +450,19 @@ public class SpecificationLoader {
 			for (XMLActivity event : xmlActivities) {
 
 				/*
-				 * Each activity is one of the six specified activites:
+				 * Each activity is one of the seven specified activites:
 				 * ReceiveOnly, SendOnly, ReceiveSendSync, SendReceiveSync,
-				 * ReceiveSendAsync, and SendReceiveAsync.
+				 * ReceiveSendAsync, SendReceiveAsync, and Wait.
 				 */
 
+				if(event instanceof XMLWaitActivity) {
+					XMLWaitActivity xmlWait = (XMLWaitActivity) event;
+					Wait activity = new Wait(partnerTrack);
+					activity.setWaitDuration(xmlWait.getWaitForMilliseconds());
+					activities.add(activity);
+					continue;
+				}
+				
 				if (event instanceof XMLReceiveActivity) {
 					XMLReceiveActivity xmlReceive = (XMLReceiveActivity) event;
 					ReceiveAsync activity = new ReceiveAsync(partnerTrack);

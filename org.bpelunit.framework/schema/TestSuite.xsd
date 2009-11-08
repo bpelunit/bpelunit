@@ -127,35 +127,57 @@
 			<xs:choice>
 				<xs:element name="sendOnly" type="SendActivity">
 					<xs:annotation>
-						<xs:documentation>Send a message and wait for an ACK.</xs:documentation>
+						<xs:documentation>
+							Send a message and wait for an ACK.
+						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="receiveOnly" type="ReceiveActivity">
 					<xs:annotation>
-						<xs:documentation>Receive a message, send an ACK.</xs:documentation>
+						<xs:documentation>
+							Receive a message, send an ACK.
+						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="sendReceive" type="TwoWayActivity">
 					<xs:annotation>
-						<xs:documentation>Send a message and wait for a qualified response.</xs:documentation>
+						<xs:documentation>
+							Send a message and wait for a qualified
+							response.
+						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="receiveSend" type="TwoWayActivity">
 					<xs:annotation>
-						<xs:documentation>Receive a message, and answer with a qualified response.</xs:documentation>
+						<xs:documentation>
+							Receive a message, and answer with a
+							qualified response.
+						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="receiveSendAsynchronous" type="TwoWayActivity">
+				<xs:element name="receiveSendAsynchronous"
+					type="TwoWayActivity">
 					<xs:annotation>
-						<xs:documentation>Receive a message, send an ACK, and then send a qualified asynchronous response and expect an ACK.</xs:documentation>
+						<xs:documentation>
+							Receive a message, send an ACK, and then
+							send a qualified asynchronous response and
+							expect an ACK.
+						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="sendReceiveAsynchronous" type="TwoWayActivity">
+				<xs:element name="sendReceiveAsynchronous"
+					type="TwoWayActivity">
 					<xs:annotation>
-						<xs:documentation>Send a message, expect an ACK, and then wait for a qualified asynchronous messageand send an ACK.</xs:documentation>
+						<xs:documentation>
+							Send a message, expect an ACK, and then wait
+							for a qualified asynchronous messageand send
+							an ACK.
+						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-			</xs:choice>
+                <xs:element name="wait" type="WaitActivity"></xs:element>
+            </xs:choice>
+
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="PartnerTrack">
@@ -313,5 +335,15 @@
 			<xs:element name="expression" type="xs:string"/>
 			<xs:element name="value" type="xs:string"/>
 		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="WaitActivity">
+		<xs:complexContent>
+			<xs:extension base="Activity">
+				<xs:sequence>
+					<xs:element name="waitForMilliseconds" type="xs:unsignedInt"></xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 </xs:schema>

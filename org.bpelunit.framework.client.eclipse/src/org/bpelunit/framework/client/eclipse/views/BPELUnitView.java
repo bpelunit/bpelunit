@@ -154,6 +154,7 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 	private Map<StatusCode, Image> create(String name) {
 		Map<StatusCode, Image> map= new HashMap<StatusCode, Image>();
 		map.put(StatusCode.PASSED, createImage("icons/" + name + "_pass.gif"));
+		map.put(StatusCode.INPROGRESS, createImage("icons/" + name + "_inprogress.gif"));
 		map.put(StatusCode.ERROR, createImage("icons/" + name + "_err.gif"));
 		map.put(StatusCode.FAILED, createImage("icons/" + name + "_fail.gif"));
 		map.put(StatusCode.NOTYETSPECIFIED, createImage("icons/" + name + "_notyet.gif"));

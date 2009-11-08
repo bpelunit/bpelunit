@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.result;
 public interface XMLReceiveCondition extends org.bpelunit.framework.xml.result.XMLArtefact
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLReceiveCondition.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("receivecondition6ba7type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLReceiveCondition.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("receivecondition6ba7type");
     
     /**
      * Gets the "condition" element
@@ -41,7 +41,7 @@ public interface XMLReceiveCondition extends org.bpelunit.framework.xml.result.X
     public interface Condition extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Condition.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("condition1980elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Condition.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("condition1980elemtype");
         
         /**
          * Gets the "expression" element

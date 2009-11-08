@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLSendActivity extends org.bpelunit.framework.xml.suite.XMLSoapActivity
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLSendActivity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("sendactivitybb4ftype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLSendActivity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("sendactivitybb4ftype");
     
     /**
      * Gets the "data" element

@@ -17,7 +17,7 @@ package org.bpelunit.framework.xml.result;
 public interface XMLTestResultDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestResultDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("testresult956edoctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestResultDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("testresult956edoctype");
     
     /**
      * Gets the "testResult" element

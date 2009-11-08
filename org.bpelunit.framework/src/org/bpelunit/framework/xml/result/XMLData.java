@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.result;
 public interface XMLData extends org.bpelunit.framework.xml.result.XMLArtefact
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("datab8d9type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("datab8d9type");
     
     /**
      * Gets array of all "xmlData" elements
@@ -106,7 +106,7 @@ public interface XMLData extends org.bpelunit.framework.xml.result.XMLArtefact
     public interface XmlData extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XmlData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("xmldata53acelemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XmlData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("xmldata53acelemtype");
         
         /**
          * Gets the "name" attribute

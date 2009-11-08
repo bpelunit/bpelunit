@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLTrack extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTrack.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("track70edtype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTrack.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("track70edtype");
     
     /**
      * Gets array of all "sendOnly" elements
@@ -257,6 +257,46 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
      * Removes the ith "sendReceiveAsynchronous" element
      */
     void removeSendReceiveAsynchronous(int i);
+    
+    /**
+     * Gets array of all "wait" elements
+     */
+    org.bpelunit.framework.xml.suite.XMLWaitActivity[] getWaitArray();
+    
+    /**
+     * Gets ith "wait" element
+     */
+    org.bpelunit.framework.xml.suite.XMLWaitActivity getWaitArray(int i);
+    
+    /**
+     * Returns number of "wait" element
+     */
+    int sizeOfWaitArray();
+    
+    /**
+     * Sets array of all "wait" element
+     */
+    void setWaitArray(org.bpelunit.framework.xml.suite.XMLWaitActivity[] waitArray);
+    
+    /**
+     * Sets ith "wait" element
+     */
+    void setWaitArray(int i, org.bpelunit.framework.xml.suite.XMLWaitActivity wait);
+    
+    /**
+     * Inserts and returns a new empty value (as xml) as the ith "wait" element
+     */
+    org.bpelunit.framework.xml.suite.XMLWaitActivity insertNewWait(int i);
+    
+    /**
+     * Appends and returns a new empty value (as xml) as the last "wait" element
+     */
+    org.bpelunit.framework.xml.suite.XMLWaitActivity addNewWait();
+    
+    /**
+     * Removes the ith "wait" element
+     */
+    void removeWait(int i);
     
     /**
      * A factory class with static methods for creating instances

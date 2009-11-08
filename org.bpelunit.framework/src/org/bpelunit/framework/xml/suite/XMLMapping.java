@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLMapping extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLMapping.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("mappingca8atype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLMapping.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("mappingca8atype");
     
     /**
      * Gets array of all "copy" elements

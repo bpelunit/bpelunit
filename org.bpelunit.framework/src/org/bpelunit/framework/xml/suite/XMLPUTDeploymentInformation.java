@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLPUTDeploymentInformation extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLPUTDeploymentInformation.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s658D211C851517200AFEC2C2421DA420").resolveHandle("putdeploymentinformationc34etype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLPUTDeploymentInformation.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("putdeploymentinformationc34etype");
     
     /**
      * Gets array of all "property" elements

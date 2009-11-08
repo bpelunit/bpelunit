@@ -47,6 +47,7 @@ public abstract class Activity implements ITestArtefact {
 
 	public Activity(PartnerTrack partnerTrack) {
 		fPartnerTrack= partnerTrack;
+		fStatus= ArtefactStatus.createInitialStatus();
 	}
 
 
