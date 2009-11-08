@@ -5,8 +5,8 @@
  */
 package org.bpelunit.toolsupport.editors.wizards.pages;
 
-import org.bpelunit.framework.xml.suite.XMLActivity;
 import org.bpelunit.framework.xml.suite.XMLSendActivity;
+import org.bpelunit.framework.xml.suite.XMLSoapActivity;
 import org.bpelunit.framework.xml.suite.XMLTestSuite;
 import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
 import org.bpelunit.toolsupport.editors.wizards.ActivityWizard;
@@ -37,7 +37,7 @@ public class SendCompleteWizardPage extends OperationWizardPage {
 	 * @param sendActivity
 	 * @param pageName
 	 */
-	public SendCompleteWizardPage(XMLActivity operationActivity, XMLSendActivity sendActivity,
+	public SendCompleteWizardPage(XMLSoapActivity operationActivity, XMLSendActivity sendActivity,
 			ActivityEditMode mode, String pageName) {
 		super(operationActivity, mode, pageName);
 		this.fSendActivity = sendActivity;

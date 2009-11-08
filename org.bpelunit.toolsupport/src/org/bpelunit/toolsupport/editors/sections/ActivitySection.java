@@ -32,6 +32,7 @@ import org.bpelunit.framework.xml.suite.XMLHeaderProcessor;
 import org.bpelunit.framework.xml.suite.XMLMapping;
 import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
 import org.bpelunit.framework.xml.suite.XMLSendActivity;
+import org.bpelunit.framework.xml.suite.XMLSoapActivity;
 import org.bpelunit.framework.xml.suite.XMLTrack;
 import org.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import org.bpelunit.toolsupport.ToolSupportActivator;
@@ -866,7 +867,7 @@ public class ActivitySection extends TreeSection {
 	 * Because this WSDL4J version does not use generics, we suppress warnings here 
 	 */
 	@SuppressWarnings("unchecked")
-	private void prefillDataIfOnlyOneChoiceExists(XMLActivity operation) {
+	private void prefillDataIfOnlyOneChoiceExists(XMLSoapActivity operation) {
 		XMLTrack track = ActivityUtil.getEnclosingTrack(operation);
 		if(track == null) {
 			return;

@@ -5,8 +5,8 @@
  */
 package org.bpelunit.toolsupport.editors.wizards.pages;
 
-import org.bpelunit.framework.xml.suite.XMLActivity;
 import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
+import org.bpelunit.framework.xml.suite.XMLSoapActivity;
 import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
 import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import org.bpelunit.toolsupport.editors.wizards.components.OperationChangeListener;
@@ -37,7 +37,7 @@ public class ReceiveCompleteWizardPage extends OperationWizardPage {
 	 * @param sendActivity
 	 * @param pageName
 	 */
-	public ReceiveCompleteWizardPage(XMLActivity operationActivity,
+	public ReceiveCompleteWizardPage(XMLSoapActivity operationActivity,
 			XMLReceiveActivity receiveActivity, ActivityEditMode mode,
 			String pageName) {
 		super(operationActivity, mode, pageName);

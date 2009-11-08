@@ -18,6 +18,7 @@ import javax.xml.namespace.QName;
 
 import org.bpelunit.framework.control.util.ActivityUtil;
 import org.bpelunit.framework.xml.suite.XMLActivity;
+import org.bpelunit.framework.xml.suite.XMLSoapActivity;
 import org.bpelunit.framework.xml.suite.XMLTrack;
 import org.bpelunit.toolsupport.ToolSupportActivator;
 import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
@@ -427,7 +428,7 @@ public class OperationDataComponent extends DataComponent {
 		return this.getEditor().getWSDLParserForDefinition(this.getDefinition());
 	}
 
-	public void init(XMLActivity activity) {
+	public void init(XMLSoapActivity activity) {
 
 		this.fActivity = activity;
 

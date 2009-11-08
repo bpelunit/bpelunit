@@ -9,6 +9,7 @@ import javax.wsdl.Definition;
 import javax.xml.namespace.QName;
 
 import org.bpelunit.framework.xml.suite.XMLActivity;
+import org.bpelunit.framework.xml.suite.XMLSoapActivity;
 import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
 import org.bpelunit.toolsupport.editors.wizards.ReceiveSendAsyncActivityWizard;
 import org.bpelunit.toolsupport.editors.wizards.ReceiveSendSyncActivityWizard;
@@ -31,10 +32,10 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class OperationWizardPage extends ActivityWizardPage implements IComponentListener {
 
-	private XMLActivity fOperationActivity;
+	private XMLSoapActivity fOperationActivity;
 	private OperationDataComponent fOperationsComponent;
 
-	public OperationWizardPage(XMLActivity operationActivity, ActivityEditMode mode, String pageName) {
+	public OperationWizardPage(XMLSoapActivity operationActivity, ActivityEditMode mode, String pageName) {
 		super(pageName, mode);
 		this.fOperationActivity = operationActivity;
 		this.setDescription("Enter an operation and the data to send.");

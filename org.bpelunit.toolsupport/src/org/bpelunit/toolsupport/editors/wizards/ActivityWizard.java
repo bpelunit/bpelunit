@@ -8,9 +8,9 @@ package org.bpelunit.toolsupport.editors.wizards;
 import javax.xml.namespace.QName;
 
 import org.apache.xmlbeans.XmlObject;
-import org.bpelunit.framework.xml.suite.XMLActivity;
 import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
 import org.bpelunit.framework.xml.suite.XMLSendActivity;
+import org.bpelunit.framework.xml.suite.XMLSoapActivity;
 import org.bpelunit.framework.xml.suite.XMLTestSuite;
 import org.bpelunit.toolsupport.editors.BPELUnitEditor;
 import org.bpelunit.toolsupport.editors.TestSuitePage;
@@ -75,7 +75,7 @@ public abstract class ActivityWizard extends Wizard {
 		return super.getStartingPage();
 	}
 
-	protected void transferOperation(OperationWizardPage page, XMLActivity activity) {
+	protected void transferOperation(OperationWizardPage page, XMLSoapActivity activity) {
 		QName service= page.getService();
 		String port= page.getPort();
 		String operation= page.getOperation();
