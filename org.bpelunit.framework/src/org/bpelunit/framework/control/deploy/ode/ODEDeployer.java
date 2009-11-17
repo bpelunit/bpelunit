@@ -211,7 +211,7 @@ public class ODEDeployer implements IBPELDeployer {
 
 		RequestEntity re;
 		try {
-			re = fFactory.getUndeployRequestEntity(fPackageId);
+			re = fFactory.getUndeployRequestEntity(fProcessId);
 		} catch (IOException e) {
 			throw new DeploymentException(
 					"Problem while creating SOAP request: " + e.getMessage(), e);
@@ -293,12 +293,11 @@ public class ODEDeployer implements IBPELDeployer {
 			Element envelope = doc.getRootElement();
 
 			Iterator<Element> it = envelope.getDescendants(new ElementFilter(
-					"id"));
+					"name"));
 			Element idElement = it.next();
 
 			String qnameStr = idElement.getText();
-			QName qname = extractQName(qnameStr, idElement);
-			processId = qname.getLocalPart();
+			processId = idElement.getTextNormalize();
 		} catch (JDOMException e) {
 			throw new IOException(e);
 		}
