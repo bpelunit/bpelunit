@@ -7,6 +7,7 @@ package org.bpelunit.toolsupport.editors;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -137,8 +138,8 @@ public class BPELUnitEditor extends FormEditor {
 		}
 
 		try {
-			this.fDocument = XMLTestSuiteDocument.Factory.parse(baseFile
-					.getContents());
+			this.fDocument = XMLTestSuiteDocument.Factory.parse(new InputStreamReader(baseFile
+					.getContents(), baseFile.getCharset()));
 			if (this.needsBasicRestructuring(this.fDocument)) {
 				this.fTestSuitePage.markDirty();
 			}
