@@ -16,10 +16,16 @@ package org.bpelunit.framework.xml.result;
 public interface XMLData extends org.bpelunit.framework.xml.result.XMLArtefact
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("datab8d9type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("datab8d9type");
+    
+    /**
+     * Gets a List of "xmlData" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.result.XMLData.XmlData> getXmlDataList();
     
     /**
      * Gets array of all "xmlData" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.result.XMLData.XmlData[] getXmlDataArray();
     
@@ -59,7 +65,13 @@ public interface XMLData extends org.bpelunit.framework.xml.result.XMLArtefact
     void removeXmlData(int i);
     
     /**
+     * Gets a List of "receiveCondition" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.result.XMLReceiveCondition> getReceiveConditionList();
+    
+    /**
      * Gets array of all "receiveCondition" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.result.XMLReceiveCondition[] getReceiveConditionArray();
     
@@ -106,7 +118,7 @@ public interface XMLData extends org.bpelunit.framework.xml.result.XMLArtefact
     public interface XmlData extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XmlData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("xmldata53acelemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XmlData.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("xmldata53acelemtype");
         
         /**
          * Gets the "name" attribute

@@ -16,10 +16,16 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLTestCasesSection extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestCasesSection.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("testcasessectionc352type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestCasesSection.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("testcasessectionc352type");
+    
+    /**
+     * Gets a List of "testCase" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.suite.XMLTestCase> getTestCaseList();
     
     /**
      * Gets array of all "testCase" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLTestCase[] getTestCaseArray();
     

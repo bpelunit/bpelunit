@@ -32,6 +32,45 @@ public class XMLArtefactImpl extends org.apache.xmlbeans.impl.values.XmlComplexC
     
     
     /**
+     * Gets a List of "state" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.result.XMLInfo> getStateList()
+    {
+        final class StateList extends java.util.AbstractList<org.bpelunit.framework.xml.result.XMLInfo>
+        {
+            public org.bpelunit.framework.xml.result.XMLInfo get(int i)
+                { return XMLArtefactImpl.this.getStateArray(i); }
+            
+            public org.bpelunit.framework.xml.result.XMLInfo set(int i, org.bpelunit.framework.xml.result.XMLInfo o)
+            {
+                org.bpelunit.framework.xml.result.XMLInfo old = XMLArtefactImpl.this.getStateArray(i);
+                XMLArtefactImpl.this.setStateArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.result.XMLInfo o)
+                { XMLArtefactImpl.this.insertNewState(i).set(o); }
+            
+            public org.bpelunit.framework.xml.result.XMLInfo remove(int i)
+            {
+                org.bpelunit.framework.xml.result.XMLInfo old = XMLArtefactImpl.this.getStateArray(i);
+                XMLArtefactImpl.this.removeState(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLArtefactImpl.this.sizeOfStateArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new StateList();
+        }
+    }
+    
+    /**
      * Gets array of all "state" elements
      */
     public org.bpelunit.framework.xml.result.XMLInfo[] getStateArray()

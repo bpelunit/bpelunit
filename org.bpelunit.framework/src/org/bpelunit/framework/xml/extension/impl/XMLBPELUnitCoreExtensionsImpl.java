@@ -28,6 +28,45 @@ public class XMLBPELUnitCoreExtensionsImpl extends org.apache.xmlbeans.impl.valu
     
     
     /**
+     * Gets a List of "deployer" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> getDeployerList()
+    {
+        final class DeployerList extends java.util.AbstractList<org.bpelunit.framework.xml.extension.XMLExtension>
+        {
+            public org.bpelunit.framework.xml.extension.XMLExtension get(int i)
+                { return XMLBPELUnitCoreExtensionsImpl.this.getDeployerArray(i); }
+            
+            public org.bpelunit.framework.xml.extension.XMLExtension set(int i, org.bpelunit.framework.xml.extension.XMLExtension o)
+            {
+                org.bpelunit.framework.xml.extension.XMLExtension old = XMLBPELUnitCoreExtensionsImpl.this.getDeployerArray(i);
+                XMLBPELUnitCoreExtensionsImpl.this.setDeployerArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.extension.XMLExtension o)
+                { XMLBPELUnitCoreExtensionsImpl.this.insertNewDeployer(i).set(o); }
+            
+            public org.bpelunit.framework.xml.extension.XMLExtension remove(int i)
+            {
+                org.bpelunit.framework.xml.extension.XMLExtension old = XMLBPELUnitCoreExtensionsImpl.this.getDeployerArray(i);
+                XMLBPELUnitCoreExtensionsImpl.this.removeDeployer(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLBPELUnitCoreExtensionsImpl.this.sizeOfDeployerArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new DeployerList();
+        }
+    }
+    
+    /**
      * Gets array of all "deployer" elements
      */
     public org.bpelunit.framework.xml.extension.XMLExtension[] getDeployerArray()
@@ -144,6 +183,45 @@ public class XMLBPELUnitCoreExtensionsImpl extends org.apache.xmlbeans.impl.valu
     }
     
     /**
+     * Gets a List of "encoder" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> getEncoderList()
+    {
+        final class EncoderList extends java.util.AbstractList<org.bpelunit.framework.xml.extension.XMLExtension>
+        {
+            public org.bpelunit.framework.xml.extension.XMLExtension get(int i)
+                { return XMLBPELUnitCoreExtensionsImpl.this.getEncoderArray(i); }
+            
+            public org.bpelunit.framework.xml.extension.XMLExtension set(int i, org.bpelunit.framework.xml.extension.XMLExtension o)
+            {
+                org.bpelunit.framework.xml.extension.XMLExtension old = XMLBPELUnitCoreExtensionsImpl.this.getEncoderArray(i);
+                XMLBPELUnitCoreExtensionsImpl.this.setEncoderArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.extension.XMLExtension o)
+                { XMLBPELUnitCoreExtensionsImpl.this.insertNewEncoder(i).set(o); }
+            
+            public org.bpelunit.framework.xml.extension.XMLExtension remove(int i)
+            {
+                org.bpelunit.framework.xml.extension.XMLExtension old = XMLBPELUnitCoreExtensionsImpl.this.getEncoderArray(i);
+                XMLBPELUnitCoreExtensionsImpl.this.removeEncoder(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLBPELUnitCoreExtensionsImpl.this.sizeOfEncoderArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new EncoderList();
+        }
+    }
+    
+    /**
      * Gets array of all "encoder" elements
      */
     public org.bpelunit.framework.xml.extension.XMLExtension[] getEncoderArray()
@@ -256,6 +334,45 @@ public class XMLBPELUnitCoreExtensionsImpl extends org.apache.xmlbeans.impl.valu
         {
             check_orphaned();
             get_store().remove_element(ENCODER$2, i);
+        }
+    }
+    
+    /**
+     * Gets a List of "headerProcessor" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> getHeaderProcessorList()
+    {
+        final class HeaderProcessorList extends java.util.AbstractList<org.bpelunit.framework.xml.extension.XMLExtension>
+        {
+            public org.bpelunit.framework.xml.extension.XMLExtension get(int i)
+                { return XMLBPELUnitCoreExtensionsImpl.this.getHeaderProcessorArray(i); }
+            
+            public org.bpelunit.framework.xml.extension.XMLExtension set(int i, org.bpelunit.framework.xml.extension.XMLExtension o)
+            {
+                org.bpelunit.framework.xml.extension.XMLExtension old = XMLBPELUnitCoreExtensionsImpl.this.getHeaderProcessorArray(i);
+                XMLBPELUnitCoreExtensionsImpl.this.setHeaderProcessorArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.extension.XMLExtension o)
+                { XMLBPELUnitCoreExtensionsImpl.this.insertNewHeaderProcessor(i).set(o); }
+            
+            public org.bpelunit.framework.xml.extension.XMLExtension remove(int i)
+            {
+                org.bpelunit.framework.xml.extension.XMLExtension old = XMLBPELUnitCoreExtensionsImpl.this.getHeaderProcessorArray(i);
+                XMLBPELUnitCoreExtensionsImpl.this.removeHeaderProcessor(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLBPELUnitCoreExtensionsImpl.this.sizeOfHeaderProcessorArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new HeaderProcessorList();
         }
     }
     

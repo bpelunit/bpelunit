@@ -26,6 +26,45 @@ public class XMLReceiveActivityImpl extends org.bpelunit.framework.xml.suite.imp
     
     
     /**
+     * Gets a List of "condition" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLCondition> getConditionList()
+    {
+        final class ConditionList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLCondition>
+        {
+            public org.bpelunit.framework.xml.suite.XMLCondition get(int i)
+                { return XMLReceiveActivityImpl.this.getConditionArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLCondition set(int i, org.bpelunit.framework.xml.suite.XMLCondition o)
+            {
+                org.bpelunit.framework.xml.suite.XMLCondition old = XMLReceiveActivityImpl.this.getConditionArray(i);
+                XMLReceiveActivityImpl.this.setConditionArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLCondition o)
+                { XMLReceiveActivityImpl.this.insertNewCondition(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLCondition remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLCondition old = XMLReceiveActivityImpl.this.getConditionArray(i);
+                XMLReceiveActivityImpl.this.removeCondition(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLReceiveActivityImpl.this.sizeOfConditionArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new ConditionList();
+        }
+    }
+    
+    /**
      * Gets array of all "condition" elements
      */
     public org.bpelunit.framework.xml.suite.XMLCondition[] getConditionArray()

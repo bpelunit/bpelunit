@@ -26,6 +26,45 @@ public class XMLDataImpl extends org.bpelunit.framework.xml.result.impl.XMLArtef
     
     
     /**
+     * Gets a List of "xmlData" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.result.XMLData.XmlData> getXmlDataList()
+    {
+        final class XmlDataList extends java.util.AbstractList<org.bpelunit.framework.xml.result.XMLData.XmlData>
+        {
+            public org.bpelunit.framework.xml.result.XMLData.XmlData get(int i)
+                { return XMLDataImpl.this.getXmlDataArray(i); }
+            
+            public org.bpelunit.framework.xml.result.XMLData.XmlData set(int i, org.bpelunit.framework.xml.result.XMLData.XmlData o)
+            {
+                org.bpelunit.framework.xml.result.XMLData.XmlData old = XMLDataImpl.this.getXmlDataArray(i);
+                XMLDataImpl.this.setXmlDataArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.result.XMLData.XmlData o)
+                { XMLDataImpl.this.insertNewXmlData(i).set(o); }
+            
+            public org.bpelunit.framework.xml.result.XMLData.XmlData remove(int i)
+            {
+                org.bpelunit.framework.xml.result.XMLData.XmlData old = XMLDataImpl.this.getXmlDataArray(i);
+                XMLDataImpl.this.removeXmlData(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLDataImpl.this.sizeOfXmlDataArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new XmlDataList();
+        }
+    }
+    
+    /**
      * Gets array of all "xmlData" elements
      */
     public org.bpelunit.framework.xml.result.XMLData.XmlData[] getXmlDataArray()
@@ -138,6 +177,45 @@ public class XMLDataImpl extends org.bpelunit.framework.xml.result.impl.XMLArtef
         {
             check_orphaned();
             get_store().remove_element(XMLDATA$0, i);
+        }
+    }
+    
+    /**
+     * Gets a List of "receiveCondition" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.result.XMLReceiveCondition> getReceiveConditionList()
+    {
+        final class ReceiveConditionList extends java.util.AbstractList<org.bpelunit.framework.xml.result.XMLReceiveCondition>
+        {
+            public org.bpelunit.framework.xml.result.XMLReceiveCondition get(int i)
+                { return XMLDataImpl.this.getReceiveConditionArray(i); }
+            
+            public org.bpelunit.framework.xml.result.XMLReceiveCondition set(int i, org.bpelunit.framework.xml.result.XMLReceiveCondition o)
+            {
+                org.bpelunit.framework.xml.result.XMLReceiveCondition old = XMLDataImpl.this.getReceiveConditionArray(i);
+                XMLDataImpl.this.setReceiveConditionArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.result.XMLReceiveCondition o)
+                { XMLDataImpl.this.insertNewReceiveCondition(i).set(o); }
+            
+            public org.bpelunit.framework.xml.result.XMLReceiveCondition remove(int i)
+            {
+                org.bpelunit.framework.xml.result.XMLReceiveCondition old = XMLDataImpl.this.getReceiveConditionArray(i);
+                XMLDataImpl.this.removeReceiveCondition(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLDataImpl.this.sizeOfReceiveConditionArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new ReceiveConditionList();
         }
     }
     

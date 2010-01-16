@@ -24,6 +24,45 @@ public class XMLPartnerTrackImpl extends org.bpelunit.framework.xml.result.impl.
     
     
     /**
+     * Gets a List of "activity" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity> getActivityList()
+    {
+        final class ActivityList extends java.util.AbstractList<org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity>
+        {
+            public org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity get(int i)
+                { return XMLPartnerTrackImpl.this.getActivityArray(i); }
+            
+            public org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity set(int i, org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity o)
+            {
+                org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity old = XMLPartnerTrackImpl.this.getActivityArray(i);
+                XMLPartnerTrackImpl.this.setActivityArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity o)
+                { XMLPartnerTrackImpl.this.insertNewActivity(i).set(o); }
+            
+            public org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity remove(int i)
+            {
+                org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity old = XMLPartnerTrackImpl.this.getActivityArray(i);
+                XMLPartnerTrackImpl.this.removeActivity(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLPartnerTrackImpl.this.sizeOfActivityArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new ActivityList();
+        }
+    }
+    
+    /**
      * Gets array of all "activity" elements
      */
     public org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity[] getActivityArray()

@@ -62,6 +62,7 @@
     	<!-- srconly="true" -->
 
         <xmlbean schema="schema"
+        	javasource="1.5"
             srcgendir="${src-dir}"
     		classgendir="${bin-dir}"
             classpathref="xmlbeans.path"

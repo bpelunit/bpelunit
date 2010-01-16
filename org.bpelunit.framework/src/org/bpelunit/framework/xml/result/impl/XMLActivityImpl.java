@@ -30,6 +30,45 @@ public class XMLActivityImpl extends org.bpelunit.framework.xml.result.impl.XMLA
     
     
     /**
+     * Gets a List of "activity" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.result.XMLActivity> getActivityList()
+    {
+        final class ActivityList extends java.util.AbstractList<org.bpelunit.framework.xml.result.XMLActivity>
+        {
+            public org.bpelunit.framework.xml.result.XMLActivity get(int i)
+                { return XMLActivityImpl.this.getActivityArray(i); }
+            
+            public org.bpelunit.framework.xml.result.XMLActivity set(int i, org.bpelunit.framework.xml.result.XMLActivity o)
+            {
+                org.bpelunit.framework.xml.result.XMLActivity old = XMLActivityImpl.this.getActivityArray(i);
+                XMLActivityImpl.this.setActivityArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.result.XMLActivity o)
+                { XMLActivityImpl.this.insertNewActivity(i).set(o); }
+            
+            public org.bpelunit.framework.xml.result.XMLActivity remove(int i)
+            {
+                org.bpelunit.framework.xml.result.XMLActivity old = XMLActivityImpl.this.getActivityArray(i);
+                XMLActivityImpl.this.removeActivity(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLActivityImpl.this.sizeOfActivityArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new ActivityList();
+        }
+    }
+    
+    /**
      * Gets array of all "activity" elements
      */
     public org.bpelunit.framework.xml.result.XMLActivity[] getActivityArray()
@@ -146,6 +185,45 @@ public class XMLActivityImpl extends org.bpelunit.framework.xml.result.impl.XMLA
     }
     
     /**
+     * Gets a List of "dataPackage" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.result.XMLData> getDataPackageList()
+    {
+        final class DataPackageList extends java.util.AbstractList<org.bpelunit.framework.xml.result.XMLData>
+        {
+            public org.bpelunit.framework.xml.result.XMLData get(int i)
+                { return XMLActivityImpl.this.getDataPackageArray(i); }
+            
+            public org.bpelunit.framework.xml.result.XMLData set(int i, org.bpelunit.framework.xml.result.XMLData o)
+            {
+                org.bpelunit.framework.xml.result.XMLData old = XMLActivityImpl.this.getDataPackageArray(i);
+                XMLActivityImpl.this.setDataPackageArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.result.XMLData o)
+                { XMLActivityImpl.this.insertNewDataPackage(i).set(o); }
+            
+            public org.bpelunit.framework.xml.result.XMLData remove(int i)
+            {
+                org.bpelunit.framework.xml.result.XMLData old = XMLActivityImpl.this.getDataPackageArray(i);
+                XMLActivityImpl.this.removeDataPackage(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLActivityImpl.this.sizeOfDataPackageArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new DataPackageList();
+        }
+    }
+    
+    /**
      * Gets array of all "dataPackage" elements
      */
     public org.bpelunit.framework.xml.result.XMLData[] getDataPackageArray()
@@ -258,6 +336,45 @@ public class XMLActivityImpl extends org.bpelunit.framework.xml.result.impl.XMLA
         {
             check_orphaned();
             get_store().remove_element(DATAPACKAGE$2, i);
+        }
+    }
+    
+    /**
+     * Gets a List of "copyOperation" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.result.XMLCopyOperation> getCopyOperationList()
+    {
+        final class CopyOperationList extends java.util.AbstractList<org.bpelunit.framework.xml.result.XMLCopyOperation>
+        {
+            public org.bpelunit.framework.xml.result.XMLCopyOperation get(int i)
+                { return XMLActivityImpl.this.getCopyOperationArray(i); }
+            
+            public org.bpelunit.framework.xml.result.XMLCopyOperation set(int i, org.bpelunit.framework.xml.result.XMLCopyOperation o)
+            {
+                org.bpelunit.framework.xml.result.XMLCopyOperation old = XMLActivityImpl.this.getCopyOperationArray(i);
+                XMLActivityImpl.this.setCopyOperationArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.result.XMLCopyOperation o)
+                { XMLActivityImpl.this.insertNewCopyOperation(i).set(o); }
+            
+            public org.bpelunit.framework.xml.result.XMLCopyOperation remove(int i)
+            {
+                org.bpelunit.framework.xml.result.XMLCopyOperation old = XMLActivityImpl.this.getCopyOperationArray(i);
+                XMLActivityImpl.this.removeCopyOperation(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLActivityImpl.this.sizeOfCopyOperationArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new CopyOperationList();
         }
     }
     

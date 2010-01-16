@@ -16,10 +16,16 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLTrack extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTrack.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("track70edtype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTrack.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("track70edtype");
+    
+    /**
+     * Gets a List of "sendOnly" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.suite.XMLSendActivity> getSendOnlyList();
     
     /**
      * Gets array of all "sendOnly" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLSendActivity[] getSendOnlyArray();
     
@@ -59,7 +65,13 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeSendOnly(int i);
     
     /**
+     * Gets a List of "receiveOnly" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.suite.XMLReceiveActivity> getReceiveOnlyList();
+    
+    /**
      * Gets array of all "receiveOnly" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLReceiveActivity[] getReceiveOnlyArray();
     
@@ -99,7 +111,13 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeReceiveOnly(int i);
     
     /**
+     * Gets a List of "sendReceive" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getSendReceiveList();
+    
+    /**
      * Gets array of all "sendReceive" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getSendReceiveArray();
     
@@ -139,7 +157,13 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeSendReceive(int i);
     
     /**
+     * Gets a List of "receiveSend" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getReceiveSendList();
+    
+    /**
      * Gets array of all "receiveSend" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getReceiveSendArray();
     
@@ -179,7 +203,13 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeReceiveSend(int i);
     
     /**
+     * Gets a List of "receiveSendAsynchronous" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getReceiveSendAsynchronousList();
+    
+    /**
      * Gets array of all "receiveSendAsynchronous" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getReceiveSendAsynchronousArray();
     
@@ -219,7 +249,13 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeReceiveSendAsynchronous(int i);
     
     /**
+     * Gets a List of "sendReceiveAsynchronous" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getSendReceiveAsynchronousList();
+    
+    /**
      * Gets array of all "sendReceiveAsynchronous" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getSendReceiveAsynchronousArray();
     
@@ -259,7 +295,13 @@ public interface XMLTrack extends org.apache.xmlbeans.XmlObject
     void removeSendReceiveAsynchronous(int i);
     
     /**
+     * Gets a List of "wait" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.suite.XMLWaitActivity> getWaitList();
+    
+    /**
      * Gets array of all "wait" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLWaitActivity[] getWaitArray();
     

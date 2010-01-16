@@ -24,6 +24,45 @@ public class XMLTestCaseImpl extends org.bpelunit.framework.xml.result.impl.XMLA
     
     
     /**
+     * Gets a List of "partnerTrack" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.result.XMLPartnerTrack> getPartnerTrackList()
+    {
+        final class PartnerTrackList extends java.util.AbstractList<org.bpelunit.framework.xml.result.XMLPartnerTrack>
+        {
+            public org.bpelunit.framework.xml.result.XMLPartnerTrack get(int i)
+                { return XMLTestCaseImpl.this.getPartnerTrackArray(i); }
+            
+            public org.bpelunit.framework.xml.result.XMLPartnerTrack set(int i, org.bpelunit.framework.xml.result.XMLPartnerTrack o)
+            {
+                org.bpelunit.framework.xml.result.XMLPartnerTrack old = XMLTestCaseImpl.this.getPartnerTrackArray(i);
+                XMLTestCaseImpl.this.setPartnerTrackArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.result.XMLPartnerTrack o)
+                { XMLTestCaseImpl.this.insertNewPartnerTrack(i).set(o); }
+            
+            public org.bpelunit.framework.xml.result.XMLPartnerTrack remove(int i)
+            {
+                org.bpelunit.framework.xml.result.XMLPartnerTrack old = XMLTestCaseImpl.this.getPartnerTrackArray(i);
+                XMLTestCaseImpl.this.removePartnerTrack(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLTestCaseImpl.this.sizeOfPartnerTrackArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new PartnerTrackList();
+        }
+    }
+    
+    /**
      * Gets array of all "partnerTrack" elements
      */
     public org.bpelunit.framework.xml.result.XMLPartnerTrack[] getPartnerTrackArray()

@@ -24,6 +24,45 @@ public class XMLMappingImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     
     
     /**
+     * Gets a List of "copy" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLCopy> getCopyList()
+    {
+        final class CopyList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLCopy>
+        {
+            public org.bpelunit.framework.xml.suite.XMLCopy get(int i)
+                { return XMLMappingImpl.this.getCopyArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLCopy set(int i, org.bpelunit.framework.xml.suite.XMLCopy o)
+            {
+                org.bpelunit.framework.xml.suite.XMLCopy old = XMLMappingImpl.this.getCopyArray(i);
+                XMLMappingImpl.this.setCopyArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLCopy o)
+                { XMLMappingImpl.this.insertNewCopy(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLCopy remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLCopy old = XMLMappingImpl.this.getCopyArray(i);
+                XMLMappingImpl.this.removeCopy(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLMappingImpl.this.sizeOfCopyArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new CopyList();
+        }
+    }
+    
+    /**
      * Gets array of all "copy" elements
      */
     public org.bpelunit.framework.xml.suite.XMLCopy[] getCopyArray()

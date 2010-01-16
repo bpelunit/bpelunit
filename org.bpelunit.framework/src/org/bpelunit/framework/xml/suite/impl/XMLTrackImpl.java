@@ -36,6 +36,45 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     
     
     /**
+     * Gets a List of "sendOnly" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLSendActivity> getSendOnlyList()
+    {
+        final class SendOnlyList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLSendActivity>
+        {
+            public org.bpelunit.framework.xml.suite.XMLSendActivity get(int i)
+                { return XMLTrackImpl.this.getSendOnlyArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLSendActivity set(int i, org.bpelunit.framework.xml.suite.XMLSendActivity o)
+            {
+                org.bpelunit.framework.xml.suite.XMLSendActivity old = XMLTrackImpl.this.getSendOnlyArray(i);
+                XMLTrackImpl.this.setSendOnlyArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLSendActivity o)
+                { XMLTrackImpl.this.insertNewSendOnly(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLSendActivity remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLSendActivity old = XMLTrackImpl.this.getSendOnlyArray(i);
+                XMLTrackImpl.this.removeSendOnly(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLTrackImpl.this.sizeOfSendOnlyArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new SendOnlyList();
+        }
+    }
+    
+    /**
      * Gets array of all "sendOnly" elements
      */
     public org.bpelunit.framework.xml.suite.XMLSendActivity[] getSendOnlyArray()
@@ -148,6 +187,45 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             get_store().remove_element(SENDONLY$0, i);
+        }
+    }
+    
+    /**
+     * Gets a List of "receiveOnly" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLReceiveActivity> getReceiveOnlyList()
+    {
+        final class ReceiveOnlyList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLReceiveActivity>
+        {
+            public org.bpelunit.framework.xml.suite.XMLReceiveActivity get(int i)
+                { return XMLTrackImpl.this.getReceiveOnlyArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLReceiveActivity set(int i, org.bpelunit.framework.xml.suite.XMLReceiveActivity o)
+            {
+                org.bpelunit.framework.xml.suite.XMLReceiveActivity old = XMLTrackImpl.this.getReceiveOnlyArray(i);
+                XMLTrackImpl.this.setReceiveOnlyArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLReceiveActivity o)
+                { XMLTrackImpl.this.insertNewReceiveOnly(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLReceiveActivity remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLReceiveActivity old = XMLTrackImpl.this.getReceiveOnlyArray(i);
+                XMLTrackImpl.this.removeReceiveOnly(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLTrackImpl.this.sizeOfReceiveOnlyArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new ReceiveOnlyList();
         }
     }
     
@@ -268,6 +346,45 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
+     * Gets a List of "sendReceive" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getSendReceiveList()
+    {
+        final class SendReceiveList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>
+        {
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity get(int i)
+                { return XMLTrackImpl.this.getSendReceiveArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity set(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
+            {
+                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getSendReceiveArray(i);
+                XMLTrackImpl.this.setSendReceiveArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
+                { XMLTrackImpl.this.insertNewSendReceive(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getSendReceiveArray(i);
+                XMLTrackImpl.this.removeSendReceive(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLTrackImpl.this.sizeOfSendReceiveArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new SendReceiveList();
+        }
+    }
+    
+    /**
      * Gets array of all "sendReceive" elements
      */
     public org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getSendReceiveArray()
@@ -380,6 +497,45 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             get_store().remove_element(SENDRECEIVE$4, i);
+        }
+    }
+    
+    /**
+     * Gets a List of "receiveSend" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getReceiveSendList()
+    {
+        final class ReceiveSendList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>
+        {
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity get(int i)
+                { return XMLTrackImpl.this.getReceiveSendArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity set(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
+            {
+                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getReceiveSendArray(i);
+                XMLTrackImpl.this.setReceiveSendArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
+                { XMLTrackImpl.this.insertNewReceiveSend(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getReceiveSendArray(i);
+                XMLTrackImpl.this.removeReceiveSend(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLTrackImpl.this.sizeOfReceiveSendArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new ReceiveSendList();
         }
     }
     
@@ -500,6 +656,45 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
+     * Gets a List of "receiveSendAsynchronous" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getReceiveSendAsynchronousList()
+    {
+        final class ReceiveSendAsynchronousList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>
+        {
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity get(int i)
+                { return XMLTrackImpl.this.getReceiveSendAsynchronousArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity set(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
+            {
+                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getReceiveSendAsynchronousArray(i);
+                XMLTrackImpl.this.setReceiveSendAsynchronousArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
+                { XMLTrackImpl.this.insertNewReceiveSendAsynchronous(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getReceiveSendAsynchronousArray(i);
+                XMLTrackImpl.this.removeReceiveSendAsynchronous(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLTrackImpl.this.sizeOfReceiveSendAsynchronousArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new ReceiveSendAsynchronousList();
+        }
+    }
+    
+    /**
      * Gets array of all "receiveSendAsynchronous" elements
      */
     public org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getReceiveSendAsynchronousArray()
@@ -616,6 +811,45 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
+     * Gets a List of "sendReceiveAsynchronous" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLTwoWayActivity> getSendReceiveAsynchronousList()
+    {
+        final class SendReceiveAsynchronousList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLTwoWayActivity>
+        {
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity get(int i)
+                { return XMLTrackImpl.this.getSendReceiveAsynchronousArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity set(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
+            {
+                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getSendReceiveAsynchronousArray(i);
+                XMLTrackImpl.this.setSendReceiveAsynchronousArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLTwoWayActivity o)
+                { XMLTrackImpl.this.insertNewSendReceiveAsynchronous(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLTwoWayActivity remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLTwoWayActivity old = XMLTrackImpl.this.getSendReceiveAsynchronousArray(i);
+                XMLTrackImpl.this.removeSendReceiveAsynchronous(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLTrackImpl.this.sizeOfSendReceiveAsynchronousArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new SendReceiveAsynchronousList();
+        }
+    }
+    
+    /**
      * Gets array of all "sendReceiveAsynchronous" elements
      */
     public org.bpelunit.framework.xml.suite.XMLTwoWayActivity[] getSendReceiveAsynchronousArray()
@@ -728,6 +962,45 @@ public class XMLTrackImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             get_store().remove_element(SENDRECEIVEASYNCHRONOUS$10, i);
+        }
+    }
+    
+    /**
+     * Gets a List of "wait" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLWaitActivity> getWaitList()
+    {
+        final class WaitList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLWaitActivity>
+        {
+            public org.bpelunit.framework.xml.suite.XMLWaitActivity get(int i)
+                { return XMLTrackImpl.this.getWaitArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLWaitActivity set(int i, org.bpelunit.framework.xml.suite.XMLWaitActivity o)
+            {
+                org.bpelunit.framework.xml.suite.XMLWaitActivity old = XMLTrackImpl.this.getWaitArray(i);
+                XMLTrackImpl.this.setWaitArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLWaitActivity o)
+                { XMLTrackImpl.this.insertNewWait(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLWaitActivity remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLWaitActivity old = XMLTrackImpl.this.getWaitArray(i);
+                XMLTrackImpl.this.removeWait(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLTrackImpl.this.sizeOfWaitArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new WaitList();
         }
     }
     

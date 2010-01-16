@@ -16,10 +16,16 @@ package org.bpelunit.framework.xml.config;
 public interface XMLConfiguration extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLConfiguration.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("configurationc4a0type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLConfiguration.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("configurationc4a0type");
+    
+    /**
+     * Gets a List of "property" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.config.XMLProperty> getPropertyList();
     
     /**
      * Gets array of all "property" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.config.XMLProperty[] getPropertyArray();
     

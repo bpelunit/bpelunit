@@ -16,10 +16,16 @@ package org.bpelunit.framework.xml.result;
 public interface XMLPartnerTrack extends org.bpelunit.framework.xml.result.XMLArtefact
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLPartnerTrack.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("partnertrack9a52type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLPartnerTrack.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("partnertrack9a52type");
+    
+    /**
+     * Gets a List of "activity" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity> getActivityList();
     
     /**
      * Gets array of all "activity" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.result.XMLPartnerTrack.Activity[] getActivityArray();
     
@@ -66,7 +72,7 @@ public interface XMLPartnerTrack extends org.bpelunit.framework.xml.result.XMLAr
     public interface Activity extends org.bpelunit.framework.xml.result.XMLActivity
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Activity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("activity8907elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Activity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("activity8907elemtype");
         
         /**
          * A factory class with static methods for creating instances

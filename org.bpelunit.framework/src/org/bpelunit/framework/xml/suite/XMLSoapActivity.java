@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLSoapActivity extends org.bpelunit.framework.xml.suite.XMLActivity
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLSoapActivity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("soapactivity09actype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLSoapActivity.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("soapactivity09actype");
     
     /**
      * Gets the "service" attribute

@@ -16,10 +16,16 @@ package org.bpelunit.framework.xml.result;
 public interface XMLTestCase extends org.bpelunit.framework.xml.result.XMLArtefact
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestCase.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("testcase5191type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestCase.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("testcase5191type");
+    
+    /**
+     * Gets a List of "partnerTrack" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.result.XMLPartnerTrack> getPartnerTrackList();
     
     /**
      * Gets array of all "partnerTrack" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.result.XMLPartnerTrack[] getPartnerTrackArray();
     

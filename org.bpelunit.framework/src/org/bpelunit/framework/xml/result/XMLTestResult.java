@@ -16,10 +16,16 @@ package org.bpelunit.framework.xml.result;
 public interface XMLTestResult extends org.bpelunit.framework.xml.result.XMLArtefact
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestResult.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("testresult337etype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestResult.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("testresult337etype");
+    
+    /**
+     * Gets a List of "testCase" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.result.XMLTestCase> getTestCaseList();
     
     /**
      * Gets array of all "testCase" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.result.XMLTestCase[] getTestCaseArray();
     

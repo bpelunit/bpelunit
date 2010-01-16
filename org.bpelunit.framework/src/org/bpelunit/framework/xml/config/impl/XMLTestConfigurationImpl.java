@@ -24,6 +24,45 @@ public class XMLTestConfigurationImpl extends org.apache.xmlbeans.impl.values.Xm
     
     
     /**
+     * Gets a List of "configuration" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.config.XMLConfiguration> getConfigurationList()
+    {
+        final class ConfigurationList extends java.util.AbstractList<org.bpelunit.framework.xml.config.XMLConfiguration>
+        {
+            public org.bpelunit.framework.xml.config.XMLConfiguration get(int i)
+                { return XMLTestConfigurationImpl.this.getConfigurationArray(i); }
+            
+            public org.bpelunit.framework.xml.config.XMLConfiguration set(int i, org.bpelunit.framework.xml.config.XMLConfiguration o)
+            {
+                org.bpelunit.framework.xml.config.XMLConfiguration old = XMLTestConfigurationImpl.this.getConfigurationArray(i);
+                XMLTestConfigurationImpl.this.setConfigurationArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.config.XMLConfiguration o)
+                { XMLTestConfigurationImpl.this.insertNewConfiguration(i).set(o); }
+            
+            public org.bpelunit.framework.xml.config.XMLConfiguration remove(int i)
+            {
+                org.bpelunit.framework.xml.config.XMLConfiguration old = XMLTestConfigurationImpl.this.getConfigurationArray(i);
+                XMLTestConfigurationImpl.this.removeConfiguration(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLTestConfigurationImpl.this.sizeOfConfigurationArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new ConfigurationList();
+        }
+    }
+    
+    /**
      * Gets array of all "configuration" elements
      */
     public org.bpelunit.framework.xml.config.XMLConfiguration[] getConfigurationArray()

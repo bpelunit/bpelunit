@@ -26,6 +26,45 @@ public class XMLConfigurationImpl extends org.apache.xmlbeans.impl.values.XmlCom
     
     
     /**
+     * Gets a List of "property" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.config.XMLProperty> getPropertyList()
+    {
+        final class PropertyList extends java.util.AbstractList<org.bpelunit.framework.xml.config.XMLProperty>
+        {
+            public org.bpelunit.framework.xml.config.XMLProperty get(int i)
+                { return XMLConfigurationImpl.this.getPropertyArray(i); }
+            
+            public org.bpelunit.framework.xml.config.XMLProperty set(int i, org.bpelunit.framework.xml.config.XMLProperty o)
+            {
+                org.bpelunit.framework.xml.config.XMLProperty old = XMLConfigurationImpl.this.getPropertyArray(i);
+                XMLConfigurationImpl.this.setPropertyArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.config.XMLProperty o)
+                { XMLConfigurationImpl.this.insertNewProperty(i).set(o); }
+            
+            public org.bpelunit.framework.xml.config.XMLProperty remove(int i)
+            {
+                org.bpelunit.framework.xml.config.XMLProperty old = XMLConfigurationImpl.this.getPropertyArray(i);
+                XMLConfigurationImpl.this.removeProperty(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLConfigurationImpl.this.sizeOfPropertyArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new PropertyList();
+        }
+    }
+    
+    /**
      * Gets array of all "property" elements
      */
     public org.bpelunit.framework.xml.config.XMLProperty[] getPropertyArray()

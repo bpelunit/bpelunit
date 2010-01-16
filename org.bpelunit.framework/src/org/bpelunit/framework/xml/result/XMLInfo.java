@@ -16,7 +16,7 @@ package org.bpelunit.framework.xml.result;
 public interface XMLInfo extends org.apache.xmlbeans.XmlString
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLInfo.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("infoa8ddtype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLInfo.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("infoa8ddtype");
     
     /**
      * Gets the "name" attribute

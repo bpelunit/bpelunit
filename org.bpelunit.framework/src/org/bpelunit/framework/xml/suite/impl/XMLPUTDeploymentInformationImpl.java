@@ -30,6 +30,45 @@ public class XMLPUTDeploymentInformationImpl extends org.apache.xmlbeans.impl.va
     
     
     /**
+     * Gets a List of "property" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLProperty> getPropertyList()
+    {
+        final class PropertyList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLProperty>
+        {
+            public org.bpelunit.framework.xml.suite.XMLProperty get(int i)
+                { return XMLPUTDeploymentInformationImpl.this.getPropertyArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLProperty set(int i, org.bpelunit.framework.xml.suite.XMLProperty o)
+            {
+                org.bpelunit.framework.xml.suite.XMLProperty old = XMLPUTDeploymentInformationImpl.this.getPropertyArray(i);
+                XMLPUTDeploymentInformationImpl.this.setPropertyArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLProperty o)
+                { XMLPUTDeploymentInformationImpl.this.insertNewProperty(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLProperty remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLProperty old = XMLPUTDeploymentInformationImpl.this.getPropertyArray(i);
+                XMLPUTDeploymentInformationImpl.this.removeProperty(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLPUTDeploymentInformationImpl.this.sizeOfPropertyArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new PropertyList();
+        }
+    }
+    
+    /**
      * Gets array of all "property" elements
      */
     public org.bpelunit.framework.xml.suite.XMLProperty[] getPropertyArray()

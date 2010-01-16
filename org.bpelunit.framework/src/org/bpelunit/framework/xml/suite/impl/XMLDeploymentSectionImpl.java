@@ -76,6 +76,45 @@ public class XMLDeploymentSectionImpl extends org.apache.xmlbeans.impl.values.Xm
     }
     
     /**
+     * Gets a List of "partner" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation> getPartnerList()
+    {
+        final class PartnerList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation>
+        {
+            public org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation get(int i)
+                { return XMLDeploymentSectionImpl.this.getPartnerArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation set(int i, org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation o)
+            {
+                org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation old = XMLDeploymentSectionImpl.this.getPartnerArray(i);
+                XMLDeploymentSectionImpl.this.setPartnerArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation o)
+                { XMLDeploymentSectionImpl.this.insertNewPartner(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation old = XMLDeploymentSectionImpl.this.getPartnerArray(i);
+                XMLDeploymentSectionImpl.this.removePartner(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLDeploymentSectionImpl.this.sizeOfPartnerArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new PartnerList();
+        }
+    }
+    
+    /**
      * Gets array of all "partner" elements
      */
     public org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation[] getPartnerArray()

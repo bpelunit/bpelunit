@@ -16,10 +16,16 @@ package org.bpelunit.framework.xml.suite;
 public interface XMLPUTDeploymentInformation extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLPUTDeploymentInformation.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("putdeploymentinformationc34etype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLPUTDeploymentInformation.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("putdeploymentinformationc34etype");
+    
+    /**
+     * Gets a List of "property" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.suite.XMLProperty> getPropertyList();
     
     /**
      * Gets array of all "property" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.suite.XMLProperty[] getPropertyArray();
     

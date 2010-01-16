@@ -16,10 +16,16 @@ package org.bpelunit.framework.xml.config;
 public interface XMLTestConfiguration extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestConfiguration.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("testconfigurationf552type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLTestConfiguration.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("testconfigurationf552type");
+    
+    /**
+     * Gets a List of "configuration" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.config.XMLConfiguration> getConfigurationList();
     
     /**
      * Gets array of all "configuration" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.config.XMLConfiguration[] getConfigurationArray();
     

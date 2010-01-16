@@ -16,10 +16,16 @@ package org.bpelunit.framework.xml.extension;
 public interface XMLBPELUnitCoreExtensions extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLBPELUnitCoreExtensions.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s40325DB26B1B206C7D793E5B0986465B").resolveHandle("bpelunitcoreextensionsdf41type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(XMLBPELUnitCoreExtensions.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s2DE349CDB64FC5F159C18554BFE3264F").resolveHandle("bpelunitcoreextensionsdf41type");
+    
+    /**
+     * Gets a List of "deployer" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> getDeployerList();
     
     /**
      * Gets array of all "deployer" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.extension.XMLExtension[] getDeployerArray();
     
@@ -59,7 +65,13 @@ public interface XMLBPELUnitCoreExtensions extends org.apache.xmlbeans.XmlObject
     void removeDeployer(int i);
     
     /**
+     * Gets a List of "encoder" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> getEncoderList();
+    
+    /**
      * Gets array of all "encoder" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.extension.XMLExtension[] getEncoderArray();
     
@@ -99,7 +111,13 @@ public interface XMLBPELUnitCoreExtensions extends org.apache.xmlbeans.XmlObject
     void removeEncoder(int i);
     
     /**
+     * Gets a List of "headerProcessor" elements
+     */
+    java.util.List<org.bpelunit.framework.xml.extension.XMLExtension> getHeaderProcessorList();
+    
+    /**
      * Gets array of all "headerProcessor" elements
+     * @deprecated
      */
     org.bpelunit.framework.xml.extension.XMLExtension[] getHeaderProcessorArray();
     

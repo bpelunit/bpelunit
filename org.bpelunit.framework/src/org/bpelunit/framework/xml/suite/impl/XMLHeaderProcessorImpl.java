@@ -26,6 +26,45 @@ public class XMLHeaderProcessorImpl extends org.apache.xmlbeans.impl.values.XmlC
     
     
     /**
+     * Gets a List of "property" elements
+     */
+    public java.util.List<org.bpelunit.framework.xml.suite.XMLProperty> getPropertyList()
+    {
+        final class PropertyList extends java.util.AbstractList<org.bpelunit.framework.xml.suite.XMLProperty>
+        {
+            public org.bpelunit.framework.xml.suite.XMLProperty get(int i)
+                { return XMLHeaderProcessorImpl.this.getPropertyArray(i); }
+            
+            public org.bpelunit.framework.xml.suite.XMLProperty set(int i, org.bpelunit.framework.xml.suite.XMLProperty o)
+            {
+                org.bpelunit.framework.xml.suite.XMLProperty old = XMLHeaderProcessorImpl.this.getPropertyArray(i);
+                XMLHeaderProcessorImpl.this.setPropertyArray(i, o);
+                return old;
+            }
+            
+            public void add(int i, org.bpelunit.framework.xml.suite.XMLProperty o)
+                { XMLHeaderProcessorImpl.this.insertNewProperty(i).set(o); }
+            
+            public org.bpelunit.framework.xml.suite.XMLProperty remove(int i)
+            {
+                org.bpelunit.framework.xml.suite.XMLProperty old = XMLHeaderProcessorImpl.this.getPropertyArray(i);
+                XMLHeaderProcessorImpl.this.removeProperty(i);
+                return old;
+            }
+            
+            public int size()
+                { return XMLHeaderProcessorImpl.this.sizeOfPropertyArray(); }
+            
+        }
+        
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return new PropertyList();
+        }
+    }
+    
+    /**
      * Gets array of all "property" elements
      */
     public org.bpelunit.framework.xml.suite.XMLProperty[] getPropertyArray()
