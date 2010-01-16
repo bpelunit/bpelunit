@@ -6,7 +6,6 @@
 package org.bpelunit.framework.control.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.HashSet;
 
 import javax.xml.namespace.QName;
@@ -20,21 +19,24 @@ import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.xmlbeans.XmlOptions;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+import org.w3c.dom.Node;
 
 /**
  * Utilities for use in the BPELUnit framework.
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Antonio Garcia-Dominguez (changed serialization method)
  * 
  */
 public class BPELUnitUtil {
@@ -138,20 +140,21 @@ public class BPELUnitUtil {
 	 * @return
 	 */
 	public static String toFormattedString(Document element) {
-		OutputFormat format= new OutputFormat();
-		format.setLineWidth(65);
-		format.setIndenting(true);
-		format.setIndent(2);
-		format.setOmitXMLDeclaration(true);
-
-		ByteArrayOutputStream output= new ByteArrayOutputStream();
-		XMLSerializer serializer= new XMLSerializer(output, format);
 		try {
-			serializer.serialize(element);
-		} catch (IOException e) {
+			return serializeXML(element);
+		} catch (TransformerException e) {
 			return "(no data)";
 		}
-		return output.toString();
+	}
+
+	private static String serializeXML(Node node) throws TransformerException {
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer t = tf.newTransformer();
+		t.setOutputProperty(OutputKeys.INDENT, "yes");
+		t.setOutputProperty(OutputKeys.METHOD, "xml");
+		ByteArrayOutputStream bOS = new ByteArrayOutputStream();
+		t.transform(new DOMSource(node), new StreamResult(bOS));
+		return bOS.toString();
 	}
 
 	/**
