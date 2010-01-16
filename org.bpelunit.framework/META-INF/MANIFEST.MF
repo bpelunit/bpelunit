@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit Eclipse Framework Plugin
 Bundle-SymbolicName: org.bpelunit.framework
-Bundle-Version: 1.2.1
+Bundle-Version: 1.3.0
 Bundle-ClassPath: framework.jar,
  lib/activation.jar,
  lib/commons-codec-1.3.jar,
