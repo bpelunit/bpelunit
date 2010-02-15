@@ -20,6 +20,7 @@ import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.soap.DocumentLiteralEncoder;
 import org.bpelunit.framework.control.soap.NamespaceContextImpl;
 import org.bpelunit.framework.control.soap.RPCLiteralEncoder;
+import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import org.bpelunit.test.util.StringOutputStream;
@@ -58,7 +59,9 @@ public class TestSOAPEncoder extends SimpleTest {
 		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
 
 		ISOAPEncoder encoder= new DocumentLiteralEncoder();
-		SOAPMessage message= encoder.construct(operation, literal);
+		SOAPMessage message= encoder.construct(operation, literal,
+				BPELUnitConstants.SOAP_FAULT_CODE_CLIENT,
+				BPELUnitConstants.SOAP_FAULT_DESCRIPTION);
 
 		String messageAsString= toString(message);
 
@@ -80,7 +83,9 @@ public class TestSOAPEncoder extends SimpleTest {
 		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
 
 		ISOAPEncoder encoder= new RPCLiteralEncoder();
-		SOAPMessage message= encoder.construct(operation, literal);
+		SOAPMessage message= encoder.construct(operation, literal,
+				BPELUnitConstants.SOAP_FAULT_CODE_CLIENT,
+				BPELUnitConstants.SOAP_FAULT_DESCRIPTION);
 
 		String messageAsString= toString(message);
 

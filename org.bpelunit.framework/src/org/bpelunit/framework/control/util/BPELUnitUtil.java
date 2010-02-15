@@ -86,8 +86,9 @@ public class BPELUnitUtil {
 			MessageFactory mFactory= MessageFactory.newInstance();
 			SOAPMessage message= mFactory.createMessage();
 			SOAPBody body= message.getSOAPBody();
-			SOAPFault fault= body.addFault(new QName(BPELUnitConstants.SOAP_1_1_NAMESPACE, BPELUnitConstants.SOAP_FAULT_CODE_CLIENT),
-					"BPELUnit Framework Generated Fault");
+			SOAPFault fault= body.addFault(
+			        BPELUnitConstants.SOAP_FAULT_CODE_CLIENT,
+			        BPELUnitConstants.SOAP_FAULT_DESCRIPTION);
 
 			Detail detail= fault.addDetail();
 			DetailEntry entry= detail.addDetailEntry(new QName("http://www.bpelunit.org/framework/error", "BPELUnitFault"));

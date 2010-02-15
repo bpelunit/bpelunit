@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPMessage;
 
 import org.apache.log4j.Logger;
@@ -94,6 +95,15 @@ public class SendDataSpecification extends DataSpecification {
 	 */
 	private int fDelay;
 
+        /**
+         * Fault code to be reported, if this is a fault.
+         */
+        private QName fFaultCode;
+
+        /**
+         * Fault string to be reported, if this is a fault.
+         */
+        private String fFaultString;
 
 	// ******************** Initialization ************************
 
@@ -102,7 +112,7 @@ public class SendDataSpecification extends DataSpecification {
 	}
 
 	public void initialize(SOAPOperationCallIdentifier operation, int delay, String targetURL, String soapAction, String encodingStyle,
-			ISOAPEncoder encoder, Element rawDataRoot, NamespaceContext context) {
+			ISOAPEncoder encoder, Element rawDataRoot, NamespaceContext context, QName faultCode, String faultString) {
 		fOperation= operation;
 		fLiteralData= rawDataRoot;
 		fNamespaceContext= context;
@@ -113,11 +123,16 @@ public class SendDataSpecification extends DataSpecification {
 		fEncoder= encoder;
 
 		fDelay= delay;
+		fFaultCode= faultCode;
+		fFaultString= faultString;
 	}
 
-	public void initialize(SOAPOperationCallIdentifier operation, int delay, String encodingStyle, ISOAPEncoder encoder, Element rawDataRoot,
-			NamespaceContext context) {
-		initialize(operation, delay, null, null, encodingStyle, encoder, rawDataRoot, context);
+	public void initialize(SOAPOperationCallIdentifier operation, int delay,
+			String encodingStyle, ISOAPEncoder encoder, Element rawDataRoot,
+			NamespaceContext context, QName faultCode, String faultString) {
+		initialize(operation, delay, null, null,
+			encodingStyle, encoder,
+			rawDataRoot, context, faultCode, faultString);
 	}
 
 
@@ -210,7 +225,7 @@ public class SendDataSpecification extends DataSpecification {
 
 	private void encodeMessage() {
 		try {
-			fSOAPMessage= fEncoder.construct(fOperation, fLiteralData);
+			fSOAPMessage= fEncoder.construct(fOperation, fLiteralData, fFaultCode, fFaultString);
 		} catch (SOAPEncodingException e) {
 			fStatus= ArtefactStatus.createErrorStatus("Encoding the message failed: " + e.getMessage(), e);
 		}

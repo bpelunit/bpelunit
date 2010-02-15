@@ -17,7 +17,6 @@ import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.exception.SOAPEncodingException;
 import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
@@ -73,15 +72,14 @@ import org.w3c.dom.NodeList;
  * </p>
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Antonio Garcia-Dominguez
  * 
  */
 public class RPCLiteralEncoder implements ISOAPEncoder {
 
 	private static final String RPC_WRAPPER_NAMESPACE_PREFIX= "rpcwrappernsprefix";
 
-	public SOAPMessage construct(SOAPOperationCallIdentifier operation, Element literalData) throws SOAPEncodingException {
-
+	public SOAPMessage construct(SOAPOperationCallIdentifier operation, Element literalData, QName faultCode, String faultString) throws SOAPEncodingException {
 		try {
 		        if (operation.isFault()) {
                             throw new SOAPEncodingException("RPC style cannot be used with SOAP faults: check section 3.6 of the WSDL 1.1 standard");

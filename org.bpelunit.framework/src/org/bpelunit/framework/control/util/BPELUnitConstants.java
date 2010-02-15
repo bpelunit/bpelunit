@@ -8,6 +8,8 @@ package org.bpelunit.framework.control.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 /**
  * Some Constants.
  * 
@@ -75,7 +77,7 @@ public class BPELUnitConstants {
 	/**
 	 * SOAP Fault Code for BPELUnit framework generated faults
 	 */
-	public static final String SOAP_FAULT_CODE_CLIENT= "Client";
+	public static final QName SOAP_FAULT_CODE_CLIENT= new QName(SOAP_1_1_NAMESPACE, "Client");
 
 	/**
 	 * SOAP Fault Description for BPELUnit framework generazted faults

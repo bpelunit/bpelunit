@@ -56,15 +56,15 @@ import org.w3c.dom.NodeList;
  * literal elements into the SOAP Body or Fault Detail, no questions asked.
  * </p>
  * 
- * @version $Id: DocumentLiteralEncoder.java 226 2009-06-24 14:59:09Z cbuddhika
- *          $
- * @author Philip Mayer
+ * @version $Id$
+ * @author Philip Mayer, Antonio Garcia-Dominguez
  * 
  */
 public class DocumentLiteralEncoder implements ISOAPEncoder {
 
 	public SOAPMessage construct(SOAPOperationCallIdentifier operation,
-			Element literalElement) throws SOAPEncodingException {
+			Element literalElement, QName faultCode, String faultString)
+			throws SOAPEncodingException {
 
 		try {
 
@@ -75,10 +75,7 @@ public class DocumentLiteralEncoder implements ISOAPEncoder {
 			SOAPBody body = message.getSOAPBody();
 			SOAPElement data;
 			if (operation.isFault()) {
-				SOAPFault fault = body.addFault(new QName(
-						BPELUnitConstants.SOAP_1_1_NAMESPACE,
-						BPELUnitConstants.SOAP_FAULT_CODE_CLIENT),
-						BPELUnitConstants.SOAP_FAULT_DESCRIPTION);
+				SOAPFault fault = body.addFault(faultCode, faultString);
 				data = fault.addDetail();
 			} else
 				data = body;

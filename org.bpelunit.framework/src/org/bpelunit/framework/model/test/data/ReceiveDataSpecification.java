@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
@@ -82,6 +83,15 @@ public class ReceiveDataSpecification extends DataSpecification {
 	 */
 	private NamespaceContext fNamespaceContext;
 
+	/**
+	 * Expected SOAP fault code (if this is a fault)
+	 */
+	private QName fFaultCode;
+
+	/**
+	 * Expected SOAP fault string (if this is a fault)
+	 */
+	private String fFaultString;
 
 	// ********************** Initialization ***************************
 
@@ -90,12 +100,15 @@ public class ReceiveDataSpecification extends DataSpecification {
 	}
 
 	public void initialize(SOAPOperationCallIdentifier op, String encodingStyle, ISOAPEncoder encoder, List<ReceiveCondition> conditions,
-			NamespaceContext context) throws SpecificationException {
+			NamespaceContext context, QName faultCode, String faultString) throws SpecificationException {
 		fOperation= op;
 		fConditions= conditions;
 		fNamespaceContext= context;
 		fDecoder= encoder;
 		fEncodingStyle= encodingStyle;
+
+		fFaultCode= faultCode;
+		fFaultString= faultString;
 	}
 
 	// ******************** Implementation ***************************

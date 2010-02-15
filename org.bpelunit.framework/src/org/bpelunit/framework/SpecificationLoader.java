@@ -745,6 +745,11 @@ public class SpecificationLoader {
 		// Namespaces
 		NamespaceContext context = getNamespaceMap(xmlSend.newCursor());
 
+		// If the user hasn't specified any fault code or string, use these default values
+		final QName faultCode = xmlSend.isSetFaultcode() ?
+		        xmlSend.getFaultcode() : BPELUnitConstants.SOAP_FAULT_CODE_CLIENT;
+		final String faultString = xmlSend.isSetFaultstring() ?
+		        xmlSend.getFaultstring() : BPELUnitConstants.SOAP_FAULT_DESCRIPTION;
 		if (activity instanceof ReceiveSendSync) {
 			// This send specification will be used to send back
 			// a response to a HTTP request inside the same channel
@@ -752,10 +757,11 @@ public class SpecificationLoader {
 			spec
 					.initialize(operation, currentDelay, encodingStyle,
 							delaySequence, delaySequence, encoder, rawDataRoot,
-							context);
+							context, faultCode, faultString);
 		} else
 			spec.initialize(operation, currentDelay, targetURL, soapAction,
-					encodingStyle, encoder, rawDataRoot, context);
+					encodingStyle, encoder, rawDataRoot, context,
+					faultCode, faultString);
 
 		return spec;
 	}
@@ -819,7 +825,12 @@ public class SpecificationLoader {
 		// Namespaces
 		NamespaceContext context = getNamespaceMap(xmlReceive.newCursor());
 
-		spec.initialize(operation, encodingStyle, encoder, cList, context);
+		// Add fault code and string. These will be only checked if this message is a fault and if
+		// they are not null.
+		QName faultCode    = xmlReceive.getFaultcode();
+		String faultString = xmlReceive.getFaultstring();
+
+		spec.initialize(operation, encodingStyle, encoder, cList, context, faultCode, faultString);
 		return spec;
 	}
 
