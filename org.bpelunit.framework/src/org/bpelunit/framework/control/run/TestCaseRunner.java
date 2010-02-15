@@ -38,7 +38,7 @@ import org.bpelunit.framework.model.test.wire.OutgoingMessage;
  * in case of an error, failure, or user interaction.
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Antonio Garcia-Dominguez
  * 
  */
 public class TestCaseRunner {
@@ -157,7 +157,16 @@ public class TestCaseRunner {
 
 		if (fProblemOccurred || fAbortedByUser) {
 
-			fLogger.info("A test failure or error occurred.");
+			for (PartnerTrack partnerTrack : fPartnerTracks.keySet()) {
+				if (partnerTrack.getStatus().isError()
+						|| partnerTrack.getStatus().isFailure()) {
+					fLogger.info(String.format(
+							"A test failure or error occurred on %s: %s",
+							partnerTrack.getName(),
+							partnerTrack.getStatus().getMessage()));
+				}
+			}
+
 			fLogger.debug("Trying to interrupt all threads...");
 
 			// Interrupt all threads

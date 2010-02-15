@@ -25,7 +25,7 @@ import org.w3c.dom.Element;
  * {@link #evaluate(Element, NamespaceContext)} may be called to verify the condition.
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Antonio García-Domínguez
  * 
  */
 public class ReceiveCondition implements ITestArtefact {
@@ -85,7 +85,10 @@ public class ReceiveCondition implements ITestArtefact {
 						fActualValue= "(no data)";
 				}
 
-				fStatus= ArtefactStatus.createFailedStatus("Condition failed. Result was 'false'");
+				// Get expected value
+				String sExpectedValue = xpath.evaluate(fExpectedValue, literalData);
+
+				fStatus= ArtefactStatus.createFailedStatus(String.format("Condition failed. Obtained value was '%s', expected '%s'", smartGuess, sExpectedValue));
 
 			} else {
 				fStatus= ArtefactStatus.createPassedStatus();

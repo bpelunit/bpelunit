@@ -37,7 +37,7 @@ import org.w3c.dom.Element;
  * 
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Antonio Garcia-Dominguez
  * 
  */
 public class ReceiveDataSpecification extends DataSpecification {
@@ -180,10 +180,16 @@ public class ReceiveDataSpecification extends DataSpecification {
 			c.evaluate(fLiteralData, fNamespaceContext);
 
 			if (c.isFailure()) {
-				fStatus= ArtefactStatus.createFailedStatus("A condition did not hold. See conditions.");
+				fStatus = ArtefactStatus.createFailedStatus(String.format(
+						"Condition '%s=%s' did not hold: %s",
+						c.getExpression(), c.getExpectedValue(), c.getStatus()
+								.getMessage()));
 				break;
 			} else if (c.isError()) {
-				fStatus= ArtefactStatus.createErrorStatus("A condition had an error. See conditions");
+				fStatus = ArtefactStatus.createErrorStatus(String.format(
+						"Condition '%s=%s' had an error: %s.", c
+								.getExpression(), c.getExpectedValue(), c
+								.getStatus().getMessage()));
 				break;
 			}
 		}
