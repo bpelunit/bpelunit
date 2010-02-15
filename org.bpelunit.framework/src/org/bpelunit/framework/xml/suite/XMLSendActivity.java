@@ -94,6 +94,66 @@ public interface XMLSendActivity extends org.bpelunit.framework.xml.suite.XMLSoa
     void unsetDelaySequence();
     
     /**
+     * Gets the "faultcode" attribute
+     */
+    javax.xml.namespace.QName getFaultcode();
+    
+    /**
+     * Gets (as xml) the "faultcode" attribute
+     */
+    org.apache.xmlbeans.XmlQName xgetFaultcode();
+    
+    /**
+     * True if has "faultcode" attribute
+     */
+    boolean isSetFaultcode();
+    
+    /**
+     * Sets the "faultcode" attribute
+     */
+    void setFaultcode(javax.xml.namespace.QName faultcode);
+    
+    /**
+     * Sets (as xml) the "faultcode" attribute
+     */
+    void xsetFaultcode(org.apache.xmlbeans.XmlQName faultcode);
+    
+    /**
+     * Unsets the "faultcode" attribute
+     */
+    void unsetFaultcode();
+    
+    /**
+     * Gets the "faultstring" attribute
+     */
+    java.lang.String getFaultstring();
+    
+    /**
+     * Gets (as xml) the "faultstring" attribute
+     */
+    org.apache.xmlbeans.XmlString xgetFaultstring();
+    
+    /**
+     * True if has "faultstring" attribute
+     */
+    boolean isSetFaultstring();
+    
+    /**
+     * Sets the "faultstring" attribute
+     */
+    void setFaultstring(java.lang.String faultstring);
+    
+    /**
+     * Sets (as xml) the "faultstring" attribute
+     */
+    void xsetFaultstring(org.apache.xmlbeans.XmlString faultstring);
+    
+    /**
+     * Unsets the "faultstring" attribute
+     */
+    void unsetFaultstring();
+    
+    /**
      * A factory class with static methods for creating instances
      * of this type.
      */
