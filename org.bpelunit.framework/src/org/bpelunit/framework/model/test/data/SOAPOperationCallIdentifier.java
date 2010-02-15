@@ -21,6 +21,7 @@ import javax.wsdl.extensions.soap.SOAPBody;
 import javax.wsdl.extensions.soap.SOAPOperation;
 import javax.xml.namespace.QName;
 
+import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.exception.SpecificationException;
 
 /**
@@ -189,6 +190,9 @@ public class SOAPOperationCallIdentifier {
 		String style= sBinding.getStyle();
 
 		// Style might only be indicated at operation level.
+		if (isFault()) {
+		        style = "document"; // according to WSDL 1.1 (section 3.6, last paragraph)
+		}
 		if (style == null) {
 			style= getSOAPOperation().getStyle();
 		}

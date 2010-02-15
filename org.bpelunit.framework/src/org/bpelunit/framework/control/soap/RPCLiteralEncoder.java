@@ -83,22 +83,19 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 	public SOAPMessage construct(SOAPOperationCallIdentifier operation, Element literalData) throws SOAPEncodingException {
 
 		try {
+		        if (operation.isFault()) {
+                            throw new SOAPEncodingException("RPC style cannot be used with SOAP faults: check section 3.6 of the WSDL 1.1 standard");
+                        }
+
 			MessageFactory mFactory= BPELUnitUtil.getMessageFactoryInstance();
 			SOAPFactory sFactory= SOAPFactory.newInstance();
 
 			SOAPMessage message= mFactory.createMessage();
 			SOAPBody body= message.getSOAPBody();
 
-			// We want to add the data to the body, or the fault element,
-			// depending on whether this is a fault or input/output operation.
-			SOAPElement data;
-
-			if (operation.isFault()) {
-				SOAPFault fault= body.addFault(new QName(BPELUnitConstants.SOAP_1_1_NAMESPACE, BPELUnitConstants.SOAP_FAULT_CODE_CLIENT),
-						BPELUnitConstants.SOAP_FAULT_DESCRIPTION);
-				data= fault.addDetail();
-			} else
-				data= body;
+			// The RPC wrapper element name must match the error code if this
+			// is a fault, and the operation name otherwise.
+			SOAPElement data = body;
 
 			// create the RPC/Literal parent element.
 			String targetNameSpace= operation.getTargetNamespace();
@@ -125,16 +122,11 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 		try {
 			SOAPBody body= message.getSOAPBody();
 
-			// We want to retrieve the data from the body, or the fault element,
-			// depending on whether this is a fault or input/output operation.
-			SOAPElement data;
+                        if (operation.isFault()) {
+                            throw new SOAPEncodingException("rpc style cannot be used with SOAP faults: check section 3.6 of the WSDL 1.1 standard");
+                        }
 
-			if (operation.isFault()) {
-				data= body.getFault().getDetail();
-			} else
-				data= body;
-
-
+			SOAPElement data = body;
 			SOAPElement rpcWrapper= null;
 
 			// Find element node child
