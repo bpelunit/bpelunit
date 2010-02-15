@@ -25,6 +25,7 @@ import org.bpelunit.toolsupport.util.WSDLReadingException;
 import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
 import org.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.sun.xml.xsom.parser.XSOMParser;
@@ -121,7 +122,20 @@ public class WSDLParser {
 				// inherit the namespaces from the definitions-tag
 				this.addNamespaces(namespaces, schemaElement);
 
-				reader.parse(this.getStringReaderFromElement(schemaElement));
+				/*
+				 * We need to set a system ID or importing .xsd files with
+				 * relative paths won't work. See this mailing list thread at
+				 * the XSOM website:
+				 *
+				 * https://xsom.dev.java.net/servlets/ReadMsg?list=users&msgNo=159
+				 *
+				 * All relative URIs will use the WSDL URI as their base.
+				 */
+				StringReader sReader = this.getStringReaderFromElement(schemaElement);
+				InputSource source = new InputSource(sReader);
+				source.setSystemId(this.definition.getDocumentBaseURI());
+				reader.parse(source);
+				
 				try {
 					parser.readSchemata(reader.getResult());
 				} catch (NullPointerException e) {
