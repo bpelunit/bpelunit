@@ -99,20 +99,7 @@ public class DocumentLiteralEncoder implements ISOAPEncoder {
 			SOAPMessage message) throws SOAPEncodingException {
 
 		try {
-			SOAPBody body = message.getSOAPBody();
-			SOAPElement data;
-
-			if (operation.isFault()) {
-				// a fault is expected
-				SOAPFault fault = body.getFault();
-				if (fault == null)
-					throw new SOAPEncodingException(
-							"A fault was expected in operation " + this
-									+ ", but none was found in input data.");
-				else
-					data = body.getFault().getDetail();
-			} else
-				data = body;
+			SOAPElement data = message.getSOAPBody();
 
 			Element rawRoot = BPELUnitUtil.generateDummyElementNode();
 			for (Iterator i = data.getChildElements(); i.hasNext();) {

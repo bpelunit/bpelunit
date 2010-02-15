@@ -44,8 +44,13 @@
 						<crs:ssn>0</crs:ssn>
 					</data>
 					</send>
-					<receive fault="true">
-						<condition><expression>crs:error/text()</expression><value>'SSN may not be null.'</value></condition>
+					<receive fault="true" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+						<!--
+						  All receive conditions are now evaluated from the soap:Body element, even if they
+						  are faults. This is more consistent and allows the user to check XPath asserts on
+						  any part of the SOAP fault message.
+						-->
+						<condition><expression>soapenv:Fault/detail/crs:error/text()</expression><value>'SSN may not be null.'</value></condition>
 					</receive>
 				</sendReceive>
 			</clientTrack>

@@ -12,7 +12,9 @@ import java.util.List;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
@@ -148,13 +150,6 @@ public class ReceiveDataSpecification extends DataSpecification {
 		if (hasProblems())
 			return;
 
-		// If the message is a SOAP fault, but this receive did not expect a fault,
-		// log as an error
-		if (hasMessageFault() && !fOperation.isFault()) {
-			fStatus= ArtefactStatus.createErrorStatus("Received a SOAP fault although none was expected.");
-			return;
-		}
-
 		validateConditions();
 		if (hasProblems())
 			return;
@@ -188,6 +183,45 @@ public class ReceiveDataSpecification extends DataSpecification {
 	}
 
 	private void validateConditions() {
+
+		// Check implicit fault assertions
+		SOAPBody body;
+		try {
+			body = fSOAPMessage.getSOAPBody();
+		} catch (SOAPException e) {
+			fStatus = ArtefactStatus.createErrorStatus(
+				"Exception during condition validation", e);
+			return;
+		}
+		if (fOperation.isFault()) {
+			SOAPFault fault = body.getFault();
+			if (fault == null) {
+				fStatus = ArtefactStatus.createFailedStatus(
+					"A fault was expected in operation "
+					+ this
+					+ ", but none was found in input data.");
+				return;
+			}
+			if (fFaultCode != null && !fFaultCode.equals(fault.getFaultCodeAsQName())) {
+				fStatus = ArtefactStatus.createFailedStatus(String.format(
+					"Expected the fault code %s, got %s instead",
+					fFaultCode, fault.getFaultCodeAsQName()));
+				return;
+			}
+			if (fFaultString != null && !fFaultString.equals(fault.getFaultString())) {
+				fStatus = ArtefactStatus.createFailedStatus(String.format(
+					"Expected the fault string %s, got %s instead",
+					fFaultString, fault.getFaultString()));
+				return;
+			}
+		}
+		else if (body.getFault() != null){
+			fStatus = ArtefactStatus.createFailedStatus(
+				"The operation "
+				+ this
+				+ " was expected to succeed, but replied with a SOAP fault.");
+			return;
+		}
 
 		for (ReceiveCondition c : fConditions) {
 			c.evaluate(fLiteralData, fNamespaceContext);
