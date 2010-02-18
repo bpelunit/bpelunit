@@ -7,6 +7,11 @@ package org.bpelunit.framework.control.deploy.activebpel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.soap.SOAPException;
 
@@ -63,6 +68,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	private String fDeploymentDirectory;
 
 	private String fDeploymentAdminServiceURL;
+	private String fAdminServiceURL;
 
 	@IBPELDeployerOption(testSuiteSpecific = false)
 	public void setBPRFile(String bprFile) {
@@ -79,6 +85,11 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		this.fDeploymentAdminServiceURL = deploymentAdminServiceURL;
 	}
 
+	@IBPELDeployerOption(defaultValue = "http://localhost:8080/active-bpel/services/ActiveBpelAdmin")
+	public void setAdministrationServiceURL(String adminServiceURL) {
+		this.fAdminServiceURL = adminServiceURL;
+	}
+
 	public void deploy(String pathToTest, ProcessUnderTest put)
 			throws DeploymentException {
 		fLogger.info("ActiveBPEL deployer got request to deploy " + put);
@@ -86,6 +97,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		check(fBPRFile, "BPR File");
 		check(fDeploymentDirectory, "deployment directory path");
 		check(fDeploymentAdminServiceURL, "deployment admin server URL");
+		check(fAdminServiceURL, "engine admin server URL");
 
 		// changed the way the archive location is obtained.
 		/*
@@ -189,6 +201,12 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 					+ deployable + ": File " + bprFile
 					+ " could not be deleted.");
 
+		try {
+			terminateAllRunningProcesses();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new DeploymentException(e.getLocalizedMessage());
+		}
 	}
 
 	// new method to get Archive Location.
@@ -253,4 +271,71 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		}
 	}
 
+	private void terminateAllRunningProcesses() throws Exception {
+	    for (int pid : listRunningProcesses()) {
+	        terminateProcess(pid);
+	    }
+	}
+
+	  private List<Integer> listRunningProcesses() throws Exception {
+		try {
+			ArrayList<Integer> vProcesses = new ArrayList<Integer>();
+			RequestResult listResponse = sendRequestToActiveBPEL(
+				fAdminServiceURL,
+				new ProcessListRequestEntity());
+
+			if (listResponse.statusCode != 200) {
+				throw new Exception(
+					String.format(
+						"Could not obtain the running process list: "
+						+ "got status code %d\nResponse:\n%s",
+						listResponse.statusCode,
+						listResponse.responseBody));
+			}
+
+			// No need to perform XML parsing: we're only interested
+			// in some simple elements
+			Pattern patPID = Pattern.compile(
+				"<[^>]*processId>\\s*([0-9]+)\\s*</[^>]+>");
+			Matcher matcher = patPID.matcher(listResponse.responseBody);
+			while (matcher.find()) {
+				vProcesses.add(Integer.parseInt(matcher.group(1)));
+			}
+
+			return vProcesses;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(
+				"Could not obtain the running process list: "
+				+ e.toString(), e);
+		}
+	}
+
+	private void terminateProcess(int pid) throws Exception {
+		try {
+			RequestResult response = sendRequestToActiveBPEL(
+				fAdminServiceURL,
+				new TerminateProcessRequestEntity(pid));
+			if (response.statusCode != 200) {
+				throw new Exception(
+					String.format(
+						"Could not kill process #%d: "
+						+ "non-OK status code %d\nResponse:\n%s",
+						pid,
+						response.statusCode,
+						response.responseBody));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(
+				String.format(
+					"Could not kill process #%d: %s",
+					pid, e.toString()), e);
+		}
+	}
+
 }
+
+
+
