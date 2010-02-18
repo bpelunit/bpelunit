@@ -335,6 +335,9 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		}
 	}
 
+    public void cleanUpAfterTestCase() throws Exception {
+        // FIXME: temporary placeholder
+    }
 }
 
 

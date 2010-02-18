@@ -27,8 +27,11 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  * For each deployed PUT, a new instance will be created. It is thus safe to
  * store undeployment data in the deployer instance.
  * 
+ * Additionally, after each test case has been run, cleanUpAfterTestCase() will be called, in case
+ * some cleanup needs to be done after every test.
+ *
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Antonio García Domínguez (added cleanUpAfterTestCase)
  * 
  */
 public interface IBPELDeployer {
@@ -123,4 +126,18 @@ public interface IBPELDeployer {
 	
 	public void setArchiveLocation(String archive);
 
+	/**
+	 * Performs engine-specific test cleanup after each test. This may or
+	 * may not include killing any stale processes which may have end up in
+	 * an infinite loop, among other things. Most implementations will
+	 * probably do nothing here.
+	 *
+	 * Cleaning up after the test suite has ended doesn't require any new
+	 * methods: adding the required logic to {@see #undeploy(String,
+	 * ProcessUnderTest)} is enough.
+	 *
+	 * @throws Exception There was a problem while cleaning up after the
+	 * test case.
+	 */
+	public void cleanUpAfterTestCase() throws Exception;
 }

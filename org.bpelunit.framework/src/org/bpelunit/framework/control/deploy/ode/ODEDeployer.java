@@ -380,4 +380,8 @@ public class ODEDeployer implements IBPELDeployer {
 							+ description + ".");
 	}
 
+	public void cleanUpAfterTestCase() throws Exception {
+		// do nothing.
+	}
+
 }

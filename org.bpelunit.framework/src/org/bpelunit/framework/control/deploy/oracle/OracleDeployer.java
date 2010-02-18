@@ -22,7 +22,7 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  * Oracle Deployer - deploys a process to an Oracle BPEL server.
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Antonio García-Domínguez (added cleanUpAfterTestCase)
  * 
  */
 @IBPELDeployerCapabilities(canDeploy = true)
@@ -225,4 +225,8 @@ public class OracleDeployer implements IBPELDeployer {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    public void cleanUpAfterTestCase() {
+        // do nothing.
+    }
 }

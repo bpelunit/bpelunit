@@ -22,7 +22,7 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  * does nothing.
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Antonio García-Domínguez (added cleanUpAfterTestCase)
  * 
  */
 @IBPELDeployerCapabilities
@@ -50,6 +50,10 @@ public class TestModeDeployer implements IBPELDeployer {
 	}
 
 	public void setArchiveLocation(String archive) {
+		// do nothing.
+	}
+
+	public void cleanUpAfterTestCase() {
 		// do nothing.
 	}
 }
