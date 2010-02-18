@@ -207,6 +207,12 @@ public class TestSuite implements ITestArtefact {
 		for (TestCase testCase : fTestCaseFilter) {
 			fCurrentTestCase = testCase;
 			testCase.run();
+			try {
+			  fProcessUnderTest.cleanUpAfterTestCase();
+			} catch (Exception ex) {
+			    ex.printStackTrace();
+			    failure = true;
+			}
 			if (testCase.getStatus().isError()) {
 				error = true;
 				if (BPELUnitRunner.isHaltOnError())
