@@ -69,6 +69,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	private String fDeploymentAdminServiceURL;
 	private String fAdminServiceURL;
+	private ProcessUnderTest put;
 
 	@IBPELDeployerOption(testSuiteSpecific = false)
 	public void setBPRFile(String bprFile) {
@@ -92,6 +93,8 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	public void deploy(String pathToTest, ProcessUnderTest put)
 			throws DeploymentException {
+		this.put = put;
+
 		fLogger.info("ActiveBPEL deployer got request to deploy " + put);
 
 		check(fBPRFile, "BPR File");
@@ -336,7 +339,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	}
 
     public void cleanUpAfterTestCase() throws Exception {
-        // FIXME: temporary placeholder
+        terminateAllRunningProcesses(put.getName());
     }
 }
 
