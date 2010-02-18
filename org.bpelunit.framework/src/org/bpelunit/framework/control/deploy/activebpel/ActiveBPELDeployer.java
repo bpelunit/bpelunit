@@ -31,7 +31,7 @@ import org.bpelunit.framework.model.ProcessUnderTest;
  * ActiveBPEL Deployer - deploys a process to an ActiveBPEL server.
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Antonio Garcia-Dominguez
  * 
  */
 @IBPELDeployerCapabilities(canDeploy = true, canMeasureTestCoverage = true)
@@ -46,6 +46,13 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	//
 	// private static final String fsDeploymentServiceURL =
 	// "ActiveBPELDeploymentServiceURL";
+
+	/* Encapsulates the results from an HTTP request: status code and
+	 * response body */
+	private static class RequestResult {
+		public int    statusCode;
+		public String responseBody;
+	}
 
 	private Logger fLogger = Logger.getLogger(getClass());
 
@@ -119,12 +126,9 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 		// Upload it.
 
-		HttpClient client = new HttpClient();
-		PostMethod method = new PostMethod(fDeploymentAdminServiceURL);
-
 		RequestEntity re;
 		try {
-			re = new ActiveBPELRequestEntity(uploadingFile);
+			re = new BPRDeployRequestEntity(uploadingFile);
 		} catch (IOException e) {
 			throw new DeploymentException(
 					"An input/output error occured in ActivBPEL deployer when deploying: "
@@ -134,25 +138,18 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 					"An error occurred while creating SOAP message for ActiveBPEL deployment: "
 							+ e.getMessage());
 		}
-		method.setRequestEntity(re);
 
 		fLogger
 				.info("ActiveBPEL deployer about to send SOAP request to deploy "
 						+ put);
 
-		// Provide custom retry handler is necessary
-		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-				new DefaultHttpMethodRetryHandler(1, false));
-		method.addRequestHeader("SOAPAction", "");
-
 		try {
-			int statusCode = client.executeMethod(method);
+			RequestResult result = sendRequestToActiveBPEL(fDeploymentAdminServiceURL, re);
 
-			if (statusCode < 200 || statusCode > 299) {
-				String responseBody = method.getResponseBodyAsString();
+			if (result.statusCode < 200 || result.statusCode > 299) {
 				throw new DeploymentException(
 						"ActiveBPEL Server reported a Deployment Error: "
-								+ responseBody);
+								+ result.responseBody);
 			}
 
 			// done.
@@ -167,17 +164,14 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 					"Problem contacting the ActiveBPEL Server: "
 							+ e.getMessage(), e);
 		} finally {
-			method.releaseConnection();
 			if (fileReplaced && uploadingFile.exists()) {
 				uploadingFile.delete();
 			}
 		}
-
 	}
 
 	public void undeploy(String path, ProcessUnderTest deployable)
 			throws DeploymentException {
-
 		// undeploy may be called even if deploy was not successful
 		if (fResultingFile == null)
 			return;
@@ -222,4 +216,41 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	/**
+	 * @param re SOAP request entity to be sent to ActiveBPEL.
+	 * @return Response from the ActiveBPEL administration service.
+	 * @throws IOException
+	 * @throws HttpException
+	 */
+	private static RequestResult sendRequestToActiveBPEL(
+			final String url, RequestEntity re)
+			throws IOException, HttpException {
+		PostMethod method = null;
+		try {
+			HttpClient client = new HttpClient();
+			method = new PostMethod(url);
+			method.setRequestEntity(re);
+
+			// Provide custom retry handler is necessary
+			method.getParams().setParameter(
+				HttpMethodParams.RETRY_HANDLER,
+				new DefaultHttpMethodRetryHandler(1, false));
+			method.addRequestHeader("SOAPAction", "");
+			client.executeMethod(method);
+
+			// We need to read the response body right now: if it is called
+			// after the connection is released, it will only return null
+			RequestResult result = new RequestResult();
+			result.statusCode    = method.getStatusCode();
+			result.responseBody  = method.getResponseBodyAsString();
+
+			return result;
+		}  finally {
+			if (method != null) {
+			    method.releaseConnection();
+			}
+		}
+	}
+
 }
