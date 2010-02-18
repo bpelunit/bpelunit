@@ -67,7 +67,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		this.fDeploymentDirectory = deploymentDirectory;
 	}
 
-	@IBPELDeployerOption(defaultValue = "http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR")
+	@IBPELDeployerOption(defaultValue = "http://localhost:8080/active-bpel/services/DeployBPRService")
 	public void setDeploymentAdminServiceURL(String deploymentAdminServiceURL) {
 		this.fDeploymentAdminServiceURL = deploymentAdminServiceURL;
 	}
