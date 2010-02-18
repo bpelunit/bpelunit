@@ -202,7 +202,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 					+ " could not be deleted.");
 
 		try {
-			terminateAllRunningProcesses();
+			terminateAllRunningProcesses(deployable.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new DeploymentException(e.getLocalizedMessage());
@@ -271,18 +271,18 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		}
 	}
 
-	private void terminateAllRunningProcesses() throws Exception {
-	    for (int pid : listRunningProcesses()) {
+	private void terminateAllRunningProcesses(String processName) throws Exception {
+	    for (int pid : listRunningProcesses(processName)) {
 	        terminateProcess(pid);
 	    }
 	}
 
-	  private List<Integer> listRunningProcesses() throws Exception {
+	  private List<Integer> listRunningProcesses(String processName) throws Exception {
 		try {
 			ArrayList<Integer> vProcesses = new ArrayList<Integer>();
 			RequestResult listResponse = sendRequestToActiveBPEL(
 				fAdminServiceURL,
-				new ProcessListRequestEntity());
+				new ProcessListRequestEntity(processName));
 
 			if (listResponse.statusCode != 200) {
 				throw new Exception(
@@ -336,6 +336,5 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	}
 
 }
-
 
 
