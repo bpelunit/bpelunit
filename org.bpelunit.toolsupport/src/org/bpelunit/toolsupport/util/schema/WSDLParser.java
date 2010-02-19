@@ -22,6 +22,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.bpelunit.framework.exception.SpecificationException;
+import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import org.bpelunit.toolsupport.util.WSDLReadingException;
 import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
@@ -222,43 +224,6 @@ public class WSDLParser {
 	}
 
 	/**
-	 * Returns the Operation identified by <code>service</code>,
-	 * <code>port</code> and <code>operationName</code>
-	 * 
-	 * @param service
-	 *            QName of the service
-	 * @param port
-	 *            name of the port
-	 * @param operationName
-	 *            name of the operation
-	 * @return
-	 * @throws InvalidInputException
-	 */
-	private Operation getOperation(QName service, String port, String operationName)
-			throws InvalidInputException {
-		if (service == null || service.getLocalPart().isEmpty()
-				|| service.getNamespaceURI().isEmpty()) {
-			throw new InvalidInputException("Service must be set.");
-		}
-
-		if (port == null || port.isEmpty()) {
-			throw new InvalidInputException("Port must be set.");
-		}
-
-		if (operationName == null || operationName.isEmpty()) {
-			throw new InvalidInputException("operationName must be set.");
-		}
-
-		try {
-			Operation operation = this.definition.getService(service).getPort(port).getBinding()
-					.getBindingOperation(operationName, null, null).getOperation();
-			return operation;
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
-
-	/**
 	 * Returns an XML Element for the output of the operation.
 	 *
 	 * For document/literal bindings, returns the Element of the first part of
@@ -284,15 +249,42 @@ public class WSDLParser {
 
 	private Element getElementForOperation(QName service, String port, String operationName, SOAPOperationDirectionIdentifier direction)
 			throws InvalidInputException, NoSuchOperationException {
-		Operation operation = this.getOperation(service, port, operationName);
-		if (operation == null) {
-			throw new NoSuchOperationException("Operation " + operationName + "for port " + port
-					+ " in service " + service + " does not exist.");
+
+		// Create the identifier, for querying additional required info
+		SOAPOperationCallIdentifier opIdentifier;
+		Operation operation;
+		try {
+			opIdentifier = new SOAPOperationCallIdentifier(this.definition,
+					service, port, operationName, direction);
+			operation = opIdentifier.getBindingOperation().getOperation();
+		} catch (SpecificationException e) {
+			throw new NoSuchOperationException(e);
 		}
+
+		// Query the style (rpc/lit, doc/lit ...)
+		String opStyle;
+		try {
+			opStyle = opIdentifier.getEncodingStyle();
+		} catch (SpecificationException e) {
+			throw new InvalidInputException(e);
+		}
+
 		Message msg = SOAPOperationDirectionIdentifier.OUTPUT.equals(direction)
 			? operation.getOutput().getMessage()
 			: operation.getInput().getMessage();
 
+		if ("document/literal".equals(opStyle)) {
+			return getElementForDocLitMessage(msg);
+		}
+		else {
+			throw new InvalidInputException(
+					"Unknown combination of operation style and soap:body use: "
+					+ opStyle);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Element getElementForDocLitMessage(Message msg) {
 		Collection<Part> parts = msg.getParts().values();
 		if (parts.isEmpty()) {
 			return null;

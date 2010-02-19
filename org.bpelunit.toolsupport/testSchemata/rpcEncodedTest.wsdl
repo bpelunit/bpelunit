@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/rpcEncodedTest/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="rpcEncodedTest" targetNamespace="http://www.example.org/rpcEncodedTest/">
+  <wsdl:message name="goRequest">
+    <wsdl:part name="goRequest" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="goResponse">
+    <wsdl:part name="goResponse" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:portType name="doSomethingPortType">
+    <wsdl:operation name="go">
+      <wsdl:input message="tns:goRequest"/>
+      <wsdl:output message="tns:goResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="rpcEncodedTestSOAP" type="tns:doSomethingPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="go">
+      <soap:operation soapAction="http://www.example.org/rpcEncodedTest/go"/>
+      <wsdl:input>
+        <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.example.org/rpcEncodedTest/" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.example.org/rpcEncodedTest/" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="doSomethingService">
+    <wsdl:port binding="tns:rpcEncodedTestSOAP" name="doSomethingPort">
+      <soap:address location="http://www.example.org/services/doSomething"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
