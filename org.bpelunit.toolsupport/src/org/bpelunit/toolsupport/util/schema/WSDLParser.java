@@ -119,6 +119,12 @@ public class WSDLParser {
 		reader.setAnnotationParser(new DomAnnotationParserFactory());
 
 		Map<String, String> namespaces = this.definition.getNamespaces();
+
+		// stop here if the WSDL doesn't define any types of its own (common
+		// for RPC style operations)
+		if (this.definition.getTypes() == null) {
+			return;
+		}
 		// for all schemas in the WSDL ...
 		for (Object tmp : this.definition.getTypes().getExtensibilityElements()) {
 			if (tmp instanceof Schema) {
