@@ -36,7 +36,9 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
  * Types of the schemata. Connects the operations of the service with the input
  * and output messages.
  * 
- * @author cvolhard
+ * Antonio: fix relative URI imports.
+ *
+ * @author cvolhard, Antonio García-Domínguez
  * 
  */
 public class WSDLParser {
@@ -193,9 +195,11 @@ public class WSDLParser {
 	}
 
 	/**
-	 * Gets the Element of the first part of the input message of operation
-	 * identified by <code>service</code>, <code>port</code> and
-	 * <code>operationName</code> (first part because of the WS-I standard).
+	 * Returns an XML Element for the input of the operation.
+	 *
+	 * For document/literal bindings, returns the Element of the first part of
+	 * the output message of the operation identified by <code>service</code>,
+	 * <code>port</code> and <code>operationName</code>.
 	 * 
 	 * 
 	 * @param service
@@ -262,9 +266,11 @@ public class WSDLParser {
 	}
 
 	/**
-	 * Gets the Element of the first part of the output message of operation
-	 * identified by <code>service</code>, <code>port</code> and
-	 * <code>operationName</code> (first part because of the WS-I standard).
+	 * Returns an XML Element for the output of the operation.
+	 *
+	 * For document/literal bindings, returns the Element of the first part of
+	 * the output message of the operation identified by <code>service</code>,
+	 * <code>port</code> and <code>operationName</code>.
 	 * 
 	 * 
 	 * @param service
@@ -293,3 +299,4 @@ public class WSDLParser {
 		return this.elements.get(part.getElementName());
 	}
 }
+
