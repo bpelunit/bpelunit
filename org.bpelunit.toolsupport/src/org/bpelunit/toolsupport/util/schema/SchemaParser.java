@@ -43,7 +43,7 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
  * <li>ComplexTypes are only created if a Element references to it</li>
  * </ul>
  * 
- * @author cvolhard
+ * @author cvolhard, Antonio García-Domínguez
  * 
  */
 public class SchemaParser {
@@ -246,4 +246,12 @@ public class SchemaParser {
 				decl.getName());
 	}
 
+	/**
+	 * Returns the manager for the elements in this schema.
+	 *
+	 * @return Manager for the elements in this schema.
+	 */
+	public SchemaElementManager getSchemaElementManager() {
+		return this.elementManager;
+	}
 }
