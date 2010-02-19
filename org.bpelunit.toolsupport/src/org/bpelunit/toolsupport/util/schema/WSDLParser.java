@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.wsdl.Definition;
+import javax.wsdl.Message;
 import javax.wsdl.Operation;
 import javax.wsdl.Part;
 import javax.wsdl.extensions.schema.Schema;
@@ -21,6 +22,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import org.bpelunit.toolsupport.util.WSDLReadingException;
 import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
 import org.bpelunit.toolsupport.util.schema.nodes.Element;
@@ -42,6 +44,7 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
  * 
  */
 public class WSDLParser {
+
 	private Definition definition;
 	private HashMap<QName, ComplexType> complexTypes;
 	private HashMap<QName, SimpleType> simpleTypes;
@@ -215,17 +218,7 @@ public class WSDLParser {
 	 */
 	public Element getInputElementForOperation(QName service, String port, String operationName)
 			throws InvalidInputException, NoSuchOperationException {
-		Operation operation = this.getOperation(service, port, operationName);
-		if (operation == null) {
-			throw new NoSuchOperationException("Operation " + operationName + "for port " + port
-					+ " in service " + service + " does not exists.");
-		}
-		Collection values = operation.getInput().getMessage().getParts().values();
-		if (values.isEmpty()) {
-			return null;
-		}
-		Part part = (Part) values.iterator().next();
-		return this.elements.get(part.getElementName());
+		return this.getElementForOperation(service, port, operationName, SOAPOperationDirectionIdentifier.INPUT);
 	}
 
 	/**
@@ -286,16 +279,25 @@ public class WSDLParser {
 	 */
 	public Element getOutputElementForOperation(QName service, String port, String operationName)
 			throws InvalidInputException, NoSuchOperationException {
+		return this.getElementForOperation(service, port, operationName, SOAPOperationDirectionIdentifier.OUTPUT);
+	}
+
+	private Element getElementForOperation(QName service, String port, String operationName, SOAPOperationDirectionIdentifier direction)
+			throws InvalidInputException, NoSuchOperationException {
 		Operation operation = this.getOperation(service, port, operationName);
 		if (operation == null) {
 			throw new NoSuchOperationException("Operation " + operationName + "for port " + port
-					+ " in service " + service + " does not exists.");
+					+ " in service " + service + " does not exist.");
 		}
-		Collection values = operation.getOutput().getMessage().getParts().values();
-		if (values.isEmpty()) {
+		Message msg = SOAPOperationDirectionIdentifier.OUTPUT.equals(direction)
+			? operation.getOutput().getMessage()
+			: operation.getInput().getMessage();
+
+		Collection<Part> parts = msg.getParts().values();
+		if (parts.isEmpty()) {
 			return null;
 		}
-		Part part = (Part) values.iterator().next();
+		Part part = (Part) parts.iterator().next();
 		return this.elements.get(part.getElementName());
 	}
 }
