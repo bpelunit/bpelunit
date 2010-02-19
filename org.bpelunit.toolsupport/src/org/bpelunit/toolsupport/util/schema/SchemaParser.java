@@ -135,6 +135,12 @@ public class SchemaParser {
 		for (XSElementDecl elementDecl : schema.getElementDecls().values()) {
 			this.readElement(elementDecl, false);
 		}
+		for (XSSimpleType simpleType : schema.getSimpleTypes().values()) {
+			this.readSimpleType(simpleType);
+		}
+		for (XSComplexType complexType : schema.getComplexTypes().values()) {
+			this.readComplexType(complexType);
+		}
 	}
 
 	/**
