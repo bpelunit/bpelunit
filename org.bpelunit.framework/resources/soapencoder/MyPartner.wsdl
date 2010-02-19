@@ -23,10 +23,10 @@
 <wsdl:operation name="NewOperation">
 <soap:operation soapAction="http://www.example.org/MyPartner/NewOperation"/>
 <wsdl:input>
-<soap:body parts="tns:NewOperationRequest" use="literal"/>
+<soap:body parts="NewOperationRequest" use="literal"/>
 </wsdl:input>
 <wsdl:output>
-<soap:body parts="tns:NewOperationResponse" use="literal"/>
+<soap:body parts="NewOperationResponse" use="literal"/>
 </wsdl:output>
 </wsdl:operation>
 </wsdl:binding>
