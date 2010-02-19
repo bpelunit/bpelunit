@@ -179,8 +179,8 @@ public class OperationDataComponent extends DataComponent {
 						}
 					}
 				} catch (Exception e1) {
-					// no (existing) operation selected. Error is shown
-					// elsewhere.
+					// Error will (sometimes) be shown elsewhere as well
+					ToolSupportActivator.log(e1);
 				}
 			}
 		}
@@ -202,8 +202,8 @@ public class OperationDataComponent extends DataComponent {
 					((SendComponent) listener).setOperationMessage(element, false);
 				}
 			} catch (Exception e1) {
-				// no (existing) operation selected. Error is shown
-				// elsewhere.
+				// Error will (sometimes) be shown elsewhere as well
+				ToolSupportActivator.log(e1);
 			}
 		}
 	}
