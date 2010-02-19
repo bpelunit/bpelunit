@@ -754,7 +754,7 @@ public class MessageEditor extends Composite {
 	}
 
 	private void expandTreeItem(TreeItem item) {
-		if (!this.isItemDisabled(item)) {
+		if (item != null && !this.isItemDisabled(item)) {
 			item.setExpanded(true);
 			for (TreeItem child : item.getItems()) {
 				this.expandTreeItem(child);
