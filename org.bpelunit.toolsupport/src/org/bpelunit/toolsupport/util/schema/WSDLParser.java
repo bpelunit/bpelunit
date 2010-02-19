@@ -48,9 +48,7 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 public class WSDLParser {
 
 	private Definition definition;
-	private HashMap<QName, ComplexType> complexTypes;
-	private HashMap<QName, SimpleType> simpleTypes;
-	private HashMap<QName, Element> elements;
+	private SchemaElementManager schemaManager;
 
 	/**
 	 * Creates the WSDL-Parser for <code>definition</code>. Parses all the
@@ -75,7 +73,7 @@ public class WSDLParser {
 	 * @return
 	 */
 	HashMap<QName, ComplexType> getComplexTypes() {
-		return this.complexTypes;
+		return this.schemaManager.getComplexTypes();
 	}
 
 	/**
@@ -86,7 +84,7 @@ public class WSDLParser {
 	 * @return
 	 */
 	HashMap<QName, SimpleType> getSimpleTypes() {
-		return this.simpleTypes;
+		return this.schemaManager.getSimpleTypes();
 	}
 
 	/**
@@ -97,7 +95,7 @@ public class WSDLParser {
 	 * @return
 	 */
 	HashMap<QName, Element> getElements() {
-		return this.elements;
+		return this.schemaManager.getElements();
 	}
 
 	/**
@@ -110,9 +108,7 @@ public class WSDLParser {
 	@SuppressWarnings("unchecked")
 	private void readSchemata() throws SAXException, TransformerException, WSDLReadingException {
 		SchemaParser parser = new SchemaParser();
-		this.complexTypes = parser.getComplexTypes();
-		this.simpleTypes = parser.getSimpleTypes();
-		this.elements = parser.getElements();
+		this.schemaManager = parser.getSchemaElementManager();
 
 		XSOMParser reader = new XSOMParser();
 		reader.setErrorHandler(new ErrorAdapter());
@@ -296,7 +292,7 @@ public class WSDLParser {
 			return null;
 		}
 		Part part = (Part) parts.iterator().next();
-		return this.elements.get(part.getElementName());
+		return schemaManager.getElement(part.getElementName());
 	}
 }
 
