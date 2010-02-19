@@ -95,19 +95,35 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 			// is a fault, and the operation name otherwise.
 			SOAPElement data = body;
 
-			// create the RPC/Literal parent element.
-			String targetNameSpace= operation.getTargetNamespace();
-			SOAPElement wrapper= sFactory.createElement(operation.getName(), RPC_WRAPPER_NAMESPACE_PREFIX, targetNameSpace);
+			// Create the RPC/Literal wrapper if it doesn't exist.
+			// It would be easier (and less error prone in corner cases) to
+			// just assume all literal data for rpc/lit operations were
+			// properly wrapped, but that'd break backwards compatibility.
+			//
+			// TODO deprecate old unwrapped style?
+			String bodyNamespace= operation.getBodyNamespace();
+			Element firstElement = getFirstElementChild(literalData);
+			SOAPElement newWrapper = sFactory.createElement(operation.getName(),
+						RPC_WRAPPER_NAMESPACE_PREFIX, bodyNamespace);
+			NodeList list;
+			if (firstElement != null
+					&& bodyNamespace.equals(firstElement.getNamespaceURI())
+					&& operation.getName().equals(firstElement.getLocalName())) {
+				// already wrapped: don't wrap twice
+				list = firstElement.getChildNodes();
+			} else {
+				// not wrapped yet
+				list = literalData.getChildNodes();
+			}
 
-			NodeList list= literalData.getChildNodes();
 			for (int i= 0; i < list.getLength(); i++) {
 				Node node= list.item(i);
 				if (node instanceof Element) {
 					Element actual= (Element) list.item(i);
-					wrapper.addChildElement(sFactory.createElement(actual));
+					newWrapper.addChildElement(sFactory.createElement(actual));
 				}
 			}
-			data.addChildElement(wrapper);
+			data.addChildElement(newWrapper);
 			return message;
 
 		} catch (SOAPException e) {
@@ -157,6 +173,13 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 		}
 	}
 
-
-
+	private Element getFirstElementChild(Node literalData) {
+		Node firstElement = literalData.getFirstChild();
+		while (firstElement != null) {
+			if (firstElement instanceof Element)
+				return (Element)firstElement;
+			firstElement = firstElement.getNextSibling();
+		}
+		return null;
+	}
 }

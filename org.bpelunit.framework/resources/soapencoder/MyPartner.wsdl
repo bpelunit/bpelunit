@@ -23,7 +23,8 @@
 <wsdl:operation name="NewOperation">
 <soap:operation soapAction="http://www.example.org/MyPartner/NewOperation"/>
 <wsdl:input>
-<soap:body parts="NewOperationRequest" use="literal"/>
+<!-- namespace attribute should be ignored for doc/lit operations and used in rpc/lit operations -->
+<soap:body parts="NewOperationRequest" namespace="http://test.com/NewOperation" use="literal"/>
 </wsdl:input>
 <wsdl:output>
 <soap:body parts="NewOperationResponse" use="literal"/>

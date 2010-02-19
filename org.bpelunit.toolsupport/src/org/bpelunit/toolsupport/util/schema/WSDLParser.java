@@ -28,7 +28,9 @@ import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import org.bpelunit.toolsupport.util.WSDLReadingException;
 import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
 import org.bpelunit.toolsupport.util.schema.nodes.Element;
+import org.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
 import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+import org.bpelunit.toolsupport.util.schema.nodes.Type;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -208,7 +210,13 @@ public class WSDLParser {
 	 * the output message of the operation identified by <code>service</code>,
 	 * <code>port</code> and <code>operationName</code>.
 	 * 
-	 * 
+	 * For RPC/literal bindings, returns an Element. Its namespace URI is equal
+	 * to the value of the soap:body element of the binding, or the target
+	 * namespace for the service if it isn't specified (this last option is
+	 * for WSDL files which do not comply to the WS-I Basic Profile). It has as
+	 * many children as there are parts in the message. Their types are those
+	 * indicated in the type attribute of their corresponding part.
+	 *
 	 * @param service
 	 *            QName of the service
 	 * @param port
@@ -232,7 +240,13 @@ public class WSDLParser {
 	 * the output message of the operation identified by <code>service</code>,
 	 * <code>port</code> and <code>operationName</code>.
 	 * 
-	 * 
+	 * For RPC/literal bindings, returns an Element. Its namespace URI is equal
+	 * to the value of the soap:body element of the binding, or the target
+	 * namespace for the service if it isn't specified (this last option is
+	 * for WSDL files which do not comply to the WS-I Basic Profile). It has as
+	 * many children as there are parts in the message. Their types are those
+	 * indicated in the type attribute of their corresponding part.
+	 *
 	 * @param service
 	 *            QName of the service
 	 * @param port
@@ -271,6 +285,7 @@ public class WSDLParser {
 			throw new InvalidInputException(e);
 		}
 
+		String bodyNamespace = opIdentifier.getBodyNamespace();
 		Message msg = SOAPOperationDirectionIdentifier.OUTPUT.equals(direction)
 			? operation.getOutput().getMessage()
 			: operation.getInput().getMessage();
@@ -278,10 +293,65 @@ public class WSDLParser {
 		if ("document/literal".equals(opStyle)) {
 			return getElementForDocLitMessage(msg);
 		}
+		else if ("rpc/literal".equals(opStyle)) {
+			return getElementForRpcLitMessage(bodyNamespace, operation.getName(), msg);
+		}
 		else {
 			throw new InvalidInputException(
 					"Unknown combination of operation style and soap:body use: "
 					+ opStyle);
+		}
+	}
+
+	private Element getElementForRpcLitMessage(
+			String bodyNamespace, String operationName, Message msg)
+			throws InvalidInputException {
+		QName wrapperName = new QName(bodyNamespace, operationName);
+
+		// Check if the element has been already created. If so, just return it.
+		Map<QName, Element> elements = schemaManager.getElements();
+		if (elements.containsKey(wrapperName)) {
+			return elements.get(wrapperName);
+		}
+
+		// Create the complex type for the wrapper
+		ComplexType wrapperType = schemaManager.getComplexType(
+				bodyNamespace, operationName + "WrapperElementType");
+		addRPCPartElements(bodyNamespace, msg, wrapperType);
+
+		// Create the wrapper element itself
+		Element wrapperElement = schemaManager.getElement(wrapperName);
+		wrapperElement.setType(wrapperType);
+
+		return wrapperElement;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void addRPCPartElements(String bodyNamespace, Message msg, ComplexType wrapperType)
+			throws InvalidInputException {
+		Map<QName, ComplexType> complexTypes = schemaManager.getComplexTypes();
+		Map<QName, SimpleType> simpleTypes = schemaManager.getSimpleTypes();
+
+		Collection<Part> parts = msg.getOrderedParts(null);
+		for (Part part : parts) {
+			QName typeName = part.getTypeName();
+			Type type;
+			if (complexTypes.containsKey(typeName)) {
+				type = complexTypes.get(typeName);
+			}
+			else if (simpleTypes.containsKey(typeName)) {
+				type = simpleTypes.get(typeName);
+			}
+			else if (SchemaNode.XML_SCHEMA_NAMESPACE.equals(typeName.getNamespaceURI())) {
+				type = schemaManager.getSimpleType(typeName.getLocalPart());
+			}
+			else {
+				throw new InvalidInputException("Could not find the type " + typeName);
+			}
+
+			Element partElement = schemaManager.getElement(bodyNamespace, part.getName());
+			partElement.setType(type);
+			wrapperType.addElement(partElement);
 		}
 	}
 

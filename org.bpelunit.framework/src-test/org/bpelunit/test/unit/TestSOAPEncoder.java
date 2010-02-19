@@ -21,6 +21,7 @@ import org.bpelunit.framework.control.soap.DocumentLiteralEncoder;
 import org.bpelunit.framework.control.soap.NamespaceContextImpl;
 import org.bpelunit.framework.control.soap.RPCLiteralEncoder;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
+import org.bpelunit.framework.exception.SOAPEncodingException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import org.bpelunit.test.util.StringOutputStream;
@@ -74,26 +75,33 @@ public class TestSOAPEncoder extends SimpleTest {
 		return StringUtils.remove(messageAsString, '\r');
 	}
 
-	@Test
-	public void testEncodeRPCLit() throws SpecificationException, Exception {
-
+	/* Reuse the same test body for both RPC encoding tests (wrapped/unwrapped) */
+	private void testEncodeRPCLit(final String fragmentPath) throws Exception,
+			SpecificationException, SOAPEncodingException, SOAPException,
+			IOException {
 		// Create a RPC Literal message
-
-		Element literal= TestUtil.readLiteralData(PATH_TO_FILES, "rpclit1.xmlfrag");
+		Element literal= TestUtil.readLiteralData(PATH_TO_FILES, fragmentPath);
 		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
-
 		ISOAPEncoder encoder= new RPCLiteralEncoder();
 		SOAPMessage message= encoder.construct(operation, literal,
 				BPELUnitConstants.SOAP_FAULT_CODE_CLIENT,
 				BPELUnitConstants.SOAP_FAULT_DESCRIPTION);
-
 		String messageAsString= toString(message);
-
 		assertEquals(
-				nl("<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><rpcwrappernsprefix:NewOperation xmlns:rpcwrappernsprefix=\"http://www.example.org/MyPartner/\"><someFirstPart>\n"
+				nl("<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><rpcwrappernsprefix:NewOperation xmlns:rpcwrappernsprefix=\"http://test.com/NewOperation\"><someFirstPart>\n"
 						+ "	<tns:me xmlns:tns=\"http://xxx\" name=\"Phil\"/>\n"
 						+ "</someFirstPart><someSecondPart>directStringPart</someSecondPart></rpcwrappernsprefix:NewOperation></SOAP-ENV:Body></SOAP-ENV:Envelope>"),
 				nl(messageAsString));
+	}
+
+	@Test
+	public void testEncodeRPCLitUnwrapped() throws SpecificationException, Exception {
+		testEncodeRPCLit("rpclit1.xmlfrag");
+	}
+
+	@Test
+	public void testEncodeRPCLitWrapped() throws SpecificationException, Exception {
+		testEncodeRPCLit("rpclit3.xmlfrag");
 	}
 
 	@Test
