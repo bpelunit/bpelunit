@@ -6,4 +6,8 @@ public class NoSuchOperationException extends Exception {
 		super(message);
 	}
 
+	public NoSuchOperationException(Throwable cause) {
+		super(cause);
+	}
+
 }
