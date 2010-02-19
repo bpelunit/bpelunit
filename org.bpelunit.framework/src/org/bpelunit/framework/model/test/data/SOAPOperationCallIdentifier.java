@@ -53,7 +53,7 @@ import org.bpelunit.framework.exception.SpecificationException;
  * </p>
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Antonio García-Domínguez (getters for WSDL info and getBodyNamespace)
  * 
  */
 public class SOAPOperationCallIdentifier {
@@ -167,6 +167,34 @@ public class SOAPOperationCallIdentifier {
 		return fDirection == SOAPOperationDirectionIdentifier.FAULT;
 	}
 
+	/**
+	 * Returns the WSDL service for this call.
+	 */
+	public Service getService() {
+		return this.fService;
+	}
+
+	/**
+	 * Returns the WSDL port for this call.
+	 */
+	public Port getPort() {
+		return this.fPort;
+	}
+
+	/**
+	 * Returns the WSDL port binding for this call.
+	 */
+	public Binding getBinding() {
+		return this.fBinding;
+	}
+
+	/**
+	 * Returns the WSDL operation binding for this call.
+	 */
+	public BindingOperation getBindingOperation() {
+		return this.fOperation;
+	}
+
 	// ********************* WSDL-Related Getters *********************
 
 	/**
@@ -233,9 +261,28 @@ public class SOAPOperationCallIdentifier {
 		throw new SpecificationException("I could not find a target URL for operation " + this);
 	}
 
+	/**
+	 * Returns the namespace URI that should be used for the elements of the
+	 * soap:Body of the SOAP Message. Only useful with the RPC style: if the
+	 * style is "document", WS-I forbids using the namespace attribute in the
+	 * soap:body child of the binding of the port type.
+	 */
+	public String getBodyNamespace() {
+		SOAPBody soapBody;
+		if (SOAPOperationDirectionIdentifier.INPUT.equals(getDirection())) {
+			soapBody = getSoapBody(fOperation.getBindingInput());
+		} else {
+			soapBody = getSoapBody(fOperation.getBindingOutput());
+		}
+		if (soapBody != null && soapBody.getNamespaceURI() != null) {
+			return soapBody.getNamespaceURI();
+		}
+		else {
+			return getTargetNamespace();
+		}
+	}
 
 	// ********************** Private Helpers ****************
-
 
 	private SOAPOperation getSOAPOperation() {
 		List extensibilityElements2= fOperation.getExtensibilityElements();
