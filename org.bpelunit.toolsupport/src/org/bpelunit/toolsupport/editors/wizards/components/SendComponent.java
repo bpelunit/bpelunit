@@ -53,7 +53,7 @@ import org.eclipse.swt.widgets.Text;
  * 
  */
 public class SendComponent extends DataComponent implements IHyperLinkFieldListener,
-		OperationChangeListener, StringValueListener {
+		MessageChangeListener, StringValueListener {
 
 	protected TextDialogField fSendField;
 	protected XMLSendActivity fSendData;
@@ -215,7 +215,7 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 		this.messageEditor = new MessageEditor(this.tabFolder, SWT.NULL, this.getTestSuite());
 		if (this.getWizardPage() instanceof OperationWizardPage) {
 			OperationWizardPage comp = (OperationWizardPage) this.getWizardPage();
-			comp.getOperationDataComponent().addOperationListener(this);
+			comp.getOperationDataComponent().addMessageListener(this);
 		}
 		this.messageEditor.setXML(this.fSendField.getText());
 		this.messageEditor.addStringValueListener(this);
@@ -319,7 +319,7 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 	}
 
 	@Override
-	public void operationChanged(Element input) {
+	public void messageChanged(Element input) {
 		this.setOperationMessage(input, true);
 	}
 

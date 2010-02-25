@@ -159,7 +159,7 @@ public class OperationDataComponent extends DataComponent {
 	private boolean fPageComplete;
 	private SelectionButtonDialogField fReceiveFaultField;
 
-	private List<OperationChangeListener> operationChangeListener = new ArrayList<OperationChangeListener>();
+	private List<MessageChangeListener> messageChangeListener = new ArrayList<MessageChangeListener>();
 	private StringButtonDialogField fOutputDialogField;
 
 	private boolean fSendFault;
@@ -198,8 +198,8 @@ public class OperationDataComponent extends DataComponent {
 				try {
 					element = ((OperationWizardPage) this.getWizardPage()).getElementForOperation();
 					if (element != null) {
-						for (OperationChangeListener listener : this.operationChangeListener) {
-							listener.operationChanged(element);
+						for (MessageChangeListener listener : this.messageChangeListener) {
+							listener.messageChanged(element);
 						}
 					}
 				} catch (Exception e1) {
@@ -210,13 +210,13 @@ public class OperationDataComponent extends DataComponent {
 		}
 	}
 
-	public void addOperationListener(OperationChangeListener listener) {
-		for (OperationChangeListener ol : this.operationChangeListener) {
+	public void addMessageListener(MessageChangeListener listener) {
+		for (MessageChangeListener ol : this.messageChangeListener) {
 			if (ol == listener) {
 				return;
 			}
 		}
-		this.operationChangeListener.add(listener);
+		this.messageChangeListener.add(listener);
 		if (this.getWizardPage() instanceof OperationWizardPage) {
 			Element element;
 			try {
@@ -232,8 +232,8 @@ public class OperationDataComponent extends DataComponent {
 		}
 	}
 
-	public void removeOperationListener(OperationChangeListener listener) {
-		this.operationChangeListener.remove(listener);
+	public void removeOperationListener(MessageChangeListener listener) {
+		this.messageChangeListener.remove(listener);
 	}
 
 	/**
