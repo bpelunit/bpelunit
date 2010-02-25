@@ -18,6 +18,7 @@ import org.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
 import org.bpelunit.toolsupport.editors.wizards.components.OperationDataComponent;
 import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
 import org.bpelunit.toolsupport.util.schema.InvalidInputException;
+import org.bpelunit.toolsupport.util.schema.NoElementDefinitionExistsException;
 import org.bpelunit.toolsupport.util.schema.NoSuchOperationException;
 import org.bpelunit.toolsupport.util.schema.WSDLParser;
 import org.bpelunit.toolsupport.util.schema.nodes.Element;
@@ -34,6 +35,8 @@ public class OperationWizardPage extends ActivityWizardPage implements IComponen
 
 	private XMLSoapActivity fOperationActivity;
 	private OperationDataComponent fOperationsComponent;
+	private String elementError;
+	private String elementWarning;
 
 	public OperationWizardPage(XMLSoapActivity operationActivity, ActivityEditMode mode, String pageName) {
 		super(pageName, mode);
@@ -53,8 +56,13 @@ public class OperationWizardPage extends ActivityWizardPage implements IComponen
 	}
 
 	public void valueChanged(DialogField field) {
-		this.setErrorMessage(this.fOperationsComponent.getErrorMessage());
-		this.setPageComplete(this.fOperationsComponent.isPageComplete());
+		final String operationError = this.fOperationsComponent.getErrorMessage();
+
+		this.setErrorMessage(operationError != null
+				? operationError : elementError);
+		this.setMessage(elementWarning, WARNING);
+		this.setPageComplete(elementError == null
+				&& this.fOperationsComponent.isPageComplete());
 	}
 
 	public Definition getDefinition() {
@@ -109,21 +117,34 @@ public class OperationWizardPage extends ActivityWizardPage implements IComponen
 			return null;
 		}
 		
-		/* Normally I'd expect faults only to be sent instead of an <output>,
-		 * but it turns out they can be sent instead of an <input>, for
-		 * solicit-response operations (see WSDL 1.1, section 2.4.3). */
-		if (this.getSendFault()) {
-			element = parser.getFaultElementForOperation(
-					getService(), getPort(), getOperation(), getSendFaultName());
+
+		try {
+			/* Normally I'd expect faults only to be sent instead of an <output>,
+			 * but it turns out they can be sent instead of an <input>, for
+			 * solicit-response operations (see WSDL 1.1, section 2.4.3). */
+			if (this.getSendFault()) {
+				element = parser.getFaultElementForOperation(
+						getService(), getPort(), getOperation(), getSendFaultName());
+			}
+			else if (this.getWizard() instanceof ReceiveSendAsyncActivityWizard
+					|| this.getWizard() instanceof ReceiveSendSyncActivityWizard) {
+				element = parser.getOutputElementForOperation(
+						getService(), getPort(), getOperation());
+			} else {
+				element = parser.getInputElementForOperation(
+						getService(), getPort(), getOperation());
+			}
+
+			elementError = null;
+			elementWarning = null;
+		} catch (InvalidInputException ex) {
+			elementError = "Invalid input: " + ex.getLocalizedMessage();
+			return null;
+		} catch (NoElementDefinitionExistsException ex) {
+			elementWarning = "Cannot generate sample element: " + ex.getLocalizedMessage();
+			return null;
 		}
-		else if (this.getWizard() instanceof ReceiveSendAsyncActivityWizard
-				|| this.getWizard() instanceof ReceiveSendSyncActivityWizard) {
-			element = parser.getOutputElementForOperation(this.getService(), this.getPort(), this
-					.getOperation());
-		} else {
-			element = parser.getInputElementForOperation(this.getService(), this.getPort(), this
-					.getOperation());
-		}
+
 		return element;
 	}
 }

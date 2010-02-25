@@ -716,7 +716,7 @@ public class MessageEditor extends Composite {
 			this.selectionListener.disposeEditor();
 			this.tree.removeAll();
 			if (this.displayedElement == null) {
-				this.displayError("Selected Operation has no Input.");
+				this.displayError("No element definition available for this message.");
 				if (this.isEditable) {
 					for (StringValueListener listener : this.listeners) {
 						listener.valueChanged("");
@@ -1041,7 +1041,7 @@ public class MessageEditor extends Composite {
 
 	private void setXML() {
 		if (this.displayedElement == null) {
-			this.displayError("Selected Operation has no input.");
+			this.displayError("No element definition available in the WSDL.");
 			return;
 		}
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

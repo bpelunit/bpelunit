@@ -230,10 +230,11 @@ public class WSDLParser {
 	 * @return
 	 * @throws InvalidInputException
 	 * @throws NoSuchOperationException
+	 * @throws NoElementDefinitionExistsException
 	 * @see #getOutputElementForOperation(QName, String, String)
 	 */
 	public Element getInputElementForOperation(QName service, String port, String operationName)
-			throws InvalidInputException, NoSuchOperationException {
+			throws InvalidInputException, NoSuchOperationException, NoElementDefinitionExistsException {
 		return this.getElementForOperation(service, port, operationName, null, SOAPOperationDirectionIdentifier.INPUT);
 	}
 
@@ -260,10 +261,11 @@ public class WSDLParser {
 	 * @return
 	 * @throws InvalidInputException
 	 * @throws NoSuchOperationException
+	 * @throws NoElementDefinitionExistsException
 	 * @see #getInputElementForOperation(QName, String, String)
 	 */
 	public Element getOutputElementForOperation(QName service, String port, String operationName)
-			throws InvalidInputException, NoSuchOperationException {
+			throws InvalidInputException, NoSuchOperationException, NoElementDefinitionExistsException {
 		return this.getElementForOperation(service, port, operationName, null, SOAPOperationDirectionIdentifier.OUTPUT);
 	}
 
@@ -285,14 +287,15 @@ public class WSDLParser {
 	 * @return
 	 * @throws InvalidInputException
 	 * @throws NoSuchOperationException
+	 * @throws NoElementDefinitionExistsException
 	 */
 	public Element getFaultElementForOperation(QName service, String port, String operationName, String faultName)
-			throws InvalidInputException, NoSuchOperationException {
+			throws InvalidInputException, NoSuchOperationException, NoElementDefinitionExistsException {
 		return getElementForOperation(service, port, operationName, faultName, SOAPOperationDirectionIdentifier.FAULT);
 	}
 
 	private Element getElementForOperation(QName service, String port, String operationName, String faultName, SOAPOperationDirectionIdentifier direction)
-			throws InvalidInputException, NoSuchOperationException {
+			throws InvalidInputException, NoSuchOperationException, NoElementDefinitionExistsException {
 
 		// Create the identifier, for querying additional required info
 		SOAPOperationCallIdentifier opIdentifier;
@@ -330,26 +333,33 @@ public class WSDLParser {
 	}
 
 	private Message getMessageFromOperation(String faultName,
-			SOAPOperationDirectionIdentifier direction, Operation operation) {
+			SOAPOperationDirectionIdentifier direction, Operation operation)
+			throws InvalidInputException, NoElementDefinitionExistsException {
 		switch (direction) {
 		case OUTPUT:
 			Output output = operation.getOutput();
-			if (output == null) return null;
+			if (output == null)
+				throw new InvalidInputException("Selected operation has no output");
 			return output.getMessage();
 		case INPUT:
 			Input input = operation.getInput();
-			if (input == null) return null;
+			if (input == null)
+				throw new InvalidInputException("Selected operation has no input");
 			return input.getMessage();
 		case FAULT:
 			// Empty fault name -> custom fault, which has no schema attached
-			// to it. Tell the user that no schema is available for that case.
-			if (faultName == null) return null;
+			// to it. Warn the user that no schema is available for that case.
+			if (faultName == null)
+				throw new NoElementDefinitionExistsException(
+						"Custom fault has no schema attached to it");
 
 			Fault fault = operation.getFault(faultName);
-			if (fault == null) return null;
+			if (fault == null)
+				throw new InvalidInputException(
+						"Selected operation has no fault called " + faultName);
 			return fault.getMessage();
 		default:
-			return null;
+			throw new InvalidInputException("Unknown direction type");
 		}
 	}
 
@@ -406,10 +416,11 @@ public class WSDLParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Element getElementForDocLitMessage(Message msg) {
+	private Element getElementForDocLitMessage(Message msg)
+		throws InvalidInputException, NoElementDefinitionExistsException {
 		Collection<Part> parts = msg.getParts().values();
 		if (parts.isEmpty()) {
-			return null;
+			throw new NoElementDefinitionExistsException("Message has no parts");
 		}
 		Part part = (Part) parts.iterator().next();
 		return schemaManager.getElement(part.getElementName());
