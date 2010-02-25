@@ -305,7 +305,7 @@ public class SendComponent extends DataComponent implements IHyperLinkFieldListe
 	}
 
 	public String getDelaySequence() {
-		return this.fDelayStringField.getText();
+		return fDelaySelected ? this.fDelayStringField.getText() : "";
 	}
 
 	public void hyperLinkActivated() {

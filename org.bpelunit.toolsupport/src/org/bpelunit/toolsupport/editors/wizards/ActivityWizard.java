@@ -85,9 +85,10 @@ public abstract class ActivityWizard extends Wizard {
 	}
 
 	protected void transferDelay(String delaySequence, XMLSendActivity activity) {
-		if (delaySequence.equals("") && activity.getDelaySequence() != null)
-			activity.unsetDelaySequence();
-		else
+		if (delaySequence == null || "".equals(delaySequence)) {
+			if (activity.isSetDelaySequence())
+				activity.unsetDelaySequence();
+		} else
 			activity.setDelaySequence(delaySequence);
 	}
 
