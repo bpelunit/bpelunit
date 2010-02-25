@@ -33,12 +33,16 @@
 	<wsdl:message name="doSomethingFaultQuery">
 		<wsdl:part name="fault" element="cxsd:reason"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="nonWSICompliantFault">
+		<wsdl:part name="fault" type="xsd:int"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="rpcLiteralTest">
 		<wsdl:operation name="doSomething">
 			<wsdl:input message="tns:doSomethingRequest" />
 			<wsdl:output message="tns:doSomethingResponse" />
 			<wsdl:fault name="processingError" message="tns:doSomethingFaultProcessing"/>
 			<wsdl:fault name="invalidQuery" message="tns:doSomethingFaultQuery"/>
+			<wsdl:fault name="iambad" message="tns:nonWSICompliantFault" />
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="rpcLiteralTestSOAP" type="tns:rpcLiteralTest">
@@ -58,6 +62,9 @@
 			</wsdl:fault>
 			<wsdl:fault name="invalidQuery">
 				<soap:fault use="literal" name="invalidQuery" />
+			</wsdl:fault>
+			<wsdl:fault name="iambad">
+				<soap:fault use="literal" name="iambad" />
 			</wsdl:fault>
 		</wsdl:operation>
 	</wsdl:binding>

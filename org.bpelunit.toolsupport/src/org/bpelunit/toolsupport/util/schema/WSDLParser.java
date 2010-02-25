@@ -423,7 +423,18 @@ public class WSDLParser {
 			throw new NoElementDefinitionExistsException("Message has no parts");
 		}
 		Part part = (Part) parts.iterator().next();
-		return schemaManager.getElement(part.getElementName());
+		QName elementName = part.getElementName();
+
+		// The message part was wrongly declared with the type attribute, so
+		// there's no element name. Avoid throwing a NullPointerException by
+		// just returning null here.
+		if (elementName == null)
+			throw new InvalidInputException(
+				"Message style is doc/lit, but the part "
+					+ part.getName() + " uses the element attribute");
+
+		return schemaManager.getElement(elementName);
 	}
+
 }
 

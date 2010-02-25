@@ -2,6 +2,7 @@ package org.bpelunit.toolsupport.util.schema;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -162,5 +163,22 @@ public class RPCLiteralTest {
 		assertEquals("root element should have the right content type",
 				new QName(XSD_NAMESPACE, "string"),
 				type.getQName());
+	}
+
+	/**
+	 * This test checks that faults which do not comply with the WS-I Basic
+	 * Profile 1.1 restriction (section 4.4.2) that all faults should be defined
+	 * on messages whose single part uses the element attribute are detected,
+	 * throwing the right exception type. It's actually a more general issue:
+	 * when using the doc/lit style, all parts should use the element attribute,
+	 * and not the type attribute.
+	 */
+	@Test
+	public void generatedFaultWithTypePartIsRejected() throws Exception {
+		try {
+			fParser.getFaultElementForOperation(
+					WSDL_SERVICE_QNAME, WSDL_PORT, WSDL_OPERATION, "iambad");
+			fail("Faults declared using the type attribute should be rejected");
+		} catch (InvalidInputException ex) {}
 	}
 }
