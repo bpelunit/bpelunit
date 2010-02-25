@@ -171,7 +171,7 @@ public class OperationDataComponent extends DataComponent {
 
 	public void handleOutputFieldChanged(DialogField field) {
 		this.setFaultByMenuSelection(this.fOutputDialogField.getText());
-		this.validateOperation(Verify.ALL);
+		fireMessageChanged();
 	}
 
 	public void handleServiceFieldChanged(DialogField field) {
@@ -191,23 +191,7 @@ public class OperationDataComponent extends DataComponent {
 
 	public void handleOperationFieldChanged(DialogField field) {
 		this.fOperation = this.fOperationDialogField.getText();
-		if (this.validateOperation(Verify.ALL)) {
-			if (this.getWizardPage() instanceof OperationWizardPage) {
-
-				Element element;
-				try {
-					element = ((OperationWizardPage) this.getWizardPage()).getElementForOperation();
-					if (element != null) {
-						for (MessageChangeListener listener : this.messageChangeListener) {
-							listener.messageChanged(element);
-						}
-					}
-				} catch (Exception e1) {
-					// Error will (sometimes) be shown elsewhere as well
-					ToolSupportActivator.log(e1);
-				}
-			}
-		}
+		fireMessageChanged();
 	}
 
 	public void addMessageListener(MessageChangeListener listener) {
@@ -681,5 +665,24 @@ public class OperationDataComponent extends DataComponent {
 			}
 		}
 		return null;
+	}
+
+	private void fireMessageChanged() {
+		if (this.validateOperation(Verify.ALL)) {
+			if (this.getWizardPage() instanceof OperationWizardPage) {
+				Element element;
+				try {
+					element = ((OperationWizardPage) this.getWizardPage()).getElementForOperation();
+					if (element != null) {
+						for (MessageChangeListener listener : this.messageChangeListener) {
+							listener.messageChanged(element);
+						}
+					}
+				} catch (Exception e1) {
+					// Error will (sometimes) be shown elsewhere as well
+					ToolSupportActivator.log(e1);
+				}
+			}
+		}
 	}
 }
