@@ -634,6 +634,10 @@ public class OperationDataComponent extends DataComponent {
 		return this.fSendFault;
 	}
 
+	public String getSendFaultName() {
+		return this.fSendFaultName;
+	}
+
 	public boolean getReceiveFault() {
 		return this.fReceiveFaultField.isSelected();
 	}

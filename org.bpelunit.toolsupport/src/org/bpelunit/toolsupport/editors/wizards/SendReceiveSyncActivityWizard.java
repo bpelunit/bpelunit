@@ -33,6 +33,7 @@ public class SendReceiveSyncActivityWizard extends TwoWayActivityWizard {
 
 		transferOperation(fSendPage, twoWayActivity);
 		transferFault(fSendPage.getSendFault(), twoWayActivity.getSend());
+		transferFaultString(fSendPage.getSendFaultName(), twoWayActivity.getSend());
 		transferFault(fSendPage.getReceiveFault(), twoWayActivity.getReceive());
 
 		transferLiteralSendData(fSendPage.getSendXML(), twoWayActivity.getSend());

@@ -34,6 +34,7 @@ public abstract class TwoWayAsyncActivityWizard extends TwoWayActivityWizard {
 		transferOperation(fReceivePage, twoWayActivity.getReceive());
 
 		transferFault(fSendPage.getSendFault(), twoWayActivity.getSend());
+		transferFaultString(fSendPage.getSendFaultName(), twoWayActivity.getSend());
 		transferFault(fReceivePage.getReceiveFault(), twoWayActivity.getReceive());
 
 		transferLiteralSendData(fSendPage.getSendXML(), twoWayActivity.getSend());

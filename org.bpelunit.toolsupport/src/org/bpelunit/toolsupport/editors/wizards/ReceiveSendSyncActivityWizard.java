@@ -37,6 +37,8 @@ public class ReceiveSendSyncActivityWizard extends TwoWayActivityWizard {
 		this.transferOperation(this.fReceivePage, twoWayActivity);
 		this.transferFault(this.fReceivePage.getSendFault(), twoWayActivity
 				.getSend());
+		this.transferFaultString(this.fReceivePage.getSendFaultName(),
+				twoWayActivity.getSend());
 		this.transferFault(this.fReceivePage.getReceiveFault(), twoWayActivity
 				.getReceive());
 

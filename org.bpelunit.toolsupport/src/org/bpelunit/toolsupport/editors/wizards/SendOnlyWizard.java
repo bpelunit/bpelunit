@@ -31,6 +31,7 @@ public class SendOnlyWizard extends ActivityWizard {
 
 		transferOperation(fSendPage, fSendActivity);
 		transferFault(fSendPage.getSendFault(), fSendActivity);
+		transferFaultString(fSendPage.getSendFaultName(), fSendActivity);
 
 		transferLiteralSendData(fSendPage.getSendXML(), fSendActivity);
 		transferDelay(fSendPage.getDelaySequence(), fSendActivity);

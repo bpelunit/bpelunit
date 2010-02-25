@@ -84,6 +84,22 @@ public abstract class ActivityWizard extends Wizard {
 		activity.setFault(fault);
 	}
 
+	protected void transferFaultString(String faultString, XMLReceiveActivity activity) {
+		if (faultString == null || "".equals(faultString)) {
+			if (activity.isSetFaultstring())
+				activity.unsetFaultstring();
+		} else
+			activity.setFaultstring(faultString);
+	}
+
+	protected void transferFaultString(String faultString, XMLSendActivity activity) {
+		if (faultString == null || "".equals(faultString)) {
+			if (activity.isSetFaultstring())
+				activity.unsetFaultstring();
+		} else
+			activity.setFaultstring(faultString);
+	}
+
 	protected void transferDelay(String delaySequence, XMLSendActivity activity) {
 		if (delaySequence == null || "".equals(delaySequence)) {
 			if (activity.isSetDelaySequence())

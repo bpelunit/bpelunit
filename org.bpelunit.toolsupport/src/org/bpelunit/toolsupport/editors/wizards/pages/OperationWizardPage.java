@@ -77,6 +77,10 @@ public class OperationWizardPage extends ActivityWizardPage implements IComponen
 		return this.fOperationsComponent.getSendFault();
 	}
 
+	public String getSendFaultName() {
+		return this.fOperationsComponent.getSendFaultName();
+	}
+
 	public boolean getReceiveFault() {
 		return this.fOperationsComponent.getReceiveFault();
 	}
