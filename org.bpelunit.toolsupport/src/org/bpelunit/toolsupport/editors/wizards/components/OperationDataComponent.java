@@ -673,10 +673,8 @@ public class OperationDataComponent extends DataComponent {
 				Element element;
 				try {
 					element = ((OperationWizardPage) this.getWizardPage()).getElementForOperation();
-					if (element != null) {
-						for (MessageChangeListener listener : this.messageChangeListener) {
-							listener.messageChanged(element);
-						}
+					for (MessageChangeListener listener : this.messageChangeListener) {
+						listener.messageChanged(element);
 					}
 				} catch (Exception e1) {
 					// Error will (sometimes) be shown elsewhere as well
