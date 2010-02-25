@@ -2,8 +2,10 @@ package org.bpelunit.toolsupport.util.schema;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -15,6 +17,7 @@ import javax.wsdl.Message;
 import javax.wsdl.Operation;
 import javax.wsdl.Output;
 import javax.wsdl.Part;
+import javax.wsdl.Types;
 import javax.wsdl.extensions.schema.Schema;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
@@ -122,13 +125,14 @@ public class WSDLParser {
 
 		Map<String, String> namespaces = this.definition.getNamespaces();
 
-		// stop here if the WSDL doesn't define any types of its own (common
-		// for RPC style operations)
-		if (this.definition.getTypes() == null) {
-			return;
-		}
-		// for all schemas in the WSDL ...
-		for (Object tmp : this.definition.getTypes().getExtensibilityElements()) {
+		// We need to collect the schemata from all WSDL imports. It might be
+		// that some of the imported WSDL elements refer to something in their
+		// internal schemas. If we don't import it, we'll have missing types in
+		// our internal schemata, and the tree editor won't work.
+		List<Object> possibleSchemata = collectPossibleSchemata();
+
+		// loop through the collected schemata
+		for (Object tmp : possibleSchemata) {
 			if (tmp instanceof Schema) {
 				Schema schema = (Schema) tmp;
 
@@ -160,6 +164,26 @@ public class WSDLParser {
 				}
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Object> collectPossibleSchemata() {
+		List<Object> possibleSchemata = new ArrayList<Object>();
+		Types localTypesSection = this.definition.getTypes();
+		if (localTypesSection != null) {
+			possibleSchemata.addAll(localTypesSection.getExtensibilityElements());
+		}
+		// Go through all imports
+		Map<String, List<Import>> allImports = this.definition.getImports();
+		for (List<Import> importsInNamespace : allImports.values()) {
+			for (Import importDef : importsInNamespace) {
+				Types typesSection = importDef.getDefinition().getTypes();
+				if (typesSection != null) {
+					possibleSchemata.addAll(typesSection.getExtensibilityElements());
+				}
+			}
+		}
+		return possibleSchemata;
 	}
 
 	/**

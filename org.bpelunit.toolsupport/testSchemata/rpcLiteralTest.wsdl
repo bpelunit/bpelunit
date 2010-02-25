@@ -2,8 +2,10 @@
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:cxsd="http://www.example.org/rpcLiteralTest/Types" xmlns:tns="http://www.example.org/rpcLiteralTest/"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	name="rpcLiteralTest" targetNamespace="http://www.example.org/rpcLiteralTest/">
-	<wsdl:types>
+	name="rpcLiteralTest" targetNamespace="http://www.example.org/rpcLiteralTest/"
+	xmlns:imp="http://www.example.org/rpcLiteralTestImported/">
+    <wsdl:import namespace="http://www.example.org/rpcLiteralTestImported/" location="rpcLiteralTestImported.wsdl"/>
+    <wsdl:types>
 		<xsd:schema targetNamespace="http://www.example.org/rpcLiteralTest/Types"
 			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
@@ -46,6 +48,7 @@
 			<wsdl:fault name="processingError" message="tns:doSomethingFaultProcessing"/>
 			<wsdl:fault name="invalidQuery" message="tns:doSomethingFaultQuery"/>
 			<wsdl:fault name="iambad" message="tns:nonWSICompliantFault" />
+			<wsdl:fault name="importTest" message="imp:importTestMsg"/>
 		</wsdl:operation>
 		<wsdl:operation name="elemAttrInRpcLitOp">
 			<wsdl:input message="tns:elemAttrInRpcLitOpRequest"></wsdl:input>

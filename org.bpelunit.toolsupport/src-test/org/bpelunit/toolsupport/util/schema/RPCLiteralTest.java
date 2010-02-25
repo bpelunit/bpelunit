@@ -2,6 +2,8 @@ package org.bpelunit.toolsupport.util.schema;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -26,6 +28,7 @@ import org.junit.Test;
  */
 public class RPCLiteralTest {
 
+	private static final String WSDL_IMPORT_NAMESPACE = "http://www.example.org/rpcLiteralTestImported/";
 	private static final String WSDL_PATH = "testSchemata/rpcLiteralTest.wsdl";
 	private static final String WSDL_TYPES_NAMESPACE = "http://www.example.org/rpcLiteralTest/Types";
 	private static final String XSD_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
@@ -195,5 +198,26 @@ public class RPCLiteralTest {
 					WSDL_SERVICE_QNAME, WSDL_PORT, "elemAttrInRpcLitOp");
 			fail("rpc/lit messages with element parts should be rejected");
 		} catch (InvalidInputException ex) {}
+	}
+
+	/**
+	 * Check that messages imported from other WSDL files which use their own
+	 * types are generated correctly. According to the WS-I Basic Profile 1.1,
+	 * we can't access the elements of the schemata in an external WSDL by
+	 * importing it, but we *can* use the WSDL stuff in there, which may
+	 * reference its local types just fine.
+	 */
+	@Test
+	public void generateImportedMsgWithInternalTypes() throws Exception {
+		Element root = fParser.getFaultElementForOperation(
+				WSDL_SERVICE_QNAME, WSDL_PORT, WSDL_OPERATION, "importTest");
+		assertEquals("root element should have the right name",
+				new QName(WSDL_IMPORT_NAMESPACE, "importTest"),
+				root.getQName());
+
+		SimpleType type = root.getType().getAsSimpleType();
+		assertNotNull("root element should have simple content", type);
+		assertEquals("root element should have the right content type",
+				new QName(XSD_NAMESPACE, "int"), type.getQName());
 	}
 }
