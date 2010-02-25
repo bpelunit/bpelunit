@@ -49,7 +49,8 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
  * Types of the schemata. Connects the operations of the service with the input,
  * fault and output messages.
  * 
- * Antonio: fix relative URI imports.
+ * Antonio: fix relative URI imports, generate messages for faults and rpc/lit
+ * and improve error reporting.
  *
  * @author cvolhard, Antonio García-Domínguez
  * 
