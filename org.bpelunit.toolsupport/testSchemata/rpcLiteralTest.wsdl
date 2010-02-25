@@ -6,45 +6,64 @@
 	<wsdl:types>
 		<xsd:schema targetNamespace="http://www.example.org/rpcLiteralTest/Types"
 			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    	
-            <xsd:simpleType name="numberOfFingers">
-            	<xsd:restriction base="xsd:int">
-            		<xsd:minInclusive value="0"></xsd:minInclusive>
-            		<xsd:maxInclusive value="10"></xsd:maxInclusive>
-            		<xsd:whiteSpace value="collapse"></xsd:whiteSpace>
-            	</xsd:restriction>
-            </xsd:simpleType>
-    	</xsd:schema></wsdl:types>
-    <wsdl:message name="doSomethingRequest">
-    <wsdl:part name="description" type="xsd:string"/>
-    <wsdl:part name="amount" type="xsd:float"></wsdl:part>
-    <wsdl:part name="currentDate" type="xsd:dateTime"></wsdl:part>
-    <wsdl:part name="fingers" type="cxsd:numberOfFingers"></wsdl:part>
-    </wsdl:message>
-  <wsdl:message name="doSomethingResponse">
-    <wsdl:part name="result" type="xsd:string"/>
-  </wsdl:message>
-  <wsdl:portType name="rpcLiteralTest">
-    <wsdl:operation name="doSomething">
-      <wsdl:input message="tns:doSomethingRequest"/>
-      <wsdl:output message="tns:doSomethingResponse"/>
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:binding name="rpcLiteralTestSOAP" type="tns:rpcLiteralTest">
-    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="doSomething">
-      <soap:operation soapAction="http://www.example.org/rpcLiteralTest/doSomething"/>
-      <wsdl:input>
-        <soap:body namespace="http://www.example.org/rpcLiteralTest/Input" use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:service name="rpcLiteralTest">
-    <wsdl:port binding="tns:rpcLiteralTestSOAP" name="rpcLiteralTestSOAP">
-      <soap:address location="http://www.example.org/"/>
-    </wsdl:port>
-  </wsdl:service>
+
+			<xsd:simpleType name="numberOfFingers">
+				<xsd:restriction base="xsd:int">
+					<xsd:minInclusive value="0"></xsd:minInclusive>
+					<xsd:maxInclusive value="10"></xsd:maxInclusive>
+					<xsd:whiteSpace value="collapse"></xsd:whiteSpace>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="errorCode" type="xsd:int" />
+			<xsd:element name="reason" type="xsd:string" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="doSomethingRequest">
+		<wsdl:part name="description" type="xsd:string" />
+		<wsdl:part name="amount" type="xsd:float"></wsdl:part>
+		<wsdl:part name="currentDate" type="xsd:dateTime"></wsdl:part>
+		<wsdl:part name="fingers" type="cxsd:numberOfFingers"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doSomethingResponse">
+		<wsdl:part name="result" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="doSomethingFaultProcessing">
+		<wsdl:part name="fault" element="cxsd:errorCode"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doSomethingFaultQuery">
+		<wsdl:part name="fault" element="cxsd:reason"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="rpcLiteralTest">
+		<wsdl:operation name="doSomething">
+			<wsdl:input message="tns:doSomethingRequest" />
+			<wsdl:output message="tns:doSomethingResponse" />
+			<wsdl:fault name="processingError" message="tns:doSomethingFaultProcessing"/>
+			<wsdl:fault name="invalidQuery" message="tns:doSomethingFaultQuery"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="rpcLiteralTestSOAP" type="tns:rpcLiteralTest">
+		<soap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="doSomething">
+			<soap:operation soapAction="http://www.example.org/rpcLiteralTest/doSomething" />
+			<wsdl:input>
+				<soap:body use="literal"
+					namespace="http://www.example.org/rpcLiteralTest/Input" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="processingError">
+				<soap:fault use="literal" name="processingError" />
+			</wsdl:fault>
+			<wsdl:fault name="invalidQuery">
+				<soap:fault use="literal" name="invalidQuery" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="rpcLiteralTest">
+		<wsdl:port binding="tns:rpcLiteralTestSOAP" name="rpcLiteralTestSOAP">
+			<soap:address location="http://www.example.org/" />
+		</wsdl:port>
+	</wsdl:service>
 </wsdl:definitions>

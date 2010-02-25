@@ -123,4 +123,44 @@ public class RPCLiteralTest {
 				new QName(XSD_NAMESPACE, "string"),
 				partType.getQName());
 	}
+
+	/**
+	 * This test checks that the generator produces fault messages properly.
+	 * In addition to the usual constraints, the generator should take into
+	 * account that all fault messages will use the document style, as they
+	 * cannot have parameters. This is according to WS-I Basic Profile 1.1,
+	 * section 4.4.2.
+	 *
+	 * There's actually two tests like this: it's important to make sure that
+	 * the code really uses the faultName parameter.
+	 */
+	@Test
+	public void generatedProcessingErrorFaultElementIsCorrect() throws Exception {
+		Element docElement = fParser.getFaultElementForOperation(
+				WSDL_SERVICE_QNAME, WSDL_PORT, WSDL_OPERATION, "processingError");
+		assertEquals("root element in the message should be the element in the WSDL",
+				new QName(WSDL_TYPES_NAMESPACE, "errorCode"),
+				docElement.getQName());
+
+		SimpleType type = docElement.getType().getAsSimpleType();
+		assertNotNull("root element should have simple content", type);
+		assertEquals("root element should have the right content type",
+				new QName(XSD_NAMESPACE, "int"),
+				type.getQName());
+	}
+
+	@Test
+	public void generatedInvalidQueryFaultElementIsCorrect() throws Exception {
+		Element docElement = fParser.getFaultElementForOperation(
+				WSDL_SERVICE_QNAME, WSDL_PORT, WSDL_OPERATION, "invalidQuery");
+		assertEquals("root element in the message should be the element in the WSDL",
+				new QName(WSDL_TYPES_NAMESPACE, "reason"),
+				docElement.getQName());
+
+		SimpleType type = docElement.getType().getAsSimpleType();
+		assertNotNull("root element should have simple content", type);
+		assertEquals("root element should have the right content type",
+				new QName(XSD_NAMESPACE, "string"),
+				type.getQName());
+	}
 }

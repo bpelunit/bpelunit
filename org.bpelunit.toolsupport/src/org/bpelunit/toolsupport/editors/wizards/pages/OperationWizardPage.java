@@ -108,7 +108,15 @@ public class OperationWizardPage extends ActivityWizardPage implements IComponen
 		if (parser == null) {
 			return null;
 		}
-		if (this.getWizard() instanceof ReceiveSendAsyncActivityWizard
+		
+		/* Normally I'd expect faults only to be sent instead of an <output>,
+		 * but it turns out they can be sent instead of an <input>, for
+		 * solicit-response operations (see WSDL 1.1, section 2.4.3). */
+		if (this.getSendFault()) {
+			element = parser.getFaultElementForOperation(
+					getService(), getPort(), getOperation(), getSendFaultName());
+		}
+		else if (this.getWizard() instanceof ReceiveSendAsyncActivityWizard
 				|| this.getWizard() instanceof ReceiveSendSyncActivityWizard) {
 			element = parser.getOutputElementForOperation(this.getService(), this.getPort(), this
 					.getOperation());

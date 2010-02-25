@@ -8,8 +8,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.wsdl.Definition;
+import javax.wsdl.Fault;
+import javax.wsdl.Import;
+import javax.wsdl.Input;
 import javax.wsdl.Message;
 import javax.wsdl.Operation;
+import javax.wsdl.Output;
 import javax.wsdl.Part;
 import javax.wsdl.extensions.schema.Schema;
 import javax.xml.namespace.QName;
@@ -39,8 +43,8 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 
 /**
  * Parses all schemata in the Definition of a WSDL and manages the Elements and
- * Types of the schemata. Connects the operations of the service with the input
- * and output messages.
+ * Types of the schemata. Connects the operations of the service with the input,
+ * fault and output messages.
  * 
  * Antonio: fix relative URI imports.
  *
@@ -230,7 +234,7 @@ public class WSDLParser {
 	 */
 	public Element getInputElementForOperation(QName service, String port, String operationName)
 			throws InvalidInputException, NoSuchOperationException {
-		return this.getElementForOperation(service, port, operationName, SOAPOperationDirectionIdentifier.INPUT);
+		return this.getElementForOperation(service, port, operationName, null, SOAPOperationDirectionIdentifier.INPUT);
 	}
 
 	/**
@@ -260,10 +264,34 @@ public class WSDLParser {
 	 */
 	public Element getOutputElementForOperation(QName service, String port, String operationName)
 			throws InvalidInputException, NoSuchOperationException {
-		return this.getElementForOperation(service, port, operationName, SOAPOperationDirectionIdentifier.OUTPUT);
+		return this.getElementForOperation(service, port, operationName, null, SOAPOperationDirectionIdentifier.OUTPUT);
 	}
 
-	private Element getElementForOperation(QName service, String port, String operationName, SOAPOperationDirectionIdentifier direction)
+	/**
+	 * Returns an XML Element for a specific fault of the operation.
+	 *
+	 * Results will be the same both for document/literal and RPC/literal
+	 * bindings: fault messages always use the document/literal style, according
+	 * to WS-I Basic Profile 1.1, section 4.4.2.
+	 *
+	 * @param service
+	 *            QName of the service
+	 * @param port
+	 *            name of the port
+	 * @param operationName
+	 *            name of the operation
+	 * @param faultName
+	 *            name of the fault
+	 * @return
+	 * @throws InvalidInputException
+	 * @throws NoSuchOperationException
+	 */
+	public Element getFaultElementForOperation(QName service, String port, String operationName, String faultName)
+			throws InvalidInputException, NoSuchOperationException {
+		return getElementForOperation(service, port, operationName, faultName, SOAPOperationDirectionIdentifier.FAULT);
+	}
+
+	private Element getElementForOperation(QName service, String port, String operationName, String faultName, SOAPOperationDirectionIdentifier direction)
 			throws InvalidInputException, NoSuchOperationException {
 
 		// Create the identifier, for querying additional required info
@@ -286,9 +314,7 @@ public class WSDLParser {
 		}
 
 		String bodyNamespace = opIdentifier.getBodyNamespace();
-		Message msg = SOAPOperationDirectionIdentifier.OUTPUT.equals(direction)
-			? operation.getOutput().getMessage()
-			: operation.getInput().getMessage();
+		Message msg = getMessageFromOperation(faultName, direction, operation);
 
 		if ("document/literal".equals(opStyle)) {
 			return getElementForDocLitMessage(msg);
@@ -300,6 +326,30 @@ public class WSDLParser {
 			throw new InvalidInputException(
 					"Unknown combination of operation style and soap:body use: "
 					+ opStyle);
+		}
+	}
+
+	private Message getMessageFromOperation(String faultName,
+			SOAPOperationDirectionIdentifier direction, Operation operation) {
+		switch (direction) {
+		case OUTPUT:
+			Output output = operation.getOutput();
+			if (output == null) return null;
+			return output.getMessage();
+		case INPUT:
+			Input input = operation.getInput();
+			if (input == null) return null;
+			return input.getMessage();
+		case FAULT:
+			// Empty fault name -> custom fault, which has no schema attached
+			// to it. Tell the user that no schema is available for that case.
+			if (faultName == null) return null;
+
+			Fault fault = operation.getFault(faultName);
+			if (fault == null) return null;
+			return fault.getMessage();
+		default:
+			return null;
 		}
 	}
 
