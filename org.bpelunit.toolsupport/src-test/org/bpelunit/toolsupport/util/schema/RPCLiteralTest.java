@@ -33,6 +33,7 @@ public class RPCLiteralTest {
 	private static final String WSDL_SERVICE_NAME = "rpcLiteralTest";
 	private static final String WSDL_SERVICE_NAMESPACE = "http://www.example.org/rpcLiteralTest/";
 	private static final String WSDL_INPUT_NAMESPACE = WSDL_SERVICE_NAMESPACE + "Input";
+	private static final QName WSDL_SERVICE_QNAME = new QName(WSDL_SERVICE_NAMESPACE, WSDL_SERVICE_NAME);
 	private WSDLParser fParser;
 
 	@Before
@@ -45,8 +46,8 @@ public class RPCLiteralTest {
 
 	@Test
 	public void generatedInputElementIsCorrect() throws Exception {
-		Element wrapperElement = fParser.getInputElementForOperation(new QName(
-				WSDL_SERVICE_NAMESPACE, WSDL_SERVICE_NAME), WSDL_PORT, WSDL_OPERATION);
+		Element wrapperElement = fParser.getInputElementForOperation(WSDL_SERVICE_QNAME,
+				WSDL_PORT, WSDL_OPERATION);
 
 		// The WSDL has been designed to use different namespaces for the
 		// service, its soap:body binding and some of its types, to handle
@@ -99,9 +100,8 @@ public class RPCLiteralTest {
 	 */
 	@Test
 	public void generatedOutputElementIsCorrect() throws Exception {
-		final QName serviceName = new QName(WSDL_SERVICE_NAMESPACE, WSDL_SERVICE_NAME);
 		Element wrapperElement = fParser.getOutputElementForOperation(
-				serviceName, WSDL_PORT, WSDL_OPERATION);
+				WSDL_SERVICE_QNAME, WSDL_PORT, WSDL_OPERATION);
 		assertEquals("wrapper element should have the right name",
 				new QName(WSDL_SERVICE_NAMESPACE, WSDL_OPERATION),
 				wrapperElement.getQName());
