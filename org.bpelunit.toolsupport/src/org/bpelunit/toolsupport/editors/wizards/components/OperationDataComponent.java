@@ -294,6 +294,7 @@ public class OperationDataComponent extends DataComponent {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void openServiceChooser(DialogField field) {
 
 		Definition def = this.getDefinition();
@@ -327,6 +328,7 @@ public class OperationDataComponent extends DataComponent {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void openPortChooser(DialogField field) {
 
 		if (this.validateOperation(Verify.SERVICE)) {
@@ -343,6 +345,7 @@ public class OperationDataComponent extends DataComponent {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void openOperationChooser(DialogField field) {
 
 		if (this.validateOperation(Verify.PORT)) {
