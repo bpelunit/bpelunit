@@ -299,8 +299,7 @@ public class OperationDataComponent extends DataComponent {
 
 		Definition def = this.getDefinition();
 		if (def == null) {
-			MessageDialog.openError(this.getShell(), "Error",
-					"Partner Definition is incorrect; Problem loading WSDL.");
+			showErrorDialog("Partner Definition is incorrect; Problem loading WSDL.");
 			return;
 		}
 		/*
@@ -340,8 +339,7 @@ public class OperationDataComponent extends DataComponent {
 			this.updateFields();
 			this.validateOperation(Verify.ALL);
 		} else {
-			MessageDialog.openError(this.getShell(), "Error",
-					"Please select a valid service first.");
+			showErrorDialog("Please select a valid service first.");
 		}
 	}
 
@@ -366,9 +364,12 @@ public class OperationDataComponent extends DataComponent {
 			this.updateFields();
 			this.validateOperation(Verify.ALL);
 		} else {
-			MessageDialog.openError(this.getShell(), "Error",
-					"Please select a valid service and port first.");
+			showErrorDialog("Please select a valid service and port first.");
 		}
+	}
+
+	private void showErrorDialog(final String msg) {
+		MessageDialog.openError(this.getShell(), "Error", msg);
 	}
 
 	private boolean isEmpty(String something) {
