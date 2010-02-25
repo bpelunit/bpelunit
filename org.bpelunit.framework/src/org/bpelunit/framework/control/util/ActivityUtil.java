@@ -329,6 +329,28 @@ public class ActivityUtil {
 	}
 
 	/**
+	 * Returns the receive fault code for this activity. The fault always resides at the receive element,
+	 * no matter how deep it is nested inside the activity.
+	 */
+	public static String getReceiveFaultString(XMLActivity activity) {
+		if (isTwoWayActivity(activity)) {
+			return ((XMLTwoWayActivity) activity).getReceive().getFaultstring();
+		} else
+			return getSimpleFaultString(activity);
+	}
+
+	/**
+	 * Returns the send fault code for this activity. The fault always resides at the send element,
+	 * no matter how deep it is nested inside the activity.
+	 */
+	public static String getSendFaultString(XMLActivity activity) {
+		if (isTwoWayActivity(activity)) {
+			return ((XMLTwoWayActivity) activity).getSend().getFaultstring();
+		} else
+			return getSimpleFaultString(activity);
+	}
+
+	/**
 	 * Returns a "fault" for this activity, which might be a send or receive fault, depending on the
 	 * type of the activity.
 	 * 
@@ -344,6 +366,23 @@ public class ActivityUtil {
 			return ((XMLSendActivity) activity).getFault();
 
 		return false;
+	}
+
+	/**
+	 * Returns a "fault string" for this activity, which might be a send or
+	 * receive fault string, depending on the type of the activity.
+	 *
+	 * The activity must not be a two way activity.
+	 *
+	 * @param activity
+	 * @return
+	 */
+	private static String getSimpleFaultString(XMLActivity activity) {
+		if (ActivityUtil.isActivity(activity, ActivityConstant.RECEIVE_ONLY) || ActivityUtil.isActivity(activity, ActivityConstant.RECEIVE)) {
+			return ((XMLReceiveActivity) activity).getFaultstring();
+		} else if (ActivityUtil.isActivity(activity, ActivityConstant.SEND_ONLY) || ActivityUtil.isActivity(activity, ActivityConstant.SEND))
+			return ((XMLSendActivity) activity).getFaultstring();
+		return null;
 	}
 
 	// ************************** ACTIVITY MANIPULATION *********************************

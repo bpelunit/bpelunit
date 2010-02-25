@@ -6,12 +6,15 @@
 package org.bpelunit.toolsupport.editors.wizards.components;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import javax.wsdl.Binding;
 import javax.wsdl.BindingOperation;
 import javax.wsdl.Definition;
+import javax.wsdl.Fault;
+import javax.wsdl.Operation;
 import javax.wsdl.Port;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
@@ -56,6 +59,9 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
  */
 public class OperationDataComponent extends DataComponent {
 
+	private static final String REGLAR_MESSAGE_SELITEM = "regular message";
+	private static final String CUSTOM_FAULT_SELITEM = "custom fault";
+
 	private class ServiceListener implements IStringButtonAdapter, IDialogFieldListener {
 
 		public void changeControlPressed(DialogField field) {
@@ -68,6 +74,17 @@ public class OperationDataComponent extends DataComponent {
 
 	}
 
+	private class OutputListener implements IStringButtonAdapter, IDialogFieldListener {
+
+		public void changeControlPressed(DialogField field) {
+			OperationDataComponent.this.openOutputChooser(field);
+		}
+
+		public void dialogFieldChanged(DialogField field) {
+			OperationDataComponent.this.handleOutputFieldChanged(field);
+		}
+
+	}
 	private class PortListener implements IStringButtonAdapter, IDialogFieldListener {
 
 		public void changeControlPressed(DialogField field) {
@@ -124,10 +141,9 @@ public class OperationDataComponent extends DataComponent {
 	}
 
 	private enum Verify {
-		DEF, SERVICE, PORT, ALL
+		DEF, SERVICE, PORT, OPERATION, ALL
 	}
 
-	private static final String SEND_NAME = "send";
 	private static final String RECEIVE_NAME = "receive";
 
 	private StringButtonDialogField fServiceDialogField;
@@ -141,13 +157,21 @@ public class OperationDataComponent extends DataComponent {
 	private String fErrorMessage;
 
 	private boolean fPageComplete;
-	private SelectionButtonDialogField fSendFaultField;
 	private SelectionButtonDialogField fReceiveFaultField;
 
 	private List<OperationChangeListener> operationChangeListener = new ArrayList<OperationChangeListener>();
+	private StringButtonDialogField fOutputDialogField;
+
+	private boolean fSendFault;
+	private String fSendFaultName;
 
 	public OperationDataComponent(IWizardPage wizard, FontMetrics metrics) {
 		super(wizard, metrics);
+	}
+
+	public void handleOutputFieldChanged(DialogField field) {
+		this.setFaultByMenuSelection(this.fOutputDialogField.getText());
+		this.validateOperation(Verify.ALL);
 	}
 
 	public void handleServiceFieldChanged(DialogField field) {
@@ -290,6 +314,22 @@ public class OperationDataComponent extends DataComponent {
 			return false;
 		}
 
+		if (v.equals(Verify.OPERATION)) {
+			this.setNoProblem();
+			return true;
+		}
+
+		// If we're sending a specific fault, check that the fault exists
+		if ((!ActivityUtil.isReceiveFirstActivity(fActivity)
+				|| ActivityUtil.isTwoWayActivity(fActivity))
+				&& !isEmpty(this.fSendFaultName)) {
+			Operation op = getOperationByName(this.fOperation);
+			if (op != null && op.getFault(fSendFaultName) == null) {
+				this.setProblem("Could not locate fault with name " + this.fSendFaultName);
+				return false;
+			}
+		}
+
 		this.setNoProblem();
 		return true;
 	}
@@ -372,6 +412,50 @@ public class OperationDataComponent extends DataComponent {
 		MessageDialog.openError(this.getShell(), "Error", msg);
 	}
 
+	@SuppressWarnings("unchecked")
+	private void openOutputChooser(DialogField field) {
+		if (this.validateOperation(Verify.OPERATION)) {
+			Operation op = getOperationByName(this.fOperation);
+			if (op == null) {
+				showErrorDialog(
+					"Couldn't find information about the selected Operation "
+						+ fOperation);
+				return;
+			}
+
+			int iOption = 0;
+			Collection<Fault> faults = op.getFaults().values();
+			String[] options = new String[2 + faults.size()];
+			options[iOption++] = REGLAR_MESSAGE_SELITEM;
+			options[iOption++] = CUSTOM_FAULT_SELITEM;
+			for (Fault fault : faults) {
+				options[iOption++] = fault.getName();
+			}
+
+			setFaultByMenuSelection(this.openStringChooser(options));
+			this.updateFields();
+			this.validateOperation(Verify.ALL);
+		} else {
+			showErrorDialog(
+				"Please select a valid service, port and operation first.");
+		}
+	}
+
+	private void setFaultByMenuSelection(String str) {
+		if (isEmpty(str) || REGLAR_MESSAGE_SELITEM.equals(str)) {
+			this.fSendFault = false;
+			this.fSendFaultName = null;
+		}
+		else if (CUSTOM_FAULT_SELITEM.equals(str)) {
+			this.fSendFault = true;
+			this.fSendFaultName = null;
+		}
+		else {
+			this.fSendFault = true;
+			this.fSendFaultName = str;
+		}
+	}
+
 	private boolean isEmpty(String something) {
 		return (something == null || "".equals(something));
 	}
@@ -406,6 +490,13 @@ public class OperationDataComponent extends DataComponent {
 		}
 		if (this.fOperation != null) {
 			this.fOperationDialogField.setText(this.fOperation);
+		}
+		if (this.fSendFault) {
+			this.fOutputDialogField.setText(!isEmpty(this.fSendFaultName)
+					? this.fSendFaultName
+					: CUSTOM_FAULT_SELITEM);
+		} else {
+			this.fOutputDialogField.setText(REGLAR_MESSAGE_SELITEM);
 		}
 	}
 
@@ -468,15 +559,20 @@ public class OperationDataComponent extends DataComponent {
 		this.fOperationDialogField.setLabelText("Operation");
 		this.fOperationDialogField.setButtonLabel("Choose...");
 
-		// Faults:
+		OutputListener outputListener = new OutputListener();
+		this.fOutputDialogField = new StringButtonDialogField(outputListener);
+		this.fOutputDialogField.setDialogFieldListener(outputListener);
+		this.fOutputDialogField.setLabelText("Send");
+		this.fOutputDialogField.setButtonLabel("Choose...");
 
-		this.fSendFaultField = new SelectionButtonDialogField(SWT.CHECK);
-		this.fSendFaultField.setLabelText("Use fault element for " + SEND_NAME + " operation");
+		// Faults:
+		this.fSendFault = ActivityUtil.getSendFault(fActivity);
+		this.fSendFaultName = ActivityUtil.getSendFaultString(fActivity);
+
 		this.fReceiveFaultField = new SelectionButtonDialogField(SWT.CHECK);
 		this.fReceiveFaultField
 				.setLabelText("Use fault element for " + RECEIVE_NAME + " operation");
 
-		this.fSendFaultField.setSelection(ActivityUtil.getSendFault(this.fActivity));
 		this.fReceiveFaultField.setSelection(ActivityUtil.getReceiveFault(this.fActivity));
 
 		this.updateFields();
@@ -508,12 +604,12 @@ public class OperationDataComponent extends DataComponent {
 		if (ActivityUtil.isReceiveFirstActivity(this.fActivity)) {
 			this.fReceiveFaultField.doFillIntoGrid(operationGroup, nColumns);
 		} else {
-			this.fSendFaultField.doFillIntoGrid(operationGroup, nColumns);
+			this.fOutputDialogField.doFillIntoGrid(operationGroup, nColumns);
 		}
 
 		if (ActivityUtil.isTwoWayActivity(this.fActivity)) {
 			if (ActivityUtil.isReceiveFirstActivity(this.fActivity)) {
-				this.fSendFaultField.doFillIntoGrid(operationGroup, nColumns);
+				this.fOutputDialogField.doFillIntoGrid(operationGroup, nColumns);
 			} else {
 				this.fReceiveFaultField.doFillIntoGrid(operationGroup, nColumns);
 			}
@@ -535,7 +631,7 @@ public class OperationDataComponent extends DataComponent {
 	}
 
 	public boolean getSendFault() {
-		return this.fSendFaultField.isSelected();
+		return this.fSendFault;
 	}
 
 	public boolean getReceiveFault() {
@@ -570,4 +666,16 @@ public class OperationDataComponent extends DataComponent {
 		this.fErrorMessage = string;
 	}
 
+	@SuppressWarnings("unchecked")
+	private Operation getOperationByName(String opName) {
+		List<BindingOperation> bindingOps = this.getDefinition()
+		  .getService(this.fService)
+		  .getPort(this.fPort).getBinding().getBindingOperations();
+		for (BindingOperation bindingOp : bindingOps) {
+			if (opName.equals(bindingOp.getOperation().getName())) {
+				return bindingOp.getOperation();
+			}
+		}
+		return null;
+	}
 }
