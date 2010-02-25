@@ -181,4 +181,19 @@ public class RPCLiteralTest {
 			fail("Faults declared using the type attribute should be rejected");
 		} catch (InvalidInputException ex) {}
 	}
+
+	/**
+	 * This test checks that messages in the rpc/lit style which have parts
+	 * declared using the element attribute (violating the WS-I Basic Profile
+	 * 1.1, section 4.4.1, R2203) are detected, throwing the right exception
+	 * type.
+	 */
+	@Test
+	public void rpcLitMessagesWithElementPartAreRejected() throws Exception {
+		try {
+			fParser.getInputElementForOperation(
+					WSDL_SERVICE_QNAME, WSDL_PORT, "elemAttrInRpcLitOp");
+			fail("rpc/lit messages with element parts should be rejected");
+		} catch (InvalidInputException ex) {}
+	}
 }

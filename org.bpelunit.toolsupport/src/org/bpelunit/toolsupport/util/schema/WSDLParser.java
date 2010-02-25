@@ -396,7 +396,12 @@ public class WSDLParser {
 		for (Part part : parts) {
 			QName typeName = part.getTypeName();
 			Type type;
-			if (complexTypes.containsKey(typeName)) {
+			if (typeName == null) {
+				throw new InvalidInputException(
+					"Message style is rpc/lit, but the part "
+						+ part.getName() + " uses the element attribute");
+			}
+			else if (complexTypes.containsKey(typeName)) {
 				type = complexTypes.get(typeName);
 			}
 			else if (simpleTypes.containsKey(typeName)) {

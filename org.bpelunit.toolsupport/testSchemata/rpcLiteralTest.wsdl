@@ -36,6 +36,9 @@
 	<wsdl:message name="nonWSICompliantFault">
 		<wsdl:part name="fault" type="xsd:int"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="elemAttrInRpcLitOpRequest">
+		<wsdl:part name="request" element="cxsd:reason"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="rpcLiteralTest">
 		<wsdl:operation name="doSomething">
 			<wsdl:input message="tns:doSomethingRequest" />
@@ -43,6 +46,9 @@
 			<wsdl:fault name="processingError" message="tns:doSomethingFaultProcessing"/>
 			<wsdl:fault name="invalidQuery" message="tns:doSomethingFaultQuery"/>
 			<wsdl:fault name="iambad" message="tns:nonWSICompliantFault" />
+		</wsdl:operation>
+		<wsdl:operation name="elemAttrInRpcLitOp">
+			<wsdl:input message="tns:elemAttrInRpcLitOpRequest"></wsdl:input>
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="rpcLiteralTestSOAP" type="tns:rpcLiteralTest">
@@ -66,6 +72,13 @@
 			<wsdl:fault name="iambad">
 				<soap:fault use="literal" name="iambad" />
 			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="elemAttrInRpcLitOp">
+			<soap:operation
+				soapAction="http://www.example.org/rpcLiteralTest/elemAttrInRpcLitOp" />
+			<wsdl:input>
+				<soap:body use="literal" namespace="http://www.example.org/rpcLiteralTest/" />
+			</wsdl:input>
 		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="rpcLiteralTest">
