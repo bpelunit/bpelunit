@@ -15,16 +15,19 @@ import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
 import org.bpelunit.toolsupport.util.schema.nodes.impl.AttributeImpl;
 import org.bpelunit.toolsupport.util.schema.nodes.impl.ComplexTypeImpl;
 import org.bpelunit.toolsupport.util.schema.nodes.impl.ElementImpl;
+import org.bpelunit.toolsupport.util.schema.nodes.impl.SimpleTypeImpl;
 import org.xml.sax.SAXException;
 
 import com.sun.xml.xsom.XSAttributeDecl;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSParticle;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
+import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSType;
 import com.sun.xml.xsom.parser.XSOMParser;
 import com.sun.xml.xsom.util.DomAnnotationParserFactory;
@@ -207,16 +210,40 @@ public class SchemaParser {
 		}
 		// if null, complexType contains no elements
 		if (xsComplex.getContentType().asParticle() != null) {
-			for (XSParticle particle : xsComplex.getContentType().asParticle()
-					.getTerm().asModelGroup().getChildren()) {
-				Element element = this.readElement(particle.getTerm()
-						.asElementDecl(), true);
+			XSModelGroup mainModelGroup
+				= xsComplex.getContentType().asParticle().getTerm().asModelGroup();
+			readModelGroup(complex, mainModelGroup);
+		}
+		return complex;
+	}
+
+	/**
+	 * Collects recursively all elements in a model group. Currently, as <xsd:all>
+	 * and <xsd:choice> aren't explicitly supported, they will be treated as if
+	 * they were <xsd:sequence>s.
+	 *
+	 * TODO Handle wildcards (<xsd:any>)
+	 */
+	private void readModelGroup(ComplexType complex, XSModelGroup modelGroup) {
+		for (XSParticle particle : modelGroup.getChildren()) {
+			XSTerm term = particle.getTerm();
+
+			XSElementDecl elemDecl = term.asElementDecl();
+			if (elemDecl != null) {
+				Element element = this.readElement(elemDecl, true);
 				element.setMaxOccurs(particle.getMaxOccurs());
 				element.setMinOccurs(particle.getMinOccurs());
 				complex.addElement(element);
+				continue;
 			}
+
+			XSModelGroup nestedModelGroup = term.asModelGroup();
+			if (nestedModelGroup != null) {
+				readModelGroup(complex, nestedModelGroup);
+			}
+
+			// otherwise, it's a wildcard: don't do anything in that case
 		}
-		return complex;
 	}
 
 	/**

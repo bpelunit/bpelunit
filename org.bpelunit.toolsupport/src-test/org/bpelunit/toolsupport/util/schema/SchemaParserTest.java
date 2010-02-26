@@ -17,6 +17,7 @@ import org.bpelunit.toolsupport.util.schema.nodes.Attribute;
 import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
 import org.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+import org.bpelunit.toolsupport.util.schema.nodes.Type;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,6 +25,7 @@ public class SchemaParserTest {
 	private final String schemaFileFolder = "testSchemata";
 	private final static String targetNs = "http://schematest.bpelunit.org";
 	private final static String schemaNs = "http://www.w3.org/2001/XMLSchema";
+	private static final String XSD_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
 	private SchemaParser parser;
 	private HashMap<QName, Element> elements;
 	private HashMap<QName, ComplexType> complexTypes;
@@ -391,6 +393,38 @@ public class SchemaParserTest {
 
 		SimpleType attrType = colorAttr.getType();
 		assertNull(attrType.getLocalPart());
+	}
+
+	/**
+	 * Check that elements in nested model groups are collected into a single
+	 * list. We might not have explicit support for the <xsd:choice> and <xsd:all>
+	 * model groups, but it's useful to consider them as <xsd:sequence> for the
+	 * time being. This way, we'll be able to generate sample (invalid) messages,
+	 * and the user will just need to remember the extra constraints to be met.
+	 */
+	@Test
+	public void testDefineComplexElements4_NestedModelGroups() throws Exception {
+		this.parser.parse(this.getFile("defineComplexElements4.xsd"));
+
+		Element element = this.elements.get(new QName(targetNs, "results"));
+		ComplexType type = element.getType().getAsComplexType();
+		assertNull(type.getLocalPart());
+
+		List<Element> elements = type.getElements();
+		String[] localParts = new String[]{"result", "count", "empty"};
+		QName[] nestedTypeName = new QName[]{new QName(XSD_NAMESPACE, "string"),
+				new QName(XSD_NAMESPACE, "nonNegativeInteger"),
+				new QName(XSD_NAMESPACE, "anyType")
+		};
+		assertEquals(localParts.length, elements.size());
+
+		for (int i = 0; i < elements.size(); ++i) {
+			Element nestedElement = elements.get(i);
+			assertEquals(localParts[i], nestedElement.getLocalPart());
+
+			Type nestedType = nestedElement.getType();
+			assertEquals(nestedTypeName[i], nestedType.getQName());
+		}
 	}
 
 	private Attribute findAttribute(List<Attribute> e, String namespace, String name) {

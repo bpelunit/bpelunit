@@ -18,4 +18,18 @@
 			</xsd:simpleContent>
 		</xsd:complexType>
 	</xsd:element>
+
+	<xsd:element name="results">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="result" type="xsd:string" minOccurs="1"
+						maxOccurs="unbounded"/>
+					<xsd:element name="count" type="xsd:nonNegativeInteger"
+						minOccurs="1" maxOccurs="1" />
+				</xsd:sequence>
+				<xsd:element name="empty" minOccurs="1" maxOccurs="1" />
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
 </xsd:schema>
