@@ -423,7 +423,7 @@ public class WSDLParser {
 			Type type;
 			if (typeName == null) {
 				throw new InvalidInputException(
-					"Message style is rpc/lit, but the part "
+					"Style is rpc/lit, but the part "
 						+ part.getName() + " uses the element attribute");
 			}
 			else if (complexTypes.containsKey(typeName)) {
@@ -460,7 +460,7 @@ public class WSDLParser {
 		// just returning null here.
 		if (elementName == null)
 			throw new InvalidInputException(
-				"Message style is doc/lit, but the part "
+				"Style is doc/lit, but the part "
 					+ part.getName() + " uses the element attribute");
 
 		return schemaManager.getElement(elementName);
