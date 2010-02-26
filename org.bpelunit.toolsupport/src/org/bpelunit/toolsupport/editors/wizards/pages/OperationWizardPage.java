@@ -126,11 +126,13 @@ public class OperationWizardPage extends ActivityWizardPage implements IComponen
 				element = parser.getFaultElementForOperation(
 						getService(), getPort(), getOperation(), getSendFaultName());
 			}
-			else if (this.getWizard() instanceof ReceiveSendAsyncActivityWizard
-					|| this.getWizard() instanceof ReceiveSendSyncActivityWizard) {
+			else if (this.getWizard() instanceof ReceiveSendSyncActivityWizard) {
+				// Sync receive/send: send the output from the WS
 				element = parser.getOutputElementForOperation(
 						getService(), getPort(), getOperation());
 			} else {
+				// Sync send/receive, async send/receive or async receive/send:
+				// send the input for some WS
 				element = parser.getInputElementForOperation(
 						getService(), getPort(), getOperation());
 			}
