@@ -248,8 +248,13 @@ public class SchemaParser {
 	 * @return
 	 */
 	private SimpleType readSimpleType(XSSimpleType decl) {
-		return this.elementManager.getSimpleType(decl.getTargetNamespace(),
+		String localPart = decl.getName();
+		if (localPart == null) {
+			return new SimpleTypeImpl(decl.getTargetNamespace(), localPart);
+		} else {
+			return this.elementManager.getSimpleType(decl.getTargetNamespace(),
 				decl.getName());
+		}
 	}
 
 	/**

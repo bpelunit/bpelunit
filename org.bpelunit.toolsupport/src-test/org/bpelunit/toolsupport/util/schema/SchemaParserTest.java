@@ -368,6 +368,31 @@ public class SchemaParserTest {
 
 	}
 
+	/**
+	 * Check that anonymous inner simple types do not crash the parser and that
+	 * they work correctly.
+	 */
+	@Test
+	public void testDefineComplexElements4_NestedSimpleTypes() throws Exception {
+		this.parser.parse(this.getFile("defineComplexElements4.xsd"));
+
+		assertEquals(2, this.simpleTypes.size());
+		assertEquals(1, this.complexTypes.size());
+		assertEquals(2, this.elements.size());
+
+		Element element = this.elements.get(new QName(targetNs, "itinerary"));
+		ComplexType type = element.getType().getAsComplexType();
+		assertNull(type.getLocalPart());
+
+		List<Attribute> attrs = type.getAttributes();
+		assertEquals(1, attrs.size());
+		Attribute colorAttr = attrs.get(0);
+		assertEquals("color", colorAttr.getLocalPart());
+
+		SimpleType attrType = colorAttr.getType();
+		assertNull(attrType.getLocalPart());
+	}
+
 	private Attribute findAttribute(List<Attribute> e, String namespace, String name) {
 		for (Attribute attribute : e) {
 			if (namespace.equals(attribute.getNamespace())

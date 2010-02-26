@@ -13,6 +13,7 @@ Staged for next version
 * _Fix_: Avoid missing namespace nodes by dumping XML as strings using a null XSLT transform instead of internal Sun APIs.
 * _Fix_: Show XML Schema parsing errors while using the BPTS editor in the Problems view.
 * _Fix_: Make message generation in the BPTS editor work with XSD imports with relative URLs and imported messages which use their WSDL's XML Schema definitions.
+* _Fix_: Parse correctly anonymous simple types in the BPTS editor.
 * _Fix_: Make sure all generated fault messages follow the doc/lit style, according WS-I Basic Profile 1.1, section 3.6.
 
 -------------
