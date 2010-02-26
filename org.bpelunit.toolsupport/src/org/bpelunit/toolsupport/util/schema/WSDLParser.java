@@ -341,13 +341,13 @@ public class WSDLParser {
 			throw new InvalidInputException(e);
 		}
 
-		String bodyNamespace = opIdentifier.getBodyNamespace();
 		Message msg = getMessageFromOperation(faultName, direction, operation);
 
 		if ("document/literal".equals(opStyle)) {
 			return getElementForDocLitMessage(msg);
 		}
 		else if ("rpc/literal".equals(opStyle)) {
+			String bodyNamespace = opIdentifier.getBodyNamespace();
 			return getElementForRpcLitMessage(bodyNamespace, operation.getName(), msg);
 		}
 		else {

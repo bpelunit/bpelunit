@@ -28,6 +28,7 @@ import org.junit.Test;
  */
 public class RPCLiteralTest {
 
+	private static final String WSDL_OPERATION_ONLYINPUT = "elemAttrInRpcLitOp";
 	private static final String WSDL_IMPORT_NAMESPACE = "http://www.example.org/rpcLiteralTestImported/";
 	private static final String WSDL_PATH = "testSchemata/rpcLiteralTest.wsdl";
 	private static final String WSDL_TYPES_NAMESPACE = "http://www.example.org/rpcLiteralTest/Types";
@@ -195,7 +196,7 @@ public class RPCLiteralTest {
 	public void rpcLitMessagesWithElementPartAreRejected() throws Exception {
 		try {
 			fParser.getInputElementForOperation(
-					WSDL_SERVICE_QNAME, WSDL_PORT, "elemAttrInRpcLitOp");
+					WSDL_SERVICE_QNAME, WSDL_PORT, WSDL_OPERATION_ONLYINPUT);
 			fail("rpc/lit messages with element parts should be rejected");
 		} catch (InvalidInputException ex) {}
 	}
@@ -219,5 +220,20 @@ public class RPCLiteralTest {
 		assertNotNull("root element should have simple content", type);
 		assertEquals("root element should have the right content type",
 				new QName(XSD_NAMESPACE, "int"), type.getQName());
+	}
+
+	/**
+	 * Checks that we can ask for an element for a custom fault even in one-way
+	 * operations. However, we'll get an exception saying there's no schema
+	 * definition we can use to generate a sample XML fragment, as usual.
+	 */
+	@Test
+	public void generateCustomFaultForOneWayOpProducesCorrectException() throws Exception {
+		try {
+			fParser.getFaultElementForOperation(WSDL_SERVICE_QNAME, WSDL_PORT,
+					WSDL_OPERATION_ONLYINPUT, null);
+			fail("Generating a custom fault should throw a 'no element definition' " +
+					"exception even for operations without declared faults");
+		} catch (NoElementDefinitionExistsException ex) {}
 	}
 }
