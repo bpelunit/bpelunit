@@ -2,7 +2,7 @@
 <feature
       id="org.bpelunit.eclipse.feature"
       label="BPELUnit"
-      version="1.2.2"
+      version="1.4.0"
       provider-name="Leibniz Universität Hannover">
 
    <description url="http://www.bpelunit.net/">
@@ -220,20 +220,20 @@ litigation.
          id="org.bpelunit.framework"
          download-size="0"
          install-size="0"
-         version="1.2.1"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.bpelunit.framework.client.eclipse"
          download-size="0"
          install-size="0"
-         version="1.2.1"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.bpelunit.toolsupport"
          download-size="0"
          install-size="0"
-         version="1.2.2"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>

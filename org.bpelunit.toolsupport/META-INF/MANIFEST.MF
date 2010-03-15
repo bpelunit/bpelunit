@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit Eclipse Tool Support Plugin
 Bundle-SymbolicName: org.bpelunit.toolsupport; singleton:=true
-Bundle-Version: 1.2.2
+Bundle-Version: 1.4.0
 Bundle-Activator: org.bpelunit.toolsupport.ToolSupportActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,

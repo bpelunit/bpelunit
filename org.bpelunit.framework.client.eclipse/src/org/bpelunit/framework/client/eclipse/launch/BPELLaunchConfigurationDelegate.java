@@ -137,7 +137,7 @@ public class BPELLaunchConfigurationDelegate implements
 			try {
 				suite.setUp();
 			} catch (DeploymentException e) {
-
+				e.printStackTrace();
 				try {
 					suite.shutDown();
 				} catch (DeploymentException unused) {
@@ -167,8 +167,10 @@ public class BPELLaunchConfigurationDelegate implements
 				plugin.showCoverageResult(suite.getTestCases(), tool.getStatistics(), tool.getErrorStatus());
 			}
 		} catch (SpecificationException e) {
+			e.printStackTrace();
 			showError(e);
 		} catch (ConfigurationException e) {
+			e.printStackTrace();
 			showError(e);
 		} catch (Exception e) {
 			showError(e);
