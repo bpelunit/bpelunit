@@ -199,9 +199,16 @@
 				<xs:annotation>
 					<xs:documentation>A send operation</xs:documentation>
 				</xs:annotation>
-				<xs:sequence>
-					<xs:element name="data" type="AnyElement"/>
-				</xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="1">
+					<xs:element name="data" type="AnyElement" >
+						<xs:annotation>
+							<xs:documentation>Verbatim XML to be used as the SOAP body of the message to be sent.</xs:documentation>
+						</xs:annotation></xs:element>
+					<xs:element name="template" type="AnyElement">
+						<xs:annotation>
+							<xs:documentation>Apache Velocity template to be expanded to produce the SOAP body.</xs:documentation>
+						</xs:annotation></xs:element>
+				</xs:choice>
 				<xs:attribute name="fault" type="xs:boolean" use="optional"/>
 				<xs:attribute name="delaySequence" type="xs:string" use="optional"/>
 				<xs:attribute name="faultcode" type="xs:QName" use="optional"/>
