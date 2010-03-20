@@ -329,7 +329,7 @@ public class OperationDataComponent extends DataComponent {
 		/*
 		 * The map is Map<QName, javax.wsdl.Service>.
 		 */
-		Map services = def.getServices();
+		Map services = def.getAllServices();
 
 		if (services != null) {
 			ElementListSelectionDialog dialog = new ElementListSelectionDialog(this.getShell(),

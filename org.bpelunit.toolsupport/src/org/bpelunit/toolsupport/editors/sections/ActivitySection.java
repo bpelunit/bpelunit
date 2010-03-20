@@ -879,7 +879,7 @@ public class ActivitySection extends TreeSection {
 				return;
 			}
 
-			Map services = wsdlForPartner.getServices();
+			Map services = wsdlForPartner.getAllServices();
 			if (services.size() == 1) {
 				Service service = (Service) services.values().iterator().next();
 				operation.setService(service.getQName());
