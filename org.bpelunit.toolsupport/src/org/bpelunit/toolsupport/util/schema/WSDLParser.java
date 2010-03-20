@@ -124,67 +124,65 @@ public class WSDLParser {
 		reader.setErrorHandler(new ErrorAdapter());
 		reader.setAnnotationParser(new DomAnnotationParserFactory());
 
-		Map<String, String> namespaces = this.definition.getNamespaces();
-
 		// We need to collect the schemata from all WSDL imports. It might be
 		// that some of the imported WSDL elements refer to something in their
 		// internal schemas. If we don't import it, we'll have missing types in
 		// our internal schemata, and the tree editor won't work.
-		List<Object> possibleSchemata = collectPossibleSchemata();
+		List<Schema> schemata = new ArrayList<Schema>();
+		WSDLParser.collectSchemata(schemata, this.definition);
+		for (List<Import> importsByNamespace : ((Map<String, List<Import>>) this.definition
+				.getImports()).values()) {
+			for (Import importDef : importsByNamespace) {
+				WSDLParser.collectSchemata(schemata, importDef.getDefinition());
+			}
+		}
 
 		// loop through the collected schemata
-		for (Object tmp : possibleSchemata) {
-			if (tmp instanceof Schema) {
-				Schema schema = (Schema) tmp;
+		for (Schema schema : schemata) {
+			org.w3c.dom.Element schemaElement = schema.getElement();
 
-				org.w3c.dom.Element schemaElement = schema.getElement();
+			/*
+			 * We need to set a system ID or importing .xsd files with relative
+			 * paths won't work. See this mailing list thread at the XSOM
+			 * website:
+			 *
+			 * https://xsom.dev.java.net/servlets/ReadMsg?list=users&msgNo=159
+			 *
+			 * All relative URIs will use the WSDL URI as their base.
+			 */
+			StringReader sReader = this.getStringReaderFromElement(schemaElement);
+			InputSource source = new InputSource(sReader);
+			source.setSystemId(this.definition.getDocumentBaseURI());
+			reader.parse(source);
 
-				// inherit the namespaces from the definitions-tag
-				this.addNamespaces(namespaces, schemaElement);
-
-				/*
-				 * We need to set a system ID or importing .xsd files with
-				 * relative paths won't work. See this mailing list thread at
-				 * the XSOM website:
-				 *
-				 * https://xsom.dev.java.net/servlets/ReadMsg?list=users&msgNo=159
-				 *
-				 * All relative URIs will use the WSDL URI as their base.
-				 */
-				StringReader sReader = this.getStringReaderFromElement(schemaElement);
-				InputSource source = new InputSource(sReader);
-				source.setSystemId(this.definition.getDocumentBaseURI());
-				reader.parse(source);
-				
-				try {
-					parser.readSchemata(reader.getResult());
-				} catch (NullPointerException e) {
-					throw new WSDLReadingException("Corrupt Schema in WSDL", e);
-				} catch (Throwable e) {
-					// error occured, needed schmeta could be read, continue
-				}
+			try {
+				parser.readSchemata(reader.getResult());
+			} catch (NullPointerException e) {
+				throw new WSDLReadingException("Corrupt Schema in WSDL", e);
+			} catch (Throwable e) {
+				// error occured, needed schmeta could be read, continue
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Object> collectPossibleSchemata() {
-		List<Object> possibleSchemata = new ArrayList<Object>();
-		Types localTypesSection = this.definition.getTypes();
-		if (localTypesSection != null) {
-			possibleSchemata.addAll(localTypesSection.getExtensibilityElements());
+	private static void collectSchemata(List<Schema> schemata, Definition def) {
+		Types typesSection = def.getTypes();
+		if (typesSection == null)
+			return;
+
+		for (Object o : typesSection.getExtensibilityElements()) {
+			if (!(o instanceof Schema))
+				continue;
+
+			// Import all spaces from the schema's WSDL definition into the
+			// schema element, for later parsing by XSOM
+			Schema schema = (Schema) o;
+			org.w3c.dom.Element element = schema.getElement();
+			WSDLParser.addNamespaces(def.getNamespaces(), element);
+
+			schemata.add(schema);
 		}
-		// Go through all imports
-		Map<String, List<Import>> allImports = this.definition.getImports();
-		for (List<Import> importsInNamespace : allImports.values()) {
-			for (Import importDef : importsInNamespace) {
-				Types typesSection = importDef.getDefinition().getTypes();
-				if (typesSection != null) {
-					possibleSchemata.addAll(typesSection.getExtensibilityElements());
-				}
-			}
-		}
-		return possibleSchemata;
 	}
 
 	/**
@@ -220,7 +218,8 @@ public class WSDLParser {
 	 *            representing on schema element of the WSDL
 	 */
 	@SuppressWarnings("unchecked")
-	private void addNamespaces(Map<String, String> namespaces, org.w3c.dom.Element schemaElement) {
+	private static void addNamespaces(Map<String, String> namespaces,
+			org.w3c.dom.Element schemaElement) {
 		for (Object o : namespaces.entrySet()) {
 			if (o instanceof Entry) {
 				Entry entry = (Entry) o;

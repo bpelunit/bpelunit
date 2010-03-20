@@ -33,12 +33,12 @@ public class RPCLiteralTest {
 	private static final String WSDL_PATH = "testSchemata/rpcLiteralTest.wsdl";
 	private static final String WSDL_TYPES_NAMESPACE = "http://www.example.org/rpcLiteralTest/Types";
 	private static final String XSD_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
-	private static final String WSDL_OPERATION = "doSomething";
-	private static final String WSDL_PORT = "rpcLiteralTestSOAP";
-	private static final String WSDL_SERVICE_NAME = "rpcLiteralTest";
-	private static final String WSDL_SERVICE_NAMESPACE = "http://www.example.org/rpcLiteralTest/";
-	private static final String WSDL_INPUT_NAMESPACE = WSDL_SERVICE_NAMESPACE + "Input";
-	private static final QName WSDL_SERVICE_QNAME = new QName(WSDL_SERVICE_NAMESPACE, WSDL_SERVICE_NAME);
+	static final String WSDL_OPERATION = "doSomething";
+	static final String WSDL_PORT = "rpcLiteralTestSOAP";
+	static final String WSDL_SERVICE_NAME = "rpcLiteralTest";
+	static final String WSDL_SERVICE_NAMESPACE = "http://www.example.org/rpcLiteralTest/";
+	static final String WSDL_INPUT_NAMESPACE = WSDL_SERVICE_NAMESPACE + "Input";
+	static final QName WSDL_SERVICE_QNAME = new QName(WSDL_SERVICE_NAMESPACE, WSDL_SERVICE_NAME);
 	private WSDLParser fParser;
 
 	@Before

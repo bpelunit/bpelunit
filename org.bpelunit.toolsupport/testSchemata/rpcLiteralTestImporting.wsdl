@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:tns="http://www.example.org/rpcLiteralTestImporting/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	name="rpcLiteralTestImporting"
+	targetNamespace="http://www.example.org/rpcLiteralTestImporting/">
+	<wsdl:import namespace="http://www.example.org/rpcLiteralTest/"
+		location="rpcLiteralTest.wsdl" />
+</wsdl:definitions>

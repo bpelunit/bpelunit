@@ -18,6 +18,7 @@
 			</xsd:simpleType>
 			<xsd:element name="errorCode" type="xsd:int" />
 			<xsd:element name="reason" type="xsd:string" />
+			<xsd:element name="eFingers" type="cxsd:numberOfFingers"/>
 		</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="doSomethingRequest">
