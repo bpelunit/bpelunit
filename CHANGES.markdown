@@ -1,7 +1,6 @@
 Changelog
 =========
 
------------------------
 Staged for next version
 -----------------------
 
@@ -18,7 +17,6 @@ Staged for next version
 * _Fix_: Make sure in the BPTS editor that all generated fault messages follow the doc/lit style, according to section 3.6 of the WS-I Basic Profile 1.1.
 * _Fix_: the message for the send part in an async receive/send activity is the input for the WS, not its output.
 
--------------
 Version 1.3.0
 -------------
 
@@ -30,14 +28,12 @@ Version 1.3.0
 * _Fix_: Fixed Undeploy Exception for ODE Deployment.
 * _Fix_: Fixed charset handling in Eclipse Editor.
 
---------------------------
 Version 1.2.2 (2009/09/25)
 --------------------------
 
 * Missing info, sorry!
 * _Fix_: Wrong cursor positioning in input fields.
 
---------------------------
 Version 1.2.1 (2009/09/22)
 --------------------------
 
@@ -45,19 +41,16 @@ Version 1.2.1 (2009/09/22)
   operation exists.
 * _Fix_: Input fields for text nodes cuts content.
 
---------------------------
 Version 1.2.0 (2009/09/18)
 --------------------------
 
 * No information for now, sorry!
 
------------
 Version 1.1
 -----------
 
 * No information for now, sorry!
 
------------
 Version 1.0
 -----------
 
