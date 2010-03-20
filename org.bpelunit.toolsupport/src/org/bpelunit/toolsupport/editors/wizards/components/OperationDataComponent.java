@@ -177,8 +177,31 @@ public class OperationDataComponent extends DataComponent {
 	public void handleServiceFieldChanged(DialogField field) {
 
 		Definition def = this.getDefinition();
-		if (def != null) {
-			this.fService = new QName(def.getTargetNamespace(), this.fServiceDialogField.getText());
+
+		// We shouldn't assume the service mentioned in the text field belongs
+		// to the target namespace. The user only gets to write the local part:
+		// the namespace URI might be from one of the imported WSDL definitions.
+		// It's better to look at all the services available in the definition
+		// and get the first service whose name has a matching local part.
+
+		// There might be more than one candidate: in that case, the user should
+		// use the 'Choose...' dialog. We need to make sure we don't clobber the
+		// user's selection back to the first candidate. We'll only update the
+		// fService field here when there's no service selected or the local
+		// name of the current service doesn't match the contents of the text
+		// field.
+
+		final String fieldText = this.fServiceDialogField.getText();
+		if (def != null && (this.fService == null ||
+				!this.fService.getLocalPart().equals(fieldText))) {
+			@SuppressWarnings("unchecked")
+			Collection<Service> services = def.getAllServices().values();
+			for (Service s : services) {
+				final QName sName = s.getQName();
+				if (sName.getLocalPart().equals(fieldText)) {
+					this.fService = sName;
+				}
+			}
 		}
 
 		this.validateOperation(Verify.ALL);

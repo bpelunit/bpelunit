@@ -3,6 +3,10 @@ Changelog
 
 Staged for next version
 -----------------------
+* _Fix_: list imported services in the BPTS editor's service picker and let the user select them.
+
+Version 1.4.0
+-----------------------
 
 * _Feature_: Better error reporting for failing test cases and receive conditions.
 * _Feature_: Kill lingering processes in ActiveBPEL after each test case and when the test suite is completed.
