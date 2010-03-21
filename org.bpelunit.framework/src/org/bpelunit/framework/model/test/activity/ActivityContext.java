@@ -21,6 +21,7 @@ import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import org.bpelunit.framework.model.test.data.SendDataSpecification;
 import org.bpelunit.framework.model.test.wire.IncomingMessage;
 import org.bpelunit.framework.model.test.wire.OutgoingMessage;
+import org.w3c.dom.Element;
 
 /**
  * An activity context is a contextual object created for a single enclosing top-level activity
@@ -66,6 +67,8 @@ public class ActivityContext {
 	 * The URL simulated by the current partner
 	 */
 	private String fSimulatedURL;
+
+	private Element fIncomingMessage;
 
 
 
@@ -161,6 +164,29 @@ public class ActivityContext {
 	 */
 	public void setSimulatedURL(String simulatedURL) {
 		fSimulatedURL= simulatedURL;
+	}
+
+	/**
+	 * Returns the received message. Might be null if no message has been
+	 * received yet (for instance, in a <sendReceive> activity). The received
+	 * message is mostly useful for the VelocityContexts of the <receiveSend>
+	 * and <receiveSendAsynchronous> activities.
+	 *
+	 * @return received message
+	 */
+	public Element getIncomingMessage() {
+		return fIncomingMessage;
+	}
+	
+	/**
+	 * Saves the message received for later use by the VelocityContext of the
+	 * <send> activity. Useful for <receiveSend> and <receiveSendAsynchronous>
+	 * activities.
+	 *
+	 * @param incomingMessage Incoming message.
+	 */
+	public void setIncomingMessage(Element incomingMessage) {
+		fIncomingMessage = incomingMessage;
 	}
 
 }

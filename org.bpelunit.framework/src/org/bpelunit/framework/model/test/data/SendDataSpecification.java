@@ -19,9 +19,9 @@ import javax.xml.soap.SOAPMessage;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.apache.xmlbeans.XmlObject;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
+import org.bpelunit.framework.control.util.XPathTool;
 import org.bpelunit.framework.exception.HeaderProcessingException;
 import org.bpelunit.framework.exception.SOAPEncodingException;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -147,8 +147,9 @@ public class SendDataSpecification extends DataSpecification {
 
 		// Expand template into literal data if there is one
 		if (fDataTemplate != null) {
-			expandTemplate();
+			expandTemplate(context);
 		}
+		if (hasProblems()) return;
 
 		// Insert mapping data from context (if any)
 		insertMappingData(context);
@@ -177,13 +178,18 @@ public class SendDataSpecification extends DataSpecification {
 		fStatus= ArtefactStatus.createPassedStatus();
 	}
 
-	private void expandTemplate() {
+	private void expandTemplate(ActivityContext context) {
 		try {
 			// Expand the template as a regular string
 			Velocity.init();
-			VelocityContext ctx = new VelocityContext();
+			VelocityContext velocityCtx = new VelocityContext();
+			if (context.getIncomingMessage() != null) {
+				velocityCtx.put("xpath", new XPathTool());
+				velocityCtx.put("request", context.getIncomingMessage());
+			}
+
 			StringWriter writer = new StringWriter();
-			Velocity.evaluate(ctx, writer, "expandTemplate", fDataTemplate);
+			Velocity.evaluate(velocityCtx, writer, "expandTemplate", fDataTemplate);
 			String expandedTemplate = writer.toString();
 
 			// Parse back to a DOM XML element

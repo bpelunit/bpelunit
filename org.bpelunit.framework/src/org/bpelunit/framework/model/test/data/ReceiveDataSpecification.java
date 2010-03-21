@@ -17,6 +17,8 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlObject;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.exception.HeaderProcessingException;
@@ -155,6 +157,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 			return;
 
 		// Receive completed.
+		context.setIncomingMessage(fLiteralData);
 		fStatus= ArtefactStatus.createPassedStatus();
 	}
 
