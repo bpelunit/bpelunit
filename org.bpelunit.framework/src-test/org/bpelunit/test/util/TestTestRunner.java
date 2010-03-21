@@ -95,4 +95,8 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 		// do nothing.
 	}
 
+	public TestSuite getTestSuite() {
+		return fSuite;
+	}
+
 }

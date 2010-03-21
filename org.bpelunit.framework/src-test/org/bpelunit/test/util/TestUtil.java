@@ -17,15 +17,20 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.FileUtils;
+import org.bpelunit.framework.control.result.XMLResultProducer;
 import org.bpelunit.framework.control.soap.NamespaceContextImpl;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
+import org.bpelunit.framework.xml.result.XMLTestResultDocument;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * 
@@ -66,4 +71,21 @@ public class TestUtil {
 		return (Node) xpath.evaluate(string, literalData, XPathConstants.NODE);
 	}
 
+	public static void assertSameResults(String msg, File bptsOriginal, File bptsNew) throws Exception {
+		final String xmlTextA = getResults(bptsOriginal).xmlText();
+		final String xmlTextB = getResults(bptsNew).xmlText();
+		assertEquals(msg, xmlTextA, xmlTextB);
+	}
+
+	public static void assertDifferentResults(String msg, File bptsOriginal, File bptsNew) throws Exception {
+		final String xmlTextA = getResults(bptsOriginal).xmlText();
+		final String xmlTextB = getResults(bptsNew).xmlText();
+		assertFalse(msg, xmlTextA.equals(xmlTextB));
+	}
+
+	public static XMLTestResultDocument getResults(File bpts) throws Exception {
+		TestTestRunner runner = new TestTestRunner(bpts.getParent(), bpts.getName());
+		runner.testRun();
+		return XMLResultProducer.getXMLResults(runner.getTestSuite());
+	}
 }

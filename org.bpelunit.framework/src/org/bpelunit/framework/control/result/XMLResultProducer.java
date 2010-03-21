@@ -52,46 +52,14 @@ public class XMLResultProducer {
 	 * @throws IOException
 	 */
 	public static void writeXML(OutputStream out, TestSuite suite) throws IOException {
+                XMLTestResultDocument xmlTestResultDocument= getXMLResults(suite);
 
-		XMLTestResultDocument xmlTestResultDocument= XMLTestResultDocument.Factory.newInstance();
-		XMLTestResult xmlTestResult= xmlTestResultDocument.addNewTestResult();
-		transferState(suite, xmlTestResult);
+                XmlOptions opts= new XmlOptions();
+                opts.setSavePrettyPrint();
+                opts.setSavePrettyPrintIndent(4);
 
-		List<ITestArtefact> children= suite.getChildren();
-		for (ITestArtefact artefact : children) {
-			TestCase testCase= (TestCase) artefact;
-			XMLTestCase xmlTestCase= xmlTestResult.addNewTestCase();
-			transferState(testCase, xmlTestCase);
-
-			List<PartnerTrack> partnerTracks= testCase.getPartnerTracks();
-			for (PartnerTrack track : partnerTracks) {
-				XMLPartnerTrack xmlPartnerTrack= xmlTestCase.addNewPartnerTrack();
-				transferState(track, xmlPartnerTrack);
-
-				List<ITestArtefact> trackChildren= track.getChildren();
-				// Track children may only be activites
-				for (ITestArtefact artefact2 : trackChildren) {
-					Activity activity= (Activity) artefact2;
-
-					XMLActivity xmlActivity= xmlPartnerTrack.addNewActivity();
-					xmlActivity.setType(activity.getActivityCode());
-					transferState(activity, xmlActivity);
-
-					List<ITestArtefact> activityChildren= activity.getChildren();
-					// Activity children may be other activites, dataPackages, or arbitrary data
-					for (ITestArtefact artefact3 : activityChildren) {
-						handleLowLevel(xmlActivity, artefact3);
-					}
-				}
-			}
-		}
-
-		XmlOptions opts= new XmlOptions();
-		opts.setSavePrettyPrint();
-		opts.setSavePrettyPrintIndent(4);
-
-		xmlTestResultDocument.save(out, opts);
-	}
+                xmlTestResultDocument.save(out, opts);
+        }
 
 	private static void handleLowLevel(XMLActivity xmlActivity, ITestArtefact testArtefact) {
 
@@ -172,4 +140,45 @@ public class XMLResultProducer {
 			handleStateData(result.addNewState(), data);
 		}
 	}
+
+        /**
+         * Serializes the trace of a test suite to a tree of XMLBeans classes.
+         *
+         * @param suite Suite with the data to be written.
+         */
+        public static XMLTestResultDocument getXMLResults(TestSuite suite) {
+                XMLTestResultDocument xmlTestResultDocument = XMLTestResultDocument.Factory.newInstance();
+                XMLTestResult xmlTestResult= xmlTestResultDocument.addNewTestResult();
+                transferState(suite, xmlTestResult);
+
+                List<ITestArtefact> children= suite.getChildren();
+                for (ITestArtefact artefact : children) {
+                        TestCase testCase= (TestCase) artefact;
+                        XMLTestCase xmlTestCase= xmlTestResult.addNewTestCase();
+                        transferState(testCase, xmlTestCase);
+
+                        List<PartnerTrack> partnerTracks= testCase.getPartnerTracks();
+                        for (PartnerTrack track : partnerTracks) {
+                                XMLPartnerTrack xmlPartnerTrack= xmlTestCase.addNewPartnerTrack();
+                                transferState(track, xmlPartnerTrack);
+
+                                List<ITestArtefact> trackChildren= track.getChildren();
+                                // Track children may only be activites
+                                for (ITestArtefact artefact2 : trackChildren) {
+                                        Activity activity= (Activity) artefact2;
+
+                                        XMLActivity xmlActivity= xmlPartnerTrack.addNewActivity();
+                                        xmlActivity.setType(activity.getActivityCode());
+                                        transferState(activity, xmlActivity);
+
+                                        List<ITestArtefact> activityChildren= activity.getChildren();
+                                        // Activity children may be other activites, dataPackages, or arbitrary data
+                                        for (ITestArtefact artefact3 : activityChildren) {
+                                                handleLowLevel(xmlActivity, artefact3);
+                                        }
+                                }
+                        }
+                }
+                return xmlTestResultDocument;
+        }
 }
