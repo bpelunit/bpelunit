@@ -79,6 +79,7 @@ import org.bpelunit.framework.xml.suite.XMLTrack;
 import org.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import org.bpelunit.framework.xml.suite.XMLWaitActivity;
 import org.w3c.dom.Attr;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -702,35 +703,33 @@ public class SpecificationLoader {
 		String soapAction = operation.getSOAPHTTPAction();
 		ISOAPEncoder encoder = fRunner.createNewSOAPEncoder(encodingStyle);
 
-		// Check if everything is there...
-		XMLAnyElement xmlData = xmlSend.getData();
-		if (xmlData == null)
+		// Check that we have everything
+		if (xmlSend.isSetData() == xmlSend.isSetTemplate()) {
 			throw new SpecificationException(
-					"Send Element must have a data child.");
+					"Send Element must have either a data or a template " +
+					"child, and not both.");
+		}
+		XMLAnyElement xmlData = xmlSend.getData(),
+			xmlTemplate = xmlSend.getTemplate();
 
-		// create dummy node
-		Element rawDataRoot = BPELUnitUtil.generateDummyElementNode();
+		// Import namespaces in the BPTS file to the root elements of the
+		// <data> or <template> element, and convert the <template> contents
+		// to text.
+		Element rawDataRoot = null;
+		String templateText = null;
 
 		try {
-			// Use the internal namespace mechanism of XMLBeans to
-			// sort out namespaces and add them to the top-level element,
-			// ready to be copied by importNode().
-			XmlObject test = XmlObject.Factory.parse(xmlData.xmlText());
-			NodeList cn = test.getDomNode().getChildNodes();
-			for (int i = 0; i < cn.getLength(); i++) {
-				Node currentItem = cn.item(i);
-				// must be elements. There might be comments flying around,
-				// filter them.
-				if (currentItem instanceof Element) {
-					Element element = (Element) currentItem;
-					rawDataRoot.appendChild(rawDataRoot.getOwnerDocument()
-							.importNode(element, true));
-				}
+			if (xmlData != null)
+				rawDataRoot = copyAsRootWithNamespaces(xmlData);
+			if (xmlTemplate != null) {
+				Element templateRoot = copyAsRootWithNamespaces(xmlTemplate);
+				templateText = XmlObject.Factory.parse(templateRoot).xmlText();
 			}
 		} catch (XmlException e) {
 			throw new SpecificationException(
-					"An error occurred when reading the literal data of send for activity "
-							+ activity.getName() + ": " + e.getMessage(), e);
+					"An error occurred when reading the literal data or " +
+					"template of send for activity "
+						+ activity.getName() + ": " + e.getMessage(), e);
 		}
 
 		/*
@@ -757,13 +756,35 @@ public class SpecificationLoader {
 			spec
 					.initialize(operation, currentDelay, encodingStyle,
 							delaySequence, delaySequence, encoder, rawDataRoot,
-							context, faultCode, faultString);
+							templateText, context, faultCode, faultString);
 		} else
 			spec.initialize(operation, currentDelay, targetURL, soapAction,
-					encodingStyle, encoder, rawDataRoot, context,
-					faultCode, faultString);
+					encodingStyle, encoder, rawDataRoot, templateText,
+					context, faultCode, faultString);
 
 		return spec;
+	}
+
+	private Element copyAsRootWithNamespaces(XMLAnyElement xmlData)
+			throws XmlException, DOMException {
+		Element rawDataRoot;
+		rawDataRoot = BPELUnitUtil.generateDummyElementNode();
+		// Use the internal namespace mechanism of XMLBeans to
+		// sort out namespaces and add them to the top-level element,
+		// ready to be copied by importNode().
+		XmlObject test = XmlObject.Factory.parse(xmlData.xmlText());
+		NodeList cn = test.getDomNode().getChildNodes();
+		for (int i = 0; i < cn.getLength(); i++) {
+			Node currentItem = cn.item(i);
+			// must be elements. There might be comments flying around,
+			// filter them.
+			if (currentItem instanceof Element) {
+				Element element = (Element) currentItem;
+				rawDataRoot.appendChild(rawDataRoot.getOwnerDocument()
+						.importNode(element, true));
+			}
+		}
+		return rawDataRoot;
 	}
 
 	/**

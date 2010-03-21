@@ -6,14 +6,20 @@
 package org.bpelunit.framework.model.test.data;
 
 import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.SOAPMessage;
 
 import org.apache.log4j.Logger;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
+import org.apache.xmlbeans.XmlObject;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.exception.HeaderProcessingException;
@@ -24,7 +30,9 @@ import org.bpelunit.framework.model.test.activity.ActivityContext;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
 import org.bpelunit.framework.model.test.report.ITestArtefact;
 import org.bpelunit.framework.model.test.report.StateData;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 /**
  * The send data specification is a data package which contains all necessary information to encode
@@ -105,6 +113,11 @@ public class SendDataSpecification extends DataSpecification {
          */
         private String fFaultString;
 
+        /**
+         * If no literal data is available, this Velocity template will be used to produce the data to be sent.
+         */
+		private String fDataTemplate;
+
 	// ******************** Initialization ************************
 
 	public SendDataSpecification(Activity parent) throws SpecificationException {
@@ -112,9 +125,10 @@ public class SendDataSpecification extends DataSpecification {
 	}
 
 	public void initialize(SOAPOperationCallIdentifier operation, int delay, String targetURL, String soapAction, String encodingStyle,
-			ISOAPEncoder encoder, Element rawDataRoot, NamespaceContext context, QName faultCode, String faultString) {
+			ISOAPEncoder encoder, Element rawDataRoot, String dataTemplate, NamespaceContext context, QName faultCode, String faultString) {
 		fOperation= operation;
 		fLiteralData= rawDataRoot;
+		fDataTemplate= dataTemplate;
 		fNamespaceContext= context;
 
 		fSOAPHTTPAction= soapAction;
@@ -127,20 +141,14 @@ public class SendDataSpecification extends DataSpecification {
 		fFaultString= faultString;
 	}
 
-	public void initialize(SOAPOperationCallIdentifier operation, int delay,
-			String encodingStyle, ISOAPEncoder encoder, Element rawDataRoot,
-			NamespaceContext context, QName faultCode, String faultString) {
-		initialize(operation, delay, null, null,
-			encodingStyle, encoder,
-			rawDataRoot, context, faultCode, faultString);
-	}
-
-
 	// ******************** Implementation ***************************
 
 	public void handle(ActivityContext context) {
 
-		// Literal data is already available
+		// Expand template into literal data if there is one
+		if (fDataTemplate != null) {
+			expandTemplate();
+		}
 
 		// Insert mapping data from context (if any)
 		insertMappingData(context);
@@ -167,6 +175,27 @@ public class SendDataSpecification extends DataSpecification {
 			return;
 
 		fStatus= ArtefactStatus.createPassedStatus();
+	}
+
+	private void expandTemplate() {
+		try {
+			// Expand the template as a regular string
+			Velocity.init();
+			VelocityContext ctx = new VelocityContext();
+			StringWriter writer = new StringWriter();
+			Velocity.evaluate(ctx, writer, "expandTemplate", fDataTemplate);
+			String expandedTemplate = writer.toString();
+
+			// Parse back to a DOM XML element
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setNamespaceAware(true);
+			Document docExpanded = dbf.newDocumentBuilder().parse(
+					new InputSource(new StringReader(expandedTemplate)));
+			fLiteralData = docExpanded.getDocumentElement();
+		} catch (Exception ex) {
+			fStatus = ArtefactStatus.createErrorStatus("Template expansion fault: "
+					+ ex.getLocalizedMessage(), ex);
+		}
 	}
 
 	/**
