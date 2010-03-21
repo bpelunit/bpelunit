@@ -19,10 +19,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/saaj-1.3_api.jar" sourcepath="lib/saaj1.3_src.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/saaj-1.3_impl.jar" sourcepath="lib/saaj1.3_src.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-src-3.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-1.2-src.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang-2.1-src.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-src.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.13-src.jar"/>
 	<classpathentry kind="lib" path="lib/org.mortbay.jetty-src.jar"/>
 	<classpathentry kind="lib" path="lib/saaj1.3_src.jar"/>
 	<classpathentry kind="lib" path="lib/xbean.jar" sourcepath="lib/xbean-src.jar"/>
