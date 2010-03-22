@@ -141,6 +141,10 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 		return "Partner Track " + getPartner().getName();
 	}
 
+	public String getRawName() {
+		return getPartner().getName();
+	}
+
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children = new ArrayList<ITestArtefact>();
 		for (Activity activity : fActivities) {

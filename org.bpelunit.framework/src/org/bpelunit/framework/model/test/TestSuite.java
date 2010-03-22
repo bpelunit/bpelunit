@@ -299,6 +299,10 @@ public class TestSuite implements ITestArtefact {
 		return "Test Suite " + fName;
 	}
 
+	public String getRawName() {
+		return fName;
+	}
+
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children = new ArrayList<ITestArtefact>();
 		for (TestCase testCase : fTestCaseMap.values()) {

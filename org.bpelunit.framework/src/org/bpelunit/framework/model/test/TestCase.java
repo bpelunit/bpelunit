@@ -118,6 +118,10 @@ public class TestCase implements ITestArtefact {
 		return "Test Case " + fName;
 	}
 
+	public String getRawName() {
+		return fName;
+	}
+
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
 		for (PartnerTrack track : getPartnerTracks()) {
