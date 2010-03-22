@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.velocity.VelocityContext;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
 import org.bpelunit.framework.model.test.report.ITestArtefact;
@@ -60,6 +61,8 @@ public class TestCase implements ITestArtefact {
 	 * If true, the user has aborted this test case
 	 */
 	private boolean fAbortedByUser;
+
+	private VelocityContext fTestSuiteVelocityContext;
 
 
 	// ****************** Initialization ************************
@@ -184,4 +187,24 @@ public class TestCase implements ITestArtefact {
 		return getName();
 	}
 
+	// ******************** VELOCITY **************************
+
+	/**
+	 * Creates a new Velocity context that extends the VelocityContext of the
+	 * test suite with information about this test case. To keep test cases
+	 * isolated, the context does not wrap the test suite context, but clones
+	 * and extends it. To reduce overhead, the test suite context is cached so
+	 * it is only produced the first time.
+	 *
+	 * @return VelocityContext with information about the test suite and test
+	 * case.
+	 * */
+	public VelocityContext createVelocityContext() throws Exception {
+		if (fTestSuiteVelocityContext == null) {
+			fTestSuiteVelocityContext = getSuite().createVelocityContext();
+		}
+		VelocityContext ctx = (VelocityContext)fTestSuiteVelocityContext.clone();
+		ctx.put("testCaseName", getRawName());
+		return ctx;
+	}
 }

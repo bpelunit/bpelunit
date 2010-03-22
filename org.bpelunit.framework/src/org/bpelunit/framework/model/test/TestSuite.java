@@ -19,7 +19,6 @@ import org.bpelunit.framework.control.result.ITestResultListener;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.XPathTool;
 import org.bpelunit.framework.control.ws.LocalHTTPServer;
-import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.TestCaseNotFoundException;
 import org.bpelunit.framework.model.ProcessUnderTest;
@@ -98,7 +97,6 @@ public class TestSuite implements ITestArtefact {
 	 */
 	private Logger fLogger;
 
-	private VelocityContext fVelocityContext;
 
 	// ****************************** Initialization **************************
 
@@ -167,7 +165,7 @@ public class TestSuite implements ITestArtefact {
 
 	// ************ Running *************
 
-	public void setUp() throws DeploymentException, ConfigurationException {
+	public void setUp() throws DeploymentException {
 
 		fLogger.info("Now starting local HTTP server...");
 		try {
@@ -183,13 +181,6 @@ public class TestSuite implements ITestArtefact {
 
 		fLogger.info("Now deploying PUT: " + fProcessUnderTest);
 		fProcessUnderTest.deploy();
-
-		fLogger.info("Setting up root Velocity context...");
-		try {
-			fVelocityContext = setupVelocityContext();
-		} catch (Exception ex) {
-			throw new ConfigurationException("Could not set up the root Velocity context.", ex);
-		}
 	}
 
 	public void shutDown() throws DeploymentException {
@@ -312,8 +303,22 @@ public class TestSuite implements ITestArtefact {
 		return fLocalServer;
 	}
 
-	public VelocityContext getVelocityContext() {
-		return fVelocityContext;
+	/**
+	 * Creates a new VelocityContext with information about this test suite.
+	 * If necessary, it will initialize Velocity.
+	 *
+	 * NOTE: to keep test cases and activities isolated, this context should
+	 * not be wrapped, but rather be cloned and then extended.
+	 */
+	public VelocityContext createVelocityContext() throws Exception {
+		Velocity.init();
+
+		VelocityContext ctx = new VelocityContext();
+		ctx.put("baseURL", fBaseURL);
+		ctx.put("putName", fProcessUnderTest.getName());
+		ctx.put("testSuiteName", this.getRawName());
+		ctx.put("testCaseCount", this.getTestCaseCount());
+		return ctx;
 	}
 
 	// *********** ITestArtefact ************
@@ -386,21 +391,4 @@ public class TestSuite implements ITestArtefact {
 		return testCases;
 	}
 
-	/**
-	 * Prepares the suite-wide Velocity context, which will be wrapped later
-	 * with the case-wide Velocity context, and then with an activity-wide
-	 * Velocity context.
-	 *
-	 * This method also ensures that Velocity.init() is called exactly once
-	 * per test suite.
-	 */
-	private VelocityContext setupVelocityContext() throws Exception {
-		Velocity.init();
-		VelocityContext ctx = new VelocityContext();
-		ctx.put("baseURL", fBaseURL);
-		ctx.put("putName", fProcessUnderTest.getName());
-		ctx.put("testSuiteName", this.getRawName());
-		ctx.put("testCaseCount", this.getTestCaseCount());
-		return ctx;
-	}
 }

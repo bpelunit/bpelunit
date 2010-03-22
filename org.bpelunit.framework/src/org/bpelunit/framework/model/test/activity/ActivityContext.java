@@ -71,9 +71,7 @@ public class ActivityContext {
 
 	private Element fIncomingMessage;
 
-	private VelocityContext fVelocityContext;
-
-
+	private VelocityContext fTestCaseVelocityContext;
 
 	// ****************************** Initialization ****************************
 
@@ -82,7 +80,6 @@ public class ActivityContext {
 		fTrack= track;
 		fUserData= new HashMap<String, String>();
 		fSimulatedURL= fTrack.getPartner().getSimulatedURL();
-		fVelocityContext = setupVelocityContext();
 	}
 
 	/**
@@ -93,14 +90,6 @@ public class ActivityContext {
 		fTrack= null;
 		fUserData= new HashMap<String, String>();
 		fSimulatedURL= simulatedURL;
-		fVelocityContext = new VelocityContext();
-	}
-
-	private VelocityContext setupVelocityContext() {
-		VelocityContext ctx = new VelocityContext(fRunner.getVelocityContext());
-		ctx.put("partnerTrackName", fTrack.getRawName());
-		ctx.put("partnerTrackURL", fTrack.getPartner().getSimulatedURL());
-		return ctx;
 	}
 
 	// *********** Methods for sending and receiving messages *********
@@ -203,14 +192,24 @@ public class ActivityContext {
 	// **************************** Velocity ********************************
 
 	/**
-	 * Returns the partner track-wide Velocity context. It should be wrapped into
-	 * another VelocityContext for every activity, to avoid modifying it by
-	 * mistake.
-	 * @return Base VelocityContext for the partner track, which wraps the
-	 * test case VelocityContext, which wraps the test suite VelocityContext in
-	 * turn.
+	 * Creates a new partner track-wide Velocity context. It collects information
+	 * from the test suite, the test case and this partner track. This context
+	 * is isolated from all the following partner tracks: any changes done to
+	 * the test suite and test case variables will be lost in the next partner
+	 * track.
+	 *
+	 * This method obtains and caches the VelocityContext of the test case, so it
+	 * only needs to be produced once for every partner track.
+	 *
+	 * @return Base VelocityContext for the partner track.
 	 */
-	public VelocityContext getVelocityContext() {
-		return fVelocityContext;
+	public VelocityContext createVelocityContext() throws Exception {
+		if (fTestCaseVelocityContext == null) {
+			fTestCaseVelocityContext = fRunner.createVelocityContext();
+		}
+		VelocityContext ctx = (VelocityContext)fTestCaseVelocityContext.clone();
+		ctx.put("partnerTrackName", fTrack.getRawName());
+		ctx.put("partnerTrackURL", fTrack.getPartner().getSimulatedURL());
+		return ctx;
 	}
 }
