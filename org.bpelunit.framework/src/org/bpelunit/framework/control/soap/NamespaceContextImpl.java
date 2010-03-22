@@ -35,7 +35,7 @@ public class NamespaceContextImpl implements NamespaceContext {
 	}
 
 	public void setNamespace(String prefix, String namespaceURI) {
-		Collection<String> prefixes= fNamespaceMap.get(prefix);
+		Collection<String> prefixes= fNamespaceMap.get(namespaceURI);
 		if (prefixes == null) {
 			prefixes= new ArrayList<String>();
 			fNamespaceMap.put(namespaceURI, prefixes);
