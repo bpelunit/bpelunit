@@ -31,6 +31,7 @@ import org.xml.sax.InputSource;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * 
@@ -71,7 +72,7 @@ public class TestUtil {
 		return (Node) xpath.evaluate(string, literalData, XPathConstants.NODE);
 	}
 
-	public static void assertSameResults(String msg, File bptsOriginal, File bptsNew) throws Exception {
+	public static void assertSameAndSuccessfulResults(String msg, File bptsOriginal, File bptsNew) throws Exception {
 		final String xmlTextA = getResults(bptsOriginal).xmlText();
 		final String xmlTextB = getResults(bptsNew).xmlText();
 		assertEquals(msg, xmlTextA, xmlTextB);
@@ -86,6 +87,7 @@ public class TestUtil {
 	public static XMLTestResultDocument getResults(File bpts) throws Exception {
 		TestTestRunner runner = new TestTestRunner(bpts.getParent(), bpts.getName());
 		runner.testRun();
+		assertTrue("Test suites should pass all tests", runner.getTestSuite().getStatus().isPassed());
 		return XMLResultProducer.getXMLResults(runner.getTestSuite());
 	}
 }

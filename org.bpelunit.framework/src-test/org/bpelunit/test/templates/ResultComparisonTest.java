@@ -13,7 +13,7 @@ public class ResultComparisonTest extends AbstractTemplateTest {
 
 	@Test
 	public void resultsFromSameBptsAreEqual() throws Exception {
-		TestUtil.assertSameResults("The same BPTS file should always produce the same results",
+		TestUtil.assertSameAndSuccessfulResults("The same BPTS file should always produce the same results",
 				TC_4R_NOTEMP, TC_4R_NOTEMP);
 	}
 

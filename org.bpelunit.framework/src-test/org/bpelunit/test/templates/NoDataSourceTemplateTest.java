@@ -13,21 +13,21 @@ public class NoDataSourceTemplateTest extends AbstractTemplateTest {
 
 	@Test
 	public void noContextTemplatesAreCorrectlyEvaluated() throws Exception {
-		TestUtil.assertSameResults(
+		TestUtil.assertSameAndSuccessfulResults(
 				"The expanded template should also produce 4 results",
 				TC_4R_NOTEMP, TC_4R_TEMP);
 	}
 
 	@Test
 	public void requestVariableCanBeUsedInTemplate() throws Exception {
-		TestUtil.assertSameResults(
+		TestUtil.assertSameAndSuccessfulResults(
 			"The $request variable should be an XmlObject with the SOAP " +
 			"body of the incoming message", TC_K2R_NOTEMP, TC_K2R_TEMP);
 	}
 
 	@Test
 	public void testInfoCanBeUsedInTemplate() throws Exception {
-		TestUtil.assertSameResults("Information about the PUT, test suite and " +
+		TestUtil.assertSameAndSuccessfulResults("Information about the PUT, test suite and " +
 				"current test case should be made available to the template",
 				TC_TI_NOTEMP, TC_TI_TEMP);
 	}
