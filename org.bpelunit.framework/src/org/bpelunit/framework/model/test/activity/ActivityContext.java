@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.velocity.VelocityContext;
 import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.SendPackage;
 import org.bpelunit.framework.control.run.TestCaseRunner;
@@ -70,6 +71,8 @@ public class ActivityContext {
 
 	private Element fIncomingMessage;
 
+	private VelocityContext fVelocityContext;
+
 
 
 	// ****************************** Initialization ****************************
@@ -79,6 +82,7 @@ public class ActivityContext {
 		fTrack= track;
 		fUserData= new HashMap<String, String>();
 		fSimulatedURL= fTrack.getPartner().getSimulatedURL();
+		fVelocityContext = setupVelocityContext();
 	}
 
 	/**
@@ -89,8 +93,13 @@ public class ActivityContext {
 		fTrack= null;
 		fUserData= new HashMap<String, String>();
 		fSimulatedURL= simulatedURL;
+		fVelocityContext = new VelocityContext();
 	}
 
+	private VelocityContext setupVelocityContext() {
+		VelocityContext ctx = new VelocityContext(fRunner.getVelocityContext());
+		return ctx;
+	}
 
 	// *********** Methods for sending and receiving messages *********
 
@@ -189,4 +198,17 @@ public class ActivityContext {
 		fIncomingMessage = incomingMessage;
 	}
 
+	// **************************** Velocity ********************************
+
+	/**
+	 * Returns the partner track-wide Velocity context. It should be wrapped into
+	 * another VelocityContext for every activity, to avoid modifying it by
+	 * mistake.
+	 * @return Base VelocityContext for the partner track, which wraps the
+	 * test case VelocityContext, which wraps the test suite VelocityContext in
+	 * turn.
+	 */
+	public VelocityContext getVelocityContext() {
+		return fVelocityContext;
+	}
 }

@@ -106,19 +106,17 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 
 	// ************************* Running *************************
 
-	public void run(File testSuite) throws SpecificationException, DeploymentException {
+	public void run(File testSuite) throws SpecificationException, DeploymentException, ConfigurationException {
 
 		TestSuite suite= loadTestSuite(testSuite);
 		suite.addResultListener(this);
 
 		try {
 			suite.setUp();
-		} catch (DeploymentException e) {
+		} finally {
 			try {
 				suite.shutDown();
-			} catch (DeploymentException e1) {
-			}
-			throw e;
+			} catch (Exception e) {}
 		}
 
 		outputPlain("START", suite);

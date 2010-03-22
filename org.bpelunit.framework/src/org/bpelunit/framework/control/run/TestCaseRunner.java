@@ -20,6 +20,8 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.ws.LocalHTTPServer;
@@ -79,6 +81,8 @@ public class TestCaseRunner {
 
 	private boolean allMarkersReceived;
 
+	private VelocityContext fVelocityContext;
+
 	public TestCaseRunner(LocalHTTPServer localServer, TestCase caseToRun) {
 
 		instance = this;
@@ -91,6 +95,7 @@ public class TestCaseRunner {
 		fConnectionManager = new MultiThreadedHttpConnectionManager();
 		fClient = new HttpClient(fConnectionManager);
 
+		fVelocityContext = setupVelocityContext();
 		List<PartnerTrack> partnerTracks = caseToRun.getPartnerTracks();
 		for (PartnerTrack partnerTrack : partnerTracks) {
 			partnerTrack.initialize(this);
@@ -427,4 +432,14 @@ public class TestCaseRunner {
 		fAbortedByUser = true;
 	}
 
+	// ********************* Velocity contexts *********************
+	public VelocityContext getVelocityContext() {
+		return fVelocityContext;
+	}
+
+	private VelocityContext setupVelocityContext() {
+		VelocityContext ctx
+			= new VelocityContext(fTestCase.getSuite().getVelocityContext());
+		return ctx;
+	}
 }
