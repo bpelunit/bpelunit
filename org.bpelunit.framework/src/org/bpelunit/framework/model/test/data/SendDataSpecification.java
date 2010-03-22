@@ -183,6 +183,7 @@ public class SendDataSpecification extends DataSpecification {
 			// Expand the template as a regular string
 			VelocityContext velocityCtx = new VelocityContext(context.getVelocityContext());
 			if (context.getIncomingMessage() != null) {
+				velocityCtx.put("xpath", new XPathTool(this.fNamespaceContext));
 				velocityCtx.put("request", context.getIncomingMessage());
 			}
 

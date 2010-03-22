@@ -14,15 +14,15 @@
                     <tes:send fault="false">
                         <tes:data>
                             <exa:search>
-                                <keywords>
-                                    <keyword>word</keyword>
-                                </keywords>
+                                <exa:keywords>
+                                    <exa:keyword>word</exa:keyword>
+                                </exa:keywords>
                             </exa:search>
                         </tes:data>
                     </tes:send>
                     <tes:receive fault="false">
                         <tes:condition>
-                            <tes:expression>count(//result)</tes:expression>
+                            <tes:expression>count(//exa:result)</tes:expression>
                             <tes:value>7</tes:value>
                         </tes:condition>
                     </tes:receive>
@@ -34,15 +34,15 @@
                     <tes:send fault="false">
                         <tes:template>
                             <exa:searchResponse>
-                                <results>
-                                    <result>$testSuiteName</result>
-                                    <result>$baseURL</result>
-                                    <result>$partnerTrackName</result>
-                                    <result>$partnerTrackURL</result>
-                                    <result>$putName</result>
-                                    <result>$testCaseName</result>
-                                    <result>$testCaseCount</result>
-                                </results>
+                                <exa:results>
+                                    <exa:result>$testSuiteName</exa:result>
+                                    <exa:result>$baseURL</exa:result>
+                                    <exa:result>$partnerTrackName</exa:result>
+                                    <exa:result>$partnerTrackURL</exa:result>
+                                    <exa:result>$putName</exa:result>
+                                    <exa:result>$testCaseName</exa:result>
+                                    <exa:result>$testCaseCount</exa:result>
+                                </exa:results>
                             </exa:searchResponse>
                         </tes:template>
                     </tes:send>

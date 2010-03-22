@@ -14,15 +14,15 @@
                     <tes:send fault="false">
                         <tes:data>
                             <exa:search>
-                                <keywords>
-                                    <keyword>word</keyword>
-                                </keywords>
+                                <exa:keywords>
+                                    <exa:keyword>word</exa:keyword>
+                                </exa:keywords>
                             </exa:search>
                         </tes:data>
                     </tes:send>
                     <tes:receive fault="false">
                         <tes:condition>
-                            <tes:expression>count(//result)</tes:expression>
+                            <tes:expression>count(//exa:result)</tes:expression>
                             <tes:value>4</tes:value>
                         </tes:condition>
                     </tes:receive>
@@ -34,11 +34,11 @@
                     <tes:send fault="false">
                         <tes:template>
                             <exa:searchResponse>
-                                <results>
+                                <exa:results>
 #foreach($r in ['A', 'B', 'C', 'D'])
-                                    <result>$r</result>
+                                    <exa:result>$r</exa:result>
 #end
-                                </results>
+                                </exa:results>
                             </exa:searchResponse>
                         </tes:template>
                     </tes:send>

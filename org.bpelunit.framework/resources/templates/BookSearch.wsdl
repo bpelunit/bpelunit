@@ -5,7 +5,7 @@
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="bookSearchWrapper"
                   targetNamespace="http://www.example.org/bookSearchWrapper/">
   <wsdl:types>
-    <xsd:schema targetNamespace="http://www.example.org/bookSearchWrapper/">
+    <xsd:schema targetNamespace="http://www.example.org/bookSearchWrapper/" elementFormDefault="qualified">
       <xsd:element name="search">
         <xsd:complexType>
           <xsd:sequence minOccurs="1" maxOccurs="unbounded">

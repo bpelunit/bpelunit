@@ -401,7 +401,6 @@ public class TestSuite implements ITestArtefact {
 		ctx.put("putName", fProcessUnderTest.getName());
 		ctx.put("testSuiteName", this.getRawName());
 		ctx.put("testCaseCount", this.getTestCaseCount());
-		ctx.put("xpath", new XPathTool());
 		return ctx;
 	}
 }

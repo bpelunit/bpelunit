@@ -14,16 +14,16 @@
                     <tes:send fault="false">
                         <tes:data>
                             <exa:search>
-                                <keywords>
-                                    <keyword>word</keyword>
-                                </keywords>
+                                <exa:keywords>
+                                    <exa:keyword>word</exa:keyword>
+                                </exa:keywords>
                             </exa:search>
                         </tes:data>
                     </tes:send>
                     <tes:receive fault="false">
                         <tes:condition>
-                            <tes:expression>count(//result)</tes:expression>
-                            <tes:value>4</tes:value>
+                            <tes:expression>count(//exa:result)</tes:expression>
+                            <tes:value>3</tes:value>
                         </tes:condition>
                     </tes:receive>
                 </tes:sendReceive>
@@ -34,11 +34,11 @@
                     <tes:send fault="false">
                         <tes:data>
                             <exa:searchResponse>
-                                <results>
-                                    <result>A</result>
-                                    <result>B</result>
-                                    <result>C</result>
-                                </results>
+                                <exa:results>
+                                    <exa:result>A</exa:result>
+                                    <exa:result>B</exa:result>
+                                    <exa:result>C</exa:result>
+                                </exa:results>
                             </exa:searchResponse>
                         </tes:data>
                     </tes:send>

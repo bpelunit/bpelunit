@@ -3,6 +3,7 @@ package org.bpelunit.framework.control.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -18,13 +19,14 @@ import org.w3c.dom.NodeList;
  * 5MB in size.
  * 
  * @author Antonio García-Domínguez
- * @version 1.0
+ * @version 1.1
  */
 public class XPathTool {
 	private XPath fXPath;
 
-	public XPathTool() {
+	public XPathTool(NamespaceContext nsContext) {
 		fXPath = XPathFactory.newInstance().newXPath();
+		fXPath.setNamespaceContext(nsContext);
 	}
 
 	public List<Node> evaluateAsList(String query, Object item) throws XPathExpressionException {
