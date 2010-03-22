@@ -89,6 +89,11 @@ public class TestSuite implements ITestArtefact {
 	private ArtefactStatus fStatus;
 
 	/**
+	 * Base URL for the mockups
+	 */
+	private String fBaseURL;
+
+	/**
 	 * The logger
 	 */
 	private Logger fLogger;
@@ -118,6 +123,7 @@ public class TestSuite implements ITestArtefact {
 			rootPath += "/";
 		this.fLogger.info("ROOTPATH=" + rootPath);
 		fLocalServer = new LocalHTTPServer(portNumber, rootPath);
+		fBaseURL = "http://localhost:" + portNumber + rootPath;
 		fTestCaseMap = new LinkedHashMap<String, TestCase>();
 	}
 
@@ -391,6 +397,10 @@ public class TestSuite implements ITestArtefact {
 	private VelocityContext setupVelocityContext() throws Exception {
 		Velocity.init();
 		VelocityContext ctx = new VelocityContext();
+		ctx.put("baseURL", fBaseURL);
+		ctx.put("putName", fProcessUnderTest.getName());
+		ctx.put("testSuiteName", this.getRawName());
+		ctx.put("testCaseCount", this.getTestCaseCount());
 		ctx.put("xpath", new XPathTool());
 		return ctx;
 	}

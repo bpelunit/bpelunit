@@ -98,6 +98,8 @@ public class ActivityContext {
 
 	private VelocityContext setupVelocityContext() {
 		VelocityContext ctx = new VelocityContext(fRunner.getVelocityContext());
+		ctx.put("partnerTrackName", fTrack.getRawName());
+		ctx.put("partnerTrackURL", fTrack.getPartner().getSimulatedURL());
 		return ctx;
 	}
 

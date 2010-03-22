@@ -440,6 +440,7 @@ public class TestCaseRunner {
 	private VelocityContext setupVelocityContext() {
 		VelocityContext ctx
 			= new VelocityContext(fTestCase.getSuite().getVelocityContext());
+		ctx.put("testCaseName", fTestCase.getRawName());
 		return ctx;
 	}
 }
