@@ -18,4 +18,6 @@ public abstract class AbstractTemplateTest {
 	protected static final File TC_K2R_NOTEMP = new File(TEST_BPTS_DIR, "BookSearch-key2res-nt.bpts");
 	protected static final File TC_TI_NOTEMP = new File(TEST_BPTS_DIR, "BookSearch-testinfo-nt.bpts");
 	protected static final File TC_TI_TEMP = new File(TEST_BPTS_DIR, "BookSearch-testinfo-t.bpts");
+	protected static final File TC_SUP_NOTEMP = new File(TEST_BPTS_DIR, "BookSearch-setUp-nt.bpts");
+	protected static final File TC_SUP_TEMP = new File(TEST_BPTS_DIR, "BookSearch-setUp-t.bpts");
 }

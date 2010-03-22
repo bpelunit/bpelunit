@@ -31,4 +31,11 @@ public class NoDataSourceTemplateTest extends AbstractTemplateTest {
 				"current test case should be made available to the template",
 				TC_TI_NOTEMP, TC_TI_TEMP);
 	}
+
+	@Test
+	public void testSuiteAndTestCaseSetUpBlocksWorkCorrectly() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+				"setUp Velocity scripts are executed using 2-levels with proper" +
+				" isolation, inheritance and redefinition", TC_SUP_NOTEMP, TC_SUP_TEMP);
+	}
 }
