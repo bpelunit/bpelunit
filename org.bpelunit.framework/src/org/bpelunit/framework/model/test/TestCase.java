@@ -5,12 +5,14 @@
  */
 package org.bpelunit.framework.model.test;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
 import org.bpelunit.framework.model.test.report.ITestArtefact;
@@ -62,8 +64,9 @@ public class TestCase implements ITestArtefact {
 	 */
 	private boolean fAbortedByUser;
 
-	private VelocityContext fTestSuiteVelocityContext;
+	private String fSetUpVelocityScript;
 
+	private VelocityContext fTestSuiteVelocityContext;
 
 	// ****************** Initialization ************************
 
@@ -205,6 +208,19 @@ public class TestCase implements ITestArtefact {
 		}
 		VelocityContext ctx = (VelocityContext)fTestSuiteVelocityContext.clone();
 		ctx.put("testCaseName", getRawName());
+		if (fSetUpVelocityScript != null) {
+			StringWriter sW = new StringWriter();
+			Velocity.evaluate(ctx, sW, "setUpTestCase", fSetUpVelocityScript);
+		}
 		return ctx;
 	}
+
+	public String getSetUpVelocityScript() {
+		return fSetUpVelocityScript;
+	}
+
+	public void setSetUpVelocityScript(String script) {
+		fSetUpVelocityScript = script;
+	}
+
 }

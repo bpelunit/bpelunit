@@ -5,6 +5,7 @@
  */
 package org.bpelunit.framework.model.test;
 
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,7 +18,6 @@ import org.apache.velocity.app.Velocity;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.result.ITestResultListener;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
-import org.bpelunit.framework.control.util.XPathTool;
 import org.bpelunit.framework.control.ws.LocalHTTPServer;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.TestCaseNotFoundException;
@@ -97,6 +97,7 @@ public class TestSuite implements ITestArtefact {
 	 */
 	private Logger fLogger;
 
+	private String fSetUpVelocityScript;
 
 	// ****************************** Initialization **************************
 
@@ -318,6 +319,11 @@ public class TestSuite implements ITestArtefact {
 		ctx.put("putName", fProcessUnderTest.getName());
 		ctx.put("testSuiteName", this.getRawName());
 		ctx.put("testCaseCount", this.getTestCaseCount());
+
+		if (fSetUpVelocityScript != null) {
+			StringWriter sW = new StringWriter();
+			Velocity.evaluate(ctx, sW, "setUpTestSuite", fSetUpVelocityScript);
+		}
 		return ctx;
 	}
 
@@ -391,4 +397,13 @@ public class TestSuite implements ITestArtefact {
 		return testCases;
 	}
 
+	// ********************** setUp/tearDown ***********************
+
+	public String getSetUpVelocityScript() {
+		return fSetUpVelocityScript;
+	}
+
+	public void setSetUpVelocityScript(String script) {
+		fSetUpVelocityScript = script;
+	}
 }

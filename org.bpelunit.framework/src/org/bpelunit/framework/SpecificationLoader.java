@@ -70,6 +70,7 @@ import org.bpelunit.framework.xml.suite.XMLPartnerTrack;
 import org.bpelunit.framework.xml.suite.XMLProperty;
 import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
 import org.bpelunit.framework.xml.suite.XMLSendActivity;
+import org.bpelunit.framework.xml.suite.XMLSetUp;
 import org.bpelunit.framework.xml.suite.XMLSoapActivity;
 import org.bpelunit.framework.xml.suite.XMLTestCase;
 import org.bpelunit.framework.xml.suite.XMLTestCasesSection;
@@ -252,6 +253,13 @@ public class SpecificationLoader {
 		TestSuite suite = new TestSuite(xmlSuiteName, suiteBaseURL,
 				processUnderTest);
 
+		// Process the contents of the setUp block, if any
+		try {
+			readTestSuiteSetUpBlock(suite, xmlTestSuite);
+		} catch (Exception ex) {
+			throw new SpecificationException("Error during test suite set up", ex);
+		}
+
 		/*
 		 * The Test Cases. Each test case consists of a number of Partner
 		 * Tracks, which in turn consist of an ordered collection of Activities.
@@ -339,6 +347,16 @@ public class SpecificationLoader {
 		return suite;
 	}
 
+	private void readTestSuiteSetUpBlock(TestSuite testSuite,
+			XMLTestSuite xmlTestSuite) throws Exception {
+		if (!xmlTestSuite.isSetSetUp()) return;
+
+		XMLSetUp xmlSetUp = xmlTestSuite.getSetUp();
+		if (xmlSetUp.isSetScript()) {
+			testSuite.setSetUpVelocityScript(xmlSetUp.getScript());
+		}
+	}
+
 	private TestCase createTestCase(Map<String, Partner> suitePartners,
 			Partner suiteClient, TestSuite suite, XMLTestCase xmlTestCase,
 			String xmlTestCaseName, int round) throws SpecificationException {
@@ -356,6 +374,9 @@ public class SpecificationLoader {
 
 			test.addProperty(xmlPropertyName, xmlPropertyData);
 		}
+
+		// Set up block
+		readTestCaseSetUpBlock(test, xmlTestCase);
 
 		// Client Partner Track
 		XMLTrack xmlClientTrack = xmlTestCase.getClientTrack();
@@ -391,6 +412,15 @@ public class SpecificationLoader {
 				test.addPartnerTrack(pTrack);
 			}
 		return test;
+	}
+
+	private void readTestCaseSetUpBlock(TestCase test, XMLTestCase xmlTestCase) {
+		if (!xmlTestCase.isSetSetUp()) return;
+
+		XMLSetUp xmlSetUp = xmlTestCase.getSetUp();
+		if (xmlSetUp.isSetScript()) {
+			test.setSetUpVelocityScript(xmlSetUp.getScript());
+		}
 	}
 
 	/**
