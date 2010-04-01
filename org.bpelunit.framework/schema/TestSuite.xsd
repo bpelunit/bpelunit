@@ -400,3 +400,4 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 		<xs:attribute name="src" type="xs:string" use="optional"></xs:attribute>
 	</xs:complexType>
 </xs:schema>
+
