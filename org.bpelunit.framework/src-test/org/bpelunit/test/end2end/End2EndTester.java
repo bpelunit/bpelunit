@@ -6,6 +6,8 @@
 package org.bpelunit.test.end2end;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -99,4 +101,18 @@ public class End2EndTester {
 		assertEquals(0, runner.getProblems());
 	}
 
+	/**
+	 * This test checks that invalid BPTS files are properly rejected and that errors are reported.
+	 *
+	 */
+	@Test
+	public void testInvalidBPTS() throws ConfigurationException {
+		try {
+			new TestTestRunner(BASEPATH + "04_Invalid/", "InvalidTestSuite.bpts");
+			fail("An exception should have been thrown");
+		} catch (SpecificationException ex) {
+			assertTrue("Validation errors should be included in the SpecificationException",
+					ex.getLocalizedMessage().contains("sendOnlyInvalid"));
+		}
+	}
 }

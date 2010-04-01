@@ -7,6 +7,7 @@ package org.bpelunit.framework;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
+import org.apache.xmlbeans.XmlOptions;
 import org.bpelunit.framework.control.datasource.DataSourceUtil;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IDataSource;
@@ -113,8 +115,8 @@ public class SpecificationLoader {
 			String path = FilenameUtils.getFullPath(suite.toString());
 			fLogger.info("Using base path: " + path);
 
-			XMLTestSuiteDocument doc = XMLTestSuiteDocument.Factory
-					.parse(suite);
+			XMLTestSuiteDocument doc = XMLTestSuiteDocument.Factory.parse(suite);
+			validateTestSuite(doc);
 			TestSuite testSuite = parseSuite(path, doc);
 
 			fLogger
@@ -148,6 +150,20 @@ public class SpecificationLoader {
 			throw new SpecificationException(
 					"An I/O error occurred when reading the test suite file.",
 					e);
+		}
+	}
+
+	private void validateTestSuite(final XMLTestSuiteDocument doc) throws SpecificationException {
+		ArrayList<Object> validationErrors = new ArrayList<Object>();
+		XmlOptions options = new XmlOptions();
+		options.setErrorListener(validationErrors);
+
+		if (!doc.validate(options)) {
+			StringWriter sW = new StringWriter();
+			for (Object o : validationErrors) {
+				sW.append(o + "\n");
+			}
+			throw new SpecificationException("BPTS is invalid:\n" + sW.toString());
 		}
 	}
 
