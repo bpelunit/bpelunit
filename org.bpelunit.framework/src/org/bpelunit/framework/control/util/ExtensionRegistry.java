@@ -97,18 +97,17 @@ public class ExtensionRegistry {
 			XMLBPELUnitCoreExtensions testExtensions = document
 					.getExtensionRegistry();
 
-			for (XMLExtension deployer : testExtensions.getDeployerArray())
+			for (XMLExtension deployer : testExtensions.getDeployerList())
 				load(deployer, IBPELDeployer.class, "Deployer",
 						fsDeployerRegistry);
 
-			for (XMLExtension encoder : testExtensions.getEncoderArray()) {
+			for (XMLExtension encoder : testExtensions.getEncoderList()) {
 				load(encoder, ISOAPEncoder.class, "Encoder", fsEncoderRegistry);
+			}
 
-				for (XMLExtension hproc : testExtensions
-						.getHeaderProcessorArray())
-					load(hproc, IHeaderProcessor.class, "Header Processor",
-							fsHeaderRegistry);
-
+			for (XMLExtension hproc : testExtensions.getHeaderProcessorList()) {
+				load(hproc, IHeaderProcessor.class, "Header Processor",
+						fsHeaderRegistry);
 			}
 
 		} catch (XmlException e) {
@@ -254,12 +253,9 @@ public class ExtensionRegistry {
 			document = XMLTestConfigurationDocument.Factory.parse(file);
 			XMLTestConfiguration testConfig = document.getTestConfiguration();
 
-			XMLConfiguration[] configurationList = testConfig
-					.getConfigurationArray();
-			for (XMLConfiguration configuration : configurationList) {
+			for (XMLConfiguration configuration : testConfig.getConfigurationList()) {
 				String deployer = configuration.getDeployer();
-				XMLProperty[] propertyList = configuration.getPropertyArray();
-				for (XMLProperty property : propertyList) {
+				for (XMLProperty property : configuration.getPropertyList()) {
 					Map<String, String> options = fsDeployerOptions
 							.get(deployer);
 					if (options == null) {
