@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
 import org.bpelunit.framework.model.test.report.ITestArtefact;
@@ -69,6 +70,10 @@ public class TestCase implements ITestArtefact {
 	private String fSetUpVelocityScript;
 
 	private VelocityContext fTestSuiteVelocityContext;
+
+	private IDataSource fDataSource;
+
+	private int fRowIndex;
 
 	private static final Cloner fCloner = new Cloner();
 
@@ -216,6 +221,9 @@ public class TestCase implements ITestArtefact {
 			StringWriter sW = new StringWriter();
 			Velocity.evaluate(ctx, sW, "setUpTestCase", fSetUpVelocityScript);
 		}
+		if (fDataSource != null) {
+			fDataSource.initializeContext(ctx, fRowIndex);
+		}
 		return ctx;
 	}
 
@@ -225,6 +233,22 @@ public class TestCase implements ITestArtefact {
 
 	public void setSetUpVelocityScript(String script) {
 		fSetUpVelocityScript = script;
+	}
+
+	public void setDataSource(IDataSource fDataSource) {
+		this.fDataSource = fDataSource;
+	}
+
+	public IDataSource getDataSource() {
+		return fDataSource;
+	}
+
+	public void setRowIndex(int fRowIndex) {
+		this.fRowIndex = fRowIndex;
+	}
+
+	public int getRowIndex() {
+		return fRowIndex;
 	}
 
 }
