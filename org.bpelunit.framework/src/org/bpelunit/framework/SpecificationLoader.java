@@ -194,7 +194,6 @@ public class SpecificationLoader {
 		String xmlPutName = xmlPut.getName();
 		String xmlPutWSDL = xmlPut.getWsdl();
 		String xmlPutType = xmlPut.getType();
-		XMLProperty[] xmlPutDeploymentOptions = xmlPut.getPropertyArray();
 
 		if ((xmlPutName == null) || (xmlPutWSDL == null)
 				|| (xmlPutType == null))
@@ -204,7 +203,7 @@ public class SpecificationLoader {
 		ProcessUnderTest processUnderTest = new ProcessUnderTest(xmlPutName,
 				testDirectory, xmlPutWSDL, suiteBaseURL.toString());
 
-		for (XMLProperty property : xmlPutDeploymentOptions) {
+		for (XMLProperty property : xmlPut.getPropertyList()) {
 			processUnderTest.setXMLDeploymentOption(property.getName(),
 					property.getStringValue());
 		}
@@ -238,9 +237,7 @@ public class SpecificationLoader {
 		 * later on.
 		 */
 
-		XMLPartnerDeploymentInformation[] xmlPartners = xmlDeployment
-				.getPartnerArray();
-		for (XMLPartnerDeploymentInformation xmlPDI : xmlPartners) {
+		for (XMLPartnerDeploymentInformation xmlPDI : xmlDeployment.getPartnerList()) {
 			String name = xmlPDI.getName();
 			String wsdl = xmlPDI.getWsdl();
 			if ((name == null) || (wsdl == null))
@@ -265,9 +262,9 @@ public class SpecificationLoader {
 			throw new SpecificationException(
 					"No test case section found in test suite document.");
 
-		XMLTestCase[] xmlTestCaseList = xmlTestCases.getTestCaseArray();
+		List<XMLTestCase> xmlTestCaseList = xmlTestCases.getTestCaseList();
 
-		if (xmlTestCaseList == null || xmlTestCaseList.length == 0)
+		if (xmlTestCaseList == null || xmlTestCaseList.size() == 0)
 			throw new SpecificationException("No test cases found.");
 
 		int currentNumber = 0;
@@ -349,8 +346,7 @@ public class SpecificationLoader {
 		TestCase test = new TestCase(suite, xmlTestCaseName);
 
 		// Load metadata
-		XMLProperty[] xmlMetaDataList = xmlTestCase.getPropertyArray();
-		for (XMLProperty data : xmlMetaDataList) {
+		for (XMLProperty data : xmlTestCase.getPropertyList()) {
 			String xmlPropertyName = data.getName();
 			String xmlPropertyData = data.getStringValue();
 			if ((xmlPropertyName == null) || (xmlPropertyData == null))
@@ -374,7 +370,7 @@ public class SpecificationLoader {
 		test.addPartnerTrack(track);
 
 		// Partners Partner Track
-		XMLPartnerTrack[] partnerTrackList = xmlTestCase.getPartnerTrackArray();
+		List<XMLPartnerTrack> partnerTrackList = xmlTestCase.getPartnerTrackList();
 		// There might be no partners.
 		if (partnerTrackList != null)
 			for (XMLPartnerTrack xmlPartnerTrack : partnerTrackList) {
@@ -835,7 +831,7 @@ public class SpecificationLoader {
 		ISOAPEncoder encoder = fRunner.createNewSOAPEncoder(encodingStyle);
 
 		// get conditions
-		XMLCondition[] xmlConditionList = xmlReceive.getConditionArray();
+		List<XMLCondition> xmlConditionList = xmlReceive.getConditionList();
 		List<ReceiveCondition> cList = new ArrayList<ReceiveCondition>();
 		if (xmlConditionList != null)
 			for (XMLCondition xmlCondition : xmlConditionList) {
@@ -863,7 +859,7 @@ public class SpecificationLoader {
 		ArrayList<DataCopyOperation> copyDataOperations = new ArrayList<DataCopyOperation>();
 		XMLMapping xmlMapping = xmlTwoWayType.getMapping();
 		if (xmlMapping != null) {
-			XMLCopy[] xmlCopyList = xmlMapping.getCopyArray();
+			List<XMLCopy> xmlCopyList = xmlMapping.getCopyList();
 			if (xmlCopyList != null)
 				for (XMLCopy xmlCopy : xmlCopyList) {
 					String xmlCopyFrom = xmlCopy.getFrom();
@@ -891,7 +887,7 @@ public class SpecificationLoader {
 		if (xmlHeaderProcessorName == null)
 			throw new SpecificationException("Header Processor needs a name.");
 
-		XMLProperty[] propertyList = xmlHeaderProcessor.getPropertyArray();
+		List<XMLProperty> propertyList = xmlHeaderProcessor.getPropertyList();
 
 		IHeaderProcessor proc = fRunner
 				.createNewHeaderProcessor(xmlHeaderProcessorName);
@@ -981,8 +977,7 @@ public class SpecificationLoader {
 		if (cursor.toParent()) {
 			XMLTestCasesSection section = (XMLTestCasesSection) cursor
 					.getObject();
-			XMLTestCase[] testCaseList = section.getTestCaseArray();
-			for (XMLTestCase xmlTestCaseFor : testCaseList) {
+			for (XMLTestCase xmlTestCaseFor : section.getTestCaseList()) {
 				if (basedOn.equals(xmlTestCaseFor.getName())) {
 					if (hasNonEmptyPartnerTrack(xmlTestCaseFor,
 							partnerTrackName)) {
@@ -1014,9 +1009,7 @@ public class SpecificationLoader {
 		if (trackName.equalsIgnoreCase(BPELUnitConstants.CLIENT_NAME)) {
 			track = xmlTestCase.getClientTrack();
 		} else {
-			XMLPartnerTrack[] partnerTrackList = xmlTestCase
-					.getPartnerTrackArray();
-			for (XMLPartnerTrack pTrack : partnerTrackList) {
+			for (XMLPartnerTrack pTrack : xmlTestCase.getPartnerTrackList()) {
 				if (trackName.equals(pTrack.getName())) {
 					track = pTrack;
 					break;
