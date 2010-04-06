@@ -130,6 +130,7 @@
 		<!-- copy documentation -->
 		<copy todir="${builddir}/doc">
 			<fileset dir="doc" />
+                        <fileset file="../*.markdown"/>
 		</copy>
 
 		<copy todir="${builddir}/doc/licenses">
