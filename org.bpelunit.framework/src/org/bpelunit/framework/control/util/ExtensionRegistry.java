@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerOption;
@@ -47,8 +48,8 @@ import org.jdom.input.SAXBuilder;
  * The BPELUnit Extension Registry handles reading the extensions.xml file and
  * instantiates the extensions.
  * 
- * @version $Id: ExtensionRegistry.java,v 1.3 2007/06/21 06:34:46 asalnikowAlex
- *          Salnikow
+ * @author Alex Salnikow, Antonio García-Domínguez
+ * @version 1.1 (2010/03/06)
  */
 public class ExtensionRegistry {
 
@@ -63,6 +64,8 @@ public class ExtensionRegistry {
 	private static Map<String, Class<?>> fsEncoderRegistry;
 
 	private static Map<String, Class<?>> fsHeaderRegistry;
+
+	private static Map<String, Class<?>> fsDataSourceRegistry;
 
 	private static boolean fsIgnoreOnNotFound;
 
@@ -86,6 +89,7 @@ public class ExtensionRegistry {
 		fsDeployerRegistry = new HashMap<String, Class<?>>();
 		fsEncoderRegistry = new HashMap<String, Class<?>>();
 		fsHeaderRegistry = new HashMap<String, Class<?>>();
+		fsDataSourceRegistry = new HashMap<String, Class<?>>();
 		fsDeployerOptions = new HashMap<String, Map<String, String>>();
 
 		XMLExtensionRegistryDocument document;
@@ -110,6 +114,9 @@ public class ExtensionRegistry {
 						fsHeaderRegistry);
 			}
 
+			for (XMLExtension dataSource : testExtensions.getDataSourceList()) {
+				load(dataSource, IDataSource.class, "Data Source", fsDataSourceRegistry);
+			}
 		} catch (XmlException e) {
 			throw new ConfigurationException(
 					"An XML reading error occurred reading the deployment plug-ins from file "
@@ -160,6 +167,19 @@ public class ExtensionRegistry {
 	public static IHeaderProcessor createNewHeaderProcessorForType(String type)
 			throws SpecificationException {
 		return (IHeaderProcessor) createObject(fsHeaderRegistry.get(type), type);
+	}
+
+	/**
+	 * Creates a new instance of the data source for the given type
+	 *
+	 * @param type
+	 *            data source type as specified in the extensions.xml file
+	 * @return new data source instance
+	 * @throws SpecificationException
+	 */
+	public static IDataSource createNewDataSourceForType(String type)
+			throws SpecificationException {
+		return (IDataSource) createObject(fsDataSourceRegistry.get(type), type);
 	}
 
 	/**

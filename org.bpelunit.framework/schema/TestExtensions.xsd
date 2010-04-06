@@ -44,6 +44,7 @@
 					<xs:documentation>A header processor</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="dataSource" type="Extension" minOccurs="0" maxOccurs="unbounded"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
