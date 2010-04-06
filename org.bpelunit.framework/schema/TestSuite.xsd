@@ -393,8 +393,11 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 
 	<xs:complexType name="DataSource">
 		<xs:sequence>
-			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="contents" type="xs:string" minOccurs="0"/>
+			<xs:element name="property" type="Property" minOccurs="0"
+				maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="contents" type="xs:string"></xs:element>
+			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded"></xs:element>
 		</xs:sequence>
 		<xs:attribute name="type" type="xs:string" use="required"></xs:attribute>
 		<xs:attribute name="src" type="xs:string" use="optional"></xs:attribute>
