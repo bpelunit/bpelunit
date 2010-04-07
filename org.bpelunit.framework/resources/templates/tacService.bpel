@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process
+   name="tacService"
+   targetNamespace="http://enterprise.netbeans.org/bpel/TacService/tacService"
+   xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
+   xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor"
+   xmlns:tns="http://enterprise.netbeans.org/bpel/TacService/tacService"
+   xmlns:ns0="http://xml.netbeans.org/schema/tacService"
+   xmlns:ext="http://www.activebpel.org/2006/09/bpel/extension/query_handling"
+   ext:createTargetXPath="yes">
+
+   <extensions>
+      <extension
+         mustUnderstand="yes"
+         namespace="http://www.activebpel.org/2006/09/bpel/extension/query_handling"/>
+   </extensions>
+  <import namespace="http://j2ee.netbeans.org/wsdl/tacService"
+          location="tacService.wsdl"
+          importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <partnerLinks>
+    <partnerLink name="client" xmlns:tns="http://j2ee.netbeans.org/wsdl/tacService"
+                 partnerLinkType="tns:tacService" myRole="tacServicePortTypeRole"/>
+  </partnerLinks>
+  <variables>
+    <variable name="lineCount" type="xsd:unsignedInt"/>
+    <variable name="counter" type="xsd:unsignedInt"/>
+    <variable name="ReverseLinesOut"
+              xmlns:tns="http://j2ee.netbeans.org/wsdl/tacService"
+              messageType="tns:reverseLinesResponse"/>
+    <variable name="ReverseLinesIn"
+              xmlns:tns="http://j2ee.netbeans.org/wsdl/tacService"
+              messageType="tns:reverseLinesRequest"/>
+  </variables>
+  <sequence>
+    <receive name="ReceiveLines" createInstance="yes" partnerLink="client"
+             operation="reverseLines"
+             xmlns:tns="http://j2ee.netbeans.org/wsdl/tacService"
+             portType="tns:tacServicePortType" variable="ReverseLinesIn"/>
+    <assign name="InitializeCounter">
+      <copy>
+        <from>count($ReverseLinesIn.request/ns0:lines/ns0:line)</from>
+        <to variable="lineCount"/>
+      </copy>
+      <copy>
+        <from>$lineCount</from>
+        <to variable="counter"/>
+      </copy>
+      <copy>
+        <from>
+          <literal>
+            <ns0:tacResponse>
+              <ns0:lines/>
+            </ns0:tacResponse>
+          </literal>
+        </from>
+        <to variable="ReverseLinesOut" part="response"/>
+      </copy>
+    </assign>
+    <while name="While1">
+      <condition>$counter &gt;= 1</condition>
+      <assign name="Assign1">
+        <copy>
+          <from>
+            $ReverseLinesIn.request/ns0:lines/ns0:line[$counter]
+          </from>
+          <to>
+            $ReverseLinesOut.response/ns0:lines/ns0:line[$lineCount - $counter + 1]
+          </to>
+        </copy>
+        <copy>
+          <from>-1 + $counter</from>
+          <to>$counter</to>
+        </copy>
+      </assign>
+    </while>
+    <reply name="SendReversedLines" partnerLink="client"
+           operation="reverseLines"
+           xmlns:tns="http://j2ee.netbeans.org/wsdl/tacService"
+           portType="tns:tacServicePortType" variable="ReverseLinesOut"/>
+  </sequence>
+</process>

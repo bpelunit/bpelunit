@@ -20,4 +20,7 @@ public abstract class AbstractTemplateTest {
 	protected static final File TC_TI_TEMP = new File(TEST_BPTS_DIR, "BookSearch-testinfo-t.bpts");
 	protected static final File TC_SUP_NOTEMP = new File(TEST_BPTS_DIR, "BookSearch-setUp-nt.bpts");
 	protected static final File TC_SUP_TEMP = new File(TEST_BPTS_DIR, "BookSearch-setUp-t.bpts");
+
+	protected static final File TC_VDS_TCDS_NOTEMP = new File(TEST_BPTS_DIR, "tacService-casesrc-nt.bpts");
+	protected static final File TC_VDS_TCDS_TEMP = new File(TEST_BPTS_DIR, "tacService-casesrc-t.bpts");
 }

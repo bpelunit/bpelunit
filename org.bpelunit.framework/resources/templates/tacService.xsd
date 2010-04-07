@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://xml.netbeans.org/schema/tacService"
+    xmlns:tns="http://xml.netbeans.org/schema/tacService"
+    elementFormDefault="qualified">
+    <xsd:element name="line" type="xsd:string"></xsd:element>
+    <xsd:element name="lines">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:line" maxOccurs="unbounded" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="tacRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:lines"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="tacResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:lines"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
