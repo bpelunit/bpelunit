@@ -13,4 +13,6 @@
 	<encoder type="rpc/literal" extensionClass="org.bpelunit.framework.control.soap.RPCLiteralEncoder" />
 	
 	<headerProcessor type="wsa" extensionClass="org.bpelunit.framework.control.soap.WSAHeaderProcessor" />
+
+	<dataSource type="velocity" extensionClass="org.bpelunit.framework.control.datasource.VelocityDataSource" />
 </extensionRegistry>
