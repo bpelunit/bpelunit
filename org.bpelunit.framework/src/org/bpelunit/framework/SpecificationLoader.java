@@ -26,7 +26,9 @@ import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
+import org.bpelunit.framework.control.datasource.DataSourceUtil;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.soap.NamespaceContextImpl;
@@ -36,6 +38,7 @@ import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
 import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import org.bpelunit.framework.exception.ConfigurationException;
+import org.bpelunit.framework.exception.DataSourceException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.ProcessUnderTest;
@@ -287,23 +290,34 @@ public class SpecificationLoader {
 			int rounds = computeNumberOfRounds(xmlTestSuiteDocument, isVary);
 			fLogger.info("Varying: " + isVary + " (Rounds: " + rounds + ")");
 
-			if (isVary && rounds > 0) {
-				for (int i = 0; i < rounds; i++) {
-					// Create a non-computer-science name ;)
-					int roundPlusOne = i + 1;
-					String variedName = xmlTestCaseName + " (Round "
-							+ roundPlusOne + ")";
+			IDataSource dataSource;
+			try {
+				dataSource = DataSourceUtil.createDataSource(xmlTestSuite, xmlTestCase);
+			} catch (DataSourceException e) {
+				throw new SpecificationException("There was a problem while "
+						+ "initializing the specified data source.", e);
+			}
+
+			final int nRows = dataSource != null ? dataSource.getNumberOfRows() : 1;
+			final int nRounds = isVary && rounds > 0 ? rounds : 1;
+			for (int iRow = 0; iRow < nRows; ++iRow) {
+				for (int iRound = 0; iRound < nRounds; iRound++) {
+					String currentTestCaseName = xmlTestCaseName;
+					if (dataSource != null) {
+						currentTestCaseName = currentTestCaseName + " (Row " + (iRow + 1) + ")";
+					}
+					if (isVary && rounds > 0) {
+						// Create a non-computer-science name ;)
+						currentTestCaseName = currentTestCaseName + " (Round " + (iRound + 1) + ")";
+					}
 					if (!xmlTestCase.getAbstract()) {
 						TestCase test = createTestCase(suitePartners,
-								suiteClient, suite, xmlTestCase, variedName, i);
+								suiteClient, suite, xmlTestCase, currentTestCaseName,
+								iRound);
+						test.setDataSource(dataSource);
+						test.setRowIndex(iRow);
 						suite.addTestCase(test);
 					}
-				}
-			} else {
-				if (!xmlTestCase.getAbstract()) {
-					TestCase test = createTestCase(suitePartners, suiteClient,
-							suite, xmlTestCase, xmlTestCaseName, 0);
-					suite.addTestCase(test);
 				}
 			}
 		}
