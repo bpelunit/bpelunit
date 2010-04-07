@@ -24,6 +24,8 @@ import org.bpelunit.framework.model.test.wire.IncomingMessage;
 import org.bpelunit.framework.model.test.wire.OutgoingMessage;
 import org.w3c.dom.Element;
 
+import com.rits.cloning.Cloner;
+
 /**
  * An activity context is a contextual object created for a single enclosing top-level activity
  * (i.e. an activity directly beneath a partnerTrack, not a nested activity).
@@ -72,6 +74,8 @@ public class ActivityContext {
 	private Element fIncomingMessage;
 
 	private VelocityContext fTestCaseVelocityContext;
+
+	private static final Cloner fCloner = new Cloner();
 
 	// ****************************** Initialization ****************************
 
@@ -207,7 +211,7 @@ public class ActivityContext {
 		if (fTestCaseVelocityContext == null) {
 			fTestCaseVelocityContext = fRunner.createVelocityContext();
 		}
-		VelocityContext ctx = (VelocityContext)fTestCaseVelocityContext.clone();
+		VelocityContext ctx =  fCloner.deepClone(fTestCaseVelocityContext);
 		ctx.put("partnerTrackName", fTrack.getRawName());
 		ctx.put("partnerTrackURL", fTrack.getPartner().getSimulatedURL());
 		return ctx;

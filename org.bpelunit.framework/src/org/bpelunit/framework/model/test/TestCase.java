@@ -18,6 +18,8 @@ import org.bpelunit.framework.model.test.report.ArtefactStatus;
 import org.bpelunit.framework.model.test.report.ITestArtefact;
 import org.bpelunit.framework.model.test.report.StateData;
 
+import com.rits.cloning.Cloner;
+
 /**
  * A BPELUnit Test Case is a description of an interaction with the BPEL PUT, consisting of a number
  * of PartnerTracks, which run in parallel and contain sequences of activities for interaction with
@@ -67,6 +69,8 @@ public class TestCase implements ITestArtefact {
 	private String fSetUpVelocityScript;
 
 	private VelocityContext fTestSuiteVelocityContext;
+
+	private static final Cloner fCloner = new Cloner();
 
 	// ****************** Initialization ************************
 
@@ -206,7 +210,7 @@ public class TestCase implements ITestArtefact {
 		if (fTestSuiteVelocityContext == null) {
 			fTestSuiteVelocityContext = getSuite().createVelocityContext();
 		}
-		VelocityContext ctx = (VelocityContext)fTestSuiteVelocityContext.clone();
+		VelocityContext ctx = fCloner.deepClone(fTestSuiteVelocityContext);
 		ctx.put("testCaseName", getRawName());
 		if (fSetUpVelocityScript != null) {
 			StringWriter sW = new StringWriter();
@@ -224,3 +228,4 @@ public class TestCase implements ITestArtefact {
 	}
 
 }
+

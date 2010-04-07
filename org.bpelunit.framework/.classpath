@@ -29,5 +29,7 @@
 	<classpathentry kind="lib" path="lib/velocity-1.6.3.jar" sourcepath="lib/velocity-1.6.3-src.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar" sourcepath="lib/commons-lang-2.4-src.jar"/>
+	<classpathentry kind="lib" path="lib/cloning-1.7.jar" sourcepath="lib/cloning-src-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/objenesis-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
