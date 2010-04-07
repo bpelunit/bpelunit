@@ -284,43 +284,7 @@ public class SpecificationLoader {
 			currentNumber++;
 
 			boolean isVary = xmlTestCase.getVary();
-			int rounds = 0;
-
-			if (isVary) {
-				/*
-				 * This is a varying test case. Each activity may have an
-				 * arbitrary number of delay times specified. These lists SHOULD
-				 * be of equal length, although no varying also also okay.
-				 * 
-				 * We use XPath to find all delay sequences and find the highest
-				 * size. This will be the size expected from all activities.
-				 */
-				XPath xpath = XPathFactory.newInstance().newXPath();
-				NamespaceContextImpl nsContext = new NamespaceContextImpl();
-				nsContext.setNamespace("ts",
-						BPELUnitConstants.BPELUNIT_TESTSUITE_NAMESPACE);
-				xpath.setNamespaceContext(nsContext);
-				try {
-					NodeList set = (NodeList) xpath.evaluate(
-							"//@delaySequence", xmlTestSuiteDocument
-									.getDomNode(), XPathConstants.NODESET);
-					int currentMax = 0;
-					for (int i = 0; i < set.getLength(); i++) {
-						if (set.item(i) instanceof Attr) {
-							Attr attr = (Attr) set.item(i);
-							List<Integer> ints = getRoundInformation(attr
-									.getValue());
-							if (ints != null)
-								currentMax = ints.size();
-						}
-					}
-					rounds = currentMax;
-				} catch (XPathExpressionException e) {
-					// This should not happen.
-					throw new SpecificationException(
-							"There was a problem finding delay sequences. This most likely indicates a bug in the framework.");
-				}
-			}
+			int rounds = computeNumberOfRounds(xmlTestSuiteDocument, isVary);
 			fLogger.info("Varying: " + isVary + " (Rounds: " + rounds + ")");
 
 			if (isVary && rounds > 0) {
@@ -345,6 +309,50 @@ public class SpecificationLoader {
 		}
 
 		return suite;
+	}
+
+	private int computeNumberOfRounds(
+			XMLTestSuiteDocument xmlTestSuiteDocument, boolean isVary)
+			throws SpecificationException {
+		int rounds;
+		rounds = 0;
+
+		if (isVary) {
+			/*
+			 * This is a varying test case. Each activity may have an
+			 * arbitrary number of delay times specified. These lists SHOULD
+			 * be of equal length, although no varying also also okay.
+			 *
+			 * We use XPath to find all delay sequences and find the highest
+			 * size. This will be the size expected from all activities.
+			 */
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			NamespaceContextImpl nsContext = new NamespaceContextImpl();
+			nsContext.setNamespace("ts",
+					BPELUnitConstants.BPELUNIT_TESTSUITE_NAMESPACE);
+			xpath.setNamespaceContext(nsContext);
+			try {
+				NodeList set = (NodeList) xpath.evaluate(
+						"//@delaySequence", xmlTestSuiteDocument
+								.getDomNode(), XPathConstants.NODESET);
+				int currentMax = 0;
+				for (int i = 0; i < set.getLength(); i++) {
+					if (set.item(i) instanceof Attr) {
+						Attr attr = (Attr) set.item(i);
+						List<Integer> ints = getRoundInformation(attr
+								.getValue());
+						if (ints != null)
+							currentMax = ints.size();
+					}
+				}
+				rounds = currentMax;
+			} catch (XPathExpressionException e) {
+				// This should not happen.
+				throw new SpecificationException(
+						"There was a problem finding delay sequences. This most likely indicates a bug in the framework.");
+			}
+		}
+		return rounds;
 	}
 
 	private void readTestSuiteSetUpBlock(TestSuite testSuite,
