@@ -46,6 +46,7 @@ The Velocity template that produces the SOAP body for an activity has access to 
 ### Predefined test suite variables ###
 
 - `$baseURL` (String): base URL for the simulated URLs.
+- `$collections` (java.util.Collections class): utility methods for handling lists and other collections.
 - `$putName` (String): name of the process under test.
 - `$testCaseCount` (int): number of test cases.
 - `$testSuiteName` (String): name of the test suite.

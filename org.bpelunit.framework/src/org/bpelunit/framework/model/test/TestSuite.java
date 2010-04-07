@@ -316,6 +316,7 @@ public class TestSuite implements ITestArtefact {
 
 		VelocityContext ctx = new VelocityContext();
 		ctx.put("baseURL", fBaseURL);
+		ctx.put("collections", java.util.Collections.class);
 		ctx.put("putName", fProcessUnderTest.getName());
 		ctx.put("testSuiteName", this.getRawName());
 		ctx.put("testCaseCount", this.getTestCaseCount());
