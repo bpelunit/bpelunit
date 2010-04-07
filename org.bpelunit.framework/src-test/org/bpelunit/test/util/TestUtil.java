@@ -17,6 +17,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.xmlbeans.XmlOptions;
 import org.bpelunit.framework.control.result.XMLResultProducer;
 import org.bpelunit.framework.control.soap.NamespaceContextImpl;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -73,14 +74,18 @@ public class TestUtil {
 	}
 
 	public static void assertSameAndSuccessfulResults(String msg, File bptsOriginal, File bptsNew) throws Exception {
-		final String xmlTextA = getResults(bptsOriginal).xmlText();
-		final String xmlTextB = getResults(bptsNew).xmlText();
+		XmlOptions options = new XmlOptions();
+		options.setSavePrettyPrint();
+		final String xmlTextA = getResults(bptsOriginal).xmlText(options);
+		final String xmlTextB = getResults(bptsNew).xmlText(options);
 		assertEquals(msg, xmlTextA, xmlTextB);
 	}
 
 	public static void assertDifferentResults(String msg, File bptsOriginal, File bptsNew) throws Exception {
-		final String xmlTextA = getResults(bptsOriginal).xmlText();
-		final String xmlTextB = getResults(bptsNew).xmlText();
+		XmlOptions options = new XmlOptions();
+		options.setSavePrettyPrint();
+		final String xmlTextA = getResults(bptsOriginal).xmlText(options);
+		final String xmlTextB = getResults(bptsNew).xmlText(options);
 		assertFalse(msg, xmlTextA.equals(xmlTextB));
 	}
 
