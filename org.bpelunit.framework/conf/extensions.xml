@@ -8,6 +8,7 @@
 	<deployer extensionClass="org.bpelunit.framework.control.deploy.oracle.OracleDeployer" type="oracle"/>
 	<deployer extensionClass="org.bpelunit.framework.control.deploy.simple.TestModeDeployer" type="testmode"/>
 	<deployer extensionClass="org.bpelunit.framework.control.deploy.simple.FixedDeployer" type="fixed"/>
+	<deployer extensionClass="org.bpelunit.framework.control.deploy.ode.ODEDeployer" type="ode"/>
 	
 	<encoder type="document/literal" extensionClass="org.bpelunit.framework.control.soap.DocumentLiteralEncoder" />
 	<encoder type="rpc/literal" extensionClass="org.bpelunit.framework.control.soap.RPCLiteralEncoder" />
