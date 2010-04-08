@@ -1,0 +1,8 @@
+1270727397386	Extract method 'findFirstCellIndex'
+1270728808367	Convert local variable 'firstCellIndex' to field
+1270728865183	Rename field 'currentRow'
+1270729413761	Extract local variable 'newRow'
+1270729425419	Convert local variable 'currentRow' to field
+1270729469230	Extract local variable 'firstCellValue'
+1270729713393	Extract local variable 'cellIndex'
+1270730056201	Extract local variable 'sheetIndex'

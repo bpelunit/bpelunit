@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun name="OdsDataSourceTest" project="org.bpelunit.framework" tests="10" started="10" failures="2" errors="3" ignored="0">
+  <testsuite name="org.bpelunit.framework.datasource.OdsDataSourceTest" time="2.161">
+    <testcase name="testNoInlineData" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" time="0.002"/>
+    <testcase name="testEmptySheet" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" time="2.085"/>
+    <testcase name="testSheetWithHeadersOnly" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" time="0.031"/>
+    <testcase name="testSheetWithHeadersAndOneRow" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" time="0.012">
+      <failure>java.lang.AssertionError: expected:&lt;A&gt; but was:&lt;null&gt;
+	at org.junit.Assert.fail(Assert.java:71)
+	at org.junit.Assert.failNotEquals(Assert.java:451)
+	at org.junit.Assert.assertEquals(Assert.java:99)
+	at org.junit.Assert.assertEquals(Assert.java:116)
+	at org.bpelunit.framework.datasource.OdsDataSourceTest.testSheetWithHeadersAndOneRow(OdsDataSourceTest.java:63)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.junit.internal.runners.TestMethodRunner.executeMethodBody(TestMethodRunner.java:99)
+	at org.junit.internal.runners.TestMethodRunner.runUnprotected(TestMethodRunner.java:81)
+	at org.junit.internal.runners.BeforeAndAfterRunner.runProtected(BeforeAndAfterRunner.java:34)
+	at org.junit.internal.runners.TestMethodRunner.runMethod(TestMethodRunner.java:75)
+	at org.junit.internal.runners.TestMethodRunner.run(TestMethodRunner.java:45)
+	at org.junit.internal.runners.TestClassMethodsRunner.invokeTestMethod(TestClassMethodsRunner.java:66)
+	at org.junit.internal.runners.TestClassMethodsRunner.run(TestClassMethodsRunner.java:35)
+	at org.junit.internal.runners.TestClassRunner$1.runUnprotected(TestClassRunner.java:42)
+	at org.junit.internal.runners.BeforeAndAfterRunner.runProtected(BeforeAndAfterRunner.java:34)
+	at org.junit.internal.runners.TestClassRunner.run(TestClassRunner.java:52)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:45)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:460)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:673)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:386)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:196)
+
+</failure>
+    </testcase>
+    <testcase name="testSheetWithHeadersAndThreeRows" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" time="0.003">
+      <error>org.bpelunit.framework.datasource.InvalidDataSourceException: Could not open src-test/org/bpelunit/framework/datasource/header_3rows.ods
+	at org.bpelunit.framework.datasource.OdsDataSource.setSource(OdsDataSource.java:88)
+	at org.bpelunit.framework.datasource.OdsDataSourceTest.testSheetWithHeadersAndThreeRows(OdsDataSourceTest.java:72)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.junit.internal.runners.TestMethodRunner.executeMethodBody(TestMethodRunner.java:99)
+	at org.junit.internal.runners.TestMethodRunner.runUnprotected(TestMethodRunner.java:81)
+	at org.junit.internal.runners.BeforeAndAfterRunner.runProtected(BeforeAndAfterRunner.java:34)
+	at org.junit.internal.runners.TestMethodRunner.runMethod(TestMethodRunner.java:75)
+	at org.junit.internal.runners.TestMethodRunner.run(TestMethodRunner.java:45)
+	at org.junit.internal.runners.TestClassMethodsRunner.invokeTestMethod(TestClassMethodsRunner.java:66)
+	at org.junit.internal.runners.TestClassMethodsRunner.run(TestClassMethodsRunner.java:35)
+	at org.junit.internal.runners.TestClassRunner$1.runUnprotected(TestClassRunner.java:42)
+	at org.junit.internal.runners.BeforeAndAfterRunner.runProtected(BeforeAndAfterRunner.java:34)
+	at org.junit.internal.runners.TestClassRunner.run(TestClassRunner.java:52)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:45)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:460)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:673)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:386)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:196)
+Caused by: java.lang.IllegalArgumentException: The empty file 'src-test\org\bpelunit\framework\datasource\header_3rows.ods' is no ODF package!
+	at org.odftoolkit.odfdom.pkg.OdfPackage.initialize(OdfPackage.java:333)
+	at org.odftoolkit.odfdom.pkg.OdfPackage.&lt;init&gt;(OdfPackage.java:201)
+	at org.odftoolkit.odfdom.pkg.OdfPackage.loadPackage(OdfPackage.java:249)
+	at org.odftoolkit.odfdom.doc.OdfDocument.loadDocument(OdfDocument.java:269)
+	at org.bpelunit.framework.datasource.OdsDataSource.setSource(OdsDataSource.java:82)
+	... 21 more
+Caused by: java.io.FileNotFoundException: src-test\org\bpelunit\framework\datasource\header_3rows.ods (Das System kann die angegebene Datei nicht finden)
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.&lt;init&gt;(Unknown Source)
+	at java.util.zip.ZipFile.&lt;init&gt;(Unknown Source)
+	at org.odftoolkit.odfdom.pkg.OdfPackage.initialize(OdfPackage.java:330)
+	... 25 more
+
+</error>
+    </testcase>
+    <testcase name="testSheetWithHeadersAndThreeRowsShifted" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" time="0.002">
+      <error>org.bpelunit.framework.datasource.InvalidDataSourceException: Could not open src-test/org/bpelunit/framework/datasource/header_3rowsshifted.ods
+	at org.bpelunit.framework.datasource.OdsDataSource.setSource(OdsDataSource.java:88)
+	at org.bpelunit.framework.datasource.OdsDataSourceTest.testSheetWithHeadersAndThreeRowsShifted(OdsDataSourceTest.java:98)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.junit.internal.runners.TestMethodRunner.executeMethodBody(TestMethodRunner.java:99)
+	at org.junit.internal.runners.TestMethodRunner.runUnprotected(TestMethodRunner.java:81)
+	at org.junit.internal.runners.BeforeAndAfterRunner.runProtected(BeforeAndAfterRunner.java:34)
+	at org.junit.internal.runners.TestMethodRunner.runMethod(TestMethodRunner.java:75)
+	at org.junit.internal.runners.TestMethodRunner.run(TestMethodRunner.java:45)
+	at org.junit.internal.runners.TestClassMethodsRunner.invokeTestMethod(TestClassMethodsRunner.java:66)
+	at org.junit.internal.runners.TestClassMethodsRunner.run(TestClassMethodsRunner.java:35)
+	at org.junit.internal.runners.TestClassRunner$1.runUnprotected(TestClassRunner.java:42)
+	at org.junit.internal.runners.BeforeAndAfterRunner.runProtected(BeforeAndAfterRunner.java:34)
+	at org.junit.internal.runners.TestClassRunner.run(TestClassRunner.java:52)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:45)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:460)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:673)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:386)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:196)
+Caused by: java.lang.IllegalArgumentException: The empty file 'src-test\org\bpelunit\framework\datasource\header_3rowsshifted.ods' is no ODF package!
+	at org.odftoolkit.odfdom.pkg.OdfPackage.initialize(OdfPackage.java:333)
+	at org.odftoolkit.odfdom.pkg.OdfPackage.&lt;init&gt;(OdfPackage.java:201)
+	at org.odftoolkit.odfdom.pkg.OdfPackage.loadPackage(OdfPackage.java:249)
+	at org.odftoolkit.odfdom.doc.OdfDocument.loadDocument(OdfDocument.java:269)
+	at org.bpelunit.framework.datasource.OdsDataSource.setSource(OdsDataSource.java:82)
+	... 21 more
+Caused by: java.io.FileNotFoundException: src-test\org\bpelunit\framework\datasource\header_3rowsshifted.ods (Das System kann die angegebene Datei nicht finden)
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.&lt;init&gt;(Unknown Source)
+	at java.util.zip.ZipFile.&lt;init&gt;(Unknown Source)
+	at org.odftoolkit.odfdom.pkg.OdfPackage.initialize(OdfPackage.java:330)
+	... 25 more
+
+</error>
+    </testcase>
+    <testcase name="testSheetWithHeadersAndThreeRowsAndTwoSheets" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" time="0.012">
+      <failure>java.lang.AssertionError: expected:&lt;A&gt; but was:&lt;null&gt;
+	at org.junit.Assert.fail(Assert.java:71)
+	at org.junit.Assert.failNotEquals(Assert.java:451)
+	at org.junit.Assert.assertEquals(Assert.java:99)
+	at org.junit.Assert.assertEquals(Assert.java:116)
+	at org.bpelunit.framework.datasource.OdsDataSourceTest.testSheetWithHeadersAndThreeRowsAndTwoSheets(OdsDataSourceTest.java:134)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.junit.internal.runners.TestMethodRunner.executeMethodBody(TestMethodRunner.java:99)
+	at org.junit.internal.runners.TestMethodRunner.runUnprotected(TestMethodRunner.java:81)
+	at org.junit.internal.runners.BeforeAndAfterRunner.runProtected(BeforeAndAfterRunner.java:34)
+	at org.junit.internal.runners.TestMethodRunner.runMethod(TestMethodRunner.java:75)
+	at org.junit.internal.runners.TestMethodRunner.run(TestMethodRunner.java:45)
+	at org.junit.internal.runners.TestClassMethodsRunner.invokeTestMethod(TestClassMethodsRunner.java:66)
+	at org.junit.internal.runners.TestClassMethodsRunner.run(TestClassMethodsRunner.java:35)
+	at org.junit.internal.runners.TestClassRunner$1.runUnprotected(TestClassRunner.java:42)
+	at org.junit.internal.runners.BeforeAndAfterRunner.runProtected(BeforeAndAfterRunner.java:34)
+	at org.junit.internal.runners.TestClassRunner.run(TestClassRunner.java:52)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:45)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:460)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:673)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:386)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:196)
+
+</failure>
+    </testcase>
+    <testcase name="testInvalidSheetNumber" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" time="0.001"/>
+    <testcase name="testSettingSheetNumberAfterAccessingDataSource" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" time="0.002">
+      <error>java.lang.Exception: Unexpected exception, expected&lt;java.lang.IllegalStateException&gt; but was&lt;org.bpelunit.framework.datasource.InvalidDataSourceException&gt;
+	at org.junit.internal.runners.TestMethodRunner.runUnprotected(TestMethodRunner.java:91)
+	at org.junit.internal.runners.BeforeAndAfterRunner.runProtected(BeforeAndAfterRunner.java:34)
+	at org.junit.internal.runners.TestMethodRunner.runMethod(TestMethodRunner.java:75)
+	at org.junit.internal.runners.TestMethodRunner.run(TestMethodRunner.java:45)
+	at org.junit.internal.runners.TestClassMethodsRunner.invokeTestMethod(TestClassMethodsRunner.java:66)
+	at org.junit.internal.runners.TestClassMethodsRunner.run(TestClassMethodsRunner.java:35)
+	at org.junit.internal.runners.TestClassRunner$1.runUnprotected(TestClassRunner.java:42)
+	at org.junit.internal.runners.BeforeAndAfterRunner.runProtected(BeforeAndAfterRunner.java:34)
+	at org.junit.internal.runners.TestClassRunner.run(TestClassRunner.java:52)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:45)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:460)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:673)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:386)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:196)
+Caused by: org.bpelunit.framework.datasource.InvalidDataSourceException: Could not open src-test/org/bpelunit/framework/datasource/header_3rowsshifted.ods
+	at org.bpelunit.framework.datasource.OdsDataSource.setSource(OdsDataSource.java:88)
+	at org.bpelunit.framework.datasource.OdsDataSourceTest.testSettingSheetNumberAfterAccessingDataSource(OdsDataSourceTest.java:157)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.junit.internal.runners.TestMethodRunner.executeMethodBody(TestMethodRunner.java:99)
+	at org.junit.internal.runners.TestMethodRunner.runUnprotected(TestMethodRunner.java:81)
+	... 14 more
+Caused by: java.lang.IllegalArgumentException: The empty file 'src-test\org\bpelunit\framework\datasource\header_3rowsshifted.ods' is no ODF package!
+	at org.odftoolkit.odfdom.pkg.OdfPackage.initialize(OdfPackage.java:333)
+	at org.odftoolkit.odfdom.pkg.OdfPackage.&lt;init&gt;(OdfPackage.java:201)
+	at org.odftoolkit.odfdom.pkg.OdfPackage.loadPackage(OdfPackage.java:249)
+	at org.odftoolkit.odfdom.doc.OdfDocument.loadDocument(OdfDocument.java:269)
+	at org.bpelunit.framework.datasource.OdsDataSource.setSource(OdsDataSource.java:82)
+	... 21 more
+Caused by: java.io.FileNotFoundException: src-test\org\bpelunit\framework\datasource\header_3rowsshifted.ods (Das System kann die angegebene Datei nicht finden)
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.&lt;init&gt;(Unknown Source)
+	at java.util.zip.ZipFile.&lt;init&gt;(Unknown Source)
+	at org.odftoolkit.odfdom.pkg.OdfPackage.initialize(OdfPackage.java:330)
+	... 25 more
+
+</error>
+    </testcase>
+    <testcase name="testInvalidSheetIndex" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" time="0.002"/>
+  </testsuite>
+</testrun>

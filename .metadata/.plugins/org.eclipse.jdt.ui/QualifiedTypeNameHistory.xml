@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.odftoolkit.odfdom.doc.OdfDocument"/>
+<fullyQualifiedTypeName name="org.odftoolkit.odfdom.doc.OdfSpreadsheetDocument"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="org.odftoolkit.odfdom.doc.table.OdfTable"/>
+<fullyQualifiedTypeName name="org.odftoolkit.odfdom.doc.table.OdfTableRow"/>
+<fullyQualifiedTypeName name="org.apache.commons.lang.StringUtils"/>
+<fullyQualifiedTypeName name="org.bpelunit.framework.datasource.InvalidDataSourceException"/>
+</qualifiedTypeNameHistroy>

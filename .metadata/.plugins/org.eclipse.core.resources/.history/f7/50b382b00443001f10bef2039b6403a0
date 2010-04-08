@@ -1,0 +1,109 @@
+package org.bpelunit.framework.datasource;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.bpelunit.framework.datasource.DataSource.ConfigurationOption;
+import org.odftoolkit.odfdom.doc.OdfDocument;
+import org.odftoolkit.odfdom.doc.OdfSpreadsheetDocument;
+import org.odftoolkit.odfdom.doc.table.OdfTable;
+import org.odftoolkit.odfdom.doc.table.OdfTableRow;
+
+public class OdsDataSource implements DataSource {
+
+	private static final int DEFAULT_SHEET_INDEX = 0;
+	private OdfTable table;
+	private int headingRowIndex;
+	private List<String> headings;
+	private int sheetIndex;
+
+	@ConfigurationOption(defaultValue = "" + DEFAULT_SHEET_INDEX, description = "The number of the sheet in which the test data reside. Counting starts with 1 for the first sheet.")
+	public void setSheet(String index) {
+		checkIfMayAlterConfiguration();
+		try {
+			this.sheetIndex = Integer.parseInt(index) - 1;
+		} catch (Exception e) {
+			throw new IllegalArgumentException(
+					"Sheet Index must be a positive number");
+		}
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String[] getFieldNames() {
+		return headings.toArray(new String[headings.size()]);
+	}
+
+	@Override
+	public String[] getSupportedContentTypes() {
+		return new String[] { "application/vnd.oasis.opendocument.spreadsheet",
+				"application/x-vnd.oasis.opendocument.spreadsheet" };
+	}
+
+	@Override
+	public String getValueFor(String fieldName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean next() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setData(String data) throws InvalidDataSourceException {
+		throw new InvalidDataSourceException(
+				"Inline sources are not allowed for Open Document Spreadsheets (e.g. OpenOffice.org) files");
+	}
+
+	@Override
+	public void setSource(String uri) throws InvalidDataSourceException {
+		OdfDocument ods;
+		try {
+			ods = OdfSpreadsheetDocument.loadDocument(uri);
+			table = ods.getTableList().get(0);
+			extractFieldNames();
+		} catch (InvalidDataSourceException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new InvalidDataSourceException("Could not open " + uri, e);
+		}
+	}
+
+	private void extractFieldNames() throws InvalidDataSourceException {
+		List<String> headings = new ArrayList<String>();
+		OdfTableRow headingRow = table.getRowByIndex(headingRowIndex);
+		if (headingRow.getCellCount() == 0) {
+			throw new InvalidDataSourceException("No headings found at row "
+					+ headingRowIndex);
+		}
+
+		int firstCellIndex = 0;
+		while (StringUtils.isEmpty(headingRow.getCellByIndex(firstCellIndex)
+				.getStringValue())) {
+			firstCellIndex++;
+		}
+
+		for (int i = firstCellIndex; i < headingRow.getCellCount(); i++) {
+			String heading = headingRow.getCellByIndex(i).getStringValue();
+			headings.add(heading);
+		}
+
+		this.headings = headings;
+	}
+
+	private void checkIfMayAlterConfiguration() {
+		if (table != null) {
+			throw new IllegalStateException(
+					"Data has already been loaded; must not alter settings anymore!");
+		}
+	}
+}

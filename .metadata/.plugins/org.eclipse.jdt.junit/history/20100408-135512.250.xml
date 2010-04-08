@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun name="Rerun org.bpelunit.framework.datasource.OdsDataSourceTest.testEmptySheet" project="org.bpelunit.framework" tests="1" started="1" failures="0" errors="0" ignored="0">
+  <testcase name="testEmptySheet" classname="org.bpelunit.framework.datasource.OdsDataSourceTest" incomplete="true"/>
+</testrun>
