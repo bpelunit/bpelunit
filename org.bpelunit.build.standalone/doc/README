@@ -88,8 +88,8 @@ Ant task will execute a specified Test Suite Specification, producing either a p
 message (indicating how many tests passed, failed, and errored) or a rich XML format which contains
 all details of the test run and can then be transformed by XLST or processed by other means.
 
-To use the BPELUnit Ant task in your build files, you must first declare the task in your build.xml
-file:
+To use the BPELUnit Ant task in your build files, you must first copy the lib/truezip-6.jar file into
+your Ant library directory. Once you're done, you need to  declare the task in your build.xml file:
 
 	<typedef name="bpelunit" classname="org.bpelunit.framework.ui.ant.BPELUnit">
 		<classpath>
