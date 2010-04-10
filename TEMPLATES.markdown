@@ -147,8 +147,6 @@ Data sources can be freely combined with test suite and test case `<script>` ele
           <contents>
             <!-- inline contents -->
           </contents>
-          <!-- zero or more properties -->
-          <property name="myname2">myvalue2</property>
         </dataSource>
         ...
       </setUp>
