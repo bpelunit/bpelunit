@@ -1,6 +1,7 @@
 package org.bpelunit.framework.control.datasource;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,6 +37,8 @@ public class DataSourceUtil {
 	 *            XMLBeans object for the <testSuite> element.
 	 * @param xmlTestCase
 	 *            XMLBeans object for the <testCase> element.
+	 * @param bptsDir
+	 *            Directory where the BPTS resides.
 	 * @return <code>null</code> if no data source is available. Otherwise, an
 	 *         instance of the appropriate data source will be returned, with
 	 *         its contents initialized from its source according to
@@ -46,7 +49,7 @@ public class DataSourceUtil {
 	 *             problem while initializing its contents from the XML element.
 	 */
 	public static IDataSource createDataSource(XMLTestSuite xmlTestSuite,
-			XMLTestCase xmlTestCase) throws DataSourceException {
+			XMLTestCase xmlTestCase, File bptsDir) throws DataSourceException {
 		XMLDataSource xmlDataSource = null;
 		if (xmlTestCase.isSetSetUp()
 				&& xmlTestCase.getSetUp().isSetDataSource()) {
@@ -58,7 +61,7 @@ public class DataSourceUtil {
 
 		if (xmlDataSource != null) {
 			final String type = xmlDataSource.getType();
-			final InputStream istream = getStreamForDataSource(xmlDataSource);
+			final InputStream istream = getStreamForDataSource(xmlDataSource, bptsDir);
 			Map<String, String> properties = createPropertyMap(xmlDataSource
 					.getPropertyList());
 			return createDataSource(type, istream, properties);
@@ -148,13 +151,15 @@ public class DataSourceUtil {
 	 * 
 	 * @param xmlDataSource
 	 *            XMLBeans object for the <dataSource> element.
+	 * @param basedir
+	 *            Base directory from which relative paths should be interpreted.
 	 * @throws DataSourceException
 	 *             Unknown content source type.
 	 */
-	public static InputStream getStreamForDataSource(XMLDataSource xmlDataSource)
+	public static InputStream getStreamForDataSource(XMLDataSource xmlDataSource, File basedir)
 			throws DataSourceException {
 		return getStreamForDataSource(xmlDataSource.getContents(),
-				xmlDataSource.getSrc());
+				xmlDataSource.getSrc(), basedir);
 	}
 
 	/**
@@ -170,13 +175,15 @@ public class DataSourceUtil {
 	 * @param externalReference
 	 *            Value of the external reference. If <code>null</code> the data
 	 *            source has no external reference.
+	 * @param basedir
+	 *            Base directory from which relative paths should be interpreted.
 	 * @throws DataSourceException
 	 *             Either the external reference is of an unknown type, or
 	 *             neither an external reference nor inline contents are
 	 *             available.
 	 */
 	public static InputStream getStreamForDataSource(String contents,
-			String externalReference) throws DataSourceException {
+			String externalReference, File basedir) throws DataSourceException {
 		if (contents != null) {
 			if (externalReference != null) {
 				throw new DataSourceException("Inline content and external "

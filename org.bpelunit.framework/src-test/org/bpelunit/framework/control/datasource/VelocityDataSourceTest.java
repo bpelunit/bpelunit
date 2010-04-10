@@ -153,7 +153,7 @@ public class VelocityDataSourceTest {
 			props.put(VelocityDataSource.PROPERTY_ITERATED_VARS, "x");
 			props.put("badprop", "nobodyexpectsthespanishinquisition");
 			DataSourceUtil.createDataSource(SOURCE_TYPE, DataSourceUtil
-					.getStreamForDataSource("#set($x=[1,2,3])", null), props);
+					.getStreamForDataSource("#set($x=[1,2,3])", null, null), props);
 			fail("A DataSourceException was expected.");
 		} catch (DataSourceException ex) {
 			assertTrue("The exception message should indicate that an "
@@ -258,6 +258,6 @@ public class VelocityDataSourceTest {
 			props.put(VelocityDataSource.PROPERTY_ITERATED_VARS, variables);
 		}
 		return DataSourceUtil.createDataSource(SOURCE_TYPE, DataSourceUtil
-				.getStreamForDataSource(contents, null), props);
+				.getStreamForDataSource(contents, null, null), props);
 	}
 }

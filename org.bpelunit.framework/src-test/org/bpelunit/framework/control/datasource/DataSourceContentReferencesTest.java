@@ -22,7 +22,7 @@ public class DataSourceContentReferencesTest {
 	@Test
 	public void bothMissingIsReported() {
 		try {
-			DataSourceUtil.getStreamForDataSource(null, null);
+			DataSourceUtil.getStreamForDataSource(null, null, null);
 			fail("A DataSourceException was expected");
 		} catch (DataSourceException ex) {}
 	}
@@ -30,14 +30,14 @@ public class DataSourceContentReferencesTest {
 	@Test
 	public void bothSpecifiedIsReported() {
 		try {
-			DataSourceUtil.getStreamForDataSource("foo", "bar");
+			DataSourceUtil.getStreamForDataSource("foo", "bar", null);
 			fail("A DataSourceException was expected");
 		} catch (DataSourceException ex) {}
 	}
 	@Test
 	public void inlineContents() throws Exception {
 		final String contents = "test";
-		InputStream is = DataSourceUtil.getStreamForDataSource(contents, null);
+		InputStream is = DataSourceUtil.getStreamForDataSource(contents, null, null);
 		BufferedReader rIs = new BufferedReader(new InputStreamReader(is));
 		rIs.readLine().equals(contents);
 	}
