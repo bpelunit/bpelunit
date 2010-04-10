@@ -14,16 +14,14 @@
 	<classpathentry exported="true" kind="lib" path="lib/javax.servlet.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsr173_1.0_api.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.13.jar" sourcepath="lib/log4j-1.2.13-src.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/org.mortbay.jetty.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.mortbay.jetty.jar" sourcepath="lib/org.mortbay.jetty-src.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/saaj-1.3_api.jar" sourcepath="lib/saaj1.3_src.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/saaj-1.3_impl.jar" sourcepath="lib/saaj1.3_src.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-src-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-src.jar"/>
-	<classpathentry kind="lib" path="lib/org.mortbay.jetty-src.jar"/>
 	<classpathentry kind="lib" path="lib/saaj1.3_src.jar"/>
 	<classpathentry kind="lib" path="lib/xbean.jar" sourcepath="lib/xbean-src.jar"/>
 	<classpathentry kind="lib" path="lib/wsdl4j-1.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang-2.4-src.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
@@ -34,4 +32,3 @@
 	<classpathentry kind="lib" path="lib/objenesis-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
-
