@@ -3,6 +3,7 @@ Changelog
 
 Staged for next version
 -----------------------
+* _Feature_: BPTS files can now include Apache Velocity-based test case templates. This feature is rather large: check `TEMPLATES.markdown` for a full description.
 * _Fix_: list imported services in the BPTS editor's service picker and let the user select them.
 * _Fix_: don't produce a NullPointerException when importing a WSDL whose schema uses a prefix that takes a different value than in the main WSDL file, or that is missing from the main WSDL file.
 * _Fix_: when several prefixes refer to the same namespace URL, do not clobber the previous ones by mistake.

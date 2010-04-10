@@ -156,7 +156,10 @@ Data sources can be freely combined with test suite and test case `<script>` ele
 There are several things to keep in mind:
 
 - Data sources belong to one of the *types* registered in the extension registry. You can use one of the predefined data source types, or you can implement and register your own. Each of the predefined data source types are described in the "Predefined data source types" section.
-- Data sources load their contents either from the text content of their `<contents>` nested element, or from the external reference linked to from the `src` attribute of the `<dataSource>` element. Both cannot be used at the same time. Currently, only nested `<contents>` elements work, but in the future external references will accept file paths and URLs.
+- Data sources load their contents either from the text content of their `<contents>` nested element, or from the external reference linked to from the `src` attribute of the `<dataSource>` element. Both cannot be used at the same time. You can use these values in the `src` attribute:
+  - Absolute file paths
+  - Relative file paths (from the directory with the `.bpts` file)
+  - `http://`, `file://` and all other URL types `java.net.URL` can load
 - The behaviour of a data source can be customized by setting the right *properties*. Please refer to the documentation for that data source type to obtain a list of the available properties and their accepted values.
 
 ### Register a new data source type ###
@@ -188,6 +191,8 @@ Predefined data sources
 ### Velocity ###
 
 _Type: "velocity"_
+
+_Properties: "iterated\_vars" (required)_
 
 Velocity templates can be used as a data source. Just `#set` some variables with list literals and list their names (separated by spaces) in the `iterated_vars` property, like this:
 
@@ -224,7 +229,6 @@ Pending tasks
 
 ### Important ###
 
-- Implement external references (file paths and URLs)
 - Add variables to access previously received and sent messages in the current partner track
 - Implement more data source types (CSV, XLS, ODS)
 
