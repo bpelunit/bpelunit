@@ -2,9 +2,14 @@ package org.bpelunit.framework.control.datasource;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,8 +109,7 @@ public class DataSourceUtil {
 			setProperty(dataSource, prop.getKey(), prop.getValue());
 		}
 
-		// Contents should be loaded after setting the properties, as these
-		// might
+		// Contents should be loaded after setting the properties, as these might
 		// have information that is required to correctly interpret the input
 		// stream, such as text encoding, for instance.
 		dataSource.loadFromStream(istream);
@@ -164,11 +168,16 @@ public class DataSourceUtil {
 
 	/**
 	 * Returns an InputStream for the contents referenced in the data source.
-	 * Currently, only inline content through the nested <contents> element is
-	 * supported.
+	 * These reference types are available:
 	 * 
-	 * TODO paths, file:// and http:// URLs.
+	 * <ul>
+	 *   <li>Inline content through the nested <contents> element.</li>
+	 *   <li>Absolute file paths.</li>
+	 *   <li>Relative file paths, evaluated from the BPTS' directory.</li>
+	 *   <li>Any URL accepted by java.net.URL (such as http:// or file://).</li>
+	 * </ul>
 	 * 
+	 * @see java.net.URL#URL(String)
 	 * @param contents
 	 *            Inline contents of the data source. If <code>null</code>, the
 	 *            data source has no inline contents.
@@ -192,8 +201,35 @@ public class DataSourceUtil {
 			}
 			return new ByteArrayInputStream(contents.getBytes());
 		} else if (externalReference != null) {
-			throw new DataSourceException(String.format(
-					"Unknown external reference '%s'", externalReference));
+			// Try to parse it as an URL (http://, file://)
+			try {
+				return new URL(externalReference).openStream();
+			} catch (MalformedURLException e) {
+				// Malformed URL... might be a file path
+			} catch (IllegalArgumentException e) {
+				// Not a valid URL either
+			} catch (IOException e) {
+				throw new DataSourceException("Error while opening URL '"
+					+ externalReference + "'", e);
+			}
+
+			// Try opening it as a file - absolute path
+			File f = new File(externalReference);
+			try {
+				return new FileInputStream(f);
+			}
+			catch (FileNotFoundException e){
+				// let's try again as a relative path
+			}
+
+			// Last chance - relative path
+			f = new File(basedir, externalReference);
+			try {
+				return new FileInputStream(f);
+			} catch (FileNotFoundException e) {
+				throw new DataSourceException("File not found: '"
+						+ externalReference + "'", e);
+			}
 		} else {
 			throw new DataSourceException(
 					"No inline contents and no external reference are available");
