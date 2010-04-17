@@ -1,0 +1,142 @@
+package org.bpelunit.framework.control.datasource.csv;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.bpelunit.framework.control.ext.IDataSource;
+import org.bpelunit.framework.control.ext.IDataSource.DataSource;
+import org.bpelunit.framework.exception.DataSourceException;
+
+@DataSource(name = "CSV Data Source", shortName = "CSV", contentTypes = {
+		"text/cvs", "text/plain" })
+public class CSVDataSource implements IDataSource {
+
+	private static final String DEFAULT_SEPARATOR = "\t";
+
+	private List<String> headers = null;
+	private List<String> lines = null;
+	private String[] currentRecord = null;
+	private String separator = DEFAULT_SEPARATOR;
+
+	@Override
+	public String[] getFieldNames() {
+		return headers.toArray(new String[headers.size()]);
+	}
+
+	@Override
+	public String getValueFor(String fieldName) {
+		int index = headers.indexOf(fieldName);
+		return currentRecord[index];
+	}
+
+	@Override
+	public boolean next() {
+		if (lines.size() == 0) {
+			return false;
+		}
+
+		String line = lines.remove(0);
+		currentRecord = parseLine(line);
+		return true;
+	}
+
+	private String[] parseLine(String currentLine) {
+		return currentLine.split(separator);
+	}
+
+	@Override
+	public void loadFromStream(InputStream data) throws DataSourceException {
+		setSource(new InputStreamReader(data));
+	}
+
+	private void setSource(Reader reader) throws DataSourceException {
+		try {
+			this.lines = new ArrayList<String>();
+
+			BufferedReader in = new BufferedReader(reader);
+			readColumnHeadersIfNecessary(in);
+
+			while (in.ready()) {
+				String line = in.readLine();
+				if (!line.trim().equals("")) {
+					this.lines.add(line);
+				}
+			}
+
+		} catch (IOException e) {
+			throw new DataSourceException("Invalid data source", e);
+		} finally {
+			try {
+				reader.close();
+			} catch (IOException e) {
+				// Do nothing because it is only a reader
+			}
+		}
+	}
+
+	private void readColumnHeadersIfNecessary(BufferedReader reader)
+			throws IOException, DataSourceException {
+		if (headersAreAlreadySet()) {
+			return;
+		}
+
+		if (reader.ready()) {
+			String headerLine = reader.readLine();
+			headers = Arrays.asList(parseLine(headerLine));
+		} else {
+			throw new DataSourceException("CSV File contains no header row");
+		}
+	}
+
+	private boolean headersAreAlreadySet() {
+		return headers != null;
+	}
+
+	@Override
+	public void close() {
+		this.lines = null;
+	}
+
+	@ConfigurationOption(defaultValue = DEFAULT_SEPARATOR, description = "The separator used to divide two values within a row.")
+	public void setSeparator(String separator) {
+		checkIfMayAlterConfiguration();
+
+		this.separator = separator;
+	}
+
+	private void checkIfMayAlterConfiguration() {
+		if (lines != null) {
+			throw new IllegalStateException(
+					"Data Source is already open - must not set new parse options!");
+		}
+	}
+
+	@ConfigurationOption(defaultValue = "", description = "The column names, separated by commas, which shall be used for naming the data columns of the CSV file. Use this option, if the CSV file itself does not have the headers in its first row.")
+	public void setHeaders(String headerNames) {
+		checkIfMayAlterConfiguration();
+
+		if (headerNames != null && !headerNames.equals("")) {
+			String[] headers = headerNames.split(",");
+			trim(headers);
+
+			this.headers = Arrays.asList(headers);
+		}
+	}
+
+	private void trim(String[] array) {
+		for (int i = 0; i < array.length; i++) {
+			array[i] = array[i].trim();
+		}
+	}
+
+	@Override
+	public int getNumberOfRows() {
+		return this.lines.size();
+	}
+}

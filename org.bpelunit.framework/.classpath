@@ -23,16 +23,7 @@
 	<classpathentry kind="lib" path="lib/saaj1.3_src.jar"/>
 	<classpathentry kind="lib" path="lib/xbean.jar" sourcepath="lib/xbean-src.jar"/>
 	<classpathentry kind="lib" path="lib/wsdl4j-1.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/apache-poi/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/apache-poi/geronimo-stax-api_1.0_spec-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/apache-poi/poi-3.6-20091214.jar"/>
-	<classpathentry kind="lib" path="lib/apache-poi/poi-ooxml-3.6-20091214.jar"/>
-	<classpathentry kind="lib" path="lib/apache-poi/poi-ooxml-schemas-3.6-20091214.jar"/>
-	<classpathentry kind="lib" path="lib/odfdom/odfdom.jar"/>
-	<classpathentry kind="lib" path="lib/odfdom/resolver.jar"/>
-	<classpathentry kind="lib" path="lib/odfdom/serializer.jar"/>
-	<classpathentry kind="lib" path="lib/odfdom/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="lib/odfdom/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.4-src.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
@@ -43,3 +34,4 @@
 	<classpathentry kind="lib" path="lib/objenesis-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
+

@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.bpelunit.framework.control.datasource.DataSourceUtil;
 import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
@@ -222,7 +223,7 @@ public class TestCase implements ITestArtefact {
 			Velocity.evaluate(ctx, sW, "setUpTestCase", fSetUpVelocityScript);
 		}
 		if (fDataSource != null) {
-			fDataSource.initializeContext(ctx, fRowIndex);
+			DataSourceUtil.initializeContext(ctx, fDataSource);
 		}
 		return ctx;
 	}

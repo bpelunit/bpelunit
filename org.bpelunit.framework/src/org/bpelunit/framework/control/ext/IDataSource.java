@@ -1,6 +1,10 @@
 package org.bpelunit.framework.control.ext;
 
 import java.io.InputStream;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 import org.apache.velocity.context.Context;
 import org.bpelunit.framework.exception.DataSourceException;
@@ -34,6 +38,18 @@ import org.bpelunit.framework.exception.DataSourceException;
  */
 public interface IDataSource {
 
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.TYPE)
+	public @interface DataSource {
+		String name();
+		String shortName();
+		String[] contentTypes();
+	}
+	
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.METHOD)
+	public @interface ConfigurationOption { String defaultValue(); String description(); }
+	
 	/**
 	 * Reports the number of rows in this data source. BPELUnit will produce
 	 * as many test cases from a template as there are rows in its data source.
@@ -62,14 +78,13 @@ public interface IDataSource {
 	 * @throws DataSourceException There was a problem while initializing the
 	 * context variables with the contents of the <code>rowIndex</code>-th row.
 	 */
-	void initializeContext(Context ctx, int rowIndex) throws DataSourceException;
+	//void initializeContext(Context ctx, int rowIndex) throws DataSourceException;
 
-	/**
-	 * Sets the property with name<code>name</code> to the value <code>value</code>.
-	 * @param name Name of the property.
-	 * @param value Value to be set.
-	 * @throws DataSourceException Property with name <code>name</code> does not
-	 * exist for this data source, or <code>value</code> is not valid.
-	 */
-	void setProperty(String name, String value) throws DataSourceException;
+	public String[] getFieldNames();
+	
+	public boolean next();
+	
+	public Object getValueFor(String fieldName);
+	
+	public void close();
 }

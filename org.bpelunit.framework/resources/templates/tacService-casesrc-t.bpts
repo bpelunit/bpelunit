@@ -18,7 +18,7 @@
     <testCase name="MainTemplate" basedOn="" abstract="false" vary="true">
       <setUp>
         <dataSource type="velocity">
-          <property name="iterated_vars">lines</property>
+          <property name="iteratedVars">lines</property>
           <contents>
             #set($lines = [[], ['A'], ['A','B'], ['A','B','C']])
           </contents>

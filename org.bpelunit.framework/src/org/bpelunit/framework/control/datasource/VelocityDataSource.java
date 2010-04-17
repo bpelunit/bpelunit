@@ -10,63 +10,74 @@ import java.util.StringTokenizer;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.context.Context;
 import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.exception.DataSourceException;
 
 public class VelocityDataSource implements IDataSource {
 
-	/**
-	 * Space-separated list of one or more variables which will be iterated over
-	 * each row. These variables must all be lists with the same number of
-	 * elements. The initialized context for the n-th row will have their n-th
-	 * elements in variables with the same names as the lists. The rest of the
-	 * variables will be available as-is.
-	 * 
-	 * For instance, suppose we had these contents and this property was set to
-	 * "v w":
-	 * 
-	 * <code>
-	 * #set($v = [1, 2, 3])
-	 * #set($w = [2, 4, 6])
-	 * #set($z = 3)
-	 * </code>
-	 * 
-	 * This data source would have 3 rows: the first would have v = 1 and w = 2,
-	 * the second would have v = 2 and w = 4, and the last one would have v = 3
-	 * and w = 6. All three rows would have z = 3.
-	 * 
-	 * <emph>This property is required</emph>.
-	 */
-	public static final String PROPERTY_ITERATED_VARS = "iterated_vars";
+	static final String PROPERTY_ITERATED_VARS = "iteratedVars";
 	private List<String> fIteratedVars;
 	private VelocityContext fContext;
 	private int fRowCount;
+	private int fCurrentRow = -1;
 
 	public int getNumberOfRows() {
 		return fRowCount;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void initializeContext(Context ctx, int rowIndex)
-			throws DataSourceException {
-		if (rowIndex < 0 || rowIndex >= fRowCount) {
-			throw new DataSourceException(String.format("Invalid row index. "
-					+ "Valid row indexes are in the [0,%d] range.", fRowCount));
+	@Override
+	public boolean next() {
+		fCurrentRow++;
+		return fCurrentRow < getNumberOfRows();
+	}
+	
+	@Override
+	public String[] getFieldNames() {
+		Object[] objKeys = fContext.getKeys();
+		String[] keys = new String[objKeys.length];
+		           
+		for(int i = 0; i < objKeys.length; i++) {
+			keys[i] = objKeys[i].toString();
 		}
-
-		for (Object oKey : fContext.getKeys()) {
-			String sKey = (String) oKey;
-			Object value = fContext.get(sKey);
-			if (fIteratedVars.contains(sKey)) {
-				// Iterated variable: put its n-th element
-				ctx.put(sKey, ((ArrayList) value).get(rowIndex));
-			} else {
-				// Copy it as-is
-				ctx.put(sKey, value);
-			}
+		
+		return keys;
+	}
+	
+	@Override
+	public Object getValueFor(String fieldName) {
+		if (fIteratedVars.contains(fieldName)) {
+			return ((List<?>)(fContext.get(fieldName))).get(fCurrentRow);
+		} else {
+			return fContext.get(fieldName);
 		}
 	}
+	
+	@Override
+	public void close() {
+		fContext = null;
+	}
+	
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public void initializeContext(Context ctx, int rowIndex)
+//			throws DataSourceException {
+//		if (rowIndex < 0 || rowIndex >= fRowCount) {
+//			throw new DataSourceException(String.format("Invalid row index. "
+//					+ "Valid row indexes are in the [0,%d] range.", fRowCount));
+//		}
+//
+//		for (Object oKey : fContext.getKeys()) {
+//			String sKey = (String) oKey;
+//			Object value = fContext.get(sKey);
+//			if (fIteratedVars.contains(sKey)) {
+//				// Iterated variable: put its n-th element
+//				ctx.put(sKey, ((List) value).get(rowIndex));
+//			} else {
+//				// Copy it as-is
+//				ctx.put(sKey, value);
+//			}
+//		}
+//	}
 
 	public void loadFromStream(InputStream is) throws DataSourceException {
 		try {
@@ -91,22 +102,40 @@ public class VelocityDataSource implements IDataSource {
 		validateIteratedVars();
 	}
 
-	public void setProperty(String name, String value)
-			throws DataSourceException {
-		if (PROPERTY_ITERATED_VARS.equals(name)) {
-			StringTokenizer tok = new StringTokenizer(value);
-			List<String> iterVars = new ArrayList<String>();
-			while (tok.hasMoreTokens()) {
-				iterVars.add(tok.nextToken());
-			}
-			if (iterVars.isEmpty()) {
-				throw new DataSourceException(
-						"Iterated variable list cannot be empty");
-			}
-			fIteratedVars = iterVars;
-		} else {
-			throw new DataSourceException("Unknown property: " + name);
+	/**
+	 * Space-separated list of one or more variables which will be iterated over
+	 * each row. These variables must all be lists with the same number of
+	 * elements. The initialized context for the n-th row will have their n-th
+	 * elements in variables with the same names as the lists. The rest of the
+	 * variables will be available as-is.
+	 * 
+	 * For instance, suppose we had these contents and this property was set to
+	 * "v w":
+	 * 
+	 * <code>
+	 * #set($v = [1, 2, 3])
+	 * #set($w = [2, 4, 6])
+	 * #set($z = 3)
+	 * </code>
+	 * 
+	 * This data source would have 3 rows: the first would have v = 1 and w = 2,
+	 * the second would have v = 2 and w = 4, and the last one would have v = 3
+	 * and w = 6. All three rows would have z = 3.
+	 * 
+	 * <emph>This property is required</emph>.
+	 */
+	@ConfigurationOption(description = "The names of the variables that should be used as test data. The list is space seperated.", defaultValue = "")
+	public void setIteratedVars(String value) throws DataSourceException {
+		StringTokenizer tok = new StringTokenizer(value);
+		List<String> iterVars = new ArrayList<String>();
+		while (tok.hasMoreTokens()) {
+			iterVars.add(tok.nextToken());
 		}
+		if (iterVars.isEmpty()) {
+			throw new DataSourceException(
+					"Iterated variable list cannot be empty");
+		}
+		fIteratedVars = iterVars;
 	}
 
 	/* PRIVATE METHODS */
@@ -153,12 +182,12 @@ public class VelocityDataSource implements IDataSource {
 						+ "this data source.");
 			}
 
-			if (!(value instanceof ArrayList)) {
+			if (!(value instanceof List)) {
 				throw new DataSourceException("Iterated variable " + var
 						+ " does not contain a list literal.");
 			}
 
-			ArrayList arrList = (ArrayList) value;
+			List arrList = (List) value;
 			if (fRowCount != -1) {
 				if (arrList.size() != fRowCount) {
 					throw new DataSourceException("Iterated variable " + var

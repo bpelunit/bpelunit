@@ -2,11 +2,14 @@ package org.bpelunit.framework.control.datasource;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.velocity.VelocityContext;
 import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.util.ExtensionRegistry;
 import org.bpelunit.framework.exception.DataSourceException;
@@ -95,15 +98,47 @@ public class DataSourceUtil {
 		}
 
 		for (Entry<String, String> prop : properties.entrySet()) {
-			dataSource.setProperty(prop.getKey(), prop.getValue());
+			setProperty(dataSource, prop.getKey(), prop.getValue());
 		}
 
-		// Contents should be loaded after setting the properties, as these might
+		// Contents should be loaded after setting the properties, as these
+		// might
 		// have information that is required to correctly interpret the input
 		// stream, such as text encoding, for instance.
 		dataSource.loadFromStream(istream);
 
 		return dataSource;
+	}
+
+	private static void setProperty(IDataSource ds, String key, String value)
+			throws DataSourceException {
+		try {
+			Method method = ds.getClass().getMethod("set" + toFirstUpper(key),
+					String.class);
+			method.invoke(ds, value);
+		} catch (InvocationTargetException e) {
+			Throwable targetException = e.getTargetException();
+			if (targetException instanceof DataSourceException) {
+				throw (DataSourceException) targetException;
+			} else {
+				throw new DataSourceException("Property " + key
+						+ " is invalid for data source", targetException);
+			}
+		} catch (Exception e) {
+			throw new DataSourceException("Property " + key
+					+ " is invalid for data source", e);
+		}
+	}
+
+	/**
+	 * Package protected for tests
+	 */
+	static String toFirstUpper(String s) {
+		if (s == null || "".equals(s)) {
+			return "";
+		}
+
+		return s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
 
 	/**
@@ -144,9 +179,9 @@ public class DataSourceUtil {
 			String externalReference) throws DataSourceException {
 		if (contents != null) {
 			if (externalReference != null) {
-				throw new DataSourceException("Inline content and external " +
-						"references cannot be used at the same time in a " +
-						"data source: it is ambiguous");
+				throw new DataSourceException("Inline content and external "
+						+ "references cannot be used at the same time in a "
+						+ "data source: it is ambiguous");
 			}
 			return new ByteArrayInputStream(contents.getBytes());
 		} else if (externalReference != null) {
@@ -158,6 +193,17 @@ public class DataSourceUtil {
 		}
 	}
 
+	public static void initializeContext(VelocityContext ctx, IDataSource ds) {
+		if(ds.next()) {
+			String[] fieldNames = ds.getFieldNames();
+			
+			for(String fieldName : fieldNames) {
+				System.out.println("Put " + fieldName + " -> " + ds.getValueFor(fieldName));
+				ctx.put(fieldName, ds.getValueFor(fieldName));
+			}
+		}
+	}
+	
 	/************* PRIVATE METHODS ****************/
 
 	private static Map<String, String> createPropertyMap(
