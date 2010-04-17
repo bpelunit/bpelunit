@@ -23,6 +23,9 @@
 
 	<target name="init">
 		<mkdir dir="temp" />
+		<mkdir dir="${temp-class-dir}/src" />
+		<mkdir dir="${temp-class-dir}/bin" />
+		
 		<mkdir dir="${builddir}" />
 		<mkdir dir="${builddir}/lib" />
 		<mkdir dir="${builddir}/conf" />
@@ -40,7 +43,7 @@
 
 	<!-- ========================== build ==== -->
 
-	<target name="build" depends="clean, init, buildframework">
+	<target name="build" depends="clean, init, buildframework, datasource.csv, datasource.excel, datasource.ods, jar">
 	</target>
 
 
@@ -93,10 +96,6 @@
 		<!-- Call oracle deployer build -->
 		<antcall target="buildoracle" />
 
-
-		<!--jar the framework and clients -->
-		<jar destfile="${bpelunit.jar}" basedir="${temp-class-dir}" />
-
 		<!-- copy lib files -->
 		<copy todir="${builddir}/lib">
 			<fileset dir="../org.bpelunit.framework/lib">
@@ -136,10 +135,6 @@
 		<copy todir="${builddir}/doc/licenses">
 			<fileset dir="../org.bpelunit.framework/3rdpartylicenses/" />
 		</copy>
-
-		<!-- Remove temp dir -->
-		<delete dir="temp" />
-
 	</target>
 
 	<target name="buildoracle" if="OraBPELPM">
@@ -154,4 +149,75 @@
 
 	</target>
 
+	<target name="datasource.csv">
+		<property name="datasource.csv.project" location="../org.bpelunit.framework.control.datasource.csv" />
+
+		<javac srcdir="${datasource.csv.project}/src" destdir="${temp-class-dir}">
+			<classpath>
+				<fileset dir="../org.bpelunit.framework/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${datasource.csv.project}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<copy todir="${builddir}/lib">
+			<fileset dir="${datasource.csv.project}/lib">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="datasource.excel">
+		<property name="datasource.excel.project" value="org.bpelunit.framework.control.datasource.excel" />
+
+		<javac srcdir="../${datasource.excel.project}/src" destdir="${temp-class-dir}">
+			<classpath>
+				<fileset dir="../org.bpelunit.framework/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="../${datasource.excel.project}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<copy todir="${builddir}/lib">
+			<fileset dir="../${datasource.excel.project}/lib">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="datasource.ods">
+		<property name="datasource.ods.project" value="org.bpelunit.framework.control.datasource.ods" />
+
+		<javac srcdir="../${datasource.ods.project}/src" destdir="${temp-class-dir}">
+			<classpath>
+				<fileset dir="../org.bpelunit.framework/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="../${datasource.ods.project}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<copy todir="${builddir}/lib">
+			<fileset dir="../${datasource.ods.project}/lib">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="jar">
+		<!--jar the framework and clients -->
+		<jar destfile="${bpelunit.jar}" basedir="${temp-class-dir}" />
+		
+		<!-- Remove temp dir -->
+		<delete dir="temp" />
+	</target>
+	
 </project>
