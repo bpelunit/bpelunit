@@ -1,2 +1,6 @@
 bin
 build
+velocity.log
+cobertura.ser
+junit-report
+cobertura-report
