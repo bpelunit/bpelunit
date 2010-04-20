@@ -1,0 +1,7 @@
+<b:AirlineReservationSyncProcessResponse 
+	xmlns:b="http://xmlns.oracle.com/AirlineReservationSync">
+	
+	<b:result some="Hallo">false</b:result>
+	<b:bookingNumber>589588</b:bookingNumber>
+	
+</b:AirlineReservationSyncProcessResponse>

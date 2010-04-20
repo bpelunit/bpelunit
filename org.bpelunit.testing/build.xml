@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     18.04.2010 22:07:09                                                        
+
+     BPELUnit    
+     Testing script for running all of BPELUnit's unit tests and measuring
+     the test coverage.
+                   
+     dluebke                                                                
+     ====================================================================== -->
+<project name="BPELUnit" default="run-tests">
+	<description>
+            Testing script for running all of BPELUnit's unit tests and measuring
+    </description>
+
+	<property name="dir.build" location="build" />
+	<property name="dir.build.instrumented" location="build/bin-instrumented" />
+	<property name="dir.cobertura" location="cobertura" />
+	<property name="dir.reports.junit" location="junit-report" />
+	<property name="dir.coverage.cobertura" location="cobertura-report" />
+
+	<property name="xmlbeans.lib" location="../org.bpelunit.framework/lib" />
+	<path id="xmlbeans.path">
+		<fileset dir="${xmlbeans.lib}" includes="*.jar" />
+	</path>
+
+	<path id="cobertura.classpath">
+		<fileset dir="${dir.cobertura}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="classpath.test">
+		<pathelement location="${dir.build}/bin" />
+		<pathelement location="lib/junit-4.8.2.jar" />
+	</path>
+
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+
+	<target name="init">
+		<mkdir dir="${dir.build}" />
+		<mkdir dir="${dir.build}/bin" />
+		<mkdir dir="${dir.build.instrumented}" />
+		<mkdir dir="${dir.reports.junit}" />
+		<mkdir dir="resources" />
+	</target>
+
+	<target name="run-tests" depends="clean, init, test-build, copy-testdata">
+		<junit fork="true">
+			<classpath>
+				<dirset dir="${dir.build.instrumented}" />
+				<dirset dir="${dir.build}/bin" />
+				<fileset dir="${dir.build}/lib" includes="**/*.jar" />
+			</classpath>
+			<classpath refid="cobertura.classpath" />
+			<classpath refid="classpath.test" />
+
+			<formatter type="xml" />
+
+			<batchtest todir="${dir.reports.junit}" fork="true">
+				<fileset dir="${dir.build}/bin">
+					<include name="**/*Test.class" />
+					<exclude name="**/ProcessUnderTest.class" />
+					<exclude name="**/Abstract*Test.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<junitreport todir="${dir.reports.junit}">
+			<fileset dir="${dir.reports.junit}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${dir.reports.junit}" />
+		</junitreport>
+		
+		<cobertura-report srcdir="${dir.build}/src" destdir="${dir.coverage.cobertura}" format="xml" />
+		<cobertura-report destdir="${dir.coverage.cobertura}">
+			<fileset dir="${dir.build}/src">
+				<include name="**/*.java" />
+			</fileset>
+		</cobertura-report>
+	</target>
+
+	<target name="test-build" depends="copy-libs, xmlbeans, copy-sources, copy-tests">
+
+		<javac srcdir="${dir.build}/src" destdir="${dir.build}/bin" debug="on">
+			<classpath>
+				<fileset dir="${dir.build}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<javac srcdir="${dir.build}/src-test" destdir="${dir.build}/bin" debug="on">
+			<classpath>
+				<fileset dir="${dir.build}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<cobertura-instrument todir="${dir.build.instrumented}">
+			<fileset dir="${dir.build}">
+				<include name="**/*.class" />
+				<exclude name="**/*Test.class" />
+			</fileset>
+		</cobertura-instrument>
+
+		<copy todir="${dir.build}/bin">
+			<fileset dir="${dir.build}/src-test">
+				<include name="**/*" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="xmlbeans">
+		<taskdef name="xmlbean" classname="org.apache.xmlbeans.impl.tool.XMLBean" classpathref="xmlbeans.path" />
+		<xmlbean schema="../org.bpelunit.framework/schema" javasource="1.5" srcgendir="${dir.build}/src" classgendir="${dir.build}/bin" classpathref="xmlbeans.path" />
+	</target>
+
+	<target name="copy-testdata">
+		<copy todir="resources">
+			<fileset dir="../org.bpelunit.framework/resources">
+				<include name="**/*" />
+			</fileset>
+
+		</copy>
+	</target>
+
+
+	<target name="copy-libs">
+		<mkdir dir="${dir.build}/lib" />
+		<copy todir="${dir.build}/lib">
+			<fileset dir="../org.bpelunit.framework/lib">
+				<include name="**/*" />
+			</fileset>
+			<!--
+			<fileset dir="../org.bpelunit.framework.client.ant/lib">
+				<include name="**/*" />
+				<exclude name="**/*ant*.jar" />
+			</fileset>
+			<fileset dir="../org.bpelunit.framework.client.command/lib">
+				<include name="**/*" />
+			</fileset>
+			-->
+			<!--<fileset dir="../org.bpelunit.framework.client.eclipse/lib">
+				<include name="**/*" />
+			</fileset>
+			-->
+			<!--<fileset dir="../org.bpelunit.framework.control.datasource.csv/lib">
+				<include name="**/*" />
+			</fileset>
+			-->
+			<fileset dir="../org.bpelunit.framework.control.datasource.excel/lib">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="../org.bpelunit.framework.control.datasource.ods/lib">
+				<include name="**/*" />
+			</fileset>
+			<!--<fileset dir="../org.bpelunit.toolsupport/lib">
+				<include name="**/*" />
+			</fileset>
+			-->
+			<fileset dir="lib">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-sources">
+		<copy todir="${dir.build}/src">
+			<fileset dir="../org.bpelunit.framework/src">
+				<include name="**/*" />
+			</fileset>
+			<!--
+			<fileset dir="../org.bpelunit.framework.client.ant/src">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="../org.bpelunit.framework.client.command/src">
+				<include name="**/*" />
+			</fileset>
+			-->
+			<!--<fileset dir="../org.bpelunit.framework.client.eclipse/src">
+				<include name="**/*" />
+			</fileset>
+			-->
+			<fileset dir="../org.bpelunit.framework.control.datasource.csv/src">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="../org.bpelunit.framework.control.datasource.excel/src">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="../org.bpelunit.framework.control.datasource.ods/src">
+				<include name="**/*" />
+			</fileset>
+			<!--<fileset dir="../org.bpelunit.toolsupport/src">
+				<include name="**/*" />
+			</fileset>
+			-->
+		</copy>
+	</target>
+
+	<target name="copy-tests">
+		<copy todir="${dir.build}/src-test">
+			<fileset dir="../org.bpelunit.framework/src-test">
+				<include name="**/*" />
+			</fileset>
+			<!--<fileset dir="../org.bpelunit.framework.client.ant/src-test">
+				<include name="**/*" />
+			</fileset>
+			-->
+			<!--<fileset dir="../org.bpelunit.framework.client.command/src-test">
+				<include name="**/*" />
+			</fileset>
+			-->
+			<!--<fileset dir="../org.bpelunit.framework.client.eclipse/src-test">
+				<include name="**/*" />
+			</fileset>
+			-->
+			<fileset dir="../org.bpelunit.framework.control.datasource.csv/src-test">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="../org.bpelunit.framework.control.datasource.excel/src-test">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="../org.bpelunit.framework.control.datasource.ods/src-test">
+				<include name="**/*" />
+			</fileset>
+			<!--<fileset dir="../org.bpelunit.toolsupport/src-test">
+				<include name="**/*" />
+			</fileset>
+			-->
+		</copy>
+	</target>
+
+	<target name="clean">
+		<delete dir="${dir.build}" />
+		<delete dir="${dir.reports.junit}" />
+		<delete dir="${dir.coverage.cobertura}" />
+		<delete dir="resources" />
+		<delete file="cobertura.ser" />
+	</target>
+</project>

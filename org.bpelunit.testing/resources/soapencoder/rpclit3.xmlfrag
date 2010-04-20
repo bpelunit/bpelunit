@@ -1,0 +1,7 @@
+<wns:NewOperation xmlns:wns="http://test.com/NewOperation">
+<someFirstPart>
+	<tns:me name="Phil" xmlns:tns="http://xxx" />
+</someFirstPart>
+
+<someSecondPart>directStringPart</someSecondPart>
+</wns:NewOperation>

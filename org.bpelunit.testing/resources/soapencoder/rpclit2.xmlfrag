@@ -1,0 +1,11 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+	<SOAP-ENV:Header/>
+	<SOAP-ENV:Body>
+		<rpcwrappernsprefix:NewOperation xmlns:rpcwrappernsprefix="http://www.example.org/MyPartner/">
+			<someFirstPart>
+				<tns:me xmlns:tns="http://xxx" name="Phil"/>
+			</someFirstPart>
+			<someSecondPart>directStringPart</someSecondPart>
+		</rpcwrappernsprefix:NewOperation>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

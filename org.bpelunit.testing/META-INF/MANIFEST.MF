@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: org.bpelunit.testing
+Bundle-Version: 1.4.0
+Bundle-Vendor: BPELUnit Project
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

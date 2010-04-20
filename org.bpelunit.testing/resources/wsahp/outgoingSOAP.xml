@@ -1,0 +1,8 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+	<SOAP-ENV:Header/>
+	<SOAP-ENV:Body>
+		<tns:about xmlns:tns="http://xxx">
+			<tns:me name="Phil"/>
+		</tns:about>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

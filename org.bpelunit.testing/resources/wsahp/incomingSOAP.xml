@@ -1,0 +1,13 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+	<SOAP-ENV:Header>
+		<wsa:MessageID>kjasdhfjsdbksjdgdsrhfdgjkdfjk</wsa:MessageID>
+		<wsa:ReplyTo>
+			<wsa:Address>http://return.to.me/</wsa:Address>
+		</wsa:ReplyTo>
+	</SOAP-ENV:Header>
+	<SOAP-ENV:Body>
+		<tns:about xmlns:tns="http://xxx">
+			<tns:me name="Phil"/>
+		</tns:about>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
