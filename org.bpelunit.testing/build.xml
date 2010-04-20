@@ -194,6 +194,9 @@
 			<fileset dir="../org.bpelunit.framework.control.datasource.ods/src">
 				<include name="**/*" />
 			</fileset>
+			<fileset dir="../org.bpelunit.framework.control.datasource.html/src">
+				<include name="**/*" />
+			</fileset>
 			<!--<fileset dir="../org.bpelunit.toolsupport/src">
 				<include name="**/*" />
 			</fileset>
@@ -225,6 +228,9 @@
 				<include name="**/*" />
 			</fileset>
 			<fileset dir="../org.bpelunit.framework.control.datasource.ods/src-test">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="../org.bpelunit.framework.control.datasource.html/src-test">
 				<include name="**/*" />
 			</fileset>
 			<!--<fileset dir="../org.bpelunit.toolsupport/src-test">
