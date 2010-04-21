@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit Open Document Data Source Plug-in
-Bundle-SymbolicName: org.bpelunit.framework.control.datasource.ods
+Bundle-SymbolicName: org.bpelunit.framework.control.datasource.ods;singleton:=true
 Bundle-Version: 1.4.0
 Bundle-Vendor: BPELUnit Project
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
