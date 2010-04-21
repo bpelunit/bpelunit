@@ -238,6 +238,11 @@
 			</fileset>
 			-->
 		</copy>
+                <copy todir="${dir.build}/resources">
+                        <fileset dir="../org.bpelunit.framework/resources">
+                                <include name="**/*" />
+                        </fileset>
+                </copy>
 	</target>
 
 	<target name="clean">
