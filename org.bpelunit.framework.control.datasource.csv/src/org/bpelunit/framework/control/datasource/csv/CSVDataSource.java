@@ -47,15 +47,6 @@ public class CSVDataSource implements IDataSource {
 		}
 	}
 
-	public boolean next() {
-	    try {
-	        setRow(currentLineNumber + 1);
-	        return true;
-	    } catch (DataSourceException ex) {
-	        return false;
-	    }
-	}
-
 	private String[] parseLine(String currentLine) {
 		return currentLine.split(separator);
 	}
