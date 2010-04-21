@@ -127,7 +127,6 @@
 			<fileset dir="../org.bpelunit.framework/resources">
 				<include name="**/*" />
 			</fileset>
-
 		</copy>
 	</target>
 
@@ -138,33 +137,12 @@
 			<fileset dir="../org.bpelunit.framework/lib">
 				<include name="**/*" />
 			</fileset>
-			<!--
-			<fileset dir="../org.bpelunit.framework.client.ant/lib">
-				<include name="**/*" />
-				<exclude name="**/*ant*.jar" />
-			</fileset>
-			<fileset dir="../org.bpelunit.framework.client.command/lib">
-				<include name="**/*" />
-			</fileset>
-			-->
-			<!--<fileset dir="../org.bpelunit.framework.client.eclipse/lib">
-				<include name="**/*" />
-			</fileset>
-			-->
-			<!--<fileset dir="../org.bpelunit.framework.control.datasource.csv/lib">
-				<include name="**/*" />
-			</fileset>
-			-->
 			<fileset dir="../org.bpelunit.framework.control.datasource.excel/lib">
 				<include name="**/*" />
 			</fileset>
 			<fileset dir="../org.bpelunit.framework.control.datasource.ods/lib">
 				<include name="**/*" />
 			</fileset>
-			<!--<fileset dir="../org.bpelunit.toolsupport/lib">
-				<include name="**/*" />
-			</fileset>
-			-->
 			<fileset dir="lib">
 				<include name="**/*" />
 			</fileset>
@@ -176,18 +154,6 @@
 			<fileset dir="../org.bpelunit.framework/src">
 				<include name="**/*" />
 			</fileset>
-			<!--
-			<fileset dir="../org.bpelunit.framework.client.ant/src">
-				<include name="**/*" />
-			</fileset>
-			<fileset dir="../org.bpelunit.framework.client.command/src">
-				<include name="**/*" />
-			</fileset>
-			-->
-			<!--<fileset dir="../org.bpelunit.framework.client.eclipse/src">
-				<include name="**/*" />
-			</fileset>
-			-->
 			<fileset dir="../org.bpelunit.framework.control.datasource.csv/src">
 				<include name="**/*" />
 			</fileset>
@@ -200,10 +166,6 @@
 			<fileset dir="../org.bpelunit.framework.control.datasource.html/src">
 				<include name="**/*" />
 			</fileset>
-			<!--<fileset dir="../org.bpelunit.toolsupport/src">
-				<include name="**/*" />
-			</fileset>
-			-->
 		</copy>
 	</target>
 
@@ -212,18 +174,6 @@
 			<fileset dir="../org.bpelunit.framework/src-test">
 				<include name="**/*" />
 			</fileset>
-			<!--<fileset dir="../org.bpelunit.framework.client.ant/src-test">
-				<include name="**/*" />
-			</fileset>
-			-->
-			<!--<fileset dir="../org.bpelunit.framework.client.command/src-test">
-				<include name="**/*" />
-			</fileset>
-			-->
-			<!--<fileset dir="../org.bpelunit.framework.client.eclipse/src-test">
-				<include name="**/*" />
-			</fileset>
-			-->
 			<fileset dir="../org.bpelunit.framework.control.datasource.csv/src-test">
 				<include name="**/*" />
 			</fileset>
@@ -236,10 +186,6 @@
 			<fileset dir="../org.bpelunit.framework.control.datasource.html/src-test">
 				<include name="**/*" />
 			</fileset>
-			<!--<fileset dir="../org.bpelunit.toolsupport/src-test">
-				<include name="**/*" />
-			</fileset>
-			-->
 		</copy>
                 <copy todir="${dir.build}/resources">
                         <fileset dir="../org.bpelunit.framework/resources">
