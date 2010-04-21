@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.util.ExtensionRegistry;
@@ -32,6 +33,7 @@ import org.bpelunit.framework.xml.suite.XMLTestSuite;
  * @version 1.1
  */
 public class DataSourceUtil {
+	private static final Logger logger = Logger.getLogger(DataSourceUtil.class);
 
 	/**
 	 * Creates the effective IDataSource for a test case inside a test suite. It
@@ -241,7 +243,7 @@ public class DataSourceUtil {
 			String[] fieldNames = ds.getFieldNames();
 			
 			for(String fieldName : fieldNames) {
-				System.out.println("Put " + fieldName + " -> " + ds.getValueFor(fieldName));
+				logger.debug("Put " + fieldName + " -> " + ds.getValueFor(fieldName));
 				ctx.put(fieldName, ds.getValueFor(fieldName));
 			}
 		}
