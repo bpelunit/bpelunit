@@ -124,7 +124,7 @@ public class VelocityDataSource implements IDataSource {
 	 * 
 	 * <emph>This property is required</emph>.
 	 */
-	@ConfigurationOption(description = "The names of the variables that should be used as test data. The list is space seperated.", defaultValue = "")
+	@ConfigurationOption(description = "The names of the variables that should be used as test data. The list is space separated.", defaultValue = "")
 	public void setIteratedVars(String value) throws DataSourceException {
 		StringTokenizer tok = new StringTokenizer(value);
 		List<String> iterVars = new ArrayList<String>();
