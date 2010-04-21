@@ -19,7 +19,7 @@ import org.junit.BeforeClass;
  * @author Philip Mayer
  * 
  */
-public class SimpleTest {
+public abstract class SimpleTest {
 
 	@BeforeClass
 	public static void setUp() throws ConfigurationException {

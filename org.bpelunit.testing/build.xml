@@ -62,6 +62,7 @@
 					<include name="**/*Test.class" />
 					<exclude name="**/ProcessUnderTest.class" />
 					<exclude name="**/Abstract*Test.class" />
+					<exclude name="**/SimpleTest.class" />
 				</fileset>
 			</batchtest>
 		</junit>
