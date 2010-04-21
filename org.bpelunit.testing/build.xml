@@ -99,10 +99,13 @@
 			</classpath>
 		</javac>
 
+                <delete file="cobertura.ser"/>
 		<cobertura-instrument todir="${dir.build.instrumented}">
 			<fileset dir="${dir.build}">
 				<include name="**/*.class" />
 				<exclude name="**/*Test.class" />
+                                <exclude name="bin/org/bpelunit/framework/xml/**"/>
+                                <exclude name="bin/schemaorg_apache_xmlbeans/**"/>
 			</fileset>
 		</cobertura-instrument>
 
