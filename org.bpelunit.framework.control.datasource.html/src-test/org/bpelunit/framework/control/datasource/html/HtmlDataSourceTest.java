@@ -99,6 +99,26 @@ public class HtmlDataSourceTest {
 	}
 	
 	@Test
+	public void testTableWithoutManyTags() throws Exception {
+		this.ds.loadFromStream(getStream("table-without-endtags"));
+		
+		assertEquals(1, ds.getNumberOfRows());
+		
+		String[] fieldNames = ds.getFieldNames();
+		assertEquals(3, fieldNames.length);
+		assertEquals("A", fieldNames[0]);
+		assertEquals("B", fieldNames[1]);
+		assertEquals("C", fieldNames[2]);
+		
+		assertTrue(ds.next());
+		assertEquals("1", ds.getValueFor("A"));
+		assertEquals("2", ds.getValueFor("B"));
+		assertEquals("3", ds.getValueFor("C"));
+		
+		assertFalse(ds.next());
+	}
+	
+	@Test
 	public void testSecondTableWithHeaderAndOneRow() throws Exception {
 		this.ds.setTable("2");
 		this.ds.loadFromStream(getStream("two-tables"));
