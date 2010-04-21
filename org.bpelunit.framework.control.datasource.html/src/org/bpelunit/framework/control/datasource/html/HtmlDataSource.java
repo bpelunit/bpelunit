@@ -157,15 +157,6 @@ public class HtmlDataSource implements IDataSource {
 	    currentRow = data.get(currentRowIndex);
 	}
 
-	public boolean next() {
-	    try {
-	        setRow(currentRowIndex + 1);
-	        return true;
-	    } catch (DataSourceException ex) {
-	        return false;
-	    }
-	}
-
 	@ConfigurationOption(defaultValue = "1", description = "The index of the table in the HTML file in which the data is contained")
 	public void setTable(String value) {
 		checkIfConfigurationMayBeChanged();

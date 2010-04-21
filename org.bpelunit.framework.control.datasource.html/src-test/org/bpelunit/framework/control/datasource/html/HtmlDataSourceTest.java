@@ -55,8 +55,6 @@ public class HtmlDataSourceTest {
 		assertEquals("A", fieldNames[0]);
 		assertEquals("B", fieldNames[1]);
 		assertEquals("C", fieldNames[2]);
-		
-		assertFalse(ds.next());
 	}
 	
 	@Test
@@ -70,12 +68,32 @@ public class HtmlDataSourceTest {
 		assertEquals("B", fieldNames[1]);
 		assertEquals("C", fieldNames[2]);
 		
-		assertTrue(ds.next());
+		ds.setRow(0);
+		assertEquals("1", ds.getValueFor("A"));
+		assertEquals("2", ds.getValueFor("B"));
+		assertEquals("3", ds.getValueFor("C"));
+	}
+	
+	@Test
+	public void testTableWithHeaderAndTwoRows() throws Exception {
+		this.ds.loadFromStream(getStream("table-with-header-and-two-rows"));
+		assertEquals(2, ds.getNumberOfRows());
+		
+		String[] fieldNames = ds.getFieldNames();
+		assertEquals(3, fieldNames.length);
+		assertEquals("A", fieldNames[0]);
+		assertEquals("B", fieldNames[1]);
+		assertEquals("C", fieldNames[2]);
+		
+		ds.setRow(0);
 		assertEquals("1", ds.getValueFor("A"));
 		assertEquals("2", ds.getValueFor("B"));
 		assertEquals("3", ds.getValueFor("C"));
 		
-		assertFalse(ds.next());
+		ds.setRow(1);
+		assertEquals("4", ds.getValueFor("A"));
+		assertEquals("5", ds.getValueFor("B"));
+		assertEquals("6", ds.getValueFor("C"));
 	}
 	
 	@Test
@@ -90,12 +108,10 @@ public class HtmlDataSourceTest {
 		assertEquals("B", fieldNames[1]);
 		assertEquals("C", fieldNames[2]);
 		
-		assertTrue(ds.next());
+		ds.setRow(0);
 		assertEquals("1", ds.getValueFor("A"));
 		assertEquals("2", ds.getValueFor("B"));
 		assertEquals("3", ds.getValueFor("C"));
-		
-		assertFalse(ds.next());
 	}
 	
 	@Test
@@ -110,12 +126,10 @@ public class HtmlDataSourceTest {
 		assertEquals("B", fieldNames[1]);
 		assertEquals("C", fieldNames[2]);
 		
-		assertTrue(ds.next());
+		ds.setRow(0);
 		assertEquals("1", ds.getValueFor("A"));
 		assertEquals("2", ds.getValueFor("B"));
 		assertEquals("3", ds.getValueFor("C"));
-		
-		assertFalse(ds.next());
 	}
 	
 	@Test
@@ -130,12 +144,10 @@ public class HtmlDataSourceTest {
 		assertEquals("B", fieldNames[1]);
 		assertEquals("C", fieldNames[2]);
 		
-		assertTrue(ds.next());
+		ds.setRow(0);
 		assertEquals("1", ds.getValueFor("A"));
 		assertEquals("2", ds.getValueFor("B"));
 		assertEquals("3", ds.getValueFor("C"));
-		
-		assertFalse(ds.next());
 	}
 	
 	@Test
@@ -149,12 +161,10 @@ public class HtmlDataSourceTest {
 		assertEquals("B", fieldNames[1]);
 		assertEquals("C", fieldNames[2]);
 		
-		assertTrue(ds.next());
+		ds.setRow(0);
 		assertEquals("1", ds.getValueFor("A"));
 		assertEquals("2", ds.getValueFor("B"));
 		assertEquals("", ds.getValueFor("C"));
-		
-		assertFalse(ds.next());
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
