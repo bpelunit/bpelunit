@@ -66,15 +66,6 @@ public class ExcelDataSource implements IDataSource {
 	    }
 	}
 
-	public boolean next() {
-	    try {
-	        setRow(currentDataRow + 1);
-	        return true;
-	    } catch (DataSourceException ex) {
-	        return false;
-	    }
-	}
-
 	@Override
 	public void loadFromStream(InputStream data) throws DataSourceException {
 		Workbook workbook = readWorkbook(data);
