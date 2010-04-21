@@ -67,15 +67,6 @@ public class OdsDataSource implements IDataSource {
 		}
 	}
 
-	public boolean next() {
-	    try {
-	        setRow(currentRowIndex);
-	        return true;
-	    } catch (DataSourceException ex) {
-	        return false;
-	    }
-	}
-
 	@Override
 	public void loadFromStream(InputStream data) throws DataSourceException {
 		OdfDocument ods;

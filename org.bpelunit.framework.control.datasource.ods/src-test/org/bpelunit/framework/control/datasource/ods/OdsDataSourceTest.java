@@ -1,8 +1,6 @@
 package org.bpelunit.framework.control.datasource.ods;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
 
@@ -51,8 +49,6 @@ public class OdsDataSourceTest {
 		assertEquals("AA", fieldNames[0]);
 		assertEquals("BB", fieldNames[1]);
 		assertEquals("CC", fieldNames[2]);
-
-		assertFalse(ds.next());
 	}
 
 	@Test
@@ -67,12 +63,10 @@ public class OdsDataSourceTest {
 		assertEquals("BB", fieldNames[1]);
 		assertEquals("CC", fieldNames[2]);
 
-		assertTrue(ds.next());
+		ds.setRow(0);
 		assertEquals("A", ds.getValueFor("AA"));
 		assertEquals("B", ds.getValueFor("BB"));
 		assertEquals("C", ds.getValueFor("CC"));
-
-		assertFalse(ds.next());
 	}
 
 	@Test
@@ -87,20 +81,20 @@ public class OdsDataSourceTest {
 		assertEquals("BB", fieldNames[1]);
 		assertEquals("CC", fieldNames[2]);
 
-		assertTrue(ds.next());
+		ds.setRow(0);
 		assertEquals("A", ds.getValueFor("AA"));
 		assertEquals("B", ds.getValueFor("BB"));
 		assertEquals("C", ds.getValueFor("CC"));
-		assertTrue(ds.next());
+
+		ds.setRow(1);
 		assertEquals("D", ds.getValueFor("AA"));
 		assertEquals("E", ds.getValueFor("BB"));
 		assertEquals("F", ds.getValueFor("CC"));
-		assertTrue(ds.next());
+
+		ds.setRow(2);
 		assertEquals("G", ds.getValueFor("AA"));
 		assertEquals("H", ds.getValueFor("BB"));
 		assertEquals("I", ds.getValueFor("CC"));
-
-		assertFalse(ds.next());
 	}
 
 	@Test
@@ -115,20 +109,20 @@ public class OdsDataSourceTest {
 		assertEquals("BB", fieldNames[1]);
 		assertEquals("CC", fieldNames[2]);
 
-		assertTrue(ds.next());
+		ds.setRow(0);
 		assertEquals("A", ds.getValueFor("AA"));
 		assertEquals("B", ds.getValueFor("BB"));
 		assertEquals("C", ds.getValueFor("CC"));
-		assertTrue(ds.next());
+
+		ds.setRow(1);
 		assertEquals("D", ds.getValueFor("AA"));
 		assertEquals("E", ds.getValueFor("BB"));
 		assertEquals("F", ds.getValueFor("CC"));
-		assertTrue(ds.next());
+
+		ds.setRow(2);
 		assertEquals("G", ds.getValueFor("AA"));
 		assertEquals("H", ds.getValueFor("BB"));
 		assertEquals("I", ds.getValueFor("CC"));
-
-		assertFalse(ds.next());
 	}
 
 	@Test
@@ -144,20 +138,20 @@ public class OdsDataSourceTest {
 		assertEquals("BB", fieldNames[1]);
 		assertEquals("CC", fieldNames[2]);
 
-		assertTrue(ds.next());
+		ds.setRow(0);
 		assertEquals("A", ds.getValueFor("AA"));
 		assertEquals("B", ds.getValueFor("BB"));
 		assertEquals("C", ds.getValueFor("CC"));
-		assertTrue(ds.next());
+
+		ds.setRow(1);
 		assertEquals("D", ds.getValueFor("AA"));
 		assertEquals("E", ds.getValueFor("BB"));
 		assertEquals("F", ds.getValueFor("CC"));
-		assertTrue(ds.next());
+
+		ds.setRow(2);
 		assertEquals("G", ds.getValueFor("AA"));
 		assertEquals("H", ds.getValueFor("BB"));
 		assertEquals("I", ds.getValueFor("CC"));
-
-		assertFalse(ds.next());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
