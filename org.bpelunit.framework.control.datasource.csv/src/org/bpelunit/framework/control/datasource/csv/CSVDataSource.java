@@ -23,6 +23,7 @@ public class CSVDataSource implements IDataSource {
 	private List<String> lines = null;
 	private String[] currentRecord = null;
 	private String separator = DEFAULT_SEPARATOR;
+	private int currentLineNumber = -1;
 
 	@Override
 	public String[] getFieldNames() {
@@ -36,14 +37,23 @@ public class CSVDataSource implements IDataSource {
 	}
 
 	@Override
-	public boolean next() {
-		if (lines.size() == 0) {
-			return false;
+	public void setRow(int index) throws DataSourceException {
+		if (index < lines.size()) {
+		    currentLineNumber = index;
+		    String line = lines.get(currentLineNumber);
+		    currentRecord = parseLine(line);
+		} else {
+		    throw new DataSourceException(String.format("Index %d out of bounds [0, %d]", index, lines.size() - 1));
 		}
+	}
 
-		String line = lines.remove(0);
-		currentRecord = parseLine(line);
-		return true;
+	public boolean next() {
+	    try {
+	        setRow(currentLineNumber + 1);
+	        return true;
+	    } catch (DataSourceException ex) {
+	        return false;
+	    }
 	}
 
 	private String[] parseLine(String currentLine) {

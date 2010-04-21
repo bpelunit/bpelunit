@@ -223,7 +223,7 @@ public class TestCase implements ITestArtefact {
 			Velocity.evaluate(ctx, sW, "setUpTestCase", fSetUpVelocityScript);
 		}
 		if (fDataSource != null) {
-			DataSourceUtil.initializeContext(ctx, fDataSource);
+			DataSourceUtil.initializeContext(ctx, fDataSource, fRowIndex);
 		}
 		return ctx;
 	}

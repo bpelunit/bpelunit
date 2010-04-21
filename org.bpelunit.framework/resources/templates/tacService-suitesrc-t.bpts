@@ -16,7 +16,7 @@
 
   <setUp>
     <dataSource type="velocity" src="tacService-data.vm">
-      <property name="iterated_vars">lines</property>
+      <property name="iteratedVars">lines</property>
     </dataSource>
   </setUp>
 

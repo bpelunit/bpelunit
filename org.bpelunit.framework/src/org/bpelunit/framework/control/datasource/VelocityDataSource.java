@@ -26,9 +26,15 @@ public class VelocityDataSource implements IDataSource {
 	}
 
 	@Override
-	public boolean next() {
-		fCurrentRow++;
-		return fCurrentRow < getNumberOfRows();
+	public void setRow(int index) throws DataSourceException {
+		if (index < fRowCount) {
+			fCurrentRow = index;
+		}
+		else {
+			throw new DataSourceException(
+				String.format("Index %d is out of bounds [0, %d]",
+					index, fRowCount - 1));
+		}
 	}
 	
 	@Override

@@ -6,7 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.velocity.context.Context;
 import org.bpelunit.framework.exception.DataSourceException;
 
 /**
@@ -68,23 +67,11 @@ public interface IDataSource {
 	 */
 	void loadFromStream(InputStream is) throws DataSourceException;
 
-	/**
-	 * Initializes the variables in the context <code>ctx</code> with the
-	 * contents of the <code>rowIndex</code>-th row of the test suite.
-	 * 
-	 * @param ctx Velocity context to be initialized. The context might not
-	 * be empty: do not clear it.
-	 * @param rowIndex Zero-based row index.
-	 * @throws DataSourceException There was a problem while initializing the
-	 * context variables with the contents of the <code>rowIndex</code>-th row.
-	 */
-	//void initializeContext(Context ctx, int rowIndex) throws DataSourceException;
+	String[] getFieldNames();
+	
+	Object getValueFor(String fieldName);
+	
+	void close();
 
-	public String[] getFieldNames();
-	
-	public boolean next();
-	
-	public Object getValueFor(String fieldName);
-	
-	public void close();
+	void setRow(int rowIndex) throws DataSourceException;
 }

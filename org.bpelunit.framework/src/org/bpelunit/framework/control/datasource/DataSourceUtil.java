@@ -238,14 +238,25 @@ public class DataSourceUtil {
 		}
 	}
 
-	public static void initializeContext(VelocityContext ctx, IDataSource ds) {
-		if(ds.next()) {
-			String[] fieldNames = ds.getFieldNames();
-			
-			for(String fieldName : fieldNames) {
-				logger.debug("Put " + fieldName + " -> " + ds.getValueFor(fieldName));
-				ctx.put(fieldName, ds.getValueFor(fieldName));
-			}
+	/**
+	 * Initializes the variables in the context <code>ctx</code> with the
+	 * contents of the <code>rowIndex</code>-th row from the <code>ds</code>
+	 * data source.
+	 *
+	 * @param ctx Velocity context to be initialized. The context might not
+	 * be empty: do not clear it.
+	 * @param ds Data source to extract the information from.
+	 * @param rowIndex Zero-based row index of the data source.
+	 * @throws DataSourceException There was a problem while initializing the
+	 * context variables with the contents of the <code>rowIndex</code>-th row.
+	 */
+	public static void initializeContext(VelocityContext ctx, IDataSource ds, int rowIndex) throws DataSourceException {
+		ds.setRow(rowIndex);
+		String[] fieldNames = ds.getFieldNames();
+
+		for(String fieldName : fieldNames) {
+			logger.debug("Put " + fieldName + " -> " + ds.getValueFor(fieldName));
+			ctx.put(fieldName, ds.getValueFor(fieldName));
 		}
 	}
 	

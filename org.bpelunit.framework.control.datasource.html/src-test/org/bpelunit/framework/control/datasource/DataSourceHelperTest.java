@@ -104,8 +104,7 @@ public class DataSourceHelperTest {
 		}
 
 		@Override
-		public boolean next() {
-			return false;
+		public void setRow(int index) {
 		}
 
 		@Override

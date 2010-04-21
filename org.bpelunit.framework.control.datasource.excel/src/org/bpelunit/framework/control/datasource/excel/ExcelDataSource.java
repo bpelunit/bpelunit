@@ -26,9 +26,9 @@ public class ExcelDataSource implements IDataSource {
 
 	private Sheet sheet;
 	private List<String> headings;
-	private int headingRowIndex = 0;
-	private int startDataRowIndex = 1;
-	private int currentDataRow = startDataRowIndex - 1;
+	private final int headingRowIndex = 0;
+	private final int startDataRowIndex = 1;
+	private int currentDataRow = -1;
 	private short firstCellIndex = 0;
 	private int sheetIndex = DEFAULT_SHEET_INDEX;
 
@@ -44,7 +44,7 @@ public class ExcelDataSource implements IDataSource {
 
 	@Override
 	public String getValueFor(String fieldName) {
-		Row row = sheet.getRow(currentDataRow);
+		Row row = sheet.getRow(startDataRowIndex + currentDataRow);
 		int cellIndex = firstCellIndex + headings.indexOf(fieldName);
 
 		Cell cell = row.getCell(cellIndex);
@@ -56,15 +56,23 @@ public class ExcelDataSource implements IDataSource {
 	}
 
 	@Override
-	public boolean next() {
-		Row rowToCheck = sheet.getRow(currentDataRow + 1);
+	public void setRow(int index) throws DataSourceException {
+	    if (index < getNumberOfRows() && sheet.getRow(startDataRowIndex + index) != null) {
+	        currentDataRow = index;
+	    } else {
+	        throw new DataSourceException(
+	            String.format("Index %d out of bounds [0, %d]",
+	                index, getNumberOfRows()));
+	    }
+	}
 
-		if (rowToCheck == null) {
-			return false;
-		} else {
-			currentDataRow++;
-			return true;
-		}
+	public boolean next() {
+	    try {
+	        setRow(currentDataRow + 1);
+	        return true;
+	    } catch (DataSourceException ex) {
+	        return false;
+	    }
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package org.bpelunit.framework.control.datasource;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -168,10 +167,10 @@ public class VelocityDataSourceTest {
 	@Test
 	public void invalidRowsAreReported() throws Exception {
 		IDataSource ds = createDataSourceFromString("x", "#set($x=[1,2])");
-		assertTrue(ds.next());
-		assertTrue(ds.next());
-		assertFalse(ds.next());
-		assertFalse(ds.next());
+		try {
+			ds.setRow(5);
+			fail("Invalid row indexes should be reported");
+		} catch (DataSourceException ex) {}
 	}
 
 	/**
@@ -195,7 +194,7 @@ public class VelocityDataSourceTest {
 		final int z = 3;
 
 		for (int iRow = 0; iRow < ds.getNumberOfRows(); ++iRow) {
-			assertTrue(ds.next());
+			ds.setRow(iRow);
 			assertEquals(x[iRow], ds.getValueFor("x"));
 			assertEquals(y[iRow], ds.getValueFor("y"));
 			assertEquals(z, ds.getValueFor("z"));
@@ -228,24 +227,13 @@ public class VelocityDataSourceTest {
 		assertEquals(expectedRows.length, ds.getNumberOfRows());
 
 		for (int iRow = 0; iRow < ds.getNumberOfRows(); ++iRow) {
-			assertTrue(ds.next());
+			ds.setRow(iRow);
 			List actualLines = (List) ds.getValueFor("lines");
 			final String[] expectedLines = expectedRows[iRow];
 			assertEquals(expectedLines.length, actualLines.size());
 			for (int iLine = 0; iLine < expectedLines.length; ++iLine) {
 				assertEquals(expectedLines[iLine], actualLines.get(iLine));
 			}
-			
-//			VelocityContext ctx = new VelocityContext();
-//			ds.initializeContext(ctx, iRow);
-//
-//			List actualLines = (List) ctx.get("lines");
-//			final String[] expectedLines = expectedRows[iRow];
-//			assertEquals(expectedLines.length, actualLines.size());
-//			for (int iLine = 0; iLine < expectedLines.length; ++iLine) {
-//				assertEquals(expectedLines[iLine], actualLines.get(iLine));
-//			}
-			// TODO Remove block
 		}
 	}
 

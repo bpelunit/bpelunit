@@ -58,16 +58,24 @@ public class OdsDataSource implements IDataSource {
 	}
 
 	@Override
-	public boolean next() {
-		if(this.currentRowIndex == this.lastRow) {
-			return false;
+	public void setRow(int index) throws DataSourceException {
+		if(index < getNumberOfRows()) {
+			currentRowIndex = headingRowIndex + 1 + index;
+			currentRow = table.getRowByIndex(currentRowIndex);
 		} else {
-			this.currentRowIndex++;
-			this.currentRow = this.table.getRowByIndex(currentRowIndex);
-			return true;
+		    throw new DataSourceException(String.format("Index %d out of bounds [0, %d]", index, lastRow - 1));
 		}
 	}
-	
+
+	public boolean next() {
+	    try {
+	        setRow(currentRowIndex);
+	        return true;
+	    } catch (DataSourceException ex) {
+	        return false;
+	    }
+	}
+
 	@Override
 	public void loadFromStream(InputStream data) throws DataSourceException {
 		OdfDocument ods;

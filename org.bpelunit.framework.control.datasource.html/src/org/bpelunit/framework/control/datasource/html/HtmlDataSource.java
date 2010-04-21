@@ -86,8 +86,8 @@ public class HtmlDataSource implements IDataSource {
 	private List<String> headings;
 	private List<List<String>> data;
 	private List<String> currentRow;
-	private int numberOfRows;
 	private boolean hadRowOrColSpan = false;
+	private int currentRowIndex = -1;
 
 	@Override
 	public void close() {
@@ -103,7 +103,7 @@ public class HtmlDataSource implements IDataSource {
 
 	@Override
 	public int getNumberOfRows() {
-		return numberOfRows;
+		return data.size();
 	}
 
 	@Override
@@ -147,17 +147,23 @@ public class HtmlDataSource implements IDataSource {
 		}
 
 		this.headings = data.remove(0);
-		numberOfRows = data.size();
 	}
 
 	@Override
+	public void setRow(int index) throws DataSourceException {
+	    if (index >= getNumberOfRows())
+	        throw new DataSourceException(String.format("Index %d out of bounds [0, %d]", index, getNumberOfRows() - 1));
+	    currentRowIndex = index;
+	    currentRow = data.get(currentRowIndex);
+	}
+
 	public boolean next() {
-		if (data.size() == 0) {
-			return false;
-		} else {
-			this.currentRow = data.remove(0);
-			return true;
-		}
+	    try {
+	        setRow(currentRowIndex + 1);
+	        return true;
+	    } catch (DataSourceException ex) {
+	        return false;
+	    }
 	}
 
 	@ConfigurationOption(defaultValue = "1", description = "The index of the table in the HTML file in which the data is contained")
