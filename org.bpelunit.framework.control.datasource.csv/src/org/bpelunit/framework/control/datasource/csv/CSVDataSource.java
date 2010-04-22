@@ -13,6 +13,11 @@ import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.ext.IDataSource.DataSource;
 import org.bpelunit.framework.exception.DataSourceException;
 
+/**
+ * This data source can be used to read in CSV (comma separated value) files.
+ * 
+ * @author Daniel Luebke <bpelunit@daniel-luebke.de>
+ */
 @DataSource(name = "CSV Data Source", shortName = "CSV", contentTypes = {
 		"text/cvs", "text/plain" })
 public class CSVDataSource implements IDataSource {
@@ -39,11 +44,12 @@ public class CSVDataSource implements IDataSource {
 	@Override
 	public void setRow(int index) throws DataSourceException {
 		if (index < lines.size()) {
-		    currentLineNumber = index;
-		    String line = lines.get(currentLineNumber);
-		    currentRecord = parseLine(line);
+			currentLineNumber = index;
+			String line = lines.get(currentLineNumber);
+			currentRecord = parseLine(line);
 		} else {
-		    throw new DataSourceException(String.format("Index %d out of bounds [0, %d]", index, lines.size() - 1));
+			throw new DataSourceException(String.format(
+					"Index %d out of bounds [0, %d]", index, lines.size() - 1));
 		}
 	}
 

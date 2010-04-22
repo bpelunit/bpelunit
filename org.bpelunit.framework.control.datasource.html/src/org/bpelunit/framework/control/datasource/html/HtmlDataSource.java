@@ -14,6 +14,7 @@ import javax.swing.text.html.HTMLEditorKit.Parser;
 import javax.swing.text.html.HTMLEditorKit.ParserCallback;
 
 import org.bpelunit.framework.control.ext.IDataSource;
+import org.bpelunit.framework.control.ext.IDataSource.DataSource;
 import org.bpelunit.framework.exception.DataSourceException;
 
 /**
@@ -23,8 +24,9 @@ import org.bpelunit.framework.exception.DataSourceException;
  * <li>No rowspan/colspan
  * </ul>
  * 
- * @author F145410
+ * @author Daniel Luebke <bpelunit@daniel-luebke.de>
  */
+@DataSource(name="HTML Data Source", shortName="HTML", contentTypes={"text/html", "application/xhtml+xml", "application/xhtml+xml"})
 public class HtmlDataSource implements IDataSource {
 
 	private final class DataSourceHtmlParser extends ParserCallback {
@@ -110,13 +112,14 @@ public class HtmlDataSource implements IDataSource {
 	public Object getValueFor(String fieldName) {
 		int fieldIndex = this.headings.indexOf(fieldName);
 
-		if(fieldIndex < 0) {
-			throw new IllegalArgumentException("No row named \"" + fieldName + "\" found in HTML table");
+		if (fieldIndex < 0) {
+			throw new IllegalArgumentException("No row named \"" + fieldName
+					+ "\" found in HTML table");
 		}
-		
+
 		try {
 			return currentRow.get(fieldIndex);
-		} catch(IndexOutOfBoundsException e) {
+		} catch (IndexOutOfBoundsException e) {
 			// Unbalanced row. There should be such a field but isn't
 			return "";
 		}
@@ -151,10 +154,12 @@ public class HtmlDataSource implements IDataSource {
 
 	@Override
 	public void setRow(int index) throws DataSourceException {
-	    if (index >= getNumberOfRows())
-	        throw new DataSourceException(String.format("Index %d out of bounds [0, %d]", index, getNumberOfRows() - 1));
-	    currentRowIndex = index;
-	    currentRow = data.get(currentRowIndex);
+		if (index >= getNumberOfRows())
+			throw new DataSourceException(String.format(
+					"Index %d out of bounds [0, %d]", index,
+					getNumberOfRows() - 1));
+		currentRowIndex = index;
+		currentRow = data.get(currentRowIndex);
 	}
 
 	@ConfigurationOption(defaultValue = "1", description = "The index of the table in the HTML file in which the data is contained")

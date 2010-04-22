@@ -5,12 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bpelunit.framework.control.ext.IDataSource;
+import org.bpelunit.framework.control.ext.IDataSource.DataSource;
 import org.bpelunit.framework.exception.DataSourceException;
 import org.odftoolkit.odfdom.doc.OdfDocument;
 import org.odftoolkit.odfdom.doc.OdfSpreadsheetDocument;
 import org.odftoolkit.odfdom.doc.table.OdfTable;
 import org.odftoolkit.odfdom.doc.table.OdfTableRow;
 
+/**
+ * A data source for accessing Open Document Spreadsheet (ODS) compliant files
+ * (OpenOffice.org, KOffice, etc.). ODS is an official ISO standard, developed
+ * in an open manner and implemented in several office productivity products.
+ * 
+ * @author Daniel Luebke <bpelunit@daniel-luebke.de>
+ */
+@DataSource(name = "ODS Data Source", shortName = "ODS", contentTypes = {
+		"application/vnd.oasis.opendocument.spreadsheet",
+		"application/x-vnd.oasis.opendocument.spreadsheet" })
 public class OdsDataSource implements IDataSource {
 
 	private static final int DEFAULT_SHEET_INDEX = 0;
@@ -59,11 +70,12 @@ public class OdsDataSource implements IDataSource {
 
 	@Override
 	public void setRow(int index) throws DataSourceException {
-		if(index < getNumberOfRows()) {
+		if (index < getNumberOfRows()) {
 			currentRowIndex = headingRowIndex + 1 + index;
 			currentRow = table.getRowByIndex(currentRowIndex);
 		} else {
-		    throw new DataSourceException(String.format("Index %d out of bounds [0, %d]", index, lastRow - 1));
+			throw new DataSourceException(String.format(
+					"Index %d out of bounds [0, %d]", index, lastRow - 1));
 		}
 	}
 
@@ -78,20 +90,22 @@ public class OdsDataSource implements IDataSource {
 		} catch (DataSourceException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new DataSourceException("Error while reading the ODS data source", e);
+			throw new DataSourceException(
+					"Error while reading the ODS data source", e);
 		}
 	}
 
 	private void calculateRowCount() {
 		this.lastRow = this.headingRowIndex;
-		
-		while( isDataRow(this.lastRow + 1) ) {
+
+		while (isDataRow(this.lastRow + 1)) {
 			this.lastRow++;
 		}
 	}
 
 	private boolean isDataRow(int lastRow) {
-		return !StringUtils.isEmpty(this.table.getCellByPosition(this.firstCellIndex, lastRow).getStringValue());
+		return !StringUtils.isEmpty(this.table.getCellByPosition(
+				this.firstCellIndex, lastRow).getStringValue());
 	}
 
 	private void extractFieldNames() throws DataSourceException {

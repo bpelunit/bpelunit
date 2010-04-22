@@ -1,9 +1,12 @@
 package org.bpelunit.framework.control.datasource.csv;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
+import java.util.List;
 
+import org.bpelunit.framework.control.datasource.DataSourceHelper;
 import org.bpelunit.framework.exception.DataSourceException;
 import org.junit.After;
 import org.junit.Before;
@@ -26,6 +29,18 @@ public class CSVDataSourceTest {
 	private InputStream getStream(String fileName) {
 		return getClass().getResourceAsStream(fileName);
 	}
+
+	@Test
+	public void testMetaData() throws Exception {
+		List<String> validationMessages = DataSourceHelper.validateDataSourceAnnotation(ds.getClass());
+		assertEquals(validationMessages.toString(), 0, validationMessages.size());
+		
+		validationMessages = DataSourceHelper.validateMethodAnnotations(ds.getClass());
+		assertEquals(validationMessages.toString(), 0, validationMessages.size());
+		
+		assertTrue(DataSourceHelper.isValidConfigurationOption(ds, "separator"));
+		assertTrue(DataSourceHelper.isValidConfigurationOption(ds, "headers"));
+	}
 	
 	@Test(expected = DataSourceException.class)
 	public void testEmptyCSVFile() throws Exception {
@@ -40,7 +55,7 @@ public class CSVDataSourceTest {
 		assertEquals(1, ds.getNumberOfRows());
 		assertEquals(1, ds.getFieldNames().length);
 		assertEquals("A", ds.getFieldNames()[0]);
-		
+
 		ds.setRow(0);
 		assertEquals("A1", ds.getValueFor("A"));
 	}
@@ -48,7 +63,7 @@ public class CSVDataSourceTest {
 	@Test
 	public void testCSVFileWithHeaderAndThreeRowsAndTabSeparator()
 			throws Exception {
-		ds.setSeparator("\t");
+		DataSourceHelper.setConfigurationOption(ds, "separator", "\t");
 		ds.loadFromStream(getStream("header_3rows_tab.csv"));
 		assertEquals(3, ds.getNumberOfRows());
 
@@ -76,7 +91,7 @@ public class CSVDataSourceTest {
 	@Test
 	public void testCSVFileWithHeaderAndThreeRowsAndCommaSeparator()
 			throws Exception {
-		ds.setSeparator(",");
+		DataSourceHelper.setConfigurationOption(ds, "separator", ",");
 		ds.loadFromStream(getStream("header_3rows_comma.csv"));
 		assertEquals(3, ds.getNumberOfRows());
 
@@ -89,7 +104,7 @@ public class CSVDataSourceTest {
 		assertEquals("A1", ds.getValueFor("A"));
 		assertEquals("B1", ds.getValueFor("B"));
 		assertEquals("C1", ds.getValueFor("C"));
-		
+
 		ds.setRow(1);
 		assertEquals("A2", ds.getValueFor("A"));
 		assertEquals("B2", ds.getValueFor("B"));
@@ -103,7 +118,7 @@ public class CSVDataSourceTest {
 
 	@Test
 	public void testEmptyCSVFileWithDefinedHeaders() throws Exception {
-		ds.setHeaders(" D, E , F ");
+		DataSourceHelper.setConfigurationOption(ds, "headers", " D, E , F ");
 		ds.loadFromStream(getStream("empty.csv"));
 		assertEquals(0, ds.getNumberOfRows());
 
@@ -116,7 +131,7 @@ public class CSVDataSourceTest {
 	@Test
 	public void testCSVFileWithHeaderAndThreeRowsAndDefaultSeparatorWithDefinedHeaders()
 			throws Exception {
-		ds.setHeaders(" D, E , F ");
+		DataSourceHelper.setConfigurationOption(ds, "headers", " D, E , F ");
 		ds.loadFromStream(getStream("header_3rows_tab.csv"));
 		assertEquals(4, ds.getNumberOfRows());
 
@@ -149,8 +164,8 @@ public class CSVDataSourceTest {
 	@Test
 	public void testCSVFileWithHeaderAndThreeRowsAndCommaSeparatorWithDefinedHeaders()
 			throws Exception {
-		ds.setSeparator(",");
-		ds.setHeaders(" D, E , F ");
+		DataSourceHelper.setConfigurationOption(ds, "separator", ",");
+		DataSourceHelper.setConfigurationOption(ds, "headers", " D, E , F ");
 		ds.loadFromStream(getStream("header_3rows_comma.csv"));
 		assertEquals(4, ds.getNumberOfRows());
 

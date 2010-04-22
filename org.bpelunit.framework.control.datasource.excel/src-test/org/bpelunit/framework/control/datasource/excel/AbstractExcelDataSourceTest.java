@@ -3,7 +3,9 @@ package org.bpelunit.framework.control.datasource.excel;
 import static org.junit.Assert.*;
 
 import java.io.InputStream;
+import java.util.List;
 
+import org.bpelunit.framework.control.datasource.DataSourceHelper;
 import org.bpelunit.framework.exception.DataSourceException;
 import org.junit.After;
 import org.junit.Before;
@@ -14,8 +16,8 @@ public abstract class AbstractExcelDataSourceTest {
 	protected abstract String getFileSuffix();
 
 	private InputStream getStream(String filenameBody) {
-		return getClass().getResourceAsStream(filenameBody + "."
-				+ getFileSuffix());
+		return getClass().getResourceAsStream(
+				filenameBody + "." + getFileSuffix());
 	}
 
 	private ExcelDataSource ds;
@@ -30,6 +32,17 @@ public abstract class AbstractExcelDataSourceTest {
 		ds.close();
 	}
 
+	@Test
+	public void testMetaData() throws Exception {
+		List<String> validationMessages = DataSourceHelper.validateDataSourceAnnotation(ds.getClass());
+		assertEquals(validationMessages.toString(), 0, validationMessages.size());
+		
+		validationMessages = DataSourceHelper.validateMethodAnnotations(ds.getClass());
+		assertEquals(validationMessages.toString(), 0, validationMessages.size());
+		
+		assertTrue(DataSourceHelper.isValidConfigurationOption(ds, "sheet"));
+	}
+	
 	@Test(expected = DataSourceException.class)
 	public void testEmptySheet() throws Exception {
 		ds.loadFromStream(getStream("empty"));
@@ -40,7 +53,7 @@ public abstract class AbstractExcelDataSourceTest {
 		ds.loadFromStream(getStream("header_0rows"));
 
 		assertEquals(0, ds.getNumberOfRows());
-		
+
 		String[] fieldNames = ds.getFieldNames();
 		assertEquals(3, fieldNames.length);
 		assertEquals("AA", fieldNames[0]);
@@ -53,7 +66,7 @@ public abstract class AbstractExcelDataSourceTest {
 		ds.loadFromStream(getStream("header_1row"));
 
 		assertEquals(1, ds.getNumberOfRows());
-		
+
 		String[] fieldNames = ds.getFieldNames();
 		assertEquals(3, fieldNames.length);
 		assertEquals("AA", fieldNames[0]);
@@ -71,7 +84,7 @@ public abstract class AbstractExcelDataSourceTest {
 		ds.loadFromStream(getStream("header_3rows"));
 
 		assertEquals(3, ds.getNumberOfRows());
-		
+
 		String[] fieldNames = ds.getFieldNames();
 		assertEquals(3, fieldNames.length);
 		assertEquals("AA", fieldNames[0]);
@@ -82,12 +95,12 @@ public abstract class AbstractExcelDataSourceTest {
 		assertEquals("A", ds.getValueFor("AA"));
 		assertEquals("B", ds.getValueFor("BB"));
 		assertEquals("C", ds.getValueFor("CC"));
-		
+
 		ds.setRow(1);
 		assertEquals("D", ds.getValueFor("AA"));
 		assertEquals("E", ds.getValueFor("BB"));
 		assertEquals("F", ds.getValueFor("CC"));
-		
+
 		ds.setRow(2);
 		assertEquals("G", ds.getValueFor("AA"));
 		assertEquals("H", ds.getValueFor("BB"));
@@ -99,7 +112,7 @@ public abstract class AbstractExcelDataSourceTest {
 		ds.loadFromStream(getStream("header_3rowsshifted"));
 
 		assertEquals(3, ds.getNumberOfRows());
-		
+
 		String[] fieldNames = ds.getFieldNames();
 		assertEquals(3, fieldNames.length);
 		assertEquals("AA", fieldNames[0]);
@@ -110,12 +123,12 @@ public abstract class AbstractExcelDataSourceTest {
 		assertEquals("A", ds.getValueFor("AA"));
 		assertEquals("B", ds.getValueFor("BB"));
 		assertEquals("C", ds.getValueFor("CC"));
-		
+
 		ds.setRow(1);
 		assertEquals("D", ds.getValueFor("AA"));
 		assertEquals("E", ds.getValueFor("BB"));
 		assertEquals("F", ds.getValueFor("CC"));
-		
+
 		ds.setRow(2);
 		assertEquals("G", ds.getValueFor("AA"));
 		assertEquals("H", ds.getValueFor("BB"));
@@ -128,7 +141,7 @@ public abstract class AbstractExcelDataSourceTest {
 		ds.loadFromStream(getStream("header_3rows_2sheets"));
 
 		assertEquals(3, ds.getNumberOfRows());
-		
+
 		String[] fieldNames = ds.getFieldNames();
 		assertEquals(3, fieldNames.length);
 		assertEquals("AA", fieldNames[0]);
@@ -139,7 +152,7 @@ public abstract class AbstractExcelDataSourceTest {
 		assertEquals("A", ds.getValueFor("AA"));
 		assertEquals("B", ds.getValueFor("BB"));
 		assertEquals("C", ds.getValueFor("CC"));
-		
+
 		ds.setRow(1);
 		assertEquals("D", ds.getValueFor("AA"));
 		assertEquals("E", ds.getValueFor("BB"));

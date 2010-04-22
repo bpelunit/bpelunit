@@ -16,6 +16,18 @@ import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.ext.IDataSource.DataSource;
 import org.bpelunit.framework.exception.DataSourceException;
 
+/**
+ * A data source that can read Excel files (incl .xlsx from Excel 2007).
+ * 
+ * Following restrictions apply to the Excel files:
+ * <ul>
+ * <li>The first used row must contain the header (that will become the variable
+ * name in the context)
+ * <li>No merged cells</li>
+ * </ul>
+ * 
+ * @author Daniel Luebke <bpelunit@daniel-luebke.de>
+ */
 @DataSource(name = "Excel Data Source", shortName = "Excel", contentTypes = {
 		"application/excel", "application/vnd.ms-excel", "application/x-excel",
 		"application/x-msexcel",
@@ -57,13 +69,13 @@ public class ExcelDataSource implements IDataSource {
 
 	@Override
 	public void setRow(int index) throws DataSourceException {
-	    if (index < getNumberOfRows() && sheet.getRow(startDataRowIndex + index) != null) {
-	        currentDataRow = index;
-	    } else {
-	        throw new DataSourceException(
-	            String.format("Index %d out of bounds [0, %d]",
-	                index, getNumberOfRows()));
-	    }
+		if (index < getNumberOfRows()
+				&& sheet.getRow(startDataRowIndex + index) != null) {
+			currentDataRow = index;
+		} else {
+			throw new DataSourceException(String.format(
+					"Index %d out of bounds [0, %d]", index, getNumberOfRows()));
+		}
 	}
 
 	@Override

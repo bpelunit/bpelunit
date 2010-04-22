@@ -1,14 +1,16 @@
 package org.bpelunit.framework.control.datasource.ods;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
+import java.util.List;
 
+import org.bpelunit.framework.control.datasource.DataSourceHelper;
 import org.bpelunit.framework.exception.DataSourceException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class OdsDataSourceTest {
 	private InputStream getStream(String filenameBody) {
@@ -29,10 +31,19 @@ public class OdsDataSourceTest {
 
 	@Test
 	public void testMetaData() throws Exception {
-		String[] contentTypes = { "application/vnd.oasis.opendocument.spreadsheet",
-		"application/x-vnd.oasis.opendocument.spreadsheet" };
+		List<String> validationMessages = DataSourceHelper
+				.validateDataSourceAnnotation(ds.getClass());
+		assertEquals(validationMessages.toString(), 0, validationMessages
+				.size());
+
+		validationMessages = DataSourceHelper.validateMethodAnnotations(ds
+				.getClass());
+		assertEquals(validationMessages.toString(), 0, validationMessages
+				.size());
+
+		assertTrue(DataSourceHelper.isValidConfigurationOption(ds, "sheet"));
 	}
-	
+
 	@Test(expected = DataSourceException.class)
 	public void testEmptySheet() throws Exception {
 		ds.loadFromStream(getStream("empty"));
@@ -43,7 +54,7 @@ public class OdsDataSourceTest {
 		ds.loadFromStream(getStream("header_0rows"));
 
 		assertEquals(0, ds.getNumberOfRows());
-		
+
 		String[] fieldNames = ds.getFieldNames();
 		assertEquals(3, fieldNames.length);
 		assertEquals("AA", fieldNames[0]);
@@ -54,7 +65,7 @@ public class OdsDataSourceTest {
 	@Test
 	public void testSheetWithHeadersAndOneRow() throws Exception {
 		ds.loadFromStream(getStream("header_1row"));
-		
+
 		assertEquals(1, ds.getNumberOfRows());
 
 		String[] fieldNames = ds.getFieldNames();
@@ -74,7 +85,7 @@ public class OdsDataSourceTest {
 		ds.loadFromStream(getStream("header_3rows"));
 
 		assertEquals(3, ds.getNumberOfRows());
-		
+
 		String[] fieldNames = ds.getFieldNames();
 		assertEquals(3, fieldNames.length);
 		assertEquals("AA", fieldNames[0]);
@@ -102,7 +113,7 @@ public class OdsDataSourceTest {
 		ds.loadFromStream(getStream("header_3rowsshifted"));
 
 		assertEquals(3, ds.getNumberOfRows());
-		
+
 		String[] fieldNames = ds.getFieldNames();
 		assertEquals(3, fieldNames.length);
 		assertEquals("AA", fieldNames[0]);
@@ -127,11 +138,11 @@ public class OdsDataSourceTest {
 
 	@Test
 	public void testSheetWithHeadersAndThreeRowsAndTwoSheets() throws Exception {
-		ds.setSheet("2");
+		DataSourceHelper.setConfigurationOption(ds, "sheet", "2");
 		ds.loadFromStream(getStream("header_3rows_2sheets"));
 
 		assertEquals(3, ds.getNumberOfRows());
-		
+
 		String[] fieldNames = ds.getFieldNames();
 		assertEquals(3, fieldNames.length);
 		assertEquals("AA", fieldNames[0]);
@@ -171,4 +182,7 @@ public class OdsDataSourceTest {
 		ds.setSheet("2");
 		ds.loadFromStream(getStream("header_3rowsshifted.xls"));
 	}
+	
+	// TODO StartRow for data for ODS & Excel incl. tests
+	// TODO Property setting with DataSourceHelper
 }
