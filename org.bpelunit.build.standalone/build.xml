@@ -120,9 +120,10 @@
 
 
 
-		<!-- copy startup file -->
+		<!-- copy startup files -->
 		<copy todir="${builddir}">
 			<fileset file="../org.bpelunit.framework.client.command/bpelunit.bat" />
+			<fileset file="../org.bpelunit.framework.client.command/bpelunit.sh" />
 		</copy>
 
 		<!-- copy documentation -->
