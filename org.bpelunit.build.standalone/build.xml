@@ -157,17 +157,8 @@
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${datasource.csv.project}/lib">
-					<include name="**/*.jar" />
-				</fileset>
 			</classpath>
 		</javac>
-
-		<copy todir="${builddir}/lib">
-			<fileset dir="${datasource.csv.project}/lib">
-				<include name="**/*.jar" />
-			</fileset>
-		</copy>
 	</target>
 
 	<target name="datasource.excel">
