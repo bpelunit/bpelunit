@@ -39,6 +39,8 @@ public class VelocityDataSourceTest {
 		
 		messages = DataSourceHelper.validateMethodAnnotations(VelocityDataSource.class);
 		assertEquals(messages.toString(), 0, messages.size());
+		
+		assertTrue(DataSourceHelper.isValidConfigurationOption(new VelocityDataSource(), "iteratedVars"));
 	}
 	
 	/**

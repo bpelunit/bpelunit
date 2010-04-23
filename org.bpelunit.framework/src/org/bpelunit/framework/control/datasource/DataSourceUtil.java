@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.bpelunit.framework.control.ext.IDataSource;
+import org.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
 import org.bpelunit.framework.control.util.ExtensionRegistry;
 import org.bpelunit.framework.exception.DataSourceException;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -124,6 +125,9 @@ public class DataSourceUtil {
 		try {
 			Method method = ds.getClass().getMethod("set" + toFirstUpper(key),
 					String.class);
+			if(method.getAnnotation(ConfigurationOption.class) == null) {
+				throw new Exception("@ConfigurationOption missing for " + method.getName());
+			}
 			method.invoke(ds, value);
 		} catch (InvocationTargetException e) {
 			Throwable targetException = e.getTargetException();
