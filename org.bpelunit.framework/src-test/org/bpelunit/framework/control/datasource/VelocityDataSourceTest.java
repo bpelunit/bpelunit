@@ -32,6 +32,15 @@ public class VelocityDataSourceTest {
 				BPELUnitBaseRunner.EXTENSIONS_FILE_NAME), false);
 	}
 
+	@Test
+	public void testMetaData() throws Exception {
+		List<String> messages = DataSourceHelper.validateDataSourceAnnotation(VelocityDataSource.class);
+		assertEquals(messages.toString(), 0, messages.size());
+		
+		messages = DataSourceHelper.validateMethodAnnotations(VelocityDataSource.class);
+		assertEquals(messages.toString(), 0, messages.size());
+	}
+	
 	/**
 	 * Checks that the data source can be created. This requires that it is
 	 * properly registered in <code>conf/extensions.xml</code>.

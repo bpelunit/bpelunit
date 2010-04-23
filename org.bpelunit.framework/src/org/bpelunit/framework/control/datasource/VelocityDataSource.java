@@ -11,8 +11,10 @@ import java.util.StringTokenizer;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.bpelunit.framework.control.ext.IDataSource;
+import org.bpelunit.framework.control.ext.IDataSource.DataSource;
 import org.bpelunit.framework.exception.DataSourceException;
 
+@DataSource(name="Velocity Data Source", shortName="velocity", contentTypes={})
 public class VelocityDataSource implements IDataSource {
 
 	static final String PROPERTY_ITERATED_VARS = "iteratedVars";
