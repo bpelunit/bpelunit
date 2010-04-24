@@ -38,20 +38,12 @@ import org.bpelunit.framework.model.ProcessUnderTest;
 @IBPELDeployerCapabilities(canDeploy = true, canMeasureTestCoverage = true)
 public class ActiveBPELDeployer implements IBPELDeployer {
 
-	// // put config
-	// private static final String fsBPRFile = "BPRFile";
-	//
-	// // general config
-	// private static final String fsDeploymentDirectory =
-	// "ActiveBPELDeploymentDirectory";
-	//
-	// private static final String fsDeploymentServiceURL =
-	// "ActiveBPELDeploymentServiceURL";
-
-	/* Encapsulates the results from an HTTP request: status code and
-	 * response body */
+	/*
+	 * Encapsulates the results from an HTTP request: status code and response
+	 * body
+	 */
 	private static class RequestResult {
-		public int    statusCode;
+		public int statusCode;
 		public String responseBody;
 	}
 
@@ -99,32 +91,8 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		check(fAdminServiceURL, "engine admin server URL");
 
 		// changed the way the archive location is obtained.
-		/*
-		 * String pathToArchive = FilenameUtils.concat(archivePath,
-		 * FilenameUtils .getFullPath(fBPRFile)); fBPRFile =
-		 * FilenameUtils.getName(fBPRFile);
-		 */
-		// fBPRFile = pathToTest;
 		boolean fileReplaced = false;
 		String archivePath = getArchiveLocation(pathToTest);
-
-		// this has been moved to ProcessUnderTest deploy() method.
-		/*
-		 * if (BPELUnitRunner.measureTestCoverage()) { ICoverageMeasurementTool
-		 * coverageTool = BPELUnitRunner .getCoverageMeasurmentTool(); try {
-		 * 
-		 * String newFile;
-		 * 
-		 * newFile = coverageTool.prepareArchiveForCoverageMeasurement(
-		 * pathToArchive, FilenameUtils.getName(fBPRFile), this);
-		 * 
-		 * archivePath = coverageTool
-		 * .prepareArchiveForCoverageMeasurement(pathToTest,
-		 * getDeployment(put)); fBPRFile = archivePath; fileReplaced = true; }
-		 * catch (Exception e) { coverageTool.setErrorStatus(
-		 * "Coverage measurmetn is failed. An error occurred when annotation for coverage: "
-		 * + e.getMessage()); // e.printStackTrace(); } }
-		 */
 
 		File uploadingFile = new File(archivePath);
 
