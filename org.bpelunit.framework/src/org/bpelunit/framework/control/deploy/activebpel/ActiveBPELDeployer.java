@@ -51,16 +51,16 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	}
 
 	/* Default URLs for the deployment and administration web services */
-	public static final String DEFAULT_DEPLOYMENT_URL
+	static final String DEFAULT_DEPLOYMENT_URL
 		= "http://localhost:8080/active-bpel/services/DeployBPRService";
-	public static final String DEFAULT_ADMIN_URL
+	static final String DEFAULT_ADMIN_URL
 		= "http://localhost:8080/active-bpel/services/ActiveBpelAdmin";
 
 	/*
 	 * Name of the environment variable which will be used to build the
 	 * deployment directory if no configuration has been specified.
 	 */
-	public static final String DEFAULT_APPSERVER_DIR_ENVVAR = "CATALINA_HOME";
+	static final String DEFAULT_APPSERVER_DIR_ENVVAR = "CATALINA_HOME";
 
 	private Logger fLogger = Logger.getLogger(getClass());
 

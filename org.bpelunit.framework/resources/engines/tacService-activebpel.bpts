@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testSuite
+   xmlns:tacbpel="http://enterprise.netbeans.org/bpel/TacService/tacService"
+   xmlns:tacwsdl="http://j2ee.netbeans.org/wsdl/tacService"
+   xmlns:tac="http://xml.netbeans.org/schema/tacService"
+   xmlns="http://www.bpelunit.org/schema/testSuite">
+
+  <name>tacService</name>
+  <baseURL>http://localhost:7777/ws</baseURL>
+
+  <deployment>
+    <put name="tacService" type="activebpel">
+      <wsdl>tacService.wsdl</wsdl>
+      <property name="BPRFile">tacService.bpr</property>
+    </put>
+  </deployment>
+
+  <testCases>
+    <testCase name="EmptyInput" basedOn="" abstract="false" vary="false">
+      <clientTrack>
+        <sendReceive
+            service="tacwsdl:tacService"
+            port="tacServicePort"
+            operation="reverseLines">
+
+          <send fault="false">
+            <data>
+              <tac:tacRequest>
+                <tac:lines/>
+              </tac:tacRequest>
+            </data>
+          </send>
+
+          <receive fault="false">
+            <condition>
+              <expression>count(tac:tacResponse/tac:lines/tac:line)</expression>
+              <value>0</value>
+            </condition>
+          </receive>
+        </sendReceive>
+      </clientTrack>
+    </testCase>
+
+    <testCase name="OneLine" basedOn="" abstract="false" vary="false">
+      <clientTrack>
+        <sendReceive
+            service="tacwsdl:tacService"
+            port="tacServicePort"
+            operation="reverseLines">
+
+          <send fault="false">
+            <data>
+              <tac:tacRequest>
+                <tac:lines>
+                  <tac:line>A</tac:line>
+                </tac:lines>
+              </tac:tacRequest>
+            </data>
+          </send>
+
+          <receive fault="false">
+            <condition>
+              <expression>count(tac:tacResponse/tac:lines/tac:line)</expression>
+              <value>1</value>
+            </condition>
+            <condition>
+              <expression>tac:tacResponse/tac:lines/tac:line[1]</expression>
+              <value>'A'</value>
+            </condition>
+          </receive>
+        </sendReceive>
+      </clientTrack>
+    </testCase>
+
+    <testCase name="TwoLines" basedOn="" abstract="false" vary="false">
+      <clientTrack>
+        <sendReceive
+            service="tacwsdl:tacService"
+            port="tacServicePort"
+            operation="reverseLines">
+
+          <send fault="false">
+            <data>
+              <tac:tacRequest>
+                <tac:lines>
+                  <tac:line>A</tac:line>
+                  <tac:line>B</tac:line>
+                </tac:lines>
+              </tac:tacRequest>
+            </data>
+          </send>
+
+          <receive fault="false">
+            <condition>
+              <expression>count(tac:tacResponse/tac:lines/tac:line)</expression>
+              <value>2</value>
+            </condition>
+            <condition>
+              <expression>tac:tacResponse/tac:lines/tac:line[1]</expression>
+              <value>'B'</value>
+            </condition>
+            <condition>
+              <expression>tac:tacResponse/tac:lines/tac:line[2]</expression>
+              <value>'A'</value>
+            </condition>
+          </receive>
+        </sendReceive>
+      </clientTrack>
+    </testCase>
+
+    <testCase name="ThreeLines" basedOn="" abstract="false" vary="false">
+      <clientTrack>
+        <sendReceive
+            service="tacwsdl:tacService"
+            port="tacServicePort"
+            operation="reverseLines">
+
+          <send fault="false">
+            <data>
+              <tac:tacRequest>
+                <tac:lines>
+                  <tac:line>A</tac:line>
+                  <tac:line>B</tac:line>
+                  <tac:line>C</tac:line>
+                </tac:lines>
+              </tac:tacRequest>
+            </data>
+          </send>
+
+          <receive fault="false">
+            <condition>
+              <expression>count(tac:tacResponse/tac:lines/tac:line)</expression>
+              <value>3</value>
+            </condition>
+            <condition>
+              <expression>tac:tacResponse/tac:lines/tac:line[1]</expression>
+              <value>'C'</value>
+            </condition>
+            <condition>
+              <expression>tac:tacResponse/tac:lines/tac:line[2]</expression>
+              <value>'B'</value>
+            </condition>
+            <condition>
+              <expression>tac:tacResponse/tac:lines/tac:line[3]</expression>
+              <value>'A'</value>
+            </condition>
+          </receive>
+        </sendReceive>
+      </clientTrack>
+    </testCase>
+
+  </testCases>
+</testSuite>
