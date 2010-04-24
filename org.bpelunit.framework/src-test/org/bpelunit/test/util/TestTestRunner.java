@@ -47,6 +47,7 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 
 		Map<String, String> options= new HashMap<String, String>();
 		options.put(BPELUnitRunner.SKIP_UNKNOWN_EXTENSIONS, "true");
+		options.put(BPELUnitRunner.GLOBAL_TIMEOUT, "10000");
 		initialize(options);
 
 		fSuite= loadTestSuite(new File(path, bpts));
