@@ -31,9 +31,12 @@ import org.bpelunit.framework.model.ProcessUnderTest;
 /**
  * ActiveBPEL Deployer - deploys a process to an ActiveBPEL server.
  * 
- * @version $Id$
- * @author Philip Mayer, Antonio Garcia-Dominguez
+ * By default, the application server running ActiveBPEL is considered to be
+ * listening at http://localhost:8080, and deployment archives are stored at
+ * $CATALINA_HOME/bpr, where $CATALINA_HOME is an environment variable that
+ * needs to be set to the home directory of the application server.
  * 
+ * @author Philip Mayer, Antonio Garcia-Dominguez
  */
 @IBPELDeployerCapabilities(canDeploy = true, canMeasureTestCoverage = true)
 public class ActiveBPELDeployer implements IBPELDeployer {
@@ -52,6 +55,12 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		= "http://localhost:8080/active-bpel/services/DeployBPRService";
 	public static final String DEFAULT_ADMIN_URL
 		= "http://localhost:8080/active-bpel/services/ActiveBpelAdmin";
+
+	/*
+	 * Name of the environment variable which will be used to build the
+	 * deployment directory if no configuration has been specified.
+	 */
+	public static final String DEFAULT_APPSERVER_DIR_ENVVAR = "CATALINA_HOME";
 
 	private Logger fLogger = Logger.getLogger(getClass());
 
@@ -73,7 +82,9 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	@IBPELDeployerOption
 	public void setDeploymentDirectory(String deploymentDirectory) {
-		this.fDeploymentDirectory = deploymentDirectory;
+		if (deploymentDirectory != null) {
+			this.fDeploymentDirectory = deploymentDirectory;
+		}
 	}
 
 	@IBPELDeployerOption(defaultValue = DEFAULT_DEPLOYMENT_URL)
@@ -96,6 +107,11 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 		fLogger.info("ActiveBPEL deployer got request to deploy " + put);
 
+		if (fDeploymentDirectory == null
+				&& System.getenv(DEFAULT_APPSERVER_DIR_ENVVAR) != null) {
+			fDeploymentDirectory = System.getenv(DEFAULT_APPSERVER_DIR_ENVVAR)
+					+ File.separator + "bpr";
+		}
 		check(fBPRFile, "BPR File");
 		check(fDeploymentDirectory, "deployment directory path");
 		check(fDeploymentAdminServiceURL, "deployment admin server URL");
