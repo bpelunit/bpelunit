@@ -75,6 +75,9 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	private ProcessUnderTest put;
 
+	/* for unit testing */
+	static int _terminatedProcessCount = 0;
+
 	@IBPELDeployerOption(testSuiteSpecific = false)
 	public void setBPRFile(String bprFile) {
 		this.fBPRFile = bprFile;
@@ -308,6 +311,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	private void terminateProcess(int pid) throws Exception {
 		try {
+			++_terminatedProcessCount;
 			RequestResult response = sendRequestToActiveBPEL(
 				fAdminServiceURL,
 				new TerminateProcessRequestEntity(pid));
