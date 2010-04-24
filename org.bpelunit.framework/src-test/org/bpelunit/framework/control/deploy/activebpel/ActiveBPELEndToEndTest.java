@@ -37,6 +37,19 @@ public class ActiveBPELEndToEndTest {
 		assertEquals("All test cases should pass", 4, runner.getPassed());
 	}
 
+	@Test
+	public void endlessLoopIsTerminated() throws ConfigurationException,
+			SpecificationException {
+		checkAssumptions();
+
+		TestTestRunner runner = new TestTestRunner(TEST_SUITE_DIR, TEST_SUITE_ENDLESS_FNAME);
+		runner.testRun();
+		assertEquals("Only the case with empty input passed",
+				1, runner.getPassed());
+		assertTrue("Some processes were terminated",
+				ActiveBPELDeployer._terminatedProcessCount >= 1);
+	}
+
 	private void checkAssumptions() {
 		assumeNotNull(System
 				.getenv(ActiveBPELDeployer.DEFAULT_APPSERVER_DIR_ENVVAR));
