@@ -110,10 +110,11 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 
 		try {
 			suite.setUp();
-		} finally {
+		} catch (DeploymentException e) {
 			try {
 				suite.shutDown();
-			} catch (Exception e) {}
+			} catch (DeploymentException e2) {}
+			throw e;
 		}
 
 		outputPlain("START", suite);

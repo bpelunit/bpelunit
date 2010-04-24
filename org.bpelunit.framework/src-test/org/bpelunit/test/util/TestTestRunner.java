@@ -58,8 +58,7 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 		try {
 			fSuite.setUp();
 			fSuite.run();
-			fSuite.shutDown();
-		} catch (Exception ex) {
+		} catch (DeploymentException ex) {
 		} finally {
 			try {
 				fSuite.shutDown();
