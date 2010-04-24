@@ -47,6 +47,12 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		public String responseBody;
 	}
 
+	/* Default URLs for the deployment and administration web services */
+	public static final String DEFAULT_DEPLOYMENT_URL
+		= "http://localhost:8080/active-bpel/services/DeployBPRService";
+	public static final String DEFAULT_ADMIN_URL
+		= "http://localhost:8080/active-bpel/services/ActiveBpelAdmin";
+
 	private Logger fLogger = Logger.getLogger(getClass());
 
 	private String fResultingFile;
@@ -55,8 +61,9 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	private String fDeploymentDirectory;
 
-	private String fDeploymentAdminServiceURL;
-	private String fAdminServiceURL;
+	private String fDeploymentAdminServiceURL = DEFAULT_DEPLOYMENT_URL;
+	private String fAdminServiceURL = DEFAULT_ADMIN_URL;
+
 	private ProcessUnderTest put;
 
 	@IBPELDeployerOption(testSuiteSpecific = false)
@@ -69,14 +76,18 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		this.fDeploymentDirectory = deploymentDirectory;
 	}
 
-	@IBPELDeployerOption(defaultValue = "http://localhost:8080/active-bpel/services/DeployBPRService")
+	@IBPELDeployerOption(defaultValue = DEFAULT_DEPLOYMENT_URL)
 	public void setDeploymentAdminServiceURL(String deploymentAdminServiceURL) {
-		this.fDeploymentAdminServiceURL = deploymentAdminServiceURL;
+		if (deploymentAdminServiceURL != null) {
+			this.fDeploymentAdminServiceURL = deploymentAdminServiceURL;
+		}
 	}
 
-	@IBPELDeployerOption(defaultValue = "http://localhost:8080/active-bpel/services/ActiveBpelAdmin")
+	@IBPELDeployerOption(defaultValue = DEFAULT_ADMIN_URL)
 	public void setAdministrationServiceURL(String adminServiceURL) {
-		this.fAdminServiceURL = adminServiceURL;
+		if (adminServiceURL != null) {
+			this.fAdminServiceURL = adminServiceURL;
+		}
 	}
 
 	public void deploy(String pathToTest, ProcessUnderTest put)
