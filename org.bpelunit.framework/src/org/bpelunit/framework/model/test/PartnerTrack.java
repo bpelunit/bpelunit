@@ -8,14 +8,27 @@ package org.bpelunit.framework.model.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.log4j.Logger;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
 import org.bpelunit.framework.control.run.TestCaseRunner;
 import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.test.activity.Activity;
 import org.bpelunit.framework.model.test.activity.ActivityContext;
+import org.bpelunit.framework.model.test.data.ContextXPathVariableResolver;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
 import org.bpelunit.framework.model.test.report.ITestArtefact;
 import org.bpelunit.framework.model.test.report.StateData;
+import org.w3c.dom.Document;
+
+import com.rits.cloning.Cloner;
 
 /**
  * A PartnerTrack represents the sequential list of activities which are
@@ -57,6 +70,10 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 	 * The logger
 	 */
 	private Logger fLogger;
+
+	private Object fTestCaseVelocityContext;
+
+	private static final Cloner fCloner = new Cloner();
 
 	public PartnerTrack(TestCase testCase, Partner client) {
 		fPartner = client;
@@ -167,6 +184,31 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 
 	public void reportProgress(ITestArtefact artefac) {
 		fTestCase.reportProgress(artefac);
+	}
+
+	/* VELOCITY */
+
+	/**
+	 * Creates a new partner track-wide Velocity context. It collects
+	 * information from the test suite, the test case and this partner track.
+	 * This context is isolated from all the following partner tracks: any
+	 * changes done to the test suite and test case variables will be lost in
+	 * the next partner track.
+	 * 
+	 * This method obtains and caches the VelocityContext of the test case, so
+	 * it only needs to be produced once for every partner track.
+	 * 
+	 * @return Base VelocityContext for the partner track.
+	 */
+	public VelocityContext createVelocityContext() throws Exception {
+		if (fTestCaseVelocityContext == null) {
+			fTestCaseVelocityContext = fRunner.createVelocityContext();
+		}
+		VelocityContext ctx = (VelocityContext) fCloner
+				.deepClone(fTestCaseVelocityContext);
+		ctx.put("partnerTrackName", getRawName());
+		ctx.put("partnerTrackURL", getPartner().getSimulatedURL());
+		return ctx;
 	}
 
 }

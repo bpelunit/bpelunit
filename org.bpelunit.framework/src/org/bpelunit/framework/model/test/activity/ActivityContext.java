@@ -24,8 +24,6 @@ import org.bpelunit.framework.model.test.wire.IncomingMessage;
 import org.bpelunit.framework.model.test.wire.OutgoingMessage;
 import org.w3c.dom.Element;
 
-import com.rits.cloning.Cloner;
-
 /**
  * An activity context is a contextual object created for a single enclosing top-level activity
  * (i.e. an activity directly beneath a partnerTrack, not a nested activity).
@@ -72,10 +70,6 @@ public class ActivityContext {
 	private String fSimulatedURL;
 
 	private Element fIncomingMessage;
-
-	private VelocityContext fTestCaseVelocityContext;
-
-	private static final Cloner fCloner = new Cloner();
 
 	// ****************************** Initialization ****************************
 
@@ -195,25 +189,7 @@ public class ActivityContext {
 
 	// **************************** Velocity ********************************
 
-	/**
-	 * Creates a new partner track-wide Velocity context. It collects information
-	 * from the test suite, the test case and this partner track. This context
-	 * is isolated from all the following partner tracks: any changes done to
-	 * the test suite and test case variables will be lost in the next partner
-	 * track.
-	 *
-	 * This method obtains and caches the VelocityContext of the test case, so it
-	 * only needs to be produced once for every partner track.
-	 *
-	 * @return Base VelocityContext for the partner track.
-	 */
 	public VelocityContext createVelocityContext() throws Exception {
-		if (fTestCaseVelocityContext == null) {
-			fTestCaseVelocityContext = fRunner.createVelocityContext();
-		}
-		VelocityContext ctx =  fCloner.deepClone(fTestCaseVelocityContext);
-		ctx.put("partnerTrackName", fTrack.getRawName());
-		ctx.put("partnerTrackURL", fTrack.getPartner().getSimulatedURL());
-		return ctx;
+		return fTrack.createVelocityContext();
 	}
 }
