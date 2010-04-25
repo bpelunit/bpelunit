@@ -28,4 +28,5 @@ public abstract class AbstractTemplateTest {
 	protected static final File TC_COND = new File(TEST_BPTS_DIR, "tacService-casesrc-t-cond.bpts");
 
 	protected static final File TC_ASSUME_PTRACK = new File(TEST_BPTS_DIR, "tacService-casesrc-t-assume-pt.bpts");
+	protected static final File TC_ASSUME_ACTIVITY = new File(TEST_BPTS_DIR, "tacService-casesrc-t-assume-act.bpts");
 }

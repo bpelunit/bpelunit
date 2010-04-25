@@ -101,12 +101,16 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 		if (assumptionHolds(fAssumption)) {
 			for (Activity activity : fActivities) {
 
-				fLogger.info(getName() + " now starting activity " + activity);
-
-				ActivityContext context = new ActivityContext(fRunner, this);
-				activity.run(context);
-
-				fLogger.info(getName() + " returned from activity " + activity);
+				if (assumptionHolds(activity.getAssumption())) {
+					fLogger.info(getName() + " now starting activity "
+							+ activity);
+					ActivityContext context = new ActivityContext(fRunner, this);
+					activity.run(context);
+					fLogger.info(getName() + " returned from activity "
+							+ activity);
+				} else {
+					fLogger.info(getName() + " skipped activity " + activity);
+				}
 
 				reportProgress(activity);
 

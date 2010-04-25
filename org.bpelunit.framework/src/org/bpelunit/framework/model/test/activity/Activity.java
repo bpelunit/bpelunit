@@ -42,6 +42,7 @@ public abstract class Activity implements ITestArtefact {
 	 */
 	protected ArtefactStatus fStatus;
 
+	private String fAssumption;
 
 	// ******************* Initialization *********************
 
@@ -78,6 +79,14 @@ public abstract class Activity implements ITestArtefact {
 
 	public boolean hasProblems() {
 		return getStatus().hasProblems();
+	}
+
+	public String getAssumption() {
+		return fAssumption;
+	}
+
+	public void setAssumption(String assumption) {
+		fAssumption = assumption;
 	}
 
 	// ********************** ITestArtefact ******************

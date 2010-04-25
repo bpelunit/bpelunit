@@ -55,4 +55,14 @@ public class VelocityDataSourceTemplateTest extends AbstractTemplateTest {
 	public void testPartnerTracksAreSkippedWhenAssumptionsAreFalse() throws Exception {
 		TestUtil.getResults(TC_ASSUME_PTRACK);
 	}
+
+	/**
+	 * Checks that activities are skipped if and only if the XPath expression
+	 * in their assume attributes evaluate to false. These XPath expressions have
+	 * access to the partner track template variables.
+	 */
+	@Test
+	public void testActivitiesAreSkippedIffAssumptionsAreFalse() throws Exception {
+		TestUtil.getResults(TC_ASSUME_ACTIVITY);
+	}
 }

@@ -529,6 +529,7 @@ public class SpecificationLoader {
 					XMLWaitActivity xmlWait = (XMLWaitActivity) event;
 					Wait activity = new Wait(partnerTrack);
 					activity.setWaitDuration(xmlWait.getWaitForMilliseconds());
+					activity.setAssumption(event.getAssume());
 					activities.add(activity);
 					continue;
 				}
@@ -540,6 +541,7 @@ public class SpecificationLoader {
 							activity, xmlReceive,
 							SOAPOperationDirectionIdentifier.INPUT);
 					activity.initialize(spec);
+					activity.setAssumption(event.getAssume());
 
 					activities.add(activity);
 					continue;
@@ -552,6 +554,7 @@ public class SpecificationLoader {
 							activity, xmlSend,
 							SOAPOperationDirectionIdentifier.INPUT, round);
 					activity.initialize(spec);
+					activity.setAssumption(event.getAssume());
 
 					activities.add(activity);
 					continue;
@@ -574,6 +577,7 @@ public class SpecificationLoader {
 						ReceiveSendAsync activity = new ReceiveSendAsync(
 								partnerTrack);
 						fillAsyncTwoWay(activity, op, round);
+						activity.setAssumption(event.getAssume());
 						activities.add(activity);
 					}
 					if (ActivityUtil.isActivity(op,
@@ -581,6 +585,7 @@ public class SpecificationLoader {
 						SendReceiveAsync activity = new SendReceiveAsync(
 								partnerTrack);
 						fillAsyncTwoWay(activity, op, round);
+						activity.setAssumption(event.getAssume());
 						activities.add(activity);
 					}
 					continue;
@@ -645,6 +650,8 @@ public class SpecificationLoader {
 			int round) throws SpecificationException {
 
 		ReceiveSendSync activity = new ReceiveSendSync(partnerTrack);
+		activity.setAssumption(xmlReceiveSendSync.getAssume());
+
 		XMLSendActivity xmlSend = xmlReceiveSendSync.getSend();
 		XMLReceiveActivity xmlReceive = xmlReceiveSendSync.getReceive();
 
