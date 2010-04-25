@@ -54,9 +54,9 @@
           <receive/>
 
           <send>
-            <template>
+            <template>$collections.reverse($lines)
               <tac:tacResponse>
-                <tac:lines>$collections.reverse($lines)
+                <tac:lines>
 #foreach($line in $lines)
                   <tac:line>$line</tac:line>
 #end
