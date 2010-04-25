@@ -71,6 +71,10 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 	 */
 	private Logger fLogger;
 
+	private String fAssumption;
+
+	private NamespaceContext fNamespaceContext;
+
 	private Object fTestCaseVelocityContext;
 
 	private static final Cloner fCloner = new Cloner();
@@ -94,21 +98,25 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 
 		fLogger.info(getName() + " now active.");
 
-		for (Activity activity : fActivities) {
+		if (assumptionHolds(fAssumption)) {
+			for (Activity activity : fActivities) {
 
-			fLogger.info(getName() + " now starting activity " + activity);
+				fLogger.info(getName() + " now starting activity " + activity);
 
-			ActivityContext context = new ActivityContext(fRunner, this);
-			activity.run(context);
+				ActivityContext context = new ActivityContext(fRunner, this);
+				activity.run(context);
 
-			fLogger.info(getName() + " returned from activity " + activity);
+				fLogger.info(getName() + " returned from activity " + activity);
 
-			reportProgress(activity);
+				reportProgress(activity);
 
-			if (activity.hasProblems()) {
-				fStatus = activity.getStatus();
-				break;
+				if (activity.hasProblems()) {
+					fStatus = activity.getStatus();
+					break;
+				}
 			}
+		} else {
+			fLogger.info(getName() + " was skipped.");
 		}
 
 		// Ensure set status before notification
@@ -150,6 +158,14 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	public void setAssumption(String assumption) {
+		fAssumption = assumption;
+	}
+
+	public void setNamespaceContext(NamespaceContext context) {
+		fNamespaceContext = context;
 	}
 
 	// ************* ITestArtefact **********
@@ -209,6 +225,34 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 		ctx.put("partnerTrackName", getRawName());
 		ctx.put("partnerTrackURL", getPartner().getSimulatedURL());
 		return ctx;
+	}
+
+	/* PRIVATE METHODS */
+
+	private boolean assumptionHolds(final String assumption) {
+		if (assumption == null)
+			return true;
+
+		Context context;
+		try {
+			context = this.createVelocityContext();
+
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			xpath.setNamespaceContext(fNamespaceContext);
+			xpath.setXPathVariableResolver(new ContextXPathVariableResolver(
+					context));
+
+			return (Boolean) xpath.evaluate(assumption, createEmptyDocument(),
+					XPathConstants.BOOLEAN);
+		} catch (Exception e) {
+			fStatus = ArtefactStatus.createErrorStatus(
+					"Failed to evaluate the assumption " + fAssumption, e);
+			return false;
+		}
+	}
+
+	private Document createEmptyDocument() throws ParserConfigurationException {
+		return DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 	}
 
 }

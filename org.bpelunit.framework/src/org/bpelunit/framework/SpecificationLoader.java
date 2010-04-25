@@ -448,6 +448,10 @@ public class SpecificationLoader {
 
 				PartnerTrack pTrack = new PartnerTrack(test, realPartner);
 				readActivities(pTrack, xmlTestCase, xmlPartnerTrack, round);
+				pTrack.setNamespaceContext(getNamespaceMap(xmlPartnerTrack.newCursor()));
+				if (xmlPartnerTrack.isSetAssume()) {
+					pTrack.setAssumption(xmlPartnerTrack.getAssume());
+				}
 				test.addPartnerTrack(pTrack);
 			}
 		return test;
