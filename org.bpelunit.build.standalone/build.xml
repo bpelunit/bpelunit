@@ -107,8 +107,10 @@
 
 		<!-- copy conf files -->
 		<copy todir="${builddir}/conf">
-			<fileset dir="../org.bpelunit.framework/conf" />
-
+			<fileset dir="../org.bpelunit.framework/conf">
+				<exclude name="extensions.xml" />
+			</fileset>
+			<fileset dir="conf"/>
 		</copy>
 
 		<!-- copy schema files -->
