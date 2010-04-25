@@ -36,7 +36,7 @@ public class TestConditionChecker extends SimpleTest {
 		ns.setNamespace("soapenv", "http://schemas.xmlsoap.org/soap/envelope/");
 		ns.setNamespace("b", "http://xmlns.oracle.com/AirlineReservationSync");
 
-		c.evaluate(parent, ns);
+		c.evaluate(parent, ns, null);
 		return c;
 	}
 

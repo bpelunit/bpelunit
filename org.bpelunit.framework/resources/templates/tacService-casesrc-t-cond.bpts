@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testSuite
+   xmlns:tacbpel="http://enterprise.netbeans.org/bpel/TacService/tacService"
+   xmlns:tacwsdl="http://j2ee.netbeans.org/wsdl/tacService"
+   xmlns:tac="http://xml.netbeans.org/schema/tacService"
+   xmlns:java="http://xml.apache.org/xalan/java"
+   xmlns="http://www.bpelunit.org/schema/testSuite">
+
+  <name>tacService</name>
+  <baseURL>http://localhost:7777/ws</baseURL>
+
+  <deployment>
+    <put name="tacService" type="testmode">
+      <wsdl>tacService.wsdl</wsdl>
+    </put>
+  </deployment>
+
+  <testCases>
+    <testCase name="MainTemplate" basedOn="" abstract="false" vary="false">
+      <setUp>
+        <dataSource type="velocity">
+          <property name="iteratedVars">lines</property>
+          <contents>
+            #set($lines = [[], ['A']])
+          </contents>
+        </dataSource>
+      </setUp>
+      <clientTrack>
+        <sendReceive
+            service="tacwsdl:tacService"
+            port="tacServicePort"
+            operation="reverseLines">
+
+          <send>
+            <template>
+              <tac:tacRequest>
+                <tac:lines>
+#foreach($line in $lines)
+                  <tac:line>$line</tac:line>
+#end
+                </tac:lines>
+              </tac:tacRequest>
+            </template>
+          </send>
+
+          <receive/>
+        </sendReceive>
+      </clientTrack>
+      <partnerTrack name="tacService">
+        <receiveSend
+          service="tacwsdl:tacService"
+          port="tacServicePort"
+          operation="reverseLines">
+          <receive>
+            <condition>
+              <expression>count($request//tac:line)</expression>
+              <value>count($lines)</value>
+            </condition>
+            <condition>
+              <expression>$partnerTrackName</expression>
+              <value>'tacService'</value>
+            </condition>
+            <condition>
+              <expression>count($lines) != 1 or $lines[1]/text() = 'A'</expression>
+              <value>true()</value>
+            </condition>
+          </receive>
+
+          <send>
+            <template>
+              <tac:tacResponse>
+                <tac:lines>$collections.reverse($lines)
+#foreach($line in $lines)
+                  <tac:line>$line</tac:line>
+#end
+                </tac:lines>
+              </tac:tacResponse>
+            </template>
+          </send>
+        </receiveSend>
+      </partnerTrack>
+    </testCase>
+
+  </testCases>
+</testSuite>

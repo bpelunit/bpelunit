@@ -17,6 +17,9 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 
+import org.apache.velocity.context.Context;
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlObject;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.exception.HeaderProcessingException;
@@ -150,7 +153,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		if (hasProblems())
 			return;
 
-		validateConditions();
+		validateConditions(context);
 		if (hasProblems())
 			return;
 
@@ -183,7 +186,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		}
 	}
 
-	private void validateConditions() {
+	private void validateConditions(ActivityContext templateContext) {
 
 		// Check implicit fault assertions
 		SOAPBody body;
@@ -224,8 +227,21 @@ public class ReceiveDataSpecification extends DataSpecification {
 			return;
 		}
 
+		// Create Velocity context for the conditions
+		Context conditionContext;
+		try {
+			conditionContext = templateContext.createVelocityContext();
+		} catch (Exception e) {
+			fStatus = ArtefactStatus.createFailedStatus(String.format(
+				"Could not create the Velocity context for this condition: %s",
+				e.getLocalizedMessage()));
+			return;
+		}
+		conditionContext.put("request", fLiteralData);
+		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);
+
 		for (ReceiveCondition c : fConditions) {
-			c.evaluate(fLiteralData, fNamespaceContext);
+			c.evaluate(fLiteralData, fNamespaceContext, variableResolver);
 
 			if (c.isFailure()) {
 				fStatus = ArtefactStatus.createFailedStatus(String.format(

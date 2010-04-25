@@ -36,4 +36,13 @@ public class VelocityDataSourceTemplateTest extends AbstractTemplateTest {
 				+ "should produce the same results as the equivalent old-style "
 				+ "BPTS", TC_VDS_TCDS_NOTEMP, TC_VDS_TSDS_TEMP);
 	}
+
+	/**
+	 * Checks that variables inside the activity context are available in
+	 * the XPath receive conditions (both expression and value).
+	 */
+	@Test
+	public void testActivityContextVariablesAvailableInConditions() throws Exception {
+		TestUtil.getResults(TC_COND);
+	}
 }

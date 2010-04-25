@@ -24,4 +24,6 @@ public abstract class AbstractTemplateTest {
 	protected static final File TC_VDS_TCDS_NOTEMP = new File(TEST_BPTS_DIR, "tacService-casesrc-nt.bpts");
 	protected static final File TC_VDS_TCDS_TEMP = new File(TEST_BPTS_DIR, "tacService-casesrc-t.bpts");
 	protected static final File TC_VDS_TSDS_TEMP = new File(TEST_BPTS_DIR, "tacService-suitesrc-t.bpts");
+
+	protected static final File TC_COND = new File(TEST_BPTS_DIR, "tacService-casesrc-t-cond.bpts");
 }

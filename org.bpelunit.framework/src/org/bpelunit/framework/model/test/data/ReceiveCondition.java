@@ -12,6 +12,7 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathVariableResolver;
 
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.model.test.report.ArtefactStatus;
@@ -69,10 +70,14 @@ public class ReceiveCondition implements ITestArtefact {
 
 	// ******************** Implementation ***************************
 
-	public void evaluate(Element literalData, NamespaceContext context) {
+	public void evaluate(Element literalData, NamespaceContext context, XPathVariableResolver variableResolver) {
 
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		xpath.setNamespaceContext(context);
+		if (variableResolver != null) {
+			xpath.setXPathVariableResolver(variableResolver);
+		}
+
 		try {
 			String completeXPath= fExpression + "=" + fExpectedValue;
 			if (!(Boolean) xpath.evaluate(completeXPath, literalData, XPathConstants.BOOLEAN)) {
