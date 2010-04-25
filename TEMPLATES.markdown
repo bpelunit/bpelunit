@@ -3,6 +3,8 @@ Test case templates in BPELUnit
 
 BPELUnit can now build the body of the SOAP messages to be sent from the mockups using [Velocity](http://velocity.apache.org) templates. These templates allow the user to easily define many test cases which have the same activities but have different content in their messages. For more information on the Velocity Template Language, check the official [guide](http://velocity.apache.org/engine/devel/developer-guide.html) and [reference](http://velocity.apache.org/engine/devel/vtl-reference-guide.html).
 
+Template variables can also be used to skip partner tracks and activities and inside receive conditions. See below for more details.
+
 How to build messages using templates
 -------------------------------------
 
@@ -178,12 +180,25 @@ The following section describes the requirements that must be met by the class t
 
 Data source classes should belong to the `org.bpelunit.framework.control.datasource` package and implement the `org.bpelunit.framework.control.ext.IDataSource` interface, which has the following methods:
 
-- `int getNumberOfRows()`, which returns the number of rows it contains.
+- `void close()`, which frees any resources attached to it.
+- `String[] getFieldNames()`, which returns an array of Strings with the names for each field in each row. These names will be used for the names of the template variables.
+- `int getNumberOfRows()`, which returns the number of rows which have been read from the call to `loadFromStream`.
+- `Object getValueFor(String)`, which returns the value for the specified field in this row.
 - `void loadFromStream(InputStream)`, which loads the contents of the `InputStream` into the data source.
-- `void initializeContext(Context, int)`, which places the values of the n-th row of the contents of the data source into the specified Velocity template context.
-- `void setProperty(String, String)`, which sets the value of a property.
+- `void setRow(int)`, which places the internal cursor of the data source in the n-th row (starting from 0). By default, data sources point to the first row. Will throw an exception if you try to change to a row which is out of bounds.
 
-Data source classes are expected to validate their contents and properties on their own. However, they do not have access to the contents of the `<dataSource>` XML element. The BPELUnit core automatically calls the methods in the `IDataSource` interface as required. The `InputStream` is created from the contents of the XML element. For more information, refer to the `getStreamForDataSource` methods of the `org.bpelunit.framework.control.datasource.DataSourceUtil` class.
+Data source classes should also be annotated with the `@DataSource` annotation, which has the following attributes:
+
+- `name`, with the long name for the data source (such as "Velocity Data Source").
+- `shortName`, with the short name that should be used in the `type` attribute of the `<dataSource>` element.
+- `contentTypes`, with a list of all MIME types which should be associated to this class.
+
+Accepted properties are defined using setter methods. For instance, to define the property `iteratedVars`, you should add a `setIteratedVars` method, and annotate it using the `@ConfigurationOption` annotation, which has the following two fields:
+
+- `description`, with a long description of what can be customized with this property.
+- `defaultValue`, with a default value to be used in the Eclipse BPTS editor.
+
+Data source classes are expected to load their full contents in memory and validate their contents and properties on their own as soon as possible. However, they do not have access to the contents of the `<dataSource>` XML element. The BPELUnit core automatically calls the methods in the `IDataSource` interface as required. The `InputStream` is created from the contents of the XML element. For more information, refer to the `getStreamForDataSource` methods of the `org.bpelunit.framework.control.datasource.DataSourceUtil` class.
 
 Predefined data sources
 -----------------------
@@ -192,12 +207,12 @@ Predefined data sources
 
 _Type: "velocity"_
 
-_Properties: "iterated\_vars" (required)_
+_Properties: "iteratedVars" (required)_
 
-Velocity templates can be used as a data source. Just `#set` some variables with list literals and list their names (separated by spaces) in the `iterated_vars` property, like this:
+Velocity templates can be used as a data source. Just `#set` some variables with list literals and list their names (separated by spaces) in the `iteratedVars` property, like this:
 
     <dataSource type="velocity">
-      <property name="iterated_vars">lines</property>
+      <property name="iteratedVars">lines</property>
       <contents>
         #set($lines = [[], ['A'], ['A','B'], ['A','B','C']])
       </contents>
@@ -207,14 +222,14 @@ This data source would have 4 rows: the first row would set `$lines` to the empt
 
 There are some constraints, though:
 
-- The `iterated_vars` is required and must list at least one variable.
-- All variables listed separated by spaces in the `iterated_vars` property must contain list literals with the exact same number of elements.
-- All variables listed in the `iterated_vars` property must be set somewhere in the template.
+- The `iteratedVars` is required and must list at least one variable.
+- All variables listed separated by spaces in the `iteratedVars` property must contain list literals with the exact same number of elements.
+- All variables listed in the `iteratedVars` property must be set somewhere in the template.
 
-Variables which are set in the contents of the data source but are not listed in the `iterated_vars` property will be copied as-is. Suppose we had this data source:
+Variables which are set in the contents of the data source but are not listed in the `iteratedVars` property will be copied as-is. Suppose we had this data source:
 
     <dataSource type="velocity">
-      <property name="iterated_vars">v w</property>
+      <property name="iteratedVars">v w</property>
       <contents>
          #set($v = [1, 2, 3])
          #set($w = [2, 4, 6])
@@ -224,19 +239,54 @@ Variables which are set in the contents of the data source but are not listed in
 
 This data source would have 3 rows: the first would have `v = 1` and `w = 2`, the second would have `v = 2` and `w = 4`, and the last one would have `v = 3` and `w = 6`. All three rows would have `z = 3`.
 
+Using template variables in receive conditions
+----------------------------------------------
+
+XPath expressions in the `<expression>` and `<value>` child elements of each `<condition>` in a receive activity can access the current partner track's template variables (see above for a listing). Template variables are available under the same names: for instance, the name of the current partner track can be accessed with `$partnerTrackName`, just like a regular XPath variable. For consistency, `$request` contains the document element of the incoming SOAP message, but you don't really need it: those XPath queries are run with the SOAP message's document element node as context.
+
+Template variables which contain Velocity list literals (or any Java object which implements the Iterable interface) are transparently converted into regular node lists, so you do not need to do anything special with them. Suppose we had this data source:
+
+    <dataSource type="velocity">
+      <property name="iteratedVars">lines</property>
+      <contents>
+        #set($lines = [[],['A']])
+      </contents>
+    </dataSource>
+
+In the first row, `$lines` would be mapped to an empty node list. In the second row, `$lines` would be mapped to a node list with a single `<element>` element, with "A" as its text content. Here are some sample XPath queries:
+
+- `count($lines)`, number of lines: 0 for the first row, 1 for the second row.
+- `$lines[1]/text()`, text content of the first element. Empty string for the first row (empty nodeset), "A" for the second row.
+
+Using template variables to skip activities
+-------------------------------------------
+
+Activities or entire partner tracks can now be skipped if certain XPath expressions evaluate to false. These XPath expressions should be added to the `assume` attribute of the proper partner track or activity element. Partner track and activity assumptions have access to all partner track template variables (see above for a listing).
+
+The `assume` attribute is available in the following elements:
+
+- `<partnerTrack>`
+- `<sendReceive>`
+- `<receiveSend>`
+- `<sendReceiveAsynchronous>`
+- `<receiveSendAsynchronous>`
+- `<sendOnly>`
+- `<receiveOnly>`
+- `<wait>`
+
+It is *not* available in:
+
+- `<clientTrack>`
+- `<send>` (inside a two-way activity)
+- `<receive>` (inside a two-way activity)
+
 Pending tasks
 -------------
 
 ### Important ###
 
 - Add variables to access previously received and sent messages in the current partner track
-- Implement more data source types (CSV, XLS, ODS)
 
 ### Nice ###
 
-- Access template variables from XPath expressions in conditions
 - Log template output from setup blocks and Velocity data source (currently discarded)
-
-### Not sure yet ###
-
-- Build conditions using templates?
