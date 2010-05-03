@@ -9,18 +9,11 @@ import java.util.Set;
 import org.bpelunit.framework.coverage.receiver.MarkerState;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 
-/*
- * Repräsentiert Statistik, die die Anzahl der getesteten und gesamten
- * Codestücke beinhalten. Eine Statistik kann sich aus mehreren Statistiken
- * (Substatistiken) zusammensetzten.
- * 
- * @author Alex Salnikow
- * 
- */
 /**
  * Straight implementation of {@link IStatistic}
  * 
- * <br />Can therefore also contain sub statistics
+ * <br />
+ * Can therefore also contain sub statistics
  * 
  * @author Alex Salnikow, Ronald Becher
  * 
@@ -28,8 +21,6 @@ import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 public class Statistic implements IStatistic {
 
 	private int totalNumber = 0;
-
-	private int testedNumber = 0;
 
 	private String name;
 
@@ -41,23 +32,17 @@ public class Statistic implements IStatistic {
 		this.name = string;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.bpelunit.framework.coverage.result.statistic.IStatistic#getSubStatistics
-	 * ()
+	/**
+	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#getSubStatistics
+	 *      ()
 	 */
 	public List<IStatistic> getSubStatistics() {
 		return subStatistics;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.bpelunit.framework.coverage.result.statistic.IStatistic#addSubStatistic
-	 * (org.bpelunit.framework.coverage.result.statistic.IStatistic)
+	/**
+	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#addSubStatistic
+	 *      (org.bpelunit.framework.coverage.result.statistic.IStatistic)
 	 */
 	public void addSubStatistic(IStatistic statistic) {
 		if (subStatistics == null)
@@ -65,15 +50,13 @@ public class Statistic implements IStatistic {
 		subStatistics.add(statistic);
 	}
 
-	/*
-	 * Wenn die Statistik sich aus weiteren Statistiken zusammensetzt, dann
-	 * setzt sich das Ergebnis aus den Daten der Substatistiken zusammen.
-	 */
 	/**
 	 * Get total number of elements (see {@link IStatistic.getTotalNumber})
 	 * 
-	 * <br />Should the statistic contain sub statistics, then the number
-	 * contains their data, too.
+	 * <br />
+	 * Should the statistic contain sub statistics, then the number contains
+	 * their data, too.
+	 * 
 	 * @return number of elements
 	 */
 	public int getTotalNumber() {
@@ -93,7 +76,7 @@ public class Statistic implements IStatistic {
 		return name;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedItems(java.lang.String)
 	 */
 	public Set<MarkerState> getTestedItems(String testCase) {
@@ -114,14 +97,14 @@ public class Statistic implements IStatistic {
 		return set;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedNumber(java.lang.String)
 	 */
 	public int getTestedNumber(String testCase) {
 		return getTestedItems(testCase).size();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedNumber(java.util.Set)
 	 */
 	public int getTestedNumber(Set<String> testCases) {
@@ -133,7 +116,7 @@ public class Statistic implements IStatistic {
 		return set.size();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedNumber()
 	 */
 	public int getTestedNumber() {
@@ -153,7 +136,7 @@ public class Statistic implements IStatistic {
 		return number;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#setStatusList(java.util.List)
 	 */
 	public void setStateList(List<MarkerState> statusListe) {

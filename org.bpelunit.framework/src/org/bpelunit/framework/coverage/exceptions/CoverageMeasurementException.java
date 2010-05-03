@@ -1,5 +1,6 @@
 package org.bpelunit.framework.coverage.exceptions;
 
+@SuppressWarnings("serial")
 public class CoverageMeasurementException extends Exception {
 
 	private Throwable fOriginalException;

@@ -6,6 +6,7 @@ import org.bpelunit.framework.coverage.exceptions.CoverageMeasurementException;
  * Bpel Exception
  * @author Alex Salnikow, Ronald Becher
  */
+@SuppressWarnings("serial")
 public class BpelException extends CoverageMeasurementException {
 
 	public static final String NO_VALIDE_BPEL = "No valide BPEL";

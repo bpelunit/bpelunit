@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
@@ -25,13 +24,6 @@ import org.jdom.Namespace;
 import org.jdom.filter.ContentFilter;
 import org.jdom.filter.ElementFilter;
 
-/*
- * In der Klasse ist für die Vorbereitung und Start der Instrumentierung
- * verantwortlich.
- * 
- * @author Alex Salnikow
- * 
- */
 /**
  * Class responsible for preparations and start of instrumentation
  * 
@@ -46,8 +38,6 @@ public class Instrumenter {
 
 	public static final String SEPARATOR = "#";
 
-	private Logger logger;
-
 	private CMServiceFactory cmServiceFactory;
 
 	private String assignVariable = createVariableName();
@@ -57,7 +47,7 @@ public class Instrumenter {
 	}
 
 	/*
-	 * Führt die Instrumentierung der BPEL-Datei durch.
+	 * Fï¿½hrt die Instrumentierung der BPEL-Datei durch.
 	 * 
 	 * @param document BPEL-Prozess
 	 * 
@@ -172,13 +162,6 @@ public class Instrumenter {
 
 	}
 
-	/*
-	 * speichert für die Metriken notwendigen Elemente des Original-Prozesses
-	 * 
-	 * @param metrics
-	 * 
-	 * @param process_element
-	 */
 	/**
 	 * Saves the process elements needed by the metrics
 	 * 
@@ -195,13 +178,6 @@ public class Instrumenter {
 		}
 	}
 
-	/*
-	 * Überprüft die BPEL-Version
-	 * 
-	 * @param process_element
-	 * 
-	 * @throws BpelVersionException
-	 */
 	/**
 	 * Check BPEL version
 	 * 
@@ -222,13 +198,6 @@ public class Instrumenter {
 		}
 	}
 
-	/*
-	 * Führt die Initialisierung der Tools durch
-	 * 
-	 * @param process_element
-	 * 
-	 * @throws BpelVersionException
-	 */
 	/**
 	 * Exercices initializing of the tools
 	 * 
@@ -243,13 +212,6 @@ public class Instrumenter {
 		StructuredActivities.initialize();
 	}
 
-	/*
-	 * Startet für jede Metrik den Instrumentierungsprozess
-	 * 
-	 * @param metrics
-	 * 
-	 * @throws BpelException
-	 */
 	/**
 	 * Starts the process of instrumentating for each metric
 	 * 
@@ -265,12 +227,6 @@ public class Instrumenter {
 		}
 	}
 
-	/*
-	 * Fügt nach der Annotation des Prozesses für eingefügte Marken invoke und
-	 * assig-Aktivitäten in den Prozess ein.
-	 * 
-	 * @param process_element Wurzelelement des BPEL-Prozesses
-	 */
 	/**
 	 * Inserts invoke and assign activities after annotating the process for
 	 * included markings
@@ -286,10 +242,10 @@ public class Instrumenter {
 
 	private void handleCoverageLabelsInElement(Element element, String variable) {
 		List<Element> childElements = new ArrayList<Element>();
-		List children = element.getContent(new ContentFilter(
+		List<Element> children = element.getContent(new ContentFilter(
 				ContentFilter.ELEMENT));
 		for (int i = 0; i < children.size(); i++) {
-			childElements.add((Element) children.get(i));
+			childElements.add(children.get(i));
 		}
 		replaceCoverageLabelsWithReportInvokes(element, variable);
 		boolean isFlow = element.getName().equals(
@@ -305,7 +261,7 @@ public class Instrumenter {
 
 	private void replaceCoverageLabelsWithReportInvokes(Element element,
 			String variable) {
-		List children;
+		List<Comment> children;
 		children = element.getContent(new ContentFilter(ContentFilter.COMMENT));
 		int indexOfLastMarker = -1;
 		int index;
@@ -313,7 +269,7 @@ public class Instrumenter {
 		String marker = "";
 		String commentText;
 		for (int i = children.size() - 1; i > -1; i--) {
-			comment = (Comment) children.get(i);
+			comment = children.get(i);
 			index = element.indexOf(comment);
 			commentText = comment.getText();
 			if (isCoverageLabel(commentText)) {
@@ -357,19 +313,12 @@ public class Instrumenter {
 		}
 	}
 
-	/*
-	 * Extrahiert die Marke aus dem Kommentar
-	 * 
-	 * @param complettLabel
-	 * @param identifier
-	 * @return
-	 */
 	/**
 	 * Extracts the marking from the comment
 	 * 
 	 * @param complettLabel
 	 * @param identifier
-	 * @return marking
+	 * @return marker
 	 */
 	private String getMarker(String complettLabel, String identifier) {
 		int startIndex = complettLabel.indexOf(identifier)
@@ -378,23 +327,13 @@ public class Instrumenter {
 
 	}
 
-	/*
-	 * Überprüft, ob der Kommentar eine Coverage-Marke ist.
-	 * 
-	 * @param label
-	 * @return
-	 */
 	/**
 	 * Checks whether comment is a coverage marking
 	 * 
 	 * @param label
-	 * @return yes, iff comment is a marking
+	 * @return yes, iff comment is a marker
 	 */
 	private boolean isCoverageLabel(String label) {
-		/*if (label.startsWith(COVERAGE_LABEL_IDENTIFIER)) {
-			return true;
-		}
-		return false;*/
 		return (label.startsWith(COVERAGE_LABEL_IDENTIFIER));
 	}
 

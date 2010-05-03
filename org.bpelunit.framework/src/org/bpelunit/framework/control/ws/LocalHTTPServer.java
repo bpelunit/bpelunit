@@ -28,32 +28,25 @@ public class LocalHTTPServer {
 	private HttpServer fServer;
 
 	private WebServiceHandler fHandler;
-	
-
 
 	private Logger wsLogger = Logger.getLogger(this.getClass());
 
-	private HttpServer server;
-
 	private MarkersServiceHandler fHandler2;
 
-	private SocketListener listener2=null;
+	private SocketListener listener2 = null;
 
 	public LocalHTTPServer(int portNumber, String rootPath) {
-
-		
 
 		fServer = new HttpServer();
 		SocketListener listener = new SocketListener();
 		listener.setPort(portNumber);
-
 
 		fServer.addListener(listener);
 
 		// Create the context for the root path
 		HttpContext context = new HttpContext();
 		context.setContextPath(rootPath);
-		wsLogger.info("!!!!ROOTPATH "+rootPath);
+		wsLogger.info("!!!!ROOTPATH " + rootPath);
 		context.setResourceBase("");
 		fHandler = new WebServiceHandler();
 
@@ -62,9 +55,8 @@ public class LocalHTTPServer {
 
 		// Add a 404 handler last
 		context.addHandler(new NotFoundHandler());
-		
+
 		fServer.addContext(context);
-		
 
 		if (BPELUnitRunner.measureTestCoverage()) {
 
@@ -85,7 +77,7 @@ public class LocalHTTPServer {
 			// Add a 404 handler last
 			context2.addHandler(new NotFoundHandler());
 			fServer.addContext(context2);
-			}
+		}
 
 	}
 
@@ -100,11 +92,11 @@ public class LocalHTTPServer {
 	}
 
 	public void stopServer() throws InterruptedException {
-		wsLogger.info("Connections="+fServer.getConnections());
-		wsLogger.info("ConnectionsOpen="+fServer.getConnectionsOpen());
-		wsLogger.info("ConnectionsRequests="+fServer.getRequests());
-		if(listener2!=null){
-			wsLogger.info("ACCEPTQUESIZE="+listener2.getAcceptQueueSize());
+		wsLogger.info("Connections=" + fServer.getConnections());
+		wsLogger.info("ConnectionsOpen=" + fServer.getConnectionsOpen());
+		wsLogger.info("ConnectionsRequests=" + fServer.getRequests());
+		if (listener2 != null) {
+			wsLogger.info("ACCEPTQUESIZE=" + listener2.getAcceptQueueSize());
 		}
 		fServer.stop(true);
 	}

@@ -381,11 +381,11 @@ public class ExtensionRegistry {
 	private static Map<String, List<String>> handleMetricElements(Element config) {
 		String attribute;
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		List children = config.getChildren(
+		List<Element> children = config.getChildren(
 				CoverageConstants.CONFIG_METRIC_ELEMENT,
 				CoverageConstants.NAMESPACE_CONFIGURATION);
-		for (Iterator iter = children.iterator(); iter.hasNext();) {
-			Element element = (Element) iter.next();
+		for (Iterator<Element> iter = children.iterator(); iter.hasNext();) {
+			Element element = iter.next();
 			attribute = element
 					.getAttributeValue(CoverageConstants.CONFIG_ATTRIBUT_NAME);
 			if (attribute != null) {

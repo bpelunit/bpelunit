@@ -13,7 +13,6 @@ import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
-import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
@@ -144,7 +143,7 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 			SOAPElement rpcWrapper= null;
 
 			// Find element node child
-			for (Iterator childElements= data.getChildElements(); childElements.hasNext();) {
+			for (Iterator<?> childElements= data.getChildElements(); childElements.hasNext();) {
 				Object current= childElements.next();
 				if (current instanceof SOAPElement) {
 					rpcWrapper= (SOAPElement) current;
@@ -159,7 +158,7 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 			Element rawRoot= BPELUnitUtil.generateDummyElementNode();
 
 			// Iterate through the children and add them
-			for (Iterator i= rpcWrapper.getChildElements(); i.hasNext();) {
+			for (Iterator<?> i= rpcWrapper.getChildElements(); i.hasNext();) {
 				Object current= i.next();
 				if (current instanceof SOAPElement) {
 					SOAPElement element= (SOAPElement) current;

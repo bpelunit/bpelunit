@@ -68,16 +68,16 @@ public class WSAHeaderProcessor implements IHeaderProcessor {
 
 			// Retrieve message ID
 			String messageID= null;
-			for (Iterator i= header.getChildElements(new QName(WSA_NAMESPACE, WSA_TAG_MESSAGE_ID)); i.hasNext();) {
+			for (Iterator<?> i= header.getChildElements(new QName(WSA_NAMESPACE, WSA_TAG_MESSAGE_ID)); i.hasNext();) {
 				SOAPElement soapElement= (SOAPElement) i.next();
 				messageID= soapElement.getTextContent();
 			}
 
 			// Retrieve reply to
 			String replyTo= null;
-			for (Iterator i= header.getChildElements(new QName(WSA_NAMESPACE, WSA_TAG_REPLY_TO)); i.hasNext();) {
+			for (Iterator<?> i= header.getChildElements(new QName(WSA_NAMESPACE, WSA_TAG_REPLY_TO)); i.hasNext();) {
 				SOAPElement soapElement= (SOAPElement) i.next();
-				for (Iterator j= soapElement.getChildElements(new QName(WSA_NAMESPACE, WSA_TAG_ADDRESS)); j.hasNext();) {
+				for (Iterator<?> j= soapElement.getChildElements(new QName(WSA_NAMESPACE, WSA_TAG_ADDRESS)); j.hasNext();) {
 					SOAPElement soapElement2= (SOAPElement) j.next();
 					replyTo= soapElement2.getTextContent();
 				}

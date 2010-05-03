@@ -63,7 +63,7 @@ public class NamespaceContextImpl implements NamespaceContext {
 			return null;
 	}
 
-	public Iterator getPrefixes(String namespaceURI) {
+	public Iterator<String> getPrefixes(String namespaceURI) {
 		Collection<String> name= fNamespaceMap.get(namespaceURI);
 		if (name != null)
 			return name.iterator();

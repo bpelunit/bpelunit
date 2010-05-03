@@ -111,7 +111,7 @@ public class BPELLaunchShortCut implements ILaunchShortcut {
 	 * configurations. Return the chosen config, or <code>null</code> if the user cancelled the
 	 * dialog.
 	 */
-	protected ILaunchConfiguration chooseConfiguration(List configList) {
+	protected ILaunchConfiguration chooseConfiguration(List<?> configList) {
 		IDebugModelPresentation labelProvider= DebugUITools.newDebugModelPresentation();
 		ElementListSelectionDialog dialog= new ElementListSelectionDialog(getShell(), labelProvider);
 		dialog.setElements(configList.toArray());

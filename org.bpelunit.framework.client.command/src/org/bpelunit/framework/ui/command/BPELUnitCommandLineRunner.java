@@ -61,11 +61,6 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 	private String fXmlFileName;
 	private String fLogFileName;
 	private String fCovFileName;
-	
-
-	private long stop1;
-
-	private long stop2;
 
 	public BPELUnitCommandLineRunner(boolean verbose, String xmlFileName, String logFileName, String covFileName) {
 		fVerbose= verbose;
@@ -242,7 +237,6 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 				System.out.println("  " + e.getMessage());
 				System.exit(1);
 			}
-			stop1=System.currentTimeMillis();
 			if (fCovFileName != null) {
 				try {
 					ICoverageMeasurementTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
@@ -257,7 +251,6 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 					e.printStackTrace();
 				}
 			}
-			stop2=System.currentTimeMillis();
 			System.out.println("Services undeployed.");
 			System.out.println("Shutting down. Have a nice day!");
 

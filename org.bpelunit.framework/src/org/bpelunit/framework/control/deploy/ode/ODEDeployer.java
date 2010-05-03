@@ -8,13 +8,10 @@ package org.bpelunit.framework.control.deploy.ode;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPException;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -52,8 +49,6 @@ public class ODEDeployer implements IBPELDeployer {
 	private Logger fLogger = Logger.getLogger(getClass());
 
 	private String fProcessId;
-
-	private String fPackageId;
 
 	private String fArchive;
 
@@ -195,7 +190,6 @@ public class ODEDeployer implements IBPELDeployer {
 
 		try {
 			fProcessId = extractProcessId(responseBody);
-			fPackageId = extractPackageId(fProcessId);
 		} catch (IOException e) {
 			throw new DeploymentException(
 					"Problem extracting deployment information: "
@@ -296,80 +290,12 @@ public class ODEDeployer implements IBPELDeployer {
 					"name"));
 			Element idElement = it.next();
 
-			String qnameStr = idElement.getText();
 			processId = idElement.getTextNormalize();
 		} catch (JDOMException e) {
 			throw new IOException(e);
 		}
 
 		return processId;
-	}
-
-	private QName extractQName(String serviceName, Element idElement) {
-		final int NS_URI = 0;
-		final int LOCALNAME = 1;
-
-		String tokens[];
-
-		if (serviceName.contains(":")) {
-			tokens = serviceName.split(":");
-
-			if (isUri(tokens[NS_URI]) && !isPrefix(tokens[NS_URI], idElement)) {
-				return new QName(tokens[NS_URI], tokens[LOCALNAME]);
-			} else {
-				String namespace = getPrefixValue(tokens[NS_URI], idElement);
-				return new QName(namespace, tokens[LOCALNAME]);
-			}
-		}
-
-		return new QName(null, serviceName);
-	}
-
-	private boolean isUri(String uriStr) {
-		try {
-			new URI(uriStr);
-		} catch (URISyntaxException e) {
-			return false;
-		}
-
-		return true;
-	}
-
-	private boolean isPrefix(String uriStr, Element service) {
-
-		if (service != null && service.getNamespace(uriStr) != null) {
-			return true;
-		}
-		return false;
-	}
-
-	private String getPrefixValue(String prefix, Element service) {
-
-		if (service != null && service.getNamespace(prefix) != null) {
-			return service.getNamespace(prefix).getURI();
-		}
-		return null;
-	}
-
-	private String extractPackageId(String processId) {
-		String version = null;
-		String packageName = null;
-
-		if (processId.contains("-")) {
-			version = processId.split("-")[1];
-			// processId is in the form HelloBPELProcess-1. Extract out version.
-		}
-
-		File archive = new File(fArchive);
-
-		if (fArchive.contains(".")) { // For zip deployments
-			packageName = archive.getName().split("\\.")[0];
-			// fBundle is in the form HelloBPEL.zip. Take out .zip part.
-		} else { // For directory deployments
-			packageName = archive.getName();
-		}
-
-		return packageName + "-" + version; // this is the deployed package id.
 	}
 
 	private void check(String toCheck, String description)
@@ -380,6 +306,7 @@ public class ODEDeployer implements IBPELDeployer {
 							+ description + ".");
 	}
 
+	@Override
 	public void cleanUpAfterTestCase() throws Exception {
 		// do nothing.
 	}

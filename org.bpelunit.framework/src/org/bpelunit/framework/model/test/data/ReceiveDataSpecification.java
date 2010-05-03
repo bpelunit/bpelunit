@@ -17,8 +17,6 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 
-import org.apache.xmlbeans.XmlException;
-import org.apache.xmlbeans.XmlObject;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.exception.HeaderProcessingException;
@@ -262,17 +260,6 @@ public class ReceiveDataSpecification extends DataSpecification {
 			}
 		}
 	}
-
-	private boolean hasMessageFault() {
-		boolean fault= false;
-		try {
-			fault= fSOAPMessage.getSOAPBody().hasFault();
-		} catch (SOAPException e) {
-			// should not happen
-		}
-		return fault;
-	}
-
 
 	private String getWireFormatAsString() {
 		if (fPlainMessage != null) {

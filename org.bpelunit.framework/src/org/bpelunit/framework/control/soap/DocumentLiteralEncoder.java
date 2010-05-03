@@ -18,7 +18,6 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.Text;
 
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.util.BPELUnitUtil;
 import org.bpelunit.framework.exception.SOAPEncodingException;
 import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
@@ -102,7 +101,7 @@ public class DocumentLiteralEncoder implements ISOAPEncoder {
 			SOAPElement data = message.getSOAPBody();
 
 			Element rawRoot = BPELUnitUtil.generateDummyElementNode();
-			for (Iterator i = data.getChildElements(); i.hasNext();) {
+			for (Iterator<?> i = data.getChildElements(); i.hasNext();) {
 				Object current = i.next();
 				if (current instanceof SOAPElement) {
 					SOAPElement element = (SOAPElement) current;

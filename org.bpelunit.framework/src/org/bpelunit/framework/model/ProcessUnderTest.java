@@ -22,8 +22,6 @@ import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.EndPointException;
 import org.bpelunit.framework.exception.SpecificationException;
 
-import de.schlichtherle.io.File;
-
 /**
  * The ProcessUnderTest is the internal representation of the BPEL process which
  * is tested in a particular test suite. The process is characterized by name, a

@@ -26,7 +26,6 @@ import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.Partner;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;

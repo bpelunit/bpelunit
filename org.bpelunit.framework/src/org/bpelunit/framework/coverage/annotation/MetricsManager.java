@@ -16,12 +16,6 @@ import org.bpelunit.framework.coverage.receiver.MarkerState;
 import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 
-/*
- * 
- * Die Klasse verwaltet die Metriken, die bei einem Testlauf ermittelt werden sollen.
- * @author Alex Salnikow
- *
- */
 /**
  * Manager class for metrics used in a test run
  * 
@@ -34,26 +28,15 @@ public class MetricsManager {
 			Hashtable<String, Hashtable<String, MarkerState>> allLabels) {
 		List<MarkerState> list = new ArrayList<MarkerState>();
 		if (allLabels.get(label) != null) {
-			Hashtable activityTable = allLabels.get(label);
-			Enumeration e = activityTable.elements();
+			Hashtable<String, MarkerState> activityTable = allLabels.get(label);
+			Enumeration<MarkerState> e = activityTable.elements();
 			while (e.hasMoreElements()) {
-				list.add((MarkerState) e.nextElement());
+				list.add(e.nextElement());
 			}
 		}
 		return list;
 	}
 
-	/*
-	 * 
-	 * @param name
-	 * 
-	 * @param list eine Liste mit Konfigurationsinformation
-	 * 
-	 * @param markersRegistry wird verwendet um beim Instrumentieren, die
-	 * ingefügten Marken zu registrieren.
-	 * 
-	 * @return Metrik
-	 */
 	/**
 	 * Creates a metric
 	 * 
@@ -104,14 +87,6 @@ public class MetricsManager {
 		return false;
 	}
 
-	/*
-	 * Erzeugt Statistiken nach dem Testlauf (wird an die Statistiken
-	 * weiterdeliegiert).
-	 * 
-	 * @param allMarkers
-	 *            eine Liste mit allen eingefügten Marken (nach dem Testlauf)
-	 * @return alle erzeugten Statistiken
-	 */
 	/**
 	 * Creates statistics after the test run.
 	 * 

@@ -1,14 +1,11 @@
 package org.bpelunit.framework.coverage;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IDeployment;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
@@ -18,8 +15,6 @@ import org.bpelunit.framework.coverage.annotation.MetricsManager;
 import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetricHandler;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.IDeploymentArchiveHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.impl.ActiveBPELDeploymentArchiveHandler;
 import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
 import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.bpelunit.framework.coverage.exceptions.CoverageMeasurementException;
@@ -42,9 +37,6 @@ import org.jdom.filter.ElementFilter;
 public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 
 	private Logger logger = Logger.getLogger(this.getClass());
-
-	// TODO what is failure?
-	private boolean failure;
 
 	private boolean error;
 
@@ -245,7 +237,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 				markersRegistry.addRegistryForFile(bpelFile);
 				doc = ParseUtil.getJDOMDocument(bpelFile);
 				addImports(doc);
-				Iterator iter2 = doc.getDescendants(new ElementFilter("link",
+				Iterator<?> iter2 = doc.getDescendants(new ElementFilter("link",
 						doc.getRootElement().getNamespace()));
 				while (iter2.hasNext()) {
 					iter2.next();

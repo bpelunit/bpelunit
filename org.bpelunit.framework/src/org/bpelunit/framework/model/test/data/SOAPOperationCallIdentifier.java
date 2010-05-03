@@ -21,7 +21,6 @@ import javax.wsdl.extensions.soap.SOAPBody;
 import javax.wsdl.extensions.soap.SOAPOperation;
 import javax.xml.namespace.QName;
 
-import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.exception.SpecificationException;
 
 /**
@@ -207,7 +206,7 @@ public class SOAPOperationCallIdentifier {
 	public String getEncodingStyle() throws SpecificationException {
 
 		SOAPBinding sBinding= null;
-		List extensibilityElements= fBinding.getExtensibilityElements();
+		List<?> extensibilityElements= fBinding.getExtensibilityElements();
 		for (Object supposedSOAPBinding : extensibilityElements) {
 			if (supposedSOAPBinding instanceof SOAPBinding)
 				sBinding= (SOAPBinding) supposedSOAPBinding;
@@ -251,7 +250,7 @@ public class SOAPOperationCallIdentifier {
 	 * @throws SpecificationException
 	 */
 	public String getTargetURL() throws SpecificationException {
-		List extensibilityElements= fPort.getExtensibilityElements();
+		List<?> extensibilityElements= fPort.getExtensibilityElements();
 		for (Object supposedSOAPAddress : extensibilityElements) {
 			if (supposedSOAPAddress instanceof SOAPAddress) {
 				SOAPAddress adr= (SOAPAddress) supposedSOAPAddress;
@@ -285,7 +284,7 @@ public class SOAPOperationCallIdentifier {
 	// ********************** Private Helpers ****************
 
 	private SOAPOperation getSOAPOperation() {
-		List extensibilityElements2= fOperation.getExtensibilityElements();
+		List<?> extensibilityElements2= fOperation.getExtensibilityElements();
 		for (Object supposedSOAPOperation : extensibilityElements2) {
 			if (supposedSOAPOperation instanceof SOAPOperation)
 				return ((SOAPOperation) supposedSOAPOperation);
@@ -329,7 +328,7 @@ public class SOAPOperationCallIdentifier {
 	}
 
 	private SOAPBody getSoapBody(ElementExtensible bindingInput) {
-		List extensibilityElements= bindingInput.getExtensibilityElements();
+		List<?> extensibilityElements= bindingInput.getExtensibilityElements();
 		for (Object supposedSOAPBody : extensibilityElements) {
 			if (supposedSOAPBody instanceof SOAPBody)
 				return ((SOAPBody) supposedSOAPBody);
