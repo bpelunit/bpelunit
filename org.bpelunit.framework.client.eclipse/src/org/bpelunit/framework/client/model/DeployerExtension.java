@@ -21,10 +21,15 @@ public class DeployerExtension extends Extension {
 	private String[] fGeneralOptions;
 	private String[] fSuiteOptions;
 
+	@Deprecated
 	public DeployerExtension(String id, String name, String[] general_options, String[] suite_options, IConfigurationElement e) {
 		super(id, name, e);
 		fGeneralOptions= general_options;
 		fSuiteOptions= suite_options;
+	}
+	
+	public DeployerExtension(String id, String name, IConfigurationElement e) {
+		super(id, name, e);
 	}
 
 	public IBPELDeployer createNew() throws SpecificationException {
@@ -35,10 +40,12 @@ public class DeployerExtension extends Extension {
 		throw new SpecificationException("Can't intantiate class for deployer " + getId());
 	}
 
+	@Deprecated
 	public String[] getGeneralOptions() {
 		return fGeneralOptions;
 	}
 
+	@Deprecated
 	public String[] getSuiteOptions() {
 		return fSuiteOptions;
 	}

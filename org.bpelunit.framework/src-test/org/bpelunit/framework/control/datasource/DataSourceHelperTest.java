@@ -130,6 +130,7 @@ public class DataSourceHelperTest {
 			AbstractDataSource {
 	}
 
+	@DataSource(name="Test", shortName="test", contentTypes="")
 	public static final class MyDataSource extends AbstractDataSource {
 
 		String b;
@@ -171,10 +172,17 @@ public class DataSourceHelperTest {
 	}
 
 	@Test
-	public void validateMethodAnnotationsWithNoDescriptionWrongNameWrongParameterList()
+	public void testValidateMethodAnnotationsWithNoDescriptionWrongNameWrongParameterList()
 			throws Exception {
 		List<String> messages = DataSourceHelper
 				.validateMethodAnnotations(MethodAnnotationsWithNoDescriptionWrongNameWrongParameterList.class);
 		assertEquals(4, messages.size());
+	}
+	
+	@Test
+	public void testGetName() {
+		MyDataSource ds = new MyDataSource();
+		assertEquals("Test", DataSourceHelper.getName(ds));
+		assertEquals("test", DataSourceHelper.getShortName(ds));
 	}
 }

@@ -9,12 +9,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.bpelunit.framework.client.model.DataSourceExtension;
 import org.bpelunit.framework.client.model.DeployerExtension;
 import org.bpelunit.framework.client.model.Extension;
 import org.bpelunit.framework.client.model.HeaderProcessorExtension;
 import org.bpelunit.framework.client.model.SOAPEncoderExtension;
+import org.bpelunit.framework.control.datasource.DataSourceHelper;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.exception.SpecificationException;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -34,10 +38,12 @@ public class ExtensionControl {
 	public static final String DEPLOYER_EXTENSION_POINT_ID = "org.bpelunit.framework.client.eclipse.bpelDeployer";
 	public static final String ENCODER_EXTENSION_POINT_ID = "org.bpelunit.framework.client.eclipse.soapEncoder";
 	public static final String HEADER_EXTENSION_POINT_ID = "org.bpelunit.framework.client.eclipse.headerProcessor";
+	public static final String DATASOURCE_EXTENSION_POINT_ID = "org.bpelunit.framework.client.eclipse.dataSource";
 
 	private static Map<String, DeployerExtension> fDeployers = new HashMap<String, DeployerExtension>();
 	private static Map<String, HeaderProcessorExtension> fHeaderProcessors = new HashMap<String, HeaderProcessorExtension>();
 	private static Map<String, SOAPEncoderExtension> fSOAPEncoders = new HashMap<String, SOAPEncoderExtension>();
+	private static Map<String, DataSourceExtension> fDataSources = new HashMap<String, DataSourceExtension>();
 
 	private static boolean isInitialized = false;
 
@@ -49,6 +55,8 @@ public class ExtensionControl {
 			loadExtensions(ENCODER_EXTENSION_POINT_ID, new SOAPEncoderLoader());
 			loadExtensions(HEADER_EXTENSION_POINT_ID,
 					new HeaderProcessorLoader());
+			loadExtensions(DATASOURCE_EXTENSION_POINT_ID,
+					new DataSourceLoader());
 
 			isInitialized = true;
 		}
@@ -93,26 +101,8 @@ public class ExtensionControl {
 				BPELUnitActivator
 						.logErrorMessage("Error reading bpel deployer list from plugin.xml files - required attributes are missing.");
 			} else {
-
-				String[] general_options = getOptions(e, "general_options");
-				String[] suite_options = getOptions(e, "suite_options");
-
-				fDeployers.put(id, new DeployerExtension(id, name,
-						general_options, suite_options, e));
+				fDeployers.put(id, new DeployerExtension(id, name, e));
 			}
-		}
-
-		private String[] getOptions(IConfigurationElement e, String name) {
-			String options = e.getAttribute(name);
-			String[] optionsx = new String[0];
-			if (options != null) {
-				optionsx = options.split(",");
-				for (int i = 0; i < optionsx.length; i++) {
-					optionsx[i] = optionsx[i].trim();
-				}
-			} else
-				optionsx = new String[0];
-			return optionsx;
 		}
 	}
 
@@ -145,6 +135,25 @@ public class ExtensionControl {
 						.logErrorMessage("Error reading soap encoder list from plugin.xml files - required attributes are missing.");
 			} else {
 				fSOAPEncoders.put(id, new SOAPEncoderExtension(id, name, e));
+			}
+		}
+	}
+	
+	static class DataSourceLoader extends ELoader {
+		@Override
+		public void load(IConfigurationElement e) {
+			super.load(e);
+			
+			try {
+				IDataSource ds = (IDataSource)e.createExecutableExtension("class");
+				String shortName = DataSourceHelper.getShortName(ds);
+				name = DataSourceHelper.getName(ds);
+				
+				fDataSources.put(id, new DataSourceExtension(shortName, name, e));
+			} catch (CoreException e1) {
+				BPELUnitActivator
+				.logErrorMessage("Error reading data source list from plugin.xml files - data source class cannot be instantiated.");
+				e1.printStackTrace();
 			}
 		}
 	}
@@ -195,16 +204,6 @@ public class ExtensionControl {
 			return fDeployers.values().iterator().next().getId();
 	}
 
-	public static String[] getSuiteOptionsForDeployer(String type) {
-		initialize();
-		DeployerExtension extension = findDeployerExtension(type);
-		if (extension != null)
-			return extension.getSuiteOptions();
-		else
-			return new String[0];
-
-	}
-
 	public static String getDeployerType(IBPELDeployer deployer) {
 		Set<String> keys = fDeployers.keySet();
 
@@ -215,7 +214,7 @@ public class ExtensionControl {
 					return fDeployers.get(key).getId();
 				}
 			} catch (SpecificationException e) {
-				//e.printStackTrace();
+				// e.printStackTrace();
 				return null;
 			}
 		}

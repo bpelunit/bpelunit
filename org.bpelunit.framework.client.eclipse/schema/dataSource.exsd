@@ -3,10 +3,10 @@
 <schema targetNamespace="org.bpelunit.framework.client.eclipse" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.bpelunit.framework.client.eclipse" id="bpelDeployer" name="BPEL Deployer"/>
+         <meta.schema plugin="org.bpelunit.framework.client.eclipse" id="dataSource" name="Data Source"/>
       </appInfo>
       <documentation>
-         Extension point for adding BPEL Deployers
+         [Enter description of this extension point.]
       </documentation>
    </annotation>
 
@@ -17,57 +17,46 @@
          </appInfo>
       </annotation>
       <complexType>
-         <sequence>
-            <element ref="bpelDeployer" minOccurs="1" maxOccurs="unbounded"/>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="datasource"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
-                  a fully qualified identifier of the target extension point
+                  
                </documentation>
             </annotation>
          </attribute>
          <attribute name="id" type="string">
             <annotation>
                <documentation>
-                  an optional identifier of the extension instance
+                  
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string">
             <annotation>
                <documentation>
-                  an optional name of the extension instance
+                  
                </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>
    </element>
 
-   <element name="bpelDeployer">
+   <element name="datasource">
       <complexType>
-         <attribute name="id" type="string" use="required">
+         <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  ID of this bpel deployer
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="deployerClass" type="string" use="required">
-            <annotation>
-               <documentation>
-                  class implementing the interface IBPELDeployer
+                  A data source that can be used for fetching test data for templates
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.bpelunit.framework.control.ext.IBPELDeployer"/>
+                  <meta.attribute kind="java" basedOn=":org.bpelunit.framework.control.ext.IDataSource"/>
                </appInfo>
-            </annotation>
-         </attribute>
-         <attribute name="name" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
             </annotation>
          </attribute>
       </complexType>
@@ -78,7 +67,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         1.0
+         [Enter the first release in which this extension point appears.]
       </documentation>
    </annotation>
 
@@ -93,7 +82,7 @@
 
    <annotation>
       <appInfo>
-         <meta.section type="apiInfo"/>
+         <meta.section type="apiinfo"/>
       </appInfo>
       <documentation>
          [Enter API information here.]

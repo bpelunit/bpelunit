@@ -4,6 +4,7 @@
    <extension-point id="bpelDeployer" name="BPEL Deployer" schema="schema/BPELDeployer.exsd"/>
    <extension-point id="headerProcessor" name="HeaderProcessor" schema="schema/HeaderProcessor.exsd"/>
    <extension-point id="soapEncoder" name="SOAPEncoder" schema="schema/SOAPEncoder.exsd"/>
+   <extension-point id="dataSource" name="Data Source" schema="schema/dataSource.exsd"/>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -127,41 +128,42 @@
    <extension
          point="org.bpelunit.framework.client.eclipse.bpelDeployer">
       <bpelDeployer
-            deployerClass="org.bpelunit.framework.control.deploy.oracle.OracleDeployer"
-            id="oracle"
-            name="Oracle Deployer"
-            general_options="OracleDirectory,OracleDomain,OracleDomainPassword"
-            suite_options="BPELJARFile"
-            />
+            deployerClass="org.bpelunit.framework.control.deploy.simple.FixedDeployer"
+            id="fixed"
+            name="Fixed/Static Deployment" />
       <bpelDeployer
             deployerClass="org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer"
             id="activebpel"
             name="ActiveBPEL Deployer"
-            general_options="ActiveBPELDeploymentDirectory,ActiveBPELDeploymentServiceURL"
-            suite_options="BPRFile"
             />
       <bpelDeployer
             deployerClass="org.bpelunit.framework.control.deploy.ode.ODEDeployer"
             id="ode"
-            name="ODE Deployer"
-            general_options="ODEDeploymentServiceURL"
-            suite_options="DeploymentArchive"
+            name="Apache ODE Deployer"
             />
+      <bpelDeployer
+            deployerClass="org.bpelunit.framework.control.deploy.oracle.OracleDeployer"
+            id="oracle"
+            name="Oracle Deployer"
+            />
+   </extension>
+   <!--<extension
+         point="org.bpelunit.framework.client.eclipse.bpelDeployer">
       <bpelDeployer
             deployerClass="org.bpelunit.framework.control.deploy.simple.TestModeDeployer"
             id="testmode"
-            name="Test Mode Deployer"/>
-      <bpelDeployer
-            deployerClass="org.bpelunit.framework.control.deploy.simple.FixedDeployer"
-            id="fixed"
-            name="Fixed Deployer"/>
-   </extension>
+            name="Test Mode Deployer"
+            />
+   </extension> -->
    <extension
          point="org.bpelunit.framework.client.eclipse.soapEncoder">
       <soapProcessor
             encoderClass="org.bpelunit.framework.control.soap.DocumentLiteralEncoder"
             id="document/literal"
             name="Document/Literal Encoder"/>
+   </extension>
+   <extension
+         point="org.bpelunit.framework.client.eclipse.soapEncoder">
       <soapProcessor
             encoderClass="org.bpelunit.framework.control.soap.RPCLiteralEncoder"
             id="rpc/literal"
@@ -196,6 +198,10 @@
             name="Apache ODE Header Processor"
             processorClass="org.bpelunit.framework.control.soap.OdeHeaderProcessor">
       </headerProcessor>
+   </extension>
+   <extension
+         point="org.bpelunit.framework.client.eclipse.dataSource">
+         <datasource class="org.bpelunit.framework.control.datasource.VelocityDataSource" />
    </extension>
 
 </plugin>

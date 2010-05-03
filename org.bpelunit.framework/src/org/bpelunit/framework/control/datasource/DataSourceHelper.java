@@ -254,4 +254,14 @@ public class DataSourceHelper {
 			}
 		}
 	}
+
+	public static String getName(IDataSource ds) {
+		DataSource annotation = ds.getClass().getAnnotation(DataSource.class);
+		return annotation.name();
+	}
+	
+	public static String getShortName(IDataSource ds) {
+		DataSource annotation = ds.getClass().getAnnotation(DataSource.class);
+		return annotation.shortName();
+	}
 }
