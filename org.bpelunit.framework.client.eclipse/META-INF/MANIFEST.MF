@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.help,
  org.eclipse.help.ui
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: org.bpelunit.framework.client.eclipse,
  org.bpelunit.framework.client.eclipse.dialog,
  org.bpelunit.framework.client.eclipse.dialog.field,
@@ -28,3 +28,4 @@ Export-Package: org.bpelunit.framework.client.eclipse,
  org.bpelunit.framework.client.eclipse.views,
  org.bpelunit.framework.client.model
 Bundle-Vendor: Leibniz Universität Hannover
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

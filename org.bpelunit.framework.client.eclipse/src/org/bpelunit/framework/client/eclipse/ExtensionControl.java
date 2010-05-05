@@ -30,7 +30,7 @@ import org.eclipse.core.runtime.Platform;
  * plugins.
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Daniel Luebke <bpelunit@daniel-luebke.de>
  * 
  */
 public class ExtensionControl {

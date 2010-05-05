@@ -26,8 +26,8 @@ import org.jdom.Namespace;
 
 /**
  * Klasse instrumentiert einen BPEL-Prozess, um die Abdeckung der
- * BasicActivities bei der Ausführung zu messen. Die einzelnen Aktivitäten, die
- * bei der Messung berücksichtigt werden müssen, müssen explizit angegeben
+ * BasicActivities bei der Ausfï¿½hrung zu messen. Die einzelnen Aktivitï¿½ten, die
+ * bei der Messung berï¿½cksichtigt werden mï¿½ssen, mï¿½ssen explizit angegeben
  * werden.
  * 
  * @author Alex Salnikow
@@ -46,23 +46,25 @@ public class ActivityMetricHandler implements IMetricHandler {
 	}
 
 	/**
-	 * Diese Methode fügt die Markierungen in BPEL-Process-Element ein
+	 * Diese Methode fï¿½gt die Markierungen in BPEL-Process-Element ein
 	 * (Instrumentierung). Anhand dieser Markierungen werden danach
-	 * entsprechende Invoke aufrufe generiert und dadurch die Ausführung
-	 * bestimmter Aktivitäten geloggt.
+	 * entsprechende Invoke aufrufe generiert und dadurch die Ausfï¿½hrung
+	 * bestimmter Aktivitï¿½ten geloggt.
 	 * 
 	 * @param activities
 	 *            Prozess-Element der BPEL
+	 * 
 	 */
+	// FIXME Possible bug, need tests for: sequence is not used but
+	// seems like it is supposed to be an out parameter which it is
+	// NOT
 	public void insertMarkersForMetric(List<Element> activities) {
-		Element element;
-		for (int i = 0; i < activities.size(); i++) {
-			element = activities.get(i);
+		for (Element activity : activities) {
 			Element sequence = null;
-			respectTargetActivities(element, sequence);
+			respectTargetActivities(activity, sequence);
 			// respectSourceActivities(element, sequence);
-			ensureElementIsInSequence(element);
-			insertMarkerForActivity(element);
+			ensureElementIsInSequence(activity);
+			insertMarkerForActivity(activity);
 		}
 	}
 
@@ -82,8 +84,8 @@ public class ActivityMetricHandler implements IMetricHandler {
 	}
 
 	/**
-	 * Schliesst die Aktivität mit der Coverage Marke mit einer Sequence um,
-	 * wenn die Aktivität Ziel eines Synchronisationslinks ist.
+	 * Schliesst die Aktivitï¿½t mit der Coverage Marke mit einer Sequence um,
+	 * wenn die Aktivitï¿½t Ziel eines Synchronisationslinks ist.
 	 * 
 	 * @param element
 	 * @param sequence
@@ -138,12 +140,12 @@ public class ActivityMetricHandler implements IMetricHandler {
 	}
 
 	/**
-	 * Fügt eine Markierung für die Aktivität ein. Die Markierung wird entweder
-	 * direkt vor oder nach der Aktivität eingefügt. Die Aktivitäten, die in
-	 * eingetragen sind, müssen vor der Ausführung geloggt werden.
+	 * Fï¿½gt eine Markierung fï¿½r die Aktivitï¿½t ein. Die Markierung wird entweder
+	 * direkt vor oder nach der Aktivitï¿½t eingefï¿½gt. Die Aktivitï¿½ten, die in
+	 * eingetragen sind, mï¿½ssen vor der Ausfï¿½hrung geloggt werden.
 	 * 
 	 * @param element
-	 *            Aktivität
+	 *            Aktivitï¿½t
 	 */
 	private void insertMarkerForActivity(Element element) {
 		Element parent = element.getParentElement();

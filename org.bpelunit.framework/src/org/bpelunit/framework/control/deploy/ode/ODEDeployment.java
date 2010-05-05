@@ -19,6 +19,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.control.ext.GenericDeployment;
 import org.bpelunit.framework.control.ext.PartnerLink;
+import org.bpelunit.framework.control.util.JDomHelper;
 import org.bpelunit.framework.control.util.ParseUtil;
 import org.bpelunit.framework.coverage.CoverageConstants;
 import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
@@ -84,16 +85,16 @@ public class ODEDeployment extends GenericDeployment {
 		ArrayList<PartnerLink> links = new ArrayList<PartnerLink>();
 		Element envelope = fDescriptorDocument.getRootElement();
 
-		Iterator<Element> processes = envelope
-				.getDescendants(new ElementFilter(PROCESS_ELEMENT));
+		Iterator<Element> processes = JDomHelper.getDescendants(envelope,
+				new ElementFilter(PROCESS_ELEMENT));
 
 		while (processes.hasNext()) {
 			Element process = processes.next();
 			String processName = process.getAttributeValue(NAME_ATTR);
 
 			if (processName.contains(getProcessUnderTest().getName())) {
-				Iterator<Element> invokes = process
-						.getDescendants(new ElementFilter(INVOKE_ATTR));
+				Iterator<Element> invokes = JDomHelper.getDescendants(
+						process, new ElementFilter(INVOKE_ATTR));
 
 				while (invokes.hasNext()) {
 					Element invoke = invokes.next();
@@ -114,7 +115,9 @@ public class ODEDeployment extends GenericDeployment {
 			}
 		}
 
-		throw new DeploymentException("Could not find the process with the specified name in the deployment: " + getProcessUnderTest().getName());
+		throw new DeploymentException(
+				"Could not find the process with the specified name in the deployment: "
+						+ getProcessUnderTest().getName());
 	}
 
 	// ******************** Private helper methods ****************************
@@ -175,8 +178,8 @@ public class ODEDeployment extends GenericDeployment {
 
 		try {
 			Element deploy = fDescriptorDocument.getRootElement();
-			Iterator<Element> processes = deploy
-					.getDescendants(new ElementFilter(PROCESS_ELEMENT));
+			Iterator<Element> processes = JDomHelper.getDescendants(deploy,
+					new ElementFilter(PROCESS_ELEMENT));
 			deploy
 					.addNamespaceDeclaration(CoverageConstants.COVERAGETOOL_NAMESPACE);
 

@@ -56,11 +56,9 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		messageReceiver = new CoverageMessageReceiver(markersRegistry);
 	}
 
-	// **********************Konfiguration*********************************
+	// **********************Configuration*********************************
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see
 	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#configureMetrics
 	 * (java.util.Map)
@@ -73,20 +71,17 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 					"Coverage metrics are not configured.");
 		}
 		Iterator<String> iter = configMap.keySet().iterator();
-		String key;
-		IMetric metric;
 		while (iter.hasNext()) {
-			key = iter.next();
-			metric = MetricsManager.createMetric(key, configMap.get(key),
+			String key = iter.next();
+			IMetric metric = MetricsManager.createMetric(key, configMap.get(key),
 					markersRegistry);
-			if (metric != null)
+			if (metric != null) {
 				metricManager.addMetric(metric);
+			}
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see
 	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#setSOAPEncoder
 	 * (org.bpelunit.framework.control.ext.ISOAPEncoder)
@@ -95,9 +90,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		messageReceiver.setSOAPEncoder(encoder);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/** 
 	 * @see
 	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#setPathToWSDL
 	 * (java.lang.String)
@@ -108,9 +101,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		messageReceiver.setPathToWSDL(wsdl);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/** 
 	 * @see
 	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#getEncodingStyle
 	 * ()
@@ -119,47 +110,16 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		return messageReceiver.getEncodingStyle();
 	}
 
-	// **********************Instrumentierung********************************
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seeorg.bpelunit.framework.coverage.ICoverageMeasurementTool#
-	 * prepareArchiveForCoverageMeasurement(java.lang.String, java.lang.String,
-	 * org.bpelunit.framework.control.ext.IBPELDeployer)
-	 */
-	/*
-	 * public String prepareArchiveForCoverageMeasurement(String pathToArchive,
-	 * String archiveFile, IBPELDeployer deployer) throws
-	 * CoverageMeasurementException {
-	 * logger.info("Instrumentation is started."); if (pathToWSDL == null) {
-	 * setErrorStatus("Path to WSDL file for coverage measurment failure");
-	 * throw new CoverageMeasurementException(
-	 * "Path to WSDL file for coverage measurment failure"); }
-	 * IDeploymentArchiveHandler archiveHandler = null; if (deployer instanceof
-	 * ActiveBPELDeployer) { archiveHandler = new
-	 * ActiveBPELDeploymentArchiveHandler(); } // else if //point for extention
-	 * for other BPEL Engines
-	 * 
-	 * if (archiveHandler == null) { setErrorStatus(deployer.toString() +
-	 * " is by coverage tool not supported"); throw new
-	 * CoverageMeasurementException(deployer.toString() +
-	 * " is by coverage tool not supported"); } String newArchiveFile =
-	 * archiveHandler.createArchivecopy(FilenameUtils .concat(pathToArchive,
-	 * archiveFile)); prepareLoggingService(archiveHandler);
-	 * executeInstrumentationOfBPEL(archiveHandler);
-	 * archiveHandler.closeArchive();
-	 * logger.info("Instrumentation is complete."); return newArchiveFile; }
-	 */
+	// **********************Instrumentation********************************
 
 	public String prepareArchiveForCoverageMeasurement(String archive,
 			ProcessUnderTest put, IBPELDeployer deployer)
 			throws CoverageMeasurementException {
-		logger.info("Instrumentation is started.");
+		logger.info("Instrumentation started.");
 		if (pathToWSDL == null) {
-			setErrorStatus("Path to WSDL file for coverage measurment failure");
-			throw new CoverageMeasurementException(
-					"Path to WSDL file for coverage measurment failure");
+			String errorMsg = "No path for a WSDL file for coverage measurment set";
+			setErrorStatus(errorMsg);
+			throw new CoverageMeasurementException(errorMsg);
 		}
 
 		String newArchiveFile = ArchiveUtil.createArchivecopy(archive);
@@ -237,12 +197,12 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 				markersRegistry.addRegistryForFile(bpelFile);
 				doc = ParseUtil.getJDOMDocument(bpelFile);
 				addImports(doc);
+
 				Iterator<?> iter2 = doc.getDescendants(new ElementFilter("link",
 						doc.getRootElement().getNamespace()));
 				while (iter2.hasNext()) {
 					iter2.next();
 					count++;
-
 				}
 				doc = instrumenter.insertAnnotations(doc, metricManager);
 				ParseUtil.writeDocument(doc, bpelFile);

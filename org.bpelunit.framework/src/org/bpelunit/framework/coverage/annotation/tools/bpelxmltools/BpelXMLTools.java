@@ -5,34 +5,35 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bpelunit.framework.control.util.JDomHelper;
 import org.bpelunit.framework.coverage.CoverageConstants;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
 import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.XpathLanguage;
 import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.jdom.filter.ContentFilter;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-
 /**
- * Die Klasse stellt zur Verfügung Methoden, mit denen man neue Elemente der
- * BPEL Sprache erzeugen und in den BPEL-Prozess einfügen.
+ * Die Klasse stellt zur Verfï¿½gung Methoden, mit denen man neue Elemente der
+ * BPEL Sprache erzeugen und in den BPEL-Prozess einfï¿½gen.
  * 
  * @author Alex Salnikow
  */
 public class BpelXMLTools {
 
-	public static final Namespace NAMESPACE_BPEL_1_1 = Namespace.getNamespace("http://schemas.xmlsoap.org/ws/2003/03/business-process/");
-	public static final Namespace NAMESPACE_BPEL_2_0 = Namespace.getNamespace("http://docs.oasis-open.org/wsbpel/2.0/process/executable");
+	public static final Namespace NAMESPACE_BPEL_1_1 = Namespace
+			.getNamespace("http://schemas.xmlsoap.org/ws/2003/03/business-process/");
+	public static final Namespace NAMESPACE_BPEL_2_0 = Namespace
+			.getNamespace("http://docs.oasis-open.org/wsbpel/2.0/process/executable");
 
 	/* Elements from namespace of BPEL */
 
-	public static int sequence_count=0;
-	public static int flow_count=0;
-	public static int invoke_count=0;
-	
+	public static int sequence_count = 0;
+	public static int flow_count = 0;
+	public static int invoke_count = 0;
+
 	public static final String PROCESS_ELEMENT = "process";
 
 	public static final String VARIABLE_ELEMENT = "variable";
@@ -120,6 +121,8 @@ public class BpelXMLTools {
 	private static final String PREFIX_FOR_NEW_VARIABLE = "_zyx";
 
 	public static int count = 0;
+
+	// TODO XXX no public vars and especially not static!
 	public static Element process_element;
 
 	public static Namespace getProcessNamespace() {
@@ -157,10 +160,13 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Erzeugt ein Variable-Element ohne es in BPEL einzufügen.
+	 * Erzeugt ein Variable-Element ohne es in BPEL einzufï¿½gen.
 	 * 
-	 * @param scope kann null sein, dann wird die Variable in den globelen Prozess-Scope eingefügt.
-	 * @param name Variablenname
+	 * @param scope
+	 *            kann null sein, dann wird die Variable in den globelen
+	 *            Prozess-Scope eingefï¿½gt.
+	 * @param name
+	 *            Variablenname
 	 * @return variable-Element
 	 */
 	public static Element insertNewIntVariable(Element scope, String name) {
@@ -175,8 +181,8 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Fügt Variable in dem Scope ein. Wenn ein Varables-Element fehlt, dann
-	 * wird ein hinzugefügt.
+	 * Fï¿½gt Variable in dem Scope ein. Wenn ein Varables-Element fehlt, dann
+	 * wird ein hinzugefï¿½gt.
 	 * 
 	 * @param variable
 	 * @param scope
@@ -191,12 +197,12 @@ public class BpelXMLTools {
 			variables = new Element(VARIABLES_ELEMENT, getProcessNamespace());
 			scope.addContent(0, variables);
 		}
-		List allVariables = variables.getChildren(VARIABLE_ELEMENT,
-				getProcessNamespace());
+		List<Element> allVariables = JDomHelper.getChildren(variables,
+				VARIABLE_ELEMENT, getProcessNamespace());
 		boolean exist = false;
 		String variableName = variable.getAttributeValue(NAME_ATTR);
-		for (Iterator iter = allVariables.iterator(); iter.hasNext();) {
-			Element element = (Element) iter.next();
+		for (Iterator<Element> iter = allVariables.iterator(); iter.hasNext();) {
+			Element element = iter.next();
 			if (element.getAttributeValue(NAME_ATTR).equals(variableName)) {
 				exist = true;
 				break;
@@ -207,11 +213,11 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Schließt das Element in eine Sequence ein.
+	 * Schlieï¿½t das Element in eine Sequence ein.
 	 * 
-	 * @param activity :
-	 *            Element, das in eine Sequence eingeschloßen werden soll.
-	 * @return Umschließende Sequence-Element
+	 * @param activity
+	 *            : Element, das in eine Sequence eingeschloï¿½en werden soll.
+	 * @return Umschlieï¿½ende Sequence-Element
 	 */
 	public static Element encloseInSequence(Element activity) {
 		Element parent = activity.getParentElement();
@@ -224,14 +230,15 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Überprüft, ob das Element in Sequence eingeschloßen ist. Wenn nicht, dann
-	 * wird es in ein neues Sequence-Element eingeschloßen.
+	 * ï¿½berprï¿½ft, ob das Element in Sequence eingeschloï¿½en ist. Wenn nicht, dann
+	 * wird es in ein neues Sequence-Element eingeschloï¿½en.
 	 * 
 	 * @param activity
 	 * @return Sequence-Element
 	 */
 	public static Element ensureElementIsInSequence(Element activity) {
 		Element parent = activity.getParentElement();
+		// TODO Check for equal namespace
 		if (parent.getName().equals(StructuredActivities.SEQUENCE_ACTIVITY)) {
 			activity = parent;
 		} else {
@@ -241,42 +248,38 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Überprüft, ob das Element in Sequence eingeschloßen oder selbst Sequence
+	 * ï¿½berprï¿½ft, ob das Element in Sequence eingeschloï¿½en oder selbst Sequence
 	 * ist. Wenn nicht, dann wird es in ein neues Sequence-Element
-	 * eingeschloßen.
+	 * eingeschloï¿½en.
 	 * 
 	 * @param activity
 	 * @return Sequence-Element
 	 */
 	public static boolean isSequence(Element activity) {
-		return activity.getName().equals(StructuredActivities.SEQUENCE_ACTIVITY);
+		return activity.getName()
+				.equals(StructuredActivities.SEQUENCE_ACTIVITY);
 	}
 
 	/**
-	 * Sucht bei dem übergebenen Element innerhalb seiner direkten
-	 * Kind-Elementen nach der ersten Aktivität und gibt diese zurück.
+	 * Sucht bei dem ï¿½bergebenen Element innerhalb seiner direkten
+	 * Kind-Elementen nach der ersten Aktivitï¿½t und gibt diese zurï¿½ck.
 	 * 
 	 * @param element
-	 * @return Das erste Kind-Element, das eine Aktivität ist. Falls nicht
+	 * @return Das erste Kind-Element, das eine Aktivitï¿½t ist. Falls nicht
 	 *         vorhanden, dann null;
 	 */
 	public static Element getFirstEnclosedActivity(Element element) {
 		Element activity = null;
-		List children = element.getContent(new ContentFilter(
-				ContentFilter.ELEMENT));
-		Element child;
-		for (int i = 0; i < children.size(); i++) {
-			child = (Element) children.get(i);
+		List<Element> children = JDomHelper.getElementsInContent(element);
+		for (Element child : children) {
 			if (isActivity(child)) {
 				activity = child;
 				break;
-			} 
+			}
 		}
 		return activity;
 	}
 
-
-	
 	public static boolean canCreateInstance(Element activity) {
 		String value = activity.getAttributeValue(CREATE_INSTANCE_ATTR, "no");
 		if (value.equals("yes")) {
@@ -287,11 +290,11 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Schließt das Element in eine Flow ein.
+	 * Schlieï¿½t das Element in eine Flow ein.
 	 * 
-	 * @param activity :
-	 *            Element, das in eine Flow eingeschloßen werden soll.
-	 * @return Umschließende Flow-Element
+	 * @param activity
+	 *            : Element, das in eine Flow eingeschloï¿½en werden soll.
+	 * @return Umschlieï¿½ende Flow-Element
 	 */
 	public static Element encloseElementInFlow(Element activity) {
 		Element parent = activity.getParentElement();
@@ -304,8 +307,8 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Überprüft, ob das Element selbst Flow ist. Wenn nicht, dann wird es in
-	 * ein neues Flow-Element eingeschloßen.
+	 * ï¿½berprï¿½ft, ob das Element selbst Flow ist. Wenn nicht, dann wird es in
+	 * ein neues Flow-Element eingeschloï¿½en.
 	 * 
 	 * @param activity
 	 * @return Flow-Element
@@ -347,7 +350,7 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Erzeugt ein Assign-Element für eine Count-Variable und setzt auf 0.
+	 * Erzeugt ein Assign-Element fï¿½r eine Count-Variable und setzt auf 0.
 	 * 
 	 * @param countVariable
 	 * @return Assign-Element
@@ -369,7 +372,7 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Erzeugt ein Assign-Element für die Erhöhung der Count-Variable um 1.
+	 * Erzeugt ein Assign-Element fï¿½r die Erhï¿½hung der Count-Variable um 1.
 	 * 
 	 * @param countVariable
 	 * @return Assign-Element
@@ -392,15 +395,15 @@ public class BpelXMLTools {
 	}
 
 	/**
-	 * Fügt in das If-Element Else-Zweig ein.
+	 * Fï¿½gt in das If-Element Else-Zweig ein.
 	 * 
-	 * @param element -
-	 *            If-Element
+	 * @param element
+	 *            - If-Element
 	 * @return Else-Element
 	 */
 	public static Element insertElseBranch(Element element) {
 		Element elseElement = createBPELElement(ELSE_ELEMENT);
-//		elseElement.addContent(BpelXMLTools.createSequence());
+		// elseElement.addContent(BpelXMLTools.createSequence());
 		element.addContent(elseElement);
 		return elseElement;
 	}
@@ -438,7 +441,6 @@ public class BpelXMLTools {
 		}
 	}
 
-
 	public static Element getSurroundScope(Content content) {
 		Element scope = null;
 		Element parent = content.getParentElement();
@@ -457,27 +459,26 @@ public class BpelXMLTools {
 	}
 
 	public static Element createBPELElement(String name) {
-		if(name.equals(StructuredActivities.FLOW_ACTIVITY))
+		if (name.equals(StructuredActivities.FLOW_ACTIVITY))
 			flow_count++;
 
-		if(name.equals(BasicActivities.INVOKE_ACTIVITY))
+		if (name.equals(BasicActivities.INVOKE_ACTIVITY))
 			invoke_count++;
 		return new Element(name, getProcessNamespace());
 	}
-	
 
 	public static boolean isFaultHandlers(Element element) {
 		return element.getName().equals(FAULT_HANDLERS);
 	}
 
-	public static boolean isCompensationHandlers(Element element) {
+	public static boolean isCompensationHandler(Element element) {
 		return element.getName().equals(COMPENSATION_HANDLER);
 	}
 
 	public static List<Element> getCatchBlocks(Element faultHandler) {
 		List<Element> catchBlocks = new ArrayList<Element>();
-		List<Element> children = faultHandler.getChildren(CATCH_ELEMENT,
-				getProcessNamespace());
+		List<Element> children = JDomHelper.getChildren(faultHandler,
+				CATCH_ELEMENT, getProcessNamespace());
 		Iterator<Element> iter = children.iterator();
 		while (iter.hasNext()) {
 			catchBlocks.add(iter.next());
@@ -489,8 +490,8 @@ public class BpelXMLTools {
 		}
 		return catchBlocks;
 	}
-	
-	public static Element insertOtherwiseBranch(Element element){
+
+	public static Element insertOtherwiseBranch(Element element) {
 		Element otherwiseElement = createBPELElement(SWITCH_OTHERWISE_ELEMENT);
 		element.addContent(otherwiseElement);
 		return otherwiseElement;

@@ -116,7 +116,8 @@ public class ExtensionRegistry {
 			}
 
 			for (XMLExtension dataSource : testExtensions.getDataSourceList()) {
-				load(dataSource, IDataSource.class, "Data Source", fsDataSourceRegistry);
+				load(dataSource, IDataSource.class, "Data Source",
+						fsDataSourceRegistry);
 			}
 		} catch (XmlException e) {
 			throw new ConfigurationException(
@@ -172,7 +173,7 @@ public class ExtensionRegistry {
 
 	/**
 	 * Creates a new instance of the data source for the given type
-	 *
+	 * 
 	 * @param type
 	 *            data source type as specified in the extensions.xml file
 	 * @return new data source instance
@@ -274,7 +275,8 @@ public class ExtensionRegistry {
 			document = XMLTestConfigurationDocument.Factory.parse(fileURL);
 			XMLTestConfiguration testConfig = document.getTestConfiguration();
 
-			for (XMLConfiguration configuration : testConfig.getConfigurationList()) {
+			for (XMLConfiguration configuration : testConfig
+					.getConfigurationList()) {
 				String deployer = configuration.getDeployer();
 				for (XMLProperty property : configuration.getPropertyList()) {
 					Map<String, String> options = fsDeployerOptions
@@ -381,7 +383,7 @@ public class ExtensionRegistry {
 	private static Map<String, List<String>> handleMetricElements(Element config) {
 		String attribute;
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		List<Element> children = config.getChildren(
+		List<Element> children = JDomHelper.getChildren(config,
 				CoverageConstants.CONFIG_METRIC_ELEMENT,
 				CoverageConstants.NAMESPACE_CONFIGURATION);
 		for (Iterator<Element> iter = children.iterator(); iter.hasNext();) {

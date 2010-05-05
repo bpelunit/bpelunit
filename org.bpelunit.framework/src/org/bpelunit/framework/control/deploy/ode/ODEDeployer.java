@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IDeployment;
 import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
+import org.bpelunit.framework.control.util.JDomHelper;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.ProcessUnderTest;
@@ -286,8 +287,8 @@ public class ODEDeployer implements IBPELDeployer {
 			Document doc = builder.build(new StringReader(responseBody));
 			Element envelope = doc.getRootElement();
 
-			Iterator<Element> it = envelope.getDescendants(new ElementFilter(
-					"name"));
+			Iterator<Element> it = JDomHelper.getDescendants(envelope,
+					new ElementFilter("name"));
 			Element idElement = it.next();
 
 			processId = idElement.getTextNormalize();

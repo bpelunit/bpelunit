@@ -13,9 +13,9 @@ import java.util.Map;
 
 import javax.wsdl.Definition;
 import javax.wsdl.Service;
-
 import javax.xml.namespace.QName;
 
+import org.bpelunit.framework.control.util.JDomHelper;
 import org.bpelunit.framework.control.util.ParseUtil;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.EndPointException;
@@ -95,12 +95,12 @@ public abstract class GenericDeployment implements IDeployment {
 
 		Element definition = document.getRootElement();
 
-		Iterator<Element> services = definition
-				.getDescendants(new ElementFilter(SERVICE_ELEMENT));
+		Iterator<Element> services = JDomHelper.getDescendants(definition,
+				new ElementFilter(SERVICE_ELEMENT));
 
 		while (services.hasNext()) {
 			Element service = services.next();
-			Iterator<Element> ports = service.getDescendants(new ElementFilter(
+			Iterator<Element> ports = JDomHelper.getDescendants(service, new ElementFilter(
 					PORT_ELEMENT));
 
 			if (partnerPort != null) {
@@ -183,14 +183,14 @@ public abstract class GenericDeployment implements IDeployment {
 	 */
 	private void populateServiceToWsdlMapping(File dir) throws IOException {
 
-		if(dir == null) {
+		if (dir == null) {
 			return;
 		}
-		
-		if(!dir.exists()) {
+
+		if (!dir.exists()) {
 			throw new IOException("Could not find directory: " + dir.toString());
 		}
-		
+
 		for (File file : (File[]) dir.listFiles()) {
 			if (file.isDirectory()) {
 				populateServiceToWsdlMapping(file);
@@ -198,7 +198,7 @@ public abstract class GenericDeployment implements IDeployment {
 				if (file.getName().endsWith(".wsdl")) {
 					Definition definition = ParseUtil.getWsdlDefinition(file
 							.getAbsolutePath(), true, true);
-					Map<QName, Service> services = definition.getServices();
+					Map<QName, Service> services = getDefinitions(definition);
 
 					for (QName service : services.keySet()) {
 						fServiceToWsdlMapping.put(service, file
@@ -207,5 +207,10 @@ public abstract class GenericDeployment implements IDeployment {
 				}
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<QName, Service> getDefinitions(Definition definition) {
+		return definition.getServices();
 	}
 }
