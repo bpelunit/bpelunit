@@ -50,6 +50,9 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		public String responseBody;
 	}
 
+	// Strings which enclose the number of deployment errors in the summary
+	private static final String ERRCOUNT_START = "&lt;deploymentSummary numErrors=&quot;";
+	private static final String ERRCOUNT_END = "&quot";
 	/* Default URLs for the deployment and administration web services */
 	static final String DEFAULT_DEPLOYMENT_URL
 		= "http://localhost:8080/active-bpel/services/DeployBPRService";
@@ -155,7 +158,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		try {
 			RequestResult result = sendRequestToActiveBPEL(fDeploymentAdminServiceURL, re);
 
-			if (result.statusCode < 200 || result.statusCode > 299) {
+			if (result.statusCode < 200 || result.statusCode > 299 || errorsInSummary(result.responseBody)) {
 				throw new DeploymentException(
 						"ActiveBPEL Server reported a Deployment Error: "
 								+ result.responseBody);
@@ -331,6 +334,21 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 					"Could not kill process #%d: %s",
 					pid, e.toString()), e);
 		}
+	}
+
+	private boolean errorsInSummary(String responseBody) {
+		int startErrorCount = responseBody.indexOf(ERRCOUNT_START);
+		if (startErrorCount == -1) return false;
+		startErrorCount += ERRCOUNT_START.length();
+
+		final int endErrorCount = responseBody.indexOf(ERRCOUNT_END, startErrorCount);
+		if (endErrorCount == -1) return false;
+
+		final String sErrorCount
+			= responseBody.substring(startErrorCount, endErrorCount);
+		final int errorCount = Integer.parseInt(sErrorCount);
+
+		return errorCount > 0;
 	}
 
     public void cleanUpAfterTestCase() throws Exception {

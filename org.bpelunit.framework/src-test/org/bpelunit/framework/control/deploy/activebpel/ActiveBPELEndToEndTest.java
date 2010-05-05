@@ -27,6 +27,7 @@ public class ActiveBPELEndToEndTest {
 	private static final String TEST_SUITE_DIR = "resources/engines";
 	private static final String TEST_SUITE_FNAME = "tacService-activebpel.bpts";
 	private static final String TEST_SUITE_ENDLESS_FNAME = "tacService-activebpel-endless.bpts";
+	private static final String TEST_SUITE_INVALID = "tacService-activebpel-invalid.bpts";
 
 	@Test
 	public void allTestCasesPass() throws ConfigurationException,
@@ -50,6 +51,17 @@ public class ActiveBPELEndToEndTest {
 				1, runner.getPassed());
 		assertTrue("Some processes were terminated",
 				ActiveBPELDeployer._terminatedProcessCount >= 1);
+	}
+
+	@Test
+	public void invalidProcessesAreRejected() throws Exception {
+		checkAssumptions();
+
+		try {
+			TestTestRunner runner = new TestTestRunner(TEST_SUITE_DIR, TEST_SUITE_INVALID);
+			runner.testRun();
+			fail("A DeploymentException was expected.");
+		} catch (DeploymentException ex) {}
 	}
 
 	private void checkAssumptions() {

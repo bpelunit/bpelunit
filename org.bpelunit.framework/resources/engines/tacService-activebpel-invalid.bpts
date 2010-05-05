@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testSuite
+   xmlns:tacbpel="http://enterprise.netbeans.org/bpel/TacService/tacService"
+   xmlns:tacwsdl="http://j2ee.netbeans.org/wsdl/tacService"
+   xmlns:tac="http://xml.netbeans.org/schema/tacService"
+   xmlns="http://www.bpelunit.org/schema/testSuite">
+
+  <name>tacServiceInvalid</name>
+  <baseURL>http://localhost:7777/ws</baseURL>
+
+  <deployment>
+    <put name="tacServiceInvalid" type="activebpel">
+      <wsdl>tacService-invalid.wsdl</wsdl>
+      <property name="BPRFile">tacService-invalid.bpr</property>
+    </put>
+  </deployment>
+
+  <testCases>
+    <testCase name="EmptyInput" basedOn="" abstract="false" vary="false">
+      <clientTrack>
+        <sendReceive
+            service="tacwsdl:tacServiceInvalid"
+            port="tacServicePort"
+            operation="reverseLines">
+
+          <send fault="false">
+            <data>
+              <tac:tacRequest>
+                <tac:lines/>
+              </tac:tacRequest>
+            </data>
+          </send>
+
+          <receive fault="false">
+            <condition>
+              <expression>count(tac:tacResponse/tac:lines/tac:line)</expression>
+              <value>0</value>
+            </condition>
+          </receive>
+        </sendReceive>
+      </clientTrack>
+    </testCase>
+
+  </testCases>
+</testSuite>

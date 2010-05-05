@@ -7,6 +7,7 @@ Staged for next version
 * _Change_: the XML Schema for the BPTS has been slightly relaxed to allow some constraints which were already implicitly accepted.
    * The specific order of the elements inside <deployment>, <put> and <condition> does not matter anymore.
    * Receives with no <conditions>s and empty <partnerTrack>s are accepted.
+* _Fix_: When using ActiveBPEL, detect deployment errors through ActiveBPEL's deployment summary, in addition to the deployment web service's HTTP response code.
 * _Fix_: validate BPTS during loading. Previously, invalid elements were not reported, leading to confusing behaviour for new users who used a text editor to create the BPTS.
 * _Fix_: list imported services in the BPTS editor's service picker and let the user select them.
 * _Fix_: don't produce a NullPointerException when importing a WSDL whose schema uses a prefix that takes a different value than in the main WSDL file, or that is missing from the main WSDL file.
