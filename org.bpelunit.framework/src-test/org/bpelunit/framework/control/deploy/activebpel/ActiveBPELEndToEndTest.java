@@ -2,12 +2,14 @@ package org.bpelunit.framework.control.deploy.activebpel;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
 
 import java.io.File;
 
 import org.bpelunit.framework.exception.ConfigurationException;
+import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.test.util.TestTestRunner;
 import org.junit.Test;
@@ -28,7 +30,7 @@ public class ActiveBPELEndToEndTest {
 
 	@Test
 	public void allTestCasesPass() throws ConfigurationException,
-			SpecificationException {
+			DeploymentException, SpecificationException {
 		checkAssumptions();
 
 		TestTestRunner runner = new TestTestRunner(TEST_SUITE_DIR,
@@ -39,7 +41,7 @@ public class ActiveBPELEndToEndTest {
 
 	@Test
 	public void endlessLoopIsTerminated() throws ConfigurationException,
-			SpecificationException {
+			DeploymentException, SpecificationException {
 		checkAssumptions();
 
 		TestTestRunner runner = new TestTestRunner(TEST_SUITE_DIR, TEST_SUITE_ENDLESS_FNAME);

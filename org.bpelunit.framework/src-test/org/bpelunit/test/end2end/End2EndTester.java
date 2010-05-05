@@ -10,6 +10,7 @@ import static org.junit.Assert.fail;
 import static org.junit.Assert.assertTrue;
 
 import org.bpelunit.framework.exception.ConfigurationException;
+import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.test.util.TestTestRunner;
 import org.junit.Test;
@@ -68,7 +69,7 @@ public class End2EndTester {
 	 * only" on the PUTs side.
 	 */
 	@Test
-	public void testSendOnlyReceiveOnlyWastePaper() throws ConfigurationException, SpecificationException {
+	public void testSendOnlyReceiveOnlyWastePaper() throws ConfigurationException, DeploymentException, SpecificationException {
 		TestTestRunner runner= new TestTestRunner(BASEPATH + "01_SendReceiveOnly/", "WastePaperBasketTestSuite.bpts");
 		runner.testRun();
 		assertEquals(1, runner.getPassed());
@@ -81,7 +82,7 @@ public class End2EndTester {
 	 * 
 	 */
 	@Test
-	public void testSendReceiveSynchronous() throws ConfigurationException, SpecificationException {
+	public void testSendReceiveSynchronous() throws ConfigurationException, DeploymentException, SpecificationException {
 		TestTestRunner runner= new TestTestRunner(BASEPATH + "02_SendReceiveSync/", "CreditRatingServiceTestSuite.bpts");
 		runner.testRun();
 		assertEquals(2, runner.getPassed());
@@ -94,7 +95,7 @@ public class End2EndTester {
 	 * 
 	 */
 	@Test
-	public void testSendReceiveAsynchronous() throws ConfigurationException, SpecificationException {
+	public void testSendReceiveAsynchronous() throws ConfigurationException, DeploymentException, SpecificationException {
 		TestTestRunner runner= new TestTestRunner(BASEPATH + "03_SendReceiveAsync/", "LoanServiceTestSuite.bpts");
 		runner.testRun();
 		assertEquals(3, runner.getPassed());

@@ -21,6 +21,7 @@ import org.apache.xmlbeans.XmlOptions;
 import org.bpelunit.framework.control.result.XMLResultProducer;
 import org.bpelunit.framework.control.soap.NamespaceContextImpl;
 import org.bpelunit.framework.exception.ConfigurationException;
+import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.test.TestSuite;
@@ -96,7 +97,7 @@ public class TestUtil {
 	}
 
 	public static TestSuite getResults(File bpts)
-			throws ConfigurationException, SpecificationException {
+			throws ConfigurationException, DeploymentException, SpecificationException {
 		TestTestRunner runner = new TestTestRunner(bpts.getParent(), bpts.getName());
 		runner.testRun();
 		assertTrue("Test suites should pass all tests", runner.getTestSuite().getStatus().isPassed());

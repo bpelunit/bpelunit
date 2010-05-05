@@ -54,17 +54,13 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 		fSuite.addResultListener(this);
 	}
 
-	public void testRun() {
+	public void testRun() throws DeploymentException {
 
 		try {
 			fSuite.setUp();
 			fSuite.run();
-		} catch (DeploymentException ex) {
 		} finally {
-			try {
 				fSuite.shutDown();
-			} catch (DeploymentException e1) {
-			}
 		}
 	}
 
@@ -101,3 +97,4 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 	}
 
 }
+
