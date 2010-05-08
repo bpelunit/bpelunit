@@ -1,0 +1,4 @@
+The XML result test cases also reuse some of the fixtures used for the
+end-to-end tests, available at the resources/end2end directory. To prevent
+both sets of test cases to drift away, End2End offers the runners for these
+fixtures through several public methods. See that class for details.
