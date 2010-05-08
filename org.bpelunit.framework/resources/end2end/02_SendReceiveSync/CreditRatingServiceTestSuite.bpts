@@ -23,13 +23,16 @@
 			</clientTrack>
 			<partnerTrack name="CreditRatingService">
 				<receiveSend port="CreditRatingServicePort" operation="process" service="crs:CreditRatingService">
-				<receive>
-					<!-- Assure the SSN got transferred correctly... -->
-					<condition><expression>crs:ssn/text()</expression><value>'123456'</value></condition>
+					<mapping>
+						<copy from="crs:ssn" to="crs:rating/@ssn"/>
+					</mapping>
+					<receive>
+						<!-- Assure the SSN got transferred correctly... -->
+						<condition><expression>crs:ssn/text()</expression><value>'123456'</value></condition>
 					</receive>
 					<send>
 						<data>
-							<crs:rating>495</crs:rating>
+							<crs:rating ssn="">495</crs:rating>
 						</data>
 					</send>
 				</receiveSend>

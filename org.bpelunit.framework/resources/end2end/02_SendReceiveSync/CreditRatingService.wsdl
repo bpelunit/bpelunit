@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://examples.bpelunit.org/CreditRatingService" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://examples.bpelunit.org/CreditRatingService" name="CreditRatingService">
 	<types>
-		<schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://examples.bpelunit.org/CreditRatingService" xmlns="http://www.w3.org/2001/XMLSchema">
+		<schema elementFormDefault="qualified" targetNamespace="http://examples.bpelunit.org/CreditRatingService" xmlns="http://www.w3.org/2001/XMLSchema">
 			<element name="ssn" type="string"/>
-			<element name="rating" type="int"/>
+			<element name="rating">
+				<complexType>
+					<simpleContent>
+						<extension base="int">
+							<attribute name="ssn"
+								type="string">
+							</attribute>
+						</extension>
+					</simpleContent>
+				</complexType></element>
 			<element name="error" type="string"/>
 		</schema>
 	</types>

@@ -80,6 +80,10 @@
               <from expression="560"/>
               <to variable="output" part="payload" query="/tns:rating"/>
             </copy>
+            <copy>
+              <from variable="input" part="payload" query="/tns:ssn"/>
+              <to variable="output" part="payload" query="/tns:rating/@ssn"/>
+            </copy>
           </assign>
 
           <!-- Asynchronous callback to the requester.
