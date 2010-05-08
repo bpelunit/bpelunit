@@ -119,11 +119,23 @@ public class ArtefactStatus {
 		return fMessage;
 	}
 
+	/**
+	 * Returns the message from the exception wrapped in this status, if any.
+	 * If the exception is only a wrapper for another exception, it will not
+	 * have a message of its own. In that case, the exception will be unwrapped
+	 * as many times as required to obtain a meaningful message.
+	 *
+	 * @return Exception message if one was found, or <code>null</code> if no
+	 * non-null message was found or no exception is contained in this status.
+	 */
 	public String getExceptionMessage() {
-		if (fException != null)
-			return fException.getMessage();
-		else
-			return null;
+		for (Throwable ex = fException; ex != null; ex = ex.getCause()) {
+			String sMessage = ex.getMessage();
+			if (sMessage != null) {
+				return sMessage;
+			}
+		}
+		return null;
 	}
 
 	public List<StateData> getAsStateData() {
