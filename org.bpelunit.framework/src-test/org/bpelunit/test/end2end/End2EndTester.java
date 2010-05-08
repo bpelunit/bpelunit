@@ -64,13 +64,25 @@ public class End2EndTester {
 
 	private static final String BASEPATH= "resources/end2end/";
 
+	public static TestTestRunner getSendOnlyReceiveOnlyRunner() throws ConfigurationException, SpecificationException {
+		return new TestTestRunner(BASEPATH + "01_SendReceiveOnly/", "WastePaperBasketTestSuite.bpts");
+	}
+
+	public static TestTestRunner getSendReceiveSyncRunner() throws ConfigurationException, SpecificationException {
+		return new TestTestRunner(BASEPATH + "02_SendReceiveSync/", "CreditRatingServiceTestSuite.bpts");
+	}
+
+	public static TestTestRunner getSendReceiveAsyncRunner() throws ConfigurationException, SpecificationException {
+		return new TestTestRunner(BASEPATH + "03_SendReceiveAsync/", "LoanServiceTestSuite.bpts");
+	}
+
 	/**
 	 * This test simulates the WastePaper web service: A "send only" from the client and a "receive
 	 * only" on the PUTs side.
 	 */
 	@Test
 	public void testSendOnlyReceiveOnlyWastePaper() throws ConfigurationException, DeploymentException, SpecificationException {
-		TestTestRunner runner= new TestTestRunner(BASEPATH + "01_SendReceiveOnly/", "WastePaperBasketTestSuite.bpts");
+		TestTestRunner runner = getSendOnlyReceiveOnlyRunner();
 		runner.testRun();
 		assertEquals(1, runner.getPassed());
 		assertEquals(0, runner.getProblems());
@@ -83,7 +95,7 @@ public class End2EndTester {
 	 */
 	@Test
 	public void testSendReceiveSynchronous() throws ConfigurationException, DeploymentException, SpecificationException {
-		TestTestRunner runner= new TestTestRunner(BASEPATH + "02_SendReceiveSync/", "CreditRatingServiceTestSuite.bpts");
+		TestTestRunner runner= getSendReceiveSyncRunner();
 		runner.testRun();
 		assertEquals(2, runner.getPassed());
 		assertEquals(0, runner.getProblems());
@@ -96,7 +108,7 @@ public class End2EndTester {
 	 */
 	@Test
 	public void testSendReceiveAsynchronous() throws ConfigurationException, DeploymentException, SpecificationException {
-		TestTestRunner runner= new TestTestRunner(BASEPATH + "03_SendReceiveAsync/", "LoanServiceTestSuite.bpts");
+		TestTestRunner runner= getSendReceiveAsyncRunner();
 		runner.testRun();
 		assertEquals(3, runner.getPassed());
 		assertEquals(0, runner.getProblems());
