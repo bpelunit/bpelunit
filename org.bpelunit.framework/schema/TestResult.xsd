@@ -18,7 +18,7 @@
 	</xs:complexType>
 	<xs:complexType name="Artefact">
 		<xs:sequence>
-			<xs:element name="state" type="Info" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="state" type="Info" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="result" type="xs:string" use="required"/>
@@ -59,7 +59,7 @@
 					<xs:element name="xmlData" minOccurs="0" maxOccurs="unbounded">
 						<xs:complexType>
 							<xs:sequence>
-								<xs:any namespace="##any" processContents="lax"/>
+								<xs:any namespace="##any" processContents="lax" minOccurs="0"/>
 							</xs:sequence>
 							<xs:attribute name="name" type="xs:string" use="required"/>
 						</xs:complexType>
@@ -107,7 +107,7 @@
 							<xs:sequence>
 								<xs:element name="expression" type="xs:string"/>
 								<xs:element name="expectedValue" type="xs:string"/>
-								<xs:element name="actualValue" type="xs:string"/>
+								<xs:element name="actualValue" type="xs:string" nillable="true"/>
 							</xs:sequence>
 						</xs:complexType>
 					</xs:element>
