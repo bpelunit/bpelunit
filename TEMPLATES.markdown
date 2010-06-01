@@ -43,7 +43,7 @@ You should place Velocity commands at the start of their own lines. They will st
 Template variables
 ------------------
 
-The Velocity template that produces the SOAP body for an activity has access to several of variables. The following subsections describe what variables are available by default and how can you change and extend them. The subsections are sorted in the order these variables are set: in case there is a name collision, the last variable will replace the previous ones. Please be careful when writing your setup scripts and loading your data sources (see below).
+The Velocity template that produces the SOAP body for an activity has access to several of variables. The following subsections describe what variables are available by default and how can you change and extend them. The subsections follow the order these variables are set: in case there is a name collision, the last variable will replace the previous ones. Please keep this in mind when writing your setup scripts and loading your data sources (see below).
 
 ### Predefined test suite variables ###
 
@@ -116,7 +116,7 @@ XPath 1.0 query support
 
 SOAP message templates have access to a variable called `$xpath`, an instance of XPathTool, an utility class for doing XPath queries on DOM nodes. Currently, this class has two methods:
 
-- `List<Node> evaluateAsList(String query, Object item)`, which evaluates a XPath 1.0 `query` using `ìtem` as context and returns its results as a list of `Node`s, which can be used straight away with the `#foreach` Velocity command, for instance.
+- `List<Node> evaluateAsList(String query, Object item)`, which evaluates a XPath 1.0 `query` using `item` as context and returns its results as a list of `Node`s, which can be used straight away with the `#foreach` Velocity command, for instance.
 - `String evaluateAsString(String query, Object item)`, which evaluates a XPath 1.0 `query` using `item` as context and returns its results as a `String`.
 
 Here's an example:
@@ -239,6 +239,87 @@ Variables which are set in the contents of the data source but are not listed in
 
 This data source would have 3 rows: the first would have `v = 1` and `w = 2`, the second would have `v = 2` and `w = 4`, and the last one would have `v = 3` and `w = 6`. All three rows would have `z = 3`.
 
+### CSV ###
+
+_Type: "csv"_
+
+_Properties: "separator" (optional: "\t" by default), "headers" (optional)_
+
+This data source type loads plain text files with one row per line. Each row is split in several fields using a specific separator, set in the `separator` property. By default, this separator is the ASCII TAB character, but it could be a comma or a space, for instance.
+
+The property `headers`, if set, will contain a comma-separated list of the names of the variables which will store the values of each field. If it is not set, the names of the variables will be read from the first row.
+
+Here is an example, using both properties:
+
+    <dataSource type="csv">
+      <property name="separator">,</property>
+      <property name="headers">name,amount</property>
+      <contents>
+        Fred,100
+        Bob,200
+      </contents>
+    </dataSource>
+
+This data source would have 2 rows, and set two variables: `$name`, and `$amount`. If we wanted to avoid setting the `headers` property, we'd need something like this instead:
+
+    <dataSource type="csv">
+      <property name="separator">,</property>
+      <contents>
+        name,amount
+        Fred,100
+        Bob,200
+      </contents>
+    </dataSource>
+
+### Microsoft Excel (.xls and .xlsx) ###
+
+_Type: "excel"_
+
+_Properties: sheet (optional: 0 by default)_
+
+This data source can read data from Microsoft Excel .xls and .xlsx spreadsheets. By default, data is read from the first sheet in the file, but this can be changed through the `sheet` property. It stores the 0-based index of the sheet to be read (0 is the first one, 1 is the second one, and so on). The names of the variables are extracted from the first row of the selected sheet.
+
+Since the BPTS format does not allow for embedding binary files in its `<contents>` element, you will need to refer to an external document using the `src` attribute.
+
+### OpenDocument Spreadsheet (.ods) ###
+
+_Type: "ods"_
+
+_Properties: sheet (optional: 0 by default)_
+
+This data source reads data from OpenDocument Spreadsheet .ods documents, as produced by OpenOffice Calc, among others. Usage is similar to the Excel data source type. By default, data is read from the first sheet, but it can be changed by setting the `sheet` property to the 0-based index of the sheet to be used: 0 for the first one, 1 for the second one, and so one. The names of the variables are also extracted from the first row of the selected stylesheet.
+
+Since the BPTS format does not allow for embedding binary files in its `<contents>` element, you will need to refer to an external document using the `src` attribute.
+
+### HTML ###
+
+_Type: "html"_
+
+_Properties: table (optional: 1 by default)_
+
+This data source reads data from HTML documents. They do not need to be valid XHTML: the parser should handle most cases just fine (please notify us if you have problems). The data source loops over all tables in the HTML webpage and stops at the `table`-th table (`<table>` tag).
+
+By default, `table` is 1, so it parses the first table in the document. If you want to read a different table, set `table` to the 1-based index of the table: 1 for the first one, 2 for the second one, and so on.
+
+Each cell (`<td>` tag) in the first row (`<tr>` tag) is used for the variable names. The rest of the rows are used to set the variables in each test case.
+
+Note that if you want to embed the contents of the data source in the BPTS file, you will most probably have to place its contents inside a CDATA section so it is not parsed as XML. This is especially important if it is not valid XHTML, like here:
+
+    <dataSource type="html">
+      <contents>
+        <![CDATA[
+          <table>
+              <th>A
+              <th>B
+              <th>C</th>
+            <tr>
+              <td>1
+              <td>2
+              <td>3
+        ]]>
+      </contents>
+    </dataSource>
+
 Using template variables in receive conditions
 ----------------------------------------------
 
@@ -289,4 +370,4 @@ Pending tasks
 
 ### Nice ###
 
-- Log template output from setup blocks and Velocity data source (currently discarded)
+- Log template output from setup blocks and Velocity data sources (currently discarded)
