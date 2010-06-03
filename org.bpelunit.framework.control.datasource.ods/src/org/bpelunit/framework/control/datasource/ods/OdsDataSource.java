@@ -19,7 +19,7 @@ import org.odftoolkit.odfdom.doc.table.OdfTableRow;
  * 
  * @author Daniel Luebke <bpelunit@daniel-luebke.de>
  */
-@DataSource(name = "ODS Data Source", shortName = "ODS", contentTypes = {
+@DataSource(name = "ODS Data Source", shortName = "ods", contentTypes = {
 		"application/vnd.oasis.opendocument.spreadsheet",
 		"application/x-vnd.oasis.opendocument.spreadsheet" })
 public class OdsDataSource implements IDataSource {

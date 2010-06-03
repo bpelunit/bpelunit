@@ -28,7 +28,7 @@ import org.bpelunit.framework.exception.DataSourceException;
  * 
  * @author Daniel Luebke <bpelunit@daniel-luebke.de>
  */
-@DataSource(name = "Excel Data Source", shortName = "Excel", contentTypes = {
+@DataSource(name = "Excel Data Source", shortName = "excel", contentTypes = {
 		"application/excel", "application/vnd.ms-excel", "application/x-excel",
 		"application/x-msexcel",
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })

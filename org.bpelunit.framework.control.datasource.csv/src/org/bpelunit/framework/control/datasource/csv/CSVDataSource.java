@@ -18,7 +18,7 @@ import org.bpelunit.framework.exception.DataSourceException;
  * 
  * @author Daniel Luebke <bpelunit@daniel-luebke.de>
  */
-@DataSource(name = "CSV Data Source", shortName = "CSV", contentTypes = {
+@DataSource(name = "CSV Data Source", shortName = "csv", contentTypes = {
 		"text/cvs", "text/plain" })
 public class CSVDataSource implements IDataSource {
 

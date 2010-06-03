@@ -26,7 +26,7 @@ import org.bpelunit.framework.exception.DataSourceException;
  * 
  * @author Daniel Luebke <bpelunit@daniel-luebke.de>
  */
-@DataSource(name="HTML Data Source", shortName="HTML", contentTypes={"text/html", "application/xhtml+xml", "application/xhtml+xml"})
+@DataSource(name="HTML Data Source", shortName="html", contentTypes={"text/html", "application/xhtml+xml", "application/xhtml+xml"})
 public class HtmlDataSource implements IDataSource {
 
 	private final class DataSourceHtmlParser extends ParserCallback {
