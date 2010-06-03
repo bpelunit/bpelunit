@@ -17,9 +17,9 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
+import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
-import org.bpelunit.framework.control.util.ExtensionRegistry;
 import org.bpelunit.framework.exception.DataSourceException;
 import org.bpelunit.framework.exception.SpecificationException;
 import org.bpelunit.framework.xml.suite.XMLDataSource;
@@ -47,6 +47,8 @@ public class DataSourceUtil {
 	 *            XMLBeans object for the <testCase> element.
 	 * @param bptsDir
 	 *            Directory where the BPTS resides.
+	 * @param runner
+	 *            Runner which will be used to create the data source.
 	 * @return <code>null</code> if no data source is available. Otherwise, an
 	 *         instance of the appropriate data source will be returned, with
 	 *         its contents initialized from its source according to
@@ -57,7 +59,7 @@ public class DataSourceUtil {
 	 *             problem while initializing its contents from the XML element.
 	 */
 	public static IDataSource createDataSource(XMLTestSuite xmlTestSuite,
-			XMLTestCase xmlTestCase, File bptsDir) throws DataSourceException {
+			XMLTestCase xmlTestCase, File bptsDir, final BPELUnitRunner runner) throws DataSourceException {
 		XMLDataSource xmlDataSource = null;
 		if (xmlTestCase.isSetSetUp()
 				&& xmlTestCase.getSetUp().isSetDataSource()) {
@@ -72,7 +74,14 @@ public class DataSourceUtil {
 			final InputStream istream = getStreamForDataSource(xmlDataSource, bptsDir);
 			Map<String, String> properties = createPropertyMap(xmlDataSource
 					.getPropertyList());
-			return createDataSource(type, istream, properties);
+
+			try {
+				IDataSource dataSource = runner.createNewDataSource(type);
+				return initializeDataSource(dataSource, istream, properties);
+			} catch (SpecificationException e) {
+				throw new DataSourceException(
+						"Could not create data source instance for type " + type, e);
+			}
 		} else {
 			return null;
 		}
@@ -96,17 +105,10 @@ public class DataSourceUtil {
 	 *             There was a problem while creating the data source instance,
 	 *             loading its contents or setting a property.
 	 */
-	public static IDataSource createDataSource(final String type,
-			final InputStream istream, Map<String, String> properties)
+	public static IDataSource initializeDataSource(final IDataSource dataSource,
+			final InputStream istream,
+			Map<String, String> properties)
 			throws DataSourceException {
-		IDataSource dataSource = null;
-
-		try {
-			dataSource = ExtensionRegistry.createNewDataSourceForType(type);
-		} catch (SpecificationException e) {
-			throw new DataSourceException(
-					"Could not create data source instance for type " + type, e);
-		}
 
 		for (Entry<String, String> prop : properties.entrySet()) {
 			setProperty(dataSource, prop.getKey(), prop.getValue());

@@ -309,7 +309,7 @@ public class SpecificationLoader {
 			IDataSource dataSource;
 			try {
 				dataSource = DataSourceUtil.createDataSource(xmlTestSuite,
-						xmlTestCase, new File(testDirectory));
+						xmlTestCase, new File(testDirectory), fRunner);
 			} catch (DataSourceException e) {
 				throw new SpecificationException("There was a problem while "
 						+ "initializing the specified data source.", e);

@@ -4,6 +4,8 @@
    <extension
          point="org.bpelunit.framework.client.eclipse.dataSource">
       <datasource
+            id="html"
+            name="HTML Data Source"
             class="org.bpelunit.framework.control.datasource.html.HtmlDataSource">
       </datasource>
    </extension>

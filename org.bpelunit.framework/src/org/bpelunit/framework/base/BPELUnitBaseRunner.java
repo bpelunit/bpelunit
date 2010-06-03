@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.ExtensionRegistry;
@@ -116,6 +117,11 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	@Override
 	public ISOAPEncoder createNewSOAPEncoder(String styleEncoding) throws SpecificationException {
 		return ExtensionRegistry.createNewEncoderForType(styleEncoding);
+	}
+	
+	@Override
+	public IDataSource createNewDataSource(String type) throws SpecificationException {
+		return ExtensionRegistry.createNewDataSourceForType(type);
 	}
 	
 	@Override

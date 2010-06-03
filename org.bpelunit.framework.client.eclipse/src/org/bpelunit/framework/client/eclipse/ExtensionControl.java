@@ -172,6 +172,10 @@ public class ExtensionControl {
 		return fSOAPEncoders.get(styleEncoding);
 	}
 
+	public static DataSourceExtension findDataSource(String type) {
+		return fDataSources.get(type);
+	}
+
 	public static String[][] getDeployerMetaInformation() {
 		initialize();
 		String[][] str = new String[fDeployers.size()][2];

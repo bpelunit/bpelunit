@@ -13,6 +13,7 @@ import org.bpelunit.framework.base.BPELUnitBaseRunner;
 import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.util.ExtensionRegistry;
 import org.bpelunit.framework.exception.DataSourceException;
+import org.bpelunit.framework.exception.SpecificationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,7 +59,7 @@ public class VelocityDataSourceTest {
 	 * property is required.
 	 */
 	@Test
-	public void iteratedVarsPropertyIsRequired() {
+	public void iteratedVarsPropertyIsRequired() throws SpecificationException {
 		try {
 			createDataSourceFromString(null, "#set($x=[1,2,3])");
 			fail("A DataSourceException was expected");
@@ -77,7 +78,7 @@ public class VelocityDataSourceTest {
 	 * properties are reported.
 	 */
 	@Test
-	public void iteratedVarsPropertyCannotBeEmpty() {
+	public void iteratedVarsPropertyCannotBeEmpty() throws SpecificationException {
 		try {
 			createDataSourceFromString("   ", "#set($x=[1,2,3])");
 			fail("A DataSourceException was expected");
@@ -93,7 +94,7 @@ public class VelocityDataSourceTest {
 	 * Checks that missing iterated variables are reported.
 	 */
 	@Test
-	public void missingIteratedVariablesAreReported() {
+	public void missingIteratedVariablesAreReported() throws SpecificationException {
 		final String variableName = "myvar";
 		try {
 			createDataSourceFromString(variableName, "");
@@ -110,7 +111,7 @@ public class VelocityDataSourceTest {
 	 * Checks that mismatching lengths in the iterated variables are reported.
 	 */
 	@Test
-	public void mismatchingLengthsOfIteratedVariablesAreReported() {
+	public void mismatchingLengthsOfIteratedVariablesAreReported() throws SpecificationException {
 		try {
 			createDataSourceFromString("x y",
 					"#set($x=[1,2,3])\n#set($y=[1,2])");
@@ -126,7 +127,7 @@ public class VelocityDataSourceTest {
 	 * Checks that empty iterated variables are reported.
 	 */
 	@Test
-	public void emptyIteratedVariablesAreReported() {
+	public void emptyIteratedVariablesAreReported() throws SpecificationException {
 		try {
 			createDataSourceFromString("x y", "#set($x=[])\n#set($y=[])");
 			fail("A DataSourceException was expected");
@@ -141,7 +142,7 @@ public class VelocityDataSourceTest {
 	 * Checks that iterated variables which are not list literals are reported.
 	 */
 	@Test
-	public void iteratedVariablesWithWrongTypesAreReported() {
+	public void iteratedVariablesWithWrongTypesAreReported() throws SpecificationException {
 		try {
 			createDataSourceFromString("x myvar",
 					"#set($x=[1,2,3])\n#set($myvar={'foo':1,'bar':2})");
@@ -157,12 +158,13 @@ public class VelocityDataSourceTest {
 	 * Checks that unknown properties are reported.
 	 */
 	@Test
-	public void unknownPropertiesAreReported() {
+	public void unknownPropertiesAreReported() throws SpecificationException {
 		try {
 			HashMap<String, String> props = new HashMap<String, String>();
 			props.put(VelocityDataSource.PROPERTY_ITERATED_VARS, "x");
 			props.put("badprop", "nobodyexpectsthespanishinquisition");
-			DataSourceUtil.createDataSource(SOURCE_TYPE, DataSourceUtil
+			IDataSource ds = ExtensionRegistry.createNewDataSourceForType(SOURCE_TYPE);
+			DataSourceUtil.initializeDataSource(ds, DataSourceUtil
 					.getStreamForDataSource("#set($x=[1,2,3])", null, null), props);
 			fail("A DataSourceException was expected.");
 		} catch (DataSourceException ex) {
@@ -251,12 +253,13 @@ public class VelocityDataSourceTest {
 	/* UTILITY METHODS */
 
 	private IDataSource createDataSourceFromString(String variables,
-			String contents) throws DataSourceException {
+			String contents) throws DataSourceException, SpecificationException {
 		HashMap<String, String> props = new HashMap<String, String>();
 		if (variables != null) {
 			props.put(VelocityDataSource.PROPERTY_ITERATED_VARS, variables);
 		}
-		return DataSourceUtil.createDataSource(SOURCE_TYPE, DataSourceUtil
+		IDataSource ds = ExtensionRegistry.createNewDataSourceForType(SOURCE_TYPE);
+		return DataSourceUtil.initializeDataSource(ds, DataSourceUtil
 				.getStreamForDataSource(contents, null, null), props);
 	}
 }

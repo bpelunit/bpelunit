@@ -15,11 +15,13 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
+import org.bpelunit.framework.client.model.DataSourceExtension;
 import org.bpelunit.framework.client.model.DeployerExtension;
 import org.bpelunit.framework.client.model.ExtensionUtil;
 import org.bpelunit.framework.client.model.HeaderProcessorExtension;
 import org.bpelunit.framework.client.model.SOAPEncoderExtension;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.run.TestCaseRunner;
@@ -112,6 +114,17 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 		} else
 			throw new SpecificationException(
 					"Could not find a SOAP Encoder for type " + styleEncoding);
+	}
+
+	@Override
+	public IDataSource createNewDataSource(String type)
+			throws SpecificationException {
+		DataSourceExtension dataSource = ExtensionControl.findDataSource(type);
+		if (dataSource != null) {
+			return dataSource.createNew();
+		} else
+			throw new SpecificationException(
+					"Could not find a Data Source for type " + type);
 	}
 
 	@Override

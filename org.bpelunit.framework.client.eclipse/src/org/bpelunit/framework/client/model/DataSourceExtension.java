@@ -1,5 +1,7 @@
 package org.bpelunit.framework.client.model;
 
+import org.bpelunit.framework.control.ext.IDataSource;
+import org.bpelunit.framework.exception.SpecificationException;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 /**
@@ -10,6 +12,14 @@ public class DataSourceExtension extends Extension {
 	public DataSourceExtension(String shortName, String name,
 			IConfigurationElement e) {
 		super(shortName, name, e);
+	}
+
+	public IDataSource createNew() throws SpecificationException {
+		Object o= getExecutableExtension("class");
+		if (o != null) {
+			return (IDataSource) o;
+		}
+		throw new SpecificationException("Can't intantiate class for data source " + getId());
 	}
 
 }

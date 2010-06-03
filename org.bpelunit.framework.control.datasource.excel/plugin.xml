@@ -4,6 +4,8 @@
    <extension
          point="org.bpelunit.framework.client.eclipse.dataSource">
       <datasource
+            id="excel"
+            name="Excel Data Source"
             class="org.bpelunit.framework.control.datasource.excel.ExcelDataSource">
       </datasource>
    </extension>

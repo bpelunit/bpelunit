@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.bpelunit.framework.control.ext.IBPELDeployer;
+import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.control.ext.IHeaderProcessor;
 import org.bpelunit.framework.control.ext.ISOAPEncoder;
 import org.bpelunit.framework.control.util.BPELUnitConstants;
@@ -275,6 +276,17 @@ public abstract class BPELUnitRunner {
 	 * @throws SpecificationException
 	 */
 	public abstract ISOAPEncoder createNewSOAPEncoder(String styleEncoding)
+			throws SpecificationException;
+
+	/**
+	 * Creates a new data source instance for the given type
+	 *
+	 * @param type
+	 *            name of the type of data source
+	 * @return the data source
+	 * @throws SpecificationException
+	 */
+	public abstract IDataSource createNewDataSource(String type)
 			throws SpecificationException;
 
 	/**

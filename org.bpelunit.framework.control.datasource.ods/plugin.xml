@@ -4,6 +4,8 @@
    <extension
          point="org.bpelunit.framework.client.eclipse.dataSource">
       <datasource
+            id="ods"
+            name="ODS Data Source"
             class="org.bpelunit.framework.control.datasource.ods.OdsDataSource">
       </datasource>
    </extension>
