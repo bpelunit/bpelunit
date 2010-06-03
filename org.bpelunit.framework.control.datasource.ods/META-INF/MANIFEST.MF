@@ -7,3 +7,9 @@ Bundle-Vendor: BPELUnit Project
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.bpelunit.framework;bundle-version="1.3.0",
  org.bpelunit.framework.client.eclipse;bundle-version="1.4.0"
+Bundle-ClassPath: lib/odfdom/odfdom.jar,
+ lib/odfdom/resolver.jar,
+ lib/odfdom/serializer.jar,
+ lib/odfdom/xercesImpl.jar,
+ lib/odfdom/xml-apis.jar,
+ .
