@@ -427,6 +427,7 @@ public class SpecificationLoader {
 
 		PartnerTrack track = new PartnerTrack(test, suiteClient);
 		readActivities(track, xmlTestCase, xmlClientTrack, round);
+		track.setNamespaceContext(getNamespaceMap(xmlClientTrack.newCursor()));
 		test.addPartnerTrack(track);
 
 		// Partners Partner Track
@@ -564,13 +565,17 @@ public class SpecificationLoader {
 					XMLTwoWayActivity op = (XMLTwoWayActivity) event;
 					if (ActivityUtil.isActivity(op,
 							ActivityConstant.RECEIVE_SEND_SYNC)) {
-						activities.add(createReceiveSendSynchronous(op,
-								partnerTrack, round));
+						Activity activity = createReceiveSendSynchronous(op,
+								partnerTrack, round);
+						activity.setAssumption(event.getAssume());
+						activities.add(activity);
 					}
 					if (ActivityUtil.isActivity(op,
 							ActivityConstant.SEND_RECEIVE_SYNC)) {
-						activities.add(createSendReceiveSynchronous(op,
-								partnerTrack, round));
+						Activity activity = createSendReceiveSynchronous(op,
+								partnerTrack, round);
+						activity.setAssumption(event.getAssume());
+						activities.add(activity);
 					}
 					if (ActivityUtil.isActivity(op,
 							ActivityConstant.RECEIVE_SEND_ASYNC)) {
