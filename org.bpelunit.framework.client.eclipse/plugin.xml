@@ -132,6 +132,10 @@
             id="fixed"
             name="Fixed/Static Deployment" />
       <bpelDeployer
+            deployerClass="org.bpelunit.framework.control.deploy.simple.TestModeDeployer"
+            id="testmode"
+            name="Test Mode Deployment" />
+      <bpelDeployer
             deployerClass="org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer"
             id="activebpel"
             name="ActiveBPEL Deployer"
