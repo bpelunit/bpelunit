@@ -40,6 +40,23 @@ You should place Velocity commands at the start of their own lines. They will st
 
 *NOTE*: from now on, we will call test cases which use one or more templates *test case templates*.
 
+*IMPORTANT*: due to the way XMLBeans parses the BPTS files, you should put all VTL commands inside the first child of <template>. This works:
+
+    <template>
+      <foo>
+    #set( $i = 0 )
+      $i
+      </foo>
+    </template>
+
+This does *NOT*:
+
+    <template>
+    #set( $i = 0 )
+      <foo>$i</foo>
+    </template>
+
+
 Template variables
 ------------------
 
