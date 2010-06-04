@@ -182,10 +182,7 @@ public class SendDataSpecification extends DataSpecification {
 		try {
 			// Expand the template as a regular string
 			VelocityContext velocityCtx = context.createVelocityContext();
-			if (context.getIncomingMessage() != null) {
-				velocityCtx.put("xpath", new XPathTool(this.fNamespaceContext));
-				velocityCtx.put("request", context.getIncomingMessage());
-			}
+			velocityCtx.put("xpath", new XPathTool(this.fNamespaceContext));
 
 			StringWriter writer = new StringWriter();
 			Velocity.evaluate(velocityCtx, writer, "expandTemplate", fDataTemplate);
@@ -197,6 +194,7 @@ public class SendDataSpecification extends DataSpecification {
 			Document docExpanded = dbf.newDocumentBuilder().parse(
 					new InputSource(new StringReader(expandedTemplate)));
 			fLiteralData = docExpanded.getDocumentElement();
+			context.saveSentMessage(fLiteralData);
 		} catch (Exception ex) {
 			fStatus = ArtefactStatus.createErrorStatus("Template expansion fault: "
 					+ ex.getLocalizedMessage(), ex);

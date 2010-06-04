@@ -5,6 +5,7 @@
  */
 package org.bpelunit.framework.model.test.activity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,21 +63,22 @@ public class ActivityContext {
 	 * Data attached to this context, may be written or read by registered data copy objects or the
 	 * header processor.
 	 */
-	private Map<String, String> fUserData;
+	private Map<String, String> fUserData = new HashMap<String, String>();
 
 	/**
 	 * The URL simulated by the current partner
 	 */
 	private String fSimulatedURL;
 
-	private Element fIncomingMessage;
+	private List<Element> fReceivedMessages = new ArrayList<Element>();
+
+	private List<Element> fSentMessages = new ArrayList<Element>();
 
 	// ****************************** Initialization ****************************
 
 	public ActivityContext(TestCaseRunner runner, PartnerTrack track) {
 		fRunner= runner;
 		fTrack= track;
-		fUserData= new HashMap<String, String>();
 		fSimulatedURL= fTrack.getPartner().getSimulatedURL();
 	}
 
@@ -86,7 +88,6 @@ public class ActivityContext {
 	public ActivityContext(String simulatedURL) {
 		fRunner= null;
 		fTrack= null;
-		fUserData= new HashMap<String, String>();
 		fSimulatedURL= simulatedURL;
 	}
 
@@ -165,26 +166,51 @@ public class ActivityContext {
 	}
 
 	/**
-	 * Returns the received message. Might be null if no message has been
+	 * Returns the last received message. Might be null if no message has been
 	 * received yet (for instance, in a <sendReceive> activity). The received
 	 * message is mostly useful for the VelocityContexts of the <receiveSend>
 	 * and <receiveSendAsynchronous> activities.
 	 *
 	 * @return received message
 	 */
-	public Element getIncomingMessage() {
-		return fIncomingMessage;
+	public Element getLastRequest() {
+		return fReceivedMessages.size() > 0
+			? fReceivedMessages.get(fReceivedMessages.size() - 1)
+			: null;
 	}
-	
+
 	/**
-	 * Saves the message received for later use by the VelocityContext of the
-	 * <send> activity. Useful for <receiveSend> and <receiveSendAsynchronous>
-	 * activities.
-	 *
-	 * @param incomingMessage Incoming message.
+	 * Returns a list of all messages previously received in this partner track.
 	 */
-	public void setIncomingMessage(Element incomingMessage) {
-		fIncomingMessage = incomingMessage;
+	public List<Element> getReceivedMessages() {
+		return fReceivedMessages;
+	}
+
+	/**
+	 * Saves the message received for later use by Velocity templates,
+	 * assumptions and <receive> conditions.
+	 *
+	 * @param msg Incoming message.
+	 */
+	public void saveReceivedMessage(Element msg) {
+		fReceivedMessages.add(msg);
+	}
+
+	/**
+	 * Returns a list of all messages previously sent from this partner track.
+	 */
+	public List<Element> getSentMessages() {
+		return fSentMessages;
+	}
+
+	/**
+	 * Saves the message sent for later use by Velocity templates, assumptions
+	 * and <receive> conditions.
+	 *
+	 * @param msg Outgoing message
+	 */
+	public void saveSentMessage(Element msg) {
+		fSentMessages.add(msg);
 	}
 
 	// **************************** Velocity ********************************

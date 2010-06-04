@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="doubleWithHistory"
+	targetNamespace="http://www.example.org/doubleWithHistory/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:tns="http://www.example.org/doubleWithHistory/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://www.example.org/doubleWithHistory/">
+			<xsd:element name="doubleRequest" type="xsd:double" />
+			<xsd:element name="doubleResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="result" type="tns:resultType"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="resultType">
+				<xsd:all>
+					<xsd:element name="original" type="xsd:double"
+						minOccurs="1" />
+					<xsd:element name="doubled" type="xsd:double"
+						minOccurs="1" />
+				</xsd:all>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="doubleRequest">
+		<wsdl:part name="parameters" element="tns:doubleRequest" />
+	</wsdl:message>
+	<wsdl:message name="doubleResponse">
+		<wsdl:part name="parameters" element="tns:doubleResponse" />
+	</wsdl:message>
+	<wsdl:portType name="DoubleWHistoryPortType">
+		<wsdl:operation name="double">
+			<wsdl:input message="tns:doubleRequest" />
+			<wsdl:output message="tns:doubleResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="DoubleWHistoryBinding" type="tns:DoubleWHistoryPortType">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="double">
+			<soap:operation soapAction="http://www.example.org/doubleWithHistory/double" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="DoubleWHistoryService">
+		<wsdl:port name="main" binding="tns:DoubleWHistoryBinding">
+			<soap:address location="http://localhost:7777/ws/DoubleWithHistory" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

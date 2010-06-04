@@ -38,4 +38,12 @@ public class NoDataSourceTemplateTest extends AbstractTemplateTest {
 				"setUp Velocity scripts are executed using 2-levels with proper" +
 				" isolation, inheritance and redefinition", TC_SUP_NOTEMP, TC_SUP_TEMP);
 	}
+
+	@Test
+	public void testPreviousSentAndReceivedMessagesVarsWorkCorrectly() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+				"partnerTrackReceived and partnerTrackSent contain all the " +
+				"messages previously received and sent from the current partner " +
+				"track", TC_PTRACKHIST_ONLYREQ, TC_PTRACKHIST_ALLVARS);
+	}
 }

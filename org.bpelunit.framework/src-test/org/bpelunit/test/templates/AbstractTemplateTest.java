@@ -30,4 +30,7 @@ public abstract class AbstractTemplateTest {
 	protected static final File TC_ASSUME_PTRACK = new File(TEST_BPTS_DIR, "tacService-casesrc-t-assume-pt.bpts");
 	protected static final File TC_ASSUME_ACTIVITY = new File(TEST_BPTS_DIR, "tacService-casesrc-t-assume-act.bpts");
 	protected static final File TC_ASSUME_CTRACK = new File(TEST_BPTS_DIR, "doubleWithHistory-clientassume.bpts");
+
+	protected static final File TC_PTRACKHIST_ONLYREQ = new File(TEST_BPTS_DIR, "doubleWithHistory-onlyrequest.bpts");
+	protected static final File TC_PTRACKHIST_ALLVARS = new File(TEST_BPTS_DIR, "doubleWithHistory-allvars.bpts");
 }

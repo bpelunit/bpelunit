@@ -151,12 +151,12 @@ public class ReceiveDataSpecification extends DataSpecification {
 		if (hasProblems())
 			return;
 
+		context.saveReceivedMessage(fLiteralData);
 		validateConditions(context);
 		if (hasProblems())
 			return;
 
 		// Receive completed.
-		context.setIncomingMessage(fLiteralData);
 		fStatus= ArtefactStatus.createPassedStatus();
 	}
 
@@ -235,7 +235,6 @@ public class ReceiveDataSpecification extends DataSpecification {
 				e.getLocalizedMessage()));
 			return;
 		}
-		conditionContext.put("request", fLiteralData);
 		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);
 
 		for (ReceiveCondition c : fConditions) {

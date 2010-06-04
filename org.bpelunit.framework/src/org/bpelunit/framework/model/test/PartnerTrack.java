@@ -75,7 +75,9 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 
 	private NamespaceContext fNamespaceContext;
 
-	private Object fTestCaseVelocityContext;
+	private VelocityContext fTestCaseVelocityContext;
+
+	private ActivityContext fActivityContext;
 
 	private static final Cloner fCloner = new Cloner();
 
@@ -97,6 +99,7 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 	public void run() {
 
 		fLogger.info(getName() + " now active.");
+		fActivityContext = new ActivityContext(fRunner, this);
 
 		if (assumptionHolds(fAssumption)) {
 			for (Activity activity : fActivities) {
@@ -104,8 +107,7 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 				if (assumptionHolds(activity.getAssumption())) {
 					fLogger.info(getName() + " now starting activity "
 							+ activity);
-					ActivityContext context = new ActivityContext(fRunner, this);
-					activity.run(context);
+					activity.run(fActivityContext);
 					fLogger.info(getName() + " returned from activity "
 							+ activity);
 				} else {
@@ -228,6 +230,11 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 				.deepClone(fTestCaseVelocityContext);
 		ctx.put("partnerTrackName", getRawName());
 		ctx.put("partnerTrackURL", getPartner().getSimulatedURL());
+		if (fActivityContext != null) {
+			ctx.put("request", fActivityContext.getLastRequest());
+			ctx.put("partnerTrackReceived", fActivityContext.getReceivedMessages());
+			ctx.put("partnerTrackSent", fActivityContext.getSentMessages());
+		}
 		return ctx;
 	}
 
