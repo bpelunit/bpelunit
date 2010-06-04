@@ -118,10 +118,12 @@ If you have set up a data source, it will place some variables into the context 
 
 - `$partnerTrackName` (String): name of the current partner track.
 - `$partnerTrackURL` (String): URL of the current partner track.
+- `$request` (org.w3c.dom.Element): SOAP body of the last received message in the current partner track.
+- `$partnerTrackReceived` (java.util.List<org.w3c.dom.Element>): list with all SOAP messages received in the current partner track.
+- `$partnerTrackSent` (java.util.List<org.w3c.dom.Element>): list with all SOAP messages sent from the current partner track.
 
 ### Predefined activity variables ###
 
-- `$request` (org.w3c.dom.Element): SOAP body of the incoming request (for `<receiveSend>` and `<receiveSendOnly>` activities).
 - `$xpath` (org.bpelunit.framework.util.control.XPathTool): utility object for running XPath queries on DOM nodes. For more information, please see below.
 
 ### Custom activity variables ###
@@ -356,6 +358,8 @@ In the first row, `$lines` would be mapped to an empty node list. In the second 
 - `count($lines)`, number of lines: 0 for the first row, 1 for the second row.
 - `$lines[1]/text()`, text content of the first element. Empty string for the first row (empty nodeset), "A" for the second row.
 
+Please note XPath expressions differ in some important ways from Velocity templates. For instance, `$x.get(0)` (first element of the list in `$x`) in a Velocity template would be `$x[1]` in an XPath expression.
+
 Using template variables to skip activities
 -------------------------------------------
 
@@ -374,16 +378,12 @@ The `assume` attribute is available in the following elements:
 
 It is *not* available in:
 
-- `<clientTrack>`
+- `<clientTrack>` (the element itself: activities in the client track can have `assume`)
 - `<send>` (inside a two-way activity)
 - `<receive>` (inside a two-way activity)
 
 Pending tasks
 -------------
-
-### Important ###
-
-- Add variables to access previously received and sent messages in the current partner track
 
 ### Nice ###
 
