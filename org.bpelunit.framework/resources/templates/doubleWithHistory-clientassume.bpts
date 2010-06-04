@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:doub="http://www.example.org/doubleWithHistory/">
+    <tes:name>suite.bpts</tes:name>
+    <tes:baseURL>http://localhost:7777/ws/</tes:baseURL>
+    <tes:deployment>
+        <tes:put type="testmode" name="DoubleWithHistory">
+            <tes:wsdl>doubleWithHistory.wsdl</tes:wsdl>
+        </tes:put>
+        <tes:partner name="DoubleWithHistory" wsdl="doubleWithHistory.wsdl"/>
+    </tes:deployment>
+    <tes:setUp>
+      <tes:script>
+      #set( $integer = 0 )
+      </tes:script>
+      <tes:dataSource type="velocity">
+        <!-- The second activity in each partner track should be
+             skipped due to their violated assumptions, or their
+             receiveConditions will also be violated and the test
+             suite will fail. -->
+        <tes:property name="iteratedVars">first_req second_req result_count</tes:property>
+        <tes:contents>
+          #set( $first_req  = [ 30, 30] )
+          #set( $second_req = [-10, 70] )
+          #set( $result_count = [1,  2] )
+        </tes:contents>
+      </tes:dataSource>
+    </tes:setUp>
+    <tes:testCases>
+        <tes:testCase name="MainTemplate" basedOn="" abstract="false" vary="false">
+            <tes:clientTrack>
+                <tes:sendReceive service="doub:DoubleWHistoryService" port="main" operation="double">
+                    <tes:send>
+                        <tes:template>
+                            <doub:doubleRequest>$first_req</doub:doubleRequest>
+                        </tes:template>
+                    </tes:send>
+                    <tes:receive/>
+                </tes:sendReceive>
+                <tes:sendReceive service="doub:DoubleWHistoryService" port="main" operation="double" assume="number($second_req) &gt; 0">
+                    <tes:send service="doub:DoubleWHistoryService" port="main" operation="double" fault="false">
+                        <tes:template>
+                            <doub:doubleRequest>$second_req</doub:doubleRequest>
+                        </tes:template>
+                    </tes:send>
+                    <tes:receive>
+                      <tes:condition>
+                        <tes:expression>number(//result[2]/doubled) &gt; 0</tes:expression>
+                        <tes:value>true()</tes:value>
+                      </tes:condition>
+                    </tes:receive>
+                </tes:sendReceive>
+            </tes:clientTrack>
+            <tes:partnerTrack name="DoubleWithHistory">
+                <tes:receiveSend service="doub:DoubleWHistoryService" port="main" operation="double">
+                    <tes:send service="doub:DoubleWHistoryService" port="main" operation="double" fault="false">
+                        <tes:template>
+                            <doub:doubleResponse>
+#set( $amount = $integer.parseInt($xpath.evaluateAsString("doub:doubleRequest", $request)) )
+#set( $doubled = $amount * 2)
+                                <result>
+                                    <original>$amount</original>
+                                    <doubled>$doubled</doubled>
+                                </result>
+                            </doub:doubleResponse>
+                        </tes:template>
+                    </tes:send>
+                    <tes:receive/>
+                </tes:receiveSend>
+                <tes:receiveSend service="doub:DoubleWHistoryService" port="main" operation="double" assume="number($second_req) &gt; 0">
+                    <tes:send>
+                        <tes:template>
+                            <doub:doubleResponse>
+#set( $doubled_orig = $integer.parseInt($first_req) * 2 )
+#set( $amount = $integer.parseInt($xpath.evaluateAsString("//doub:doubleRequest", $request)) )
+#set( $doubled = $amount * 2)
+                                <result>
+                                    <original>$first_req</original>
+                                    <doubled>$doubled_orig</doubled>
+                                </result>
+                                <result>
+                                    <original>$amount</original>
+                                    <doubled>$doubled</doubled>
+                                </result>
+                            </doub:doubleResponse>
+                        </tes:template>
+                    </tes:send>
+                    <tes:receive>
+                        <tes:condition>
+                            <tes:expression>number(doub:doubleRequest/text()) &gt; 0</tes:expression>
+                            <tes:value>true()</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                </tes:receiveSend>
+            </tes:partnerTrack>
+        </tes:testCase>
+    </tes:testCases>
+</tes:testSuite>

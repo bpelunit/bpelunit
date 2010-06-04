@@ -65,4 +65,13 @@ public class VelocityDataSourceTemplateTest extends AbstractTemplateTest {
 	public void testActivitiesAreSkippedIffAssumptionsAreFalse() throws Exception {
 		TestUtil.getResults(TC_ASSUME_ACTIVITY);
 	}
+
+	/**
+	 * Checks that activities in the client track are skipped if their assumptions
+	 * do not hold.
+	 */
+	@Test
+	public void testClientTrackActivitiesAreSkippedIffAssumptionsAreFalse() throws Exception {
+		TestUtil.getResults(TC_ASSUME_CTRACK);
+	}
 }
