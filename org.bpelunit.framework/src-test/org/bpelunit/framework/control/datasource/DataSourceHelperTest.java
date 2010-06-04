@@ -114,6 +114,7 @@ public class DataSourceHelperTest {
 	private static final class MethodAnnotationsWithNoDescriptionWrongNameWrongParameterList
 			extends AbstractDataSource {
 
+		@SuppressWarnings("unused")
 		@ConfigurationOption(defaultValue="", description="")
 		public boolean myConfigurationOption() {
 			return false;
