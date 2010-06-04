@@ -34,6 +34,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+import com.rits.cloning.Cloner;
+
 /**
  * The send data specification is a data package which contains all necessary information to encode
  * a message from literal data to SOAP, handling style, encoding, possible header processing, and
@@ -118,6 +120,9 @@ public class SendDataSpecification extends DataSpecification {
          */
 		private String fDataTemplate;
 
+	// For deep cloning contexts so they are isolated from each other
+	private static final Cloner fCloner = new Cloner();
+
 	// ******************** Initialization ************************
 
 	public SendDataSpecification(Activity parent) throws SpecificationException {
@@ -180,10 +185,10 @@ public class SendDataSpecification extends DataSpecification {
 
 	private void expandTemplate(ActivityContext context) {
 		try {
-			// Expand the template as a regular string
-			VelocityContext velocityCtx = context.createVelocityContext();
+			VelocityContext velocityCtx = fCloner.deepClone(context.createVelocityContext());
 			velocityCtx.put("xpath", new XPathTool(this.fNamespaceContext));
 
+			// Expand the template as a regular string
 			StringWriter writer = new StringWriter();
 			Velocity.evaluate(velocityCtx, writer, "expandTemplate", fDataTemplate);
 			String expandedTemplate = writer.toString();
