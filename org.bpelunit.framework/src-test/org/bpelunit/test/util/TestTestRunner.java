@@ -40,7 +40,7 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 		setHomeDirectory(".");
 	}
 
-	public TestTestRunner(String path, String bpts) throws ConfigurationException, SpecificationException {
+	public TestTestRunner(File fBPTS) throws ConfigurationException, SpecificationException {
 		super();
 		fProblems= 0;
 		fPassed= 0;
@@ -50,8 +50,12 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 		options.put(BPELUnitRunner.GLOBAL_TIMEOUT, "10000");
 		initialize(options);
 
-		fSuite= loadTestSuite(new File(path, bpts));
+		fSuite = loadTestSuite(fBPTS);
 		fSuite.addResultListener(this);
+	}
+
+	public TestTestRunner(String path, String bpts) throws ConfigurationException, SpecificationException {
+		this(new File(path, bpts));
 	}
 
 	public void testRun() throws DeploymentException {
