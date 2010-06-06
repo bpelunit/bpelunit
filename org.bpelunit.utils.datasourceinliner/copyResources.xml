@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     06/06/2010 16:46:03
+
+     Ant script for copying the resources required for testing from the core
+     project to this project.
+
+     Antonio García Domínguez
+     ====================================================================== -->
+<project name="copyResources" default="build">
+	<description>
+        Copies the resources required for this project from the core project.
+    </description>
+
+	<property name="bpelunit.core.dir" location="../org.bpelunit.framework"/>
+	<property name="bpelunit.conf.dir" location="${bpelunit.core.dir}/conf"/>
+	<property name="bpelunit.res.dir" location="${bpelunit.core.dir}/resources"/>
+	<property name="dsinliner.conf.dir" location="conf"/> 
+	<property name="dsinliner.res.dir" location="resources"/>
+
+	<target name="init">
+		<tstamp/>
+	</target>
+
+	<target name="build" depends="init">
+		<sync todir="${dsinliner.conf.dir}">
+			<fileset dir="${bpelunit.conf.dir}" includes="**/*"/>
+		</sync>
+		<sync todir="${dsinliner.res.dir}/plain">
+			<fileset dir="${bpelunit.res.dir}/end2end/01_SendReceiveOnly" includes="**/*"/>
+		</sync>
+		<sync todir="${dsinliner.res.dir}/delaySequence">
+			<fileset dir="${bpelunit.res.dir}/end2end/03_SendReceiveAsync" includes="**/*"/>
+		</sync>
+		<sync todir="${dsinliner.res.dir}/embeddedDS">
+			<fileset dir="${bpelunit.res.dir}/templates">
+				<include name="tacService.*"/>
+				<include name="tacService-casesrc-t.bpts"/>
+			</fileset>
+		</sync>
+		<sync todir="${dsinliner.res.dir}/linkedDS">
+			<fileset dir="${bpelunit.res.dir}/templates">
+				<include name="tacService.*"/>
+				<include name="tacService-data.vm"/>
+				<include name="tacService-suitesrc-t.bpts"/>
+			</fileset>
+		</sync>
+	</target>
+
+	<target name="clean" depends="init">
+		<delete dir="${dsinliner.conf.dir}"/>
+		<delete dir="${dsinliner.res.dir}"/>
+	</target>
+</project>
