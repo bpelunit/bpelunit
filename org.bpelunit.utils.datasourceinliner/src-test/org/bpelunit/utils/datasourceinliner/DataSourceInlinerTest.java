@@ -4,9 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.io.File;
-import java.io.IOException;
 
-import org.apache.xmlbeans.XmlException;
 import org.bpelunit.framework.control.datasource.DataSourceUtil;
 import org.bpelunit.framework.control.ext.IDataSource;
 import org.bpelunit.framework.xml.suite.XMLDataSource;
@@ -36,16 +34,6 @@ public class DataSourceInlinerTest {
                                                          "WastePaperBasketTestSuite.bpts");
 
     @Test
-    public void inlinedPlainBPTSIsUnchanged() throws Exception {
-        assertInlinedIsUnchanged(PLAIN_BPTS_FILE);
-    }
-
-    @Test
-    public void inlinedDelaySequenceIsUnchanged() throws Exception {
-        assertInlinedIsUnchanged(DELAYSEQ_BPTS_FILE);
-    }
-
-    @Test
     public void inlinedEmbeddedDSIsEquivalent() throws Exception {
         assertInlinedProducesSameResult(EMBEDDED_BPTS_FILE);
     }
@@ -65,36 +53,34 @@ public class DataSourceInlinerTest {
         assertInlinedIsStandalone(LINKED_BPTS_FILE);
     }
 
+    @Test
+    public void inlinedPlainBPTSIsEquivalent() throws Exception {
+        assertInlinedProducesSameResult(PLAIN_BPTS_FILE);
+    }
+
+    @Test
+    public void inlinedDelaySequenceIsEquivalent() throws Exception {
+        assertInlinedProducesSameResult(DELAYSEQ_BPTS_FILE);
+    }
+
     private static File getBPTSFile(final String dirBasename,
             final String bptsBasename) {
         return new File(new File(BPTS_BASEDIR, dirBasename), bptsBasename);
     }
 
-    private void assertInlinedIsUnchanged(final File fOriginal)
-            throws IOException, XmlException {
-        final File fInlined = inlineToTemp(fOriginal);
-        XMLTestSuiteDocument docOriginal = XMLTestSuiteDocument.Factory
-                .parse(fOriginal);
-        XMLTestSuiteDocument docInlined = XMLTestSuiteDocument.Factory
-                .parse(fInlined);
-        assertEquals("Plain BPTS should be unchanged after inlining",
-                docOriginal.xmlText(), docInlined.xmlText());
-    }
-
-    private File assertInlinedProducesSameResult(final File fOriginal)
-            throws IOException, XmlException, Exception {
+    private void assertInlinedProducesSameResult(final File fOriginal) throws Exception {
         final File fInlined = inlineToTemp(fOriginal);
         TestUtil.assertSameAndSuccessfulResults(
                 "BPTS with no templates should work just like before",
                 fOriginal, fInlined);
-        return fInlined;
     }
 
     private void assertInlinedIsStandalone(final File fOriginal) throws Exception {
+        final TestTestRunner runner = new TestTestRunner(fOriginal);
         final XMLTestSuiteDocument xmlOriginal
             = XMLTestSuiteDocument.Factory.parse(fOriginal);
         final XMLTestSuiteDocument xmlInlined
-            = new Inliner().inlineDataSources(xmlOriginal);
+            = new Inliner().inlineDataSources(xmlOriginal, fOriginal.getParentFile(), runner);
 
         final XMLTestSuite xmlTestSuite = xmlInlined.getTestSuite();
         if (xmlTestSuite.isSetSetUp()) {
@@ -102,7 +88,6 @@ public class DataSourceInlinerTest {
                     xmlTestSuite.getSetUp().isSetDataSource());
         }
 
-        final TestTestRunner runner = new TestTestRunner(fOriginal);
         for (XMLTestCase xmlTestCase : xmlTestSuite.getTestCases().getTestCaseList()) {
             if (xmlTestCase.isSetSetUp() && xmlTestCase.getSetUp().isSetDataSource()) {
                 final XMLDataSource xmlDataSrc = xmlTestCase.getSetUp().getDataSource();
@@ -120,12 +105,11 @@ public class DataSourceInlinerTest {
         }
     }
 
-    private File inlineToTemp(final File fOriginal) throws IOException,
-            XmlException {
-        final File fInlined = File.createTempFile("inlined", ".bpts", fOriginal
-                .getParentFile());
+    private File inlineToTemp(final File fOriginal) throws Exception {
+        final File fInlined = File.createTempFile("inlined", ".bpts",
+                fOriginal.getParentFile());
         fInlined.deleteOnExit();
-        new Inliner().inlineFile(fOriginal, fInlined);
+        new Inliner().inlineFile(fOriginal, fInlined, new DummyRunner("."));
         return fInlined;
     }
 }
