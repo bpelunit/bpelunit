@@ -43,11 +43,8 @@
 
 	<!-- ========================== build ==== -->
 
-	<target name="build" depends="clean, init, buildframework, datasource.csv, datasource.excel, datasource.ods, jar">
+	<target name="build" depends="clean, init, buildframework, datasource.csv, datasource.excel, datasource.ods, inliner, jar">
 	</target>
-
-
-
 
 	<target name="buildframework">
 
@@ -57,15 +54,12 @@
 			<property name="bin-dir" value="${temp-class-dir}" />
 		</ant>
 
-
-
 		<!-- build other sources -->
 		<javac srcdir="../org.bpelunit.framework/src" destdir="${temp-class-dir}">
 			<classpath>
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
 				</fileset>
-
 			</classpath>
 		</javac>
 
@@ -202,6 +196,23 @@
 				<include name="**/*.jar" />
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="inliner">
+		<property name="inliner.project" value="org.bpelunit.utils.datasourceinliner" />
+
+		<javac srcdir="../${inliner.project}/src" destdir="${temp-class-dir}">
+			<classpath>
+				<fileset dir="../org.bpelunit.framework/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+		<copy todir="${builddir}">
+			<fileset file="../${inliner.project}/dsexpand.bat"/>
+			<fileset file="../${inliner.project}/dsexpand.sh"/>
+		</copy>
+
 	</target>
 
 	<target name="jar">
