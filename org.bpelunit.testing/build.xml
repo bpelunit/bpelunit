@@ -127,6 +127,7 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
+		<ant antfile="../org.bpelunit.utils.datasourceinliner/copyResources.xml"/>
 	</target>
 
 
@@ -165,6 +166,9 @@
 			<fileset dir="../org.bpelunit.framework.control.datasource.html/src">
 				<include name="**/*" />
 			</fileset>
+			<fileset dir="../org.bpelunit.utils.datasourceinliner/src">
+				<include name="**/*" />
+			</fileset>
 		</copy>
 	</target>
 
@@ -183,6 +187,9 @@
 				<include name="**/*" />
 			</fileset>
 			<fileset dir="../org.bpelunit.framework.control.datasource.html/src-test">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="../org.bpelunit.utils.datasourceinliner/src-test">
 				<include name="**/*" />
 			</fileset>
 		</copy>
