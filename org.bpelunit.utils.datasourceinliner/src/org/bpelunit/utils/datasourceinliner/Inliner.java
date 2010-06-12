@@ -126,9 +126,10 @@ public class Inliner {
         if (xmlNewCase.isSetSetUp()) {
             xmlNewCase.unsetSetUp();
         }
-
-        final XMLSetUp xmlNewSetUp = xmlNewCase.addNewSetUp();
-        xmlNewSetUp.setScript(setup);
+        if (setup.trim().length() > 0) {
+            final XMLSetUp xmlNewSetUp = xmlNewCase.addNewSetUp();
+            xmlNewSetUp.setScript(setup);
+        }
         return xmlNewCase;
     }
 
