@@ -382,6 +382,17 @@ It is *not* available in:
 - `<send>` (inside a two-way activity)
 - `<receive>` (inside a two-way activity)
 
+Expanding data sources back into regular test cases
+---------------------------------------------------
+
+In some cases, you might want to "inline" the setup scripts and data sources back into the test cases. This might be useful, for instance, when you notice that some rows should have additional activities and partner tracks and using the assume attribute is not enough. It should also be useful for splitting the test suite into independent test cases which can be cut and joined by automatic tools.
+
+BPELUnit includes an utility which does just this. To run it, add the proper wrapper script to your PATH (`dsexpand.bat` for Windows and `dsexpand.sh` for UNIX-like environments) and execute:
+
+    (dsexpand script) (bpts) > expanded.bpts
+
+The script will create an instance of every test case template for each row in their data sources, removing all data sources and adding setup blocks with the old test suite setup script, the old test case setup script, and variable assignments for that row of the data source. Test cases which do not have data sources are mostly left as-is, except for the setup script, which has the old test suite setup script and the old test case setup script.
+
 Pending tasks
 -------------
 
