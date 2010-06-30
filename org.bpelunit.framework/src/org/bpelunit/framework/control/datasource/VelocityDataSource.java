@@ -43,13 +43,11 @@ public class VelocityDataSource implements IDataSource {
 	private VelocityContext fContext;
 	private int fRowCount;
 
-	@Override
 	public int getNumberOfRows() {
 		return fRowCount;
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public void initializeContext(Context ctx, int rowIndex)
 			throws DataSourceException {
 		if (rowIndex < 0 || rowIndex >= fRowCount) {
@@ -70,7 +68,6 @@ public class VelocityDataSource implements IDataSource {
 		}
 	}
 
-	@Override
 	public void loadFromStream(InputStream is) throws DataSourceException {
 		try {
 			Velocity.init();
@@ -94,7 +91,6 @@ public class VelocityDataSource implements IDataSource {
 		validateIteratedVars();
 	}
 
-	@Override
 	public void setProperty(String name, String value)
 			throws DataSourceException {
 		if (PROPERTY_ITERATED_VARS.equals(name)) {

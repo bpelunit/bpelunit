@@ -11,6 +11,8 @@
 			<xs:documentation>The testSuite root element</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:element name="property" type="Property"/>
+
 	<xs:complexType name="TestSuite">
 		<xs:annotation>
 			<xs:documentation>The testSuite root type</xs:documentation>
@@ -31,6 +33,7 @@
 					<xs:documentation>Deployment section of this test suite. Specifies the PUT and partners</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="setUp" type="SetUp" minOccurs="0" maxOccurs="1"></xs:element>
 			<xs:element name="testCases" type="TestCasesSection">
 				<xs:annotation>
 					<xs:documentation>Test case section of this test suite. Specifies test cases</xs:documentation>
@@ -38,21 +41,27 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:element name="partner" type="PartnerDeploymentInformation">
+		<xs:annotation>
+			<xs:documentation>
+				The test partners of the PUT (this section is not strictly required but
+				considered good practise to keep track of things).
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="DeploymentSection">
 		<xs:annotation>
 			<xs:documentation>The deployment section type</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<!-- Emulate <all> with unbounded elements -->
+			<xs:element ref="partner" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="put" type="PUTDeploymentInformation">
 				<xs:annotation>
 					<xs:documentation>The Process Under Test, which will be tested in this suite.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="partner" type="PartnerDeploymentInformation" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>The test partners of the PUT (this section is not strictly required but considered good practise to keep track of things).</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element ref="partner" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="PUTDeploymentInformation">
@@ -60,12 +69,14 @@
 			<xs:documentation>The PUT deployment information type</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+			<!-- Emulate <all> with unbounded elements -->
+			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="wsdl" type="xs:string">
 				<xs:annotation>
 					<xs:documentation>WSDL file of the PUT</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required">
 			<xs:annotation>
@@ -110,9 +121,11 @@
 			<xs:documentation>A testCase</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="clientTrack" type="Track"/>
-			<xs:element name="partnerTrack" type="PartnerTrack" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="setUp" type="SetUp" minOccurs="0" maxOccurs="1"></xs:element>
+			<xs:element name="clientTrack" type="Track" />
+			<xs:element name="partnerTrack" type="PartnerTrack"
+				minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="vary" type="xs:boolean" use="optional" default="false"/>
@@ -123,7 +136,7 @@
 		<xs:annotation>
 			<xs:documentation>An activity track</xs:documentation>
 		</xs:annotation>
-		<xs:sequence maxOccurs="unbounded">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
 			<xs:choice>
 				<xs:element name="sendOnly" type="SendActivity">
 					<xs:annotation>
@@ -182,11 +195,19 @@
 	</xs:complexType>
 	<xs:complexType name="PartnerTrack">
 		<xs:annotation>
-			<xs:documentation>An activity track for a partner</xs:documentation>
+			<xs:documentation>
+				An activity track for a partner
+			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="Track">
-				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="name" type="xs:string"
+					use="required" />
+				<xs:attribute name="assume" type="xs:string" use="optional">
+					<xs:annotation>
+						<xs:documentation>If specified, XPath expression (with access to the variables in the partner track context) which must hold for the partner track to be run.
+If false, all activities in the partner track will be skipped. Skipped tasks are considered to have passed.</xs:documentation>
+					</xs:annotation></xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -226,7 +247,7 @@
 					<xs:documentation>A receive operation</xs:documentation>
 				</xs:annotation>
 				<xs:sequence>
-					<xs:element name="condition" type="Condition" maxOccurs="unbounded"/>
+					<xs:element name="condition" type="Condition" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
 				<xs:attribute name="fault" type="xs:boolean" use="optional" default="false"/>
 				<xs:attribute name="faultcode" type="xs:QName" use="optional"/>
@@ -261,11 +282,7 @@
 			<xs:documentation>A header processor</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>Arbitrary data passed to the header processor</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required">
 			<xs:annotation>
@@ -283,7 +300,7 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:complexType name="AnyElement">
+	<xs:complexType name="AnyElement" mixed="true">
 		<xs:annotation>
 			<xs:documentation>Wrapper for the XML Any Element</xs:documentation>
 		</xs:annotation>
@@ -295,6 +312,7 @@
 		<xs:annotation>
 			<xs:documentation>A single activity</xs:documentation>
 		</xs:annotation>
+		<xs:attribute name="assume" type="xs:string"></xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="SoapActivity">
 		<xs:annotation>
@@ -342,10 +360,10 @@
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="Condition">
-		<xs:sequence>
+		<xs:all>
 			<xs:element name="expression" type="xs:string"/>
 			<xs:element name="value" type="xs:string"/>
-		</xs:sequence>
+		</xs:all>
 	</xs:complexType>
 
 	<xs:complexType name="WaitActivity">
@@ -356,5 +374,29 @@
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SetUp">
+		<xs:sequence>
+			<xs:element name="script" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Velocity script to be run before each test case
+						on the test case VelocityContext.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="dataSource" type="DataSource" minOccurs="0" maxOccurs="1"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="DataSource">
+		<xs:sequence>
+			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="contents" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="type" type="xs:string" use="required"></xs:attribute>
+		<xs:attribute name="src" type="xs:string" use="optional"></xs:attribute>
 	</xs:complexType>
 </xs:schema>

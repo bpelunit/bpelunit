@@ -39,7 +39,6 @@ public class ContextXPathVariableResolver implements XPathVariableResolver {
 		this.templateContext = templateContext;
 	}
 
-	@Override
 	public Object resolveVariable(QName arg0) {
 		final String varName = arg0.getLocalPart();
 		final Object varValue = templateContext.get(varName);
