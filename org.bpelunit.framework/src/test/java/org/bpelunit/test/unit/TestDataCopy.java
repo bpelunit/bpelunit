@@ -24,7 +24,7 @@ import org.w3c.dom.Node;
  */
 public class TestDataCopy extends SimpleTest {
 
-	private static final String PATH_TO_FILES= "resources/dataCopy/";
+	private static final String PATH_TO_FILES= "/dataCopy/";
 
 	// ************ Helpers **************
 
@@ -41,7 +41,7 @@ public class TestDataCopy extends SimpleTest {
 	@Test
 	public void testSimpleGet() throws Exception {
 
-		Element parent= TestUtil.readLiteralData(PATH_TO_FILES, "dc.xmlfrag");
+		Element parent= TestUtil.readLiteralData(PATH_TO_FILES + "dc.xmlfrag");
 
 		NamespaceContextImpl c= new NamespaceContextImpl();
 		c.setNamespace("emp", "http://packtpub.com/service/employee/");
@@ -63,7 +63,7 @@ public class TestDataCopy extends SimpleTest {
 	@Test
 	public void testSimplePut() throws Exception {
 
-		Element parent= TestUtil.readLiteralData(PATH_TO_FILES, "dc.xmlfrag");
+		Element parent= TestUtil.readLiteralData(PATH_TO_FILES + "dc.xmlfrag");
 
 		NamespaceContextImpl c= new NamespaceContextImpl();
 		c.setNamespace("emp", "http://packtpub.com/service/employee/");

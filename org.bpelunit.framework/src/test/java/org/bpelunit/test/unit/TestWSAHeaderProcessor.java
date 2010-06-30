@@ -7,8 +7,6 @@ package org.bpelunit.test.unit;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.FileInputStream;
-
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPMessage;
 
@@ -32,7 +30,7 @@ import org.w3c.dom.Node;
  */
 public class TestWSAHeaderProcessor extends SimpleTest {
 
-	private static final String PATH_TO_FILES= "resources/wsahp/";
+	private static final String PATH_TO_FILES= "/wsahp/";
 
 	@Test
 	public void testWSAHeadersReceiveSend() throws Exception {
@@ -40,7 +38,7 @@ public class TestWSAHeaderProcessor extends SimpleTest {
 		ActivityContext dummyContext= new ActivityContext("http://simulated.url");
 
 		MessageFactory factory= MessageFactory.newInstance();
-		SOAPMessage rcvMessage= factory.createMessage(null, new FileInputStream(PATH_TO_FILES + "incomingSOAP.xml"));
+		SOAPMessage rcvMessage= factory.createMessage(null, this.getClass().getResourceAsStream(PATH_TO_FILES + "incomingSOAP.xml"));
 
 		IHeaderProcessor proc= new WSAHeaderProcessor();
 
@@ -50,7 +48,7 @@ public class TestWSAHeaderProcessor extends SimpleTest {
 		assertEquals("kjasdhfjsdbksjdgdsrhfdgjkdfjk", dummyContext.getUserData("WSA-Received-ID"));
 		assertEquals("http://return.to.me/", dummyContext.getUserData("WSA-Received-Address"));
 
-		SOAPMessage sendMessage= factory.createMessage(null, new FileInputStream(PATH_TO_FILES + "outgoingSOAP.xml"));
+		SOAPMessage sendMessage= factory.createMessage(null, this.getClass().getResourceAsStream(PATH_TO_FILES + "outgoingSOAP.xml"));
 
 		SendPackage p= new SendPackage("http://target.url", sendMessage);
 		proc.processSend(dummyContext, p);
@@ -72,7 +70,7 @@ public class TestWSAHeaderProcessor extends SimpleTest {
 		IHeaderProcessor proc= new WSAHeaderProcessor();
 
 		MessageFactory factory= MessageFactory.newInstance();
-		SOAPMessage sendMessage= factory.createMessage(null, new FileInputStream(PATH_TO_FILES + "outgoingSOAP.xml"));
+		SOAPMessage sendMessage= factory.createMessage(null, this.getClass().getResourceAsStream(PATH_TO_FILES + "outgoingSOAP.xml"));
 
 		SendPackage p= new SendPackage("http://target.url", sendMessage);
 		proc.processSend(dummyContext, p);
@@ -94,7 +92,7 @@ public class TestWSAHeaderProcessor extends SimpleTest {
 
 		// Receive something back (doesn't really matter actually)
 
-		SOAPMessage rcvMessage= factory.createMessage(null, new FileInputStream(PATH_TO_FILES + "incomingSOAP2.xml"));
+		SOAPMessage rcvMessage= factory.createMessage(null, this.getClass().getResourceAsStream(PATH_TO_FILES + "incomingSOAP2.xml"));
 		proc.processReceive(dummyContext, rcvMessage);
 
 	}

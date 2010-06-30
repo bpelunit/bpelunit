@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.base.BPELUnitBaseRunner;
 import org.bpelunit.framework.control.result.ITestResultListener;
@@ -37,7 +38,7 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 
 	@Override
 	public void configureInit() throws ConfigurationException {
-		setHomeDirectory(".");
+		setHomeDirectory(FileUtils.toFile(this.getClass().getResource("/")).getAbsolutePath());
 	}
 
 	public TestTestRunner(String path, String bpts) throws ConfigurationException, SpecificationException {

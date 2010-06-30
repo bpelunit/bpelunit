@@ -195,7 +195,7 @@ public class OperationDataComponent extends DataComponent {
 		if (def != null && (this.fService == null ||
 				!this.fService.getLocalPart().equals(fieldText))) {
 			@SuppressWarnings("unchecked")
-			Collection<Service> services = def.getAllServices().values();
+			Collection<Service> services = def.getServices().values();
 			for (Service s : services) {
 				final QName sName = s.getQName();
 				if (sName.getLocalPart().equals(fieldText)) {
@@ -352,7 +352,7 @@ public class OperationDataComponent extends DataComponent {
 		/*
 		 * The map is Map<QName, javax.wsdl.Service>.
 		 */
-		Map services = def.getAllServices();
+		Map services = def.getServices();
 
 		if (services != null) {
 			ElementListSelectionDialog dialog = new ElementListSelectionDialog(this.getShell(),

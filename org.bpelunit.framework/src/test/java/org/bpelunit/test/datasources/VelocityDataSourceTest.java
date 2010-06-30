@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.velocity.VelocityContext;
 import org.bpelunit.framework.base.BPELUnitBaseRunner;
 import org.bpelunit.framework.control.datasource.DataSourceUtil;
@@ -30,7 +31,7 @@ public class VelocityDataSourceTest {
 
 	@Before
 	public void setUp() throws Exception {
-		ExtensionRegistry.loadRegistry(new File(BPELUnitBaseRunner.CONFIG_DIR,
+		ExtensionRegistry.loadRegistry(new File(new File(FileUtils.toFile(VelocityDataSourceTest.class.getResource("/")), BPELUnitBaseRunner.CONFIG_DIR),
 				BPELUnitBaseRunner.EXTENSIONS_FILE_NAME), false);
 	}
 

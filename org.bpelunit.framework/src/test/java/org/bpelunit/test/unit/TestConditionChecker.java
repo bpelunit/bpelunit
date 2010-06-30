@@ -24,11 +24,11 @@ import org.w3c.dom.Element;
  */
 public class TestConditionChecker extends SimpleTest {
 
-	private static final String PATH_TO_FILES= "resources/condition/";
+	private static final String PATH_TO_FILES= "/condition/";
 
 	private ReceiveCondition eval(String eval, String result) throws Exception {
 
-		Element parent= TestUtil.readLiteralData(PATH_TO_FILES, "simple.xmlfrag");
+		Element parent= TestUtil.readLiteralData(PATH_TO_FILES + "simple.xmlfrag");
 
 		ReceiveCondition c= new ReceiveCondition(null, eval, result);
 

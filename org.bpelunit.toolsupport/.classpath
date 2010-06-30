@@ -3,12 +3,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
-	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/xbean.jar" sourcepath="/org.bpelunit.framework/lib/old_xbean-src.jar"/>
-	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/commons-lang-2.1.jar" sourcepath="/org.bpelunit.framework/lib/commons-lang-2.1-src.jar"/>
-	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/wsdl4j-1.6.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/xsom14.jar"/>
-	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/relaxngDatatype.jar"/>
+	<classpathentry kind="lib" path="/org.bpelunit.framework/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="lib" path="/org.bpelunit.framework/wsdl4j-1.6.2.jar" sourcepath="C:/Users/vanto/.m2/repository/wsdl4j/wsdl4j/1.6.2/wsdl4j-1.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/xsom14.jar"/>
+	<classpathentry kind="lib" path="/org.bpelunit.framework/commons-lang-2.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

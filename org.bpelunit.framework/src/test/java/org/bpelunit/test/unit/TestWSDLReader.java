@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 import javax.xml.namespace.QName;
 
-import org.bpelunit.framework.exception.SpecificationException;
+import org.apache.commons.io.FileUtils;
 import org.bpelunit.framework.model.Partner;
 import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
@@ -27,8 +27,9 @@ public class TestWSDLReader extends SimpleTest {
 
 	// Helpers
 
-	private String getEncoding(String name) throws SpecificationException {
-		Partner p= new Partner("MyPartner", "resources/wsdlreader/", name, "");
+	private String getEncoding(String name) throws Exception {
+		String abspath = FileUtils.toFile(TestWSDLReader.class.getResource("/")).getAbsolutePath();
+		Partner p= new Partner("MyPartner", abspath + "/wsdlreader/", name, "");
 
 		// get a document/literal operation
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
@@ -38,8 +39,9 @@ public class TestWSDLReader extends SimpleTest {
 
 	// Helpers
 
-	private SOAPOperationCallIdentifier getOp(String name) throws SpecificationException {
-		Partner p= new Partner("MyPartner", "resources/wsdlreader/", name, "");
+	private SOAPOperationCallIdentifier getOp(String name) throws Exception {
+		String abspath = FileUtils.toFile(TestWSDLReader.class.getResource("/")).getAbsolutePath();
+		Partner p= new Partner("MyPartner", abspath + "/wsdlreader/", name, "");
 
 		// get a document/literal operation
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
@@ -50,7 +52,7 @@ public class TestWSDLReader extends SimpleTest {
 	// Test cases
 
 	@Test
-	public void testGetDocumentLiteral1() throws SpecificationException {
+	public void testGetDocumentLiteral1() throws Exception {
 
 		// Test "document" at binding level, "literal" at body level.
 		String encodingStyle= getEncoding("MyPartner1.wsdl");
@@ -58,7 +60,7 @@ public class TestWSDLReader extends SimpleTest {
 	}
 
 	@Test
-	public void testGetDocumentLiteral2() throws SpecificationException {
+	public void testGetDocumentLiteral2() throws Exception {
 
 		// Test "document" at operation level, "literal" at body level.
 		String encodingStyle= getEncoding("MyPartner2.wsdl");
@@ -66,7 +68,7 @@ public class TestWSDLReader extends SimpleTest {
 	}
 
 	@Test
-	public void testGetDocumentLiteral5() throws SpecificationException {
+	public void testGetDocumentLiteral5() throws Exception {
 
 		// Test no specs whatsoever (not legal!)
 		String encodingStyle= getEncoding("MyPartner5.wsdl");
@@ -74,7 +76,7 @@ public class TestWSDLReader extends SimpleTest {
 	}
 
 	@Test
-	public void testGetDocumentLiteral6() throws SpecificationException {
+	public void testGetDocumentLiteral6() throws Exception {
 
 		// Test no style, but literal encoding in output element.
 		String encodingStyle= getEncoding("MyPartner6.wsdl");
@@ -82,7 +84,7 @@ public class TestWSDLReader extends SimpleTest {
 	}
 
 	@Test
-	public void testGetRPCLiteral() throws SpecificationException {
+	public void testGetRPCLiteral() throws Exception {
 
 		// Test "rpc" at binding level, "literal" at body level.
 		String encodingStyle= getEncoding("MyPartner3.wsdl");
@@ -90,7 +92,7 @@ public class TestWSDLReader extends SimpleTest {
 	}
 
 	@Test
-	public void testGetRPCEncoded() throws SpecificationException {
+	public void testGetRPCEncoded() throws Exception {
 
 		// Test "rpc" at binding level, "encoded" at body level.
 		String encodingStyle= getEncoding("MyPartner4.wsdl");
@@ -98,7 +100,7 @@ public class TestWSDLReader extends SimpleTest {
 	}
 
 	@Test
-	public void testItems() throws SpecificationException {
+	public void testItems() throws Exception {
 
 		SOAPOperationCallIdentifier c= getOp("MyPartner6.wsdl");
 		assertEquals("http://www.example.org/", c.getTargetURL());

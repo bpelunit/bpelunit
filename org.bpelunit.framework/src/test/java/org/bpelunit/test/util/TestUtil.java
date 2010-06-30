@@ -5,6 +5,9 @@
  */
 package org.bpelunit.test.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 import java.io.File;
 import java.io.StringReader;
 
@@ -17,6 +20,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.bpelunit.framework.control.result.XMLResultProducer;
 import org.bpelunit.framework.control.soap.NamespaceContextImpl;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -28,9 +32,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 /**
  * 
@@ -52,14 +53,14 @@ public class TestUtil {
 		return dummy;
 	}
 
-	public static Element readLiteralData(String path, String fileName) throws Exception {
-		File f= new File(path + fileName);
-		String str= FileUtils.readFileToString(f, null);
+	public static Element readLiteralData(String fileName) throws Exception {
+		String str = IOUtils.toString(TestUtil.class.getResourceAsStream(fileName));
 		return parse(str);
 	}
 
 	public static SOAPOperationCallIdentifier getCall(String path, String wsdl, String operationName) throws SpecificationException {
-		Partner p= new Partner("MyPartner", path, wsdl, "");
+		String abspath = FileUtils.toFile(TestUtil.class.getResource(path)).getAbsolutePath() + File.separator;
+		Partner p= new Partner("MyPartner", abspath, wsdl, "");
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
 		SOAPOperationCallIdentifier operation= p.getOperation(service, "MyPartnerSOAP", operationName, SOAPOperationDirectionIdentifier.INPUT);
 		return operation;
