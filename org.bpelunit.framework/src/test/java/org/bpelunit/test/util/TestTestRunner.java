@@ -38,7 +38,7 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 
 	@Override
 	public void configureInit() throws ConfigurationException {
-		setHomeDirectory(FileUtils.toFile(this.getClass().getResource("/")).getAbsolutePath());
+		setHomeDirectory(FileUtils.toFile(BPELUnitBaseRunner.class.getClass().getResource("/")).getAbsolutePath());
 	}
 
 	public TestTestRunner(String path, String bpts) throws ConfigurationException, SpecificationException {

@@ -31,8 +31,7 @@ public class VelocityDataSourceTest {
 
 	@Before
 	public void setUp() throws Exception {
-		ExtensionRegistry.loadRegistry(new File(new File(FileUtils.toFile(VelocityDataSourceTest.class.getResource("/")), BPELUnitBaseRunner.CONFIG_DIR),
-				BPELUnitBaseRunner.EXTENSIONS_FILE_NAME), false);
+		ExtensionRegistry.loadRegistry(VelocityDataSourceTest.class.getResource("/" + BPELUnitBaseRunner.CONFIG_DIR + '/' + BPELUnitBaseRunner.EXTENSIONS_FILE_NAME), false);
 	}
 
 	/**
