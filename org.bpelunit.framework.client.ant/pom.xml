@@ -2,18 +2,18 @@
   <modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>bpelunit</artifactId>
-		<groupId>org.bpelunit</groupId>
+		<groupId>net.bpelunit</groupId>
 		<version>1.4.1-SNAPSHOT</version>
 	</parent>
-  <groupId>org.bpelunit</groupId>
-  <artifactId>org.bpelunit.framework.client.ant</artifactId>
+  <groupId>net.bpelunit</groupId>
+  <artifactId>ant-plugin</artifactId>
   <version>1.4.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>BPELUnit :: Ant Integration</name>
   <dependencies>
     <dependency>
-      <groupId>org.bpelunit</groupId>
-      <artifactId>org.bpelunit.framework</artifactId>
+      <groupId>net.bpelunit</groupId>
+      <artifactId>framework</artifactId>
       <version>1.4.1-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
