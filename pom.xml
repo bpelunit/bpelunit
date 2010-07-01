@@ -96,5 +96,6 @@
 		<module>org.bpelunit.framework</module>
 		<module>org.bpelunit.framework.client.ant</module>
 		<module>org.bpelunit.framework.client.command</module>
+		<module>org.bpelunit.framework.client.maven</module>
 	</modules>
 </project>
