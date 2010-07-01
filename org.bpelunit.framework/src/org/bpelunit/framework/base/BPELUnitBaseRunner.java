@@ -6,6 +6,7 @@
 package org.bpelunit.framework.base;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,22 +56,32 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	public void configureExtensions() throws ConfigurationException {
 		String extensionsFile= FilenameUtils.concat(fHomeDirectory, FilenameUtils.concat(CONFIG_DIR, EXTENSIONS_FILE_NAME));
 
-		if ( (extensionsFile == null) || ! (new File(extensionsFile).exists()))
-			throw new ConfigurationException("BPELUnit was expecting a extension XML file at location " + extensionsFile);
-
-		ExtensionRegistry.loadRegistry(new File(extensionsFile), isSkipUnknownExtensions());
-
+		if ( (extensionsFile != null) && (new File(extensionsFile).exists())) {
+			try {
+				ExtensionRegistry.loadRegistry(new File(extensionsFile).toURI().toURL(), isSkipUnknownExtensions());
+			} catch (MalformedURLException e) {
+				throw new ConfigurationException("BPELUnit could not locate the extension file: " + extensionsFile);
+			}
+		} else {
+			// if file could not be loaded, default to embedded settings
+			ExtensionRegistry.loadRegistry(this.getClass().getResource('/' + CONFIG_DIR + '/' + EXTENSIONS_FILE_NAME), isSkipUnknownExtensions());
+		}
 	}
 
 	@Override
 	public void configureDeployers() throws ConfigurationException {
 		String deploymentConfigFile= FilenameUtils.concat(fHomeDirectory, FilenameUtils.concat(CONFIG_DIR, DEPLOYER_CONFIG_FILE_NAME));
 
-		if ( (deploymentConfigFile == null) || ! (new File(deploymentConfigFile).exists()))
-			throw new ConfigurationException("BPELUnit was expecting a extension XML file at location " + deploymentConfigFile);
-
-		ExtensionRegistry.loadDeploymentConfiguration(new File(deploymentConfigFile));
-
+		if ( (deploymentConfigFile != null) && (new File(deploymentConfigFile).exists())) {
+			try {
+				ExtensionRegistry.loadDeploymentConfiguration(new File(deploymentConfigFile).toURI().toURL());
+			} catch (MalformedURLException e) {
+				throw new ConfigurationException("BPELUnit could not locate the deployer config file: " + deploymentConfigFile);
+			}
+		} else {
+			// if file could not be loaded, default to embedded settings
+			ExtensionRegistry.loadDeploymentConfiguration(this.getClass().getResource('/' + CONFIG_DIR + '/' + DEPLOYER_CONFIG_FILE_NAME));
+		}
 	}
 
 	protected void setHomeDirectory(String homeDirectory) throws ConfigurationException {
