@@ -302,6 +302,10 @@ public class TestSuite implements ITestArtefact {
 	public String getRawName() {
 		return fName;
 	}
+	
+	public String getSafeName() {
+		return fName.replaceAll("\\.|/|\\s|\\\\", "-");
+	}
 
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children = new ArrayList<ITestArtefact>();
