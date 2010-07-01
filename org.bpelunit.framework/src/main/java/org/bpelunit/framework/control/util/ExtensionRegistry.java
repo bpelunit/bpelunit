@@ -8,6 +8,7 @@ package org.bpelunit.framework.control.util;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -73,7 +74,7 @@ public class ExtensionRegistry {
 	 * Initializes the extension registry. Must be called before all other
 	 * methods.
 	 * 
-	 * @param configurationFile
+	 * @param configurationFileURL
 	 *            absolute path to configuration file (extensions.xml)
 	 * @param ignoreOnNotFound
 	 *            if true, the registry will not fail if a class is not found
@@ -81,7 +82,7 @@ public class ExtensionRegistry {
 	 * @throws ConfigurationException
 	 *             error reading the configuration file
 	 */
-	public static void loadRegistry(File configurationFile,
+	public static void loadRegistry(URL configurationFileURL,
 			boolean ignoreOnNotFound) throws ConfigurationException {
 
 		fsIgnoreOnNotFound = ignoreOnNotFound;
@@ -96,7 +97,7 @@ public class ExtensionRegistry {
 
 		try {
 			document = XMLExtensionRegistryDocument.Factory
-					.parse(configurationFile);
+					.parse(configurationFileURL);
 
 			XMLBPELUnitCoreExtensions testExtensions = document
 					.getExtensionRegistry();
@@ -120,11 +121,11 @@ public class ExtensionRegistry {
 		} catch (XmlException e) {
 			throw new ConfigurationException(
 					"An XML reading error occurred reading the deployment plug-ins from file "
-							+ configurationFile.getAbsolutePath(), e);
+							+ configurationFileURL, e);
 		} catch (IOException e) {
 			throw new ConfigurationException(
 					"An I/O error occurred reading the deployment plug-ins from file "
-							+ configurationFile.getAbsolutePath(), e);
+							+ configurationFileURL, e);
 		}
 	}
 
@@ -264,13 +265,13 @@ public class ExtensionRegistry {
 		}
 	}
 
-	public static void loadDeploymentConfiguration(File file)
+	public static void loadDeploymentConfiguration(URL fileURL)
 			throws ConfigurationException {
 
 		XMLTestConfigurationDocument document;
 
 		try {
-			document = XMLTestConfigurationDocument.Factory.parse(file);
+			document = XMLTestConfigurationDocument.Factory.parse(fileURL);
 			XMLTestConfiguration testConfig = document.getTestConfiguration();
 
 			for (XMLConfiguration configuration : testConfig.getConfigurationList()) {
@@ -289,11 +290,11 @@ public class ExtensionRegistry {
 		} catch (XmlException e) {
 			throw new ConfigurationException(
 					"An XML reading error occurred reading the deployment configuration from file "
-							+ file.getAbsolutePath(), e);
+							+ fileURL, e);
 		} catch (IOException e) {
 			throw new ConfigurationException(
 					"An I/O error occurred reading the deployment configuration from file "
-							+ file.getAbsolutePath(), e);
+							+ fileURL, e);
 		}
 	}
 
