@@ -263,7 +263,7 @@ public class BPELUnitMojo extends AbstractMojo {
 		}
 
 		public void testCaseStarted(TestCase testCase) {
-			BPELUnitMojo.this.getLog().info("START: " + testCase.getName() + ": " + testCase.getStatus().toString() + "\n");
+			logger.debug("START: " + testCase.getName() + ": " + testCase.getStatus().toString() + "\n");
 		}
 
 		public void testCaseEnded(TestCase testCase) {
@@ -272,12 +272,12 @@ public class BPELUnitMojo extends AbstractMojo {
 			if (testCase.getStatus().isError())
 				errors++;
 			runs++;
-			BPELUnitMojo.this.getLog().info("END: " + testCase.getName() + ": " + testCase.getStatus().toString() + "\n");
+			logger.debug("END: " + testCase.getName() + ": " + testCase.getStatus().toString() + "\n");
 		}
 
 		public void progress(ITestArtefact testArtefact) {
 			// TODO: What to do here?
-			BPELUnitMojo.this.getLog().info("[----]: " + testArtefact.getName() + ": " + testArtefact.getStatus().toString() + "\n");
+			logger.debug("[----]: " + testArtefact.getName() + ": " + testArtefact.getStatus().toString() + "\n");
 		}
 	}
 }
