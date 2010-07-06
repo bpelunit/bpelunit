@@ -138,7 +138,7 @@ public class ODEDeployer implements IBPELDeployer {
 		 * ("Test coverage for ODE Deployer is not implemented!"); }
 		 */
 
-		File uploadingFile = new File(archivePath);
+		java.io.File uploadingFile = new java.io.File(archivePath);
 
 		if (!uploadingFile.exists())
 			throw new DeploymentException(
@@ -189,7 +189,7 @@ public class ODEDeployer implements IBPELDeployer {
 			method.releaseConnection();
 
 			if (uploadingFile.exists() && archiveCreated) {
-				uploadingFile.deleteAll();
+				uploadingFile.delete();
 			}
 		}
 
