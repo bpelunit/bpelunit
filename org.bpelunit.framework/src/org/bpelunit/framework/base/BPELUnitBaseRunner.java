@@ -86,19 +86,9 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	}
 
 	protected void setHomeDirectory(String homeDirectory) throws ConfigurationException {
-
-		if (homeDirectory == null)
-			throw new ConfigurationException(
-					"BPELUnit cannot run without a set home directory. Either set environment variable BPELUNIT_HOME or instantiate BPELUnitCore with a home directory URL.");
-
-		if (!new File(homeDirectory).exists())
-			throw new ConfigurationException("The specified home directory \"" + homeDirectory
-					+ "\" does not exist - cannot run without a home directory.");
-
 		fHomeDirectory= homeDirectory;
-//		ABSOLUT_CONFIG_DIR=FilenameUtils.concat(fHomeDirectory, CONFIG_DIR);
 	}
-	
+
 	@Override
 	public abstract void configureLogging() throws ConfigurationException;
 

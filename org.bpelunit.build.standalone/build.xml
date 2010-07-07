@@ -216,9 +216,12 @@
 	</target>
 
 	<target name="jar">
-		<!--jar the framework and clients -->
-		<jar destfile="${bpelunit.jar}" basedir="${temp-class-dir}" />
-		
+		<!--jar the framework, clients and embedded config -->
+		<jar destfile="${bpelunit.jar}">
+			<fileset dir="${temp-class-dir}"/>
+			<fileset dir="${builddir}" includes="conf/**"/>
+		</jar>
+
 		<!-- Remove temp dir -->
 		<delete dir="temp" />
 	</target>
