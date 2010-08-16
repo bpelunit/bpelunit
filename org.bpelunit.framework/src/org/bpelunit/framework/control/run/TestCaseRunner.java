@@ -67,7 +67,8 @@ public class TestCaseRunner {
 	// Connection stuff
 	private LocalHTTPServer fServer;
 
-	private MultiThreadedHttpConnectionManager fConnectionManager;
+	// Pool connections over all test cases, to avoid socket leaks
+	private static final MultiThreadedHttpConnectionManager fConnectionManager = new MultiThreadedHttpConnectionManager();
 
 	private HttpClient fClient;
 
@@ -89,7 +90,6 @@ public class TestCaseRunner {
 		fProblemOccurred = false;
 		fAbortedByUser = false;
 
-		fConnectionManager = new MultiThreadedHttpConnectionManager();
 		fClient = new HttpClient(fConnectionManager);
 
 		List<PartnerTrack> partnerTracks = caseToRun.getPartnerTracks();
@@ -175,13 +175,6 @@ public class TestCaseRunner {
 				if (t.isAlive())
 					t.interrupt();
 			}
-
-			/*
-			 * HTTPClient methods are not impressed by interruptions. Deal with
-			 * them the "hard way": Calling this method effectively closes the
-			 * I/O connections beneath the HTTP POSTs.
-			 */
-			fConnectionManager.shutdown();
 
 			fLogger.debug("All threads interrupted. Waiting for threads...");
 
