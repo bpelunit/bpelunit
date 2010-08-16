@@ -12,6 +12,7 @@ Staged for next version
 * _Fix_: list imported services in the BPTS editor's service picker and let the user select them.
 * _Fix_: don't produce a NullPointerException when importing a WSDL whose schema uses a prefix that takes a different value than in the main WSDL file, or that is missing from the main WSDL file.
 * _Fix_: when several prefixes refer to the same namespace URL, do not clobber the previous ones by mistake.
+* _Fix_: fixed file descriptor leak which crashed BPTS with 600+ test cases, by reusing connection managers in TestCaseRunner.
 
 Version 1.4.0
 -----------------------
