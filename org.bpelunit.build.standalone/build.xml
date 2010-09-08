@@ -55,7 +55,7 @@
 		</ant>
 
 		<!-- build other sources -->
-		<javac srcdir="../org.bpelunit.framework/src" destdir="${temp-class-dir}">
+		<javac srcdir="../org.bpelunit.framework/src" destdir="${temp-class-dir}" debug="on">
 			<classpath>
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
@@ -64,7 +64,7 @@
 		</javac>
 
 		<!-- build ant client -->
-		<javac srcdir="../org.bpelunit.framework.client.ant/src" destdir="${temp-class-dir}">
+		<javac srcdir="../org.bpelunit.framework.client.ant/src" destdir="${temp-class-dir}" debug="on">
 			<classpath>
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
@@ -76,7 +76,7 @@
 		</javac>
 
 		<!-- build command line client -->
-		<javac srcdir="../org.bpelunit.framework.client.command/src" destdir="${temp-class-dir}">
+		<javac srcdir="../org.bpelunit.framework.client.command/src" destdir="${temp-class-dir}" debug="on">
 			<classpath>
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
@@ -147,7 +147,7 @@
 	<target name="datasource.csv">
 		<property name="datasource.csv.project" location="../org.bpelunit.framework.control.datasource.csv" />
 
-		<javac srcdir="${datasource.csv.project}/src" destdir="${temp-class-dir}">
+		<javac srcdir="${datasource.csv.project}/src" destdir="${temp-class-dir}" debug="on">
 			<classpath>
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
@@ -159,7 +159,7 @@
 	<target name="datasource.excel">
 		<property name="datasource.excel.project" value="org.bpelunit.framework.control.datasource.excel" />
 
-		<javac srcdir="../${datasource.excel.project}/src" destdir="${temp-class-dir}">
+		<javac srcdir="../${datasource.excel.project}/src" destdir="${temp-class-dir}" debug="on">
 			<classpath>
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
@@ -180,7 +180,7 @@
 	<target name="datasource.ods">
 		<property name="datasource.ods.project" value="org.bpelunit.framework.control.datasource.ods" />
 
-		<javac srcdir="../${datasource.ods.project}/src" destdir="${temp-class-dir}">
+		<javac srcdir="../${datasource.ods.project}/src" destdir="${temp-class-dir}" debug="on">
 			<classpath>
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
@@ -201,7 +201,7 @@
 	<target name="inliner">
 		<property name="inliner.project" value="org.bpelunit.utils.datasourceinliner" />
 
-		<javac srcdir="../${inliner.project}/src" destdir="${temp-class-dir}">
+		<javac srcdir="../${inliner.project}/src" destdir="${temp-class-dir}" debug="on">
 			<classpath>
 				<fileset dir="../org.bpelunit.framework/lib">
 					<include name="*.jar" />
