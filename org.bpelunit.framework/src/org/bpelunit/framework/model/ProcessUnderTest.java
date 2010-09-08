@@ -84,22 +84,6 @@ public class ProcessUnderTest extends Partner {
 	}
 
 	public void deploy() throws DeploymentException {
-		// merge global options and test suite options
-		// test suite options have precedence over global ones
-		Map<String, String> options = new HashMap<String, String>();
-		List<String> keys = ExtensionRegistry.getPossibleConfigurationOptions(
-				fDeployer.getClass(), true);
-
-		for (String key : keys) {
-			String value = getDeploymentOption(key);
-			if (value == null) {
-				value = fGlobalConfiguration.get(key);
-			}
-			options.put(key, value);
-		}
-
-		ExtensionRegistry.configureDeployer(fDeployer, options);
-
 		// changing end point logic goes here.
 		if (BPELUnitRunner.changeEndpoints()) {
 			IDeployment deployment = fDeployer.getDeployment(this);
@@ -154,6 +138,24 @@ public class ProcessUnderTest extends Partner {
 		isDeployed = true;
 	}
 
+	private void configureDeployer() {
+		// merge global options and test suite options
+		// test suite options have precedence over global ones
+		Map<String, String> options = new HashMap<String, String>();
+		List<String> keys = ExtensionRegistry.getPossibleConfigurationOptions(
+				fDeployer.getClass(), true);
+
+		for (String key : keys) {
+			String value = getDeploymentOption(key);
+			if (value == null) {
+				value = fGlobalConfiguration.get(key);
+			}
+			options.put(key, value);
+		}
+
+		ExtensionRegistry.configureDeployer(fDeployer, options);
+	}
+
 	public void undeploy() throws DeploymentException {
 		fDeployer.undeploy(getBasePath(), this);
 		// no exception -> undeploy was successful.
@@ -191,6 +193,7 @@ public class ProcessUnderTest extends Partner {
 		} else {
 			this.fGlobalConfiguration = new HashMap<String, String>();
 		}
+		configureDeployer();
 	}
 
 	public void setPartners(Map<String, Partner> partners) {
