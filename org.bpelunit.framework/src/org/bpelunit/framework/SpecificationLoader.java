@@ -182,16 +182,7 @@ public class SpecificationLoader {
 			throw new SpecificationException(
 					"No name found for the test suite.");
 
-		URL suiteBaseURL;
-		try {
-			String xmlUrl = xmlTestSuite.getBaseURL();
-			if (xmlUrl == null)
-				xmlUrl = BPELUnitConstants.DEFAULT_BASE_URL;
-			suiteBaseURL = new URL(xmlUrl);
-		} catch (MalformedURLException e) {
-			throw new SpecificationException(
-					"Could not create a valid URL from specified base URL.", e);
-		}
+		URL suiteBaseURL = getBaseURL(xmlTestSuite);
 
 		// Load deployment information
 		XMLDeploymentSection xmlDeployment = xmlTestSuite.getDeployment();
@@ -340,6 +331,34 @@ public class SpecificationLoader {
 		}
 
 		return suite;
+	}
+
+	private URL getBaseURL(XMLTestSuite xmlTestSuite)
+			throws SpecificationException {
+		try {
+			// Use the local base URL, and if that doesn't work, try the default one
+			String xmlUrl = xmlTestSuite.getBaseURL();
+			if (xmlUrl == null)
+				xmlUrl = BPELUnitConstants.DEFAULT_BASE_URL;
+			URL suiteBaseURL = new URL(xmlUrl);
+
+			// Normalize the URL: add port and trailing slash if missing
+			int port = suiteBaseURL.getPort();
+			if (port == -1) {
+				port = BPELUnitConstants.DEFAULT_BASE_PORT;
+			}
+			String path = suiteBaseURL.getPath();
+			if (!path.endsWith("/")) {
+				path += "/";
+			}
+			suiteBaseURL = new URL(suiteBaseURL.getProtocol(),
+					suiteBaseURL.getHost(), port, path);
+
+			return suiteBaseURL;
+		} catch (MalformedURLException e) {
+			throw new SpecificationException(
+					"Could not create a valid URL from specified base URL.", e);
+		}
 	}
 
 	private int computeNumberOfRounds(

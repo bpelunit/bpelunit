@@ -17,7 +17,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.bpelunit.framework.BPELUnitRunner;
 import org.bpelunit.framework.control.result.ITestResultListener;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
 import org.bpelunit.framework.control.ws.LocalHTTPServer;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.TestCaseNotFoundException;
@@ -88,9 +87,9 @@ public class TestSuite implements ITestArtefact {
 	private ArtefactStatus fStatus;
 
 	/**
-	 * Base URL for the mockups
+	 * Base URL for the mockups. Used for initializing the local Jetty server for the mockups.
 	 */
-	private String fBaseURL;
+	private URL fBaseURL;
 
 	/**
 	 * The logger
@@ -111,19 +110,9 @@ public class TestSuite implements ITestArtefact {
 		fName = suiteName;
 		fProcessUnderTest = suiteProcessUnderTest;
 		fCurrentlyRunning = false;
-
-		// BaseURL
-		int portNumber = suiteBaseURL.getPort();
-		if (portNumber == -1)
-			portNumber = BPELUnitConstants.DEFAULT_BASE_PORT;
-
-		String rootPath = suiteBaseURL.getPath();
-		if (!rootPath.endsWith("/"))
-			rootPath += "/";
-		this.fLogger.info("ROOTPATH=" + rootPath);
-		fLocalServer = new LocalHTTPServer(portNumber, rootPath);
-		fBaseURL = "http://localhost:" + portNumber + rootPath;
 		fTestCaseMap = new LinkedHashMap<String, TestCase>();
+
+		setBaseURL(suiteBaseURL);
 	}
 
 	public void addTestCase(TestCase test) {
@@ -170,7 +159,7 @@ public class TestSuite implements ITestArtefact {
 
 		fLogger.info("Now starting local HTTP server...");
 		try {
-			fLocalServer.startServer();
+			getLocalServer().startServer();
 		} catch (Exception e) {
 			fLogger
 					.error("Error starting local HTTP server: "
@@ -191,7 +180,7 @@ public class TestSuite implements ITestArtefact {
 		// Stop the server first (before any DeploymentExceptions are thrown by
 		// the undeployer)
 		try {
-			fLocalServer.stopServer();
+			getLocalServer().stopServer();
 		} catch (InterruptedException e) {
 			// do nothing.
 		}
@@ -301,7 +290,22 @@ public class TestSuite implements ITestArtefact {
 	}
 
 	public LocalHTTPServer getLocalServer() {
+		// We use lazy initialization so the user can change programmatically
+		// the base URL (and thus the port BPELUnit listens on) after creating
+		// the TestSuite but before calling #setUp.
+		if (fLocalServer == null) {
+			fLocalServer = new LocalHTTPServer(
+					getBaseURL().getPort(), getBaseURL().getPath());
+		}
 		return fLocalServer;
+	}
+
+	public URL getBaseURL() {
+		return fBaseURL;
+	}
+
+	public void setBaseURL(URL fBaseURL) {
+		this.fBaseURL = fBaseURL;
 	}
 
 	/**
@@ -315,7 +319,7 @@ public class TestSuite implements ITestArtefact {
 		Velocity.init();
 
 		VelocityContext ctx = new VelocityContext();
-		ctx.put("baseURL", fBaseURL);
+		ctx.put("baseURL", getBaseURL().toString());
 		ctx.put("collections", java.util.Collections.class);
 		ctx.put("putName", fProcessUnderTest.getName());
 		ctx.put("testSuiteName", this.getRawName());
