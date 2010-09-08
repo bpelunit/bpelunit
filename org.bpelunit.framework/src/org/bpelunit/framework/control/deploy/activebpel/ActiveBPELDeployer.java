@@ -93,11 +93,19 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		}
 	}
 
+	public String getDeploymentAdminServiceURL() {
+		return fDeploymentAdminServiceURL;
+	}
+
 	@IBPELDeployerOption(defaultValue = DEFAULT_DEPLOYMENT_URL)
 	public void setDeploymentAdminServiceURL(String deploymentAdminServiceURL) {
 		if (deploymentAdminServiceURL != null) {
 			this.fDeploymentAdminServiceURL = deploymentAdminServiceURL;
 		}
+	}
+
+	public String getAdministrationServiceURL() {
+		return fAdminServiceURL;
 	}
 
 	@IBPELDeployerOption(defaultValue = DEFAULT_ADMIN_URL)

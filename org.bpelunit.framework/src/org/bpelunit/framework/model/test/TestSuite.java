@@ -277,6 +277,10 @@ public class TestSuite implements ITestArtefact {
 		return fTestCaseMap.size();
 	}
 
+	public ProcessUnderTest getProcessUnderTest() {
+		return fProcessUnderTest;
+	}
+
 	public void abortTest() {
 		if (isRunning()) {
 			fAbortedByUser = true;
