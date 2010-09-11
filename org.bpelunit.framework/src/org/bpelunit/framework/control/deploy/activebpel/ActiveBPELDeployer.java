@@ -20,7 +20,6 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bpelunit.framework.control.ext.IBPELDeployer;
 import org.bpelunit.framework.control.ext.IDeployment;
@@ -69,7 +68,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	private String fResultingFile;
 
-	private String fBPRFile;
+	private File fBPRFile;
 
 	private String fDeploymentDirectory;
 
@@ -83,7 +82,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	@IBPELDeployerOption(testSuiteSpecific = false)
 	public void setBPRFile(String bprFile) {
-		this.fBPRFile = bprFile;
+		this.fBPRFile = new File(bprFile);
 	}
 
 	@IBPELDeployerOption
@@ -141,8 +140,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 			throw new DeploymentException(
 					"ActiveBPEL deployer could not find BPR file " + fBPRFile);
 
-		File resultingFile = new File(fDeploymentDirectory, FilenameUtils
-				.getName(fBPRFile));
+		File resultingFile = new File(fDeploymentDirectory, fBPRFile.getName());
 
 		// Upload it.
 
@@ -217,19 +215,26 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		}
 	}
 
-	// new method to get Archive Location.
 	public String getArchiveLocation(String pathToTest) {
-		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
-				.getFullPath(fBPRFile));
-		String archiveName = FilenameUtils.getName(fBPRFile);
-		return FilenameUtils.concat(pathToArchive, archiveName);
+		try {
+			if (fBPRFile.isAbsolute()) {
+				// absolute paths are left as is
+				return fBPRFile.getCanonicalPath();
+			} else {
+				// relative paths are resolved from the directory of the .bpts
+				return new File(pathToTest, fBPRFile.getName()).getCanonicalPath();
+			}
+		} catch (IOException e) {
+			// if the path cannot be cleaned up, just turn it into an absolute path
+			return fBPRFile.getAbsolutePath();
+		}
 	}
 
 	public void setArchiveLocation(String archive) {
-		this.fBPRFile = archive;
+		setBPRFile(archive);
 	}
 
-	private void check(String toCheck, String description)
+	private void check(Object toCheck, String description)
 			throws DeploymentException {
 		if (toCheck == null)
 			throw new DeploymentException(
