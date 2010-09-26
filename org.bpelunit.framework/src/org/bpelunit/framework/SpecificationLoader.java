@@ -112,7 +112,7 @@ public class SpecificationLoader {
 		try {
 			fLogger.info("Loading test suite from file " + suite);
 
-			String path = FilenameUtils.getFullPath(suite.toString());
+			String path = suite.getCanonicalFile().getParent() + File.separator;
 			fLogger.info("Using base path: " + path);
 
 			XMLTestSuiteDocument doc = XMLTestSuiteDocument.Factory.parse(suite);

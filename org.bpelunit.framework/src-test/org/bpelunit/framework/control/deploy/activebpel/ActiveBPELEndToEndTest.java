@@ -7,7 +7,9 @@ import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
 
 import java.io.File;
+import java.util.Collection;
 
+import org.apache.commons.io.FileUtils;
 import org.bpelunit.framework.exception.ConfigurationException;
 import org.bpelunit.framework.exception.DeploymentException;
 import org.bpelunit.framework.exception.SpecificationException;
@@ -38,6 +40,32 @@ public class ActiveBPELEndToEndTest {
 				TEST_SUITE_FNAME);
 		runner.testRun();
 		assertEquals("All test cases should pass", 4, runner.getPassed());
+	}
+
+	/**
+	 * Ensures that the deployer works when the .bpts is in the current directory.
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void allTestCasesPassSameDir() throws Exception {
+		checkAssumptions();
+
+		// Copy the test suite files to the current directory
+		final File testSuiteDir = new File(TEST_SUITE_DIR);
+		final File cwd = new File(".");
+		// List the test resources, so we can clean them up later
+		final Collection<File> testFiles = FileUtils.listFiles(testSuiteDir, null, false);
+
+		try {
+			FileUtils.copyDirectory(testSuiteDir, cwd);
+			TestTestRunner runner = new TestTestRunner(new File(TEST_SUITE_FNAME));
+			runner.testRun();
+			assertEquals("All test cases should pass", 4, runner.getPassed());
+		} finally {
+			for (File f : testFiles) {
+				new File(f.getName()).delete();
+			}
+		}
 	}
 
 	@Test
