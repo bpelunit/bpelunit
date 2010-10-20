@@ -3,12 +3,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
-	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/xbean.jar" sourcepath="/org.bpelunit.framework/lib/xbean-src.jar"/>
-	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/wsdl4j-1.6.2.jar" sourcepath="/org.bpelunit.framework/lib/wsdl4j-1.6.2-src.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/xsom14.jar"/>
-	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/relaxngDatatype.jar"/>
-	<classpathentry kind="lib" path="/org.bpelunit.framework/lib/commons-lang-2.4.jar" sourcepath="/org.bpelunit.framework/lib/commons-lang-2.4-src.jar"/>
+	<classpathentry kind="lib" path="lib/xsom14.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.bpelunit.framework"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
