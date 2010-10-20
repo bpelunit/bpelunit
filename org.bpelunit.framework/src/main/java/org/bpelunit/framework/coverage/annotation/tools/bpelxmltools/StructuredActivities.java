@@ -9,7 +9,7 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 
 /**
- * Die Klasse repr‰sentiert die Strukturierten Aktivit‰ten.
+ * Die Klasse repr√§sentiert die Strukturierten Aktivit√§ten.
  * 
  * @author Alex Salnikow
  *
@@ -37,7 +37,7 @@ public class StructuredActivities {
 	private static Hashtable<String, String> structured_activities;
 
 	/**
-	 * ‹berpr¸ft, ob das Element eine BPEL-StructuredActivit‰t repr‰sentiert.
+	 * √úberpr√ºft, ob das Element eine BPEL-StructuredActivit√§t repr√§sentiert.
 	 * 
 	 * @param element
 	 * @return
@@ -48,7 +48,7 @@ public class StructuredActivities {
 	}
 
 	/**
-	 * Legt die Aktivit‰ten fest abh‰ngig von der BPEL-Version (1.1 oder 2.0)
+	 * Legt die Aktivit√§ten fest abh√§ngig von der BPEL-Version (1.1 oder 2.0)
 	 *
 	 */
 	public static void initialize() {

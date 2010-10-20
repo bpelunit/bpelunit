@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Die Klasse repräsentiert eine Coverage-Marke, die mit einem Status (getestet oder nicht)  behaftet ist. 
- * Außerdem werden die zugehörigen  Testfälle gespeichert.
+ * Die Klasse reprÃ¤sentiert eine Coverage-Marke, die mit einem Status (getestet oder nicht)  behaftet ist. 
+ * AuÃŸerdem werden die zugehÃ¶rigen  TestfÃ¤lle gespeichert.
  * @author Alex Salnikow
  *
  */
@@ -30,7 +30,7 @@ public class MarkerStatus {
 
 	/**
 	 * 
-	 * @return alle Testfälle, die diese Marke "getestet" haben.
+	 * @return alle TestfÃ¤lle, die diese Marke "getestet" haben.
 	 */
 	public Set<String> getTestcases() {
 		return testcases;

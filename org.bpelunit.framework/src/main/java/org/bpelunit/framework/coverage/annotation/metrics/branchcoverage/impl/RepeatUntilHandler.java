@@ -21,7 +21,7 @@ import org.jdom.Element;
 
 /**
  * Handler, der die Instrumentierung der
- * repeatUntil-Aktivitäten für die Zweigabdeckung übernehmen.
+ * repeatUntil-AktivitÃ¤ten fÃ¼r die Zweigabdeckung Ã¼bernehmen.
  * 
  * @author Alex Salnikow
  */
@@ -35,8 +35,8 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	}
 
 	/**
-	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
-	 * um die Ausführung der Zweige zu erfassen.
+	 * FÃ¼gt Markierungen, die spÃ¤ter durch Invoke-Aufrufe protokolliert werden,
+	 * um die AusfÃ¼hrung der Zweige zu erfassen.
 	 * 
 	 * @param structured_activity
 	 * @throws BpelException
@@ -67,9 +67,9 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	}
 
 	/**
-	 * Fügt Markierung für den Zweig von Aktivitäten zu der Condition. Dafür
-	 * wird eine If-Anfrage eingefügt, die anhand der Zählvariable überprüft, ob
-	 * die Aktivitäten in der Schleife ausgeführt wurden.
+	 * FÃ¼gt Markierung fÃ¼r den Zweig von AktivitÃ¤ten zu der Condition. DafÃ¼r
+	 * wird eine If-Anfrage eingefÃ¼gt, die anhand der ZÃ¤hlvariable Ã¼berprÃ¼ft, ob
+	 * die AktivitÃ¤ten in der Schleife ausgefÃ¼hrt wurden.
 	 * 
 	 * @param element
 	 * @param countVariable
@@ -97,9 +97,9 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	}
 
 	/**
-	 * Fügt ein Assign Element an letzter Stelle innerhalb des
-	 * RepeatUntil-Konstrukts, das die Zaählvariable um eins erhöht und
-	 * registriert damit die Ausführung der Schleife.
+	 * FÃ¼gt ein Assign Element an letzter Stelle innerhalb des
+	 * RepeatUntil-Konstrukts, das die ZaÃ¤hlvariable um eins erhÃ¶ht und
+	 * registriert damit die AusfÃ¼hrung der Schleife.
 	 * 
 	 * @param increesAssign
 	 * @param element

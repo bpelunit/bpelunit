@@ -12,7 +12,7 @@ import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 
 /*
  * 
- * Die Klasse verwaltet alle eingefügten Coverage-Marken eines Deployment-Archivs.
+ * Die Klasse verwaltet alle eingefÃ¼gten Coverage-Marken eines Deployment-Archivs.
  * 
  * @author Alex Salnikow
  *
@@ -43,7 +43,7 @@ public class MarkersRegisterForArchive {
 	}
 
 	/*
-	 * registriert eingefügte Marken
+	 * registriert eingefÃ¼gte Marken
 	 * 
 	 * @param marker Coverage-Marke
 	 */
@@ -97,10 +97,10 @@ public class MarkersRegisterForArchive {
 	}
 
 	/*
-	 * Generiert Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im
+	 * Generiert Statistiken (nach dem Testlauf) fÃ¼r alle BPEL-Dateien, die im
 	 * Archive sind.
 	 * 
-	 * @return Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im
+	 * @return Statistiken (nach dem Testlauf) fÃ¼r alle BPEL-Dateien, die im
 	 * Archive sind.
 	 */
 	/**

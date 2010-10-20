@@ -22,9 +22,9 @@ public interface ICoverageMeasurmentTool {
 	 * 
 	 * @param configMap
 	 *            Map (Metrikname,Liste), wobei Liste entweder
-	 *            Zusatzinformationen enthält oder gleich null. Bei
-	 *            Aktivitätsabdeckung sind die Basisaktivitäten, die
-	 *            berücksichtigt werden sollen, in der Liste eingetragen.
+	 *            Zusatzinformationen enthÃ¤lt oder gleich null. Bei
+	 *            AktivitÃ¤tsabdeckung sind die BasisaktivitÃ¤ten, die
+	 *            berÃ¼cksichtigt werden sollen, in der Liste eingetragen.
 	 * @throws ConfigurationException
 	 */
 	public abstract void configureMetrics(Map<String, List<String>> configMap)
@@ -33,7 +33,7 @@ public interface ICoverageMeasurmentTool {
 	/**
 	 * 
 	 * @param encoder
-	 *            sSOAPEncoder für die Dekodierung der Nachrichten mit
+	 *            sSOAPEncoder fÃ¼r die Dekodierung der Nachrichten mit
 	 *            Coverage-Marken
 	 */
 	public abstract void setSOAPEncoder(ISOAPEncoder encoder);
@@ -52,9 +52,9 @@ public interface ICoverageMeasurmentTool {
 	public abstract String getEncodingStyle();
 
 	/**
-	 * Prepariert das Deploymentarchive für die Messung der Abdeckung beim
+	 * Prepariert das Deploymentarchive fÃ¼r die Messung der Abdeckung beim
 	 * Testen des BPEL-Prozesses. Die Instrumentierung wird auf einer Kopie
-	 * durchgeführt.
+	 * durchgefÃ¼hrt.
 	 * 
 	 * @param pathToArchive
 	 * @param archiveFile
@@ -69,16 +69,16 @@ public interface ICoverageMeasurmentTool {
 	public abstract void setErrorStatus(String message);
 
 	/**
-	 * Setzt den Testfall, der gerade ausgeführt wird. Dadurch ist es möglich,
+	 * Setzt den Testfall, der gerade ausgefÃ¼hrt wird. Dadurch ist es mÃ¶glich,
 	 * die Testabdeckung von jedem Testfalls zu bestimmen.
 	 * 
 	 * @param testCase
-	 *            Testfall, der gerade ausgeführt wird.
+	 *            Testfall, der gerade ausgefÃ¼hrt wird.
 	 */
 	public abstract void setCurrentTestCase(String testCase);
 
 	/**
-	 * Empfängt SOAP-Nachrichten mit Coverage Marken während der Testausführung
+	 * EmpfÃ¤ngt SOAP-Nachrichten mit Coverage Marken wÃ¤hrend der TestausfÃ¼hrung
 	 * 
 	 * @param body
 	 *            Nachricht mit Coverage-Marken
@@ -86,10 +86,10 @@ public interface ICoverageMeasurmentTool {
 	public abstract void putMessage(String body);
 
 	/**
-	 * Generiert Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im
+	 * Generiert Statistiken (nach dem Testlauf) fÃ¼r alle BPEL-Dateien, die im
 	 * Archive sind.
 	 * 
-	 * @return Statistiken (nach dem Testlauf) für alle BPEL-Dateien, die im
+	 * @return Statistiken (nach dem Testlauf) fÃ¼r alle BPEL-Dateien, die im
 	 *         Archive sind.
 	 */
 	public abstract List<IFileStatistic> getStatistics();

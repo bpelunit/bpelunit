@@ -69,8 +69,8 @@ public class FaultMetric implements IMetric {
 	}
 
 	/*
-	 * Erhält die noch nicht modifizierte Beschreibung des BPELProzesses als
-	 * XML-Element. Alle für die Instrumentierung benötigten Elemente der
+	 * ErhÃ¤lt die noch nicht modifizierte Beschreibung des BPELProzesses als
+	 * XML-Element. Alle fÃ¼r die Instrumentierung benÃ¶tigten Elemente der
 	 * Prozessbeschreibung werden gespeichert
 	 * 
 	 * @param process

@@ -56,7 +56,7 @@ public class LinkMetricHandler implements IMetricHandler {
 	}
 
 	/*
-	 * Generiert eindeutige Merkierung für die Links (in der Flow-Umgebung)
+	 * Generiert eindeutige Merkierung fÃ¼r die Links (in der Flow-Umgebung)
 	 * 
 	 * @return eindeutige Markierung
 	 */
@@ -71,7 +71,7 @@ public class LinkMetricHandler implements IMetricHandler {
 	}
 
 	/*
-	 * Generiert eindeutige Merkierung für die Links (in der Flow-Umgebung)
+	 * Generiert eindeutige Merkierung fÃ¼r die Links (in der Flow-Umgebung)
 	 * 
 	 * @return eindeutige Markierung
 	 */
@@ -86,10 +86,10 @@ public class LinkMetricHandler implements IMetricHandler {
 	}
 
 	/*
-	 * Fügt die Marker an den richtigen Stellen in BPEL-Process-Element ein
+	 * FÃ¼gt die Marker an den richtigen Stellen in BPEL-Process-Element ein
 	 * (Instrumentierung). Anhand dieser Marker werden danach entsprechende
-	 * Invoke aufrufe generiert und dadurch die Ausführung bestimmter
-	 * Aktivitäten geloggt.
+	 * Invoke aufrufe generiert und dadurch die AusfÃ¼hrung bestimmter
+	 * AktivitÃ¤ten geloggt.
 	 * 
 	 * @param process_elements
 	 * 

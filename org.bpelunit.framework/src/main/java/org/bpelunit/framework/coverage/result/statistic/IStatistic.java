@@ -5,8 +5,8 @@ import java.util.Set;
 import org.bpelunit.framework.coverage.receiver.MarkerState;
 
 /*
- * Repräsentiert Statistik, die die Anzahl der getesteten und gesamten
- * Codestücke beinhalten. Eine Statistik kann sich aus mehreren Statistiken
+ * ReprÃ¤sentiert Statistik, die die Anzahl der getesteten und gesamten
+ * CodestÃ¼cke beinhalten. Eine Statistik kann sich aus mehreren Statistiken
  * (Substatistiken) zusammensetzten.
  * 
  * @author Alex Salnikow
@@ -99,13 +99,13 @@ public interface IStatistic {
 	 * @param statusListe
 	 *            eine Menge von Marken, die mit einem Status behaftete sind
 	 *            (getestet oder nicht) und eine Element des Kontrollflusses
-	 *            repräsentieren.
+	 *            reprÃ¤sentieren.
 	 */
 	/**
 	 * @param stateList
 	 *            eine Menge von Marken, die mit einem Status behaftete sind
 	 *            (getestet oder nicht) und eine Element des Kontrollflusses
-	 *            repräsentieren.
+	 *            reprÃ¤sentieren.
 	 */
 	// TODO ... ???
 	public void setStateList(List<MarkerState> stateList);

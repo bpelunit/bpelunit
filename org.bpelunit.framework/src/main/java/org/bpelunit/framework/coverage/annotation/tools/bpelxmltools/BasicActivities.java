@@ -9,7 +9,7 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 
 /**
- * Die Klasse repr‰sentiert die Basisaktivit‰ten.
+ * Die Klasse repr√§sentiert die Basisaktivit√§ten.
  * 
  * @author Alex Salnikow
  *
@@ -46,10 +46,10 @@ public class BasicActivities {
 
 
 	/**
-	 * ‹berpr¸ft, ob das Element eine BPEL-BasicActivit‰t repr‰sentiert.
+	 * √úberpr√ºft, ob das Element eine BPEL-BasicActivit√§t repr√§sentiert.
 	 * 
 	 * @param element
-	 * @return ist BasicActivit‰t
+	 * @return ist BasicActivit√§t
 	 */
 	public static boolean isBasisActivity(Element element) {
 		return isBasisActivity(element.getName());
@@ -60,7 +60,7 @@ public class BasicActivities {
 	}
 
 	/**
-	 * Legt die Aktivit‰ten fest, abh‰ngig von der BPEL-Version (1.1 oder 2.0)
+	 * Legt die Aktivit√§ten fest, abh√§ngig von der BPEL-Version (1.1 oder 2.0)
 	 *
 	 */
 	public static void initialize() {

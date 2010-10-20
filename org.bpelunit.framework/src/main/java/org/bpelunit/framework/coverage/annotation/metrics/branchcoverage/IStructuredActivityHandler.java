@@ -4,15 +4,15 @@ import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.jdom.Element;
 
 /**
- * Die Schnittstelle für die Handler, die die Instrumentierung der
- * Strukturierten Aktivitäten für die Zweigabdeckung übernehmen.
+ * Die Schnittstelle fÃ¼r die Handler, die die Instrumentierung der
+ * Strukturierten AktivitÃ¤ten fÃ¼r die Zweigabdeckung Ã¼bernehmen.
  * 
  * @author Alex Salnikow
  */
 public interface IStructuredActivityHandler {
 	/**
-	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
-	 * um die Ausführung der Zweige zu erfassen.
+	 * FÃ¼gt Markierungen, die spÃ¤ter durch Invoke-Aufrufe protokolliert werden,
+	 * um die AusfÃ¼hrung der Zweige zu erfassen.
 	 * 
 	 * @param structured_activity
 	 * @throws BpelException

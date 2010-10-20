@@ -35,10 +35,10 @@ public class CompensationMetric implements IMetric {
 	}
 
 	/*
-	 * Liefert Präfixe von allen Marken dieser Metrik. Sie ermöglichen die
+	 * Liefert PrÃ¤fixe von allen Marken dieser Metrik. Sie ermÃ¶glichen die
 	 * Zuordnung der empfangenen Marken einer Metrik
 	 * 
-	 * @return Präfixe von allen Marken dieser Metrik
+	 * @return PrÃ¤fixe von allen Marken dieser Metrik
 	 */
 	
 	/* (non-Javadoc)
@@ -62,7 +62,7 @@ public class CompensationMetric implements IMetric {
 	 * Erzeugt Statistiken
 	 * 
 	 * @param allMarkers
-	 *            alle einegfügten Marken (von allen Metriken), nach dem Testen
+	 *            alle einegfÃ¼gten Marken (von allen Metriken), nach dem Testen
 	 * @return Statistik
 	 */
 	
@@ -78,8 +78,8 @@ public class CompensationMetric implements IMetric {
 	}
 
 	/*
-	 * Erhält die noch nicht modifizierte Beschreibung des BPELProzesses als
-	 * XML-Element. Alle für die Instrumentierung benötigten Elemente der
+	 * ErhÃ¤lt die noch nicht modifizierte Beschreibung des BPELProzesses als
+	 * XML-Element. Alle fÃ¼r die Instrumentierung benÃ¶tigten Elemente der
 	 * Prozessbeschreibung werden gespeichert
 	 * 
 	 * @param process

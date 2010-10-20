@@ -26,7 +26,7 @@ import org.jdom.Namespace;
 
 /*
  * Klasse instrumentiert ein BPEL-Prozess, um die Zweigabdeckung bei der
- * Ausführung zu messen.
+ * AusfÃ¼hrung zu messen.
  * 
  * @author Alex Salnikow
  */
@@ -58,8 +58,8 @@ public class BranchMetricHandler implements IMetricHandler {
 	}
 
 	/**
-	 * Fügt eine Markierung vor allen Aktivitäten ein. Wenn es notwendig ist,
-	 * dann wird die Markierung ind die Aktivitäten in ein Sequence-Element
+	 * FÃ¼gt eine Markierung vor allen AktivitÃ¤ten ein. Wenn es notwendig ist,
+	 * dann wird die Markierung ind die AktivitÃ¤ten in ein Sequence-Element
 	 * eingeschlossen.
 	 * 
 	 * @param activity
@@ -92,8 +92,8 @@ public class BranchMetricHandler implements IMetricHandler {
 	}
 
 	/**
-	 * Fügt eine Markierung nach allen Aktivitäten ein. Wenn es notwendig ist,
-	 * dann wird die Markierung ind die Aktivitäten in ein Sequence-Element
+	 * FÃ¼gt eine Markierung nach allen AktivitÃ¤ten ein. Wenn es notwendig ist,
+	 * dann wird die Markierung ind die AktivitÃ¤ten in ein Sequence-Element
 	 * eingeschlossen.
 	 * 
 	 * @param activity
@@ -171,11 +171,11 @@ public class BranchMetricHandler implements IMetricHandler {
 	}
 
 	/**
-	 * * Fügt die Marker an den richtigen Stellen in BPEL-Process-Element ein
+	 * * FÃ¼gt die Marker an den richtigen Stellen in BPEL-Process-Element ein
 	 * (Instrumentierung). Anhand dieser Marker werden danach entsprechende
 	 * Invoke aufrufe generiert und dadurch die Aktivierung der Zweige geloggt.
 	 * 
-	 * @param activities alle Strukturierten Aktivitäten des Prozesses
+	 * @param activities alle Strukturierten AktivitÃ¤ten des Prozesses
 	 * @throws BpelException
 	 */
 	public void insertMarkersForMetric(List<Element> activities)

@@ -12,7 +12,7 @@ import org.jdom.Element;
 
 /**
  * Handler, der die Instrumentierung der
- * forEach-Aktivitäten für die Zweigabdeckung übernehmen.
+ * forEach-AktivitÃ¤ten fÃ¼r die Zweigabdeckung Ã¼bernehmen.
  * 
  * @author Alex Salnikow
  */
@@ -27,8 +27,8 @@ public class ForEachHandler implements IStructuredActivityHandler {
 	}
 
 	/**
-	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
-	 * um die Ausführung der Zweige zu erfassen.
+	 * FÃ¼gt Markierungen, die spÃ¤ter durch Invoke-Aufrufe protokolliert werden,
+	 * um die AusfÃ¼hrung der Zweige zu erfassen.
 	 * 
 	 * @param forEach_activity
 	 * @throws BpelException

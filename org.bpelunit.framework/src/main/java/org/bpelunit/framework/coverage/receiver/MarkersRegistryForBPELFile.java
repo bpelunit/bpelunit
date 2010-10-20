@@ -12,7 +12,7 @@ import org.bpelunit.framework.coverage.result.statistic.impl.FileStatistic;
 
 /*
  * 
- * Die Klasse verwaltet alle eingefügten Coverage-Marken für eine BPEL-Datei.
+ * Die Klasse verwaltet alle eingefÃ¼gten Coverage-Marken fÃ¼r eine BPEL-Datei.
  * 
  * @author Alex Salnikow
  * 
@@ -43,7 +43,7 @@ public class MarkersRegistryForBPELFile {
 	}
 
 	/*
-	 * registriert eingefügte Marken
+	 * registriert eingefÃ¼gte Marken
 	 * 
 	 * @param marke Coverage Marke
 	 * @param status
@@ -62,7 +62,7 @@ public class MarkersRegistryForBPELFile {
 	}
 
 	/*
-	 * Initialisiert Datenstruktur für die Speicherung der Marken für alle
+	 * Initialisiert Datenstruktur fÃ¼r die Speicherung der Marken fÃ¼r alle
 	 * Metriken.
 	 * 
 	 * @param metricManager

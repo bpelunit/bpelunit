@@ -18,7 +18,7 @@ import org.jdom.Element;
 
 /**
  * Handler, der die Instrumentierung der
- * if-Aktivit‰ten f¸r die Zweigabdeckung ¸bernehmen.
+ * if-Aktivit√§ten f√ºr die Zweigabdeckung √ºbernehmen.
  * 
  * @author Alex Salnikow
  */
@@ -31,8 +31,8 @@ public class IfHandler implements IStructuredActivityHandler {
 	}
 
 	/**
-	 * F¸gt Markierungen, die sp‰ter durch Invoke-Aufrufe protokolliert werden,
-	 * um die Ausf¸hrung der Zweige zu erfassen.
+	 * F√ºgt Markierungen, die sp√§ter durch Invoke-Aufrufe protokolliert werden,
+	 * um die Ausf√ºhrung der Zweige zu erfassen.
 	 * 
 	 * @param structured_activity
 	 * @throws BpelException
@@ -57,9 +57,9 @@ public class IfHandler implements IStructuredActivityHandler {
 	/**
 	 * 
 	 * @param branch_activity
-	 *            Aktivit‰t aus dem Else-Zweig.
+	 *            Aktivit√§t aus dem Else-Zweig.
 	 * @throws BpelException
-	 *             Wenn keine Aktivit‰t in dem Zweig vorhanden ist.
+	 *             Wenn keine Aktivit√§t in dem Zweig vorhanden ist.
 	 */
 	private void insertMarkerForElseBranch(Element branch_activity)
 			throws BpelException {
@@ -73,9 +73,9 @@ public class IfHandler implements IStructuredActivityHandler {
 	/**
 	 * 
 	 * @param branch_activity
-	 *            Aktivit‰t aus dem ElseIf-Zweig.
+	 *            Aktivit√§t aus dem ElseIf-Zweig.
 	 * @throws BpelException
-	 *             Wenn keine Aktivit‰t in dem Zweig vorhanden ist.
+	 *             Wenn keine Aktivit√§t in dem Zweig vorhanden ist.
 	 */
 	private void insertMarkerForElseIfBranches(Element branch_activity)
 			throws BpelException {
@@ -88,9 +88,9 @@ public class IfHandler implements IStructuredActivityHandler {
 	/**
 	 * 
 	 * @param branch_activity
-	 *            Aktivit‰t aus dem If-Zweig.
+	 *            Aktivit√§t aus dem If-Zweig.
 	 * @throws BpelException
-	 *             Wenn keine Aktivit‰t in dem Zweig vorhanden ist.
+	 *             Wenn keine Aktivit√§t in dem Zweig vorhanden ist.
 	 */
 	private void insertMarkerForIfBranch(Element branch_activity)
 			throws BpelException {

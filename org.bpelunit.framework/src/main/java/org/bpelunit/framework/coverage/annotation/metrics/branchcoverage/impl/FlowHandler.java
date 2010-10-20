@@ -21,7 +21,7 @@ import org.jdom.filter.ContentFilter;
 
 /**
  * Handler, der die Instrumentierung der
- * flow-Aktivitäten für die Zweigabdeckung übernehmen.
+ * flow-AktivitÃ¤ten fÃ¼r die Zweigabdeckung Ã¼bernehmen.
  * 
  * @author Alex Salnikow
  */
@@ -35,8 +35,8 @@ public class FlowHandler implements IStructuredActivityHandler {
 	}
 
 	/**
-	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
-	 * um die Ausführung der Zweige zu erfassen.
+	 * FÃ¼gt Markierungen, die spÃ¤ter durch Invoke-Aufrufe protokolliert werden,
+	 * um die AusfÃ¼hrung der Zweige zu erfassen.
 	 * 
 	 * @param flow
 	 * @throws BpelException

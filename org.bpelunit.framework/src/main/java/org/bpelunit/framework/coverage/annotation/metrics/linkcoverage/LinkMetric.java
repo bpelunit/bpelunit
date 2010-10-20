@@ -38,10 +38,10 @@ public class LinkMetric implements IMetric {
 	}
 
 	/*
-	 * Liefert Präfixe von allen Marken dieser Metrik. Sie ermöglichen die
+	 * Liefert PrÃ¤fixe von allen Marken dieser Metrik. Sie ermÃ¶glichen die
 	 * Zuordnung der empfangenen Marken einer Metrik
 	 * 
-	 * @return Präfixe von allen Marken dieser Metrik
+	 * @return PrÃ¤fixe von allen Marken dieser Metrik
 	 */
 	/**
 	 * Gets metric's markers' prefix
@@ -85,16 +85,16 @@ public class LinkMetric implements IMetric {
 	}
 
 	/*
-	 * Erhält die noch nicht modifizierte Beschreibung des BPELProzesses als
-	 * XML-Element. Alle für die Instrumentierung benötigten Elemente der
+	 * ErhÃ¤lt die noch nicht modifizierte Beschreibung des BPELProzesses als
+	 * XML-Element. Alle fÃ¼r die Instrumentierung benÃ¶tigten Elemente der
 	 * Prozessbeschreibung werden gespeichert
 	 * 
 	 * @param process
 	 *            noch nicht modifiziertes BPEL-Prozess
 	 */
 	/**
-	 * Erhält die noch nicht modifizierte Beschreibung des BPELProzesses als
-	 * XML-Element. Alle für die Instrumentierung benötigten Elemente der
+	 * ErhÃ¤lt die noch nicht modifizierte Beschreibung des BPELProzesses als
+	 * XML-Element. Alle fÃ¼r die Instrumentierung benÃ¶tigten Elemente der
 	 * Prozessbeschreibung werden gespeichert
 	 * 
 	 * @param process

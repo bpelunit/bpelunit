@@ -61,7 +61,7 @@ public class XMLCoverageResultProducer {
 	 * @param string
 	 * 
 	 * @param detailed entscheidet, ob eine detaillierte Augabe erzeugt wird
-	 * (Statistik für jede einzelen Datei), oder nicht (Statistik für den
+	 * (Statistik fÃ¼r jede einzelen Datei), oder nicht (Statistik fÃ¼r den
 	 * kompletten Archive. )
 	 * 
 	 * @throws IOException
@@ -90,7 +90,7 @@ public class XMLCoverageResultProducer {
 		Element coverageStatisticElement = new Element(
 				COVERAGE_STATISTIC_ELEMENT, NAMESPACE);
 		doc.setRootElement(coverageStatisticElement);
-		logger.info("INFO WIRD EINGEFÜGT");
+		logger.info("INFO WIRD EINGEFÃœGT");
 		if (string != null && !string.equals("")) {
 			Element infoElement = new Element("info", NAMESPACE);
 			infoElement.setText(string);

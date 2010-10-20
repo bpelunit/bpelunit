@@ -16,7 +16,7 @@ import org.jdom.filter.ElementFilter;
 
 /**
  * Handler, der die Instrumentierung der
- * sequence-Aktivitäten für die Zweigabdeckung übernehmen.
+ * sequence-AktivitÃ¤ten fÃ¼r die Zweigabdeckung Ã¼bernehmen.
  * 
  * @author Alex Salnikow
  */
@@ -29,8 +29,8 @@ public class SequenceHandler implements IStructuredActivityHandler {
 	}
 
 	/**
-	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
-	 * um die Ausführung der Zweige zu erfassen.
+	 * FÃ¼gt Markierungen, die spÃ¤ter durch Invoke-Aufrufe protokolliert werden,
+	 * um die AusfÃ¼hrung der Zweige zu erfassen.
 	 * 
 	 * @param structured_activity
 	 * @throws BpelException

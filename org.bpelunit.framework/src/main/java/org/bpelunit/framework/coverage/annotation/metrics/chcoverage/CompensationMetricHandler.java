@@ -37,10 +37,10 @@ public class CompensationMetricHandler implements IMetricHandler {
 
 
 	/**
-	 * Fügt die Marker an den richtigen Stellen in
+	 * FÃ¼gt die Marker an den richtigen Stellen in
 	 * BPEL-Process-Element ein (Instrumentierung). Anhand dieser Marker werden
-	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
-	 * bestimmter Aktivitäten geloggt.
+	 * danach entsprechende Invoke aufrufe generiert und dadurch die AusfÃ¼hrung
+	 * bestimmter AktivitÃ¤ten geloggt.
 	 * 
 	 * @param process_elements
 	 * @throws BpelException 

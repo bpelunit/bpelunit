@@ -9,8 +9,8 @@ import org.bpelunit.framework.coverage.exceptions.BpelException;
 import org.jdom.Document;
 
 /**
- * Interface dient als Schnittstelle für den Zugriff auf die (deployment)
- * Archivedateien, die spezifisch für die BPELEngine sind.
+ * Interface dient als Schnittstelle fÃ¼r den Zugriff auf die (deployment)
+ * Archivedateien, die spezifisch fÃ¼r die BPELEngine sind.
  * 
  * @author Alex Salnikow
  * 
@@ -19,7 +19,7 @@ import org.jdom.Document;
 public interface IDeploymentArchiveHandler {
 
 	/**
-	 * Erzeugt eine Kopie des Archivs, auf der die Instrumentierung durchgeführt wird.
+	 * Erzeugt eine Kopie des Archivs, auf der die Instrumentierung durchgefÃ¼hrt wird.
 	 * 
 	 * @param archiv Deploymentarchive
 	 * @return ArchivCopy
@@ -50,7 +50,7 @@ public interface IDeploymentArchiveHandler {
 	public void writeDocument(Document doc, String fileName) throws ArchiveFileException;
 
 	/**
-	 * Fügt in den Archive WSDL-Datei und registriert sie, falls nötig
+	 * FÃ¼gt in den Archive WSDL-Datei und registriert sie, falls nÃ¶tig
 	 * @param wsdlFile
 	 * @throws ArchiveFileException
 	 */

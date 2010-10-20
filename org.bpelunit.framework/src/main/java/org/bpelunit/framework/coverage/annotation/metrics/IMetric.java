@@ -9,7 +9,7 @@ import org.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.jdom.Element;
 
 /*
- * Die Schnittstelle repräsentiert die Metriken.
+ * Die Schnittstelle reprÃ¤sentiert die Metriken.
  * 
  * @author Alex Salnikow
  * 
@@ -34,10 +34,10 @@ public interface IMetric {
 	public String getName();
 
 	/*
-	 * Liefert Präfixe von allen Marken dieser Metrik. Sie ermöglichen die
+	 * Liefert PrÃ¤fixe von allen Marken dieser Metrik. Sie ermÃ¶glichen die
 	 * Zuordnung der empfangenen Marken einer Metrik
 	 * 
-	 * @return Präfixe von allen Marken dieser Metrik
+	 * @return PrÃ¤fixe von allen Marken dieser Metrik
 	 */
 	/**
 	 * Get characterizing prefix of a metric's markings
@@ -49,7 +49,7 @@ public interface IMetric {
 	/*
 	 * Erzeugt Statistiken
 	 * 
-	 * @param allMarkers alle einegfügten Marken (von allen Metriken), nach dem
+	 * @param allMarkers alle einegfÃ¼gten Marken (von allen Metriken), nach dem
 	 * Testen
 	 * 
 	 * @return Statistik
@@ -65,8 +65,8 @@ public interface IMetric {
 			Hashtable<String, Hashtable<String, MarkerState>> allMarkers);
 
 	/*
-	 * Erhält die noch nicht modifizierte Beschreibung des BPELProzesses als
-	 * XML-Element. Alle für die Instrumentierung benötigten Elemente der
+	 * ErhÃ¤lt die noch nicht modifizierte Beschreibung des BPELProzesses als
+	 * XML-Element. Alle fÃ¼r die Instrumentierung benÃ¶tigten Elemente der
 	 * Prozessbeschreibung werden gespeichert
 	 * 
 	 * @param process noch nicht modifiziertes BPEL-Prozess

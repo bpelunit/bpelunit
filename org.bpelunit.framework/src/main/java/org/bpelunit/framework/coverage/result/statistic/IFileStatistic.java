@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 /*
- * Repr‰sentiert Statistik einer BPEL-Datei.
+ * Repr√§sentiert Statistik einer BPEL-Datei.
  * 
  * @author Alex Salnikow
  * 

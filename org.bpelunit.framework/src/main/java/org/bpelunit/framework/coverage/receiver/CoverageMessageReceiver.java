@@ -24,8 +24,8 @@ import org.w3c.dom.Element;
 import com.ibm.wsdl.Constants;
 
 /*
- * Die Klasse ist für die Verarbeitung von SOAP-Nachrichten an Coverage Logging
- * Service zuständig.
+ * Die Klasse ist fÃ¼r die Verarbeitung von SOAP-Nachrichten an Coverage Logging
+ * Service zustÃ¤ndig.
  * 
  * @author Alex Salnikow
  * 
@@ -54,7 +54,7 @@ public class CoverageMessageReceiver {
 	}
 
 	/*
-	 * Empfängt SOAP-Nachrichten mit Coverage Marken während der Testausführung
+	 * EmpfÃ¤ngt SOAP-Nachrichten mit Coverage Marken wÃ¤hrend der TestausfÃ¼hrung
 	 * 
 	 * @param body Nachricht mit Coverage-Marken
 	 */
@@ -96,7 +96,7 @@ public class CoverageMessageReceiver {
 
 	/*
 	 * 
-	 * @param encoder sSOAPEncoder für die Dekodierung der Nachrichten mit
+	 * @param encoder sSOAPEncoder fÃ¼r die Dekodierung der Nachrichten mit
 	 * Coverage-Marken
 	 */
 	/**
@@ -167,10 +167,10 @@ public class CoverageMessageReceiver {
 	}
 
 	/*
-	 * Setzt den Testfall, der gerade ausgeführt wird. Dadurch ist es möglich,
+	 * Setzt den Testfall, der gerade ausgefÃ¼hrt wird. Dadurch ist es mÃ¶glich,
 	 * die Testabdeckung von jedem Testfalls zu bestimmen.
 	 * 
-	 * @param testCase Testfall, der gerade ausgeführt wird.
+	 * @param testCase Testfall, der gerade ausgefÃ¼hrt wird.
 	 */
 	/**
 	 * Sets the currently processed test case.

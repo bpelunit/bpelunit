@@ -152,7 +152,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	// ********************* add WSDL file to bpr-archive *********************
 
 	/**
-	 * Fügt WSDLFile in das Archive ein. Dabei wird WSDl-Catalog und
+	 * FÃ¼gt WSDLFile in das Archive ein. Dabei wird WSDl-Catalog und
 	 * DeploymentDescriptor angepasst.
 	 * 
 	 * @param wsdlFile
@@ -253,7 +253,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 
 	/**
 	 * 
-	 * Fügt Endpoint des Coverage Logging Services und WSDl-Eintrag in den
+	 * FÃ¼gt Endpoint des Coverage Logging Services und WSDl-Eintrag in den
 	 * Deployment Descriptor ein.
 	 * 
 	 * @throws ArchiveFileException
