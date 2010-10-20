@@ -38,6 +38,7 @@
 		<developer>
 			<id>bluezio</id>
 			<name>Antonio García Domínguez</name>
+			<email>antonio.garciadominguez@uca.es</email>
 		</developer>
 	</developers>
 	<contributors>
@@ -98,4 +99,18 @@
 		<module>org.bpelunit.framework.client.command</module>
 		<module>org.bpelunit.framework.client.maven</module>
 	</modules>
+
+        <!-- For Cloning -->
+	<repositories>
+		<repository>
+			<id>oss-releases</id>
+			<url>https://oss.sonatype.org/content/repositories/releases/</url>
+			<releases><enabled>true</enabled></releases>
+		</repository>
+		<repository>
+			<id>ukcomrobust</id>
+			<url>http://oss.sonatype.org/service/local/repositories/ukcomrobust-it-049/content</url>
+			<releases><enabled>true</enabled></releases>
+		</repository>
+	</repositories>
 </project>
