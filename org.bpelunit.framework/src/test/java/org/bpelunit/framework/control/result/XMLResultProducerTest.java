@@ -56,7 +56,7 @@ public class XMLResultProducerTest {
 	@Test
 	public void testInvalidAssumptionResultsAreValid() throws Exception {
 		TestTestRunner runner
-			= new TestTestRunner("resources/result/InvalidAssumption/",
+			= new TestTestRunner("src/test/resources/result/InvalidAssumption/",
 					"WastePaperBasketTestSuite.bpts");
 		assertValid(getResults(runner));
 	}

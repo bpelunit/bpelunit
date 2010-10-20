@@ -26,7 +26,7 @@ import org.junit.Test;
  * @author Antonio García-Domínguez
  */
 public class ActiveBPELEndToEndTest {
-	private static final String TEST_SUITE_DIR = "resources/engines";
+	private static final String TEST_SUITE_DIR = "src/test/resources/engines";
 	private static final String TEST_SUITE_FNAME = "tacService-activebpel.bpts";
 	private static final String TEST_SUITE_ENDLESS_FNAME = "tacService-activebpel-endless.bpts";
 	private static final String TEST_SUITE_INVALID = "tacService-activebpel-invalid.bpts";

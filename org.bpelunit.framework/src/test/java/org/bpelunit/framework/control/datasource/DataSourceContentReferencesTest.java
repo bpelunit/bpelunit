@@ -28,7 +28,7 @@ import org.mortbay.http.handler.ResourceHandler;
 public class DataSourceContentReferencesTest {
 
 	// Source file information
-	private static final String FILE_SOURCE_DIR = "resources/templates/";
+	private static final String FILE_SOURCE_DIR = "src/test/resources/templates/";
 	private static final String FILE_SOURCE_BASENAME = "tacService-data.vm";
 	private static final String EXPECTED_FILE_CONTENTS = "#set($lines = [[], ['A'], ['A','B'], ['A','B','C']])";
 

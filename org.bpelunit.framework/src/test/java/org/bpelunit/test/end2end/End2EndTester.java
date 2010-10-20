@@ -62,7 +62,7 @@ import org.junit.Test;
  */
 public class End2EndTester {
 
-	private static final String BASEPATH= "resources/end2end/";
+	private static final String BASEPATH= "src/test/resources/end2end/";
 
 	public static TestTestRunner getSendOnlyReceiveOnlyRunner() throws ConfigurationException, SpecificationException {
 		return new TestTestRunner(BASEPATH + "01_SendReceiveOnly/", "WastePaperBasketTestSuite.bpts");
