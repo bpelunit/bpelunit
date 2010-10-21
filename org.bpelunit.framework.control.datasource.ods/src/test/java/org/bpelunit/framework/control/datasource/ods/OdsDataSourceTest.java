@@ -14,7 +14,7 @@ import org.junit.Test;
 
 public class OdsDataSourceTest {
 	private InputStream getStream(String filenameBody) {
-		return getClass().getResourceAsStream(filenameBody + ".ods");
+		return getClass().getResourceAsStream("/" + filenameBody + ".ods");
 	}
 
 	private OdsDataSource ds;

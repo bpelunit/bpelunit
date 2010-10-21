@@ -113,9 +113,10 @@
 		<module>org.bpelunit.framework.control.datasource.csv</module>
 		<module>org.bpelunit.framework.control.datasource.excel</module>
 		<module>org.bpelunit.framework.control.datasource.html</module>
+		<module>org.bpelunit.framework.control.datasource.ods</module>
 	</modules>
 
-        <!-- For Cloning -->
+        <!-- For Cloning and ODFDOM -->
 	<repositories>
 		<repository>
 			<id>oss-releases</id>
@@ -125,6 +126,11 @@
 		<repository>
 			<id>ukcomrobust</id>
 			<url>http://oss.sonatype.org/service/local/repositories/ukcomrobust-it-049/content</url>
+			<releases><enabled>true</enabled></releases>
+		</repository>
+		<repository>
+			<id>odfdom-releases</id>
+			<url>https://odftoolkit.org/svn/odfdom~maven2/release/</url>
 			<releases><enabled>true</enabled></releases>
 		</repository>
 	</repositories>
