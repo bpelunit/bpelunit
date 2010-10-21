@@ -114,6 +114,7 @@
 		<module>org.bpelunit.framework.control.datasource.excel</module>
 		<module>org.bpelunit.framework.control.datasource.html</module>
 		<module>org.bpelunit.framework.control.datasource.ods</module>
+		<module>org.bpelunit.utils.datasourceinliner</module>
 	</modules>
 
         <!-- For Cloning and ODFDOM -->

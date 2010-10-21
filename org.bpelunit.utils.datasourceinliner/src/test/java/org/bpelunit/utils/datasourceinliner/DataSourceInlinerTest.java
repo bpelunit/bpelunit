@@ -22,15 +22,15 @@ import org.junit.Test;
  */
 public class DataSourceInlinerTest {
 
-    private static final File BPTS_BASEDIR       = new File("resources");
+    private static final File BPTS_BASEDIR       = new File("target/test-classes");
 
-    private static final File LINKED_BPTS_FILE   = getBPTSFile("linkedDS",
+    private static final File LINKED_BPTS_FILE   = getBPTSFile("templates",
                                                          "tacService-suitesrc-t.bpts");
-    private static final File EMBEDDED_BPTS_FILE = getBPTSFile("embeddedDS",
+    private static final File EMBEDDED_BPTS_FILE = getBPTSFile("templates",
                                                          "tacService-casesrc-t.bpts");
-    private static final File DELAYSEQ_BPTS_FILE = getBPTSFile("delaySequence",
+    private static final File DELAYSEQ_BPTS_FILE = getBPTSFile("end2end/03_SendReceiveAsync",
                                                          "LoanServiceTestSuite.bpts");
-    private static final File PLAIN_BPTS_FILE    = getBPTSFile("plain",
+    private static final File PLAIN_BPTS_FILE    = getBPTSFile("end2end/01_SendReceiveOnly",
                                                          "WastePaperBasketTestSuite.bpts");
 
     @Test
