@@ -110,6 +110,7 @@
 		<module>org.bpelunit.framework.client.ant</module>
 		<module>org.bpelunit.framework.client.command</module>
 		<module>org.bpelunit.framework.client.maven</module>
+		<module>org.bpelunit.framework.control.datasource.csv</module>
 	</modules>
 
         <!-- For Cloning -->

@@ -27,7 +27,7 @@ public class CSVDataSourceTest {
 	}
 
 	private InputStream getStream(String fileName) {
-		return getClass().getResourceAsStream(fileName);
+		return getClass().getResourceAsStream("/" + fileName);
 	}
 
 	@Test
