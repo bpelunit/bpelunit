@@ -17,7 +17,7 @@ public abstract class AbstractExcelDataSourceTest {
 
 	private InputStream getStream(String filenameBody) {
 		return getClass().getResourceAsStream(
-				filenameBody + "." + getFileSuffix());
+				"/" + filenameBody + "." + getFileSuffix());
 	}
 
 	private ExcelDataSource ds;
