@@ -200,7 +200,7 @@ public class HtmlDataSourceTest {
 	}
 
 	private InputStream getStream(String string) {
-		InputStream is = this.getClass().getResourceAsStream(string + ".html");
+		InputStream is = this.getClass().getResourceAsStream("/" + string + ".html");
 		return is;
 	}
 }

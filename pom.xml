@@ -112,6 +112,7 @@
 		<module>org.bpelunit.framework.client.maven</module>
 		<module>org.bpelunit.framework.control.datasource.csv</module>
 		<module>org.bpelunit.framework.control.datasource.excel</module>
+		<module>org.bpelunit.framework.control.datasource.html</module>
 	</modules>
 
         <!-- For Cloning -->
