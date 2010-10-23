@@ -32,14 +32,12 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
         <configuration>
           <skip>true</skip>
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <excludes>
@@ -55,6 +53,27 @@
           <execution>
             <phase>package</phase>
             <goals><goal>test-jar</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- In addition to the regular .jar, generate an OSGi bundle Tycho can reuse -->
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>bundle</goal></goals>
+            <configuration>
+              <classifier>bundle</classifier>
+              <instructions>
+                <Export-Package>org.bpelunit.*;schemaorg_apache_xmlbeans.*;-split-package:=merge-last</Export-Package>
+                <_exportcontents>com.ibm.wsdl.*;javax.wsdl.*;org.apache.xmlbeans.*;org.apache.commons.lang</_exportcontents>
+                <Bundle-SymbolicName>org.bpelunit.framework</Bundle-SymbolicName>
+                <Embed-Transitive>true</Embed-Transitive>
+                <Embed-Dependency>*;scope=compile;artifactId=!stax-api</Embed-Dependency>
+              </instructions>
+            </configuration>
           </execution>
         </executions>
       </plugin>
