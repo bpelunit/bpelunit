@@ -1,20 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-  <name>framework</name>
-  <comment>BPEL has become the defacto standard language for composing Web services. However, as every other programming language developers can introduce defects into the code that can lead to undesired consequences when the software is rolled out at the client-side. Therefore, all software development methodologies include testing as one of the important activities. For nearly every programming language, a unit testing framework exists, for example JUnit for Java. These testing frameworks allow developers to easily test small chunks of the code that they have written. Until recently, BPEL lacked such support. However, BPELUnit was developed for closing this gap. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
-  <projects/>
-  <buildSpec>
-    <buildCommand>
-      <name>org.eclipse.jdt.core.javabuilder</name>
-    </buildCommand>
-    <buildCommand>
-      <name>org.eclipse.pde.ManifestBuilder</name>
-    </buildCommand>
-    <buildCommand>
-      <name>org.eclipse.pde.SchemaBuilder</name>
-    </buildCommand>
-  </buildSpec>
-  <natures>
-    <nature>org.eclipse.jdt.core.javanature</nature>
-    <nature>org.eclipse.pde.PluginNature</nature>
-  </natures>
+	<name>framework</name>
+	<comment>BPEL has become the defacto standard language for composing Web services. However, as every other programming language developers can introduce defects into the code that can lead to undesired consequences when the software is rolled out at the client-side. Therefore, all software development methodologies include testing as one of the important activities. For nearly every programming language, a unit testing framework exists, for example JUnit for Java. These testing frameworks allow developers to easily test small chunks of the code that they have written. Until recently, BPEL lacked such support. However, BPELUnit was developed for closing this gap. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.SchemaBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+				<dictionary>
+					<key>LaunchConfigHandle</key>
+					<value>&lt;project&gt;/.externalToolBuilders/Copy Generated Classes.launch</value>
+				</dictionary>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.pde.PluginNature</nature>
+	</natures>
 </projectDescription>
