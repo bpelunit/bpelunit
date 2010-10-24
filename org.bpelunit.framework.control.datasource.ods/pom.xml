@@ -11,12 +11,40 @@
   <packaging>jar</packaging>
   <name>BPELUnit :: ODS Data Source</name>
   <build>
+    <resources>
+      <resource>
+        <directory>.</directory>
+        <includes><include>plugin.xml</include></includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-eclipse-plugin</artifactId>
         <configuration>
           <skip>true</skip>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>bundle</goal></goals>
+            <configuration>
+              <classifier>bundle</classifier>
+              <instructions>
+                <Bundle-SymbolicName>
+                  org.bpelunit.framework.control.datasource.ods
+                </Bundle-SymbolicName>
+                <Embed-Dependency>*;groupId=org.odftoolkit</Embed-Dependency>
+                <Require-Bundle>
+                  org.bpelunit.framework.client.eclipse
+                </Require-Bundle>
+              </instructions>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
