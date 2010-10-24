@@ -21,3 +21,6 @@ Require-Bundle: org.eclipse.ui,
 Eclipse-LazyStart: true
 Bundle-Vendor: Leibniz Universität Hannover
 Import-Package: javax.wsdl
+Bundle-ClassPath: .,
+ lib/xsom14.jar,
+ lib/relaxngDatatype-1.0.jar
