@@ -10,6 +10,10 @@
 e is rolled out at the client-side. Therefore, all software development methodologies include testing as one of the important activities. For nearly every programming language, a unit testing framework exists, for example JUnit for Java. These testing frameworks allow developers to easily test small chunks of the code that they have written. Until recently, BPEL lacked such support. However, BPELUnit was developed for closing this gap.
    </description>
 
+   <copyright>
+     (c) 2006-2009 Leibniz Universität Hannover
+   </copyright>
+
    <license url="http://www.eclipse.org/org/documents/epl-v10.php">
       Eclipse Public License - v 1.0
 
@@ -101,7 +105,8 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </license>
 
    <url>
-      <discovery label="University of Hannover Site" url="http://www.se.uni-hannover.de/forschung/soa/bpelunit/"/>
+     <update label="BPELUnit Update Site" url="http://update.bpelunit.net"/>
+     <discovery label="University of Hannover Site" url="http://www.se.uni-hannover.de/forschung/soa/bpelunit/"/>
    </url>
 
    <plugin
