@@ -1,11 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-	<parent>
-		<artifactId>bpelunit</artifactId>
-		<groupId>net.bpelunit</groupId>
-		<version>1.4.1-SNAPSHOT</version>
-	</parent>
-  <groupId>net.bpelunit</groupId>
+  <parent>
+    <artifactId>bpelunit</artifactId>
+    <groupId>net.bpelunit</groupId>
+    <version>1.4.1-SNAPSHOT</version>
+  </parent>
   <artifactId>commandline</artifactId>
   <version>1.4.1-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -14,8 +13,7 @@
     <dependency>
       <groupId>net.bpelunit</groupId>
       <artifactId>framework</artifactId>
-      <version>1.4.1-SNAPSHOT</version>
-      <type>jar</type>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 </project>
