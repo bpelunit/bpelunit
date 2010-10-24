@@ -38,8 +38,9 @@
                 <Bundle-SymbolicName>
                   org.bpelunit.framework.control.datasource.excel
                 </Bundle-SymbolicName>
+                <Import-Package>!com.sun.msv.*;!org.apache.*;!org.gjt.*;!org.jaxen.*;!javax.imageio.*;!javax.swing.*;!javax.xml.stream.*;!org.xmlpull.*;!schemas*;!org.openxml*;!org.relaxng.*;!junit.*;*</Import-Package>
                 <Embed-Transitive>true</Embed-Transitive>
-                <Embed-Dependency>*;groupId=org.apache.poi</Embed-Dependency>
+                <Embed-Dependency>*;groupId=org.apache.poi|dom4j</Embed-Dependency>
                 <Require-Bundle>
                   org.bpelunit.framework.client.eclipse
                 </Require-Bundle>

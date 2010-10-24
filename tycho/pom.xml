@@ -47,6 +47,7 @@
   <modules>
     <module>org.bpelunit.framework.client.eclipse</module>
     <module>org.bpelunit.toolsupport</module>
+    <module>org.bpelunit.eclipse.feature</module>
   </modules>
 
 </project>
