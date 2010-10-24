@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>net.bpelunit</groupId>
+    <artifactId>bpelunit-tycho-parent</artifactId>
+    <version>1.4.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>eclipse-update-site</artifactId>
+  <version>1.4.1-SNAPSHOT</version>
+  <packaging>eclipse-update-site</packaging>
+  <name>BPELUnit :: Eclipse Update Site</name>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.tycho</groupId>
+        <artifactId>maven-osgi-packaging-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <archiveSite>true</archiveSite>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>framework</artifactId>
+      <version>${project.version}</version>
+      <classifier>bundle</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>datasource-csv</artifactId>
+      <version>${project.version}</version>
+      <classifier>bundle</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>datasource-excel</artifactId>
+      <version>${project.version}</version>
+      <classifier>bundle</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>datasource-html</artifactId>
+      <version>${project.version}</version>
+      <classifier>bundle</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>datasource-ods</artifactId>
+      <version>${project.version}</version>
+      <classifier>bundle</classifier>
+    </dependency>
+  </dependencies>
+
+</project>
