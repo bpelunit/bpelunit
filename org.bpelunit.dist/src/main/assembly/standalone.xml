@@ -1,0 +1,33 @@
+<assembly
+    xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+  <id>standalone</id>
+  <formats>
+    <format>zip</format>
+    <format>tar.gz</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>src/main/resources</directory>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/generated-resources/conf</directory>
+      <outputDirectory>/conf</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/generated-resources/schemaorg_apache_xmlbeans/src</directory>
+      <outputDirectory>/schema</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/generated-resources/3rdpartylicenses</directory>
+      <outputDirectory>/doc/licenses</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/dependency</directory>
+      <outputDirectory>/lib</outputDirectory>
+    </fileSet>
+  </fileSets>
+</assembly>
