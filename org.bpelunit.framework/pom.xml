@@ -6,7 +6,6 @@
     <version>1.4.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>net.bpelunit</groupId>
   <artifactId>framework</artifactId>
   <version>1.4.1-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -36,48 +35,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
         <configuration>
-          <pde>false</pde>
-          <additionalProjectnatures>
-            <projectnature>org.eclipse.pde.PluginNature</projectnature>
-          </additionalProjectnatures>
-          <buildcommands>
-            <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
-            <buildcommand>org.eclipse.pde.ManifestBuilder</buildcommand>
-            <buildcommand>org.eclipse.pde.SchemaBuilder</buildcommand>
-          </buildcommands>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/dependency</outputDirectory>
-              <overWriteReleases>false</overWriteReleases>
-              <overWriteSnapshots>false</overWriteSnapshots>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>${project.build.directory}/dependency</directory>
-              <includes>
-                <include>*.jar</include>
-              </includes>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-          </filesets>
+          <skip>true</skip>
         </configuration>
       </plugin>
       <plugin>
