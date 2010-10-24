@@ -33,14 +33,19 @@
             <goals><goal>bundle</goal></goals>
             <configuration>
               <classifier>bundle</classifier>
+              <manifestLocation>META-INF</manifestLocation>
               <instructions>
                 <Bundle-SymbolicName>
-                  org.bpelunit.framework.control.datasource.ods
+                  org.bpelunit.framework.control.datasource.ods;singleton:=true
                 </Bundle-SymbolicName>
+		<Import-Package>org.bpelunit.framework.control.datasource;*</Import-Package>
+                <Embed-Directory>target/dependency</Embed-Directory>
                 <Embed-Dependency>*;groupId=org.odftoolkit</Embed-Dependency>
                 <Require-Bundle>
                   org.bpelunit.framework.client.eclipse
                 </Require-Bundle>
+                <Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
+                <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
               </instructions>
             </configuration>
           </execution>
