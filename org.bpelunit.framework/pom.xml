@@ -17,19 +17,12 @@
         <artifactId>xmlbeans-maven-plugin</artifactId>
         <executions>
           <execution>
-            <goals>
-              <goal>xmlbeans</goal>
-            </goals>
+            <goals><goal>xmlbeans</goal></goals>
+            <configuration>
+              <javaSource>1.5</javaSource>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <schemaDirectory>src/main/schema</schemaDirectory>
-          <sourceGenerationDirectory>target/generated/xmlbeans</sourceGenerationDirectory>
-          <xmlConfigs>
-            <xmlConfig implementation="java.io.File">src/main/schema/xmlbeans.xsdconfig</xmlConfig>
-          </xmlConfigs>
-          <javaSource>1.5</javaSource>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-eclipse-plugin</artifactId>
