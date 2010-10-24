@@ -68,6 +68,7 @@
               <classifier>bundle</classifier>
               <instructions>
                 <Export-Package>org.bpelunit.*;schemaorg_apache_xmlbeans.*;-split-package:=merge-last</Export-Package>
+                <Import-Package>!*</Import-Package>
                 <_exportcontents>com.ibm.wsdl.*;javax.wsdl.*;org.apache.xmlbeans.*;org.apache.commons.lang</_exportcontents>
                 <Bundle-SymbolicName>org.bpelunit.framework</Bundle-SymbolicName>
                 <Embed-Transitive>true</Embed-Transitive>
