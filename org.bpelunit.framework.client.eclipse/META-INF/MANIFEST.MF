@@ -29,3 +29,4 @@ Export-Package: org.bpelunit.framework.client.eclipse,
  org.bpelunit.framework.client.model
 Bundle-Vendor: Leibniz Universität Hannover
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.apache.log4j
