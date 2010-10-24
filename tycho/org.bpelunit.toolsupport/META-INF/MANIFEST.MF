@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit Eclipse Tool Support Plugin
 Bundle-SymbolicName: org.bpelunit.toolsupport; singleton:=true
-Bundle-Version: 1.4.0
+Bundle-Version: 1.4.1.qualifier
 Bundle-Activator: org.bpelunit.toolsupport.ToolSupportActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -24,3 +24,4 @@ Import-Package: javax.wsdl
 Bundle-ClassPath: .,
  lib/xsom14.jar,
  lib/relaxngDatatype-1.0.jar
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
