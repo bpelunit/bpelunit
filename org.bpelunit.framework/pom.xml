@@ -11,6 +11,15 @@
   <packaging>jar</packaging>
   <name>BPELUnit :: Framework</name>
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>3rdpartylicenses</directory>
+        <targetPath>3rdpartylicenses</targetPath>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
