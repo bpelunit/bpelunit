@@ -11,12 +11,6 @@
   <packaging>jar</packaging>
   <name>BPELUnit :: Excel Data Source</name>
   <build>
-    <resources>
-      <resource>
-        <directory>.</directory>
-        <includes><include>plugin.xml</include></includes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-eclipse-plugin</artifactId>
@@ -36,15 +30,17 @@
               <manifestLocation>META-INF</manifestLocation>
               <instructions>
                 <Bundle-SymbolicName>
-                  org.bpelunit.framework.control.datasource.excel
+                  org.bpelunit.framework.control.datasource.excel;singleton:=true
                 </Bundle-SymbolicName>
-                <Import-Package>!com.sun.msv.*;!org.apache.*;!org.gjt.*;!org.jaxen.*;!javax.imageio.*;!javax.swing.*;!javax.xml.stream.*;!org.xmlpull.*;!schemas*;!org.openxml*;!org.relaxng.*;!junit.*;*</Import-Package>
+                <Import-Package>!com.sun.msv.*;!org.apache.*;!org.gjt.*;!org.jaxen.*;!javax.imageio.*;!javax.swing.*;!javax.xml.stream.*;!org.xmlpull.*;!schemas*;!org.openxml*;!org.relaxng.*;!junit.*;org.bpelunit.framework.control.datasource;*</Import-Package>
                 <Embed-Transitive>true</Embed-Transitive>
                 <Embed-Directory>target/dependency</Embed-Directory>
                 <Embed-Dependency>*;groupId=org.apache.poi|dom4j</Embed-Dependency>
                 <Require-Bundle>
                   org.bpelunit.framework.client.eclipse
                 </Require-Bundle>
+                <Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
+                <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
               </instructions>
             </configuration>
           </execution>
