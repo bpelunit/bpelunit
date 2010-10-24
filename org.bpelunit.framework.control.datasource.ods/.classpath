@@ -2,13 +2,10 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="src-test"/>
-	<classpathentry kind="lib" path="lib/odfdom/odfdom.jar"/>
-	<classpathentry kind="lib" path="lib/odfdom/resolver.jar"/>
-	<classpathentry kind="lib" path="lib/odfdom/serializer.jar"/>
-	<classpathentry kind="lib" path="lib/odfdom/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="lib/odfdom/xml-apis.jar"/>
+	<classpathentry including="**/*.java" kind="src" output="target/test-classes" path="src/test/java"/>
+	<classpathentry excluding="**/*.java" kind="src" output="target/test-classes" path="src/test/resources"/>
+	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/odfdom-java-0.8.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
