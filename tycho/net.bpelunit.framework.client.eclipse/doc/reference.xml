@@ -6,9 +6,9 @@
   
     <topic label="API Reference" href="doc/reference/api/overview-summary.html"> 
 	
-      <topic label="net.bpelunit.framework" href="doc/reference/api/org/bpelunit/framework/package-summary.html"/>
-      <topic label="net.bpelunit.framework.control.ext" href="doc/reference/api/org/bpelunit/framework/control/ext/package-summary.html"/>
-      <topic label="net.bpelunit.framework.control.result" href="doc/reference/api/org/bpelunit/framework/control/result/package-summary.html"/>
+      <topic label="net.bpelunit.framework" href="doc/reference/api/net/bpelunit/framework/package-summary.html"/>
+      <topic label="net.bpelunit.framework.control.ext" href="doc/reference/api/net/bpelunit/framework/control/ext/package-summary.html"/>
+      <topic label="net.bpelunit.framework.control.result" href="doc/reference/api/net/bpelunit/framework/control/result/package-summary.html"/>
 	  
     </topic>
     <topic label="Extension Points Reference" href="doc/reference/extension-points/index.html"> 

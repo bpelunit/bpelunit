@@ -33,9 +33,9 @@
 		
 		<javadoc destdir="doc/reference/api/">
 		    <packageset dir="../net.bpelunit.framework/src" defaultexcludes="yes">
-		      	<include name="org/bpelunit/framework"/>		    	
-		    	<include name="org/bpelunit/framework/control/ext"/>		    	
-		    	<include name="org/bpelunit/framework/control/result"/>	    	
+		      	<include name="net/bpelunit/framework"/>		    	
+		    	<include name="net/bpelunit/framework/control/ext"/>		    	
+		    	<include name="net/bpelunit/framework/control/result"/>	    	
 		    </packageset>
 		</javadoc>
 		

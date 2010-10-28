@@ -43,9 +43,9 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>org/bpelunit/test/unit/SimpleTest.java</exclude>
-            <exclude>org/bpelunit/test/util/TestUtil.java</exclude>
-            <exclude>org/bpelunit/test/util/TestTestRunner.java</exclude>
+            <exclude>net/bpelunit/test/unit/SimpleTest.java</exclude>
+            <exclude>net/bpelunit/test/util/TestUtil.java</exclude>
+            <exclude>net/bpelunit/test/util/TestTestRunner.java</exclude>
           </excludes>
         </configuration>
       </plugin>
