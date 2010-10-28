@@ -13,9 +13,9 @@
     </topic>
     <topic label="Extension Points Reference" href="doc/reference/extension-points/index.html"> 
 	
-      <topic label="net.bpelunit.framework.client.eclipse.bpelDeployer" href="doc/reference/extension-points/org_bpelunit_framework_client_eclipse_bpelDeployer.html" />
-      <topic label="net.bpelunit.framework.client.eclipse.headerProcessor" href="doc/reference/extension-points/org_bpelunit_framework_client_eclipse_headerProcessor.html" />
-      <topic label="net.bpelunit.framework.client.eclipse.soapEncoder" href="doc/reference/extension-points/org_bpelunit_framework_client_eclipse_soapEncoder.html" />
+      <topic label="net.bpelunit.framework.client.eclipse.bpelDeployer" href="doc/reference/extension-points/net_bpelunit_framework_client_eclipse_bpelDeployer.html" />
+      <topic label="net.bpelunit.framework.client.eclipse.headerProcessor" href="doc/reference/extension-points/net_bpelunit_framework_client_eclipse_headerProcessor.html" />
+      <topic label="net.bpelunit.framework.client.eclipse.soapEncoder" href="doc/reference/extension-points/net_bpelunit_framework_client_eclipse_soapEncoder.html" />
 	  
     </topic>
   </toc>
