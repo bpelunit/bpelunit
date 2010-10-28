@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.ui.command;
+package net.bpelunit.framework.ui.command;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,23 +19,23 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.varia.NullAppender;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.base.BPELUnitBaseRunner;
-import org.bpelunit.framework.control.result.ITestResultListener;
-import org.bpelunit.framework.control.result.XMLResultProducer;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
-import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
-import org.bpelunit.framework.coverage.result.XMLCoverageResultProducer;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.exception.TestCaseNotFoundException;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.TestCase;
-import org.bpelunit.framework.model.test.TestSuite;
-import org.bpelunit.framework.model.test.data.XMLData;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.base.BPELUnitBaseRunner;
+import net.bpelunit.framework.control.result.ITestResultListener;
+import net.bpelunit.framework.control.result.XMLResultProducer;
+import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
+import net.bpelunit.framework.coverage.result.XMLCoverageResultProducer;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.exception.TestCaseNotFoundException;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.model.test.data.XMLData;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 
 /**
  * The command line runner for BPELUnit.

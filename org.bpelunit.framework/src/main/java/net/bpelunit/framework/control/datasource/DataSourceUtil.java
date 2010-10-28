@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource;
+package net.bpelunit.framework.control.datasource;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -17,15 +17,15 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
-import org.bpelunit.framework.exception.DataSourceException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.xml.suite.XMLDataSource;
-import org.bpelunit.framework.xml.suite.XMLProperty;
-import org.bpelunit.framework.xml.suite.XMLTestCase;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
+import net.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.xml.suite.XMLDataSource;
+import net.bpelunit.framework.xml.suite.XMLProperty;
+import net.bpelunit.framework.xml.suite.XMLTestCase;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
 
 /**
  * Utility methods for working with data sources.

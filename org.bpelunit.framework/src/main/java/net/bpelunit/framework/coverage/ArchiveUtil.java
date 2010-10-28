@@ -1,12 +1,12 @@
-package org.bpelunit.framework.coverage;
+package net.bpelunit.framework.coverage;
 
-import static org.bpelunit.framework.coverage.CoverageConstants.PREFIX_COPY_OF_ARCHIVEFILE;
+import static net.bpelunit.framework.coverage.CoverageConstants.PREFIX_COPY_OF_ARCHIVEFILE;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
-import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
+import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
 
 import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;

@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.util.schema;
+package net.bpelunit.toolsupport.util.schema;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;

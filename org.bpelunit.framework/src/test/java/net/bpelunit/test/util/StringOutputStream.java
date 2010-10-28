@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.test.util;
+package net.bpelunit.test.util;
 
 import java.io.IOException;
 import java.io.OutputStream;

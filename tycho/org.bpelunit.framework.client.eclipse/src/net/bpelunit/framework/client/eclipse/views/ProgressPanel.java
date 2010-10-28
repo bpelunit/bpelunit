@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.views;
+package net.bpelunit.framework.client.eclipse.views;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

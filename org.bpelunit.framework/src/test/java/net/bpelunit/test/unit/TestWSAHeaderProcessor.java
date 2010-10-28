@@ -3,19 +3,19 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.test.unit;
+package net.bpelunit.test.unit;
 
 import static org.junit.Assert.assertEquals;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPMessage;
 
-import org.bpelunit.framework.control.ext.IHeaderProcessor;
-import org.bpelunit.framework.control.ext.SendPackage;
-import org.bpelunit.framework.control.soap.NamespaceContextImpl;
-import org.bpelunit.framework.control.soap.WSAHeaderProcessor;
-import org.bpelunit.framework.model.test.activity.ActivityContext;
-import org.bpelunit.test.util.TestUtil;
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
+import net.bpelunit.framework.control.ext.SendPackage;
+import net.bpelunit.framework.control.soap.NamespaceContextImpl;
+import net.bpelunit.framework.control.soap.WSAHeaderProcessor;
+import net.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.test.util.TestUtil;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

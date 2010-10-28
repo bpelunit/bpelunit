@@ -1,4 +1,4 @@
-package org.bpelunit.framework.exception;
+package net.bpelunit.framework.exception;
 
 /**
  * There was a problem while loading contents into a data source, customizing

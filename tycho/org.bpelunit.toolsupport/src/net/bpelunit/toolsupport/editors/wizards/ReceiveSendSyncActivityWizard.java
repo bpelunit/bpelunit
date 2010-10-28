@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards;
+package net.bpelunit.toolsupport.editors.wizards;
 
-import org.bpelunit.framework.xml.suite.XMLTwoWayActivity;
-import org.bpelunit.toolsupport.editors.TestSuitePage;
-import org.bpelunit.toolsupport.editors.wizards.pages.ReceiveCompleteWizardPage;
-import org.bpelunit.toolsupport.editors.wizards.pages.SendSimpleWizardPage;
+import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.wizards.pages.ReceiveCompleteWizardPage;
+import net.bpelunit.toolsupport.editors.wizards.pages.SendSimpleWizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 /**

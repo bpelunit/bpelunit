@@ -3,9 +3,9 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.launch;
+package net.bpelunit.framework.client.eclipse.launch;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
 
 /**
  * Some constants for the launch.
@@ -31,7 +31,7 @@ public class LaunchConstants {
 	/**
 	 * Launch config type as defined in the plugin.xml file
 	 */
-	public static final String ID_LAUNCH_CONFIG_TYPE= "org.bpelunit.framework.client.eclipse.testSuiteLauncher";
+	public static final String ID_LAUNCH_CONFIG_TYPE= "net.bpelunit.framework.client.eclipse.testSuiteLauncher";
 
 	/**
 	 * The empty string

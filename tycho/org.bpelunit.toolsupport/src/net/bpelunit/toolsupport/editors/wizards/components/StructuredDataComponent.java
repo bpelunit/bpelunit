@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.components;
+package net.bpelunit.toolsupport.editors.wizards.components;
 
-import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
-import org.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
-import org.bpelunit.toolsupport.editors.wizards.fields.IListAdapter;
-import org.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
+import net.bpelunit.toolsupport.editors.wizards.fields.IListAdapter;
+import net.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.graphics.FontMetrics;
 

@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test.report;
+package net.bpelunit.framework.model.test.report;
 
 /**
  * A state data package represents some information on the internal state of a test artefact. It is

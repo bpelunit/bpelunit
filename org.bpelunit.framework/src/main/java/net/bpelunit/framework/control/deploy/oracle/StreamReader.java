@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.deploy.oracle;
+package net.bpelunit.framework.control.deploy.oracle;
 
 import java.io.BufferedReader;
 import java.io.IOException;

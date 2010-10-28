@@ -1,14 +1,14 @@
-package org.bpelunit.framework.coverage.receiver;
+package net.bpelunit.framework.coverage.receiver;
 
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.Instrumenter;
-import org.bpelunit.framework.coverage.annotation.MetricsManager;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
-import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
-import org.bpelunit.framework.coverage.result.statistic.impl.FileStatistic;
+import net.bpelunit.framework.coverage.annotation.Instrumenter;
+import net.bpelunit.framework.coverage.annotation.MetricsManager;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
+import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
+import net.bpelunit.framework.coverage.result.statistic.impl.FileStatistic;
 
 /*
  * 

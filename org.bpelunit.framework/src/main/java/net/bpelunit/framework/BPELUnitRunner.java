@@ -3,24 +3,24 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework;
+package net.bpelunit.framework;
 
 import java.io.File;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IHeaderProcessor;
-import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
-import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.control.util.ExtensionRegistry;
-import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
+import net.bpelunit.framework.control.ext.ISOAPEncoder;
+import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.control.util.ExtensionRegistry;
+import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.TestSuite;
 
 /**
  * <p>

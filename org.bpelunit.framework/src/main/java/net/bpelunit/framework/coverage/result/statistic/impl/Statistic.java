@@ -1,4 +1,4 @@
-package org.bpelunit.framework.coverage.result.statistic.impl;
+package net.bpelunit.framework.coverage.result.statistic.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.bpelunit.framework.coverage.receiver.MarkerState;
-import org.bpelunit.framework.coverage.result.statistic.IStatistic;
+import net.bpelunit.framework.coverage.receiver.MarkerState;
+import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 
 /**
  * Straight implementation of {@link IStatistic}
@@ -33,7 +33,7 @@ public class Statistic implements IStatistic {
 	}
 
 	/**
-	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#getSubStatistics
+	 * @see net.bpelunit.framework.coverage.result.statistic.IStatistic#getSubStatistics
 	 *      ()
 	 */
 	public List<IStatistic> getSubStatistics() {
@@ -41,8 +41,8 @@ public class Statistic implements IStatistic {
 	}
 
 	/**
-	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#addSubStatistic
-	 *      (org.bpelunit.framework.coverage.result.statistic.IStatistic)
+	 * @see net.bpelunit.framework.coverage.result.statistic.IStatistic#addSubStatistic
+	 *      (net.bpelunit.framework.coverage.result.statistic.IStatistic)
 	 */
 	public void addSubStatistic(IStatistic statistic) {
 		if (subStatistics == null)
@@ -77,7 +77,7 @@ public class Statistic implements IStatistic {
 	}
 
 	/**
-	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedItems(java.lang.String)
+	 * @see net.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedItems(java.lang.String)
 	 */
 	public Set<MarkerState> getTestedItems(String testCase) {
 		Set<MarkerState> set = new HashSet<MarkerState>();
@@ -98,14 +98,14 @@ public class Statistic implements IStatistic {
 	}
 
 	/**
-	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedNumber(java.lang.String)
+	 * @see net.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedNumber(java.lang.String)
 	 */
 	public int getTestedNumber(String testCase) {
 		return getTestedItems(testCase).size();
 	}
 
 	/**
-	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedNumber(java.util.Set)
+	 * @see net.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedNumber(java.util.Set)
 	 */
 	public int getTestedNumber(Set<String> testCases) {
 		Set<MarkerState> set = new HashSet<MarkerState>();
@@ -117,7 +117,7 @@ public class Statistic implements IStatistic {
 	}
 
 	/**
-	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedNumber()
+	 * @see net.bpelunit.framework.coverage.result.statistic.IStatistic#getTestedNumber()
 	 */
 	public int getTestedNumber() {
 		int number = 0;
@@ -137,7 +137,7 @@ public class Statistic implements IStatistic {
 	}
 
 	/**
-	 * @see org.bpelunit.framework.coverage.result.statistic.IStatistic#setStatusList(java.util.List)
+	 * @see net.bpelunit.framework.coverage.result.statistic.IStatistic#setStatusList(java.util.List)
 	 */
 	public void setStateList(List<MarkerState> statusListe) {
 		totalNumber = statusListe.size();

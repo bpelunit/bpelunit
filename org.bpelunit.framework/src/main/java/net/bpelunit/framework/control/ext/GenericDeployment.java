@@ -4,7 +4,7 @@
  * 
  */
 
-package org.bpelunit.framework.control.ext;
+package net.bpelunit.framework.control.ext;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,12 +15,12 @@ import javax.wsdl.Definition;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
-import org.bpelunit.framework.control.util.JDomHelper;
-import org.bpelunit.framework.control.util.ParseUtil;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.EndPointException;
-import org.bpelunit.framework.model.Partner;
-import org.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.framework.control.util.JDomHelper;
+import net.bpelunit.framework.control.util.ParseUtil;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.EndPointException;
+import net.bpelunit.framework.model.Partner;
+import net.bpelunit.framework.model.ProcessUnderTest;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;

@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource.excel;
+package net.bpelunit.framework.control.datasource.excel;
 
 public class XlsxDataSourceTest extends AbstractExcelDataSourceTest {
 

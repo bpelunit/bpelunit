@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport;
+package net.bpelunit.toolsupport;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -24,7 +24,7 @@ import org.osgi.framework.BundleContext;
 public class ToolSupportActivator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.bpelunit.toolsupport";
+	public static final String PLUGIN_ID = "net.bpelunit.toolsupport";
 
 	public static final String IMAGE_DEPLOYER = "img_deployer";
 	public static final String IMAGE_TESTCASE = "img_testcase";

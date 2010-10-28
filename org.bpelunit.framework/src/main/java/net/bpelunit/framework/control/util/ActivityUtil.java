@@ -3,18 +3,18 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.util;
+package net.bpelunit.framework.control.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
-import org.bpelunit.framework.xml.suite.XMLActivity;
-import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
-import org.bpelunit.framework.xml.suite.XMLSendActivity;
-import org.bpelunit.framework.xml.suite.XMLTrack;
-import org.bpelunit.framework.xml.suite.XMLTwoWayActivity;
+import net.bpelunit.framework.xml.suite.XMLActivity;
+import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
+import net.bpelunit.framework.xml.suite.XMLSendActivity;
+import net.bpelunit.framework.xml.suite.XMLTrack;
+import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import org.w3c.dom.Node;
 
 /**

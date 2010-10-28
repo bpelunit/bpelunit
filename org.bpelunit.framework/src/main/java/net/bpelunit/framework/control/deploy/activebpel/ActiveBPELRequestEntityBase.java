@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.deploy.activebpel;
+package net.bpelunit.framework.control.deploy.activebpel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,8 +12,8 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.httpclient.methods.RequestEntity;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
-import org.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
 import org.w3c.dom.DOMException;
 
 public abstract class ActiveBPELRequestEntityBase implements RequestEntity {

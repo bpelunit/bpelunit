@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.dialog;
+package net.bpelunit.framework.client.eclipse.dialog;
 
 /**
  * 

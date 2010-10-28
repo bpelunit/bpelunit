@@ -1,6 +1,6 @@
-package org.bpelunit.framework.coverage.annotation.metrics.branchcoverage;
+package net.bpelunit.framework.coverage.annotation.metrics.branchcoverage;
 
-import org.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
 import org.jdom.Element;
 
 /**

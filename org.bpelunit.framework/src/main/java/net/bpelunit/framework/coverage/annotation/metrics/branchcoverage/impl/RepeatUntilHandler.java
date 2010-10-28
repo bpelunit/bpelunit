@@ -1,21 +1,21 @@
-package org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl;
+package net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAME_ATTR;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createIfActivity;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createIncreesAssign;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createInitializeAssign;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createSequence;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ensureElementIsInSequence;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getFirstEnclosedActivity;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.insertNewIntVariable;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.isSequence;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAME_ATTR;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createIfActivity;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createIncreesAssign;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createInitializeAssign;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createSequence;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ensureElementIsInSequence;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getFirstEnclosedActivity;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.insertNewIntVariable;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.isSequence;
 
-import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import net.bpelunit.framework.coverage.CoverageConstants;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 

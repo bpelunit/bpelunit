@@ -3,11 +3,11 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards;
+package net.bpelunit.toolsupport.editors.wizards;
 
-import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
-import org.bpelunit.toolsupport.editors.TestSuitePage;
-import org.bpelunit.toolsupport.editors.wizards.pages.ReceiveCompleteWizardPage;
+import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.wizards.pages.ReceiveCompleteWizardPage;
 
 /**
  * A wizard for editing a receive only activity.

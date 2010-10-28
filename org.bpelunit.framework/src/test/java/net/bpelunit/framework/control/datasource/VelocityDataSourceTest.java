@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource;
+package net.bpelunit.framework.control.datasource;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -9,11 +9,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bpelunit.framework.base.BPELUnitBaseRunner;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.util.ExtensionRegistry;
-import org.bpelunit.framework.exception.DataSourceException;
-import org.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.base.BPELUnitBaseRunner;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.util.ExtensionRegistry;
+import net.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.exception.SpecificationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,7 +55,7 @@ public class VelocityDataSourceTest {
 
 	/**
 	 * Checks that the
-	 * {@link org.bpelunit.framework.control.datasource.VelocityDataSource#PROPERTY_ITERATED_VARS}
+	 * {@link net.bpelunit.framework.control.datasource.VelocityDataSource#PROPERTY_ITERATED_VARS}
 	 * property is required.
 	 */
 	@Test
@@ -74,7 +74,7 @@ public class VelocityDataSourceTest {
 
 	/**
 	 * Checks that empty
-	 * {@link org.bpelunit.framework.control.datasource.VelocityDataSource#PROPERTY_ITERATED_VARS}
+	 * {@link net.bpelunit.framework.control.datasource.VelocityDataSource#PROPERTY_ITERATED_VARS}
 	 * properties are reported.
 	 */
 	@Test

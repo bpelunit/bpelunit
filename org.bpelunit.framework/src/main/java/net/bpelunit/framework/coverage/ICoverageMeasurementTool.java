@@ -1,14 +1,14 @@
-package org.bpelunit.framework.coverage;
+package net.bpelunit.framework.coverage;
 
 import java.util.List;
 import java.util.Map;
 
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.coverage.exceptions.CoverageMeasurementException;
-import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.ISOAPEncoder;
+import net.bpelunit.framework.coverage.exceptions.CoverageMeasurementException;
+import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.model.ProcessUnderTest;
 
 /**
  * Interface for integration of test coverage measurement

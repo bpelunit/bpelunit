@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource.html;
+package net.bpelunit.framework.control.datasource.html;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,9 +13,9 @@ import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLEditorKit.Parser;
 import javax.swing.text.html.HTMLEditorKit.ParserCallback;
 
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IDataSource.DataSource;
-import org.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IDataSource.DataSource;
+import net.bpelunit.framework.exception.DataSourceException;
 
 /**
  * <ul>

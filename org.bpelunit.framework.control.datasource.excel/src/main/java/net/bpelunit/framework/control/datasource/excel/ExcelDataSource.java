@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource.excel;
+package net.bpelunit.framework.control.datasource.excel;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,9 +12,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IDataSource.DataSource;
-import org.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IDataSource.DataSource;
+import net.bpelunit.framework.exception.DataSourceException;
 
 /**
  * A data source that can read Excel files (incl .xlsx from Excel 2007).

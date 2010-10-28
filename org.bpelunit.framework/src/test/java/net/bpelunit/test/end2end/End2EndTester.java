@@ -3,16 +3,16 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.test.end2end;
+package net.bpelunit.test.end2end;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.Assert.assertTrue;
 
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.test.util.TestTestRunner;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.test.util.TestTestRunner;
 import org.junit.Test;
 
 /**

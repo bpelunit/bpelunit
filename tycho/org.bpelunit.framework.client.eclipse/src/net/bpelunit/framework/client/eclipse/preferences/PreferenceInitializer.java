@@ -3,15 +3,15 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.preferences;
+package net.bpelunit.framework.client.eclipse.preferences;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
-import org.bpelunit.framework.client.eclipse.ExtensionControl;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.ExtensionControl;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 

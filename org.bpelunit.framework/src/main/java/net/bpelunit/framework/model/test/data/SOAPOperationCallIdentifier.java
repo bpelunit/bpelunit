@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test.data;
+package net.bpelunit.framework.model.test.data;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import javax.wsdl.extensions.soap.SOAPBody;
 import javax.wsdl.extensions.soap.SOAPOperation;
 import javax.xml.namespace.QName;
 
-import org.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.exception.SpecificationException;
 
 /**
  * <p>

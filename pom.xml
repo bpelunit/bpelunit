@@ -321,15 +321,15 @@
   </build>
 
   <modules>
-    <module>org.bpelunit.framework</module>
-    <module>org.bpelunit.framework.client.ant</module>
-    <module>org.bpelunit.framework.client.command</module>
-    <module>org.bpelunit.framework.client.maven</module>
-    <module>org.bpelunit.framework.control.datasource.csv</module>
-    <module>org.bpelunit.framework.control.datasource.excel</module>
-    <module>org.bpelunit.framework.control.datasource.html</module>
-    <module>org.bpelunit.framework.control.datasource.ods</module>
-    <module>org.bpelunit.utils.datasourceinliner</module>
+    <module>net.bpelunit.framework</module>
+    <module>net.bpelunit.framework.client.ant</module>
+    <module>net.bpelunit.framework.client.command</module>
+    <module>net.bpelunit.framework.client.maven</module>
+    <module>net.bpelunit.framework.control.datasource.csv</module>
+    <module>net.bpelunit.framework.control.datasource.excel</module>
+    <module>net.bpelunit.framework.control.datasource.html</module>
+    <module>net.bpelunit.framework.control.datasource.ods</module>
+    <module>net.bpelunit.utils.datasourceinliner</module>
   </modules>
 
   <!-- For Cloning and ODFDOM -->

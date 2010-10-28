@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.bpelunit.framework.client.eclipse" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="net.bpelunit.framework.client.eclipse" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.bpelunit.framework.client.eclipse" id="dataSource" name="Data Source"/>
+         <meta.schema plugin="net.bpelunit.framework.client.eclipse" id="dataSource" name="Data Source"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -55,7 +55,7 @@
                   A data source that can be used for fetching test data for templates
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.bpelunit.framework.control.ext.IDataSource"/>
+                  <meta.attribute kind="java" basedOn=":net.bpelunit.framework.control.ext.IDataSource"/>
                </appInfo>
             </annotation>
          </attribute>

@@ -1,2 +1,2 @@
 ECLIPSE_HOME = c:/Programme/eclipse
-dir.bpelunit.framework = ../org.bpelunit.framework
+dir.bpelunit.framework = ../net.bpelunit.framework

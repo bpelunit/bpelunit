@@ -1,8 +1,8 @@
-package org.bpelunit.framework.coverage.result.statistic;
+package net.bpelunit.framework.coverage.result.statistic;
 
 import java.util.List;
 import java.util.Set;
-import org.bpelunit.framework.coverage.receiver.MarkerState;
+import net.bpelunit.framework.coverage.receiver.MarkerState;
 
 /*
  * Repräsentiert Statistik, die die Anzahl der getesteten und gesamten

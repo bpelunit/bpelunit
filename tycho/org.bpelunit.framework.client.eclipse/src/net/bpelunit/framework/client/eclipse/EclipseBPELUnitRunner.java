@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse;
+package net.bpelunit.framework.client.eclipse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,28 +13,28 @@ import java.util.Map;
 import org.apache.log4j.Appender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
-import org.bpelunit.framework.client.model.DataSourceExtension;
-import org.bpelunit.framework.client.model.DeployerExtension;
-import org.bpelunit.framework.client.model.ExtensionUtil;
-import org.bpelunit.framework.client.model.HeaderProcessorExtension;
-import org.bpelunit.framework.client.model.SOAPEncoderExtension;
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IHeaderProcessor;
-import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.control.run.TestCaseRunner;
-import org.bpelunit.framework.coverage.CoverageMeasurementTool;
-import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
-import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
+import net.bpelunit.framework.client.model.DataSourceExtension;
+import net.bpelunit.framework.client.model.DeployerExtension;
+import net.bpelunit.framework.client.model.ExtensionUtil;
+import net.bpelunit.framework.client.model.HeaderProcessorExtension;
+import net.bpelunit.framework.client.model.SOAPEncoderExtension;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
+import net.bpelunit.framework.control.ext.ISOAPEncoder;
+import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.coverage.CoverageMeasurementTool;
+import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
+import net.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.SpecificationException;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**

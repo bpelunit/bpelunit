@@ -3,13 +3,13 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.util;
+package net.bpelunit.toolsupport.util;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
-import org.bpelunit.framework.client.eclipse.dialog.DialogFieldValidator;
-import org.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.client.eclipse.dialog.DialogFieldValidator;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
 
 /**
  * A validator for XPath expressions.

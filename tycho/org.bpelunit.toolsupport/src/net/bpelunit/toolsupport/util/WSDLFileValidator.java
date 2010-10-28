@@ -3,10 +3,10 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.util;
+package net.bpelunit.toolsupport.util;
 
-import org.bpelunit.toolsupport.ToolSupportActivator;
-import org.bpelunit.toolsupport.editors.BPELUnitEditor;
+import net.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.editors.BPELUnitEditor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

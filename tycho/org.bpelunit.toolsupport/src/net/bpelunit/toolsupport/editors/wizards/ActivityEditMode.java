@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.editors.wizards;
+package net.bpelunit.toolsupport.editors.wizards;
 
 /**
  * Wizard page mode options

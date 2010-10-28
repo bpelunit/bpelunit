@@ -3,20 +3,20 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards;
+package net.bpelunit.toolsupport.editors.wizards;
 
 import javax.xml.namespace.QName;
 
 import org.apache.xmlbeans.XmlObject;
-import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
-import org.bpelunit.framework.xml.suite.XMLSendActivity;
-import org.bpelunit.framework.xml.suite.XMLSoapActivity;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.toolsupport.editors.BPELUnitEditor;
-import org.bpelunit.toolsupport.editors.TestSuitePage;
-import org.bpelunit.toolsupport.editors.wizards.pages.ActivityWizardPage;
-import org.bpelunit.toolsupport.editors.wizards.pages.OperationWizardPage;
-import org.bpelunit.toolsupport.util.ToolUtil;
+import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
+import net.bpelunit.framework.xml.suite.XMLSendActivity;
+import net.bpelunit.framework.xml.suite.XMLSoapActivity;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.toolsupport.editors.BPELUnitEditor;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.wizards.pages.ActivityWizardPage;
+import net.bpelunit.toolsupport.editors.wizards.pages.OperationWizardPage;
+import net.bpelunit.toolsupport.util.ToolUtil;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 

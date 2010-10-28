@@ -1,11 +1,11 @@
-package org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools;
+package net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools;
 
 
 import java.io.File;
 import java.util.Set;
 
-import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
 import org.jdom.Document;
 
 /**

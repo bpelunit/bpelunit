@@ -1,6 +1,6 @@
-package org.bpelunit.framework.coverage;
+package net.bpelunit.framework.coverage;
 
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
 import org.jdom.Namespace;
 
 /**

@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource;
+package net.bpelunit.framework.control.datasource;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,9 +9,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IDataSource.DataSource;
-import org.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IDataSource.DataSource;
+import net.bpelunit.framework.exception.DataSourceException;
 import org.junit.Before;
 import org.junit.Test;
 

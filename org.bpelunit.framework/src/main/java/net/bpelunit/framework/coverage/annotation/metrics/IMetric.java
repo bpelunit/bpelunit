@@ -1,11 +1,11 @@
-package org.bpelunit.framework.coverage.annotation.metrics;
+package net.bpelunit.framework.coverage.annotation.metrics;
 
 import java.util.Hashtable;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkerState;
-import org.bpelunit.framework.coverage.result.statistic.IStatistic;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.receiver.MarkerState;
+import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.jdom.Element;
 
 /*

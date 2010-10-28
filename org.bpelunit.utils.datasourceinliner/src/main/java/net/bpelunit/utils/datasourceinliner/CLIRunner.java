@@ -1,13 +1,13 @@
-package org.bpelunit.utils.datasourceinliner;
+package net.bpelunit.utils.datasourceinliner;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.DataSourceException;
-import org.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 
 /**
  * Command-line interface for the data source inliner.

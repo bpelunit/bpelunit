@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.soap;
+package net.bpelunit.framework.control.soap;
 
 import java.util.Iterator;
 
@@ -17,10 +17,10 @@ import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.Text;
 
-import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.exception.SOAPEncodingException;
-import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+import net.bpelunit.framework.control.ext.ISOAPEncoder;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.exception.SOAPEncodingException;
+import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 

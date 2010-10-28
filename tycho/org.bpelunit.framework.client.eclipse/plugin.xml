@@ -10,43 +10,43 @@
          point="org.eclipse.ui.preferencePages">
       <page
             name="BPELUnit"
-            class="org.bpelunit.framework.client.eclipse.preferences.BPELUnitPreferencePage"
-            id="org.bpelunit.framework.client.eclipse.preferences.BPELUnit">
+            class="net.bpelunit.framework.client.eclipse.preferences.BPELUnitPreferencePage"
+            id="net.bpelunit.framework.client.eclipse.preferences.BPELUnit">
       </page>
       <page
-            category="org.bpelunit.framework.client.eclipse.preferences.BPELUnit"
-            class="org.bpelunit.framework.client.eclipse.preferences.BPELUnitDeploymentPreferencePage"
-            id="org.bpelunit.framework.client.eclipse.preferences.BPELUnit.config"
+            category="net.bpelunit.framework.client.eclipse.preferences.BPELUnit"
+            class="net.bpelunit.framework.client.eclipse.preferences.BPELUnitDeploymentPreferencePage"
+            id="net.bpelunit.framework.client.eclipse.preferences.BPELUnit.config"
             name="Deployment"/>
       <page
-            category="org.bpelunit.framework.client.eclipse.preferences.BPELUnit"
-            class="org.bpelunit.framework.client.eclipse.preferences.BPELUnitCoveragePreferencePage"
-            id="org.bpelunit.framework.client.eclipse.preferences.BPELUnit.coverage"
+            category="net.bpelunit.framework.client.eclipse.preferences.BPELUnit"
+            class="net.bpelunit.framework.client.eclipse.preferences.BPELUnitCoveragePreferencePage"
+            id="net.bpelunit.framework.client.eclipse.preferences.BPELUnit.coverage"
             name="Test Coverage"/>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.bpelunit.framework.client.eclipse.preferences.PreferenceInitializer">
+            class="net.bpelunit.framework.client.eclipse.preferences.PreferenceInitializer">
       </initializer>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <category
             name="BPEL Category"
-            id="org.bpelunit.framework.client.eclipse">
+            id="net.bpelunit.framework.client.eclipse">
       </category>
       <view
             name="BPELUnit"
             icon="icons/bpel.gif"
-            category="org.bpelunit.framework.client.eclipse"
-            class="org.bpelunit.framework.client.eclipse.views.BPELUnitView"
-            id="org.bpelunit.framework.client.eclipse.views.BPELUnitView">
+            category="net.bpelunit.framework.client.eclipse"
+            class="net.bpelunit.framework.client.eclipse.views.BPELUnitView"
+            id="net.bpelunit.framework.client.eclipse.views.BPELUnitView">
       </view>
       <view
-            category="org.bpelunit.framework.client.eclipse"
-            class="org.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView"
-            id="org.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView"
+            category="net.bpelunit.framework.client.eclipse"
+            class="net.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView"
+            id="net.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView"
             name="Test Coverage"/>
    </extension>
    <extension
@@ -54,7 +54,7 @@
       <perspectiveExtension
             targetID="org.eclipse.ui.resourcePerspective">
          <view
-               id="org.bpelunit.framework.client.eclipse.views.BPELUnitView"
+               id="net.bpelunit.framework.client.eclipse.views.BPELUnitView"
                relationship="stack"
                relative="org.eclipse.ui.views.ResourceNavigator"
                visible="false">
@@ -66,7 +66,7 @@
       <perspectiveExtension
             targetID="org.eclipse.jdt.ui.JavaPerspective">
          <view
-               id="org.bpelunit.framework.client.eclipse.views.BPELUnitView"
+               id="net.bpelunit.framework.client.eclipse.views.BPELUnitView"
                relationship="stack"
                relative="org.eclipse.jdt.ui.PackageExplorer"
                visible="false">
@@ -76,8 +76,8 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="org.bpelunit.framework.client.eclipse.launch.BPELLaunchConfigurationDelegate"
-            id="org.bpelunit.framework.client.eclipse.testSuiteLauncher"
+            delegate="net.bpelunit.framework.client.eclipse.launch.BPELLaunchConfigurationDelegate"
+            id="net.bpelunit.framework.client.eclipse.testSuiteLauncher"
             modes="run"
             name="BPELUnit TestSuite"
             public="true"/>
@@ -85,21 +85,21 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
-            configTypeID="org.bpelunit.framework.client.eclipse.testSuiteLauncher"
+            configTypeID="net.bpelunit.framework.client.eclipse.testSuiteLauncher"
             icon="icons/bpel.gif"
-            id="org.bpelunit.framework.client.eclipse.testSuiteLauncher.image"/>
+            id="net.bpelunit.framework.client.eclipse.testSuiteLauncher.image"/>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="org.bpelunit.framework.client.eclipse.launch.BPELLaunchGroup"
-            id="org.bpelunit.framework.client.eclipse.testSuiteLauncher.tabGroup"
-            type="org.bpelunit.framework.client.eclipse.testSuiteLauncher"/>
+            class="net.bpelunit.framework.client.eclipse.launch.BPELLaunchGroup"
+            id="net.bpelunit.framework.client.eclipse.testSuiteLauncher.tabGroup"
+            type="net.bpelunit.framework.client.eclipse.testSuiteLauncher"/>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="org.bpelunit.framework.client.eclipse.launch.BPELLaunchShortCut"
+            class="net.bpelunit.framework.client.eclipse.launch.BPELLaunchShortCut"
             icon="icons/bpel.gif"
             id="BPELUnit Test Suite"
             label="BPELUnit TestSuite"
@@ -126,59 +126,59 @@
       </shortcut>
    </extension>
    <extension
-         point="org.bpelunit.framework.client.eclipse.bpelDeployer">
+         point="net.bpelunit.framework.client.eclipse.bpelDeployer">
       <bpelDeployer
-            deployerClass="org.bpelunit.framework.control.deploy.simple.FixedDeployer"
+            deployerClass="net.bpelunit.framework.control.deploy.simple.FixedDeployer"
             id="fixed"
             name="Fixed/Static Deployment" />
       <bpelDeployer
-            deployerClass="org.bpelunit.framework.control.deploy.simple.TestModeDeployer"
+            deployerClass="net.bpelunit.framework.control.deploy.simple.TestModeDeployer"
             id="testmode"
             name="Test Mode Deployment" />
       <bpelDeployer
-            deployerClass="org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer"
+            deployerClass="net.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer"
             id="activebpel"
             name="ActiveBPEL Deployer"
             />
       <bpelDeployer
-            deployerClass="org.bpelunit.framework.control.deploy.ode.ODEDeployer"
+            deployerClass="net.bpelunit.framework.control.deploy.ode.ODEDeployer"
             id="ode"
             name="Apache ODE Deployer"
             />
       <bpelDeployer
-            deployerClass="org.bpelunit.framework.control.deploy.oracle.OracleDeployer"
+            deployerClass="net.bpelunit.framework.control.deploy.oracle.OracleDeployer"
             id="oracle"
             name="Oracle Deployer"
             />
    </extension>
    <!--<extension
-         point="org.bpelunit.framework.client.eclipse.bpelDeployer">
+         point="net.bpelunit.framework.client.eclipse.bpelDeployer">
       <bpelDeployer
-            deployerClass="org.bpelunit.framework.control.deploy.simple.TestModeDeployer"
+            deployerClass="net.bpelunit.framework.control.deploy.simple.TestModeDeployer"
             id="testmode"
             name="Test Mode Deployer"
             />
    </extension> -->
    <extension
-         point="org.bpelunit.framework.client.eclipse.soapEncoder">
+         point="net.bpelunit.framework.client.eclipse.soapEncoder">
       <soapProcessor
-            encoderClass="org.bpelunit.framework.control.soap.DocumentLiteralEncoder"
+            encoderClass="net.bpelunit.framework.control.soap.DocumentLiteralEncoder"
             id="document/literal"
             name="Document/Literal Encoder"/>
    </extension>
    <extension
-         point="org.bpelunit.framework.client.eclipse.soapEncoder">
+         point="net.bpelunit.framework.client.eclipse.soapEncoder">
       <soapProcessor
-            encoderClass="org.bpelunit.framework.control.soap.RPCLiteralEncoder"
+            encoderClass="net.bpelunit.framework.control.soap.RPCLiteralEncoder"
             id="rpc/literal"
             name="RPC/Literal Encoder"/>
    </extension>
    <extension
-         point="org.bpelunit.framework.client.eclipse.headerProcessor">
+         point="net.bpelunit.framework.client.eclipse.headerProcessor">
       <headerProcessor
             id="wsa"
             name="WS-Adressing Header Processor"
-            processorClass="org.bpelunit.framework.control.soap.WSAHeaderProcessor"/>
+            processorClass="net.bpelunit.framework.control.soap.WSAHeaderProcessor"/>
    </extension>
    <extension
          point="org.eclipse.help.toc">
@@ -196,19 +196,19 @@
             primary="false"/>
    </extension>
    <extension
-         point="org.bpelunit.framework.client.eclipse.headerProcessor">
+         point="net.bpelunit.framework.client.eclipse.headerProcessor">
       <headerProcessor
-            id="org.bpelunit.framework.client.eclipse.odeHeaderProcessor"
+            id="net.bpelunit.framework.client.eclipse.odeHeaderProcessor"
             name="Apache ODE Header Processor"
-            processorClass="org.bpelunit.framework.control.soap.OdeHeaderProcessor">
+            processorClass="net.bpelunit.framework.control.soap.OdeHeaderProcessor">
       </headerProcessor>
    </extension>
    <extension
-         point="org.bpelunit.framework.client.eclipse.dataSource">
+         point="net.bpelunit.framework.client.eclipse.dataSource">
          <datasource
              id="velocity"
              name="Velocity Data Source"
-             class="org.bpelunit.framework.control.datasource.VelocityDataSource" />
+             class="net.bpelunit.framework.control.datasource.VelocityDataSource" />
    </extension>
 
 </plugin>

@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.util.schema.nodes.impl;
+package net.bpelunit.toolsupport.util.schema.nodes.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -8,10 +8,10 @@ import java.util.HashMap;
 
 import javax.xml.namespace.QName;
 
-import org.bpelunit.toolsupport.util.schema.SchemaParser;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
-import org.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
-import org.bpelunit.toolsupport.util.schema.nodes.Type;
+import net.bpelunit.toolsupport.util.schema.SchemaParser;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
+import net.bpelunit.toolsupport.util.schema.nodes.Type;
 import org.junit.Before;
 import org.junit.Test;
 

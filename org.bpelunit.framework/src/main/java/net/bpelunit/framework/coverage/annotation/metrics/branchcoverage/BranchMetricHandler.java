@@ -1,25 +1,25 @@
-package org.bpelunit.framework.coverage.annotation.metrics.branchcoverage;
+package net.bpelunit.framework.coverage.annotation.metrics.branchcoverage;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.Instrumenter;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.FlowHandler;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.ForEachHandler;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.IfHandler;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.PickHandler;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.RepeatUntilHandler;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.SequenceHandler;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.SwitchHandler;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.WhileHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import net.bpelunit.framework.coverage.annotation.Instrumenter;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.FlowHandler;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.ForEachHandler;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.IfHandler;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.PickHandler;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.RepeatUntilHandler;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.SequenceHandler;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.SwitchHandler;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.WhileHandler;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;

@@ -1,4 +1,4 @@
-package org.bpelunit.framework.client.eclipse.preferences;
+package net.bpelunit.framework.client.eclipse.preferences;
 
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Composite;

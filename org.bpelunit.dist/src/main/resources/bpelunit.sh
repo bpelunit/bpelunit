@@ -23,7 +23,7 @@ fi
 
 ## CONFIGURATION SECTION ##############
 
-MAIN_CLASS=org.bpelunit.framework.ui.command.BPELUnitCommandLineRunner
+MAIN_CLASS=net.bpelunit.framework.ui.command.BPELUnitCommandLineRunner
 
 ## UTILITIES ##########################
 

@@ -3,13 +3,13 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.deploy.simple;
+package net.bpelunit.framework.control.deploy.simple;
 
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.IDeployment;
-import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IDeployment;
+import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.model.ProcessUnderTest;
 
 /**
  * The test mode deployer is a BPELUnit internal deployer which basically does

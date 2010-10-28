@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testSuite xmlns="http://www.bpelunit.org/schema/testSuite" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.bpelunit.org/schema/testSuite c:\java\bpelunitws\org.bpelunit.framework\schema\TestSuite.xsd">
+<testSuite xmlns="http://www.bpelunit.org/schema/testSuite" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.bpelunit.org/schema/testSuite c:\java\bpelunitws\net.bpelunit.framework\schema\TestSuite.xsd">
 	<name>Oracle Travel Synchronous Chapter 3 Test Suite</name>
 	<baseURL>http://localhost:7777/</baseURL>
 	<deployment>

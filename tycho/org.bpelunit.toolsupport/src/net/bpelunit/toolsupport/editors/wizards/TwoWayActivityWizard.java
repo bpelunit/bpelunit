@@ -3,13 +3,13 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards;
+package net.bpelunit.toolsupport.editors.wizards;
 
-import org.bpelunit.framework.xml.suite.XMLMapping;
-import org.bpelunit.framework.xml.suite.XMLTwoWayActivity;
-import org.bpelunit.toolsupport.editors.TestSuitePage;
-import org.bpelunit.toolsupport.editors.wizards.pages.DataCopyPage;
-import org.bpelunit.toolsupport.editors.wizards.pages.HeaderProcessorPage;
+import net.bpelunit.framework.xml.suite.XMLMapping;
+import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.wizards.pages.DataCopyPage;
+import net.bpelunit.toolsupport.editors.wizards.pages.HeaderProcessorPage;
 
 /**
  * Abstract superclass for all wizards which deal with two-way activities.

@@ -2,11 +2,11 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="org.bpelunit.framework.client.eclipse.dataSource">
+         point="net.bpelunit.framework.client.eclipse.dataSource">
       <datasource
             id="html"
             name="HTML Data Source"
-            class="org.bpelunit.framework.control.datasource.html.HtmlDataSource">
+            class="net.bpelunit.framework.control.datasource.html.HtmlDataSource">
       </datasource>
    </extension>
 

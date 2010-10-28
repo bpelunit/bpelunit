@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.util;
+package net.bpelunit.toolsupport.util;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.ToolSupportActivator;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;

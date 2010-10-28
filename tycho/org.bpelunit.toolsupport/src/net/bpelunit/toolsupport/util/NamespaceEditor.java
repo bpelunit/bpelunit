@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.util;
+package net.bpelunit.toolsupport.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlCursor.TokenType;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
 
 public class NamespaceEditor {
 

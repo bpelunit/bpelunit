@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.util.schema;
+package net.bpelunit.toolsupport.util.schema;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,16 +6,16 @@ import java.util.HashMap;
 
 import javax.xml.namespace.QName;
 
-import org.bpelunit.toolsupport.util.schema.impl.SchemaElementManagerImpl;
-import org.bpelunit.toolsupport.util.schema.nodes.Attribute;
-import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
-import org.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
-import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
-import org.bpelunit.toolsupport.util.schema.nodes.impl.AttributeImpl;
-import org.bpelunit.toolsupport.util.schema.nodes.impl.ComplexTypeImpl;
-import org.bpelunit.toolsupport.util.schema.nodes.impl.ElementImpl;
-import org.bpelunit.toolsupport.util.schema.nodes.impl.SimpleTypeImpl;
+import net.bpelunit.toolsupport.util.schema.impl.SchemaElementManagerImpl;
+import net.bpelunit.toolsupport.util.schema.nodes.Attribute;
+import net.bpelunit.toolsupport.util.schema.nodes.ComplexType;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
+import net.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+import net.bpelunit.toolsupport.util.schema.nodes.impl.AttributeImpl;
+import net.bpelunit.toolsupport.util.schema.nodes.impl.ComplexTypeImpl;
+import net.bpelunit.toolsupport.util.schema.nodes.impl.ElementImpl;
+import net.bpelunit.toolsupport.util.schema.nodes.impl.SimpleTypeImpl;
 import org.xml.sax.SAXException;
 
 import com.sun.xml.xsom.XSAttributeDecl;

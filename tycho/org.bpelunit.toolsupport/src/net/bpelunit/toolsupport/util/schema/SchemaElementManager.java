@@ -1,12 +1,12 @@
-package org.bpelunit.toolsupport.util.schema;
+package net.bpelunit.toolsupport.util.schema;
 
 import java.util.HashMap;
 
 import javax.xml.namespace.QName;
 
-import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
-import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+import net.bpelunit.toolsupport.util.schema.nodes.ComplexType;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.toolsupport.util.schema.nodes.SimpleType;
 
 /**
  * Manages the Elements, ComplexTypes and SimpleTypes of one or more schemata.

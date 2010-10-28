@@ -1,4 +1,4 @@
-package org.bpelunit.framework.coverage.annotation;
+package net.bpelunit.framework.coverage.annotation;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -6,15 +6,15 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
-import org.bpelunit.framework.coverage.receiver.MarkerState;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
-import org.bpelunit.framework.coverage.result.statistic.IStatistic;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
+import net.bpelunit.framework.coverage.receiver.MarkerState;
+import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 
 /**
  * Manager class for metrics used in a test run

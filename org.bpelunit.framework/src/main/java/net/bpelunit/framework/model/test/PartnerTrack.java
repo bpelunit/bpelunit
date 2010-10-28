@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test;
+package net.bpelunit.framework.model.test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +18,14 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
-import org.bpelunit.framework.control.run.TestCaseRunner;
-import org.bpelunit.framework.model.Partner;
-import org.bpelunit.framework.model.test.activity.Activity;
-import org.bpelunit.framework.model.test.activity.ActivityContext;
-import org.bpelunit.framework.model.test.data.ContextXPathVariableResolver;
-import org.bpelunit.framework.model.test.report.ArtefactStatus;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
-import org.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.model.Partner;
+import net.bpelunit.framework.model.test.activity.Activity;
+import net.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.framework.model.test.data.ContextXPathVariableResolver;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.report.StateData;
 import org.w3c.dom.Document;
 
 import com.rits.cloning.Cloner;

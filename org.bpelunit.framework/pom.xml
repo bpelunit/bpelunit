@@ -70,10 +70,10 @@
               <classifier>bundle</classifier>
               <manifestLocation>META-INF</manifestLocation>
               <instructions>
-                <Export-Package>org.bpelunit.*;schemaorg_apache_xmlbeans.system.*</Export-Package>
+                <Export-Package>net.bpelunit.*;schemaorg_apache_xmlbeans.system.*</Export-Package>
                 <_exportcontents>com.ibm.wsdl.*;javax.wsdl.*;org.apache.xmlbeans.*;org.apache.commons.lang</_exportcontents>
                 <Import-Package>!*</Import-Package>
-                <Bundle-SymbolicName>org.bpelunit.framework;symbolic:=true</Bundle-SymbolicName>
+                <Bundle-SymbolicName>net.bpelunit.framework;symbolic:=true</Bundle-SymbolicName>
                 <Embed-Transitive>true</Embed-Transitive>
                 <Embed-Directory>target/dependency</Embed-Directory>
                 <Embed-Dependency>*;scope=compile;artifactId=!stax-api</Embed-Dependency>

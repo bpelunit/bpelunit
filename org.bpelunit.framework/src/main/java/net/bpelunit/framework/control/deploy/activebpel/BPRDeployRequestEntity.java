@@ -2,7 +2,7 @@
  * This file belongs to the BPELUnit utility and Eclipse plugin set. See
  * enclosed license file for more information.
  */
-package org.bpelunit.framework.control.deploy.activebpel;
+package net.bpelunit.framework.control.deploy.activebpel;
 
 import java.io.File;
 import java.io.IOException;

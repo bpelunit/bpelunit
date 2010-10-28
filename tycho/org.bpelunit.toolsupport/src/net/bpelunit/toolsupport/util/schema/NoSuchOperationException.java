@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.util.schema;
+package net.bpelunit.toolsupport.util.schema;
 
 public class NoSuchOperationException extends Exception {
 

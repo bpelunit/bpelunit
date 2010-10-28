@@ -1,12 +1,12 @@
-package org.bpelunit.framework.control.datasource.ods;
+package net.bpelunit.framework.control.datasource.ods;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IDataSource.DataSource;
-import org.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IDataSource.DataSource;
+import net.bpelunit.framework.exception.DataSourceException;
 import org.odftoolkit.odfdom.doc.OdfDocument;
 import org.odftoolkit.odfdom.doc.OdfSpreadsheetDocument;
 import org.odftoolkit.odfdom.doc.table.OdfTable;

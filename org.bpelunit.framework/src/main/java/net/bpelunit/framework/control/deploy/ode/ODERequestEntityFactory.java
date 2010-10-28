@@ -4,7 +4,7 @@
  * 
  */
 
-package org.bpelunit.framework.control.deploy.ode;
+package net.bpelunit.framework.control.deploy.ode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -22,7 +22,7 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
 
 /**
  * ODERequestEntityFactory -creates RequestEntity objects required for deploy

@@ -1,10 +1,10 @@
-package org.bpelunit.toolsupport.util.schema.nodes.impl;
+package net.bpelunit.toolsupport.util.schema.nodes.impl;
 
 import static org.junit.Assert.assertEquals;
 
 import javax.xml.namespace.QName;
 
-import org.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
+import net.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
 import org.junit.Test;
 
 public abstract class SchemaNodeTestAbstract {

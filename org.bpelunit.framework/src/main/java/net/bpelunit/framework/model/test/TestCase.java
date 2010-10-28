@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test;
+package net.bpelunit.framework.model.test;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -13,12 +13,12 @@ import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.bpelunit.framework.control.datasource.DataSourceUtil;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.run.TestCaseRunner;
-import org.bpelunit.framework.model.test.report.ArtefactStatus;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
-import org.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.control.datasource.DataSourceUtil;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.report.StateData;
 
 import com.rits.cloning.Cloner;
 

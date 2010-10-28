@@ -1,4 +1,4 @@
-package org.bpelunit.framework.coverage.result;
+package net.bpelunit.framework.coverage.result;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
-import org.bpelunit.framework.coverage.result.statistic.IStatistic;
+import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
+import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;

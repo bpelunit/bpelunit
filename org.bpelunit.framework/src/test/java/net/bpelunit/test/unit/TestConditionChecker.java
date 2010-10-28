@@ -3,14 +3,14 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.test.unit;
+package net.bpelunit.test.unit;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.bpelunit.framework.control.soap.NamespaceContextImpl;
-import org.bpelunit.framework.model.test.data.ReceiveCondition;
-import org.bpelunit.test.util.TestUtil;
+import net.bpelunit.framework.control.soap.NamespaceContextImpl;
+import net.bpelunit.framework.model.test.data.ReceiveCondition;
+import net.bpelunit.test.util.TestUtil;
 import org.junit.Test;
 import org.w3c.dom.Element;
 

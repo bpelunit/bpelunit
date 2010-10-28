@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.model;
+package net.bpelunit.framework.client.model;
 
 import java.util.HashMap;
 import java.util.Map;

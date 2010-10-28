@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource;
+package net.bpelunit.framework.control.datasource;
 
 public class DataSourceConfigurationOption {
 

@@ -3,9 +3,9 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.dialog.validate;
+package net.bpelunit.framework.client.eclipse.dialog.validate;
 
-import org.bpelunit.framework.client.eclipse.dialog.DialogFieldValidator;
+import net.bpelunit.framework.client.eclipse.dialog.DialogFieldValidator;
 
 /**
  * A validator which doesn't check anything.

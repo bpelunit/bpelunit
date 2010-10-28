@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.exception;
+package net.bpelunit.framework.exception;
 
 /**
  * A problem while deploying or undeploying the BPEL PUT

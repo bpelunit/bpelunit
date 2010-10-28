@@ -3,21 +3,21 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.views;
+package net.bpelunit.framework.client.eclipse.views;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
-import org.bpelunit.framework.client.model.TestRunSession;
-import org.bpelunit.framework.control.result.ITestResultListener;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.TestCase;
-import org.bpelunit.framework.model.test.activity.Activity;
-import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
-import org.bpelunit.framework.model.test.data.SendDataSpecification;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
-import org.bpelunit.framework.model.test.report.ArtefactStatus.StatusCode;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.model.TestRunSession;
+import net.bpelunit.framework.control.result.ITestResultListener;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.activity.Activity;
+import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
+import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.report.ArtefactStatus.StatusCode;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;

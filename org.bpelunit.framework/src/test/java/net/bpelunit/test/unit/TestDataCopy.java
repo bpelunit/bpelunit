@@ -3,13 +3,13 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.test.unit;
+package net.bpelunit.test.unit;
 
 import static org.junit.Assert.assertEquals;
 
-import org.bpelunit.framework.control.soap.NamespaceContextImpl;
-import org.bpelunit.framework.model.test.data.DataCopyOperation;
-import org.bpelunit.test.util.TestUtil;
+import net.bpelunit.framework.control.soap.NamespaceContextImpl;
+import net.bpelunit.framework.model.test.data.DataCopyOperation;
+import net.bpelunit.test.util.TestUtil;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource;
+package net.bpelunit.framework.control.datasource;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -10,9 +10,9 @@ import java.util.StringTokenizer;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IDataSource.DataSource;
-import org.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IDataSource.DataSource;
+import net.bpelunit.framework.exception.DataSourceException;
 
 @DataSource(name="Velocity Data Source", shortName="velocity", contentTypes={})
 public class VelocityDataSource implements IDataSource {

@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource.ods;
+package net.bpelunit.framework.control.datasource.ods;
 
 class StringUtils {
 

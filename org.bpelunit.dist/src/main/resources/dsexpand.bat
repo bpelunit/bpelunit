@@ -20,7 +20,7 @@ goto :run
 :run
 REM Classpath is set up, go run bpelunit
 
-%JAVA_HOME%\bin\java org.bpelunit.utils.datasourceinliner.CLIRunner %*
+%JAVA_HOME%\bin\java net.bpelunit.utils.datasourceinliner.CLIRunner %*
 
 endlocal
 goto :eof

@@ -3,16 +3,16 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.components;
+package net.bpelunit.toolsupport.editors.wizards.components;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.toolsupport.editors.BPELUnitEditor;
-import org.bpelunit.toolsupport.editors.wizards.ActivityWizard;
-import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
-import org.bpelunit.toolsupport.editors.wizards.pages.ActivityWizardPage;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.toolsupport.editors.BPELUnitEditor;
+import net.bpelunit.toolsupport.editors.wizards.ActivityWizard;
+import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.toolsupport.editors.wizards.pages.ActivityWizardPage;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;

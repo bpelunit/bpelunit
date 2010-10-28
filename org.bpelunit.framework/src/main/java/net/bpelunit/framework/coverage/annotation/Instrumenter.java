@@ -1,23 +1,23 @@
-package org.bpelunit.framework.coverage.annotation;
+package net.bpelunit.framework.coverage.annotation;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createVariableName;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createVariableName;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.control.util.JDomHelper;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.CMServiceFactory;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.exceptions.BpelVersionException;
+import net.bpelunit.framework.control.util.JDomHelper;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.CMServiceFactory;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.exceptions.BpelVersionException;
 import org.jdom.Comment;
 import org.jdom.Document;
 import org.jdom.Element;

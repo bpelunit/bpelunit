@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.util.schema;
+package net.bpelunit.toolsupport.util.schema;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,7 @@ import javax.wsdl.Definition;
 import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -3,9 +3,9 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.components;
+package net.bpelunit.toolsupport.editors.wizards.components;
 
-import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
 
 /**
  * Interface to be implemented by classes who wish to be informed about changes in a component.

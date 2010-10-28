@@ -3,9 +3,9 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.dialog.field;
+package net.bpelunit.framework.client.eclipse.dialog.field;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;

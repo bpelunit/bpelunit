@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource;
+package net.bpelunit.framework.control.datasource;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
-import org.bpelunit.framework.control.ext.IDataSource.DataSource;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
+import net.bpelunit.framework.control.ext.IDataSource.DataSource;
 
 /**
  * This class offers static helper methods for extracting and dealing with meta

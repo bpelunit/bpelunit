@@ -1,25 +1,25 @@
-package org.bpelunit.framework.coverage.annotation.metrics.activitycoverage;
+package net.bpelunit.framework.coverage.annotation.metrics.activitycoverage;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCES_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCE_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGETS_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGET_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.count;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseInSequence;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ensureElementIsInSequence;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCES_ELEMENT;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCE_ELEMENT;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGETS_ELEMENT;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGET_ELEMENT;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.count;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseInSequence;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ensureElementIsInSequence;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.coverage.annotation.Instrumenter;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import net.bpelunit.framework.coverage.annotation.Instrumenter;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
+import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;

@@ -3,19 +3,19 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.pages;
+package net.bpelunit.toolsupport.editors.wizards.pages;
 
 import java.util.ArrayList;
 
-import org.bpelunit.framework.control.util.ActivityUtil;
-import org.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
-import org.bpelunit.toolsupport.ToolSupportActivator;
-import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
-import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
-import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
-import org.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
-import org.bpelunit.toolsupport.editors.wizards.fields.IListAdapter;
-import org.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
+import net.bpelunit.framework.control.util.ActivityUtil;
+import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
+import net.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
+import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
+import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
+import net.bpelunit.toolsupport.editors.wizards.fields.IListAdapter;
+import net.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;

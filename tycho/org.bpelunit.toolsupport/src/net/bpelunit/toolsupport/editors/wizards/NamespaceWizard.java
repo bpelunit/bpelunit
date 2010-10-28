@@ -3,10 +3,10 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards;
+package net.bpelunit.toolsupport.editors.wizards;
 
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.toolsupport.editors.wizards.pages.NamespaceWizardPage;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.toolsupport.editors.wizards.pages.NamespaceWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 /**

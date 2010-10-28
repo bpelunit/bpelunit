@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.src;
+package net.bpelunit.toolsupport.editors.src;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;

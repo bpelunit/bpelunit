@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.editors.wizards.fields;
+package net.bpelunit.toolsupport.editors.wizards.fields;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;

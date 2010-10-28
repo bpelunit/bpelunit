@@ -1,14 +1,14 @@
-package org.bpelunit.toolsupport.util.schema.nodes.impl;
+package net.bpelunit.toolsupport.util.schema.nodes.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.bpelunit.toolsupport.util.schema.nodes.Attribute;
-import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
-import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+import net.bpelunit.toolsupport.util.schema.nodes.Attribute;
+import net.bpelunit.toolsupport.util.schema.nodes.ComplexType;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.toolsupport.util.schema.nodes.SimpleType;
 
 public class ComplexTypeImpl extends TypeImpl implements ComplexType {
 

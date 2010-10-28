@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.fields;
+package net.bpelunit.toolsupport.editors.wizards.fields;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.JFaceResources;

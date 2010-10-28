@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards;
+package net.bpelunit.toolsupport.editors.wizards;
 
-import org.bpelunit.framework.xml.suite.XMLTwoWayActivity;
-import org.bpelunit.toolsupport.editors.TestSuitePage;
-import org.bpelunit.toolsupport.editors.wizards.pages.ReceiveSimpleWizardPage;
-import org.bpelunit.toolsupport.editors.wizards.pages.SendCompleteWizardPage;
+import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.wizards.pages.ReceiveSimpleWizardPage;
+import net.bpelunit.toolsupport.editors.wizards.pages.SendCompleteWizardPage;
 
 /**
  * A wizard for editing a send/receive synchronous activity.

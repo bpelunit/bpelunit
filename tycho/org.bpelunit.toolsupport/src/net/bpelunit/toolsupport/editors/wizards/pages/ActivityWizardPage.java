@@ -3,11 +3,11 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.pages;
+package net.bpelunit.toolsupport.editors.wizards.pages;
 
-import org.bpelunit.toolsupport.ToolSupportActivator;
-import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
-import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
+import net.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
+import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.wizard.WizardPage;

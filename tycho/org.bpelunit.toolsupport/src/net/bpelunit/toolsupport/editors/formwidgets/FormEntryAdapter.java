@@ -8,9 +8,9 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package org.bpelunit.toolsupport.editors.formwidgets;
+package net.bpelunit.toolsupport.editors.formwidgets;
 
-import org.bpelunit.toolsupport.editors.sections.PUTSection;
+import net.bpelunit.toolsupport.editors.sections.PUTSection;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.events.HyperlinkEvent;

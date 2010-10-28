@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse;
+package net.bpelunit.framework.client.eclipse;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
-import org.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView;
-import org.bpelunit.framework.client.eclipse.views.BPELUnitView;
-import org.bpelunit.framework.client.model.TestRunSession;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
-import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
-import org.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
+import net.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView;
+import net.bpelunit.framework.client.eclipse.views.BPELUnitView;
+import net.bpelunit.framework.client.model.TestRunSession;
+import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
+import net.bpelunit.framework.exception.ConfigurationException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -38,13 +38,13 @@ import org.osgi.framework.BundleContext;
  */
 public class BPELUnitActivator extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "org.bpelunit.framework.client.eclipse";
+	public static final String PLUGIN_ID = "net.bpelunit.framework.client.eclipse";
 
-	public static final String FRAMEWORK_BUNDLE_SYMBOLICNAME = "org.bpelunit.framework";
+	public static final String FRAMEWORK_BUNDLE_SYMBOLICNAME = "net.bpelunit.framework";
 
-	public static final String BPELUNIT_VIEW_ID = "org.bpelunit.framework.client.eclipse.views.BPELUnitView";
+	public static final String BPELUNIT_VIEW_ID = "net.bpelunit.framework.client.eclipse.views.BPELUnitView";
 
-	public static final String BPELUNIT_COVERAGE_VIEW_ID = "org.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView";
+	public static final String BPELUNIT_COVERAGE_VIEW_ID = "net.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView";
 
 	public static final String BPELUNIT_CONSOLE_ID = "BPELUnitConsole";
 

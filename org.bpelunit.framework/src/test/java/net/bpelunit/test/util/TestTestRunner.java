@@ -3,22 +3,22 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.test.util;
+package net.bpelunit.test.util;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.base.BPELUnitBaseRunner;
-import org.bpelunit.framework.control.result.ITestResultListener;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.model.test.TestCase;
-import org.bpelunit.framework.model.test.TestSuite;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.base.BPELUnitBaseRunner;
+import net.bpelunit.framework.control.result.ITestResultListener;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 
 /**
  * 

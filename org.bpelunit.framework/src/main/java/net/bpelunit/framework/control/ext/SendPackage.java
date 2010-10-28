@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.ext;
+package net.bpelunit.framework.control.ext;
 
 import javax.xml.soap.SOAPMessage;
 

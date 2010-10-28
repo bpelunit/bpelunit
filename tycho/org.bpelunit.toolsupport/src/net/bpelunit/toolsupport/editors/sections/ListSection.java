@@ -3,9 +3,9 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.sections;
+package net.bpelunit.toolsupport.editors.sections;
 
-import org.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;

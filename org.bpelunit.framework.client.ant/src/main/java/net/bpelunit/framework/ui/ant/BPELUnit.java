@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.ui.ant;
+package net.bpelunit.framework.ui.ant;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,10 +18,10 @@ import java.util.logging.Level;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.SpecificationException;
 
 /**
  * <p>

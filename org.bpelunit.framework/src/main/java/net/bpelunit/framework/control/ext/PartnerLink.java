@@ -4,7 +4,7 @@
  * 
  */
 
-package org.bpelunit.framework.control.ext;
+package net.bpelunit.framework.control.ext;
 
 import javax.xml.namespace.QName;
 

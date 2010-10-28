@@ -1,12 +1,12 @@
-package org.bpelunit.framework.coverage.result.statistic.impl;
+package net.bpelunit.framework.coverage.result.statistic.impl;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
-import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
-import org.bpelunit.framework.coverage.result.statistic.IStatistic;
+import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
+import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 
 /**
  * Straight implementation of {@link IFileStatistic}

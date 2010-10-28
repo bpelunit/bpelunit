@@ -37,12 +37,12 @@
               <manifestLocation>META-INF</manifestLocation>
               <instructions>
                 <Bundle-SymbolicName>
-                  org.bpelunit.framework.control.datasource.csv;singleton:=true
+                  net.bpelunit.framework.control.datasource.csv;singleton:=true
                 </Bundle-SymbolicName>
                 <Require-Bundle>
-                  org.bpelunit.framework.client.eclipse
+                  net.bpelunit.framework.client.eclipse
                 </Require-Bundle>
-                <Import-Package>org.bpelunit.framework.control.datasource;*</Import-Package>
+                <Import-Package>net.bpelunit.framework.control.datasource;*</Import-Package>
                 <Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
                 <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
               </instructions>

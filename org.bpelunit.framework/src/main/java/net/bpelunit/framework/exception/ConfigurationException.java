@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.exception;
+package net.bpelunit.framework.exception;
 
 /**
  * A configuration exception indicates a serious problem with the configuration of BPELUnit itself,

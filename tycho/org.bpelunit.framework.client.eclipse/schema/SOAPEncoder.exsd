@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.bpelunit.framework.client.eclipse">
+<schema targetNamespace="net.bpelunit.framework.client.eclipse">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.bpelunit.framework.client.eclipse" id="soapEncoder" name="SOAPEncoder"/>
+         <meta.schema plugin="net.bpelunit.framework.client.eclipse" id="soapEncoder" name="SOAPEncoder"/>
       </appInfo>
       <documentation>
          Extension point for adding SOAP Encoders
@@ -61,7 +61,7 @@
                   class implementing the interface ISOAPEncoder
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.bpelunit.framework.control.ext.ISOAPEncoder"/>
+                  <meta.attribute kind="java" basedOn="net.bpelunit.framework.control.ext.ISOAPEncoder"/>
                </appInfo>
             </annotation>
          </attribute>

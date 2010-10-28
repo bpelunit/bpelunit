@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.test.unit;
+package net.bpelunit.test.unit;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.exception.ConfigurationException;
 import org.junit.BeforeClass;
 
 /**

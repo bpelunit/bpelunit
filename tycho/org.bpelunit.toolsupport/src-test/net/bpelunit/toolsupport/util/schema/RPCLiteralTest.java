@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.util.schema;
+package net.bpelunit.toolsupport.util.schema;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -13,9 +13,9 @@ import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 import javax.xml.namespace.QName;
 
-import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
-import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+import net.bpelunit.toolsupport.util.schema.nodes.ComplexType;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.toolsupport.util.schema.nodes.SimpleType;
 import org.junit.Before;
 import org.junit.Test;
 

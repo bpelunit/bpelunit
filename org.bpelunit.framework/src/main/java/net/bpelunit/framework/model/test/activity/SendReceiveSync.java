@@ -3,18 +3,18 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test.activity;
+package net.bpelunit.framework.model.test.activity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bpelunit.framework.exception.SynchronousSendException;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.report.ArtefactStatus;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
-import org.bpelunit.framework.model.test.report.StateData;
-import org.bpelunit.framework.model.test.wire.IncomingMessage;
-import org.bpelunit.framework.model.test.wire.OutgoingMessage;
+import net.bpelunit.framework.exception.SynchronousSendException;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.model.test.wire.IncomingMessage;
+import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
 /**
  * A send/receive synchronous activity is intended to send a outgoing synchronous SOAP message,

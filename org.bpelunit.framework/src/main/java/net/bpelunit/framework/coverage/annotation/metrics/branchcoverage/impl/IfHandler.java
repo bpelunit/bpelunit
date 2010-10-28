@@ -1,18 +1,18 @@
-package org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl;
+package net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ELSE_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ELSE_IF_ELEMENT;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createSequence;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getFirstEnclosedActivity;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getProcessNamespace;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.insertElseBranch;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ELSE_ELEMENT;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ELSE_IF_ELEMENT;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createSequence;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getFirstEnclosedActivity;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getProcessNamespace;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.insertElseBranch;
 
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
-import org.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
+import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Element;
 
 

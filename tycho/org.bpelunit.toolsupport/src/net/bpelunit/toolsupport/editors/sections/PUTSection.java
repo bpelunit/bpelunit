@@ -3,21 +3,21 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.sections;
+package net.bpelunit.toolsupport.editors.sections;
 
-import org.bpelunit.framework.client.eclipse.ExtensionControl;
-import org.bpelunit.framework.client.eclipse.dialog.field.FileSelector;
-import org.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
-import org.bpelunit.toolsupport.editors.TestSuitePage;
-import org.bpelunit.toolsupport.editors.formwidgets.ComboEntry;
-import org.bpelunit.toolsupport.editors.formwidgets.ContextPart;
-import org.bpelunit.toolsupport.editors.formwidgets.EntryAdapter;
-import org.bpelunit.toolsupport.editors.formwidgets.FormEntry;
-import org.bpelunit.toolsupport.editors.formwidgets.FormEntryAdapter;
-import org.bpelunit.toolsupport.editors.formwidgets.TextEntry;
-import org.bpelunit.toolsupport.editors.wizards.DeploymentOptionWizard;
-import org.bpelunit.toolsupport.util.WSDLFileFilter;
-import org.bpelunit.toolsupport.util.WSDLFileValidator;
+import net.bpelunit.framework.client.eclipse.ExtensionControl;
+import net.bpelunit.framework.client.eclipse.dialog.field.FileSelector;
+import net.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.formwidgets.ComboEntry;
+import net.bpelunit.toolsupport.editors.formwidgets.ContextPart;
+import net.bpelunit.toolsupport.editors.formwidgets.EntryAdapter;
+import net.bpelunit.toolsupport.editors.formwidgets.FormEntry;
+import net.bpelunit.toolsupport.editors.formwidgets.FormEntryAdapter;
+import net.bpelunit.toolsupport.editors.formwidgets.TextEntry;
+import net.bpelunit.toolsupport.editors.wizards.DeploymentOptionWizard;
+import net.bpelunit.toolsupport.util.WSDLFileFilter;
+import net.bpelunit.toolsupport.util.WSDLFileValidator;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.window.Window;

@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.ext;
+package net.bpelunit.framework.control.ext;
 
 import javax.xml.soap.SOAPMessage;
 
-import org.bpelunit.framework.exception.HeaderProcessingException;
-import org.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.framework.exception.HeaderProcessingException;
+import net.bpelunit.framework.model.test.activity.ActivityContext;
 
 /**
  * 

@@ -11,7 +11,7 @@
 	<target name="all">
 		<antcall target="convertSchemaToHtml" />
 		<antcall target="generateJavadoc" />
-		<eclipse.refreshLocal resource="org.bpelunit.framework.client.eclipse/doc" depth="infinite"/>
+		<eclipse.refreshLocal resource="net.bpelunit.framework.client.eclipse/doc" depth="infinite"/>
 	</target>
 
 	<!-- Converts all the manifest files referenced by the plugin.xml to HTML -->
@@ -32,7 +32,7 @@
 		<mkdir dir="doc/reference/api" />
 		
 		<javadoc destdir="doc/reference/api/">
-		    <packageset dir="../org.bpelunit.framework/src" defaultexcludes="yes">
+		    <packageset dir="../net.bpelunit.framework/src" defaultexcludes="yes">
 		      	<include name="org/bpelunit/framework"/>		    	
 		    	<include name="org/bpelunit/framework/control/ext"/>		    	
 		    	<include name="org/bpelunit/framework/control/result"/>	    	

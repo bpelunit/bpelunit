@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.util;
+package net.bpelunit.toolsupport.util;
 
 public class NamespaceDeclaration {
 	private String fPrefix;

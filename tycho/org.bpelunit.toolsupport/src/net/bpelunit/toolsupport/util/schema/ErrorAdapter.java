@@ -1,6 +1,6 @@
-package org.bpelunit.toolsupport.util.schema;
+package net.bpelunit.toolsupport.util.schema;
 
-import org.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.ToolSupportActivator;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;

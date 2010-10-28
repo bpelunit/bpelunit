@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.fields;
+package net.bpelunit.toolsupport.editors.wizards.fields;
 
 import java.util.ArrayList;
 import java.util.Iterator;

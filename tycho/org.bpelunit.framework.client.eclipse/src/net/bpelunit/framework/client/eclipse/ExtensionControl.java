@@ -3,21 +3,21 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse;
+package net.bpelunit.framework.client.eclipse;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.bpelunit.framework.client.model.DataSourceExtension;
-import org.bpelunit.framework.client.model.DeployerExtension;
-import org.bpelunit.framework.client.model.Extension;
-import org.bpelunit.framework.client.model.HeaderProcessorExtension;
-import org.bpelunit.framework.client.model.SOAPEncoderExtension;
-import org.bpelunit.framework.control.datasource.DataSourceHelper;
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.client.model.DataSourceExtension;
+import net.bpelunit.framework.client.model.DeployerExtension;
+import net.bpelunit.framework.client.model.Extension;
+import net.bpelunit.framework.client.model.HeaderProcessorExtension;
+import net.bpelunit.framework.client.model.SOAPEncoderExtension;
+import net.bpelunit.framework.control.datasource.DataSourceHelper;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.exception.SpecificationException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -35,10 +35,10 @@ import org.eclipse.core.runtime.Platform;
  */
 public class ExtensionControl {
 
-	public static final String DEPLOYER_EXTENSION_POINT_ID = "org.bpelunit.framework.client.eclipse.bpelDeployer";
-	public static final String ENCODER_EXTENSION_POINT_ID = "org.bpelunit.framework.client.eclipse.soapEncoder";
-	public static final String HEADER_EXTENSION_POINT_ID = "org.bpelunit.framework.client.eclipse.headerProcessor";
-	public static final String DATASOURCE_EXTENSION_POINT_ID = "org.bpelunit.framework.client.eclipse.dataSource";
+	public static final String DEPLOYER_EXTENSION_POINT_ID = "net.bpelunit.framework.client.eclipse.bpelDeployer";
+	public static final String ENCODER_EXTENSION_POINT_ID = "net.bpelunit.framework.client.eclipse.soapEncoder";
+	public static final String HEADER_EXTENSION_POINT_ID = "net.bpelunit.framework.client.eclipse.headerProcessor";
+	public static final String DATASOURCE_EXTENSION_POINT_ID = "net.bpelunit.framework.client.eclipse.dataSource";
 
 	private static Map<String, DeployerExtension> fDeployers = new HashMap<String, DeployerExtension>();
 	private static Map<String, HeaderProcessorExtension> fHeaderProcessors = new HashMap<String, HeaderProcessorExtension>();

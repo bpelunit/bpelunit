@@ -3,14 +3,14 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.pages;
+package net.bpelunit.toolsupport.editors.wizards.pages;
 
-import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
-import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
-import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
-import org.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
-import org.bpelunit.toolsupport.editors.wizards.components.ReceiveComponent;
-import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
+import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
+import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
+import net.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
+import net.bpelunit.toolsupport.editors.wizards.components.ReceiveComponent;
+import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
 import org.eclipse.swt.widgets.Composite;
 
 /**

@@ -1,4 +1,4 @@
-package org.bpelunit.framework.client.eclipse.views;
+package net.bpelunit.framework.client.eclipse.views;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,8 +8,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
-import org.bpelunit.framework.coverage.result.statistic.IStatistic;
+import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
+import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;

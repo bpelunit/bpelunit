@@ -3,9 +3,9 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.model;
+package net.bpelunit.framework.client.model;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 

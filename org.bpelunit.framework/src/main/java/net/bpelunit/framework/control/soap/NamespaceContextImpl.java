@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.soap;
+package net.bpelunit.framework.control.soap;
 
 import java.util.ArrayList;
 import java.util.Collection;

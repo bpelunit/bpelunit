@@ -1,14 +1,14 @@
-package org.bpelunit.framework.coverage.annotation.metrics.fhcoverage;
+package net.bpelunit.framework.coverage.annotation.metrics.fhcoverage;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
 
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.Instrumenter;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import net.bpelunit.framework.coverage.annotation.Instrumenter;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Comment;
 import org.jdom.Element;
 
@@ -42,7 +42,7 @@ public class FaultMetricHandler implements IMetricHandler {
 
 
 	/* (non-Javadoc)
-	 * @see org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler#insertMarkersForMetric(java.util.List)
+	 * @see net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler#insertMarkersForMetric(java.util.List)
 	 */
 	public void insertMarkersForMetric(List<Element> processElements)
 			throws BpelException {

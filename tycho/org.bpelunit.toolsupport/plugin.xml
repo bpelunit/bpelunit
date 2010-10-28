@@ -8,23 +8,23 @@
             name="BPELUnit TestSuite Editor"
             extensions="bpts"
             icon="icons/bpel.gif"
-            contributorClass="org.bpelunit.toolsupport.editors.BPELUnitEditorContributor"
-            class="org.bpelunit.toolsupport.editors.BPELUnitEditor"
-            id="org.bpelunit.toolsupport.editors.BPELUnitEditor">
+            contributorClass="net.bpelunit.toolsupport.editors.BPELUnitEditorContributor"
+            class="net.bpelunit.toolsupport.editors.BPELUnitEditor"
+            id="net.bpelunit.toolsupport.editors.BPELUnitEditor">
       </editor>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
       <category
             name="BPELUnit"
-            id="org.bpelunit.toolsupport">
+            id="net.bpelunit.toolsupport">
       </category>
       <wizard
             name="BPELUnit TestSuite"
             icon="icons/bpel.gif"
-            category="org.bpelunit.toolsupport"
-            class="org.bpelunit.toolsupport.wizards.BPELUnitNewWizard"
-            id="org.bpelunit.toolsupport.wizards.BPELUnitNewWizard">
+            category="net.bpelunit.toolsupport"
+            class="net.bpelunit.toolsupport.wizards.BPELUnitNewWizard"
+            id="net.bpelunit.toolsupport.wizards.BPELUnitNewWizard">
       </wizard>
    </extension>
    <extension

@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.preferences;
+package net.bpelunit.framework.client.eclipse.preferences;
 
 /**
  * Constants for identifying the settings of the BPELUnit Eclipse plugin.

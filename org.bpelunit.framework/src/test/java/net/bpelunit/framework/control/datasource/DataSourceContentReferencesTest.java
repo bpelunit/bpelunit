@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource;
+package net.bpelunit.framework.control.datasource;
 
 import static org.junit.Assert.fail;
 
@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.bpelunit.framework.control.datasource.DataSourceUtil;
-import org.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.control.datasource.DataSourceUtil;
+import net.bpelunit.framework.exception.DataSourceException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

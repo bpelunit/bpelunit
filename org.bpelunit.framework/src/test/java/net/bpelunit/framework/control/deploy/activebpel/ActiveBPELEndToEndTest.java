@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.deploy.activebpel;
+package net.bpelunit.framework.control.deploy.activebpel;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,10 +10,10 @@ import java.io.File;
 import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.test.util.TestTestRunner;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.test.util.TestTestRunner;
 import org.junit.Test;
 
 /**
@@ -21,7 +21,7 @@ import org.junit.Test;
  * <em>running</em> instance installed in an application server set up under the
  * path specified in the CATALINA_HOME environment variable. The server should
  * use the default configuration values used in
- * {@link org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer}.
+ * {@link net.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer}.
  * 
  * @author Antonio García-Domínguez
  */

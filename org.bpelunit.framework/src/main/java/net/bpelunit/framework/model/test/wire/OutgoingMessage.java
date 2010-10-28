@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test.wire;
+package net.bpelunit.framework.model.test.wire;
 
 /**
  * An OutgoingMessage object is a plain, on-the-wire representation of an "outgoing message" from

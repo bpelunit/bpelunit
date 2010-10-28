@@ -2,7 +2,7 @@
  * This file belongs to the BPELUnit utility and Eclipse plugin set. See enclosed
  * license file for more information.
  */
-package org.bpelunit.framework.model.test.data;
+package net.bpelunit.framework.model.test.data;
 
 import java.util.ArrayList;
 import java.util.Iterator;

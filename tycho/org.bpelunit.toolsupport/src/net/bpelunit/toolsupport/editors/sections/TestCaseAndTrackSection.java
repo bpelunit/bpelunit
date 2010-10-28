@@ -3,29 +3,29 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.sections;
+package net.bpelunit.toolsupport.editors.sections;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
-import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
-import org.bpelunit.framework.client.eclipse.dialog.field.CheckBoxField;
-import org.bpelunit.framework.client.eclipse.dialog.field.ComboField;
-import org.bpelunit.framework.client.eclipse.dialog.field.TextField;
-import org.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
-import org.bpelunit.framework.client.eclipse.dialog.validate.NullValidator;
-import org.bpelunit.framework.control.util.ActivityUtil;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
-import org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
-import org.bpelunit.framework.xml.suite.XMLPartnerTrack;
-import org.bpelunit.framework.xml.suite.XMLTestCase;
-import org.bpelunit.framework.xml.suite.XMLTestCasesSection;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.framework.xml.suite.XMLTrack;
-import org.bpelunit.toolsupport.ToolSupportActivator;
-import org.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
+import net.bpelunit.framework.client.eclipse.dialog.field.CheckBoxField;
+import net.bpelunit.framework.client.eclipse.dialog.field.ComboField;
+import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
+import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
+import net.bpelunit.framework.client.eclipse.dialog.validate.NullValidator;
+import net.bpelunit.framework.control.util.ActivityUtil;
+import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
+import net.bpelunit.framework.xml.suite.XMLPartnerTrack;
+import net.bpelunit.framework.xml.suite.XMLTestCase;
+import net.bpelunit.framework.xml.suite.XMLTestCasesSection;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.framework.xml.suite.XMLTrack;
+import net.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;

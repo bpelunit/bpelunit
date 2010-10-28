@@ -1,11 +1,11 @@
-package org.bpelunit.framework.model.test.activity;
+package net.bpelunit.framework.model.test.activity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.report.ArtefactStatus;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 
 public class Wait extends Activity {
 

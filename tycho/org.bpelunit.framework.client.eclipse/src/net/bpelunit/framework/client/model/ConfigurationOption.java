@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.model;
+package net.bpelunit.framework.client.model;
 
 /**
  * A configuration option of a deployer.

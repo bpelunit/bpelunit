@@ -3,16 +3,16 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test.activity;
+package net.bpelunit.framework.model.test.activity;
 
 import java.util.ArrayList;
 
-import org.bpelunit.framework.control.ext.IHeaderProcessor;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.data.DataCopyOperation;
-import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
-import org.bpelunit.framework.model.test.data.SendDataSpecification;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.data.DataCopyOperation;
+import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
+import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 
 /**
  * Abstract superclass of the two-way synchronous activites Receive/Send Synchonrous and

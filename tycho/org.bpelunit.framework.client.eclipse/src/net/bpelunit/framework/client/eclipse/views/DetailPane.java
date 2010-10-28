@@ -3,13 +3,13 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.views;
+package net.bpelunit.framework.client.eclipse.views;
 
 import java.util.List;
 
-import org.bpelunit.framework.model.test.data.XMLData;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
-import org.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.model.test.data.XMLData;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.report.StateData;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;

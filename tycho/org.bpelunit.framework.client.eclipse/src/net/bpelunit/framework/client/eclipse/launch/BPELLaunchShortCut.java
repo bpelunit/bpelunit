@@ -3,13 +3,13 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.launch;
+package net.bpelunit.framework.client.eclipse.launch;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;

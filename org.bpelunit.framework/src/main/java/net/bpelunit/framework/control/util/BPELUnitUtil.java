@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.util;
+package net.bpelunit.framework.control.util;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashSet;

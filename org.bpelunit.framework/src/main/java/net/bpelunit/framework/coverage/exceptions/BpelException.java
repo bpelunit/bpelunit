@@ -1,6 +1,6 @@
-package org.bpelunit.framework.coverage.exceptions;
+package net.bpelunit.framework.coverage.exceptions;
 
-import org.bpelunit.framework.coverage.exceptions.CoverageMeasurementException;
+import net.bpelunit.framework.coverage.exceptions.CoverageMeasurementException;
 
 /**
  * Bpel Exception

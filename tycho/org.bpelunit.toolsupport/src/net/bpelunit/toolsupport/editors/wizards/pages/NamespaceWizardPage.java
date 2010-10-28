@@ -3,21 +3,21 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.pages;
+package net.bpelunit.toolsupport.editors.wizards.pages;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
-import org.bpelunit.framework.client.eclipse.dialog.field.TextField;
-import org.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
-import org.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
-import org.bpelunit.toolsupport.util.NamespaceDeclaration;
-import org.bpelunit.toolsupport.util.NamespaceEditor;
+import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
+import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
+import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
+import net.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
+import net.bpelunit.toolsupport.util.NamespaceDeclaration;
+import net.bpelunit.toolsupport.util.NamespaceEditor;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.window.Window;

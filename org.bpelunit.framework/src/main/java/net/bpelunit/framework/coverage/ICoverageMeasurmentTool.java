@@ -1,13 +1,13 @@
-package org.bpelunit.framework.coverage;
+package net.bpelunit.framework.coverage;
 
 import java.util.List;
 import java.util.Map;
 
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.coverage.exceptions.CoverageMeasurmentException;
-import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
-import org.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.ISOAPEncoder;
+import net.bpelunit.framework.coverage.exceptions.CoverageMeasurmentException;
+import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
+import net.bpelunit.framework.exception.ConfigurationException;
 
 /**
  * Die Schnittstelle zum Einbinden der Testabdeckungsmessung.

@@ -3,18 +3,18 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.pages;
+package net.bpelunit.toolsupport.editors.wizards.pages;
 
-import org.bpelunit.framework.xml.suite.XMLSendActivity;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
-import org.bpelunit.toolsupport.editors.wizards.ActivityWizard;
-import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
-import org.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
-import org.bpelunit.toolsupport.editors.wizards.components.MessageChangeListener;
-import org.bpelunit.toolsupport.editors.wizards.components.SendComponent;
-import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
-import org.bpelunit.toolsupport.util.ToolUtil;
+import net.bpelunit.framework.xml.suite.XMLSendActivity;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
+import net.bpelunit.toolsupport.editors.wizards.ActivityWizard;
+import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
+import net.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
+import net.bpelunit.toolsupport.editors.wizards.components.MessageChangeListener;
+import net.bpelunit.toolsupport.editors.wizards.components.SendComponent;
+import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.toolsupport.util.ToolUtil;
 import org.eclipse.swt.widgets.Composite;
 
 /**

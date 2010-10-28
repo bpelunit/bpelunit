@@ -3,15 +3,15 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test.activity;
+package net.bpelunit.framework.model.test.activity;
 
 import java.util.List;
 
-import org.bpelunit.framework.model.Partner;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.report.ArtefactStatus;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
-import org.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.model.Partner;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.report.StateData;
 
 /**
  * An activity is one logical event in the chain of events of a partner track. It is executed as

@@ -3,16 +3,16 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.test.unit;
+package net.bpelunit.test.unit;
 
 import static org.junit.Assert.assertEquals;
 
 import javax.xml.namespace.QName;
 
 import org.apache.commons.io.FileUtils;
-import org.bpelunit.framework.model.Partner;
-import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
-import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
+import net.bpelunit.framework.model.Partner;
+import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import org.junit.Test;
 
 /**

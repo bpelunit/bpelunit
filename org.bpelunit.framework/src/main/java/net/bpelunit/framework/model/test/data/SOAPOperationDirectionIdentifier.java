@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test.data;
+package net.bpelunit.framework.model.test.data;
 
 /**
  * <p>

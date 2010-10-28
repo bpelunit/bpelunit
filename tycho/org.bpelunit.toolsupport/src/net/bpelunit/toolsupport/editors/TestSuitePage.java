@@ -3,14 +3,14 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors;
+package net.bpelunit.toolsupport.editors;
 
-import org.bpelunit.framework.xml.suite.XMLTrack;
-import org.bpelunit.toolsupport.editors.sections.ActivitySection;
-import org.bpelunit.toolsupport.editors.sections.PUTSection;
-import org.bpelunit.toolsupport.editors.sections.PartnerSection;
-import org.bpelunit.toolsupport.editors.sections.TestCaseAndTrackSection;
-import org.bpelunit.toolsupport.editors.sections.TestSuiteSection;
+import net.bpelunit.framework.xml.suite.XMLTrack;
+import net.bpelunit.toolsupport.editors.sections.ActivitySection;
+import net.bpelunit.toolsupport.editors.sections.PUTSection;
+import net.bpelunit.toolsupport.editors.sections.PartnerSection;
+import net.bpelunit.toolsupport.editors.sections.TestCaseAndTrackSection;
+import net.bpelunit.toolsupport.editors.sections.TestSuiteSection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;

@@ -3,10 +3,10 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards;
+package net.bpelunit.toolsupport.editors.wizards;
 
-import org.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
-import org.bpelunit.toolsupport.editors.wizards.pages.ActivitySelectionWizardPage;
+import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
+import net.bpelunit.toolsupport.editors.wizards.pages.ActivitySelectionWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 /**

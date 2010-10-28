@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.base;
+package net.bpelunit.framework.base;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -12,17 +12,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IHeaderProcessor;
-import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.control.util.ExtensionRegistry;
-import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.CoverageMeasurementTool;
-import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
+import net.bpelunit.framework.control.ext.ISOAPEncoder;
+import net.bpelunit.framework.control.util.ExtensionRegistry;
+import net.bpelunit.framework.coverage.CoverageConstants;
+import net.bpelunit.framework.coverage.CoverageMeasurementTool;
+import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.SpecificationException;
 
 /**
  * Basic test runner which uses XML configuration files for configuring extensions and configuring

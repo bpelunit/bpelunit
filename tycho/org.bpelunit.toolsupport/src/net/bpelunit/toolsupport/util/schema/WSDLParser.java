@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.util.schema;
+package net.bpelunit.toolsupport.util.schema;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -29,15 +29,15 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
-import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
-import org.bpelunit.toolsupport.util.WSDLReadingException;
-import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
-import org.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
-import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
-import org.bpelunit.toolsupport.util.schema.nodes.Type;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
+import net.bpelunit.toolsupport.util.WSDLReadingException;
+import net.bpelunit.toolsupport.util.schema.nodes.ComplexType;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
+import net.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+import net.bpelunit.toolsupport.util.schema.nodes.Type;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 

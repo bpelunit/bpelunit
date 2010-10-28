@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test.data;
+package net.bpelunit.framework.model.test.data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
@@ -19,17 +19,17 @@ import javax.xml.soap.SOAPMessage;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.control.util.XPathTool;
-import org.bpelunit.framework.exception.HeaderProcessingException;
-import org.bpelunit.framework.exception.SOAPEncodingException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.model.test.activity.Activity;
-import org.bpelunit.framework.model.test.activity.ActivityContext;
-import org.bpelunit.framework.model.test.report.ArtefactStatus;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
-import org.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.control.ext.ISOAPEncoder;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.control.util.XPathTool;
+import net.bpelunit.framework.exception.HeaderProcessingException;
+import net.bpelunit.framework.exception.SOAPEncodingException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.activity.Activity;
+import net.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.report.StateData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;

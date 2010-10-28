@@ -7,7 +7,7 @@
 IHeaderProcessor
 </TITLE>
 
-<META NAME="keywords" CONTENT="org.bpelunit.framework.control.ext.IHeaderProcessor interface">
+<META NAME="keywords" CONTENT="net.bpelunit.framework.control.ext.IHeaderProcessor interface">
 
 <LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../../stylesheet.css" TITLE="Style">
 
@@ -51,8 +51,8 @@ function windowTitle()
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../../../../org/bpelunit/framework/control/ext/IBPELDeployer.html" title="interface in org.bpelunit.framework.control.ext"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../../../../org/bpelunit/framework/control/ext/ISOAPEncoder.html" title="interface in org.bpelunit.framework.control.ext"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../../../../org/bpelunit/framework/control/ext/IBPELDeployer.html" title="interface in net.bpelunit.framework.control.ext"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../org/bpelunit/framework/control/ext/ISOAPEncoder.html" title="interface in net.bpelunit.framework.control.ext"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../../../../index.html?org/bpelunit/framework/control/ext/IHeaderProcessor.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="IHeaderProcessor.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -84,7 +84,7 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHO
 <!-- ======== START OF CLASS DATA ======== -->
 <H2>
 <FONT SIZE="-1">
-org.bpelunit.framework.control.ext</FONT>
+net.bpelunit.framework.control.ext</FONT>
 <BR>
 Interface IHeaderProcessor</H2>
 <HR>
@@ -100,8 +100,8 @@ The IHeaderProcessor interface represents a SOAP Header Processor and is intende
  processor will be created by the framework.
  
  A header processor may be specified at any given activity. The order in which the
- <A HREF="../../../../../org/bpelunit/framework/control/ext/IHeaderProcessor.html#processSend(org.bpelunit.framework.model.test.activity.ActivityContext, org.bpelunit.framework.control.ext.SendPackage)"><CODE>processSend(ActivityContext, SendPackage)</CODE></A> and
- <A HREF="../../../../../org/bpelunit/framework/control/ext/IHeaderProcessor.html#processReceive(org.bpelunit.framework.model.test.activity.ActivityContext, SOAPMessage)"><CODE>processReceive(ActivityContext, SOAPMessage)</CODE></A> methods are called depends on that
+ <A HREF="../../../../../org/bpelunit/framework/control/ext/IHeaderProcessor.html#processSend(net.bpelunit.framework.model.test.activity.ActivityContext, net.bpelunit.framework.control.ext.SendPackage)"><CODE>processSend(ActivityContext, SendPackage)</CODE></A> and
+ <A HREF="../../../../../org/bpelunit/framework/control/ext/IHeaderProcessor.html#processReceive(net.bpelunit.framework.model.test.activity.ActivityContext, SOAPMessage)"><CODE>processReceive(ActivityContext, SOAPMessage)</CODE></A> methods are called depends on that
  activity.
  
  Properties defined by the tester in the test specifications are set via
@@ -131,7 +131,7 @@ The IHeaderProcessor interface represents a SOAP Header Processor and is intende
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../org/bpelunit/framework/control/ext/IHeaderProcessor.html#processReceive(org.bpelunit.framework.model.test.activity.ActivityContext, SOAPMessage)">processReceive</A></B>(org.bpelunit.framework.model.test.activity.ActivityContext&nbsp;context,
+<TD><CODE><B><A HREF="../../../../../org/bpelunit/framework/control/ext/IHeaderProcessor.html#processReceive(net.bpelunit.framework.model.test.activity.ActivityContext, SOAPMessage)">processReceive</A></B>(net.bpelunit.framework.model.test.activity.ActivityContext&nbsp;context,
                SOAPMessage&nbsp;receivedPackage)</CODE>
 
 <BR>
@@ -140,8 +140,8 @@ The IHeaderProcessor interface represents a SOAP Header Processor and is intende
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../org/bpelunit/framework/control/ext/IHeaderProcessor.html#processSend(org.bpelunit.framework.model.test.activity.ActivityContext, org.bpelunit.framework.control.ext.SendPackage)">processSend</A></B>(org.bpelunit.framework.model.test.activity.ActivityContext&nbsp;context,
-            <A HREF="../../../../../org/bpelunit/framework/control/ext/SendPackage.html" title="class in org.bpelunit.framework.control.ext">SendPackage</A>&nbsp;sendPackage)</CODE>
+<TD><CODE><B><A HREF="../../../../../org/bpelunit/framework/control/ext/IHeaderProcessor.html#processSend(net.bpelunit.framework.model.test.activity.ActivityContext, net.bpelunit.framework.control.ext.SendPackage)">processSend</A></B>(net.bpelunit.framework.model.test.activity.ActivityContext&nbsp;context,
+            <A HREF="../../../../../org/bpelunit/framework/control/ext/SendPackage.html" title="class in net.bpelunit.framework.control.ext">SendPackage</A>&nbsp;sendPackage)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Process a SOAP Message which is intended to be sent to a web service.</TD>
@@ -183,36 +183,36 @@ void <B>setProperty</B>(java.lang.String&nbsp;name,
 </DL>
 <HR>
 
-<A NAME="processSend(org.bpelunit.framework.model.test.activity.ActivityContext, org.bpelunit.framework.control.ext.SendPackage)"><!-- --></A><H3>
+<A NAME="processSend(net.bpelunit.framework.model.test.activity.ActivityContext, net.bpelunit.framework.control.ext.SendPackage)"><!-- --></A><H3>
 processSend</H3>
 <PRE>
-void <B>processSend</B>(org.bpelunit.framework.model.test.activity.ActivityContext&nbsp;context,
-                 <A HREF="../../../../../org/bpelunit/framework/control/ext/SendPackage.html" title="class in org.bpelunit.framework.control.ext">SendPackage</A>&nbsp;sendPackage)
-                 throws org.bpelunit.framework.exception.HeaderProcessingException</PRE>
+void <B>processSend</B>(net.bpelunit.framework.model.test.activity.ActivityContext&nbsp;context,
+                 <A HREF="../../../../../org/bpelunit/framework/control/ext/SendPackage.html" title="class in net.bpelunit.framework.control.ext">SendPackage</A>&nbsp;sendPackage)
+                 throws net.bpelunit.framework.exception.HeaderProcessingException</PRE>
 <DL>
 <DD>Process a SOAP Message which is intended to be sent to a web service.
 <P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>context</CODE> - activity context<DD><CODE>sendPackage</CODE> - the data to be sent
 <DT><B>Throws:</B>
-<DD><CODE>org.bpelunit.framework.exception.HeaderProcessingException</CODE></DL>
+<DD><CODE>net.bpelunit.framework.exception.HeaderProcessingException</CODE></DL>
 </DD>
 </DL>
 <HR>
 
-<A NAME="processReceive(org.bpelunit.framework.model.test.activity.ActivityContext, SOAPMessage)"><!-- --></A><H3>
+<A NAME="processReceive(net.bpelunit.framework.model.test.activity.ActivityContext, SOAPMessage)"><!-- --></A><H3>
 processReceive</H3>
 <PRE>
-void <B>processReceive</B>(org.bpelunit.framework.model.test.activity.ActivityContext&nbsp;context,
+void <B>processReceive</B>(net.bpelunit.framework.model.test.activity.ActivityContext&nbsp;context,
                     SOAPMessage&nbsp;receivedPackage)
-                    throws org.bpelunit.framework.exception.HeaderProcessingException</PRE>
+                    throws net.bpelunit.framework.exception.HeaderProcessingException</PRE>
 <DL>
 <DD>Process a SOAP Message which has been received from a web service.
 <P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>context</CODE> - activity context<DD><CODE>receivedPackage</CODE> - the received data
 <DT><B>Throws:</B>
-<DD><CODE>org.bpelunit.framework.exception.HeaderProcessingException</CODE></DL>
+<DD><CODE>net.bpelunit.framework.exception.HeaderProcessingException</CODE></DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->
@@ -245,8 +245,8 @@ void <B>processReceive</B>(org.bpelunit.framework.model.test.activity.ActivityCo
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../../../../org/bpelunit/framework/control/ext/IBPELDeployer.html" title="interface in org.bpelunit.framework.control.ext"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../../../../org/bpelunit/framework/control/ext/ISOAPEncoder.html" title="interface in org.bpelunit.framework.control.ext"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../../../../org/bpelunit/framework/control/ext/IBPELDeployer.html" title="interface in net.bpelunit.framework.control.ext"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../org/bpelunit/framework/control/ext/ISOAPEncoder.html" title="interface in net.bpelunit.framework.control.ext"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../../../../index.html?org/bpelunit/framework/control/ext/IHeaderProcessor.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="IHeaderProcessor.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;

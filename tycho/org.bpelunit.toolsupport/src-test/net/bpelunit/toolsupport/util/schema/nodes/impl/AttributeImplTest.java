@@ -1,13 +1,13 @@
-package org.bpelunit.toolsupport.util.schema.nodes.impl;
+package net.bpelunit.toolsupport.util.schema.nodes.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import javax.xml.namespace.QName;
 
-import org.bpelunit.toolsupport.util.schema.nodes.Attribute;
-import org.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
-import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+import net.bpelunit.toolsupport.util.schema.nodes.Attribute;
+import net.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
+import net.bpelunit.toolsupport.util.schema.nodes.SimpleType;
 import org.junit.Before;
 import org.junit.Test;
 

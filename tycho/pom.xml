@@ -45,10 +45,10 @@
   </build>
 
   <modules>
-    <module>org.bpelunit.framework.client.eclipse</module>
-    <module>org.bpelunit.toolsupport</module>
-    <module>org.bpelunit.eclipse.feature</module>
-    <module>org.bpelunit.eclipse.updatesite</module>
+    <module>net.bpelunit.framework.client.eclipse</module>
+    <module>net.bpelunit.toolsupport</module>
+    <module>net.bpelunit.eclipse.feature</module>
+    <module>net.bpelunit.eclipse.updatesite</module>
   </modules>
 
 </project>

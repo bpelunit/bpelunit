@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.util;
+package net.bpelunit.framework.control.util;
 
 import java.util.Iterator;
 import java.util.List;

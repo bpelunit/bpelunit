@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.editors.wizards.fields;
+package net.bpelunit.toolsupport.editors.wizards.fields;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -9,13 +9,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.toolsupport.ToolSupportActivator;
-import org.bpelunit.toolsupport.editors.wizards.components.StringValueListener;
-import org.bpelunit.toolsupport.util.NamespaceEditor;
-import org.bpelunit.toolsupport.util.schema.nodes.Attribute;
-import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.editors.wizards.components.StringValueListener;
+import net.bpelunit.toolsupport.util.NamespaceEditor;
+import net.bpelunit.toolsupport.util.schema.nodes.Attribute;
+import net.bpelunit.toolsupport.util.schema.nodes.ComplexType;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TreeEditor;
 import org.eclipse.swt.events.FocusAdapter;

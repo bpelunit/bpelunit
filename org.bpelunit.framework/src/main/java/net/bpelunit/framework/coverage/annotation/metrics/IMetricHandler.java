@@ -1,8 +1,8 @@
-package org.bpelunit.framework.coverage.annotation.metrics;
+package net.bpelunit.framework.coverage.annotation.metrics;
 
 import java.util.List;
 
-import org.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
 import org.jdom.Element;
 
 /*

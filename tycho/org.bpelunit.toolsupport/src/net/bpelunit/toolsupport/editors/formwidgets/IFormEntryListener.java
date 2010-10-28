@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package org.bpelunit.toolsupport.editors.formwidgets;
+package net.bpelunit.toolsupport.editors.formwidgets;
 
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 

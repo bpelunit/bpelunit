@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.datasource.csv;
+package net.bpelunit.framework.control.datasource.csv;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.InputStream;
 import java.util.List;
 
-import org.bpelunit.framework.control.datasource.DataSourceHelper;
-import org.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.control.datasource.DataSourceHelper;
+import net.bpelunit.framework.exception.DataSourceException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

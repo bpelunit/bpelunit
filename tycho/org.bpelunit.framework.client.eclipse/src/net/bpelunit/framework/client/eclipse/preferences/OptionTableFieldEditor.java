@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.preferences;
+package net.bpelunit.framework.client.eclipse.preferences;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,16 +11,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
-import org.bpelunit.framework.client.eclipse.dialog.field.DeployerOptionModifyListener;
-import org.bpelunit.framework.client.eclipse.dialog.field.SelectionField;
-import org.bpelunit.framework.client.eclipse.dialog.field.TextField;
-import org.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
-import org.bpelunit.framework.client.model.ConfigurationOption;
-import org.bpelunit.framework.client.model.DeployerExtension;
-import org.bpelunit.framework.client.model.ExtensionUtil;
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.util.ExtensionRegistry;
+import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
+import net.bpelunit.framework.client.eclipse.dialog.field.DeployerOptionModifyListener;
+import net.bpelunit.framework.client.eclipse.dialog.field.SelectionField;
+import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
+import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
+import net.bpelunit.framework.client.model.ConfigurationOption;
+import net.bpelunit.framework.client.model.DeployerExtension;
+import net.bpelunit.framework.client.model.ExtensionUtil;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.util.ExtensionRegistry;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditor;

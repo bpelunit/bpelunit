@@ -1,15 +1,15 @@
-package org.bpelunit.utils.datasourceinliner;
+package net.bpelunit.utils.datasourceinliner;
 
 import java.util.HashMap;
 
-import org.bpelunit.framework.base.BPELUnitBaseRunner;
-import org.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.base.BPELUnitBaseRunner;
+import net.bpelunit.framework.exception.ConfigurationException;
 
 /**
  * Dummy runner which does not set up any kind of logging, and has no special
  * logic. Useful for creating data sources in the inliner. Should
  * <emph>NOT</emph> be used to run real tests: if you want a Runner for testing
- * purposes, you should use {@link org.bpelunit.test.util.TestTestRunner} from
+ * purposes, you should use {@link net.bpelunit.test.util.TestTestRunner} from
  * the core project, instead.
  *
  * @author Antonio García-Domínguez

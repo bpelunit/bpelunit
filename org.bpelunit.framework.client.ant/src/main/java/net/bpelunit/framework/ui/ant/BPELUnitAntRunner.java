@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.ui.ant;
+package net.bpelunit.framework.ui.ant;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,18 +15,18 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.WriterAppender;
 import org.apache.log4j.varia.NullAppender;
-import org.bpelunit.framework.base.BPELUnitBaseRunner;
-import org.bpelunit.framework.control.result.ITestResultListener;
-import org.bpelunit.framework.control.result.XMLResultProducer;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.TestCase;
-import org.bpelunit.framework.model.test.TestSuite;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
-import org.bpelunit.framework.ui.ant.BPELUnit.Logging;
-import org.bpelunit.framework.ui.ant.BPELUnit.Output;
+import net.bpelunit.framework.base.BPELUnitBaseRunner;
+import net.bpelunit.framework.control.result.ITestResultListener;
+import net.bpelunit.framework.control.result.XMLResultProducer;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.ui.ant.BPELUnit.Logging;
+import net.bpelunit.framework.ui.ant.BPELUnit.Output;
 
 /**
  * The ant implementation of the BPELUnit runner. Offers support for outputting logging and test

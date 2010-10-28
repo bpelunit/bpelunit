@@ -4,12 +4,12 @@
  * 
  */
 
-package org.bpelunit.framework.control.ext;
+package net.bpelunit.framework.control.ext;
 
-import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.EndPointException;
-import org.bpelunit.framework.model.Partner;
+import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.EndPointException;
+import net.bpelunit.framework.model.Partner;
 
 /**
  * This interface implementations provide two services to the corresponding

@@ -3,22 +3,22 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.components;
+package net.bpelunit.toolsupport.editors.wizards.components;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
-import org.bpelunit.framework.client.eclipse.dialog.field.TextField;
-import org.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
-import org.bpelunit.framework.control.util.ActivityUtil;
-import org.bpelunit.framework.xml.suite.XMLCondition;
-import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
-import org.bpelunit.toolsupport.editors.formwidgets.HyperlinkField;
-import org.bpelunit.toolsupport.editors.formwidgets.HyperlinkField.IHyperLinkFieldListener;
-import org.bpelunit.toolsupport.editors.wizards.NamespaceWizard;
-import org.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
-import org.bpelunit.toolsupport.util.XPathValidator;
+import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
+import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
+import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
+import net.bpelunit.framework.control.util.ActivityUtil;
+import net.bpelunit.framework.xml.suite.XMLCondition;
+import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
+import net.bpelunit.toolsupport.editors.formwidgets.HyperlinkField;
+import net.bpelunit.toolsupport.editors.formwidgets.HyperlinkField.IHyperLinkFieldListener;
+import net.bpelunit.toolsupport.editors.wizards.NamespaceWizard;
+import net.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
+import net.bpelunit.toolsupport.util.XPathValidator;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;

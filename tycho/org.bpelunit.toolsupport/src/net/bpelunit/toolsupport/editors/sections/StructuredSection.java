@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.sections;
+package net.bpelunit.toolsupport.editors.sections;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;

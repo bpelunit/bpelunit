@@ -1,4 +1,4 @@
-package org.bpelunit.framework.coverage.receiver;
+package net.bpelunit.framework.coverage.receiver;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import org.bpelunit.framework.coverage.annotation.Instrumenter;
-import org.bpelunit.framework.coverage.annotation.MetricsManager;
-import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
+import net.bpelunit.framework.coverage.annotation.Instrumenter;
+import net.bpelunit.framework.coverage.annotation.MetricsManager;
+import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 
 /*
  * 

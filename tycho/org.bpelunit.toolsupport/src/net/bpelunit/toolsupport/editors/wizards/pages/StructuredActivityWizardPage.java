@@ -3,13 +3,13 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.pages;
+package net.bpelunit.toolsupport.editors.wizards.pages;
 
-import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
-import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
-import org.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
-import org.bpelunit.toolsupport.editors.wizards.fields.IListAdapter;
-import org.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
+import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
+import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
+import net.bpelunit.toolsupport.editors.wizards.fields.IListAdapter;
+import net.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
 
 /**
  * Abstract superclass for wizard pages which allow adding, editing, and removing of elements.

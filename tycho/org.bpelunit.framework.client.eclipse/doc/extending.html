@@ -35,17 +35,17 @@
 </ul>
 <p>&nbsp;</p>
 <h4>Adding a new BPEL Deployer</h4>
-<p> Extension Point: <font face="Courier New, Courier, mono">org.bpelunit.framework.client.eclipse.bpelDeployer</font>.</p>
+<p> Extension Point: <font face="Courier New, Courier, mono">net.bpelunit.framework.client.eclipse.bpelDeployer</font>.</p>
 <p>BPELUnit comes with four BPEL deployers. Two of them are actual deployers, 
   one deploying to the Oracle BPEL Server, and one to the ActiveBPEL engine. If 
   you wish to add a new deployer, add an extension to your <font face="Courier New, Courier, mono">plugin.xml</font>, 
   like the following code:</p>
 <pre>&lt;extension
-   point=&quot;org.bpelunit.framework.client.eclipse.bpelDeployer&quot;&gt;
+   point=&quot;net.bpelunit.framework.client.eclipse.bpelDeployer&quot;&gt;
    &lt;bpelDeployer
 		id=&quot;oracle&quot;
 		name=&quot;Oracle Deployer&quot;
-		deployerClass=&quot;org.bpelunit.framework.control.deploy.oracle.OracleDeployer&quot;
+		deployerClass=&quot;net.bpelunit.framework.control.deploy.oracle.OracleDeployer&quot;
 		general_options=&quot;OracleDirectory,OracleDomain,OracleDomainPassword&quot;
 		suite_options=&quot;BPELJARFile&quot;
    /&gt;
@@ -67,14 +67,14 @@
 </ul>
 <p>&nbsp;</p>
 <h4>Adding a new SOAP Encoder/Decoder</h4>
-<p> Extension Point: <font face="Courier New, Courier, mono">org.bpelunit.framework.client.eclipse.soapEncoder</font>.</p>
+<p> Extension Point: <font face="Courier New, Courier, mono">net.bpelunit.framework.client.eclipse.soapEncoder</font>.</p>
 <p>BPELUnit comes with two SOAP Encoder/Decoders - one for document/literal, and 
   one for rpc/literal style. If you wish to add a new SOAP Encoder/Decoder, add 
   an extension to your <font face="Courier New, Courier, mono">plugin.xml</font>, 
   like the following code:</p>
-<pre>&lt;extension<br>    point=&quot;org.bpelunit.framework.client.eclipse.soapEncoder&quot;&gt;<br>  &lt;soapProcessor<br>		id=&quot;document/literal&quot;
+<pre>&lt;extension<br>    point=&quot;net.bpelunit.framework.client.eclipse.soapEncoder&quot;&gt;<br>  &lt;soapProcessor<br>		id=&quot;document/literal&quot;
 		name=&quot;Document/Literal Encoder&quot;
-		encoderClass=&quot;org.bpelunit.framework.control.soap.DocumentLiteralEncoder&quot;<br>	/&gt;<br>&lt;/extension&gt;</pre>
+		encoderClass=&quot;net.bpelunit.framework.control.soap.DocumentLiteralEncoder&quot;<br>	/&gt;<br>&lt;/extension&gt;</pre>
 <p>The options are as follows:</p>
 <ul>
   <li><strong>id</strong>: An ID for this SOAP Encoder/Decoder. The ID must be 
@@ -87,11 +87,11 @@
 </ul>
 <p>&nbsp;</p>
 <h4>Adding a new Header Processor</h4>
-<p> Extension Point: <font face="Courier New, Courier, mono">org.bpelunit.framework.client.eclipse.headerProcessor</font>.</p>
+<p> Extension Point: <font face="Courier New, Courier, mono">net.bpelunit.framework.client.eclipse.headerProcessor</font>.</p>
 <p>BPELUnit comes with one Header Processor, implementing the WS-Addressing protocol. 
   If you wish to add a new Header Processor, add an extension to your <font face="Courier New, Courier, mono">plugin.xml</font>, 
   like the following code:</p>
-<pre>&lt;extension<br>    point=&quot;org.bpelunit.framework.client.eclipse.headerProcessor&quot;&gt;<br>  &lt;headerProcessor<br>		id=&quot;wsa&quot;<br>		name=&quot;WS-Adressing Header Processor&quot;<br>		processorClass=&quot;org.bpelunit.framework.control.soap.WSAHeaderProcessor&quot;/&gt;<br>&lt;/extension&gt;</pre>
+<pre>&lt;extension<br>    point=&quot;net.bpelunit.framework.client.eclipse.headerProcessor&quot;&gt;<br>  &lt;headerProcessor<br>		id=&quot;wsa&quot;<br>		name=&quot;WS-Adressing Header Processor&quot;<br>		processorClass=&quot;net.bpelunit.framework.control.soap.WSAHeaderProcessor&quot;/&gt;<br>&lt;/extension&gt;</pre>
 <p>The options are as follows:</p>
 <ul>
   <li><strong>id</strong>: An ID for this header processor, identifying it in 

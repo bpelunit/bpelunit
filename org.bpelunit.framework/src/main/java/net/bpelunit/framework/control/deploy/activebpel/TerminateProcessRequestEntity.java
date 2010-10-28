@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.deploy.activebpel;
+package net.bpelunit.framework.control.deploy.activebpel;
 
 import java.io.IOException;
 

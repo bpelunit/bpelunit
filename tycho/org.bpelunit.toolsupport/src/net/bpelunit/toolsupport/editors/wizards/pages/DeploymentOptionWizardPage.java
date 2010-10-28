@@ -3,24 +3,24 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.pages;
+package net.bpelunit.toolsupport.editors.wizards.pages;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bpelunit.framework.client.eclipse.ExtensionControl;
-import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
-import org.bpelunit.framework.client.eclipse.dialog.field.DeployerOptionModifyListener;
-import org.bpelunit.framework.client.eclipse.dialog.field.SelectionField;
-import org.bpelunit.framework.client.eclipse.dialog.field.TextField;
-import org.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.util.ActivityUtil;
-import org.bpelunit.framework.control.util.ExtensionRegistry;
-import org.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
-import org.bpelunit.framework.xml.suite.XMLProperty;
-import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
-import org.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
+import net.bpelunit.framework.client.eclipse.ExtensionControl;
+import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
+import net.bpelunit.framework.client.eclipse.dialog.field.DeployerOptionModifyListener;
+import net.bpelunit.framework.client.eclipse.dialog.field.SelectionField;
+import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
+import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.util.ActivityUtil;
+import net.bpelunit.framework.control.util.ExtensionRegistry;
+import net.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
+import net.bpelunit.framework.xml.suite.XMLProperty;
+import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
+import net.bpelunit.toolsupport.editors.wizards.fields.ListDialogField;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.window.Window;

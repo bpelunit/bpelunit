@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test.data;
+package net.bpelunit.framework.model.test.data;
 
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.model.test.activity.Activity;
-import org.bpelunit.framework.model.test.report.ArtefactStatus;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.activity.Activity;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 
 /**
  * Abstract superclass of the two data specification packages Send and Receive.

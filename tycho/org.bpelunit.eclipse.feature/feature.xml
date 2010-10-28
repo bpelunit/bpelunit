@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.bpelunit.eclipse.feature"
+      id="net.bpelunit.eclipse.feature"
       label="BPELUnit Feature"
       version="1.4.1.qualifier"
       provider-name="Leibniz Universität Hannover">
@@ -110,49 +110,49 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </url>
 
    <plugin
-         id="org.bpelunit.framework"
+         id="net.bpelunit.framework"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.bpelunit.framework.client.eclipse"
+         id="net.bpelunit.framework.client.eclipse"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.bpelunit.framework.control.datasource.csv"
+         id="net.bpelunit.framework.control.datasource.csv"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.bpelunit.framework.control.datasource.excel"
+         id="net.bpelunit.framework.control.datasource.excel"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.bpelunit.framework.control.datasource.html"
+         id="net.bpelunit.framework.control.datasource.html"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.bpelunit.framework.control.datasource.ods"
+         id="net.bpelunit.framework.control.datasource.ods"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.bpelunit.toolsupport"
+         id="net.bpelunit.toolsupport"
          download-size="0"
          install-size="0"
          version="0.0.0"

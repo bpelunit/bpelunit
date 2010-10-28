@@ -36,12 +36,12 @@
               <classifier>bundle</classifier>
               <manifestLocation>META-INF</manifestLocation>
               <instructions>
-		<Import-Package>org.bpelunit.framework.control.datasource;*</Import-Package>
+		<Import-Package>net.bpelunit.framework.control.datasource;*</Import-Package>
                 <Bundle-SymbolicName>
-                  org.bpelunit.framework.control.datasource.html;singleton:=true
+                  net.bpelunit.framework.control.datasource.html;singleton:=true
                 </Bundle-SymbolicName>
                 <Require-Bundle>
-                  org.bpelunit.framework.client.eclipse
+                  net.bpelunit.framework.client.eclipse
                 </Require-Bundle>
                 <Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
                 <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>

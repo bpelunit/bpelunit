@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.fields;
+package net.bpelunit.toolsupport.editors.wizards.fields;
 
 /**
  * Change listener used by <code>ListDialogField</code> and <code>CheckedListDialogField</code>

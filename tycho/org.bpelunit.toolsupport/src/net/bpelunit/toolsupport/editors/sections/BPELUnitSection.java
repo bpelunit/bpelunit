@@ -3,14 +3,14 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.sections;
+package net.bpelunit.toolsupport.editors.sections;
 
 import javax.wsdl.Definition;
 
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.toolsupport.editors.BPELUnitEditor;
-import org.bpelunit.toolsupport.editors.IModelChangedListener;
-import org.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.toolsupport.editors.BPELUnitEditor;
+import net.bpelunit.toolsupport.editors.IModelChangedListener;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;

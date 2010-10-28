@@ -8,19 +8,19 @@
   </xb:namespace>
  
   <xb:namespace uri="http://www.bpelunit.org/schema/testSuite">
-    <xb:package>org.bpelunit.framework.xml.suite</xb:package>
+    <xb:package>net.bpelunit.framework.xml.suite</xb:package>
   </xb:namespace>
  
   <xb:namespace uri="http://www.bpelunit.org/schema/testResult">
-    <xb:package>org.bpelunit.framework.xml.result</xb:package>
+    <xb:package>net.bpelunit.framework.xml.result</xb:package>
   </xb:namespace>
  
   <xb:namespace uri="http://www.bpelunit.org/schema/testConfiguration">
-    <xb:package>org.bpelunit.framework.xml.config</xb:package>
+    <xb:package>net.bpelunit.framework.xml.config</xb:package>
   </xb:namespace>
  
   <xb:namespace uri="http://www.bpelunit.org/schema/testExtension">
-    <xb:package>org.bpelunit.framework.xml.extension</xb:package>
+    <xb:package>net.bpelunit.framework.xml.extension</xb:package>
   </xb:namespace>
  
  

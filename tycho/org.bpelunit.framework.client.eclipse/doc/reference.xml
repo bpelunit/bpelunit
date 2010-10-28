@@ -6,16 +6,16 @@
   
     <topic label="API Reference" href="doc/reference/api/overview-summary.html"> 
 	
-      <topic label="org.bpelunit.framework" href="doc/reference/api/org/bpelunit/framework/package-summary.html"/>
-      <topic label="org.bpelunit.framework.control.ext" href="doc/reference/api/org/bpelunit/framework/control/ext/package-summary.html"/>
-      <topic label="org.bpelunit.framework.control.result" href="doc/reference/api/org/bpelunit/framework/control/result/package-summary.html"/>
+      <topic label="net.bpelunit.framework" href="doc/reference/api/org/bpelunit/framework/package-summary.html"/>
+      <topic label="net.bpelunit.framework.control.ext" href="doc/reference/api/org/bpelunit/framework/control/ext/package-summary.html"/>
+      <topic label="net.bpelunit.framework.control.result" href="doc/reference/api/org/bpelunit/framework/control/result/package-summary.html"/>
 	  
     </topic>
     <topic label="Extension Points Reference" href="doc/reference/extension-points/index.html"> 
 	
-      <topic label="org.bpelunit.framework.client.eclipse.bpelDeployer" href="doc/reference/extension-points/org_bpelunit_framework_client_eclipse_bpelDeployer.html" />
-      <topic label="org.bpelunit.framework.client.eclipse.headerProcessor" href="doc/reference/extension-points/org_bpelunit_framework_client_eclipse_headerProcessor.html" />
-      <topic label="org.bpelunit.framework.client.eclipse.soapEncoder" href="doc/reference/extension-points/org_bpelunit_framework_client_eclipse_soapEncoder.html" />
+      <topic label="net.bpelunit.framework.client.eclipse.bpelDeployer" href="doc/reference/extension-points/org_bpelunit_framework_client_eclipse_bpelDeployer.html" />
+      <topic label="net.bpelunit.framework.client.eclipse.headerProcessor" href="doc/reference/extension-points/org_bpelunit_framework_client_eclipse_headerProcessor.html" />
+      <topic label="net.bpelunit.framework.client.eclipse.soapEncoder" href="doc/reference/extension-points/org_bpelunit_framework_client_eclipse_soapEncoder.html" />
 	  
     </topic>
   </toc>

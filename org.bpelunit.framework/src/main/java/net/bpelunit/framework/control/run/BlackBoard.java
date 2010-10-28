@@ -3,14 +3,14 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.run;
+package net.bpelunit.framework.control.run;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.util.BPELUnitConstants;
 
 /**
  * Class used for thread communication in the test runner.

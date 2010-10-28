@@ -1,6 +1,6 @@
-package org.bpelunit.test.templates;
+package net.bpelunit.test.templates;
 
-import org.bpelunit.test.util.TestUtil;
+import net.bpelunit.test.util.TestUtil;
 import org.junit.Test;
 
 /**

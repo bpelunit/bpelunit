@@ -1,4 +1,4 @@
-package org.bpelunit.framework.control.ext;
+package net.bpelunit.framework.control.ext;
 
 import java.io.InputStream;
 import java.lang.annotation.ElementType;
@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.exception.DataSourceException;
 
 /**
  * Represents a data source for Apache Velocity templates. Data sources
@@ -30,8 +30,8 @@ import org.bpelunit.framework.exception.DataSourceException;
  * BPELUnit does not provide any conversion or validation facilities: these will
  * have to be implemented in the concrete data source class itself.
  *
- * @see org.bpelunit.framework.model.test.TestCase#createVelocityContext()
- * @see org.bpelunit.framework.control.util.ExtensionRegistry
+ * @see net.bpelunit.framework.model.test.TestCase#createVelocityContext()
+ * @see net.bpelunit.framework.control.util.ExtensionRegistry
  * @author Antonio García-Domínguez
  * @version 1.0
  */

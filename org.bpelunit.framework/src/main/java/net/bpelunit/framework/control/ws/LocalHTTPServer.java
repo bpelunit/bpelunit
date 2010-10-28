@@ -3,13 +3,13 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.ws;
+package net.bpelunit.framework.control.ws;
 
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.run.TestCaseRunner;
-import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.receiver.MarkersServiceHandler;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.coverage.CoverageConstants;
+import net.bpelunit.framework.coverage.receiver.MarkersServiceHandler;
 import org.mortbay.http.HttpContext;
 import org.mortbay.http.HttpServer;
 import org.mortbay.http.SocketListener;

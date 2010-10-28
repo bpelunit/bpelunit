@@ -1,12 +1,12 @@
-package org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.impl;
+package net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.impl;
 
-import static org.bpelunit.framework.coverage.CoverageConstants.ADDRESS_OF_SERVICE;
-import static org.bpelunit.framework.coverage.CoverageConstants.COVERAGETOOL_NAMESPACE;
-import static org.bpelunit.framework.coverage.CoverageConstants.PARTNERLINK_NAME;
-import static org.bpelunit.framework.coverage.CoverageConstants.PARTNERLINK_NAMESPACE;
-import static org.bpelunit.framework.coverage.CoverageConstants.PORT_OF_SERVICE;
-import static org.bpelunit.framework.coverage.CoverageConstants.PREFIX_COPY_OF_ARCHIVEFILE;
-import static org.bpelunit.framework.coverage.CoverageConstants.SERVICE_NAME;
+import static net.bpelunit.framework.coverage.CoverageConstants.ADDRESS_OF_SERVICE;
+import static net.bpelunit.framework.coverage.CoverageConstants.COVERAGETOOL_NAMESPACE;
+import static net.bpelunit.framework.coverage.CoverageConstants.PARTNERLINK_NAME;
+import static net.bpelunit.framework.coverage.CoverageConstants.PARTNERLINK_NAMESPACE;
+import static net.bpelunit.framework.coverage.CoverageConstants.PORT_OF_SERVICE;
+import static net.bpelunit.framework.coverage.CoverageConstants.PREFIX_COPY_OF_ARCHIVEFILE;
+import static net.bpelunit.framework.coverage.CoverageConstants.SERVICE_NAME;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,10 +18,10 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.IDeploymentArchiveHandler;
-import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.IDeploymentArchiveHandler;
+import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;

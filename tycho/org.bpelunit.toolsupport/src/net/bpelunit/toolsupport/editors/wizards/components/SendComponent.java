@@ -3,27 +3,27 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.components;
+package net.bpelunit.toolsupport.editors.wizards.components;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.xmlbeans.XmlOptions;
-import org.bpelunit.framework.xml.suite.XMLAnyElement;
-import org.bpelunit.framework.xml.suite.XMLSendActivity;
-import org.bpelunit.toolsupport.ToolSupportActivator;
-import org.bpelunit.toolsupport.editors.formwidgets.HyperlinkField;
-import org.bpelunit.toolsupport.editors.formwidgets.HyperlinkField.IHyperLinkFieldListener;
-import org.bpelunit.toolsupport.editors.wizards.NamespaceWizard;
-import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
-import org.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
-import org.bpelunit.toolsupport.editors.wizards.fields.LayoutUtil;
-import org.bpelunit.toolsupport.editors.wizards.fields.MessageEditor;
-import org.bpelunit.toolsupport.editors.wizards.fields.SelectionButtonDialogField;
-import org.bpelunit.toolsupport.editors.wizards.fields.StringDialogField;
-import org.bpelunit.toolsupport.editors.wizards.fields.TextDialogField;
-import org.bpelunit.toolsupport.editors.wizards.pages.OperationWizardPage;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.framework.xml.suite.XMLAnyElement;
+import net.bpelunit.framework.xml.suite.XMLSendActivity;
+import net.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.editors.formwidgets.HyperlinkField;
+import net.bpelunit.toolsupport.editors.formwidgets.HyperlinkField.IHyperLinkFieldListener;
+import net.bpelunit.toolsupport.editors.wizards.NamespaceWizard;
+import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
+import net.bpelunit.toolsupport.editors.wizards.fields.LayoutUtil;
+import net.bpelunit.toolsupport.editors.wizards.fields.MessageEditor;
+import net.bpelunit.toolsupport.editors.wizards.fields.SelectionButtonDialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.StringDialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.TextDialogField;
+import net.bpelunit.toolsupport.editors.wizards.pages.OperationWizardPage;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;

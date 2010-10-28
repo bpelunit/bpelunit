@@ -9,7 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *     Stephan Michels, stephan@apache.org - 104944 [JUnit] Unnecessary code in JUnitProgressBar
  *******************************************************************************/
-package org.bpelunit.framework.client.eclipse.views;
+package net.bpelunit.framework.client.eclipse.views;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;

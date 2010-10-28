@@ -3,10 +3,10 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.result;
+package net.bpelunit.framework.control.result;
 
-import org.bpelunit.framework.model.test.TestCase;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 
 /**
  * The test result listener interface is intended to be implemented by BPELUnit clients who wish to

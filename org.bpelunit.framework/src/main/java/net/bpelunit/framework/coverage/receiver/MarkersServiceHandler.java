@@ -1,4 +1,4 @@
-package org.bpelunit.framework.coverage.receiver;
+package net.bpelunit.framework.coverage.receiver;
 
 
 
@@ -8,9 +8,9 @@ import java.io.InputStreamReader;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
-import org.bpelunit.framework.coverage.CoverageConstants;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.coverage.CoverageConstants;
 import org.mortbay.http.HttpException;
 import org.mortbay.http.HttpRequest;
 import org.mortbay.http.HttpResponse;

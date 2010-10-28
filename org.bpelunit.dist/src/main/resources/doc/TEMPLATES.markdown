@@ -124,7 +124,7 @@ If you have set up a data source, it will place some variables into the context 
 
 ### Predefined activity variables ###
 
-- `$xpath` (org.bpelunit.framework.util.control.XPathTool): utility object for running XPath queries on DOM nodes. For more information, please see below.
+- `$xpath` (net.bpelunit.framework.util.control.XPathTool): utility object for running XPath queries on DOM nodes. For more information, please see below.
 
 ### Custom activity variables ###
 
@@ -197,7 +197,7 @@ The following section describes the requirements that must be met by the class t
 
 ### Implement the data source class ###
 
-Data source classes should belong to the `org.bpelunit.framework.control.datasource` package and implement the `org.bpelunit.framework.control.ext.IDataSource` interface, which has the following methods:
+Data source classes should belong to the `net.bpelunit.framework.control.datasource` package and implement the `net.bpelunit.framework.control.ext.IDataSource` interface, which has the following methods:
 
 - `void close()`, which frees any resources attached to it.
 - `String[] getFieldNames()`, which returns an array of Strings with the names for each field in each row. These names will be used for the names of the template variables.
@@ -217,7 +217,7 @@ Accepted properties are defined using setter methods. For instance, to define th
 - `description`, with a long description of what can be customized with this property.
 - `defaultValue`, with a default value to be used in the Eclipse BPTS editor.
 
-Data source classes are expected to load their full contents in memory and validate their contents and properties on their own as soon as possible. However, they do not have access to the contents of the `<dataSource>` XML element. The BPELUnit core automatically calls the methods in the `IDataSource` interface as required. The `InputStream` is created from the contents of the XML element. For more information, refer to the `getStreamForDataSource` methods of the `org.bpelunit.framework.control.datasource.DataSourceUtil` class.
+Data source classes are expected to load their full contents in memory and validate their contents and properties on their own as soon as possible. However, they do not have access to the contents of the `<dataSource>` XML element. The BPELUnit core automatically calls the methods in the `IDataSource` interface as required. The `InputStream` is created from the contents of the XML element. For more information, refer to the `getStreamForDataSource` methods of the `net.bpelunit.framework.control.datasource.DataSourceUtil` class.
 
 Predefined data sources
 -----------------------

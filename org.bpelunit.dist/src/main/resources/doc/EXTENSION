@@ -41,7 +41,7 @@ to the conf/extensions.xml file, as follows:
 
 		<deployer 
 			type="activebpel"
-			extensionClass="org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer" 
+			extensionClass="net.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer" 
 			/>
 
 The options are as follows:
@@ -58,7 +58,7 @@ If you wish to add a new SOAP Encoder/Decoder, add an extension to the conf/exte
 
 		<encoder 
 			type="document/literal" 
-			extensionClass="org.bpelunit.framework.control.soap.DocumentLiteralEncoder" 
+			extensionClass="net.bpelunit.framework.control.soap.DocumentLiteralEncoder" 
 			/>
 
 The options are as follows:
@@ -78,7 +78,7 @@ to add a new Header Processor, add an extension to your plugin.xml, like the fol
 
 		<headerProcessor 
 			type="wsa" 
-			extensionClass="org.bpelunit.framework.control.soap.WSAHeaderProcessor" 
+			extensionClass="net.bpelunit.framework.control.soap.WSAHeaderProcessor" 
 			/>
 
 The options are as follows:

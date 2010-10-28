@@ -3,10 +3,10 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.dialog.field;
+package net.bpelunit.framework.client.eclipse.dialog.field;
 
-import org.bpelunit.framework.client.eclipse.dialog.Field;
-import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
+import net.bpelunit.framework.client.eclipse.dialog.Field;
+import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;

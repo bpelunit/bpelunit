@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model;
+package net.bpelunit.framework.model;
 
 import java.io.File;
 
@@ -13,9 +13,9 @@ import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 import javax.xml.namespace.QName;
 
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
-import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 
 import com.ibm.wsdl.Constants;
 

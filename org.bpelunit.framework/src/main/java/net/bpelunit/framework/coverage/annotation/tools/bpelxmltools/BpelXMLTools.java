@@ -1,14 +1,14 @@
-package org.bpelunit.framework.coverage.annotation.tools.bpelxmltools;
+package net.bpelunit.framework.coverage.annotation.tools.bpelxmltools;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.control.util.JDomHelper;
-import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.XpathLanguage;
+import net.bpelunit.framework.control.util.JDomHelper;
+import net.bpelunit.framework.coverage.CoverageConstants;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.XpathLanguage;
 import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.Namespace;

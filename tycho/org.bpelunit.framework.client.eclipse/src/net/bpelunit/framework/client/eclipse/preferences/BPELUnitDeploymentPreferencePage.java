@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.preferences;
+package net.bpelunit.framework.client.eclipse.preferences;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
-import org.bpelunit.framework.client.eclipse.ExtensionControl;
-import org.bpelunit.framework.client.model.DeployerExtension;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.ExtensionControl;
+import net.bpelunit.framework.client.model.DeployerExtension;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;

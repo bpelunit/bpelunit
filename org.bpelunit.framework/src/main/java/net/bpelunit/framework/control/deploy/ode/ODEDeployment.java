@@ -4,7 +4,7 @@
  * 
  */
 
-package org.bpelunit.framework.control.deploy.ode;
+package net.bpelunit.framework.control.deploy.ode;
 
 import java.io.IOException;
 import java.net.URI;
@@ -17,14 +17,14 @@ import javax.xml.namespace.QName;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.control.ext.GenericDeployment;
-import org.bpelunit.framework.control.ext.PartnerLink;
-import org.bpelunit.framework.control.util.JDomHelper;
-import org.bpelunit.framework.control.util.ParseUtil;
-import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.model.Partner;
+import net.bpelunit.framework.control.ext.GenericDeployment;
+import net.bpelunit.framework.control.ext.PartnerLink;
+import net.bpelunit.framework.control.util.JDomHelper;
+import net.bpelunit.framework.control.util.ParseUtil;
+import net.bpelunit.framework.coverage.CoverageConstants;
+import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.model.Partner;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
@@ -67,7 +67,7 @@ public class ODEDeployment extends GenericDeployment {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.bpelunit.framework.control.deploy.ode.IDeployment#addLoggingService()
+	 * net.bpelunit.framework.control.deploy.ode.IDeployment#addLoggingService()
 	 */
 	public void addLoggingService(String wsdl) throws ArchiveFileException {
 		addWSDL(wsdl);

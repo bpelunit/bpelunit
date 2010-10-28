@@ -3,14 +3,14 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.sections;
+package net.bpelunit.toolsupport.editors.sections;
 
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.toolsupport.editors.TestSuitePage;
-import org.bpelunit.toolsupport.editors.formwidgets.ContextPart;
-import org.bpelunit.toolsupport.editors.formwidgets.EntryAdapter;
-import org.bpelunit.toolsupport.editors.formwidgets.TextEntry;
-import org.bpelunit.toolsupport.editors.wizards.NamespaceWizard;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.formwidgets.ContextPart;
+import net.bpelunit.toolsupport.editors.formwidgets.EntryAdapter;
+import net.bpelunit.toolsupport.editors.formwidgets.TextEntry;
+import net.bpelunit.toolsupport.editors.wizards.NamespaceWizard;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;

@@ -4,19 +4,19 @@
 	xmlns="http://www.bpelunit.org/schema/testExtension" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	
-	<deployer extensionClass="org.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer" type="activebpel"/>
-	<deployer extensionClass="org.bpelunit.framework.control.deploy.oracle.OracleDeployer" type="oracle"/>
-	<deployer extensionClass="org.bpelunit.framework.control.deploy.simple.TestModeDeployer" type="testmode"/>
-	<deployer extensionClass="org.bpelunit.framework.control.deploy.simple.FixedDeployer" type="fixed"/>
+	<deployer extensionClass="net.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer" type="activebpel"/>
+	<deployer extensionClass="net.bpelunit.framework.control.deploy.oracle.OracleDeployer" type="oracle"/>
+	<deployer extensionClass="net.bpelunit.framework.control.deploy.simple.TestModeDeployer" type="testmode"/>
+	<deployer extensionClass="net.bpelunit.framework.control.deploy.simple.FixedDeployer" type="fixed"/>
 	
-	<encoder type="document/literal" extensionClass="org.bpelunit.framework.control.soap.DocumentLiteralEncoder" />
-	<encoder type="rpc/literal" extensionClass="org.bpelunit.framework.control.soap.RPCLiteralEncoder" />
+	<encoder type="document/literal" extensionClass="net.bpelunit.framework.control.soap.DocumentLiteralEncoder" />
+	<encoder type="rpc/literal" extensionClass="net.bpelunit.framework.control.soap.RPCLiteralEncoder" />
 	
-	<headerProcessor type="wsa" extensionClass="org.bpelunit.framework.control.soap.WSAHeaderProcessor" />
+	<headerProcessor type="wsa" extensionClass="net.bpelunit.framework.control.soap.WSAHeaderProcessor" />
 
-	<dataSource type="velocity" extensionClass="org.bpelunit.framework.control.datasource.VelocityDataSource" />
-	<dataSource type="csv" extensionClass="org.bpelunit.framework.control.datasource.csv.CSVDataSource"/>
-	<dataSource type="excel" extensionClass="org.bpelunit.framework.control.datasource.excel.ExcelDataSource"/>
-	<datasource type="html" extensionClass="org.bpelunit.framework.control.datasource.html.HtmlDataSource"/>
-	<datasource type="ods" extensionClass="org.bpelunit.framework.control.datasource.ods.OdsDataSource"/>
+	<dataSource type="velocity" extensionClass="net.bpelunit.framework.control.datasource.VelocityDataSource" />
+	<dataSource type="csv" extensionClass="net.bpelunit.framework.control.datasource.csv.CSVDataSource"/>
+	<dataSource type="excel" extensionClass="net.bpelunit.framework.control.datasource.excel.ExcelDataSource"/>
+	<datasource type="html" extensionClass="net.bpelunit.framework.control.datasource.html.HtmlDataSource"/>
+	<datasource type="ods" extensionClass="net.bpelunit.framework.control.datasource.ods.OdsDataSource"/>
 </extensionRegistry>

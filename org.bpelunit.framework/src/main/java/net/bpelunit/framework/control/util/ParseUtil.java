@@ -4,7 +4,7 @@
  * 
  */
 
-package org.bpelunit.framework.control.util;
+package net.bpelunit.framework.control.util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

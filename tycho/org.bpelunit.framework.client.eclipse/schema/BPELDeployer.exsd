@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.bpelunit.framework.client.eclipse" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="net.bpelunit.framework.client.eclipse" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.bpelunit.framework.client.eclipse" id="bpelDeployer" name="BPEL Deployer"/>
+         <meta.schema plugin="net.bpelunit.framework.client.eclipse" id="bpelDeployer" name="BPEL Deployer"/>
       </appInfo>
       <documentation>
          Extension point for adding BPEL Deployers
@@ -59,7 +59,7 @@
                   class implementing the interface IBPELDeployer
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.bpelunit.framework.control.ext.IBPELDeployer"/>
+                  <meta.attribute kind="java" basedOn="net.bpelunit.framework.control.ext.IBPELDeployer"/>
                </appInfo>
             </annotation>
          </attribute>

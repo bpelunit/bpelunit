@@ -3,10 +3,10 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.model;
+package net.bpelunit.framework.client.model;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
-import org.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.model.test.TestSuite;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;

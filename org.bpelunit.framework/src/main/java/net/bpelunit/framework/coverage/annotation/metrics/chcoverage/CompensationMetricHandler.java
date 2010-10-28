@@ -1,15 +1,15 @@
-package org.bpelunit.framework.coverage.annotation.metrics.chcoverage;
+package net.bpelunit.framework.coverage.annotation.metrics.chcoverage;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.*;
 
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.Instrumenter;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import net.bpelunit.framework.coverage.annotation.Instrumenter;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Comment;
 import org.jdom.Element;
 

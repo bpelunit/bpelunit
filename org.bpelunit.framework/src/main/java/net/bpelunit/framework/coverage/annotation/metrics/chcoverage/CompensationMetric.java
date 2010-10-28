@@ -1,21 +1,21 @@
-package org.bpelunit.framework.coverage.annotation.metrics.chcoverage;
+package net.bpelunit.framework.coverage.annotation.metrics.chcoverage;
 
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.COMPENSATION_HANDLER;
-import static org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getProcessNamespace;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.COMPENSATION_HANDLER;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getProcessNamespace;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpelunit.framework.coverage.annotation.MetricsManager;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkerState;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
-import org.bpelunit.framework.coverage.result.statistic.IStatistic;
-import org.bpelunit.framework.coverage.result.statistic.impl.Statistic;
+import net.bpelunit.framework.coverage.annotation.MetricsManager;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.receiver.MarkerState;
+import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import net.bpelunit.framework.coverage.result.statistic.IStatistic;
+import net.bpelunit.framework.coverage.result.statistic.impl.Statistic;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
@@ -42,7 +42,7 @@ public class CompensationMetric implements IMetric {
 	 */
 	
 	/* (non-Javadoc)
-	 * @see org.bpelunit.framework.coverage.annotation.metrics.IMetric#getMarkersId()
+	 * @see net.bpelunit.framework.coverage.annotation.metrics.IMetric#getMarkersId()
 	 */
 	public List<String> getMarkersId() {
 		List<String> list = new ArrayList<String>();
@@ -67,7 +67,7 @@ public class CompensationMetric implements IMetric {
 	 */
 	
 	/* (non-Javadoc)
-	 * @see org.bpelunit.framework.coverage.annotation.metrics.IMetric#createStatistic(java.util.Hashtable)
+	 * @see net.bpelunit.framework.coverage.annotation.metrics.IMetric#createStatistic(java.util.Hashtable)
 	 */
 	public IStatistic createStatistic(
 			Hashtable<String, Hashtable<String, MarkerState>> allMarkers) {
@@ -86,7 +86,7 @@ public class CompensationMetric implements IMetric {
 	 *            noch nicht modifiziertes BPEL-Prozess
 	 */
 	/* (non-Javadoc)
-	 * @see org.bpelunit.framework.coverage.annotation.metrics.IMetric#setOriginalBPELProcess(org.jdom.Element)
+	 * @see net.bpelunit.framework.coverage.annotation.metrics.IMetric#setOriginalBPELProcess(org.jdom.Element)
 	 */
 	public void setOriginalBPELProcess(Element process) {
 		Iterator<Element> compensHandlers = process
@@ -104,7 +104,7 @@ public class CompensationMetric implements IMetric {
 	 * @throws BpelException
 	 */
 	/* (non-Javadoc)
-	 * @see org.bpelunit.framework.coverage.annotation.metrics.IMetric#insertMarkers()
+	 * @see net.bpelunit.framework.coverage.annotation.metrics.IMetric#insertMarkers()
 	 */
 	public void insertMarkers() throws BpelException {
 		if (elementsOfBPEL != null) {

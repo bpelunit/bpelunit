@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.preferences;
+package net.bpelunit.framework.client.eclipse.preferences;
 
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.util.Assert;

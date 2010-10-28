@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.ws;
+package net.bpelunit.framework.control.ws;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,13 +12,13 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.control.run.TestCaseRunner;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
-import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.exception.PartnerNotFoundException;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.wire.IncomingMessage;
-import org.bpelunit.framework.model.test.wire.OutgoingMessage;
+import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.exception.PartnerNotFoundException;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.wire.IncomingMessage;
+import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 import org.mortbay.http.HttpException;
 import org.mortbay.http.HttpRequest;
 import org.mortbay.http.HttpResponse;

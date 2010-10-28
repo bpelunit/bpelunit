@@ -3,10 +3,10 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.model;
+package net.bpelunit.framework.client.model;
 
-import org.bpelunit.framework.control.ext.IHeaderProcessor;
-import org.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
+import net.bpelunit.framework.exception.SpecificationException;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 /**

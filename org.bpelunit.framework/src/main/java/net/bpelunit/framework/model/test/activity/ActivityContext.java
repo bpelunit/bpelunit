@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test.activity;
+package net.bpelunit.framework.model.test.activity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,17 +12,17 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.velocity.VelocityContext;
-import org.bpelunit.framework.control.ext.IHeaderProcessor;
-import org.bpelunit.framework.control.ext.SendPackage;
-import org.bpelunit.framework.control.run.TestCaseRunner;
-import org.bpelunit.framework.exception.HeaderProcessingException;
-import org.bpelunit.framework.exception.SynchronousSendException;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.data.DataCopyOperation;
-import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
-import org.bpelunit.framework.model.test.data.SendDataSpecification;
-import org.bpelunit.framework.model.test.wire.IncomingMessage;
-import org.bpelunit.framework.model.test.wire.OutgoingMessage;
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
+import net.bpelunit.framework.control.ext.SendPackage;
+import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.exception.HeaderProcessingException;
+import net.bpelunit.framework.exception.SynchronousSendException;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.data.DataCopyOperation;
+import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
+import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.model.test.wire.IncomingMessage;
+import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 import org.w3c.dom.Element;
 
 /**

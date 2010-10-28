@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.dialog;
+package net.bpelunit.framework.client.eclipse.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;

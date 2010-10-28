@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.soap;
+package net.bpelunit.framework.control.soap;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,10 +15,10 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
 
-import org.bpelunit.framework.control.ext.IHeaderProcessor;
-import org.bpelunit.framework.control.ext.SendPackage;
-import org.bpelunit.framework.exception.HeaderProcessingException;
-import org.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
+import net.bpelunit.framework.control.ext.SendPackage;
+import net.bpelunit.framework.exception.HeaderProcessingException;
+import net.bpelunit.framework.model.test.activity.ActivityContext;
 
 /**
  * This class implements the WS-Adressing asynchronous call handling, as specified in the WS-A

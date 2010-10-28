@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.src;
+package net.bpelunit.toolsupport.editors.src;
 
 import java.util.HashMap;
 import java.util.Iterator;

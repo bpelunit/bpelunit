@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.components;
+package net.bpelunit.toolsupport.editors.wizards.components;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,21 +19,21 @@ import javax.wsdl.Port;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
-import org.bpelunit.framework.control.util.ActivityUtil;
-import org.bpelunit.framework.xml.suite.XMLActivity;
-import org.bpelunit.framework.xml.suite.XMLSoapActivity;
-import org.bpelunit.framework.xml.suite.XMLTrack;
-import org.bpelunit.toolsupport.ToolSupportActivator;
-import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
-import org.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
-import org.bpelunit.toolsupport.editors.wizards.fields.IStringButtonAdapter;
-import org.bpelunit.toolsupport.editors.wizards.fields.LayoutUtil;
-import org.bpelunit.toolsupport.editors.wizards.fields.SelectionButtonDialogField;
-import org.bpelunit.toolsupport.editors.wizards.fields.StringButtonDialogField;
-import org.bpelunit.toolsupport.editors.wizards.pages.OperationWizardPage;
-import org.bpelunit.toolsupport.util.WSDLReadingException;
-import org.bpelunit.toolsupport.util.schema.WSDLParser;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.framework.control.util.ActivityUtil;
+import net.bpelunit.framework.xml.suite.XMLActivity;
+import net.bpelunit.framework.xml.suite.XMLSoapActivity;
+import net.bpelunit.framework.xml.suite.XMLTrack;
+import net.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
+import net.bpelunit.toolsupport.editors.wizards.fields.IStringButtonAdapter;
+import net.bpelunit.toolsupport.editors.wizards.fields.LayoutUtil;
+import net.bpelunit.toolsupport.editors.wizards.fields.SelectionButtonDialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.StringButtonDialogField;
+import net.bpelunit.toolsupport.editors.wizards.pages.OperationWizardPage;
+import net.bpelunit.toolsupport.util.WSDLReadingException;
+import net.bpelunit.toolsupport.util.schema.WSDLParser;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;

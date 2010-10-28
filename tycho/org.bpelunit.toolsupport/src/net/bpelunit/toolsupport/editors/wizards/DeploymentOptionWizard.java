@@ -3,12 +3,12 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards;
+package net.bpelunit.toolsupport.editors.wizards;
 
-import org.bpelunit.framework.client.eclipse.ExtensionControl;
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
-import org.bpelunit.toolsupport.editors.wizards.pages.DeploymentOptionWizardPage;
+import net.bpelunit.framework.client.eclipse.ExtensionControl;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
+import net.bpelunit.toolsupport.editors.wizards.pages.DeploymentOptionWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 /**

@@ -1,4 +1,4 @@
-package org.bpelunit.framework.coverage;
+package net.bpelunit.framework.coverage;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -6,24 +6,24 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.IDeployment;
-import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.control.util.ParseUtil;
-import org.bpelunit.framework.coverage.annotation.Instrumenter;
-import org.bpelunit.framework.coverage.annotation.MetricsManager;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetricHandler;
-import org.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
-import org.bpelunit.framework.coverage.exceptions.ArchiveFileException;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.exceptions.CoverageMeasurementException;
-import org.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
-import org.bpelunit.framework.coverage.result.statistic.IFileStatistic;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IDeployment;
+import net.bpelunit.framework.control.ext.ISOAPEncoder;
+import net.bpelunit.framework.control.util.ParseUtil;
+import net.bpelunit.framework.coverage.annotation.Instrumenter;
+import net.bpelunit.framework.coverage.annotation.MetricsManager;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetricHandler;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
+import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.exceptions.CoverageMeasurementException;
+import net.bpelunit.framework.coverage.receiver.CoverageMessageReceiver;
+import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.model.ProcessUnderTest;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
@@ -60,7 +60,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 
 	/**
 	 * @see
-	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#configureMetrics
+	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#configureMetrics
 	 * (java.util.Map)
 	 */
 	public void configureMetrics(Map<String, List<String>> configMap)
@@ -83,8 +83,8 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 
 	/**
 	 * @see
-	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#setSOAPEncoder
-	 * (org.bpelunit.framework.control.ext.ISOAPEncoder)
+	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#setSOAPEncoder
+	 * (net.bpelunit.framework.control.ext.ISOAPEncoder)
 	 */
 	public void setSOAPEncoder(ISOAPEncoder encoder) {
 		messageReceiver.setSOAPEncoder(encoder);
@@ -92,7 +92,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 
 	/** 
 	 * @see
-	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#setPathToWSDL
+	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#setPathToWSDL
 	 * (java.lang.String)
 	 */
 	public void setPathToWSDL(String wsdl) {
@@ -103,7 +103,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 
 	/** 
 	 * @see
-	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#getEncodingStyle
+	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#getEncodingStyle
 	 * ()
 	 */
 	public String getEncodingStyle() {
@@ -266,7 +266,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#setErrorStatus
+	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#setErrorStatus
 	 * (java.lang.String)
 	 */
 	public void setErrorStatus(String message) {
@@ -279,7 +279,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#setCurrentTestCase
+	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#setCurrentTestCase
 	 * (java.lang.String)
 	 */
 	public void setCurrentTestCase(String testCase) {
@@ -290,7 +290,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#putMessage(java
+	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#putMessage(java
 	 * .lang.String)
 	 */
 	public synchronized void putMessage(String body) {
@@ -304,7 +304,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.bpelunit.framework.coverage.ICoverageMeasurementTool#getStatistics()
+	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#getStatistics()
 	 */
 	public List<IFileStatistic> getStatistics() {
 		if (error) {
@@ -316,7 +316,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.bpelunit.framework.coverage.ICoverageMeasurementTool#getStatus()
+	 * @see net.bpelunit.framework.coverage.ICoverageMeasurementTool#getStatus()
 	 */
 	public String getErrorStatus() {
 		return errorStatus;

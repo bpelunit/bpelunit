@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors;
+package net.bpelunit.toolsupport.editors;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionBars;

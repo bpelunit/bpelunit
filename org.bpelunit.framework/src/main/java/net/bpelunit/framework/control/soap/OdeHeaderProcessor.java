@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.bpelunit.framework.control.soap;
+package net.bpelunit.framework.control.soap;
 
 import java.util.Iterator;
 
@@ -11,10 +11,10 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
 
-import org.bpelunit.framework.control.ext.IHeaderProcessor;
-import org.bpelunit.framework.control.ext.SendPackage;
-import org.bpelunit.framework.exception.HeaderProcessingException;
-import org.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
+import net.bpelunit.framework.control.ext.SendPackage;
+import net.bpelunit.framework.exception.HeaderProcessingException;
+import net.bpelunit.framework.model.test.activity.ActivityContext;
 
 /**
  * @author dluebke
@@ -51,7 +51,7 @@ public class OdeHeaderProcessor implements IHeaderProcessor {
 			"http://www.w3.org/2005/08/addressing", "Address");
 
 	/**
-	 * @see org.bpelunit.framework.control.ext.IHeaderProcessor#processReceive(org.bpelunit.framework.model.test.activity.ActivityContext,
+	 * @see net.bpelunit.framework.control.ext.IHeaderProcessor#processReceive(net.bpelunit.framework.model.test.activity.ActivityContext,
 	 *      javax.xml.soap.SOAPMessage)
 	 */
 	//@Override
@@ -111,8 +111,8 @@ public class OdeHeaderProcessor implements IHeaderProcessor {
 
 	/**
 	 * 
-	 * @see org.bpelunit.framework.control.ext.IHeaderProcessor#processSend(org.bpelunit.framework.model.test.activity.ActivityContext,
-	 *      org.bpelunit.framework.control.ext.SendPackage)
+	 * @see net.bpelunit.framework.control.ext.IHeaderProcessor#processSend(net.bpelunit.framework.model.test.activity.ActivityContext,
+	 *      net.bpelunit.framework.control.ext.SendPackage)
 	 */
 	//@Override
 	public void processSend(ActivityContext context, SendPackage message)
@@ -206,7 +206,7 @@ public class OdeHeaderProcessor implements IHeaderProcessor {
 	/**
 	 * This header processor does not have any properties
 	 * 
-	 * @see org.bpelunit.framework.control.ext.IHeaderProcessor#setProperty(java.lang.String,
+	 * @see net.bpelunit.framework.control.ext.IHeaderProcessor#setProperty(java.lang.String,
 	 *      java.lang.String)
 	 */
 	//@Override

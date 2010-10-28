@@ -1,4 +1,4 @@
-package org.bpelunit.toolsupport.util.schema.nodes;
+package net.bpelunit.toolsupport.util.schema.nodes;
 
 import java.util.List;
 

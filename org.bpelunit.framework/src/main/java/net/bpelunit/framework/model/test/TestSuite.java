@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model.test;
+package net.bpelunit.framework.model.test;
 
 import java.io.StringWriter;
 import java.net.URL;
@@ -15,15 +15,15 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.result.ITestResultListener;
-import org.bpelunit.framework.control.ws.LocalHTTPServer;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.TestCaseNotFoundException;
-import org.bpelunit.framework.model.ProcessUnderTest;
-import org.bpelunit.framework.model.test.report.ArtefactStatus;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
-import org.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.result.ITestResultListener;
+import net.bpelunit.framework.control.ws.LocalHTTPServer;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.TestCaseNotFoundException;
+import net.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.report.StateData;
 
 /**
  * A BPELUnit TestSuite is a collection of TestCases, along with the description

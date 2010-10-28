@@ -3,24 +3,24 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.model;
+package net.bpelunit.framework.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.ext.DeploymentOption;
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.IDeployment;
-import org.bpelunit.framework.control.ext.PartnerLink;
-import org.bpelunit.framework.control.util.ExtensionRegistry;
-import org.bpelunit.framework.coverage.ArchiveUtil;
-import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.EndPointException;
-import org.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.ext.DeploymentOption;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IDeployment;
+import net.bpelunit.framework.control.ext.PartnerLink;
+import net.bpelunit.framework.control.util.ExtensionRegistry;
+import net.bpelunit.framework.coverage.ArchiveUtil;
+import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.EndPointException;
+import net.bpelunit.framework.exception.SpecificationException;
 
 /**
  * The ProcessUnderTest is the internal representation of the BPEL process which

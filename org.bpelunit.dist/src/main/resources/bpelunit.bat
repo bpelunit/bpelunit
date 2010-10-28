@@ -20,7 +20,7 @@ goto :run
 :run
 REM Classpath is set up, go run bpelunit
 
-%JAVA_HOME%\bin\java org.bpelunit.framework.ui.command.BPELUnitCommandLineRunner %*
+%JAVA_HOME%\bin\java net.bpelunit.framework.ui.command.BPELUnitCommandLineRunner %*
 
 endlocal
 goto :eof

@@ -3,13 +3,13 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.ext;
+package net.bpelunit.framework.control.ext;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPMessage;
 
-import org.bpelunit.framework.exception.SOAPEncodingException;
-import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+import net.bpelunit.framework.exception.SOAPEncodingException;
+import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import org.w3c.dom.Element;
 
 /**

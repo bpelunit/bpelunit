@@ -3,15 +3,15 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.ext;
+package net.bpelunit.framework.control.ext;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.model.ProcessUnderTest;
 
 /**
  * The IBPELDeployer interface represents a BPEL Deployer, i.e. an entity which

@@ -1,17 +1,17 @@
-package org.bpelunit.toolsupport.util.schema.impl;
+package net.bpelunit.toolsupport.util.schema.impl;
 
 import java.util.HashMap;
 
 import javax.xml.namespace.QName;
 
-import org.bpelunit.toolsupport.util.schema.SchemaElementManager;
-import org.bpelunit.toolsupport.util.schema.nodes.ComplexType;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
-import org.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
-import org.bpelunit.toolsupport.util.schema.nodes.SimpleType;
-import org.bpelunit.toolsupport.util.schema.nodes.impl.ComplexTypeImpl;
-import org.bpelunit.toolsupport.util.schema.nodes.impl.ElementImpl;
-import org.bpelunit.toolsupport.util.schema.nodes.impl.SimpleTypeImpl;
+import net.bpelunit.toolsupport.util.schema.SchemaElementManager;
+import net.bpelunit.toolsupport.util.schema.nodes.ComplexType;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.toolsupport.util.schema.nodes.SchemaNode;
+import net.bpelunit.toolsupport.util.schema.nodes.SimpleType;
+import net.bpelunit.toolsupport.util.schema.nodes.impl.ComplexTypeImpl;
+import net.bpelunit.toolsupport.util.schema.nodes.impl.ElementImpl;
+import net.bpelunit.toolsupport.util.schema.nodes.impl.SimpleTypeImpl;
 
 public class SchemaElementManagerImpl implements SchemaElementManager {
 	private HashMap<QName, SimpleType> simpleTypes = new HashMap<QName, SimpleType>();

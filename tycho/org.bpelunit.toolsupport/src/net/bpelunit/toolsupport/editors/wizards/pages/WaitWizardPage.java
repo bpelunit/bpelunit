@@ -1,6 +1,6 @@
-package org.bpelunit.toolsupport.editors.wizards.pages;
+package net.bpelunit.toolsupport.editors.wizards.pages;
 
-import org.bpelunit.framework.xml.suite.XMLWaitActivity;
+import net.bpelunit.framework.xml.suite.XMLWaitActivity;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;

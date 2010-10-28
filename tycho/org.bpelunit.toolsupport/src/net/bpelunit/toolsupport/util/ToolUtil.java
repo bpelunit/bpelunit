@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.util;
+package net.bpelunit.toolsupport.util;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -15,8 +15,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.xmlbeans.XmlObject;
-import org.bpelunit.framework.xml.suite.XMLAnyElement;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.framework.xml.suite.XMLAnyElement;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;

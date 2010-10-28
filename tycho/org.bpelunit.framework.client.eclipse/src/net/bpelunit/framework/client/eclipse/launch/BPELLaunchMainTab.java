@@ -3,9 +3,9 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.launch;
+package net.bpelunit.framework.client.eclipse.launch;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;

@@ -3,14 +3,14 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.dialog.field;
+package net.bpelunit.framework.client.eclipse.dialog.field;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
-import org.bpelunit.framework.client.eclipse.dialog.Field;
-import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.dialog.Field;
+import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;

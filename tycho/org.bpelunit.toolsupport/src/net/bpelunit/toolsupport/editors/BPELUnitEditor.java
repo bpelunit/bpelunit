@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors;
+package net.bpelunit.toolsupport.editors;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,17 +19,17 @@ import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 import javax.xml.transform.TransformerException;
 
-import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.xml.suite.XMLDeploymentSection;
-import org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
-import org.bpelunit.framework.xml.suite.XMLPartnerTrack;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
-import org.bpelunit.framework.xml.suite.XMLTrack;
-import org.bpelunit.toolsupport.ToolSupportActivator;
-import org.bpelunit.toolsupport.editors.src.XMLEditor;
-import org.bpelunit.toolsupport.util.WSDLReadingException;
-import org.bpelunit.toolsupport.util.schema.WSDLParser;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.xml.suite.XMLDeploymentSection;
+import net.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
+import net.bpelunit.framework.xml.suite.XMLPartnerTrack;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
+import net.bpelunit.framework.xml.suite.XMLTrack;
+import net.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.editors.src.XMLEditor;
+import net.bpelunit.toolsupport.util.WSDLReadingException;
+import net.bpelunit.toolsupport.util.schema.WSDLParser;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;

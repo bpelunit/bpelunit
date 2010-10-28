@@ -1,4 +1,4 @@
-package org.bpelunit.framework.coverage.annotation.metrics.activitycoverage;
+package net.bpelunit.framework.coverage.annotation.metrics.activitycoverage;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -6,14 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.coverage.annotation.MetricsManager;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetric;
-import org.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
-import org.bpelunit.framework.coverage.exceptions.BpelException;
-import org.bpelunit.framework.coverage.receiver.MarkerState;
-import org.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
-import org.bpelunit.framework.coverage.result.statistic.IStatistic;
-import org.bpelunit.framework.coverage.result.statistic.impl.Statistic;
+import net.bpelunit.framework.coverage.annotation.MetricsManager;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
+import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
+import net.bpelunit.framework.coverage.exceptions.BpelException;
+import net.bpelunit.framework.coverage.receiver.MarkerState;
+import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+import net.bpelunit.framework.coverage.result.statistic.IStatistic;
+import net.bpelunit.framework.coverage.result.statistic.impl.Statistic;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 

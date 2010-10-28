@@ -1,8 +1,8 @@
-package org.bpelunit.toolsupport.util.schema.nodes.impl;
+package net.bpelunit.toolsupport.util.schema.nodes.impl;
 
 import javax.xml.namespace.QName;
 
-import org.bpelunit.toolsupport.util.schema.nodes.Type;
+import net.bpelunit.toolsupport.util.schema.nodes.Type;
 
 public abstract class TypeImpl extends SchemaNodeImpl implements Type {
 

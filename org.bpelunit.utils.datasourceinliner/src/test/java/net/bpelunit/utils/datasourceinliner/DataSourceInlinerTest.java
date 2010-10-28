@@ -1,18 +1,18 @@
-package org.bpelunit.utils.datasourceinliner;
+package net.bpelunit.utils.datasourceinliner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 
-import org.bpelunit.framework.control.datasource.DataSourceUtil;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.xml.suite.XMLDataSource;
-import org.bpelunit.framework.xml.suite.XMLTestCase;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
-import org.bpelunit.test.util.TestTestRunner;
-import org.bpelunit.test.util.TestUtil;
+import net.bpelunit.framework.control.datasource.DataSourceUtil;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.xml.suite.XMLDataSource;
+import net.bpelunit.framework.xml.suite.XMLTestCase;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
+import net.bpelunit.test.util.TestTestRunner;
+import net.bpelunit.test.util.TestUtil;
 import org.junit.Test;
 
 /**

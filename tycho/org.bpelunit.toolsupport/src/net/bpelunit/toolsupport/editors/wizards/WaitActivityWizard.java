@@ -1,7 +1,7 @@
-package org.bpelunit.toolsupport.editors.wizards;
+package net.bpelunit.toolsupport.editors.wizards;
 
-import org.bpelunit.framework.xml.suite.XMLWaitActivity;
-import org.bpelunit.toolsupport.editors.wizards.pages.WaitWizardPage;
+import net.bpelunit.framework.xml.suite.XMLWaitActivity;
+import net.bpelunit.toolsupport.editors.wizards.pages.WaitWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 public class WaitActivityWizard extends Wizard {

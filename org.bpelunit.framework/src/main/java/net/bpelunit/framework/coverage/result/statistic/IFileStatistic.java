@@ -1,4 +1,4 @@
-package org.bpelunit.framework.coverage.result.statistic;
+package net.bpelunit.framework.coverage.result.statistic;
 
 import java.util.Collection;
 import java.util.List;

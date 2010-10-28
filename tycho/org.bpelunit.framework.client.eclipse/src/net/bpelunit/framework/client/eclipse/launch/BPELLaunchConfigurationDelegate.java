@@ -3,24 +3,24 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.client.eclipse.launch;
+package net.bpelunit.framework.client.eclipse.launch;
 
 import java.net.URL;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.WriterAppender;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.client.eclipse.BPELUnitActivator;
-import org.bpelunit.framework.client.eclipse.EclipseBPELUnitRunner;
-import org.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
-import org.bpelunit.framework.client.model.TestRunSession;
-import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.EclipseBPELUnitRunner;
+import net.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
+import net.bpelunit.framework.client.model.TestRunSession;
+import net.bpelunit.framework.coverage.CoverageConstants;
+import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.TestSuite;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;

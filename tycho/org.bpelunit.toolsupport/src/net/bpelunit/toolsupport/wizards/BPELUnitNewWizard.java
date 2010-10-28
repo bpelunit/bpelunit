@@ -3,13 +3,13 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.wizards;
+package net.bpelunit.toolsupport.wizards;
 
-import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.xml.suite.XMLDeploymentSection;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
-import org.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.xml.suite.XMLDeploymentSection;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
+import net.bpelunit.toolsupport.ToolSupportActivator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;

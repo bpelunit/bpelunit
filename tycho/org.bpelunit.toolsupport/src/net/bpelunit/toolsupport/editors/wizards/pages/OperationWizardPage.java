@@ -3,25 +3,25 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.wizards.pages;
+package net.bpelunit.toolsupport.editors.wizards.pages;
 
 import javax.wsdl.Definition;
 import javax.xml.namespace.QName;
 
-import org.bpelunit.framework.xml.suite.XMLActivity;
-import org.bpelunit.framework.xml.suite.XMLSoapActivity;
-import org.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
-import org.bpelunit.toolsupport.editors.wizards.ReceiveSendAsyncActivityWizard;
-import org.bpelunit.toolsupport.editors.wizards.ReceiveSendSyncActivityWizard;
-import org.bpelunit.toolsupport.editors.wizards.WizardPageCode;
-import org.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
-import org.bpelunit.toolsupport.editors.wizards.components.OperationDataComponent;
-import org.bpelunit.toolsupport.editors.wizards.fields.DialogField;
-import org.bpelunit.toolsupport.util.schema.InvalidInputException;
-import org.bpelunit.toolsupport.util.schema.NoElementDefinitionExistsException;
-import org.bpelunit.toolsupport.util.schema.NoSuchOperationException;
-import org.bpelunit.toolsupport.util.schema.WSDLParser;
-import org.bpelunit.toolsupport.util.schema.nodes.Element;
+import net.bpelunit.framework.xml.suite.XMLActivity;
+import net.bpelunit.framework.xml.suite.XMLSoapActivity;
+import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
+import net.bpelunit.toolsupport.editors.wizards.ReceiveSendAsyncActivityWizard;
+import net.bpelunit.toolsupport.editors.wizards.ReceiveSendSyncActivityWizard;
+import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
+import net.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
+import net.bpelunit.toolsupport.editors.wizards.components.OperationDataComponent;
+import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.toolsupport.util.schema.InvalidInputException;
+import net.bpelunit.toolsupport.util.schema.NoElementDefinitionExistsException;
+import net.bpelunit.toolsupport.util.schema.NoSuchOperationException;
+import net.bpelunit.toolsupport.util.schema.WSDLParser;
+import net.bpelunit.toolsupport.util.schema.nodes.Element;
 import org.eclipse.swt.widgets.Composite;
 
 /**

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit Eclipse Client Plugin
-Bundle-SymbolicName: org.bpelunit.framework.client.eclipse; singleton:=true
+Bundle-SymbolicName: net.bpelunit.framework.client.eclipse; singleton:=true
 Bundle-Version: 1.4.1.qualifier
-Bundle-Activator: org.bpelunit.framework.client.eclipse.BPELUnitActivator
+Bundle-Activator: net.bpelunit.framework.client.eclipse.BPELUnitActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors,
  org.eclipse.core.resources,
  org.eclipse.ui.ide,
- org.bpelunit.framework,
+ net.bpelunit.framework,
  org.eclipse.debug.core,
  org.eclipse.debug.ui,
  org.eclipse.ui.console,
@@ -19,14 +19,14 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.help,
  org.eclipse.help.ui
 Bundle-ActivationPolicy: lazy
-Export-Package: org.bpelunit.framework.client.eclipse,
- org.bpelunit.framework.client.eclipse.dialog,
- org.bpelunit.framework.client.eclipse.dialog.field,
- org.bpelunit.framework.client.eclipse.dialog.validate,
- org.bpelunit.framework.client.eclipse.launch,
- org.bpelunit.framework.client.eclipse.preferences,
- org.bpelunit.framework.client.eclipse.views,
- org.bpelunit.framework.client.model
+Export-Package: net.bpelunit.framework.client.eclipse,
+ net.bpelunit.framework.client.eclipse.dialog,
+ net.bpelunit.framework.client.eclipse.dialog.field,
+ net.bpelunit.framework.client.eclipse.dialog.validate,
+ net.bpelunit.framework.client.eclipse.launch,
+ net.bpelunit.framework.client.eclipse.preferences,
+ net.bpelunit.framework.client.eclipse.views,
+ net.bpelunit.framework.client.model
 Bundle-Vendor: Leibniz Universität Hannover
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.log4j

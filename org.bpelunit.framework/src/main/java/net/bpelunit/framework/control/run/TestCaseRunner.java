@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.run;
+package net.bpelunit.framework.control.run;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -21,16 +21,16 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
-import org.bpelunit.framework.control.ws.LocalHTTPServer;
-import org.bpelunit.framework.coverage.CoverageConstants;
-import org.bpelunit.framework.exception.PartnerNotFoundException;
-import org.bpelunit.framework.exception.SynchronousSendException;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.TestCase;
-import org.bpelunit.framework.model.test.wire.IncomingMessage;
-import org.bpelunit.framework.model.test.wire.OutgoingMessage;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.control.ws.LocalHTTPServer;
+import net.bpelunit.framework.coverage.CoverageConstants;
+import net.bpelunit.framework.exception.PartnerNotFoundException;
+import net.bpelunit.framework.exception.SynchronousSendException;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.wire.IncomingMessage;
+import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
 /**
  * 

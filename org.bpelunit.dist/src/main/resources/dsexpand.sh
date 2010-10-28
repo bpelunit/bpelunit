@@ -23,7 +23,7 @@ fi
 
 ## CONFIGURATION SECTION ##############
 
-MAIN_CLASS=org.bpelunit.utils.datasourceinliner.CLIRunner
+MAIN_CLASS=net.bpelunit.utils.datasourceinliner.CLIRunner
 
 ## UTILITIES ##########################
 

@@ -1,4 +1,4 @@
-org.bpelunit.framework
-org.bpelunit.framework.control.ext
-org.bpelunit.framework.control.result
-org.bpelunit.framework.coverage
+net.bpelunit.framework
+net.bpelunit.framework.control.ext
+net.bpelunit.framework.control.result
+net.bpelunit.framework.coverage

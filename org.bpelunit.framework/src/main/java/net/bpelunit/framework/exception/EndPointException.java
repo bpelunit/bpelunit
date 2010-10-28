@@ -4,7 +4,7 @@
  * 
  */
 
-package org.bpelunit.framework.exception;
+package net.bpelunit.framework.exception;
 
 public class EndPointException extends BPELUnitException {
 

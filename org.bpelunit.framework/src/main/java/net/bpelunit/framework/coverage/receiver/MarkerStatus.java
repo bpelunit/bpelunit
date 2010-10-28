@@ -1,4 +1,4 @@
-package org.bpelunit.framework.coverage.receiver;
+package net.bpelunit.framework.coverage.receiver;
 
 import java.util.HashSet;
 import java.util.Set;

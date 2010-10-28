@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.ext;
+package net.bpelunit.framework.control.ext;
 
 /**
  * An option for a certain deployer. These options are specified by the user in the test suite

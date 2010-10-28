@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.deploy.activebpel;
+package net.bpelunit.framework.control.deploy.activebpel;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,11 +21,11 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.IDeployment;
-import org.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
-import org.bpelunit.framework.exception.DeploymentException;
-import org.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IDeployment;
+import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.model.ProcessUnderTest;
 
 /**
  * ActiveBPEL Deployer - deploys a process to an ActiveBPEL server.

@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework.control.result;
+package net.bpelunit.framework.control.result;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,27 +12,27 @@ import java.util.List;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.TestCase;
-import org.bpelunit.framework.model.test.TestSuite;
-import org.bpelunit.framework.model.test.activity.Activity;
-import org.bpelunit.framework.model.test.data.DataCopyOperation;
-import org.bpelunit.framework.model.test.data.DataSpecification;
-import org.bpelunit.framework.model.test.data.ReceiveCondition;
-import org.bpelunit.framework.model.test.data.XMLData;
-import org.bpelunit.framework.model.test.report.ITestArtefact;
-import org.bpelunit.framework.model.test.report.StateData;
-import org.bpelunit.framework.xml.result.XMLActivity;
-import org.bpelunit.framework.xml.result.XMLArtefact;
-import org.bpelunit.framework.xml.result.XMLCopyOperation;
-import org.bpelunit.framework.xml.result.XMLInfo;
-import org.bpelunit.framework.xml.result.XMLPartnerTrack;
-import org.bpelunit.framework.xml.result.XMLReceiveCondition;
-import org.bpelunit.framework.xml.result.XMLTestCase;
-import org.bpelunit.framework.xml.result.XMLTestResult;
-import org.bpelunit.framework.xml.result.XMLTestResultDocument;
-import org.bpelunit.framework.xml.result.XMLData.XmlData;
-import org.bpelunit.framework.xml.result.XMLReceiveCondition.Condition;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.model.test.activity.Activity;
+import net.bpelunit.framework.model.test.data.DataCopyOperation;
+import net.bpelunit.framework.model.test.data.DataSpecification;
+import net.bpelunit.framework.model.test.data.ReceiveCondition;
+import net.bpelunit.framework.model.test.data.XMLData;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.xml.result.XMLActivity;
+import net.bpelunit.framework.xml.result.XMLArtefact;
+import net.bpelunit.framework.xml.result.XMLCopyOperation;
+import net.bpelunit.framework.xml.result.XMLInfo;
+import net.bpelunit.framework.xml.result.XMLPartnerTrack;
+import net.bpelunit.framework.xml.result.XMLReceiveCondition;
+import net.bpelunit.framework.xml.result.XMLTestCase;
+import net.bpelunit.framework.xml.result.XMLTestResult;
+import net.bpelunit.framework.xml.result.XMLTestResultDocument;
+import net.bpelunit.framework.xml.result.XMLData.XmlData;
+import net.bpelunit.framework.xml.result.XMLReceiveCondition.Condition;
 
 /**
  * Producer for the resulting XML of a test run.
@@ -78,7 +78,7 @@ public class XMLResultProducer {
 		} else if (testArtefact instanceof DataSpecification) {
 			// Reached the end - data spec
 			DataSpecification dataSpec= (DataSpecification) testArtefact;
-			org.bpelunit.framework.xml.result.XMLData xmlData= xmlActivity.addNewDataPackage();
+			net.bpelunit.framework.xml.result.XMLData xmlData= xmlActivity.addNewDataPackage();
 			transferState(dataSpec, xmlData);
 
 			// And may have children of type XMLData and ReceiveCondition

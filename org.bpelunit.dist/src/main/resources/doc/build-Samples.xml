@@ -10,10 +10,10 @@
   <property name="bpelunit.home" location="."/>
 
   <path id="lib.path">
-    <fileset dir="../org.bpelunit.framework/lib">
+    <fileset dir="../net.bpelunit.framework/lib">
       <include name="**/*.jar" />
     </fileset>
-    <pathelement location="../org.bpelunit.framework/bin"/>
+    <pathelement location="../net.bpelunit.framework/bin"/>
     <pathelement location="${dir.build}"/>
   </path>
 
@@ -24,7 +24,7 @@
   <target name="build" depends="init"
           description="Compiles the Java source code">
     <mkdir dir="${dir.build}"/>
-    <ant dir="../org.bpelunit.framework"/>
+    <ant dir="../net.bpelunit.framework"/>
     <javac srcdir="${dir.src}" destdir="${dir.build}" debug="on">
       <classpath refid="lib.path"/>
     </javac>
@@ -38,7 +38,7 @@
   <target name="test" depends="build">
     <typedef
         name="bpelunit"
-        classname="org.bpelunit.framework.ui.ant.BPELUnit">
+        classname="net.bpelunit.framework.ui.ant.BPELUnit">
       <classpath refid="lib.path" />
     </typedef>
 

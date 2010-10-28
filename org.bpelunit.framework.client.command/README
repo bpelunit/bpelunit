@@ -11,5 +11,5 @@ see the enclosed license file for licensing information.
 
 ----------------------------------------------------------
 
-This project contains the BPELUnit command line client. Have a look at the org.bpelunit.build.standalone
+This project contains the BPELUnit command line client. Have a look at the net.bpelunit.build.standalone
 package for information on how to build it.

@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.framework;
+package net.bpelunit.framework;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,62 +28,62 @@ import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
-import org.bpelunit.framework.control.datasource.DataSourceUtil;
-import org.bpelunit.framework.control.ext.IBPELDeployer;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.control.ext.IHeaderProcessor;
-import org.bpelunit.framework.control.ext.ISOAPEncoder;
-import org.bpelunit.framework.control.soap.NamespaceContextImpl;
-import org.bpelunit.framework.control.util.ActivityUtil;
-import org.bpelunit.framework.control.util.BPELUnitConstants;
-import org.bpelunit.framework.control.util.BPELUnitUtil;
-import org.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
-import org.bpelunit.framework.coverage.ICoverageMeasurementTool;
-import org.bpelunit.framework.exception.ConfigurationException;
-import org.bpelunit.framework.exception.DataSourceException;
-import org.bpelunit.framework.exception.SpecificationException;
-import org.bpelunit.framework.model.Partner;
-import org.bpelunit.framework.model.ProcessUnderTest;
-import org.bpelunit.framework.model.test.PartnerTrack;
-import org.bpelunit.framework.model.test.TestCase;
-import org.bpelunit.framework.model.test.TestSuite;
-import org.bpelunit.framework.model.test.activity.Activity;
-import org.bpelunit.framework.model.test.activity.ReceiveAsync;
-import org.bpelunit.framework.model.test.activity.ReceiveSendAsync;
-import org.bpelunit.framework.model.test.activity.ReceiveSendSync;
-import org.bpelunit.framework.model.test.activity.SendAsync;
-import org.bpelunit.framework.model.test.activity.SendReceiveAsync;
-import org.bpelunit.framework.model.test.activity.SendReceiveSync;
-import org.bpelunit.framework.model.test.activity.TwoWayAsyncActivity;
-import org.bpelunit.framework.model.test.activity.Wait;
-import org.bpelunit.framework.model.test.data.DataCopyOperation;
-import org.bpelunit.framework.model.test.data.ReceiveCondition;
-import org.bpelunit.framework.model.test.data.ReceiveDataSpecification;
-import org.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
-import org.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
-import org.bpelunit.framework.model.test.data.SendDataSpecification;
-import org.bpelunit.framework.xml.suite.XMLActivity;
-import org.bpelunit.framework.xml.suite.XMLAnyElement;
-import org.bpelunit.framework.xml.suite.XMLCondition;
-import org.bpelunit.framework.xml.suite.XMLCopy;
-import org.bpelunit.framework.xml.suite.XMLDeploymentSection;
-import org.bpelunit.framework.xml.suite.XMLHeaderProcessor;
-import org.bpelunit.framework.xml.suite.XMLMapping;
-import org.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
-import org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
-import org.bpelunit.framework.xml.suite.XMLPartnerTrack;
-import org.bpelunit.framework.xml.suite.XMLProperty;
-import org.bpelunit.framework.xml.suite.XMLReceiveActivity;
-import org.bpelunit.framework.xml.suite.XMLSendActivity;
-import org.bpelunit.framework.xml.suite.XMLSetUp;
-import org.bpelunit.framework.xml.suite.XMLSoapActivity;
-import org.bpelunit.framework.xml.suite.XMLTestCase;
-import org.bpelunit.framework.xml.suite.XMLTestCasesSection;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
-import org.bpelunit.framework.xml.suite.XMLTrack;
-import org.bpelunit.framework.xml.suite.XMLTwoWayActivity;
-import org.bpelunit.framework.xml.suite.XMLWaitActivity;
+import net.bpelunit.framework.control.datasource.DataSourceUtil;
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
+import net.bpelunit.framework.control.ext.ISOAPEncoder;
+import net.bpelunit.framework.control.soap.NamespaceContextImpl;
+import net.bpelunit.framework.control.util.ActivityUtil;
+import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
+import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.Partner;
+import net.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.model.test.activity.Activity;
+import net.bpelunit.framework.model.test.activity.ReceiveAsync;
+import net.bpelunit.framework.model.test.activity.ReceiveSendAsync;
+import net.bpelunit.framework.model.test.activity.ReceiveSendSync;
+import net.bpelunit.framework.model.test.activity.SendAsync;
+import net.bpelunit.framework.model.test.activity.SendReceiveAsync;
+import net.bpelunit.framework.model.test.activity.SendReceiveSync;
+import net.bpelunit.framework.model.test.activity.TwoWayAsyncActivity;
+import net.bpelunit.framework.model.test.activity.Wait;
+import net.bpelunit.framework.model.test.data.DataCopyOperation;
+import net.bpelunit.framework.model.test.data.ReceiveCondition;
+import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
+import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
+import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.xml.suite.XMLActivity;
+import net.bpelunit.framework.xml.suite.XMLAnyElement;
+import net.bpelunit.framework.xml.suite.XMLCondition;
+import net.bpelunit.framework.xml.suite.XMLCopy;
+import net.bpelunit.framework.xml.suite.XMLDeploymentSection;
+import net.bpelunit.framework.xml.suite.XMLHeaderProcessor;
+import net.bpelunit.framework.xml.suite.XMLMapping;
+import net.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
+import net.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
+import net.bpelunit.framework.xml.suite.XMLPartnerTrack;
+import net.bpelunit.framework.xml.suite.XMLProperty;
+import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
+import net.bpelunit.framework.xml.suite.XMLSendActivity;
+import net.bpelunit.framework.xml.suite.XMLSetUp;
+import net.bpelunit.framework.xml.suite.XMLSoapActivity;
+import net.bpelunit.framework.xml.suite.XMLTestCase;
+import net.bpelunit.framework.xml.suite.XMLTestCasesSection;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
+import net.bpelunit.framework.xml.suite.XMLTrack;
+import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
+import net.bpelunit.framework.xml.suite.XMLWaitActivity;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
@@ -658,7 +658,7 @@ public class SpecificationLoader {
 				activity, xmlSendReceiveSync, xmlReceive, receiveDirection);
 
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
-		ArrayList<org.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
+		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				activity, xmlSendReceiveSync);
 
 		activity.initialize(sSpec, rSpec, proc, mapping);
@@ -699,7 +699,7 @@ public class SpecificationLoader {
 				activity, xmlReceiveSendSync, xmlSend, sendDirection, round);
 
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
-		ArrayList<org.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
+		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				activity, xmlReceiveSendSync);
 
 		activity.initialize(sSpec, rSpec, proc, mapping);
@@ -731,7 +731,7 @@ public class SpecificationLoader {
 
 		XMLHeaderProcessor xmlHeaderProcessor = xmlAsyncTwoWay
 				.getHeaderProcessor();
-		ArrayList<org.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
+		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				twoWayActivity, xmlAsyncTwoWay);
 
 		SendAsync sendAct = new SendAsync(twoWayActivity);

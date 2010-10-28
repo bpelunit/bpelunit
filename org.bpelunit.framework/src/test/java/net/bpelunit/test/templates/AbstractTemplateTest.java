@@ -1,4 +1,4 @@
-package org.bpelunit.test.templates;
+package net.bpelunit.test.templates;
 
 import java.io.File;
 

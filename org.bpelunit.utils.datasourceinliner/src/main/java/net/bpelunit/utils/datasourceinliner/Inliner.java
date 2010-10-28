@@ -1,18 +1,18 @@
-package org.bpelunit.utils.datasourceinliner;
+package net.bpelunit.utils.datasourceinliner;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.xmlbeans.XmlException;
-import org.bpelunit.framework.BPELUnitRunner;
-import org.bpelunit.framework.control.datasource.DataSourceUtil;
-import org.bpelunit.framework.control.ext.IDataSource;
-import org.bpelunit.framework.exception.DataSourceException;
-import org.bpelunit.framework.xml.suite.XMLSetUp;
-import org.bpelunit.framework.xml.suite.XMLTestCase;
-import org.bpelunit.framework.xml.suite.XMLTestCasesSection;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.datasource.DataSourceUtil;
+import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.xml.suite.XMLSetUp;
+import net.bpelunit.framework.xml.suite.XMLTestCase;
+import net.bpelunit.framework.xml.suite.XMLTestCasesSection;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 
 /**
  * Data source inliner for BPELUnit test suite specifications in BPTS format.

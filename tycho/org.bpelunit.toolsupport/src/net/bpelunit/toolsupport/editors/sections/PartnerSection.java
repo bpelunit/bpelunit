@@ -3,21 +3,21 @@
  * license file for more information.
  * 
  */
-package org.bpelunit.toolsupport.editors.sections;
+package net.bpelunit.toolsupport.editors.sections;
 
-import org.bpelunit.framework.client.eclipse.dialog.DialogFieldValidator;
-import org.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
-import org.bpelunit.framework.client.eclipse.dialog.field.FileField;
-import org.bpelunit.framework.client.eclipse.dialog.field.TextField;
-import org.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
-import org.bpelunit.framework.xml.suite.XMLDeploymentSection;
-import org.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
-import org.bpelunit.framework.xml.suite.XMLTestSuite;
-import org.bpelunit.toolsupport.ToolSupportActivator;
-import org.bpelunit.toolsupport.editors.TestSuitePage;
-import org.bpelunit.toolsupport.util.WSDLFileFilter;
-import org.bpelunit.toolsupport.util.WSDLFileValidator;
-import org.bpelunit.toolsupport.util.WSDLReadingException;
+import net.bpelunit.framework.client.eclipse.dialog.DialogFieldValidator;
+import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
+import net.bpelunit.framework.client.eclipse.dialog.field.FileField;
+import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
+import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
+import net.bpelunit.framework.xml.suite.XMLDeploymentSection;
+import net.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
+import net.bpelunit.framework.xml.suite.XMLTestSuite;
+import net.bpelunit.toolsupport.ToolSupportActivator;
+import net.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.util.WSDLFileFilter;
+import net.bpelunit.toolsupport.util.WSDLFileValidator;
+import net.bpelunit.toolsupport.util.WSDLReadingException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
