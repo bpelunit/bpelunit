@@ -32,12 +32,12 @@
                 <Bundle-SymbolicName>
                   net.bpelunit.framework.control.datasource.excel;singleton:=true
                 </Bundle-SymbolicName>
-                <Import-Package>!com.sun.msv.*;!org.apache.*;!org.gjt.*;!org.jaxen.*;!javax.imageio.*;!javax.swing.*;!javax.xml.stream.*;!org.xmlpull.*;!schemas*;!org.openxml*;!org.relaxng.*;!junit.*;net.bpelunit.framework.control.datasource;*</Import-Package>
+                <Import-Package>!*</Import-Package>
                 <Embed-Transitive>true</Embed-Transitive>
                 <Embed-Directory>target/dependency</Embed-Directory>
                 <Embed-Dependency>*;groupId=org.apache.poi|dom4j</Embed-Dependency>
                 <Require-Bundle>
-                  net.bpelunit.framework.client.eclipse
+                  net.bpelunit.framework.client.eclipse,net.bpelunit.framework
                 </Require-Bundle>
                 <Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
                 <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>

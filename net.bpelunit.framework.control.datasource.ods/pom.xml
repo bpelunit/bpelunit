@@ -38,11 +38,10 @@
                 <Bundle-SymbolicName>
                   net.bpelunit.framework.control.datasource.ods;singleton:=true
                 </Bundle-SymbolicName>
-		<Import-Package>net.bpelunit.framework.control.datasource;*</Import-Package>
                 <Embed-Directory>target/dependency</Embed-Directory>
                 <Embed-Dependency>*;groupId=org.odftoolkit</Embed-Dependency>
                 <Require-Bundle>
-                  net.bpelunit.framework.client.eclipse
+                  net.bpelunit.framework.client.eclipse,net.bpelunit.framework
                 </Require-Bundle>
                 <Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
                 <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
