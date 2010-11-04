@@ -7,7 +7,7 @@
     <format>zip</format>
     <format>tar.gz</format>
   </formats>
-  <includeBaseDirectory>false</includeBaseDirectory>
+  <baseDirectory>bpelunit-${project.version}</baseDirectory>
   <fileSets>
     <fileSet>
       <directory>src/main/resources</directory>
