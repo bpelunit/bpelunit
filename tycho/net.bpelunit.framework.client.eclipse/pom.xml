@@ -4,11 +4,11 @@
   <parent>
     <groupId>net.bpelunit</groupId>
     <artifactId>bpelunit-tycho-parent</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>eclipse-client</artifactId>
-  <version>1.5.0</version>
+  <version>1.5.1-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
   <name>BPELUnit :: Eclipse Plugin</name>
 
