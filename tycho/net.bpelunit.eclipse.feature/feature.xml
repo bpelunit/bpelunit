@@ -2,7 +2,7 @@
 <feature
       id="net.bpelunit.eclipse.feature"
       label="BPELUnit Feature"
-      version="1.4.1.qualifier"
+      version="1.5.0"
       provider-name="Leibniz Universität Hannover">
 
    <description url="http://www.daniel-luebke.de/bpelunit.net/html/">

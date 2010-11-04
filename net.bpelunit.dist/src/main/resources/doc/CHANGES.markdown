@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Staged for next version
+Version 1.5.0
 -----------------------
 * _Feature_: BPTS files can now include Apache Velocity-based test case templates. This feature is rather large: check `TEMPLATES.markdown` for a full description.
 * _Change_: the XML Schema for the BPTS has been slightly relaxed to allow some constraints which were already implicitly accepted.

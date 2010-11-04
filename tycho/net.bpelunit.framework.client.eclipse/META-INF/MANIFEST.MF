@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit Eclipse Client Plugin
 Bundle-SymbolicName: net.bpelunit.framework.client.eclipse; singleton:=true
-Bundle-Version: 1.4.1.qualifier
+Bundle-Version: 1.5.0
 Bundle-Activator: net.bpelunit.framework.client.eclipse.BPELUnitActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,

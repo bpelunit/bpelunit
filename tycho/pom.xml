@@ -4,11 +4,11 @@
   <parent>
     <groupId>net.bpelunit</groupId>
     <artifactId>bpelunit</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.5.0</version>
   </parent>
 
   <artifactId>bpelunit-tycho-parent</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.5.0</version>
   <packaging>pom</packaging>
   <name>BPELUnit :: Tycho Parent</name>
 
