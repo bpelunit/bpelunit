@@ -181,7 +181,7 @@
       <dependency>
         <groupId>uk.com.robust-it</groupId>
         <artifactId>cloning</artifactId>
-        <version>1.7.1</version>
+        <version>1.7.4</version>
       </dependency>
       <dependency>
         <groupId>javax.activation</groupId>
@@ -389,25 +389,6 @@
     <module>net.bpelunit.framework.control.datasource.ods</module>
     <module>net.bpelunit.utils.datasourceinliner</module>
   </modules>
-
-  <!-- For Cloning and ODFDOM -->
-  <repositories>
-    <repository>
-      <id>oss-releases</id>
-      <url>https://oss.sonatype.org/content/repositories/releases/</url>
-      <releases><enabled>true</enabled></releases>
-    </repository>
-    <repository>
-      <id>ukcomrobust</id>
-      <url>http://oss.sonatype.org/service/local/repositories/ukcomrobust-it-049/content</url>
-      <releases><enabled>true</enabled></releases>
-    </repository>
-    <repository>
-      <id>odfdom-releases</id>
-      <url>https://odftoolkit.org/svn/odfdom~maven2/release/</url>
-      <releases><enabled>true</enabled></releases>
-    </repository>
-  </repositories>
 
   <!-- Sign released artifacts with GnuPG -->
   <profiles>
