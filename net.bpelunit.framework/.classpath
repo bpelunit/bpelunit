@@ -24,7 +24,7 @@
 	<classpathentry exported="true" kind="lib" path="target/dependency/truezip-6.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/velocity-1.6.4.jar"/>
 	<classpathentry kind="lib" path="target/dependency/activation-1.1.1.jar"/>
-	<classpathentry kind="lib" path="target/dependency/cloning-1.7.1.jar"/>
+	<classpathentry kind="lib" path="target/dependency/cloning-1.7.4.jar"/>
 	<classpathentry kind="lib" path="target/dependency/objenesis-1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/commons-lang-2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/wsdl4j-1.6.2.jar"/>
