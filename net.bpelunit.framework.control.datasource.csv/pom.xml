@@ -28,26 +28,18 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals><goal>bundle</goal></goals>
-            <configuration>
-              <classifier>bundle</classifier>
-              <manifestLocation>META-INF</manifestLocation>
-              <instructions>
-                <Bundle-SymbolicName>
-                  net.bpelunit.framework.control.datasource.csv;singleton:=true
-                </Bundle-SymbolicName>
-                <Require-Bundle>
-                  net.bpelunit.framework.client.eclipse,net.bpelunit.framework
-                </Require-Bundle>
-                <Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
-                <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
-              </instructions>
-            </configuration>
-          </execution>
-        </executions>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>
+              net.bpelunit.framework.control.datasource.csv;singleton:=true
+            </Bundle-SymbolicName>
+            <Require-Bundle>
+              net.bpelunit.framework.client.eclipse,net.bpelunit.framework
+            </Require-Bundle>
+            <Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
+            <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+          </instructions>
+        </configuration>
       </plugin>
     </plugins>
   </build>
