@@ -40,14 +40,18 @@ This will build and install into your local Maven repository everything: core pr
 
 Please note that due to a limitation in Tycho, the core projects and the Eclipse plugins have been split into separate reactors. Also, you *must* install the core projects into your Maven repository before you can build the Tycho-based projects or the ``net.bpelunit.dist`` project.
 
+Note for the maintainer: if you want to deploy a release to the Sonatype OSS server, please use the ``sonatype-deploy`` profile, and make sure you have a GPG keypair which has been published to ``pgp.mit.edu``. You can run the profile like this:
+
+    mvn -P sonatype-deploy
+
 Building with Eclipse PDE
 -------------------------
 
 If you want, you can also work on the BPELUnit code straight from the Eclipse Plug-in Development Environment. To do so, you will still need Maven to bootstrap the environment. Just run this from this directory:
 
-    mvn compile
+    mvn install
 
-That will ensure that the dependencies will be available in the ``target/dependency`` directory in each core project, and that the required code is automatically generated.
+That will ensure that the dependencies will be available in the ``target/dependency`` directory in each core project, and that the required code and ``MANIFEST.MF`` files are automatically generated.
 
 You should now import the projects into your Eclipse workspace. You may need to define the M2_REPO variable in the "Java Build Path" section of one of the projects if you have not done so yet. It needs to point to your local Maven repository: on most UNIX-based systems, it should be ``$HOME/.m2/repository``. Please consult the Maven documentation for more details.
 
