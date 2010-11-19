@@ -34,6 +34,7 @@
             </Bundle-SymbolicName>
             <Embed-Directory>target/dependency</Embed-Directory>
             <Embed-Dependency>*;groupId=org.odftoolkit</Embed-Dependency>
+            <Import-Package>!*</Import-Package>
             <Require-Bundle>
               net.bpelunit.framework.client.eclipse,net.bpelunit.framework
             </Require-Bundle>
