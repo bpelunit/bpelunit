@@ -102,7 +102,7 @@ public class DataSourceContentReferencesTest {
 
 	@Test
 	public void fileURL() throws Exception {
-		canReadContentsFrom("file://" + FILE_SOURCE_ABSPATH);
+		canReadContentsFrom(new File(FILE_SOURCE_ABSPATH).toURI().toURL().toExternalForm());
 	}
 
 	@Test
