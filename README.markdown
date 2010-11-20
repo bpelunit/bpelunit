@@ -49,7 +49,7 @@ Building with Eclipse PDE
 
 If you want, you can also work on the BPELUnit code straight from the Eclipse Plug-in Development Environment. To do so, you will still need Maven to bootstrap the environment. Just run this from this directory:
 
-    mvn process-classes
+    mvn install -DskipTests=true
 
 That will ensure that the dependencies will be available in the ``target/dependency`` directory in each core project, and that the required code and ``MANIFEST.MF`` files are automatically generated.
 
