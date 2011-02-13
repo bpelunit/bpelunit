@@ -6,7 +6,7 @@
   <classpathentry kind="var" path="M2_REPO/javax/xml/soap/saaj-api/1.3/saaj-api-1.3.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.4/servlet-api-2.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2.jar"/>
-  <classpathentry kind="var" path="M2_REPO/uk/com/robust-it/cloning/1.7.4/cloning-1.7.4.jar"/>
+  <classpathentry kind="var" path="M2_REPO/uk/com/robust-it/cloning/1.7.5-SNAPSHOT/cloning-1.7.5-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-cli/commons-cli/1.0/commons-cli-1.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.3/commons-codec-1.3.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar"/>
@@ -43,6 +43,7 @@
   <classpathentry kind="var" path="M2_REPO/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-4/plexus-interactivity-api-1.0-alpha-4.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/codehaus/plexus/plexus-utils/1.1/plexus-utils-1.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/sun/xml/messaging/saaj/saaj-impl/1.3/saaj-impl-1.3.jar"/>
+  <classpathentry kind="var" path="M2_REPO/stax/stax-api/1.0.1/stax-api-1.0.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/de/schlichtherle/io/truezip/6.6/truezip-6.6.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/velocity/velocity/1.6.4/velocity-1.6.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/maven/wagon/wagon-file/1.0-alpha-5/wagon-file-1.0-alpha-5.jar"/>
