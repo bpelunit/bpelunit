@@ -285,9 +285,23 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	}
 
 	private void terminateAllRunningProcesses(String processName) throws Exception {
-	    for (int pid : listRunningProcesses(processName)) {
-	        terminateProcess(pid);
-	    }
+		// Sometimes, ActiveBPEL needs more time to terminate a process. We'll
+		// have to insist a bit.
+		final int RETRIES = 20;
+		final int RETRY_DELAY = 200;
+
+		List<Integer> runningProcesses = listRunningProcesses(processName);
+		for (int i = 0; !runningProcesses.isEmpty() && i < RETRIES; ++i) {
+			if (i > 0) {
+				synchronized (this) {
+					this.wait(RETRY_DELAY);
+				}
+			}
+			for (int pid : runningProcesses) {
+				terminateProcess(pid);
+			}
+			runningProcesses = listRunningProcesses(processName);
+		}
 	}
 
 	  private List<Integer> listRunningProcesses(String processName) throws Exception {
