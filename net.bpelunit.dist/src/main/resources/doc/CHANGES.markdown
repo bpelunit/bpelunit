@@ -3,7 +3,7 @@ Changelog
 
 Staged for next version
 -----------------------
-Nothing for now.
+* _Change_: the ActiveBPEL deployer tries several times to kill stray processes now, instead of just once. This should improve isolation between each test and each test suite, especially when doing intensive testing (such as that in mutation testing).
 
 Version 1.5.0
 -----------------------
