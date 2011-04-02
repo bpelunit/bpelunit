@@ -91,7 +91,7 @@
       <artifactId>commons-logging</artifactId>
     </dependency>
     <dependency>
-      <groupId>de.schlichtherle.io</groupId>
+      <groupId>de.schlichtherle</groupId>
       <artifactId>truezip</artifactId>
     </dependency>
     <dependency>
