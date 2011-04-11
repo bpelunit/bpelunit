@@ -134,7 +134,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		try {
 			context.processHeaders(this);
 		} catch (HeaderProcessingException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Header Processing Fault.", e);
+			fStatus = ArtefactStatus.createErrorStatus("Header Processing Fault.", e);
 			return;
 		}
 

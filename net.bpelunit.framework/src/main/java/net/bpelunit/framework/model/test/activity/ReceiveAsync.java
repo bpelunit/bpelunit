@@ -74,7 +74,21 @@ public class ReceiveAsync extends Activity {
 
 		IncomingMessage incoming;
 		try {
-			incoming= context.receiveMessage(this.getPartnerTrack());
+			// Note: ignore messages with different message IDs
+			while (true) {
+				incoming = context.receiveMessage(this.getPartnerTrack());
+				fReceiveSpec.handle(context, incoming.getBody());
+
+				final String sentID = context.getUserData(IHeaderProcessor.MSG_SENT_ID);
+				final String recvID = context.getUserData(IHeaderProcessor.MSG_RECEIVED_ID);
+				if (incoming != null && !"".equals(sentID) && !recvID.equals(sentID)) {
+					LOGGER.info("Ignoring message with ID "
+						+ recvID + ", waiting for message with ID " + sentID);
+				}
+				else {
+					break;
+				}
+			}
 		} catch (TimeoutException e) {
 			fStatus= ArtefactStatus.createErrorStatus("Timeout while waiting for incoming asynchronous message", e);
 			return;
@@ -82,8 +96,6 @@ public class ReceiveAsync extends Activity {
 			fStatus= ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming asynchronous messsage", e);
 			return;
 		}
-
-		fReceiveSpec.handle(context, incoming.getBody());
 
 		/*
 		 * 

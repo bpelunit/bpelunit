@@ -34,7 +34,6 @@ public class WSAHeaderProcessor implements IHeaderProcessor {
 	static final String WSA_TAG_RELATES_TO = "RelatesTo";
 	static final String WSA_TAG_ADDRESS = "Address";
 	static final String WSA_TAG_REPLY_TO = "ReplyTo";
-	static final String WSA_TAG_FROM = "From";
 	static final String WSA_TAG_MESSAGE_ID = "MessageID";
 
 	static final String WSA_RECEIVED = "WSA-Received";
@@ -55,7 +54,6 @@ public class WSAHeaderProcessor implements IHeaderProcessor {
 			 * to test whether this reply was intended for our request or not.
 			 */
 			SOAPHeader header = getHeader(message, "Incoming");
-			context.setUserData(WSA_RECEIVED_ADDRESS, getEndpointURL(header, WSA_TAG_FROM));
 
 			String relatesToID = getRelatesToID(header);
 			context.setUserData(WSA_RECEIVED_ID, relatesToID);

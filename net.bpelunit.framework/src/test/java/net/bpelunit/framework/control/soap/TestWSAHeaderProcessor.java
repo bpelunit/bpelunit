@@ -103,7 +103,5 @@ public class TestWSAHeaderProcessor extends SimpleTest {
 		proc.processReceive(dummyContext, rcvMessage);
 		assertEquals("WSA-838848474774-3883873747",
 			dummyContext.getUserData(WSAHeaderProcessor.WSA_RECEIVED_ID));
-		assertEquals("http://example.com",
-			dummyContext.getUserData(WSAHeaderProcessor.WSA_RECEIVED_ADDRESS));
 	}
 }

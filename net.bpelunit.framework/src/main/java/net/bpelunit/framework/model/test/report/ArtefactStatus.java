@@ -8,6 +8,8 @@ package net.bpelunit.framework.model.test.report;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 /**
  * The ArtefactStatus is a representation of the current status of any BPELUnit artefact. It
  * contains a status code, message, and possible exception information.
@@ -17,6 +19,8 @@ import java.util.List;
  * 
  */
 public class ArtefactStatus {
+
+	private static final Logger LOGGER = Logger.getLogger(ArtefactStatus.class);
 
 	public enum StatusCode {
 		NOTYETSPECIFIED, INPROGRESS, ABORTED, PASSED, FAILED, ERROR
@@ -57,10 +61,12 @@ public class ArtefactStatus {
 	}
 
 	public static ArtefactStatus createErrorStatus(String message, Exception e) {
+		LOGGER.error("Error status due to exception", e);
 		return new ArtefactStatus(StatusCode.ERROR, message, e);
 	}
 
 	public static ArtefactStatus createAbortedStatus(String message, Exception e) {
+		LOGGER.error("Aborted status due to exception", e);
 		return new ArtefactStatus(StatusCode.ABORTED, message, e);
 	}
 
