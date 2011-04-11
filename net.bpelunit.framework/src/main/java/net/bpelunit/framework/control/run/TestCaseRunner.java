@@ -92,6 +92,11 @@ public class TestCaseRunner {
 
 		fClient = new HttpClient(fConnectionManager);
 
+		// Do *not* reuse connections for each request, to keep
+		// each synchronous send/receive separate from the rest
+		// (cleaner test cases when processes misbehave)
+		fClient.getParams().setVersion(HttpVersion.HTTP_1_0);
+
 		List<PartnerTrack> partnerTracks = caseToRun.getPartnerTracks();
 		for (PartnerTrack partnerTrack : partnerTracks) {
 			partnerTrack.initialize(this);
