@@ -34,6 +34,17 @@ import net.bpelunit.framework.model.test.activity.ActivityContext;
 public interface IHeaderProcessor {
 
 	/**
+	 * Name of the context value for the ID of the receive message.
+	 * This context value name is independent from the specific technology:
+	 * basically, we should reject asynchronous incoming messages if
+	 * {@link #MSG_RECEIVED_ID} does not match {@link #MSG_SENT_ID}.
+	 */
+	public final static String MSG_RECEIVED_ID = "Message-ID-Receive";
+
+	/** See {@link #MSG_RECEIVED_ID}. */
+	public final static String MSG_SENT_ID = "Message-ID-Sent";
+
+	/**
 	 * Sets a property given by the tester in the test specification.
 	 * 
 	 * @param name name of the property

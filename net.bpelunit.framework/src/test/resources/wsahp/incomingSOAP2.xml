@@ -1,6 +1,9 @@
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
 	<SOAP-ENV:Header>
 		<wsa:RelatesTo>WSA-838848474774-3883873747</wsa:RelatesTo>
+		<wsa:From>
+		  <wsa:Address>http://example.com</wsa:Address>
+		</wsa:From>
 	</SOAP-ENV:Header>
 	<SOAP-ENV:Body>
 		<tns:about xmlns:tns="http://xxx">

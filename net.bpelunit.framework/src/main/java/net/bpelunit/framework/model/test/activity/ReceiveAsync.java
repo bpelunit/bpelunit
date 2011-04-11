@@ -9,12 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
+
+import org.apache.log4j.Logger;
 
 /**
  * A receive asynchronous activity is intended to receive a single incoming transmission which
@@ -34,6 +37,8 @@ import net.bpelunit.framework.model.test.wire.OutgoingMessage;
  * 
  */
 public class ReceiveAsync extends Activity {
+
+	private static final Logger LOGGER = Logger.getLogger(ReceiveAsync.class);
 
 	/**
 	 * The parent activity, if there is one.

@@ -50,7 +50,6 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 
 	@Override
 	public void run(ActivityContext context) {
-
 		context.setHeaderProcessor(fHeaderProcessor);
 
 		fSendSpec.handle(context);
