@@ -26,6 +26,7 @@ import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDeployment;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import net.bpelunit.framework.control.util.JDomHelper;
+import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.ProcessUnderTest;
@@ -140,7 +141,7 @@ public class ODEDeployer implements IBPELDeployer {
 			throw new DeploymentException(
 					"ODE deployer could not find zip file " + fArchive);
 
-		HttpClient client = new HttpClient();
+		HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
 		PostMethod method = new PostMethod(fDeploymentAdminServiceURL);
 
 		RequestEntity re;
@@ -201,7 +202,7 @@ public class ODEDeployer implements IBPELDeployer {
 	public void undeploy(String testPath, ProcessUnderTest put)
 			throws DeploymentException {
 
-		HttpClient client = new HttpClient();
+		HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
 		PostMethod method = new PostMethod(fDeploymentAdminServiceURL);
 
 		RequestEntity re;

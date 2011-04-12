@@ -14,6 +14,13 @@ import java.util.regex.Pattern;
 
 import javax.xml.soap.SOAPException;
 
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.control.ext.IDeployment;
+import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.model.ProcessUnderTest;
+
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -21,11 +28,6 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.ext.IDeployment;
-import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
-import net.bpelunit.framework.exception.DeploymentException;
-import net.bpelunit.framework.model.ProcessUnderTest;
 
 /**
  * ActiveBPEL Deployer - deploys a process to an ActiveBPEL server.
@@ -259,7 +261,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 			throws IOException, HttpException {
 		PostMethod method = null;
 		try {
-			HttpClient client = new HttpClient();
+			HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
 			method = new PostMethod(url);
 			method.setRequestEntity(re);
 

@@ -12,18 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpVersion;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.log4j.Logger;
-import org.apache.velocity.VelocityContext;
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.control.ws.LocalHTTPServer;
 import net.bpelunit.framework.coverage.CoverageConstants;
 import net.bpelunit.framework.exception.PartnerNotFoundException;
@@ -32,6 +23,16 @@ import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
+
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.log4j.Logger;
+import org.apache.velocity.VelocityContext;
 
 /**
  * 
@@ -69,7 +70,8 @@ public class TestCaseRunner {
 	private LocalHTTPServer fServer;
 
 	// Pool connections over all test cases, to avoid socket leaks
-	private static final MultiThreadedHttpConnectionManager fConnectionManager = new MultiThreadedHttpConnectionManager();
+	private static final MultiThreadedHttpConnectionManager fConnectionManager
+		= new NoPersistenceConnectionManager();
 
 	private HttpClient fClient;
 
@@ -92,11 +94,6 @@ public class TestCaseRunner {
 		fAbortedByUser = false;
 
 		fClient = new HttpClient(fConnectionManager);
-
-		// Do *not* reuse connections for each request, to keep
-		// each synchronous send/receive separate from the rest
-		// (cleaner test cases when processes misbehave)
-		fClient.getParams().setVersion(HttpVersion.HTTP_1_0);
 
 		List<PartnerTrack> partnerTracks = caseToRun.getPartnerTracks();
 		for (PartnerTrack partnerTrack : partnerTracks) {
