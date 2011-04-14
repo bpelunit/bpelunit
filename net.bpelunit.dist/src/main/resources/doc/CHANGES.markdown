@@ -4,7 +4,6 @@ Changelog
 Staged for next version
 -----------------------
 * _Change_: BPELUnit uses a different HTTP connection for each sendReceive activity. This ensures sendReceive activities are kept separate from each other and avoids race conditions.
-* _Change_: when using the WSAHeaderProcessor in a sendReceiveAsynchronous activity, the receive side will ignore incoming messages with a different Message ID than the one originally sent, to avoid race conditions.
 
 Version 1.5.0
 -----------------------
