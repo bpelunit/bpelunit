@@ -1,0 +1,129 @@
+<?xml version="1.0" ?>
+<bpel:process name="EchoFirst" targetNamespace="http://bpelunit.net/bpel/EchoFirst"
+	suppressJoinFailure="yes" xmlns:tns="http://bpelunit.net/bpel/EchoFirst"
+	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+	xmlns:ns="http://bpelunit.net/echo" xmlns:ns2="http://www.w3.org/2001/XMLSchema">
+
+	<!-- Import the client WSDL -->
+	<bpel:import namespace="http://bpelunit.net/echo" location="EchoFirst.wsdl"
+		importType="http://schemas.xmlsoap.org/wsdl/" />
+
+	<!-- ================================================================= -->
+	<!-- PARTNERLINKS -->
+	<!-- List of services participating in this BPEL process -->
+	<!-- ================================================================= -->
+	<bpel:partnerLinks>
+		<bpel:partnerLink name="client" partnerLinkType="ns:clientType" myRole="client"/>
+	</bpel:partnerLinks>
+
+	<!-- ================================================================= -->
+	<!-- VARIABLES -->
+	<!-- List of messages and XML documents used within this BPEL process -->
+	<!-- ================================================================= -->
+	<bpel:variables>
+		<!-- Reference to the message passed as input during initiation -->
+		<bpel:variable name="leftRequest" messageType="ns:leftRequest"/>
+		<bpel:variable name="rightRequest" messageType="ns:rightRequest"/>
+
+		<bpel:variable name="replyContent" type="ns2:string">
+            <bpel:from>'uninitialized'</bpel:from>
+        </bpel:variable>
+
+		<!-- Reference to the message that will be returned to the requester -->
+		<bpel:variable name="leftResponse" messageType="ns:leftResponse"/>
+		<bpel:variable name="rightResponse" messageType="ns:rightResponse"/>
+	</bpel:variables>
+
+	<bpel:correlationSets>
+		<bpel:correlationSet name="requestID" properties="ns:requestID" />
+	</bpel:correlationSets>
+
+	<!-- ================================================================= -->
+	<!-- ORCHESTRATION LOGIC -->
+	<!-- Set of activities coordinating the flow of messages across the -->
+	<!-- services integrated within this business process -->
+	<!-- ================================================================= -->
+	<bpel:sequence name="main">
+		
+		
+		
+        <bpel:pick name="TakeFirst" createInstance="yes">
+            <bpel:onMessage partnerLink="client" operation="left" variable="leftRequest">
+                <bpel:assign name="EchoLeftMsg">
+                    <bpel:copy>
+                        <bpel:from>
+                            <![CDATA[concat('left: ', $leftRequest.parameters/message)]]>
+                        </bpel:from>
+                        <bpel:to variable="replyContent"></bpel:to>
+                    </bpel:copy>
+                </bpel:assign>
+                <bpel:correlations>
+                    <bpel:correlation set="requestID" initiate="yes"></bpel:correlation>
+                </bpel:correlations>
+            </bpel:onMessage>
+            <bpel:onMessage partnerLink="client" operation="right" portType="ns:EchoFirstPort" variable="rightRequest">
+                <bpel:assign name="EchoRightMsg">
+                    <bpel:copy>
+                        <bpel:from>
+                            <![CDATA[concat('right: ', $rightRequest.parameters/message)]]>
+                        </bpel:from>
+                        <bpel:to variable="replyContent"></bpel:to>
+                    </bpel:copy>
+                </bpel:assign>
+                <bpel:correlations>
+                    <bpel:correlation set="requestID" initiate="yes"></bpel:correlation>
+                </bpel:correlations>
+            </bpel:onMessage>
+        </bpel:pick>
+        <bpel:pick name="IgnoreSecond">
+            <bpel:onMessage partnerLink="client" operation="left" variable="leftRequest">
+                <bpel:empty/>
+                <bpel:correlations>
+                    <bpel:correlation set="requestID" initiate="no"></bpel:correlation>
+                </bpel:correlations>
+            </bpel:onMessage>
+            <bpel:onMessage partnerLink="client" operation="right" portType="ns:EchoFirstPort" variable="rightRequest">
+                <bpel:empty/>
+                <bpel:correlations>
+                    <bpel:correlation set="requestID" initiate="no"></bpel:correlation>
+                </bpel:correlations>
+            </bpel:onMessage>
+        </bpel:pick>
+        <bpel:assign validate="no" name="PrepareReplies">
+            <bpel:copy>
+                <bpel:from>
+                    <bpel:literal>
+                        <tns:response xmlns:tns="http://bpelunit.net/echo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                        	<message>message</message>
+                        </tns:response>
+                    </bpel:literal>
+                </bpel:from>
+                <bpel:to variable="rightResponse" part="parameters"></bpel:to>
+            </bpel:copy>
+            <bpel:copy>
+                <bpel:from>
+                    <bpel:literal>
+                        <tns:response xmlns:tns="http://bpelunit.net/echo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                        	<message>message</message>
+	                    </tns:response>
+                    </bpel:literal>
+                </bpel:from>
+                <bpel:to variable="leftResponse" part="parameters"></bpel:to>
+            </bpel:copy>
+            <bpel:copy>
+                <bpel:from variable="replyContent"></bpel:from>
+                <bpel:to part="parameters" variable="leftResponse">
+                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[message]]></bpel:query>
+                </bpel:to>
+            </bpel:copy>
+            <bpel:copy>
+                <bpel:from variable="replyContent"></bpel:from>
+                <bpel:to part="parameters" variable="rightResponse">
+                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[message]]></bpel:query>
+                </bpel:to>
+            </bpel:copy>
+        </bpel:assign>
+        <bpel:flow name="Flow"><bpel:reply name="ReplyLeft" partnerLink="client" operation="left" variable="leftResponse"></bpel:reply><bpel:reply name="ReplyRight" partnerLink="client" operation="right" portType="ns:EchoFirstPort" variable="rightResponse"></bpel:reply></bpel:flow>
+    </bpel:sequence>
+</bpel:process>
+

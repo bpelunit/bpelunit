@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:echo="http://bpelunit.net/echo">
+  <tes:name>suite.bpts</tes:name>
+  <tes:baseURL>http://localhost:7777/ws</tes:baseURL>
+  <tes:deployment>
+    <tes:put type="activebpel" name="EchoFirst">
+      <tes:wsdl>EchoFirst.wsdl</tes:wsdl>
+      <tes:property name="BPRFile">EchoFirstMessage.bpr</tes:property>
+    </tes:put>
+    <tes:partner name="rightClient" wsdl="EchoFirst.wsdl"/>
+  </tes:deployment>
+  <tes:setUp>
+    <tes:dataSource type="velocity" src="data.vm">
+      <tes:property name="iteratedVars">delayLeft delayRight expectedMessage</tes:property>
+    </tes:dataSource>
+  </tes:setUp>
+
+  <tes:testCases>
+    <tes:testCase name="LeftIsFirst" basedOn="" abstract="false" vary="false">
+      <tes:clientTrack>
+	<tes:sendReceive service="echo:EchoFirstService" port="EchoFirstServicePort" operation="left">
+	  <tes:send fault="false" delay="$delayLeft">
+	    <tes:data>
+	      <echo:leftRequest>
+		<id>42</id>
+		<message>Hello</message>
+	      </echo:leftRequest>
+	    </tes:data>
+	  </tes:send>
+	  <tes:receive fault="false">
+	    <tes:condition>
+	      <tes:expression>//message</tes:expression>
+	      <tes:value>$expectedMessage</tes:value>
+	    </tes:condition>
+	  </tes:receive>
+	</tes:sendReceive>
+      </tes:clientTrack>
+      <tes:partnerTrack name="rightClient">
+	<tes:sendReceive service="echo:EchoFirstService" port="EchoFirstServicePort" operation="right">
+	  <tes:send fault="false" delay="$delayRight">
+	    <tes:data>
+	      <echo:rightRequest>
+		<id>42</id>
+		<message>Bye</message>
+	      </echo:rightRequest>
+	    </tes:data>
+	  </tes:send>
+	  <tes:receive fault="false">
+	    <tes:condition>
+	      <tes:expression>//message</tes:expression>
+	      <tes:value>$expectedMessage</tes:value>
+	    </tes:condition>
+	  </tes:receive>
+	</tes:sendReceive>
+      </tes:partnerTrack>
+    </tes:testCase>
+  </tes:testCases>
+</tes:testSuite>
