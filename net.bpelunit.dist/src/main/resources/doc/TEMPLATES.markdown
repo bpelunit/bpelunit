@@ -3,7 +3,7 @@ Test case templates in BPELUnit
 
 BPELUnit can now build the body of the SOAP messages to be sent from the mockups using [Velocity](http://velocity.apache.org) templates. These templates allow the user to easily define many test cases which have the same activities but have different content in their messages. For more information on the Velocity Template Language, check the official [guide](http://velocity.apache.org/engine/devel/developer-guide.html) and [reference](http://velocity.apache.org/engine/devel/vtl-reference-guide.html).
 
-Template variables can also be used to skip partner tracks and activities and inside receive conditions. See below for more details.
+Template variables can also be used to skip partner tracks and activities and inside receive conditions, and control delays when sending messages. See below for more details.
 
 How to build messages using templates
 -------------------------------------
@@ -381,6 +381,15 @@ It is *not* available in:
 - `<clientTrack>` (the element itself: activities in the client track can have `assume`)
 - `<send>` (inside a two-way activity)
 - `<receive>` (inside a two-way activity)
+
+Using template variables to specify delays
+------------------------------------------
+
+To delay the sending of a message from a `<send>` or `<sendOnly>` activity, you can specify an XPath expression in the `delay` attribute. This expression will compute the number of seconds BPELUnit should wait before sending the message.
+
+For instance, `<send delay="2">` would always delay the message by 2 seconds, and `<send delay="$x+1">` would delay the message by one more second than the value of the data source variable `x`.
+
+It is forbidden to use both the `delay` and the `delaySequence` attributes in the same activity: BPELUnit will reject the BPTS in that case.
 
 Expanding data sources back into regular test cases
 ---------------------------------------------------
