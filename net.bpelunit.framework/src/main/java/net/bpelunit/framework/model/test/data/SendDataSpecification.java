@@ -15,10 +15,10 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.SOAPMessage;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
-import org.apache.log4j.Logger;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.control.util.XPathTool;
@@ -30,6 +30,11 @@ import net.bpelunit.framework.model.test.activity.ActivityContext;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+
+import org.apache.log4j.Logger;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.context.Context;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -101,9 +106,15 @@ public class SendDataSpecification extends DataSpecification {
 	private NamespaceContext fNamespaceContext;
 
 	/**
-	 * Delay for this send specification (if any)
+	 * Constant delay for this send specification (if any).
 	 */
 	private int fDelay;
+
+	/**
+	 * Expression to be used to initialize the constant delay in fDelay, when equal to zero.
+	 * @see #getDelay()
+	 */
+	private String fDelayExpression;
 
         /**
          * Fault code to be reported, if this is a fault.
@@ -129,7 +140,7 @@ public class SendDataSpecification extends DataSpecification {
 		super(parent);
 	}
 
-	public void initialize(SOAPOperationCallIdentifier operation, int delay, String targetURL, String soapAction, String encodingStyle,
+	public void initialize(SOAPOperationCallIdentifier operation, int delay, String delayExpression, String targetURL, String soapAction, String encodingStyle,
 			ISOAPEncoder encoder, Element rawDataRoot, String dataTemplate, NamespaceContext context, QName faultCode, String faultString) {
 		fOperation= operation;
 		fLiteralData= rawDataRoot;
@@ -141,7 +152,8 @@ public class SendDataSpecification extends DataSpecification {
 		fEncodingStyle= encodingStyle;
 		fEncoder= encoder;
 
-		fDelay= delay;
+		setDelay(delay);
+		setDelayExpression(delayExpression);
 		fFaultCode= faultCode;
 		fFaultString= faultString;
 	}
@@ -209,13 +221,13 @@ public class SendDataSpecification extends DataSpecification {
 	/**
 	 * Delays execution for a specified delay. Should be executed inside a block with other
 	 * interruptable methods
-	 * 
-	 * @throws InterruptedException
+	 * @param context Activity context for the running specification.
+	 * @throws Exception Could not compute the delay from the XPath expression inside the delay attribute.
 	 */
-	public void delay() throws InterruptedException {
-		if (fDelay > 0) {
-			Logger.getLogger(getClass()).info("Delaying send for " + fDelay + " seconds...");
-			Thread.sleep(fDelay * 1000);
+	public void delay(ActivityContext context) throws Exception {
+		if (getDelay(context) > 0) {
+			Logger.getLogger(getClass()).info("Delaying send for " + getDelay(context) + " seconds...");
+			Thread.sleep(getDelay(context) * 1000);
 		}
 	}
 
@@ -243,6 +255,33 @@ public class SendDataSpecification extends DataSpecification {
 		return fOperation.isFault();
 	}
 
+	public void setDelay(int fDelay) {
+		this.fDelay = fDelay;
+	}
+
+	public int getDelay(ActivityContext activityContext) throws Exception {
+		if (getDelayExpression() != null) {
+			final Context vtlContext = activityContext.createVelocityContext();
+			final ContextXPathVariableResolver xpathResolver = new ContextXPathVariableResolver(vtlContext);
+
+			final XPath xpath = XPathFactory.newInstance().newXPath();
+			xpath.setNamespaceContext(fNamespaceContext);
+			xpath.setXPathVariableResolver(xpathResolver);
+
+			// We should only evaluate these expressions once per row and round
+			fDelay = ((Double)xpath.evaluate(getDelayExpression(), fLiteralData, XPathConstants.NUMBER)).intValue();
+			setDelayExpression(null);
+		}
+		return fDelay;
+	}
+
+	public void setDelayExpression(String fDelayExpression) {
+		this.fDelayExpression = fDelayExpression;
+	}
+
+	public String getDelayExpression() {
+		return fDelayExpression;
+	}
 
 	// ************************* Inner Stuff ***********************
 

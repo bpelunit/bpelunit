@@ -92,13 +92,16 @@ public class SendAsync extends Activity {
 
 		IncomingMessage incoming;
 		try {
-			fSendSpec.delay();
+			fSendSpec.delay(context);
 			incoming= context.sendMessage(msg);
 		} catch (SynchronousSendException e) {
 			fStatus= ArtefactStatus.createErrorStatus("HTTP Error while sending out synchronous message!", e);
 			return;
 		} catch (InterruptedException e) {
 			fStatus= ArtefactStatus.createAbortedStatus("Aborting due to error in another partner track.", e);
+			return;
+		} catch (Exception e) {
+			fStatus= ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e);
 			return;
 		}
 

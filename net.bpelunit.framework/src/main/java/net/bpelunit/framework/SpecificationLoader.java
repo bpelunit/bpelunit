@@ -812,6 +812,13 @@ public class SpecificationLoader {
 		XMLAnyElement xmlData = xmlSend.getData(),
 			xmlTemplate = xmlSend.getTemplate();
 
+		// "delay" attribute
+		if (xmlSend.isSetDelay() && xmlSend.isSetDelaySequence()) {
+			throw new SpecificationException(
+					"Send Element can only have exactly one of {delay, delaySequence}, and not both"
+					);
+		}
+		final String delayExpression = xmlSend.getDelay();
 		// Import namespaces in the BPTS file to the root elements of the
 		// <data> or <template> element, and convert the <template> contents
 		// to text.
@@ -854,11 +861,11 @@ public class SpecificationLoader {
 			// a response to a HTTP request inside the same channel
 			// It does not need targetURL and soapAction.
 			spec
-					.initialize(operation, currentDelay, encodingStyle,
-							delaySequence, delaySequence, encoder, rawDataRoot,
+					.initialize(operation, currentDelay, delayExpression, null,
+							null, encodingStyle, encoder, rawDataRoot,
 							templateText, context, faultCode, faultString);
 		} else
-			spec.initialize(operation, currentDelay, targetURL, soapAction,
+			spec.initialize(operation, currentDelay, delayExpression, targetURL, soapAction,
 					encodingStyle, encoder, rawDataRoot, templateText,
 					context, faultCode, faultString);
 
