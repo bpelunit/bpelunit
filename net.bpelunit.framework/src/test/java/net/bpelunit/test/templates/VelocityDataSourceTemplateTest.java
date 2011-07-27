@@ -74,4 +74,12 @@ public class VelocityDataSourceTemplateTest extends AbstractTemplateTest {
 	public void testClientTrackActivitiesAreSkippedIffAssumptionsAreFalse() throws Exception {
 		TestUtil.getResults(TC_ASSUME_CTRACK);
 	}
+
+	/**
+	 * Checks that receive condition templates work.
+	 */
+	@Test
+	public void receiveConditionTemplatesShouldWork() throws Exception {
+		TestUtil.getResults(TC_VDS_TSDS_TEMP_RECVCOND);
+	}
 }
