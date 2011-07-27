@@ -939,8 +939,7 @@ public class SpecificationLoader {
 		List<ReceiveCondition> cList = new ArrayList<ReceiveCondition>();
 		if (xmlConditionList != null)
 			for (XMLCondition xmlCondition : xmlConditionList) {
-				cList.add(new ReceiveCondition(spec, xmlCondition
-						.getExpression(), xmlCondition.getValue()));
+				cList.add(new ReceiveCondition(spec, xmlCondition.getExpression(), xmlCondition.getTemplate(), xmlCondition.getValue()));
 			}
 
 		// Namespaces

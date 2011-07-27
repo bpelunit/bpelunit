@@ -15,9 +15,11 @@ import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathVariableResolver;
 
 import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+
 import org.w3c.dom.Element;
 
 /**
@@ -56,15 +58,24 @@ public class ReceiveCondition implements ITestArtefact {
 	 */
 	private ArtefactStatus fStatus;
 
+	/**
+	 * Velocity template to be used to build the receive condition.
+	 */
+	private String fTemplate;
 
 	// ******************** Initialization ************************
 
-	public ReceiveCondition(ITestArtefact parent, String condition, String value) {
+	public ReceiveCondition(ITestArtefact parent, String condition, String template, String value) throws SpecificationException {
 		fExpression= condition;
+		fTemplate= template;
 		fExpectedValue= value;
 		fStatus= ArtefactStatus.createInitialStatus();
 		fParent= parent;
 		fActualValue= null;
+
+		if (fExpression != null && fTemplate != null || fExpression == null && fTemplate == null) {
+			throw new SpecificationException("Exactly one of (<template>, <expression>) should be used");
+		}
 	}
 
 
