@@ -30,13 +30,13 @@ public class TestConditionChecker extends SimpleTest {
 
 		Element parent= TestUtil.readLiteralData(PATH_TO_FILES + "simple.xmlfrag");
 
-		ReceiveCondition c= new ReceiveCondition(null, eval, result);
+		ReceiveCondition c= new ReceiveCondition(null, eval, null, result);
 
 		NamespaceContextImpl ns= new NamespaceContextImpl();
 		ns.setNamespace("soapenv", "http://schemas.xmlsoap.org/soap/envelope/");
 		ns.setNamespace("b", "http://xmlns.oracle.com/AirlineReservationSync");
 
-		c.evaluate(parent, ns, null);
+		c.evaluate(null, parent, ns, null);
 		return c;
 	}
 

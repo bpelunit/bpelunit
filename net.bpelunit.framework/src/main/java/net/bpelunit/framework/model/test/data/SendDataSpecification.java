@@ -7,7 +7,6 @@ package net.bpelunit.framework.model.test.data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +15,8 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.SOAPMessage;
 
-import org.apache.log4j.Logger;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
-import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.exception.HeaderProcessingException;
 import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.exception.SpecificationException;
@@ -30,11 +25,12 @@ import net.bpelunit.framework.model.test.activity.ActivityContext;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-import com.rits.cloning.Cloner;
 
 /**
  * The send data specification is a data package which contains all necessary information to encode
@@ -115,9 +111,6 @@ public class SendDataSpecification extends DataSpecification {
          */
 		private String fDataTemplate;
 
-	// For deep cloning contexts so they are isolated from each other
-	private static final Cloner fCloner = new Cloner();
-
 	// ******************** Initialization ************************
 
 	public SendDataSpecification(Activity parent, NamespaceContext nsContext) throws SpecificationException {
@@ -146,7 +139,7 @@ public class SendDataSpecification extends DataSpecification {
 
 		// Expand template into literal data if there is one
 		if (fDataTemplate != null) {
-			expandTemplate(context);
+			generateLiteralDataFromTemplate(context);
 		}
 		if (hasProblems()) return;
 
@@ -177,15 +170,9 @@ public class SendDataSpecification extends DataSpecification {
 		fStatus= ArtefactStatus.createPassedStatus();
 	}
 
-	private void expandTemplate(ActivityContext context) {
+	private void generateLiteralDataFromTemplate(ActivityContext context) {
 		try {
-			VelocityContext velocityCtx = fCloner.deepClone(context.createVelocityContext());
-			velocityCtx.put("xpath", new XPathTool(this.fNamespaceContext));
-
-			// Expand the template as a regular string
-			StringWriter writer = new StringWriter();
-			Velocity.evaluate(velocityCtx, writer, "expandTemplate", fDataTemplate);
-			String expandedTemplate = writer.toString();
+			String expandedTemplate = expandTemplateToString(context, fDataTemplate);
 
 			// Parse back to a DOM XML element
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
