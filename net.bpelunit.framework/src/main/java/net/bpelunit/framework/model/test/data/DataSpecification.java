@@ -5,6 +5,8 @@
  */
 package net.bpelunit.framework.model.test.data;
 
+import javax.xml.namespace.NamespaceContext;
+
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
@@ -25,6 +27,11 @@ public abstract class DataSpecification implements ITestArtefact {
 	private Activity fActivity;
 
 	/**
+	 * Namespace Context
+	 */
+	protected NamespaceContext fNamespaceContext;
+
+	/**
 	 * Status of this object.
 	 */
 	protected ArtefactStatus fStatus;
@@ -32,9 +39,9 @@ public abstract class DataSpecification implements ITestArtefact {
 
 	// ********************** Initialization ***************************
 
-
-	public DataSpecification(Activity parent) throws SpecificationException {
+	public DataSpecification(Activity parent, NamespaceContext nsContext) throws SpecificationException {
 		fActivity= parent;
+		fNamespaceContext= nsContext;
 		fStatus= ArtefactStatus.createInitialStatus();
 	}
 

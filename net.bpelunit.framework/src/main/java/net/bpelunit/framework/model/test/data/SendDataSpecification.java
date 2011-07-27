@@ -96,11 +96,6 @@ public class SendDataSpecification extends DataSpecification {
 	private String fTargetURL;
 
 	/**
-	 * Namespace Context
-	 */
-	private NamespaceContext fNamespaceContext;
-
-	/**
 	 * Delay for this send specification (if any)
 	 */
 	private int fDelay;
@@ -125,16 +120,15 @@ public class SendDataSpecification extends DataSpecification {
 
 	// ******************** Initialization ************************
 
-	public SendDataSpecification(Activity parent) throws SpecificationException {
-		super(parent);
+	public SendDataSpecification(Activity parent, NamespaceContext nsContext) throws SpecificationException {
+		super(parent, nsContext);
 	}
 
 	public void initialize(SOAPOperationCallIdentifier operation, int delay, String targetURL, String soapAction, String encodingStyle,
-			ISOAPEncoder encoder, Element rawDataRoot, String dataTemplate, NamespaceContext context, QName faultCode, String faultString) {
+			ISOAPEncoder encoder, Element rawDataRoot, String dataTemplate, QName faultCode, String faultString) {
 		fOperation= operation;
 		fLiteralData= rawDataRoot;
 		fDataTemplate= dataTemplate;
-		fNamespaceContext= context;
 
 		fSOAPHTTPAction= soapAction;
 		fTargetURL= targetURL;
