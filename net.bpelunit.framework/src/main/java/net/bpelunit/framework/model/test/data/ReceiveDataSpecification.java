@@ -232,7 +232,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);
 
 		for (ReceiveCondition c : fConditions) {
-			c.evaluate(fLiteralData, fNamespaceContext, variableResolver);
+			c.evaluate(templateContext, fLiteralData, fNamespaceContext, variableResolver);
 
 			if (c.isFailure()) {
 				fStatus = ArtefactStatus.createFailedStatus(String.format(

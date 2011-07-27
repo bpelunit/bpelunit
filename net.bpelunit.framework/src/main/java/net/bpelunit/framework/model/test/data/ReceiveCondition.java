@@ -16,6 +16,7 @@ import javax.xml.xpath.XPathVariableResolver;
 
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.activity.ActivityContext;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -49,9 +50,9 @@ public class ReceiveCondition implements ITestArtefact {
 	private String fActualValue;
 
 	/**
-	 * Parent activity
+	 * Parent receive data specification
 	 */
-	private ITestArtefact fParent;
+	private ReceiveDataSpecification fParent;
 
 	/**
 	 * Status of this object
@@ -65,12 +66,12 @@ public class ReceiveCondition implements ITestArtefact {
 
 	// ******************** Initialization ************************
 
-	public ReceiveCondition(ITestArtefact parent, String condition, String template, String value) throws SpecificationException {
+	public ReceiveCondition(ReceiveDataSpecification rSpec, String condition, String template, String value) throws SpecificationException {
 		fExpression= condition;
 		fTemplate= template;
 		fExpectedValue= value;
 		fStatus= ArtefactStatus.createInitialStatus();
-		fParent= parent;
+		fParent= rSpec;
 		fActualValue= null;
 
 		if (fExpression != null && fTemplate != null || fExpression == null && fTemplate == null) {
@@ -81,7 +82,7 @@ public class ReceiveCondition implements ITestArtefact {
 
 	// ******************** Implementation ***************************
 
-	public void evaluate(Element literalData, NamespaceContext context, XPathVariableResolver variableResolver) {
+	public void evaluate(ActivityContext activityContext, Element literalData, NamespaceContext context, XPathVariableResolver variableResolver) {
 
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		xpath.setNamespaceContext(context);
@@ -90,7 +91,10 @@ public class ReceiveCondition implements ITestArtefact {
 		}
 
 		try {
-			String completeXPath= fExpression + "=" + fExpectedValue;
+			if (fExpression == null) {
+				fExpression = fParent.expandTemplateToString(activityContext, fTemplate).trim();
+			}
+			String completeXPath= "(" + fExpression + ") =" + fExpectedValue;
 			if (!(Boolean) xpath.evaluate(completeXPath, literalData, XPathConstants.BOOLEAN)) {
 
 				// Get actual result
