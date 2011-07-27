@@ -9,8 +9,8 @@ Version 1.5.0
 -----------------------
 * _Feature_: BPTS files can now include Apache Velocity-based test case templates. This feature is rather large: check `TEMPLATES.markdown` for a full description.
 * _Change_: the XML Schema for the BPTS has been slightly relaxed to allow some constraints which were already implicitly accepted.
-   * The specific order of the elements inside <deployment>, <put> and <condition> does not matter anymore.
-   * Receives with no <conditions>s and empty <partnerTrack>s are accepted.
+   * The specific order of the elements inside `<deployment>`, `<put>` and `<condition>` does not matter anymore.
+   * Receives with no `<conditions>`s and empty `<partnerTrack>`s are accepted.
 * _Change_: Switched to Maven for all builds, finally!
 * _Fix_: When using ActiveBPEL, detect deployment errors through ActiveBPEL's deployment summary, in addition to the deployment web service's HTTP response code.
 * _Fix_: validate BPTS during loading. Previously, invalid elements were not reported, leading to confusing behaviour for new users who used a text editor to create the BPTS.
@@ -27,11 +27,11 @@ Version 1.4.0
 * _Feature_: Add faultcode and faultstring to the *send* and *receive* activities. These allow the user to control manually the SOAP fault code and SOAP fault to be sent.
 * _Feature_: Let the user select from a list in the graphical BPTS editor whether they want to send a regular input/output, a custom fault or one of the declared faults.
 * _Feature_: Generate sample messages for RPC/literal operations and faults.
-* _Change_: messages for RPC/lit messages can now optionally include their wrapper element in the <data> elements of the BPTS.
+* _Change_: messages for RPC/lit messages can now optionally include their wrapper element in the `<data>` elements of the BPTS.
 * _Fix_: Avoid missing namespace nodes by dumping XML as strings using a null XSLT transform instead of internal Sun APIs.
 * _Fix_: Show XML Schema parsing errors while using the BPTS editor in the Problems view.
 * _Fix_: Make message generation in the BPTS editor work with XSD imports with relative URLs and imported messages which use their WSDL's XML Schema definitions.
-* _Fix_: Parse correctly anonymous simple types and nested model groups for generating messages in the BPTS editor. Currently all model groups are processed as if they were <xsd:sequence>s.
+* _Fix_: Parse correctly anonymous simple types and nested model groups for generating messages in the BPTS editor. Currently all model groups are processed as if they were `<xsd:sequence>`s.
 * _Fix_: Make sure in the BPTS editor that all generated fault messages follow the doc/lit style, according to section 3.6 of the WS-I Basic Profile 1.1.
 * _Fix_: the message for the send part in an async receive/send activity is the input for the WS, not its output.
 
