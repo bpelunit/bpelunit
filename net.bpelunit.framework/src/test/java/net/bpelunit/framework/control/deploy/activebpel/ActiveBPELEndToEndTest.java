@@ -92,6 +92,16 @@ public class ActiveBPELEndToEndTest {
 		} catch (DeploymentException ex) {}
 	}
 
+	@Test
+	public void templateDelaysWork() throws Exception {
+		checkAssumptions();
+
+		final TestTestRunner runner = new TestTestRunner("src/test/resources/engines/activebpel/delay", "EchoFirst.bpts");
+		runner.testRun();
+		assertEquals("All tests should have passed", 2, runner.getPassed());
+		assertEquals("No tests should have failed or had errors", 0, runner.getProblems());
+	}
+
 	private void checkAssumptions() {
 		assumeNotNull(System
 				.getenv(ActiveBPELDeployer.DEFAULT_APPSERVER_DIR_ENVVAR));

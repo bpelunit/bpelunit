@@ -66,7 +66,7 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 
 		IncomingMessage returnMsg;
 		try {
-			fSendSpec.delay();
+			fSendSpec.delay(context);
 			returnMsg= context.sendMessage(msg);
 		} catch (SynchronousSendException e) {
 			fStatus= ArtefactStatus.createErrorStatus("HTTP Error while sending out synchronous message: " + e.getMessage(), e);
@@ -74,6 +74,9 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 		} catch (InterruptedException e) {
 			// Interruption by another thread. Abort.
 			fStatus= ArtefactStatus.createAbortedStatus("Aborted due to error in other partner track", e);
+			return;
+		} catch (Exception e) {
+			fStatus= ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e);
 			return;
 		}
 

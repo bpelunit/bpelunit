@@ -1,0 +1,3 @@
+#set($delayLeft       = [0, 2])
+#set($delayRight      = [2, 0])
+#set($expectedMessage = ['left: Hello', 'right: Bye'])

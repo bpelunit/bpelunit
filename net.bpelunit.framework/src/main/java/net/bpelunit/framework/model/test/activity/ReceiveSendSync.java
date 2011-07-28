@@ -94,7 +94,7 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 		}
 
 		try {
-			fSendSpec.delay();
+			fSendSpec.delay(context);
 			context.postAnswer(this.getPartnerTrack(), msg);
 
 			if (fReceiveSpec.hasProblems())
@@ -109,6 +109,9 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 			return;
 		} catch (InterruptedException e) {
 			fStatus= ArtefactStatus.createAbortedStatus("Aborted while waiting for synchronous answer to be sent.", e);
+			return;
+		} catch (Exception e) {
+			fStatus= ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e);
 			return;
 		}
 	}

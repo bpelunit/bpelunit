@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://bpelunit.net/echo" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="EchoFirstMessage" targetNamespace="http://bpelunit.net/echo">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://bpelunit.net/echo">
+      <xsd:element name="leftRequest" type="tns:requestType"/>
+      <xsd:element name="rightRequest" type="tns:requestType"/>
+      <xsd:element name="response">
+	<xsd:complexType>
+	  <xsd:sequence>
+	    <xsd:element name="message" type="xsd:string"/>
+	  </xsd:sequence>
+	</xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="requestType">
+	<xsd:sequence>
+	  <xsd:element name="id" type="xsd:string"/>
+	  <xsd:element name="message" type="xsd:string"/>
+	</xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="leftRequest">
+    <wsdl:part element="tns:leftRequest" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="leftResponse">
+    <wsdl:part element="tns:response" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="rightRequest">
+    <wsdl:part element="tns:rightRequest" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="rightResponse">
+    <wsdl:part element="tns:response" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="EchoFirstPort">
+    <wsdl:operation name="left">
+      <wsdl:input message="tns:leftRequest"/>
+      <wsdl:output message="tns:leftResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="right">
+      <wsdl:input message="tns:rightRequest"/>
+      <wsdl:output message="tns:rightResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EchoFirstMessageSOAP" type="tns:EchoFirstPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="left">
+      <soap:operation soapAction="http://bpelunit.net/echoFirst/left"/>
+      <wsdl:input>
+	<soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+	<soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="right">
+      <soap:operation soapAction="http://bpelunit.net/echoFirst/right"/>
+      <wsdl:input>
+	<soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+	<soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EchoFirstService">
+    <wsdl:port binding="tns:EchoFirstMessageSOAP" name="EchoFirstServicePort">
+      <soap:address location="http://localhost:8080/active-bpel/services/EchoFirstService"/>
+    </wsdl:port>
+  </wsdl:service>
+
+  <!-- BPEL extensions: partner link types and properties -->
+  <plnk:partnerLinkType name="clientType">
+    <plnk:role name="client" portType="tns:EchoFirstPort"/>
+  </plnk:partnerLinkType>
+
+  <vprop:property name="requestID" type="xsd:string"/>
+
+  <vprop:propertyAlias messageType="tns:leftRequest" part="parameters" propertyName="tns:requestID">
+    <vprop:query><![CDATA[//id]]></vprop:query>
+  </vprop:propertyAlias>
+  <vprop:propertyAlias messageType="tns:rightRequest" part="parameters" propertyName="tns:requestID">
+    <vprop:query><![CDATA[//id]]></vprop:query>
+  </vprop:propertyAlias>
+</wsdl:definitions>
