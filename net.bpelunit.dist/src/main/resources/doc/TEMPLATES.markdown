@@ -360,6 +360,21 @@ In the first row, `$lines` would be mapped to an empty node list. In the second 
 
 Please note XPath expressions differ in some important ways from Velocity templates. For instance, `$x.get(0)` (first element of the list in `$x`) in a Velocity template would be `$x[1]` in an XPath expression.
 
+Generating receive conditions using templates
+---------------------------------------------
+
+In some cases, it might be useful to generate the XPath expression for the condition using a Velocity template. In that case, the `<expression>` element inside `<condition>` should be replaced with `<template>`. The available variables are the same as when generating messages. Here is an example, which tests that the `i`-th result has the expected value:
+
+    <condition>
+      <template<![CDATA[
+        true()
+        #foreach($line in $lines)
+          and //result[$velocityCount] = '$line'
+        #end
+      ]]></template>
+      <value>true()</value>
+    </condition>
+
 Using template variables to skip activities
 -------------------------------------------
 

@@ -57,6 +57,7 @@ import net.bpelunit.framework.model.test.activity.SendReceiveSync;
 import net.bpelunit.framework.model.test.activity.TwoWayAsyncActivity;
 import net.bpelunit.framework.model.test.activity.Wait;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
+import net.bpelunit.framework.model.test.data.DataSpecification;
 import net.bpelunit.framework.model.test.data.ReceiveCondition;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
@@ -796,7 +797,10 @@ public class SpecificationLoader {
 			SOAPOperationCallIdentifier operation, XMLSendActivity xmlSend,
 			int round) throws SpecificationException {
 
-		SendDataSpecification spec = new SendDataSpecification(activity);
+		// Namespaces
+		NamespaceContext context = getNamespaceMap(xmlSend.newCursor());
+
+		SendDataSpecification spec = new SendDataSpecification(activity, context);
 
 		String encodingStyle = operation.getEncodingStyle();
 		String targetURL = operation.getTargetURL();
@@ -848,9 +852,6 @@ public class SpecificationLoader {
 		if (sequence != null && sequence.size() > round)
 			currentDelay = sequence.get(round);
 
-		// Namespaces
-		NamespaceContext context = getNamespaceMap(xmlSend.newCursor());
-
 		// If the user hasn't specified any fault code or string, use these default values
 		final QName faultCode = xmlSend.isSetFaultcode() ?
 		        xmlSend.getFaultcode() : BPELUnitConstants.SOAP_FAULT_CODE_CLIENT;
@@ -863,11 +864,11 @@ public class SpecificationLoader {
 			spec
 					.initialize(operation, currentDelay, delayExpression, null,
 							null, encodingStyle, encoder, rawDataRoot,
-							templateText, context, faultCode, faultString);
+							templateText, faultCode, faultString);
 		} else
 			spec.initialize(operation, currentDelay, delayExpression, targetURL, soapAction,
 					encodingStyle, encoder, rawDataRoot, templateText,
-					context, faultCode, faultString);
+					faultCode, faultString);
 
 		return spec;
 	}
@@ -936,7 +937,10 @@ public class SpecificationLoader {
 			Activity activity, SOAPOperationCallIdentifier operation,
 			XMLReceiveActivity xmlReceive) throws SpecificationException {
 
-		ReceiveDataSpecification spec = new ReceiveDataSpecification(activity);
+		// Namespaces
+		NamespaceContext context = getNamespaceMap(xmlReceive.newCursor());
+
+		ReceiveDataSpecification spec = new ReceiveDataSpecification(activity, context);
 
 		String encodingStyle = operation.getEncodingStyle();
 		ISOAPEncoder encoder = fRunner.createNewSOAPEncoder(encodingStyle);
@@ -946,19 +950,15 @@ public class SpecificationLoader {
 		List<ReceiveCondition> cList = new ArrayList<ReceiveCondition>();
 		if (xmlConditionList != null)
 			for (XMLCondition xmlCondition : xmlConditionList) {
-				cList.add(new ReceiveCondition(spec, xmlCondition
-						.getExpression(), xmlCondition.getValue()));
+				cList.add(new ReceiveCondition(spec, xmlCondition.getExpression(), xmlCondition.getTemplate(), xmlCondition.getValue()));
 			}
-
-		// Namespaces
-		NamespaceContext context = getNamespaceMap(xmlReceive.newCursor());
 
 		// Add fault code and string. These will be only checked if this message is a fault and if
 		// they are not null.
 		QName faultCode    = xmlReceive.getFaultcode();
 		String faultString = xmlReceive.getFaultstring();
 
-		spec.initialize(operation, encodingStyle, encoder, cList, context, faultCode, faultString);
+		spec.initialize(operation, encodingStyle, encoder, cList, faultCode, faultString);
 		return spec;
 	}
 

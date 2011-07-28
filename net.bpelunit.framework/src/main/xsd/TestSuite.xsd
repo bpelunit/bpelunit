@@ -362,7 +362,8 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 	</xs:complexType>
 	<xs:complexType name="Condition">
 		<xs:all>
-			<xs:element name="expression" type="xs:string"/>
+			<xs:element name="expression" type="xs:string" minOccurs="0"/>
+			<xs:element name="template" type="xs:string" minOccurs="0"/>
 			<xs:element name="value" type="xs:string"/>
 		</xs:all>
 	</xs:complexType>

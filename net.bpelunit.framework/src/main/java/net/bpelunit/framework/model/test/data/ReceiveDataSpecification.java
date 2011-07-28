@@ -82,11 +82,6 @@ public class ReceiveDataSpecification extends DataSpecification {
 	private List<ReceiveCondition> fConditions;
 
 	/**
-	 * Namespace Context
-	 */
-	private NamespaceContext fNamespaceContext;
-
-	/**
 	 * Expected SOAP fault code (if this is a fault)
 	 */
 	private QName fFaultCode;
@@ -98,15 +93,14 @@ public class ReceiveDataSpecification extends DataSpecification {
 
 	// ********************** Initialization ***************************
 
-	public ReceiveDataSpecification(Activity parent) throws SpecificationException {
-		super(parent);
+	public ReceiveDataSpecification(Activity parent, NamespaceContext nsContext) throws SpecificationException {
+		super(parent, nsContext);
 	}
 
 	public void initialize(SOAPOperationCallIdentifier op, String encodingStyle, ISOAPEncoder encoder, List<ReceiveCondition> conditions,
-			NamespaceContext context, QName faultCode, String faultString) throws SpecificationException {
+			QName faultCode, String faultString) throws SpecificationException {
 		fOperation= op;
 		fConditions= conditions;
-		fNamespaceContext= context;
 		fDecoder= encoder;
 		fEncodingStyle= encodingStyle;
 
@@ -238,7 +232,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);
 
 		for (ReceiveCondition c : fConditions) {
-			c.evaluate(fLiteralData, fNamespaceContext, variableResolver);
+			c.evaluate(templateContext, fLiteralData, fNamespaceContext, variableResolver);
 
 			if (c.isFailure()) {
 				fStatus = ArtefactStatus.createFailedStatus(String.format(

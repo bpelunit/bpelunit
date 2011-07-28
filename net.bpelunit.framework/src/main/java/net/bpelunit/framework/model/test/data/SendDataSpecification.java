@@ -7,7 +7,6 @@ package net.bpelunit.framework.model.test.data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,6 @@ import javax.xml.xpath.XPathFactory;
 
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
-import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.exception.HeaderProcessingException;
 import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.exception.SpecificationException;
@@ -39,7 +37,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-import com.rits.cloning.Cloner;
 
 /**
  * The send data specification is a data package which contains all necessary information to encode
@@ -101,11 +98,6 @@ public class SendDataSpecification extends DataSpecification {
 	private String fTargetURL;
 
 	/**
-	 * Namespace Context
-	 */
-	private NamespaceContext fNamespaceContext;
-
-	/**
 	 * Constant delay for this send specification (if any).
 	 */
 	private int fDelay;
@@ -131,21 +123,17 @@ public class SendDataSpecification extends DataSpecification {
          */
 		private String fDataTemplate;
 
-	// For deep cloning contexts so they are isolated from each other
-	private static final Cloner fCloner = new Cloner();
-
 	// ******************** Initialization ************************
 
-	public SendDataSpecification(Activity parent) throws SpecificationException {
-		super(parent);
+	public SendDataSpecification(Activity parent, NamespaceContext nsContext) throws SpecificationException {
+		super(parent, nsContext);
 	}
 
 	public void initialize(SOAPOperationCallIdentifier operation, int delay, String delayExpression, String targetURL, String soapAction, String encodingStyle,
-			ISOAPEncoder encoder, Element rawDataRoot, String dataTemplate, NamespaceContext context, QName faultCode, String faultString) {
+			ISOAPEncoder encoder, Element rawDataRoot, String dataTemplate, QName faultCode, String faultString) {
 		fOperation= operation;
 		fLiteralData= rawDataRoot;
 		fDataTemplate= dataTemplate;
-		fNamespaceContext= context;
 
 		fSOAPHTTPAction= soapAction;
 		fTargetURL= targetURL;
@@ -164,7 +152,7 @@ public class SendDataSpecification extends DataSpecification {
 
 		// Expand template into literal data if there is one
 		if (fDataTemplate != null) {
-			expandTemplate(context);
+			generateLiteralDataFromTemplate(context);
 		}
 		if (hasProblems()) return;
 
@@ -195,15 +183,9 @@ public class SendDataSpecification extends DataSpecification {
 		fStatus= ArtefactStatus.createPassedStatus();
 	}
 
-	private void expandTemplate(ActivityContext context) {
+	private void generateLiteralDataFromTemplate(ActivityContext context) {
 		try {
-			VelocityContext velocityCtx = fCloner.deepClone(context.createVelocityContext());
-			velocityCtx.put("xpath", new XPathTool(this.fNamespaceContext));
-
-			// Expand the template as a regular string
-			StringWriter writer = new StringWriter();
-			Velocity.evaluate(velocityCtx, writer, "expandTemplate", fDataTemplate);
-			String expandedTemplate = writer.toString();
+			String expandedTemplate = expandTemplateToString(context, fDataTemplate);
 
 			// Parse back to a DOM XML element
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
