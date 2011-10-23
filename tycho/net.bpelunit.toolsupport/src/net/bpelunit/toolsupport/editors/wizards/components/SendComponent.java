@@ -14,6 +14,7 @@ import net.bpelunit.toolsupport.ToolSupportActivator;
 import net.bpelunit.toolsupport.editors.formwidgets.HyperlinkField;
 import net.bpelunit.toolsupport.editors.formwidgets.HyperlinkField.IHyperLinkFieldListener;
 import net.bpelunit.toolsupport.editors.wizards.NamespaceWizard;
+import net.bpelunit.toolsupport.editors.wizards.TransportOptionWizard;
 import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
 import net.bpelunit.toolsupport.editors.wizards.fields.IDialogFieldListener;
 import net.bpelunit.toolsupport.editors.wizards.fields.LayoutUtil;
@@ -284,6 +285,20 @@ public class SendComponent extends DataComponent implements
 		});
 		namespacePrefixField.createControl(group, nColumns, GridData.BEGINNING);
 
+		HyperlinkField transportOptionField = new HyperlinkField("Add HTTP Header...");
+		transportOptionField.setHyperLinkFieldListener(new IHyperLinkFieldListener() {
+			public void hyperLinkActivated() {
+				WizardDialog d = new WizardDialog(getShell(), new TransportOptionWizard(fSendData));
+				if (d.open() == Window.OK) {
+					fireValueChanged(fSendField);
+					// Message Editor does not take part in fireValueChanged Listeners
+					// as those update far too often
+					messageEditor.updateItems();
+				}
+			}
+		});
+		transportOptionField.createControl(group, nColumns, GridData.BEGINNING);
+		
 		// If the WSDL contains only one service with one port and one
 		// operation, theses values are preselected. If this is the case, the
 		// InputElement of the Operation must be displayed from the
