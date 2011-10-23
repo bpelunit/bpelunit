@@ -6,6 +6,7 @@
         <tes:put type="testmode" name="BookSearch">
             <tes:wsdl>BookSearchArtifacts.wsdl</tes:wsdl>
         </tes:put>
+        <tes:partner name="BookSearch" wsdl="BookSearchArtifacts.wsdl"/>
     </tes:deployment>
     <tes:testCases>
         <tes:testCase name="FourResults" basedOn="" abstract="false" vary="false">
@@ -35,9 +36,9 @@
                         <tes:template>
                             <exa:searchResponse>
                                 <exa:results>
-#foreach($r in ['A', 'B', 'C', 'D'])
+                                    #foreach($r in ['A', 'B', 'C', 'D'])
                                     <exa:result>$r</exa:result>
-#end
+                                    #end
                                 </exa:results>
                             </exa:searchResponse>
                         </tes:template>

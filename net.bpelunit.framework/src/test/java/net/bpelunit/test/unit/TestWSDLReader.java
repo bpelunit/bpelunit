@@ -6,6 +6,7 @@
 package net.bpelunit.test.unit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import javax.xml.namespace.QName;
 
@@ -25,28 +26,30 @@ import org.junit.Test;
  */
 public class TestWSDLReader extends SimpleTest {
 
+	private static final String ABS_PATH = FileUtils.toFile(TestWSDLReader.class.getResource("/")).getAbsolutePath() + "/wsdlreader/";
+	
 	// Helpers
 
 	private String getEncoding(String name) throws Exception {
-		String abspath = FileUtils.toFile(TestWSDLReader.class.getResource("/")).getAbsolutePath();
-		Partner p= new Partner("MyPartner", abspath + "/wsdlreader/", name, "");
+		
+		Partner p= new Partner("MyPartner", ABS_PATH, name, null, "");
 
 		// get a document/literal operation
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
-		SOAPOperationCallIdentifier operation2= p.getOperation(service, "MyPartnerSOAP", "NewOperation", SOAPOperationDirectionIdentifier.INPUT);
-		return operation2.getEncodingStyle();
+		SOAPOperationCallIdentifier operation= p.getOperation(service, "MyPartnerSOAP", "NewOperation", SOAPOperationDirectionIdentifier.INPUT);
+		return operation.getEncodingStyle();
 	}
 
 	// Helpers
 
 	private SOAPOperationCallIdentifier getOp(String name) throws Exception {
-		String abspath = FileUtils.toFile(TestWSDLReader.class.getResource("/")).getAbsolutePath();
-		Partner p= new Partner("MyPartner", abspath + "/wsdlreader/", name, "");
+		
+		Partner p= new Partner("MyPartner", ABS_PATH, name, null, "");
 
 		// get a document/literal operation
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
-		SOAPOperationCallIdentifier operation2= p.getOperation(service, "MyPartnerSOAP", "NewOperation", SOAPOperationDirectionIdentifier.INPUT);
-		return operation2;
+		SOAPOperationCallIdentifier operation= p.getOperation(service, "MyPartnerSOAP", "NewOperation", SOAPOperationDirectionIdentifier.INPUT);
+		return operation;
 	}
 
 	// Test cases
@@ -109,4 +112,19 @@ public class TestWSDLReader extends SimpleTest {
 
 	}
 
+	@Test
+	public void testTwoWSDLsSpecified() throws Exception {
+		Partner p = new Partner("Partner", ABS_PATH + "", "MyPartner1.wsdl", "Callback.wsdl", "");
+		
+		// Fetch service in WSDL 1
+		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
+		SOAPOperationCallIdentifier operation = p.getOperation(service, "MyPartnerSOAP", "NewOperation", SOAPOperationDirectionIdentifier.INPUT);
+		assertNotNull(operation);
+		
+		// Fetch service in WSDL 2
+		service= new QName("http://www.example.org/Callback/", "Callback");
+		operation = p.getOperation(service, "CallbackSOAP", "NewOperation", SOAPOperationDirectionIdentifier.INPUT);
+		assertNotNull(operation);
+	}
+	
 }

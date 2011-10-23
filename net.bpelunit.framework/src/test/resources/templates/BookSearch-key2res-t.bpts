@@ -6,6 +6,7 @@
         <tes:put type="testmode" name="BookSearch">
             <tes:wsdl>BookSearchArtifacts.wsdl</tes:wsdl>
         </tes:put>
+        <tes:partner name="BookSearch" wsdl="BookSearchArtifacts.wsdl"/>
     </tes:deployment>
     <tes:testCases>
         <tes:testCase name="FourResults" basedOn="" abstract="false" vary="false">
@@ -37,9 +38,9 @@
                         <tes:template>
                             <exa:searchResponse>
                                 <exa:results>
-#foreach($k in $xpath.evaluateAsList("//exa:keyword/text()", $request))
+                                    #foreach($k in $xpath.evaluateAsList("//exa:keyword/text()", $request))
                                     <exa:result>$k.getTextContent()</exa:result>
-#end
+                                    #end
                                 </exa:results>
                             </exa:searchResponse>
                         </tes:template>

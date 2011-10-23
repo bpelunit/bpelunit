@@ -22,12 +22,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-import org.apache.xmlbeans.XmlCursor;
-import org.apache.xmlbeans.XmlException;
-import org.apache.xmlbeans.XmlObject;
-import org.apache.xmlbeans.XmlOptions;
 import net.bpelunit.framework.control.datasource.DataSourceUtil;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDataSource;
@@ -35,9 +29,9 @@ import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.soap.NamespaceContextImpl;
 import net.bpelunit.framework.control.util.ActivityUtil;
+import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
-import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
 import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DataSourceException;
@@ -57,7 +51,6 @@ import net.bpelunit.framework.model.test.activity.SendReceiveSync;
 import net.bpelunit.framework.model.test.activity.TwoWayAsyncActivity;
 import net.bpelunit.framework.model.test.activity.Wait;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
-import net.bpelunit.framework.model.test.data.DataSpecification;
 import net.bpelunit.framework.model.test.data.ReceiveCondition;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
@@ -85,6 +78,12 @@ import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 import net.bpelunit.framework.xml.suite.XMLTrack;
 import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import net.bpelunit.framework.xml.suite.XMLWaitActivity;
+
+import org.apache.log4j.Logger;
+import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlObject;
+import org.apache.xmlbeans.XmlOptions;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
@@ -205,6 +204,7 @@ public class SpecificationLoader {
 					"Expected a Process Under Test (PUT) in the test suite.");
 		String xmlPutName = xmlPut.getName();
 		String xmlPutWSDL = xmlPut.getWsdl();
+		String xmlPutPartnerWSDL = xmlPut.getPartnerWSDL();
 		String xmlPutType = xmlPut.getType();
 
 		if ((xmlPutName == null) || (xmlPutWSDL == null)
@@ -213,7 +213,7 @@ public class SpecificationLoader {
 					"Process Under Test must have attributes name, type, wsdl, and a deployment section specified.");
 
 		ProcessUnderTest processUnderTest = new ProcessUnderTest(xmlPutName,
-				testDirectory, xmlPutWSDL, suiteBaseURL.toString());
+				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL, suiteBaseURL.toString());
 
 		for (XMLProperty property : xmlPut.getPropertyList()) {
 			processUnderTest.setXMLDeploymentOption(property.getName(),
@@ -241,7 +241,7 @@ public class SpecificationLoader {
 		 */
 
 		Partner suiteClient = new Partner(BPELUnitConstants.CLIENT_NAME,
-				testDirectory, xmlPutWSDL, suiteBaseURL.toString());
+				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL, suiteBaseURL.toString());
 
 		/*
 		 * The Partners. Each partner is initialized with the attached WSDL
@@ -252,11 +252,11 @@ public class SpecificationLoader {
 		for (XMLPartnerDeploymentInformation xmlPDI : xmlDeployment.getPartnerList()) {
 			String name = xmlPDI.getName();
 			String wsdl = xmlPDI.getWsdl();
+			String partnerWsdl = xmlPDI.getPartnerWsdl();
 			if ((name == null) || (wsdl == null))
 				throw new SpecificationException(
 						"Name and WSDL attributes of a partner must not be empty.");
-			Partner p = new Partner(xmlPDI.getName(), testDirectory, xmlPDI
-					.getWsdl(), suiteBaseURL.toString());
+			Partner p = new Partner(xmlPDI.getName(), testDirectory, wsdl, partnerWsdl, suiteBaseURL.toString());
 			suitePartners.put(p.getName(), p);
 		}
 
