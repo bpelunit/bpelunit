@@ -234,6 +234,8 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 							<xs:documentation>Apache Velocity template to be expanded to produce the SOAP body.</xs:documentation>
 						</xs:annotation></xs:element>
 				</xs:choice>
+				<xs:element name="transportOption" type="Property"
+		maxOccurs="unbounded" minOccurs="0"></xs:element>
 				</xs:sequence>
 				<xs:attribute name="fault" type="xs:boolean" use="optional" />
 				<xs:attribute name="delay" type="xs:string"></xs:attribute>

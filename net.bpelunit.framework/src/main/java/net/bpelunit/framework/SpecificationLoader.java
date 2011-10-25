@@ -816,6 +816,10 @@ public class SpecificationLoader {
 		XMLAnyElement xmlData = xmlSend.getData(),
 			xmlTemplate = xmlSend.getTemplate();
 
+		for(XMLProperty p : xmlSend.getTransportOptionList()) {
+			spec.putProtocolOption(p.getName(), p.getStringValue());
+		}
+		
 		// "delay" attribute
 		if (xmlSend.isSetDelay() && xmlSend.isSetDelaySequence()) {
 			throw new SpecificationException(

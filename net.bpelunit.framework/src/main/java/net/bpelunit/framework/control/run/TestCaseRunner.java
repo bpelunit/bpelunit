@@ -311,6 +311,10 @@ public class TestCaseRunner {
 					"Unsupported encoding when trying to post message to web service.",
 					e);
 		}
+		
+		for(String option : message.getProtocolOptionNames()) {
+			method.addRequestHeader(option, message.getProtocolOption(option));
+		}
 		method.setRequestEntity(entity);
 
 		try {

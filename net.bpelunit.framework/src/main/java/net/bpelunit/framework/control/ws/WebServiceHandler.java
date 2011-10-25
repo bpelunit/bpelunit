@@ -150,6 +150,9 @@ public class WebServiceHandler extends AbstractHttpHandler {
 			String body = m2.getBody();
 
 			wsLogger.debug("Answer is:\n" + body);
+			for(String option : m2.getProtocolOptionNames()) {
+				response.addField(option, m2.getProtocolOption(option));
+			}
 			sendResponse(response, code, body);
 
 			wsLogger.debug("Posting \"message sent\" to framework...");
