@@ -345,4 +345,54 @@ public class AggregatedWSDLDefinitionFacade implements Definition {
 		
 		return null;
 	}
+
+	@Override
+	public Object getExtensionAttribute(QName arg0) {
+		throw new UnsupportedOperationException("Not supported by facade");
+	}
+
+	@Override
+	public Map<?, ?> getExtensionAttributes() {
+		throw new UnsupportedOperationException("Not supported by facade");
+	}
+
+	@Override
+	public List<?> getNativeAttributeNames() {
+		throw new UnsupportedOperationException("Not supported by facade");
+	}
+
+	@Override
+	public void setExtensionAttribute(QName arg0, Object arg1) {
+		throw new UnsupportedOperationException("Not supported by facade");
+	}
+
+	@Override
+	public ExtensibilityElement removeExtensibilityElement(ExtensibilityElement arg0) {
+		throw new UnsupportedOperationException("Not supported by facade");
+	}
+
+	@Override
+	public Map<?, ?> getAllBindings() {
+		throw new UnsupportedOperationException("Not supported by facade");
+	}
+
+	@Override
+	public Map<?, ?> getAllPortTypes() {
+		throw new UnsupportedOperationException("Not supported by facade");
+	}
+
+	@Override
+	public Map<?, ?> getAllServices() {
+		throw new UnsupportedOperationException("Not supported by facade");
+	}
+
+	@Override
+	public Import removeImport(Import arg0) {
+		throw new UnsupportedOperationException("Not supported by facade");
+	}
+
+	@Override
+	public String removeNamespace(String arg0) {
+		throw new UnsupportedOperationException("Not supported by facade");
+	}
 }
