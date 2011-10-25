@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exa:search xmlns:exa="http://www.example.org/bookSearchWrapper/">
+	<exa:keywords>
+		<exa:keyword>word</exa:keyword>
+	</exa:keywords>
+</exa:search>

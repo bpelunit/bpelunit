@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exa:searchResponse xmlns:exa="http://www.example.org/bookSearchWrapper/">
+	<exa:results>
+		<exa:result>A</exa:result>
+		<exa:result>B</exa:result>
+		<exa:result>C</exa:result>
+		<exa:result>D</exa:result>
+	</exa:results>
+</exa:searchResponse>
