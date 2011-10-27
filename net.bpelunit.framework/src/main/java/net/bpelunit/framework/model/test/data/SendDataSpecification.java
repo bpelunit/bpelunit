@@ -30,8 +30,6 @@ import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
 
 import org.apache.log4j.Logger;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
