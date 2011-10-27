@@ -9,9 +9,11 @@ import java.util.List;
 
 import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.data.SendDataSpecification;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
 /**
  * An activity is one logical event in the chain of events of a partner track. It is executed as
@@ -116,4 +118,9 @@ public abstract class Activity implements ITestArtefact {
 		return getName();
 	}
 
+	protected static void copyProtocolOptions(SendDataSpecification source, OutgoingMessage target) {
+		for(String option : source.getProtocolOptionNames()) {
+			target.addProtocolOption(option, source.getProtocolOption(option));
+		}
+	}
 }

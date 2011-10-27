@@ -205,6 +205,7 @@ public class SpecificationLoader {
 					"Expected a Process Under Test (PUT) in the test suite.");
 		String xmlPutName = xmlPut.getName();
 		String xmlPutWSDL = xmlPut.getWsdl();
+		String xmlPutPartnerWSDL = xmlPut.getPartnerWSDL();
 		String xmlPutType = xmlPut.getType();
 
 		if ((xmlPutName == null) || (xmlPutWSDL == null)
@@ -213,7 +214,7 @@ public class SpecificationLoader {
 					"Process Under Test must have attributes name, type, wsdl, and a deployment section specified.");
 
 		ProcessUnderTest processUnderTest = new ProcessUnderTest(xmlPutName,
-				testDirectory, xmlPutWSDL, suiteBaseURL.toString());
+				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL, suiteBaseURL.toString());
 
 		for (XMLProperty property : xmlPut.getPropertyList()) {
 			processUnderTest.setXMLDeploymentOption(property.getName(),
@@ -241,7 +242,7 @@ public class SpecificationLoader {
 		 */
 
 		Partner suiteClient = new Partner(BPELUnitConstants.CLIENT_NAME,
-				testDirectory, xmlPutWSDL, suiteBaseURL.toString());
+				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL, suiteBaseURL.toString());
 
 		/*
 		 * The Partners. Each partner is initialized with the attached WSDL
@@ -253,11 +254,11 @@ public class SpecificationLoader {
 				.getPartnerList()) {
 			String name = xmlPDI.getName();
 			String wsdl = xmlPDI.getWsdl();
+			String partnerWsdl = xmlPDI.getPartnerWsdl();
 			if ((name == null) || (wsdl == null))
 				throw new SpecificationException(
 						"Name and WSDL attributes of a partner must not be empty.");
-			Partner p = new Partner(xmlPDI.getName(), testDirectory,
-					xmlPDI.getWsdl(), suiteBaseURL.toString());
+			Partner p = new Partner(xmlPDI.getName(), testDirectory, wsdl, partnerWsdl, suiteBaseURL.toString());
 			suitePartners.put(p.getName(), p);
 		}
 
@@ -840,6 +841,9 @@ public class SpecificationLoader {
 
 		XMLAnyElement xmlData = xmlSend.getData();
 		XMLAnyElement xmlTemplate = xmlSend.getTemplate();
+		for(XMLProperty p : xmlSend.getTransportOptionList()) {
+			spec.putProtocolOption(p.getName(), p.getStringValue());
+		}
 		
 		// "delay" attribute
 		if (xmlSend.isSetDelay() && xmlSend.isSetDelaySequence()) {

@@ -6,14 +6,13 @@
         <tes:put type="testmode" name="BookSearch">
             <tes:wsdl>BookSearchArtifacts.wsdl</tes:wsdl>
         </tes:put>
+        <tes:partner name="BookSearch" wsdl="BookSearchArtifacts.wsdl"/>
     </tes:deployment>
     <tes:setUp>
-        <tes:script>
-            #set($results = ['A', 'B', 'C', 'D'])
-        </tes:script>
+        <tes:script>#set($results = ['A', 'B', 'C', 'D'])</tes:script>
     </tes:setUp>
     <tes:testCases>
-        <!-- First test case: test suite set up blocks work -->
+        <!--First test case: test suite set up blocks work-->
         <tes:testCase name="FourResultsA" basedOn="" abstract="false" vary="false">
             <tes:clientTrack>
                 <tes:sendReceive service="exa:bookSearchService" port="bookSearchServiceSOAP" operation="search">
@@ -41,9 +40,9 @@
                         <tes:template>
                             <exa:searchResponse>
                                 <exa:results>
-#foreach($r in $results)
+                                    #foreach($r in $results)
                                     <exa:result>$r</exa:result>
-#end
+                                    #end
                                 </exa:results>
                             </exa:searchResponse>
                         </tes:template>
@@ -51,22 +50,18 @@
                 </tes:receiveSend>
             </tes:partnerTrack>
         </tes:testCase>
-        <!-- Second test case: test case set up blocks also work -->
+        <!--Second test case: test case set up blocks also work-->
         <tes:testCase name="FourResultsB" basedOn="FourResultsA" abstract="false" vary="false">
             <tes:setUp>
-                <tes:script>
-                    $results.set(2, 'X');
-                </tes:script>
+                <tes:script>$results.set(2, 'X');</tes:script>
             </tes:setUp>
             <tes:clientTrack/>
             <tes:partnerTrack name="BookSearch"/>
         </tes:testCase>
-        <!-- Third test case: set up blocks are properly isolated -->
+        <!--Third test case: set up blocks are properly isolated-->
         <tes:testCase name="FourResultsC" basedOn="FourResultsB" abstract="false" vary="false">
             <tes:setUp>
-                <tes:script>
-                    $results.set(3, 'X');
-                </tes:script>
+                <tes:script>$results.set(3, 'X');</tes:script>
             </tes:setUp>
             <tes:clientTrack/>
             <tes:partnerTrack name="BookSearch"/>

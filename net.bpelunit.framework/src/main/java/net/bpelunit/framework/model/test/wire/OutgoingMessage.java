@@ -5,70 +5,91 @@
  */
 package net.bpelunit.framework.model.test.wire;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * An OutgoingMessage object is a plain, on-the-wire representation of an "outgoing message" from
- * the frameworks point of view, be it a response to a HTTP request from an external entitiy (in
- * which case it will contain a code, but no target URL and no SOAP Action) or a full request (in
- * which case it will contain target URL and SOAP Action, but no code).
+ * An OutgoingMessage object is a plain, on-the-wire representation of an
+ * "outgoing message" from the frameworks point of view, be it a response to a
+ * HTTP request from an external entitiy (in which case it will contain a code,
+ * but no target URL and no SOAP Action) or a full request (in which case it
+ * will contain target URL and SOAP Action, but no code).
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Daniel Luebke
  * 
  */
 public class OutgoingMessage {
 
-	/**
-	 * If this message represents a full initial request, this is the target URL.
-	 */
-	private String fTargetURL;
+	public OutgoingMessage() {
+	}
+	
+	private Map<String, String> protocolOptions = new HashMap<String, String>();
 
 	/**
-	 * If this message represents a full initial request, this is the SOAP Action for the HTTP
-	 * Header.
+	 * If this message represents a full initial request, this is the target
+	 * URL.
 	 */
-	private String fSOAPAction;
+	private String targetURL;
 
 	/**
-	 * If this message represents a reply in a HTTP operation, this is the HTTP result code.
+	 * If this message represents a full initial request, this is the SOAP
+	 * Action for the HTTP Header.
 	 */
-	private int fCode;
+	private String soapAction;
+
+	/**
+	 * If this message represents a reply in a HTTP operation, this is the HTTP
+	 * result code.
+	 */
+	private int code;
 
 	/**
 	 * The body of the message
 	 */
-	private String fBody;
-
+	private String body;
 
 	public void setTargetURL(String targetURL) {
-		fTargetURL= targetURL;
+		this.targetURL = targetURL;
 	}
 
 	public String getTargetURL() {
-		return fTargetURL;
+		return targetURL;
 	}
 
 	public void setSOAPAction(String action) {
-		fSOAPAction= action;
+		this.soapAction = action;
 	}
 
 	public String getSOAPHTTPAction() {
-		return fSOAPAction;
+		return soapAction;
 	}
 
 	public void setBody(String body) {
-		fBody= body;
+		this.body = body;
 	}
 
 	public String getBody() {
-		return fBody;
+		return body;
 	}
 
 	public int getCode() {
-		return fCode;
+		return code;
 	}
 
 	public void setCode(int code) {
-		fCode= code;
+		this.code = code;
 	}
-
+	
+	public void addProtocolOption(String name, String value) {
+		protocolOptions.put(name, value);
+	}
+	
+	public String getProtocolOption(String name) {
+		return protocolOptions.get(name);
+	}
+	
+	public String[] getProtocolOptionNames() {
+		return protocolOptions.keySet().toArray(new String[protocolOptions.size()]);
+	}
 }

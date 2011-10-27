@@ -68,7 +68,7 @@ public class TestUtil {
 
 	public static SOAPOperationCallIdentifier getCall(String path, String wsdl, String operationName) throws SpecificationException {
 		String abspath = FileUtils.toFile(TestUtil.class.getResource(path)).getAbsolutePath() + File.separator;
-		Partner p= new Partner("MyPartner", abspath, wsdl, "");
+		Partner p= new Partner("MyPartner", abspath, wsdl, "", "");
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
 		SOAPOperationCallIdentifier operation= p.getOperation(service, "MyPartnerSOAP", operationName, SOAPOperationDirectionIdentifier.INPUT);
 		return operation;

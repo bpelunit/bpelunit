@@ -75,7 +75,9 @@
 					<xs:documentation>WSDL file of the PUT</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="partnerWSDL" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+            <xs:element ref="property" minOccurs="0"
+				maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required">
 			<xs:annotation>
@@ -102,6 +104,7 @@
 				<xs:documentation>Location of the defining WSDL file</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="partnerWsdl" type="xs:string" use="optional"></xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="TestCasesSection">
 		<xs:annotation>
@@ -219,6 +222,7 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 				<xs:annotation>
 					<xs:documentation>A send operation</xs:documentation>
 				</xs:annotation>
+				<xs:sequence>
 				<xs:choice minOccurs="1" maxOccurs="1">
 					<xs:element name="data" type="AnyElement">
 						<xs:annotation>
@@ -238,6 +242,9 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 					</xs:element>
 					<xs:element name="xmlFile" type="xs:string"></xs:element>
 				</xs:choice>
+				<xs:element name="transportOption" type="Property"
+		maxOccurs="unbounded" minOccurs="0"></xs:element>
+				</xs:sequence>
 				<xs:attribute name="fault" type="xs:boolean" use="optional" />
 				<xs:attribute name="delay" type="xs:string"></xs:attribute>
 				<xs:attribute name="delaySequence" type="xs:string" use="optional" />

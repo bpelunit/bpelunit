@@ -8,7 +8,9 @@ package net.bpelunit.framework.model.test.data;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
@@ -121,6 +123,11 @@ public class SendDataSpecification extends DataSpecification {
          */
 		private String fDataTemplate;
 
+		/**
+		 * Options to be set for the underlaying transport protocol (ATM HTTP only)
+		 */
+		private Map<String, String> protocolOptions = new HashMap<String, String>();
+		
 	// ******************** Initialization ************************
 
 	public SendDataSpecification(Activity parent, NamespaceContext nsContext) throws SpecificationException {
@@ -345,4 +352,15 @@ public class SendDataSpecification extends DataSpecification {
 		return stateData;
 	}
 
+	public void putProtocolOption(String name, String value) {
+		this.protocolOptions.put(name, value);
+	}
+	
+	public String getProtocolOption(String name) {
+		return protocolOptions.get(name);
+	}
+	
+	public String[] getProtocolOptionNames() {
+		return protocolOptions.keySet().toArray(new String[protocolOptions.size()]);
+	}
 }

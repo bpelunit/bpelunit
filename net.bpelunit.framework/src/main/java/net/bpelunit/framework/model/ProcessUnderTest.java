@@ -73,9 +73,9 @@ public class ProcessUnderTest extends Partner {
 	 */
 	private String fDeploymentURL;
 
-	public ProcessUnderTest(String name, String testBasePath, String wsdlFile,
+	public ProcessUnderTest(String name, String testBasePath, String wsdlFile, String partnerWSDLFile, 
 			String baseURL) throws SpecificationException {
-		super(name, testBasePath, wsdlFile, baseURL);
+		super(name, testBasePath, wsdlFile, partnerWSDLFile, baseURL);
 		fXMLDeploymentOptions = new ArrayList<DeploymentOption>();
 	}
 
