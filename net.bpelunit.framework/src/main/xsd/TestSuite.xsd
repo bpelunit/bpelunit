@@ -19,25 +19,43 @@
 		<xs:sequence>
 			<xs:element name="name" type="xs:string">
 				<xs:annotation>
-					<xs:documentation>A name for this suite</xs:documentation>
+					<xs:documentation>
+						A name for this suite
+					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="baseURL" type="xs:string" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>The base URL of the simulated partners and client. The framework will extract a port from this URL; it will also be used for asynchronous callbacks. The URL should end with a slash; partnerTrack names will be appended. Default is http://localhost:7777/ws/</xs:documentation>
+					<xs:documentation>
+						The base URL of the simulated partners and
+						client. The framework will extract a port from
+						this URL; it will also be used for asynchronous
+						callbacks. The URL should end with a slash;
+						partnerTrack names will be appended. Default is
+						http://localhost:7777/ws/
+					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="deployment" type="DeploymentSection">
 				<xs:annotation>
-					<xs:documentation>Deployment section of this test suite. Specifies the PUT and partners</xs:documentation>
+					<xs:documentation>
+						Deployment section of this test suite. Specifies
+						the PUT and partners
+					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="setUp" type="SetUp" minOccurs="0" maxOccurs="1"></xs:element>
+			<xs:element name="setUp" type="SetUp" minOccurs="0"
+				maxOccurs="1">
+			</xs:element>
 			<xs:element name="testCases" type="TestCasesSection">
 				<xs:annotation>
-					<xs:documentation>Test case section of this test suite. Specifies test cases</xs:documentation>
+					<xs:documentation>
+						Test case section of this test suite. Specifies
+						test cases
+					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="conditionGroups" type="ConditionGroupSection" minOccurs="0" maxOccurs="1"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="partner" type="PartnerDeploymentInformation">
@@ -240,7 +258,10 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
-					<xs:element name="xmlFile" type="xs:string"></xs:element>
+					<xs:element name="xmlFile" type="xs:string">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+						</xs:annotation></xs:element>
 				</xs:choice>
 				<xs:element name="transportOption" type="Property"
 		maxOccurs="unbounded" minOccurs="0"></xs:element>
@@ -263,7 +284,12 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 					<xs:documentation>A receive operation</xs:documentation>
 				</xs:annotation>
 				<xs:sequence>
-					<xs:element name="condition" type="Condition" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="condition" type="Condition"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="conditionGroup" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>A reference by id to a condition group defined in the same test suite. The conditions specified in this condition group are also checked at test run like the conditions specified in this activity.</xs:documentation>
+						</xs:annotation></xs:element>
 				</xs:sequence>
 				<xs:attribute name="fault" type="xs:boolean" use="optional" default="false"/>
 				<xs:attribute name="faultcode" type="xs:QName" use="optional"/>
@@ -415,6 +441,26 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 		</xs:sequence>
 		<xs:attribute name="type" type="xs:string" use="required"></xs:attribute>
 		<xs:attribute name="src" type="xs:string" use="optional"></xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="ConditionGroupSection">
+		<xs:sequence>
+			<xs:element name="conditionGroup" type="ConditionGroup"
+				minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ConditionGroup">
+        <xs:annotation>
+        	<xs:documentation>A condition group is a set of conditions that can be applied to receive activities.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="1"
+				maxOccurs="1">
+			</xs:element>
+			<xs:element name="condition" type="Condition" minOccurs="0" maxOccurs="unbounded"></xs:element>
+		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
 
