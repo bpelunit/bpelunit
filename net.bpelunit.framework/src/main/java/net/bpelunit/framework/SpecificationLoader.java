@@ -59,6 +59,7 @@ import net.bpelunit.framework.model.test.data.SendDataSpecification;
 import net.bpelunit.framework.xml.suite.XMLActivity;
 import net.bpelunit.framework.xml.suite.XMLAnyElement;
 import net.bpelunit.framework.xml.suite.XMLCondition;
+import net.bpelunit.framework.xml.suite.XMLConditionGroup;
 import net.bpelunit.framework.xml.suite.XMLCopy;
 import net.bpelunit.framework.xml.suite.XMLDeploymentSection;
 import net.bpelunit.framework.xml.suite.XMLHeaderProcessor;
@@ -103,6 +104,8 @@ public class SpecificationLoader {
 	private Logger fLogger;
 	private BPELUnitRunner fRunner;
 
+	private List<XMLConditionGroup> conditionGroups;
+	
 	protected SpecificationLoader(BPELUnitRunner runner) {
 		fRunner = runner;
 		fLogger = Logger.getLogger(getClass());
@@ -118,6 +121,7 @@ public class SpecificationLoader {
 			XMLTestSuiteDocument doc = XMLTestSuiteDocument.Factory
 					.parse(suite);
 			validateTestSuite(doc);
+			extractConditionGroups(doc);
 			TestSuite testSuite = parseSuite(path, doc);
 
 			fLogger.info("Loaded test suite with name \"" + testSuite.getName()
@@ -149,6 +153,14 @@ public class SpecificationLoader {
 			throw new SpecificationException(
 					"An I/O error occurred when reading the test suite file.",
 					e);
+		}
+	}
+
+	private void extractConditionGroups(XMLTestSuiteDocument doc) {
+		try {
+			this.conditionGroups = doc.getTestSuite().getConditionGroups().getConditionGroupList();
+		} catch(NullPointerException e) {
+			this.conditionGroups = new ArrayList<XMLConditionGroup>();
 		}
 	}
 
@@ -991,13 +1003,16 @@ public class SpecificationLoader {
 		// get conditions
 		List<XMLCondition> xmlConditionList = xmlReceive.getConditionList();
 		List<ReceiveCondition> cList = new ArrayList<ReceiveCondition>();
-		if (xmlConditionList != null)
+		if (xmlConditionList != null) {
 			for (XMLCondition xmlCondition : xmlConditionList) {
 				cList.add(new ReceiveCondition(spec, xmlCondition
 						.getExpression(), xmlCondition.getTemplate(),
 						xmlCondition.getValue()));
 			}
+		}
 
+		addConditionsFromConditionGroups(xmlReceive, spec, cList);
+		
 		// Add fault code and string. These will be only checked if this message
 		// is a fault and if
 		// they are not null.
@@ -1007,6 +1022,39 @@ public class SpecificationLoader {
 		spec.initialize(operation, encodingStyle, encoder, cList, faultCode,
 				faultString);
 		return spec;
+	}
+
+	private void addConditionsFromConditionGroups(
+			XMLReceiveActivity xmlReceive, ReceiveDataSpecification spec,
+			List<ReceiveCondition> cList) throws SpecificationException {
+		if (xmlReceive.getConditionGroupList() != null) {
+			for(String cgName : xmlReceive.getConditionGroupList()) {
+				XMLConditionGroup cg = getConditionGroupByName(cgName);
+				addConditionsFromConditionGroup(spec, cList, cg);
+				
+			}
+		}
+	}
+
+	private void addConditionsFromConditionGroup(ReceiveDataSpecification spec,
+			List<ReceiveCondition> cList, XMLConditionGroup cg)
+			throws SpecificationException {
+		if(cg.getConditionList() != null) {
+			for(XMLCondition xmlCondition : cg.getConditionList()) {
+				cList.add(new ReceiveCondition(spec, xmlCondition
+						.getExpression(), xmlCondition.getTemplate(),
+						xmlCondition.getValue()));
+			}
+		}
+	}
+
+	private XMLConditionGroup getConditionGroupByName(String cgName) throws SpecificationException {
+		for(XMLConditionGroup cg : this.conditionGroups) {
+			if(cgName.equals(cg.getName())) {
+				return cg;
+			}
+		}
+		throw new SpecificationException("Condition Group " + cgName + " was used but not declared!");
 	}
 
 	// *********** HELPERS *******************

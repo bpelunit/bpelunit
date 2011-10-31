@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://www.example.org/bookSearchWrapper/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="bookSearchWrapper"
+                  targetNamespace="http://www.example.org/bookSearchWrapper/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/bookSearchWrapper/" elementFormDefault="qualified">
+      <xsd:element name="search">
+        <xsd:complexType>
+          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:element name="keywords" type="tns:keywordList" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="limitedSearch">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+              <xsd:element name="keywords" type="tns:keywordList" />
+            </xsd:sequence>
+            <xsd:element name="maxResults" type="xsd:integer"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="searchResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="results" type="tns:resultList" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="resultList">
+        <xsd:sequence>
+          <xsd:element name="result" type="xsd:string" minOccurs="0"
+                       maxOccurs="unbounded"></xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="keywordList">
+        <xsd:sequence>
+          <xsd:element name="keyword" type="xsd:string"
+                       minOccurs="1" maxOccurs="unbounded"></xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="searchRequest">
+    <wsdl:part element="tns:search" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="limitedSearchRequest">
+    <wsdl:part element="tns:limitedSearch" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="searchResponse">
+    <wsdl:part element="tns:searchResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:portType name="bookSearchPort">
+    <wsdl:operation name="search">
+      <wsdl:input message="tns:searchRequest" />
+      <wsdl:output message="tns:searchResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="limitedBookSearchPort">
+    <wsdl:operation name="search">
+      <wsdl:input message="tns:limitedSearchRequest" />
+      <wsdl:output message="tns:searchResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="bookSearchWrapperSOAP" type="tns:bookSearchPort">
+    <soap:binding style="document"
+                  transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="search">
+      <soap:operation/>
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="limitedBookSearchSOAP" type="tns:limitedBookSearchPort">
+    <soap:binding style="document"
+                  transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="search">
+      <soap:operation/>
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="bookSearchService">
+    <wsdl:port binding="tns:bookSearchWrapperSOAP" name="bookSearchServiceSOAP">
+      <soap:address location="http://localhost:7777/ws/BookSearch" />
+    </wsdl:port>
+  </wsdl:service>
+  <wsdl:service name="bookSearchHelper">
+    <wsdl:port name="bookSearchHelperSOAP" binding="tns:limitedBookSearchSOAP">
+      <soap:address location="http://localhost:7777/ws/helper" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

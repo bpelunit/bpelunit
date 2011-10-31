@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:tns="http://bpelunit.net/test/bookSearchArtifacts" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://www.example.org/bookSearchWrapper/" name="BookSearchArtifacts" targetNamespace="http://bpelunit.net/test/bookSearchArtifacts" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <import location="BookSearch.wsdl" namespace="http://www.example.org/bookSearchWrapper/"/>
+  <plnk:partnerLinkType name="UnlimitedSearchPLT">
+    <plnk:role name="searchEngine" portType="wsdl:bookSearchPort"/>
+  </plnk:partnerLinkType>
+  <plnk:partnerLinkType name="LimitedSearchPLT">
+    <plnk:role name="searchEngine" portType="wsdl:limitedBookSearchPort"/>
+  </plnk:partnerLinkType>
+</definitions>
