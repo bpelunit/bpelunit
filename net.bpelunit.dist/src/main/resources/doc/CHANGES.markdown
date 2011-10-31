@@ -11,6 +11,7 @@ Version 1.5.1
 -----------------------
 * _Feature_: Support for setting HTTP headers on outgoing SOAP/HTTP connections
 * _Feature_: Support for having two WSDLs per partnerlink so that BPEL partner link types can be better imitated
+* _Feature_: Support for condition groups. Allows reuse of conditions across different receives
 
 Version 1.5.0
 -----------------------
