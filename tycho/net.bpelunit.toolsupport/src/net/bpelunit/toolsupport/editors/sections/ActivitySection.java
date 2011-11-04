@@ -85,13 +85,21 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
  */
 public class ActivitySection extends TreeSection {
 
-	private class ActivityLabelProvider implements ILabelProvider {
+	final static class ActivityLabelProvider implements ILabelProvider {
 
 		public Image getImage(Object element) {
 			return ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_ACTIVITY);
 		}
 
 		public String getText(Object element) {
+			if(element instanceof XMLActivity) {
+				XMLSoapActivity xml = (XMLSoapActivity)element;
+				String operation = xml.getOperation();
+				operation = operation != null ? operation : "n/a";
+				String activityName = ActivityUtil.getNiceName(element);
+				return operation + " (" + ActivityUtil.getNiceName(element) + ")"; 
+			}
+			
 			if (ActivityUtil.isActivity(element)) {
 				return ActivityUtil.getNiceName(element);
 			} else if (element instanceof XMLMapping) {
@@ -109,6 +117,17 @@ public class ActivitySection extends TreeSection {
 			} else {
 				return "";
 			}
+		}
+
+		private String getActivityName(Object element) {
+			if(element instanceof XMLSendActivity) {
+				return "send async";
+			}
+			if(element instanceof XMLReceiveActivity) {
+				return "receive async";
+			}
+			
+			return null;
 		}
 
 		public void addListener(ILabelProviderListener listener) {
