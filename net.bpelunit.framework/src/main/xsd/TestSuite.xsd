@@ -458,11 +458,14 @@ The referenced XML file must not contain SOAP message elements.</xs:documentatio
         	<xs:documentation>A condition group is a set of conditions that can be applied to receive activities.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-			<xs:element name="name" type="xs:string" minOccurs="1"
-				maxOccurs="1">
-			</xs:element>
-			<xs:element name="condition" type="Condition" minOccurs="0" maxOccurs="unbounded"></xs:element>
-		</xs:sequence>
+            <xs:element name="name" type="xs:string" minOccurs="1"
+        		maxOccurs="1">
+        	</xs:element>
+            <xs:element name="inheritFrom" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+            <xs:element name="condition" type="Condition" minOccurs="0"
+        		maxOccurs="unbounded">
+        	</xs:element>
+        </xs:sequence>
 	</xs:complexType>
 </xs:schema>
 

@@ -96,10 +96,13 @@ public class ActivityUtil {
 
 		Node node= activity.getDomNode();
 
-		if (node == null)
+		String localName = null;
+		if (node != null) {
+			localName= node.getLocalName();
+		} else {
 			return null;
+		}
 
-		String localName= node.getLocalName();
 		return ActivityConstant.getForXmlName(localName);
 	}
 

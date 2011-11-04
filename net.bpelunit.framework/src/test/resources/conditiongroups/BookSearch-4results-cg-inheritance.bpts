@@ -46,11 +46,15 @@
     </tes:testCases>
     <tes:conditionGroups>
       <tes:conditionGroup>
-        <tes:name>cg1</tes:name>
+        <tes:name>cg2</tes:name>
         <tes:condition>
 			<tes:expression>count(//exa:result)</tes:expression>
 			<tes:value>4</tes:value>
         </tes:condition>
+        </tes:conditionGroup>
+        <tes:conditionGroup>
+        <tes:name>cg1</tes:name>
+        <tes:inheritFrom>cg2</tes:inheritFrom>
         <tes:condition>
 			<tes:expression>count(//exa:result) > 3</tes:expression>
 			<tes:value>true()</tes:value>

@@ -21,4 +21,12 @@ public class ConditionGroupTest {
 				new File(TEST_BPTS_DIR, "BookSearch-4results-data.bpts"),
 				new File(TEST_BPTS_DIR, "BookSearch-4results-cg.bpts"));
 	}
+	
+	@Test
+	public void testAssertionGroupInheritance() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+				"The same BPTS file should always produce the same results",
+				new File(TEST_BPTS_DIR, "BookSearch-4results-data.bpts"),
+				new File(TEST_BPTS_DIR, "BookSearch-4results-cg-inheritance.bpts"));
+	}
 }

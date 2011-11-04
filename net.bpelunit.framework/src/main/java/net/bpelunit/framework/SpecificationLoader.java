@@ -7,7 +7,6 @@ package net.bpelunit.framework;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,6 +55,9 @@ import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.verify.NoCyclesInConditionGroupInheritanceValidator;
+import net.bpelunit.framework.verify.TestSuiteValidator;
+import net.bpelunit.framework.verify.TestSuiteXMLValidator;
 import net.bpelunit.framework.xml.suite.XMLActivity;
 import net.bpelunit.framework.xml.suite.XMLAnyElement;
 import net.bpelunit.framework.xml.suite.XMLCondition;
@@ -84,7 +86,6 @@ import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
-import org.apache.xmlbeans.XmlOptions;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
@@ -104,8 +105,8 @@ public class SpecificationLoader {
 	private Logger fLogger;
 	private BPELUnitRunner fRunner;
 
-	private List<XMLConditionGroup> conditionGroups;
-	
+	private Map<String, XMLConditionGroup> conditionGroups = new HashMap<String, XMLConditionGroup>();
+
 	protected SpecificationLoader(BPELUnitRunner runner) {
 		fRunner = runner;
 		fLogger = Logger.getLogger(getClass());
@@ -157,26 +158,26 @@ public class SpecificationLoader {
 	}
 
 	private void extractConditionGroups(XMLTestSuiteDocument doc) {
-		try {
-			this.conditionGroups = doc.getTestSuite().getConditionGroups().getConditionGroupList();
-		} catch(NullPointerException e) {
-			this.conditionGroups = new ArrayList<XMLConditionGroup>();
+		if(doc == null || doc.getTestSuite() == null || doc.getTestSuite().getConditionGroups() == null)
+			return;
+		
+		List<XMLConditionGroup> cgList = doc.getTestSuite()
+				.getConditionGroups().getConditionGroupList();
+		if (cgList != null) {
+			for (XMLConditionGroup cg : cgList) {
+				conditionGroups.put(cg.getName(), cg);
+			}
 		}
 	}
 
 	private void validateTestSuite(final XMLTestSuiteDocument doc)
 			throws SpecificationException {
-		ArrayList<Object> validationErrors = new ArrayList<Object>();
-		XmlOptions options = new XmlOptions();
-		options.setErrorListener(validationErrors);
+		TestSuiteValidator[] validators = new TestSuiteValidator[] {
+				new TestSuiteXMLValidator(),
+				new NoCyclesInConditionGroupInheritanceValidator() };
 
-		if (!doc.validate(options)) {
-			StringWriter sW = new StringWriter();
-			for (Object o : validationErrors) {
-				sW.append(o + "\n");
-			}
-			throw new SpecificationException("BPTS is invalid:\n"
-					+ sW.toString());
+		for (TestSuiteValidator v : validators) {
+			v.validate(doc);
 		}
 	}
 
@@ -226,7 +227,8 @@ public class SpecificationLoader {
 					"Process Under Test must have attributes name, type, wsdl, and a deployment section specified.");
 
 		ProcessUnderTest processUnderTest = new ProcessUnderTest(xmlPutName,
-				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL, suiteBaseURL.toString());
+				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL,
+				suiteBaseURL.toString());
 
 		for (XMLProperty property : xmlPut.getPropertyList()) {
 			processUnderTest.setXMLDeploymentOption(property.getName(),
@@ -254,7 +256,8 @@ public class SpecificationLoader {
 		 */
 
 		Partner suiteClient = new Partner(BPELUnitConstants.CLIENT_NAME,
-				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL, suiteBaseURL.toString());
+				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL,
+				suiteBaseURL.toString());
 
 		/*
 		 * The Partners. Each partner is initialized with the attached WSDL
@@ -270,7 +273,8 @@ public class SpecificationLoader {
 			if ((name == null) || (wsdl == null))
 				throw new SpecificationException(
 						"Name and WSDL attributes of a partner must not be empty.");
-			Partner p = new Partner(xmlPDI.getName(), testDirectory, wsdl, partnerWsdl, suiteBaseURL.toString());
+			Partner p = new Partner(xmlPDI.getName(), testDirectory, wsdl,
+					partnerWsdl, suiteBaseURL.toString());
 			suitePartners.put(p.getName(), p);
 		}
 
@@ -438,7 +442,8 @@ public class SpecificationLoader {
 
 	private TestCase createTestCase(Map<String, Partner> suitePartners,
 			Partner suiteClient, TestSuite suite, XMLTestCase xmlTestCase,
-			String xmlTestCaseName, int round, String testDirectory) throws SpecificationException {
+			String xmlTestCaseName, int round, String testDirectory)
+			throws SpecificationException {
 
 		TestCase test = new TestCase(suite, xmlTestCaseName);
 
@@ -489,7 +494,8 @@ public class SpecificationLoader {
 									+ xmlPartnerTrack.getName());
 
 				PartnerTrack pTrack = new PartnerTrack(test, realPartner);
-				readActivities(pTrack, xmlTestCase, xmlPartnerTrack, round, testDirectory);
+				readActivities(pTrack, xmlTestCase, xmlPartnerTrack, round,
+						testDirectory);
 				pTrack.setNamespaceContext(getNamespaceMap(xmlPartnerTrack
 						.newCursor()));
 				if (xmlPartnerTrack.isSetAssume()) {
@@ -525,8 +531,7 @@ public class SpecificationLoader {
 	 */
 	private void readActivities(PartnerTrack partnerTrack,
 			XMLTestCase xmlTestCase, XMLTrack xmlTrack, int round,
-			String testDirectory)
-			throws SpecificationException {
+			String testDirectory) throws SpecificationException {
 
 		List<XMLActivity> xmlActivities = ActivityUtil.getActivities(xmlTrack);
 
@@ -722,7 +727,8 @@ public class SpecificationLoader {
 		if (xmlSend.getFault())
 			sendDirection = SOAPOperationDirectionIdentifier.FAULT;
 		SendDataSpecification sSpec = createSendSpecificationFromParent(
-				activity, xmlReceiveSendSync, xmlSend, sendDirection, round, testDirectory);
+				activity, xmlReceiveSendSync, xmlSend, sendDirection, round,
+				testDirectory);
 
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
 		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
@@ -762,7 +768,8 @@ public class SpecificationLoader {
 
 		SendAsync sendAct = new SendAsync(twoWayActivity);
 		SendDataSpecification sSpec = createSendSpecificationFromStandalone(
-				sendAct, xmlSend, SOAPOperationDirectionIdentifier.INPUT, round, testDirectory);
+				sendAct, xmlSend, SOAPOperationDirectionIdentifier.INPUT,
+				round, testDirectory);
 		sendAct.initialize(sSpec);
 
 		ReceiveAsync receiveAct = new ReceiveAsync(twoWayActivity);
@@ -784,8 +791,8 @@ public class SpecificationLoader {
 	 */
 	private SendDataSpecification createSendSpecificationFromStandalone(
 			Activity parentActivity, XMLSendActivity xmlSend,
-			SOAPOperationDirectionIdentifier direction, int round, String testDirectory)
-			throws SpecificationException {
+			SOAPOperationDirectionIdentifier direction, int round,
+			String testDirectory) throws SpecificationException {
 
 		SOAPOperationCallIdentifier operation = getOperationCallIdentifier(
 				parentActivity, getService(parentActivity, xmlSend),
@@ -803,8 +810,7 @@ public class SpecificationLoader {
 			Activity parentActivity, XMLTwoWayActivity xmlSendReceiveSync,
 			XMLSendActivity xmlSend,
 			SOAPOperationDirectionIdentifier direction, int round,
-			String testDirectory)
-			throws SpecificationException {
+			String testDirectory) throws SpecificationException {
 
 		SOAPOperationCallIdentifier operation = getOperationCallIdentifier(
 				parentActivity, getService(parentActivity, xmlSendReceiveSync),
@@ -853,10 +859,10 @@ public class SpecificationLoader {
 
 		XMLAnyElement xmlData = xmlSend.getData();
 		XMLAnyElement xmlTemplate = xmlSend.getTemplate();
-		for(XMLProperty p : xmlSend.getTransportOptionList()) {
+		for (XMLProperty p : xmlSend.getTransportOptionList()) {
 			spec.putProtocolOption(p.getName(), p.getStringValue());
 		}
-		
+
 		// "delay" attribute
 		if (xmlSend.isSetDelay() && xmlSend.isSetDelaySequence()) {
 			throw new SpecificationException(
@@ -922,8 +928,8 @@ public class SpecificationLoader {
 			xmlSend.getData().set(XmlObject.Factory.parse(xmlFile));
 		} catch (Exception e) {
 			throw new SpecificationException(
-					"Error while loading imported XML File: "
-							+ e.getMessage(), e);
+					"Error while loading imported XML File: " + e.getMessage(),
+					e);
 		}
 	}
 
@@ -1012,7 +1018,7 @@ public class SpecificationLoader {
 		}
 
 		addConditionsFromConditionGroups(xmlReceive, spec, cList);
-		
+
 		// Add fault code and string. These will be only checked if this message
 		// is a fault and if
 		// they are not null.
@@ -1028,10 +1034,10 @@ public class SpecificationLoader {
 			XMLReceiveActivity xmlReceive, ReceiveDataSpecification spec,
 			List<ReceiveCondition> cList) throws SpecificationException {
 		if (xmlReceive.getConditionGroupList() != null) {
-			for(String cgName : xmlReceive.getConditionGroupList()) {
-				XMLConditionGroup cg = getConditionGroupByName(cgName);
+			for (String cgName : xmlReceive.getConditionGroupList()) {
+				XMLConditionGroup cg = conditionGroups.get(cgName);
 				addConditionsFromConditionGroup(spec, cList, cg);
-				
+
 			}
 		}
 	}
@@ -1039,25 +1045,42 @@ public class SpecificationLoader {
 	private void addConditionsFromConditionGroup(ReceiveDataSpecification spec,
 			List<ReceiveCondition> cList, XMLConditionGroup cg)
 			throws SpecificationException {
-		if(cg.getConditionList() != null) {
-			for(XMLCondition xmlCondition : cg.getConditionList()) {
-				cList.add(new ReceiveCondition(spec, xmlCondition
-						.getExpression(), xmlCondition.getTemplate(),
-						xmlCondition.getValue()));
-			}
-		}
-	}
 
-	private XMLConditionGroup getConditionGroupByName(String cgName) throws SpecificationException {
-		for(XMLConditionGroup cg : this.conditionGroups) {
-			if(cgName.equals(cg.getName())) {
-				return cg;
-			}
+		List<XMLCondition> conditionList = resolveConditionsForGroup(cg);
+
+		for (XMLCondition xmlCondition : conditionList) {
+			cList.add(new ReceiveCondition(spec, xmlCondition.getExpression(),
+					xmlCondition.getTemplate(), xmlCondition.getValue()));
 		}
-		throw new SpecificationException("Condition Group " + cgName + " was used but not declared!");
 	}
 
 	// *********** HELPERS *******************
+
+	private List<XMLCondition> resolveConditionsForGroup(XMLConditionGroup cg) {
+		List<XMLConditionGroup> cgs = getInheritanceBranch(cg);
+		
+		List<XMLCondition> conditions = new ArrayList<XMLCondition>();
+		for(XMLConditionGroup currentCG : cgs) {
+			if(currentCG.getConditionList() != null) {
+				conditions.addAll(currentCG.getConditionList());
+			}
+		}
+		
+		return conditions;
+	}
+
+	private List<XMLConditionGroup> getInheritanceBranch(XMLConditionGroup cg) {
+		List<XMLConditionGroup> cgs = new ArrayList<XMLConditionGroup>();
+		
+		XMLConditionGroup currentCG = cg;
+		cgs.add(currentCG);
+		while(currentCG.getInheritFrom() != null) {
+			currentCG = conditionGroups.get(cg.getInheritFrom());
+			cgs.add(0, currentCG);
+		}
+		
+		return cgs;
+	}
 
 	private ArrayList<DataCopyOperation> getCopyOperations(Activity activity,
 			XMLTwoWayActivity xmlTwoWayType) throws SpecificationException {
