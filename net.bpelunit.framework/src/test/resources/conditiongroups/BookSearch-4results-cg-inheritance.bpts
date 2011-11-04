@@ -6,6 +6,7 @@
         <tes:put type="testmode" name="BookSearch">
             <tes:wsdl>BookSearchArtifacts.wsdl</tes:wsdl>
         </tes:put>
+        <tes:partner name="BookSearch" wsdl="BookSearch.wsdl"/>
     </tes:deployment>
     <tes:testCases>
         <tes:testCase name="FourResults" basedOn="" abstract="false" vary="false">
@@ -21,7 +22,7 @@
                         </tes:data>
                     </tes:send>
                     <tes:receive fault="false">
-						<tes:conditionGroup>cg1</tes:conditionGroup>
+                        <tes:conditionGroup>cg1</tes:conditionGroup>
                     </tes:receive>
                 </tes:sendReceive>
             </tes:clientTrack>
@@ -45,20 +46,20 @@
         </tes:testCase>
     </tes:testCases>
     <tes:conditionGroups>
-      <tes:conditionGroup>
-        <tes:name>cg2</tes:name>
-        <tes:condition>
-			<tes:expression>count(//exa:result)</tes:expression>
-			<tes:value>4</tes:value>
-        </tes:condition>
+        <tes:conditionGroup>
+            <tes:name>cg2</tes:name>
+            <tes:condition>
+                <tes:expression>count(//exa:result)</tes:expression>
+                <tes:value>4</tes:value>
+            </tes:condition>
         </tes:conditionGroup>
         <tes:conditionGroup>
-        <tes:name>cg1</tes:name>
-        <tes:inheritFrom>cg2</tes:inheritFrom>
-        <tes:condition>
-			<tes:expression>count(//exa:result) > 3</tes:expression>
-			<tes:value>true()</tes:value>
-		</tes:condition>
-      </tes:conditionGroup>
+            <tes:name>cg1</tes:name>
+            <tes:inheritFrom>cg2</tes:inheritFrom>
+            <tes:condition>
+                <tes:expression>count(//exa:result) > 3</tes:expression>
+                <tes:value>true()</tes:value>
+            </tes:condition>
+        </tes:conditionGroup>
     </tes:conditionGroups>
 </tes:testSuite>

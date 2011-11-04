@@ -26,7 +26,7 @@
           <send fault="false">
             <data>
               <tac:tacRequest>
-                <tac:lines/>
+                <tac:lines></tac:lines>
               </tac:tacRequest>
             </data>
           </send>

@@ -38,7 +38,7 @@ public class PartnersUsedInTestCaseAreDeclaredInTestSuiteValidator implements
 			for (XMLPartnerTrack pt : tc.getPartnerTrackList()) {
 				if(!partnerNames.contains(pt.getName())) {
 					throw new SpecificationException(
-					"A partnertrack has been specified without a partner name.");
+					"A partnertrack has been specified without a partner name: " + pt.getName() + " in " + tc.getName());
 				}
 			}
 		}

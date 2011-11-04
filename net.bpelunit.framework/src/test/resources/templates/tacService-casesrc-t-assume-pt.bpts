@@ -1,78 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testSuite
-   xmlns:tacbpel="http://enterprise.netbeans.org/bpel/TacService/tacService"
-   xmlns:tacwsdl="http://j2ee.netbeans.org/wsdl/tacService"
-   xmlns:tac="http://xml.netbeans.org/schema/tacService"
-   xmlns="http://www.bpelunit.org/schema/testSuite">
-
-  <name>tacService</name>
-  <baseURL>http://localhost:7777/ws</baseURL>
-
-  <deployment>
-    <put name="tacService" type="testmode">
-      <wsdl>tacService.wsdl</wsdl>
-    </put>
-    <partner name="unwantedTrack" wsdl="tacService.wsdl"/>
-  </deployment>
-
-  <testCases>
-    <testCase name="MainTemplate" basedOn="" abstract="false" vary="false">
-      <setUp>
-        <dataSource type="velocity">
-          <property name="iteratedVars">lines</property>
-          <contents>
-            #set($lines = [['A']])
-          </contents>
-        </dataSource>
-      </setUp>
-      <clientTrack>
-        <sendReceive
-            service="tacwsdl:tacService"
-            port="tacServicePort"
-            operation="reverseLines">
-
-          <send>
-            <template>
-              <tac:tacRequest>
-                <tac:lines>
-#foreach($line in $lines)
-                  <tac:line>$line</tac:line>
-#end
-                </tac:lines>
-              </tac:tacRequest>
-            </template>
-          </send>
-
-          <receive/>
-        </sendReceive>
-      </clientTrack>
-      <partnerTrack name="tacService" assume="$partnerTrackName = 'tacService'">
-        <receiveSend
-          service="tacwsdl:tacService"
-          port="tacServicePort"
-          operation="reverseLines">
-          <receive/>
-
-          <send>
-            <template>$collections.reverse($lines)
-              <tac:tacResponse>
-                <tac:lines>
-#foreach($line in $lines)
-                  <tac:line>$line</tac:line>
-#end
-                </tac:lines>
-              </tac:tacResponse>
-            </template>
-          </send>
-        </receiveSend>
-      </partnerTrack>
-      <partnerTrack name="unwantedTrack" assume="count($lines) &gt; 10">
-        <receiveOnly
-          service="tacwsdl:tacService"
-          port="tacServicePort"
-          operation="reverseLines"/>
-      </partnerTrack>
-    </testCase>
-
-  </testCases>
+<testSuite xmlns:tacbpel="http://enterprise.netbeans.org/bpel/TacService/tacService" xmlns:tacwsdl="http://j2ee.netbeans.org/wsdl/tacService" xmlns:tac="http://xml.netbeans.org/schema/tacService" xmlns="http://www.bpelunit.org/schema/testSuite">
+    <name>tacService</name>
+    <baseURL>http://localhost:7777/ws</baseURL>
+    <deployment>
+        <put name="tacService" type="testmode">
+            <wsdl>tacService.wsdl</wsdl>
+        </put>
+        <partner name="unwantedTrack" wsdl="tacService.wsdl"/>
+        <partner name="tacService" wsdl="tacService.wsdl"/>
+    </deployment>
+    <testCases>
+        <testCase name="MainTemplate" basedOn="" abstract="false" vary="false">
+            <setUp>
+                <dataSource type="velocity">
+                    <property name="iteratedVars">lines</property>
+                    <contents>#set($lines = [['A']])</contents>
+                </dataSource>
+            </setUp>
+            <clientTrack>
+                <sendReceive service="tacwsdl:tacService" port="tacServicePort" operation="reverseLines">
+                    <send>
+                        <template>
+                            <tac:tacRequest>
+                                <tac:lines>
+                                    #foreach($line in $lines)
+                                    <tac:line>$line</tac:line>
+                                    #end
+                                </tac:lines>
+                            </tac:tacRequest>
+                        </template>
+                    </send>
+                    <receive/>
+                </sendReceive>
+            </clientTrack>
+            <partnerTrack name="tacService" assume="$partnerTrackName = 'tacService'">
+                <receiveSend service="tacwsdl:tacService" port="tacServicePort" operation="reverseLines">
+                    <receive/>
+                    <send>
+                        <template>
+                            $collections.reverse($lines)
+                            <tac:tacResponse>
+                                <tac:lines>
+                                    #foreach($line in $lines)
+                                    <tac:line>$line</tac:line>
+                                    #end
+                                </tac:lines>
+                            </tac:tacResponse>
+                        </template>
+                    </send>
+                </receiveSend>
+            </partnerTrack>
+            <partnerTrack name="unwantedTrack" assume="count($lines) > 10">
+                <receiveOnly service="tacwsdl:tacService" port="tacServicePort" operation="reverseLines"/>
+            </partnerTrack>
+        </testCase>
+    </testCases>
 </testSuite>
