@@ -15,17 +15,12 @@ import javax.wsdl.Port;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.xmlbeans.XmlCursor;
-import org.apache.xmlbeans.XmlException;
-import org.apache.xmlbeans.XmlObject;
-import org.apache.xmlbeans.XmlOptions;
 import net.bpelunit.framework.client.eclipse.dialog.DialogFieldValidator;
 import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
 import net.bpelunit.framework.client.eclipse.dialog.field.ListField;
 import net.bpelunit.framework.control.util.ActivityUtil;
-import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
+import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.xml.suite.XMLActivity;
 import net.bpelunit.framework.xml.suite.XMLCondition;
 import net.bpelunit.framework.xml.suite.XMLHeaderProcessor;
@@ -49,6 +44,12 @@ import net.bpelunit.toolsupport.editors.wizards.SendReceiveSyncActivityWizard;
 import net.bpelunit.toolsupport.editors.wizards.WaitActivityWizard;
 import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import net.bpelunit.toolsupport.util.WSDLReadingException;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlObject;
+import org.apache.xmlbeans.XmlOptions;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -96,7 +97,6 @@ public class ActivitySection extends TreeSection {
 				XMLSoapActivity xml = (XMLSoapActivity)element;
 				String operation = xml.getOperation();
 				operation = operation != null ? operation : "n/a";
-				String activityName = ActivityUtil.getNiceName(element);
 				return operation + " (" + ActivityUtil.getNiceName(element) + ")"; 
 			}
 			
@@ -117,17 +117,6 @@ public class ActivitySection extends TreeSection {
 			} else {
 				return "";
 			}
-		}
-
-		private String getActivityName(Object element) {
-			if(element instanceof XMLSendActivity) {
-				return "send async";
-			}
-			if(element instanceof XMLReceiveActivity) {
-				return "receive async";
-			}
-			
-			return null;
 		}
 
 		public void addListener(ILabelProviderListener listener) {
