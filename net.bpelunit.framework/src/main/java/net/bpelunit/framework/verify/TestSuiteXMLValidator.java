@@ -8,7 +8,7 @@ import org.apache.xmlbeans.XmlOptions;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 
-public class TestSuiteXMLValidator implements TestSuiteValidator {
+public class TestSuiteXMLValidator implements ITestSuiteValidator {
 
 	@Override
 	public void validate(XMLTestSuiteDocument doc)

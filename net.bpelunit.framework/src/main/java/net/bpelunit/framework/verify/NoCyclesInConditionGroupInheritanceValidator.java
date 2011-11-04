@@ -11,7 +11,7 @@ import net.bpelunit.framework.xml.suite.XMLTestSuite;
 import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 
 public class NoCyclesInConditionGroupInheritanceValidator implements
-		TestSuiteValidator {
+		ITestSuiteValidator {
 
 	@Override
 	public void validate(XMLTestSuiteDocument suite) throws SpecificationException {

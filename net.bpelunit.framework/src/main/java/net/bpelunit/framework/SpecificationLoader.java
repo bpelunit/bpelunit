@@ -56,7 +56,9 @@ import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
 import net.bpelunit.framework.verify.NoCyclesInConditionGroupInheritanceValidator;
-import net.bpelunit.framework.verify.TestSuiteValidator;
+import net.bpelunit.framework.verify.ITestSuiteValidator;
+import net.bpelunit.framework.verify.PartnersUsedInTestCaseAreDeclaredInTestSuiteValidator;
+import net.bpelunit.framework.verify.TestSuiteRootInformationValidator;
 import net.bpelunit.framework.verify.TestSuiteXMLValidator;
 import net.bpelunit.framework.xml.suite.XMLActivity;
 import net.bpelunit.framework.xml.suite.XMLAnyElement;
@@ -172,11 +174,13 @@ public class SpecificationLoader {
 
 	private void validateTestSuite(final XMLTestSuiteDocument doc)
 			throws SpecificationException {
-		TestSuiteValidator[] validators = new TestSuiteValidator[] {
+		ITestSuiteValidator[] validators = new ITestSuiteValidator[] {
 				new TestSuiteXMLValidator(),
+				new PartnersUsedInTestCaseAreDeclaredInTestSuiteValidator(),
+				new TestSuiteRootInformationValidator(),
 				new NoCyclesInConditionGroupInheritanceValidator() };
 
-		for (TestSuiteValidator v : validators) {
+		for (ITestSuiteValidator v : validators) {
 			v.validate(doc);
 		}
 	}
@@ -186,23 +190,14 @@ public class SpecificationLoader {
 			throws SpecificationException {
 
 		XMLTestSuite xmlTestSuite = xmlTestSuiteDocument.getTestSuite();
-		if (xmlTestSuite == null)
-			throw new SpecificationException(
-					"Could not find testSuite root element in the test suite XML file.");
 
 		// Name
 		String xmlSuiteName = xmlTestSuite.getName();
-		if (xmlSuiteName == null)
-			throw new SpecificationException(
-					"No name found for the test suite.");
 
 		URL suiteBaseURL = getBaseURL(xmlTestSuite);
 
 		// Load deployment information
 		XMLDeploymentSection xmlDeployment = xmlTestSuite.getDeployment();
-		if (xmlDeployment == null)
-			throw new SpecificationException(
-					"Could not find deployment section inside test suite document.");
 
 		// A map for the partners to re-identify them when reading
 		// PartnerTracks.
@@ -213,18 +208,10 @@ public class SpecificationLoader {
 		 */
 
 		XMLPUTDeploymentInformation xmlPut = xmlDeployment.getPut();
-		if (xmlPut == null)
-			throw new SpecificationException(
-					"Expected a Process Under Test (PUT) in the test suite.");
 		String xmlPutName = xmlPut.getName();
 		String xmlPutWSDL = xmlPut.getWsdl();
 		String xmlPutPartnerWSDL = xmlPut.getPartnerWSDL();
 		String xmlPutType = xmlPut.getType();
-
-		if ((xmlPutName == null) || (xmlPutWSDL == null)
-				|| (xmlPutType == null))
-			throw new SpecificationException(
-					"Process Under Test must have attributes name, type, wsdl, and a deployment section specified.");
 
 		ProcessUnderTest processUnderTest = new ProcessUnderTest(xmlPutName,
 				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL,
@@ -270,10 +257,7 @@ public class SpecificationLoader {
 			String name = xmlPDI.getName();
 			String wsdl = xmlPDI.getWsdl();
 			String partnerWsdl = xmlPDI.getPartnerWsdl();
-			if ((name == null) || (wsdl == null))
-				throw new SpecificationException(
-						"Name and WSDL attributes of a partner must not be empty.");
-			Partner p = new Partner(xmlPDI.getName(), testDirectory, wsdl,
+			Partner p = new Partner(name, testDirectory, wsdl,
 					partnerWsdl, suiteBaseURL.toString());
 			suitePartners.put(p.getName(), p);
 		}
@@ -296,14 +280,7 @@ public class SpecificationLoader {
 		 */
 
 		XMLTestCasesSection xmlTestCases = xmlTestSuite.getTestCases();
-		if (xmlTestCases == null)
-			throw new SpecificationException(
-					"No test case section found in test suite document.");
-
 		List<XMLTestCase> xmlTestCaseList = xmlTestCases.getTestCaseList();
-
-		if (xmlTestCaseList == null || xmlTestCaseList.size() == 0)
-			throw new SpecificationException("No test cases found.");
 
 		int currentNumber = 0;
 		for (XMLTestCase xmlTestCase : xmlTestCaseList) {
@@ -451,11 +428,6 @@ public class SpecificationLoader {
 		for (XMLProperty data : xmlTestCase.getPropertyList()) {
 			String xmlPropertyName = data.getName();
 			String xmlPropertyData = data.getStringValue();
-			if ((xmlPropertyName == null) || (xmlPropertyData == null))
-				throw new SpecificationException("Metadata in Test Case "
-						+ xmlTestCaseName
-						+ " must have both property and value.");
-
 			test.addProperty(xmlPropertyName, xmlPropertyData);
 		}
 
@@ -464,11 +436,6 @@ public class SpecificationLoader {
 
 		// Client Partner Track
 		XMLTrack xmlClientTrack = xmlTestCase.getClientTrack();
-
-		if (xmlClientTrack == null)
-			throw new SpecificationException(
-					"Could not find clientTrack in test case "
-							+ xmlTestCase.getName());
 
 		PartnerTrack track = new PartnerTrack(test, suiteClient);
 		readActivities(track, xmlTestCase, xmlClientTrack, round, testDirectory);
@@ -483,15 +450,7 @@ public class SpecificationLoader {
 			for (XMLPartnerTrack xmlPartnerTrack : partnerTrackList) {
 
 				String xmlPartnerTrackName = xmlPartnerTrack.getName();
-				if (xmlPartnerTrackName == null)
-					throw new SpecificationException(
-							"A partnertrack has been specified without a partner name.");
-
 				Partner realPartner = suitePartners.get(xmlPartnerTrackName);
-				if (realPartner == null)
-					throw new SpecificationException(
-							"Could not find partner or client with the name "
-									+ xmlPartnerTrack.getName());
 
 				PartnerTrack pTrack = new PartnerTrack(test, realPartner);
 				readActivities(pTrack, xmlTestCase, xmlPartnerTrack, round,
