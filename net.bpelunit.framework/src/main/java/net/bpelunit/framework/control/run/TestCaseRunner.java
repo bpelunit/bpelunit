@@ -95,22 +95,24 @@ public class TestCaseRunner {
 
 		fClient = new HttpClient(fConnectionManager);
 
-		List<PartnerTrack> partnerTracks = caseToRun.getPartnerTracks();
-		for (PartnerTrack partnerTrack : partnerTracks) {
-			partnerTrack.initialize(this);
-		}
-
-		fPartnerTracks = new HashMap<PartnerTrack, PartnerTrackResult>();
-
-		for (PartnerTrack head : partnerTracks) {
-			fPartnerTracks.put(head, PartnerTrackResult.RUNNING);
-		}
+		initializePartnerTracks(caseToRun);
 
 		fIncomingBlackboard = new BlackBoard<PartnerTrack, IncomingMessage>();
 		fOutgoingBlackboard = new BlackBoard<PartnerTrack, OutgoingMessage>();
 		fSentBlackBoard = new BlackBoard<OutgoingMessage, Boolean>();
 
 		fLogger = Logger.getLogger(getClass());
+	}
+
+	private void initializePartnerTracks(TestCase caseToRun) {
+		List<PartnerTrack> partnerTracks = caseToRun.getPartnerTracks();
+		for (PartnerTrack partnerTrack : partnerTracks) {
+			partnerTrack.initialize(this);
+		}
+		fPartnerTracks = new HashMap<PartnerTrack, PartnerTrackResult>();
+		for (PartnerTrack head : partnerTracks) {
+			fPartnerTracks.put(head, PartnerTrackResult.RUNNING);
+		}
 	}
 
 	public void run() {

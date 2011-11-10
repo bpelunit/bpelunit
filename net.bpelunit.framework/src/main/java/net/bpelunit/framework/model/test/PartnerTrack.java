@@ -15,10 +15,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.log4j.Logger;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.context.Context;
 import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.model.AbstractPartner;
 import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.ActivityContext;
@@ -26,6 +24,10 @@ import net.bpelunit.framework.model.test.data.ContextXPathVariableResolver;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+
+import org.apache.log4j.Logger;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
 import org.w3c.dom.Document;
 
 import com.rits.cloning.Cloner;
@@ -54,7 +56,7 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 	/**
 	 * The simulated partner
 	 */
-	private Partner fPartner;
+	private AbstractPartner fPartner;
 
 	/**
 	 * The test runner
@@ -81,7 +83,7 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 
 	private static final Cloner fCloner = new Cloner();
 
-	public PartnerTrack(TestCase testCase, Partner client) {
+	public PartnerTrack(TestCase testCase, AbstractPartner client) {
 		fPartner = client;
 		fTestCase = testCase;
 		fStatus = ArtefactStatus.createInitialStatus();
@@ -96,6 +98,14 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 		fActivities = activities;
 	}
 
+	public void addActivity(Activity a) {
+		if(fActivities == null) {
+			fActivities = new ArrayList<Activity>();
+		}
+		
+		fActivities.add(a);
+	}
+	
 	public void run() {
 
 		fLogger.info(getName() + " now active.");
@@ -149,7 +159,7 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 		return fPartner.getName();
 	}
 
-	public Partner getPartner() {
+	public AbstractPartner getPartner() {
 		return fPartner;
 	}
 
@@ -229,7 +239,10 @@ public class PartnerTrack implements ITestArtefact, Runnable {
 		VelocityContext ctx = (VelocityContext) fCloner
 				.deepClone(fTestCaseVelocityContext);
 		ctx.put("partnerTrackName", getRawName());
-		ctx.put("partnerTrackURL", getPartner().getSimulatedURL());
+		
+		if(getPartner() instanceof Partner) {
+			ctx.put("partnerTrackURL", ((Partner)getPartner()).getSimulatedURL());
+		}
 		if (fActivityContext != null) {
 			ctx.put("request", fActivityContext.getLastRequest());
 			ctx.put("partnerTrackReceived", fActivityContext.getReceivedMessages());

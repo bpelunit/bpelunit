@@ -7,7 +7,7 @@ package net.bpelunit.framework.model.test.activity;
 
 import java.util.List;
 
-import net.bpelunit.framework.model.Partner;
+import net.bpelunit.framework.model.AbstractPartner;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
@@ -66,7 +66,7 @@ public abstract class Activity implements ITestArtefact {
 	}
 
 
-	public Partner getPartner() {
+	public AbstractPartner getPartner() {
 		return fPartnerTrack.getPartner();
 	}
 
