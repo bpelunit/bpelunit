@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:wsdl="http://www.example.org/WS-HT/api/wsdl">
+    <tes:name>WSHTTestSuite.bpts</tes:name>
+    <tes:baseURL>http://localhost:7777/ws</tes:baseURL>
+    <tes:deployment>
+        <tes:put name="WSHT" type="fixed">
+            <tes:wsdl>ws-humantask-api.wsdl</tes:wsdl>
+        </tes:put>
+        <!--tes:humanPartner name="BankEmployee" wshtEndpoint="http://localhost:7777/ws/wsht" username="manager" password="manager"/-->
+        <tes:humanPartner name="BankEmployee" wshtEndpoint="http://localhost:8080/active-bpel/services/AeB4PTaskClient-taskOperations" username="manager" password="manager"/>
+    </tes:deployment>
+    <tes:testCases>
+        <tes:testCase name="TC1" basedOn="" abstract="false" vary="false">
+            <tes:clientTrack/>
+            <tes:humanPartnerTrack name="BankEmployee">
+                <tes:completeHumanTask>
+                    <tes:taskName>Task</tes:taskName>
+                    <tes:data>
+                        <demo:NewOperationResponse xmlns:demo="http://www.example.org/Demo/">
+                            <out>Hallo :-)</out>
+                        </demo:NewOperationResponse>
+                    </tes:data>
+                </tes:completeHumanTask>
+            </tes:humanPartnerTrack>
+        </tes:testCase>
+    </tes:testCases>
+</tes:testSuite>
