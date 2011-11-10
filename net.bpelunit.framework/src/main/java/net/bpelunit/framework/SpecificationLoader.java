@@ -186,7 +186,8 @@ public class SpecificationLoader {
 				new PartnersHaveUniqueNamesValidator(),
 				new PartnersUsedInTestCaseAreDeclaredInTestSuiteValidator(),
 				new TestSuiteRootInformationValidator(),
-		};
+				new PartnersInTestCasesHaveNamesValidator(),
+				new NoCyclesInConditionGroupInheritanceValidator() };
 
 		for (ITestSuiteValidator v : validators) {
 			v.validate(doc);
