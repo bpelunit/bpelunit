@@ -1,8 +1,6 @@
 package net.bpelunit.framework.wsht;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -12,6 +10,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.bpelunit.framework.xml.suite.XMLAnyElement;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.lf5.util.StreamUtils;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlTokenSource;
@@ -36,28 +38,14 @@ public class WSHTClient {
 	private static final String NAMESPACE_SOAP = "http://schemas.xmlsoap.org/soap/envelope/";
 	private URL wsHtEndpoint;
 	private SOAPCreator soapCreator;
-	private String username;
-	private String password;
+	String authorizationRealm;
 
 	private static class SOAPCreator {
 
 		private String soapMessage;
 
 		public SOAPCreator() throws IOException {
-			StringBuilder sb = new StringBuilder();
-			BufferedReader r = new BufferedReader(new InputStreamReader(
-					WSHTClient.class.getResourceAsStream("soap.xml")));
-
-			try {
-				String line;
-				while ((line = r.readLine()) != null) {
-					sb.append(line).append("\n");
-				}
-			} finally {
-				r.close();
-			}
-
-			soapMessage = sb.toString();
+			soapMessage = new String(StreamUtils.getBytes(WSHTClient.class.getResourceAsStream("soap.xml")));
 		}
 
 		public String createSOAP(String xml) {
@@ -69,16 +57,23 @@ public class WSHTClient {
 		this.wsHtEndpoint = endpoint;
 		try {
 			this.soapCreator = new SOAPCreator();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Build problem: Resource not found", e);
 		}
 		
-		this.username = username;
-		this.password = password;
+		setAuthorizationRealm(username, password);
 	}
 
-	public GetMyTasksResponse getTaskList() throws IOException, XmlException, ParserConfigurationException, SAXException {
+	void setAuthorizationRealm(String username, String password) {
+		String effectivePassword = password;
+		if(effectivePassword == null) {
+			effectivePassword = "";
+		}
+		this.authorizationRealm = new String(Base64.encodeBase64((username + ":" + effectivePassword).getBytes()));
+	}
+
+	public GetMyTasksResponse getReadyTaskList() throws IOException, XmlException, ParserConfigurationException, SAXException {
 		return getReadyTaskList(null);
 	}
 	
@@ -103,21 +98,21 @@ public class WSHTClient {
 		return resDoc.getGetMyTasksResponse();
 	}
 
-	public void completeTaskWithOutput(String taskId) {
+	public void completeTaskWithOutput(String taskId, XMLAnyElement completeData) {
 		claim(taskId);
 		start(taskId);
 		
-		setOutput(taskId, "<demo:NewOperationResponse xmlns:demo=\"http://www.example.org/Demo/\"><out>Hallo :-)</out></demo:NewOperationResponse>");
+		setOutput(taskId, completeData);
 		complete(taskId);
 	}
 
-	private void setOutput(String taskId, String xmlPayloadAsString) {
+	private void setOutput(String taskId, XMLAnyElement xmlPayload) {
 		try {
 			XMLSetOutputDocument setOutputDoc = XMLSetOutputDocument.Factory.newInstance();
 			SetOutput setOutput = setOutputDoc.addNewSetOutput();
 			setOutput.setIdentifier(taskId);
 			XmlObject taskData = setOutput.addNewTaskData();
-			taskData.set(XmlObject.Factory.parse(xmlPayloadAsString));
+			taskData.set(xmlPayload);
 			
 			makeWSHTSOAPRequest(setOutputDoc);
 		} catch (Exception e) {
@@ -173,7 +168,7 @@ public class WSHTClient {
 		HttpURLConnection con = (HttpURLConnection) wsHtEndpoint
 				.openConnection();
 		con.setRequestMethod("POST");
-		con.setRequestProperty("Authorization", "Basic bWFuYWdlcjptYW5hZ2Vy");
+		con.setRequestProperty("Authorization", "Basic " + authorizationRealm);
 		con.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
 		con.setRequestProperty("Accept", "application/soap+xml, text/xml");
 		con.setDoOutput(true);
@@ -182,7 +177,6 @@ public class WSHTClient {
 		OutputStream out = con.getOutputStream();
 
 		String soapMessage = soapCreator.createSOAP(request);
-		System.out.println(soapMessage);
 		out.write(soapMessage.getBytes("UTF-8"));
 		out.close();
 
@@ -195,19 +189,4 @@ public class WSHTClient {
 
 		return soapBody.getFirstChild();
 	}
-
-	public static void main(String[] args) throws Exception {
-		WSHTClient wshtClient = new WSHTClient(
-				new URL(
-						"http://manager:manager@localhost:8081/active-bpel/services/AeB4PTaskClient-taskOperations"),
-						"manager", "manager");
-
-		GetMyTasksResponse taskList = wshtClient.getTaskList();
-		
-		System.out.printf("Found %d tasks.", taskList.getTaskAbstractList().size());
-		
-		String firstTaskId = taskList.getTaskAbstractList().get(0).getId();
-		wshtClient.completeTaskWithOutput(firstTaskId);
-	}
-
 }

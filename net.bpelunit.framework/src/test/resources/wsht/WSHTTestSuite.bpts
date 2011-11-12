@@ -17,7 +17,7 @@
                     <tes:taskName>Task</tes:taskName>
                     <tes:data>
                         <demo:NewOperationResponse xmlns:demo="http://www.example.org/Demo/">
-                            <out>Hallo :-)</out>
+                            <out>Hallo, this is a BPELUnit test</out>
                         </demo:NewOperationResponse>
                     </tes:data>
                 </tes:completeHumanTask>
