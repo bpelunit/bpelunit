@@ -1,23 +1,25 @@
 package net.bpelunit.framework.model.test.activity;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import net.bpelunit.framework.model.HumanPartner;
 import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.data.CompleteHumanTaskSpecification;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.wsht.WSHTClient;
-import net.bpelunit.framework.xml.suite.XMLAnyElement;
 
+import org.apache.xmlbeans.XmlObject;
 import org.example.wsHT.api.XMLTTask;
 
 public class CompleteHumanTask extends Activity {
 
 	private String taskName;
-	private XMLAnyElement data;
 	private int waitTime = 500;
 	private int maxTimeOut = 10000;
+	private CompleteHumanTaskSpecification dataSpec;
 
 	/**
 	 * This lock is used to serialize requests to WS-HT services. This allows
@@ -30,12 +32,13 @@ public class CompleteHumanTask extends Activity {
 		super(pTrack);
 	}
 
+	public void initialize(CompleteHumanTaskSpecification spec) {
+		dataSpec = spec;
+		fStatus = ArtefactStatus.createInitialStatus();
+	}
+	
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
-	}
-
-	public void setData(XMLAnyElement data) {
-		this.data = data;
 	}
 
 	@Override
@@ -67,7 +70,10 @@ public class CompleteHumanTask extends Activity {
 				} while (taskList.size() == 0);
 				XMLTTask taskToFinish = taskList.get(taskList.size()-1);
 				
-				client.completeTaskWithOutput(taskToFinish.getId(), data);
+				XmlObject data = client.getInput(taskToFinish.getId()).getTaskData();
+				XmlObject output = dataSpec.handle(data);
+				
+				client.completeTaskWithOutput(taskToFinish.getId(), output);
 			} finally {
 				WSHT_LOCK.unlock();
 			}
@@ -100,6 +106,8 @@ public class CompleteHumanTask extends Activity {
 
 	@Override
 	public List<ITestArtefact> getChildren() {
-		return Collections.emptyList();
+		List<ITestArtefact> children = new ArrayList<ITestArtefact>();
+		children.add(dataSpec);
+		return children;
 	}
 }

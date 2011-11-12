@@ -20,6 +20,7 @@ import net.bpelunit.framework.model.AbstractPartner;
 import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.data.ContextXPathVariableResolver;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
@@ -41,7 +42,7 @@ import com.rits.cloning.Cloner;
  * @author Philip Mayer
  * 
  */
-public class PartnerTrack implements ITestArtefact, Runnable {
+public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextProvider {
 
 	/**
 	 * The parent test case

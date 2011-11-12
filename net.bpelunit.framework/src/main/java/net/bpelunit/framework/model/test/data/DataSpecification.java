@@ -9,17 +9,17 @@ import java.io.StringWriter;
 
 import javax.xml.namespace.NamespaceContext;
 
+import net.bpelunit.framework.control.util.XPathTool;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.activity.Activity;
+import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
 import com.rits.cloning.Cloner;
-
-import net.bpelunit.framework.control.util.XPathTool;
-import net.bpelunit.framework.exception.SpecificationException;
-import net.bpelunit.framework.model.test.activity.Activity;
-import net.bpelunit.framework.model.test.activity.ActivityContext;
-import net.bpelunit.framework.model.test.report.ArtefactStatus;
-import net.bpelunit.framework.model.test.report.ITestArtefact;
 
 /**
  * Abstract superclass of the two data specification packages Send and Receive.
@@ -77,7 +77,7 @@ public abstract class DataSpecification implements ITestArtefact {
 		return fStatus.hasProblems();
 	}
 
-	protected String expandTemplateToString(ActivityContext context, String template) throws Exception {
+	protected String expandTemplateToString(VelocityContextProvider context, String template) throws Exception {
 		VelocityContext velocityCtx = fCloner.deepClone(context.createVelocityContext());
 		velocityCtx.put("xpath", new XPathTool(fNamespaceContext));
 

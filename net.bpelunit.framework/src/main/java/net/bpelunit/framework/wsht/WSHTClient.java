@@ -10,8 +10,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import net.bpelunit.framework.xml.suite.XMLAnyElement;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.lf5.util.StreamUtils;
 import org.apache.xmlbeans.XmlException;
@@ -22,6 +20,10 @@ import org.example.wsHT.api.xsd.XMLClaimDocument;
 import org.example.wsHT.api.xsd.XMLClaimDocument.Claim;
 import org.example.wsHT.api.xsd.XMLCompleteDocument;
 import org.example.wsHT.api.xsd.XMLCompleteDocument.Complete;
+import org.example.wsHT.api.xsd.XMLGetInputDocument;
+import org.example.wsHT.api.xsd.XMLGetInputDocument.GetInput;
+import org.example.wsHT.api.xsd.XMLGetInputResponseDocument;
+import org.example.wsHT.api.xsd.XMLGetInputResponseDocument.GetInputResponse;
 import org.example.wsHT.api.xsd.XMLGetMyTasksDocument;
 import org.example.wsHT.api.xsd.XMLGetMyTasksDocument.GetMyTasks;
 import org.example.wsHT.api.xsd.XMLGetMyTasksResponseDocument;
@@ -93,12 +95,10 @@ public class WSHTClient {
 		XMLGetMyTasksResponseDocument resDoc = XMLGetMyTasksResponseDocument.Factory
 				.parse(result);
 
-		System.out.println(resDoc.xmlText());
-
 		return resDoc.getGetMyTasksResponse();
 	}
 
-	public void completeTaskWithOutput(String taskId, XMLAnyElement completeData) {
+	public void completeTaskWithOutput(String taskId, XmlObject completeData) {
 		claim(taskId);
 		start(taskId);
 		
@@ -106,7 +106,22 @@ public class WSHTClient {
 		complete(taskId);
 	}
 
-	private void setOutput(String taskId, XMLAnyElement xmlPayload) {
+	public GetInputResponse getInput(String taskId) {
+		try {
+			XMLGetInputDocument getInputDoc = XMLGetInputDocument.Factory.newInstance();
+			GetInput getInput = getInputDoc.addNewGetInput();
+			getInput.setIdentifier(taskId);
+			
+			Node response = makeWSHTSOAPRequest(getInputDoc);
+			
+			XMLGetInputResponseDocument getInputResponseDoc = XMLGetInputResponseDocument.Factory.parse(response);
+			return getInputResponseDoc.getGetInputResponse();
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	private void setOutput(String taskId, XmlObject xmlPayload) {
 		try {
 			XMLSetOutputDocument setOutputDoc = XMLSetOutputDocument.Factory.newInstance();
 			SetOutput setOutput = setOutputDoc.addNewSetOutput();

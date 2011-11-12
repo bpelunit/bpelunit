@@ -51,7 +51,9 @@ import net.bpelunit.framework.model.test.activity.SendReceiveAsync;
 import net.bpelunit.framework.model.test.activity.SendReceiveSync;
 import net.bpelunit.framework.model.test.activity.TwoWayAsyncActivity;
 import net.bpelunit.framework.model.test.activity.Wait;
+import net.bpelunit.framework.model.test.data.CompleteHumanTaskSpecification;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
+import net.bpelunit.framework.model.test.data.DataSpecification;
 import net.bpelunit.framework.model.test.data.ReceiveCondition;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
@@ -500,7 +502,7 @@ public class SpecificationLoader {
 	private void readHumanPartners(
 			Map<String, HumanPartner> suiteHumanPartners,
 			XMLTestCase xmlTestCase, int round, String testDirectory,
-			TestCase test) {
+			TestCase test) throws SpecificationException {
 		List<XMLHumanPartnerTrack> humanPartnerTrackList = xmlTestCase.getHumanPartnerTrackList();
 		
 		if(humanPartnerTrackList != null) {
@@ -513,7 +515,7 @@ public class SpecificationLoader {
 
 	private void readHumanPartner(Map<String, HumanPartner> suiteHumanPartners,
 			XMLTestCase xmlTestCase, int round, String testDirectory,
-			TestCase test, XMLHumanPartnerTrack xmlHumanPartnerTrack) {
+			TestCase test, XMLHumanPartnerTrack xmlHumanPartnerTrack) throws SpecificationException {
 		String xmlPartnerTrackName = xmlHumanPartnerTrack.getName();
 		HumanPartner realPartner = suiteHumanPartners.get(xmlPartnerTrackName);
 
@@ -527,13 +529,29 @@ public class SpecificationLoader {
 
 	private void readActivities(PartnerTrack pTrack,
 			XMLTestCase xmlTestCase, XMLHumanPartnerTrack xmlHumanPartnerTrack,
-			int round, String testDirectory) {
+			int round, String testDirectory) throws SpecificationException {
 		if(xmlHumanPartnerTrack.getCompleteHumanTaskList() != null) {
 			for(XMLCompleteHumanTaskActivity xmlActivity : xmlHumanPartnerTrack.getCompleteHumanTaskList()) {
 				CompleteHumanTask activity = new CompleteHumanTask(pTrack);
 				activity.setTaskName(xmlActivity.getTaskName());
-				activity.setData(xmlActivity.getData());
+				NamespaceContext context = getNamespaceMap(xmlActivity.newCursor());
+				CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(activity, context, xmlActivity.getData(), pTrack);
 				
+				// get conditions
+				List<XMLCondition> xmlConditionList = xmlActivity.getConditionList();
+				List<ReceiveCondition> cList = new ArrayList<ReceiveCondition>();
+				if (xmlConditionList != null) {
+					for (XMLCondition xmlCondition : xmlConditionList) {
+						cList.add(new ReceiveCondition(spec, xmlCondition
+								.getExpression(), xmlCondition.getTemplate(),
+								xmlCondition.getValue()));
+					}
+				}
+
+				addConditionsFromConditionGroups(xmlActivity.getConditionGroupList(), spec, cList);
+
+				spec.setConditions(cList);
+				activity.initialize(spec);
 				pTrack.addActivity(activity);
 			}
 		}
@@ -1100,7 +1118,7 @@ public class SpecificationLoader {
 			}
 		}
 
-		addConditionsFromConditionGroups(xmlReceive, spec, cList);
+		addConditionsFromConditionGroups(xmlReceive.getConditionGroupList(), spec, cList);
 
 		// Add fault code and string. These will be only checked if this message
 		// is a fault and if
@@ -1114,10 +1132,10 @@ public class SpecificationLoader {
 	}
 
 	private void addConditionsFromConditionGroups(
-			XMLReceiveActivity xmlReceive, ReceiveDataSpecification spec,
+			List<String> conditionGroupNames, DataSpecification spec,
 			List<ReceiveCondition> cList) throws SpecificationException {
-		if (xmlReceive.getConditionGroupList() != null) {
-			for (String cgName : xmlReceive.getConditionGroupList()) {
+		if (conditionGroupNames != null) {
+			for (String cgName : conditionGroupNames) {
 				XMLConditionGroup cg = conditionGroups.get(cgName);
 				addConditionsFromConditionGroup(spec, cList, cg);
 
@@ -1125,7 +1143,7 @@ public class SpecificationLoader {
 		}
 	}
 
-	private void addConditionsFromConditionGroup(ReceiveDataSpecification spec,
+	private void addConditionsFromConditionGroup(DataSpecification spec,
 			List<ReceiveCondition> cList, XMLConditionGroup cg)
 			throws SpecificationException {
 
@@ -1346,5 +1364,4 @@ public class SpecificationLoader {
 		}
 		return null;
 	}
-
 }

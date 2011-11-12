@@ -25,6 +25,7 @@ import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -178,7 +179,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		}
 	}
 
-	private void validateConditions(ActivityContext templateContext) {
+	private void validateConditions(VelocityContextProvider templateContext) {
 
 		// Check implicit fault assertions
 		SOAPBody body;
