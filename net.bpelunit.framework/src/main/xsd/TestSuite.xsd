@@ -118,19 +118,28 @@
 	</xs:complexType>
 	<xs:complexType name="PartnerDeploymentInformation">
 		<xs:annotation>
-			<xs:documentation>A partner deployment information</xs:documentation>
+			<xs:documentation>
+				A partner deployment information
+			</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="name" type="xs:string" use="required">
-			<xs:annotation>
-				<xs:documentation>A name for this partner, to be used in the testCase section. This name forms the partner URL $baseURL/name.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="wsdl" type="xs:string" use="required">
-			<xs:annotation>
-				<xs:documentation>Location of the defining WSDL file</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="partnerWsdl" type="xs:string" use="optional"></xs:attribute>
+		<xs:complexContent>
+			<xs:extension base="AbstractDeploymentInformation">
+
+				<xs:attribute name="wsdl" type="xs:string"
+					use="required">
+					<xs:annotation>
+						<xs:documentation>
+							Location of the defining WSDL file
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+
+				<xs:attribute name="partnerWsdl" type="xs:string"
+					use="optional">
+				</xs:attribute>
+
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="TestCasesSection">
 		<xs:annotation>
@@ -485,11 +494,13 @@ The referenced XML file must not contain SOAP message elements.</xs:documentatio
     <xs:element name="humanPartner" type="HumanPartnerDeploymentInformation"></xs:element>
 
     <xs:complexType name="HumanPartnerDeploymentInformation">
-    	<xs:sequence></xs:sequence>
-    	<xs:attribute name="name" type="xs:string"></xs:attribute>
-    	<xs:attribute name="wshtEndpoint" type="xs:anyURI"></xs:attribute>
-    	<xs:attribute name="username" type="xs:string"></xs:attribute>
-    	<xs:attribute name="password" type="xs:string"></xs:attribute>
+    	<xs:complexContent>
+    		<xs:extension base="AbstractDeploymentInformation">
+    			<xs:attribute name="wshtEndpoint" type="xs:anyURI"></xs:attribute>
+    			<xs:attribute name="username" type="xs:string"></xs:attribute>
+    			<xs:attribute name="password" type="xs:string"></xs:attribute>
+    		</xs:extension>
+    	</xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="HumanPartnerTrack">
@@ -508,6 +519,11 @@ The referenced XML file must not contain SOAP message elements.</xs:documentatio
     		</xs:element>
     		<xs:element name="conditionGroup" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
     	</xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AbstractDeploymentInformation">
+    	<xs:sequence></xs:sequence>
+    	<xs:attribute name="name" type="xs:string"></xs:attribute>
     </xs:complexType>
 </xs:schema>
 
