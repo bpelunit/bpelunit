@@ -38,12 +38,13 @@ import org.eclipse.ui.forms.widgets.Section;
  * elements inside the viewer.
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Daniel Luebke
  * 
  */
 public abstract class StructuredSection extends BPELUnitSection {
 
 	public static String BUTTON_ADD = "ADD";
+	private static final String BUTTON_ADD2 = "ADD2";
 	public static String BUTTON_REMOVE = "REMOVE";
 	public static String BUTTON_EDIT = "EDIT";
 	public static String BUTTON_DUPLICATE = "DUPLICATE";
@@ -53,6 +54,16 @@ public abstract class StructuredSection extends BPELUnitSection {
 	private Map<String, Button> fButtons;
 	private boolean fEnableUpDownButtons;
 	private boolean fEnableDuplicateButton;
+	private Composite buttonsContainer;
+	
+	/**
+	 * if null no second add button shall be displayed
+	 */
+	private String fAdd2ndButtonLabel;
+
+	public Composite getButtonsContainer() {
+		return buttonsContainer;
+	}
 
 	public StructuredSection(Composite parent, FormToolkit toolkit,
 			TestSuitePage page) {
@@ -61,15 +72,16 @@ public abstract class StructuredSection extends BPELUnitSection {
 
 	public StructuredSection(Composite parent, FormToolkit toolkit,
 			TestSuitePage page, boolean enableUpDownButtons) {
-		this(parent, toolkit, page, enableUpDownButtons, false);
+		this(parent, toolkit, page, enableUpDownButtons, false, null);
 	}
 	
 	public StructuredSection(Composite parent, FormToolkit toolkit,
-			TestSuitePage page, boolean enableUpDownButtons, boolean enableDuplicateButton) {
+			TestSuitePage page, boolean enableUpDownButtons, boolean enableDuplicateButton, String add2ButtonLabel) {
 		super(page, parent, toolkit, ExpandableComposite.TITLE_BAR
 				| Section.DESCRIPTION);
 		fEnableUpDownButtons = enableUpDownButtons;
 		fEnableDuplicateButton = enableDuplicateButton;
+		fAdd2ndButtonLabel = add2ButtonLabel;
 		createClient(getSection(), toolkit);
 	}
 
@@ -88,6 +100,8 @@ public abstract class StructuredSection extends BPELUnitSection {
 	protected abstract void fillContextMenu(IMenuManager mng);
 
 	protected abstract void addPressed();
+	
+	protected void add2Pressed() {}
 
 	protected abstract void editPressed();
 
@@ -127,7 +141,7 @@ public abstract class StructuredSection extends BPELUnitSection {
 			}
 		});
 
-		Composite buttonsContainer = toolkit.createComposite(container);
+		buttonsContainer = toolkit.createComposite(container);
 		buttonsContainer.setLayout(createButtonsLayout());
 
 		GridData gd = new GridData(GridData.FILL_VERTICAL);
@@ -136,6 +150,21 @@ public abstract class StructuredSection extends BPELUnitSection {
 		Button addButton = createButton(buttonsContainer, "&Add...", toolkit);
 		fButtons.put(BUTTON_ADD, addButton);
 
+		if(fAdd2ndButtonLabel != null) {
+			Button add2Button = createButton(buttonsContainer, fAdd2ndButtonLabel, toolkit);
+			fButtons.put(BUTTON_ADD2, add2Button);
+			
+			add2Button.addSelectionListener(new SelectionListener() {
+				public void widgetDefaultSelected(SelectionEvent e) {
+					add2Pressed();
+				}
+
+				public void widgetSelected(SelectionEvent e) {
+					add2Pressed();
+				}
+			});
+		}
+		
 		Button editButton = createButton(buttonsContainer, "&Edit...", toolkit);
 		fButtons.put(BUTTON_EDIT, editButton);
 
@@ -221,7 +250,7 @@ public abstract class StructuredSection extends BPELUnitSection {
 			});
 			downButton.setLayoutData(createButtonLayoutData());
 		}
-
+		
 		toolkit.paintBordersFor(container);
 		section.setClient(container);
 		setEditRemoveDuplicateEnabled(false);

@@ -5,6 +5,7 @@
  */
 package net.bpelunit.toolsupport.editors.sections;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.bpelunit.framework.client.eclipse.dialog.DialogFieldValidator;
@@ -12,7 +13,10 @@ import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
 import net.bpelunit.framework.client.eclipse.dialog.field.FileField;
 import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
 import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
+import net.bpelunit.framework.xml.suite.XMLAbstractDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLDeploymentSection;
+import net.bpelunit.framework.xml.suite.XMLHumanPartnerDeploymentInformation;
+import net.bpelunit.framework.xml.suite.XMLHumanPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLTestCase;
@@ -38,6 +42,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 
 /**
  * The partner section allows the user to add, edit, and remove partners to the
@@ -52,16 +57,22 @@ public class PartnerSection extends ListSection {
 	private static final String OPTION_WSDL_FILE = "WSDL file";
 	private static final String OPTION_PARTNER_WSDL_FILE = "Partner WSDL file";
 	private static final String OPTION_NAME = "Name";
+	private static final String OPTION_WSHTENDPOINT = "WS-HT Endpoint";
+	private static final String OPTION_USERNAME = "User Name";
+	private static final String OPTION_PASSWORD = "Password";
 
 	private class PartnerLabelProvider implements ILabelProvider {
 
 		public Image getImage(Object element) {
+			if (element instanceof XMLHumanPartnerDeploymentInformation) {
+				return ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_HUMANTASK);
+			}
 			return ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_DEPLOYER);
 		}
 
 		public String getText(Object element) {
-			if (element instanceof XMLPartnerDeploymentInformation)
-				return ((XMLPartnerDeploymentInformation) element).getName();
+			if (element instanceof XMLAbstractDeploymentInformation)
+				return ((XMLAbstractDeploymentInformation) element).getName();
 			else
 				return "";
 		}
@@ -88,7 +99,12 @@ public class PartnerSection extends ListSection {
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof XMLDeploymentSection) {
 				XMLDeploymentSection element = (XMLDeploymentSection) inputElement;
-				return element.getPartnerList().toArray();
+
+				List<Object> partners = new ArrayList<Object>();
+				partners.addAll(element.getPartnerList());
+				partners.addAll(element.getHumanPartnerList());
+
+				return partners.toArray();
 			} else
 				return new Object[0];
 		}
@@ -134,7 +150,7 @@ public class PartnerSection extends ListSection {
 	}
 
 	public PartnerSection(Composite parent, TestSuitePage page, FormToolkit toolkit) {
-		super(parent, toolkit, page);
+		super(parent, toolkit, page, false, false, "Add &WS-HT Track...");
 		init();
 	}
 
@@ -164,6 +180,58 @@ public class PartnerSection extends ListSection {
 		return model.getDeployment();
 	}
 
+	private class HumanPartnerPropertiesDialog extends FieldBasedInputDialog {
+		private TextField nameField;
+		private TextField wsthtEndpointField;
+		private TextField usernameField;
+		private TextField passwordField;
+
+		public HumanPartnerPropertiesDialog(Shell parent, String title) {
+			this(parent, title, "", null, null, null);
+		}
+
+		public HumanPartnerPropertiesDialog(Shell shell, String title, String partnerName,
+				String wshtEndpoint, String username, String password) {
+			super(shell, title);
+
+			nameField = new TextField(this, OPTION_NAME, partnerName, TextField.Style.SINGLE);
+			nameField.setValidator(new NotEmptyValidator("Partner Name"));
+			this.addField(nameField);
+
+			wsthtEndpointField = new TextField(this, OPTION_WSHTENDPOINT, wshtEndpoint,
+					TextField.Style.SINGLE);
+			wsthtEndpointField.setValidator(new NotEmptyValidator("WS-HT Endpoint"));
+			this.addField(wsthtEndpointField);
+
+			usernameField = new TextField(this, OPTION_USERNAME, username, TextField.Style.SINGLE);
+			usernameField.setValidator(new NotEmptyValidator("WS-HT User"));
+			this.addField(usernameField);
+
+			passwordField = new TextField(this, OPTION_PASSWORD, password, TextField.Style.SINGLE);
+			passwordField.setValidator(new NotEmptyValidator("Password"));
+			passwordField.setEchoChar('*');
+			this.addField(passwordField);
+
+		}
+
+		public String getPartnerName() {
+			return nameField.getSelection();
+		}
+
+		public String getWSHTEndpoint() {
+			return wsthtEndpointField.getSelection();
+		}
+
+		public String getUsername() {
+			return usernameField.getSelection();
+		}
+
+		public String getPassword() {
+			return passwordField.getSelection();
+		}
+
+	}
+
 	private class PartnerPropertiesDialog extends FieldBasedInputDialog {
 		private FileField wsdlFileField;
 		private TextField nameField;
@@ -171,7 +239,6 @@ public class PartnerSection extends ListSection {
 
 		public PartnerPropertiesDialog(Shell parent, String title) {
 			this(parent, title, "", null, null);
-
 		}
 
 		public PartnerPropertiesDialog(Shell parent, String title, String partnerName,
@@ -210,6 +277,11 @@ public class PartnerSection extends ListSection {
 	}
 
 	@Override
+	public void createClient(Section section, FormToolkit toolkit) {
+		super.createClient(section, toolkit);
+	}
+
+	@Override
 	protected void addPressed() {
 		PartnerPropertiesDialog dialog = new PartnerPropertiesDialog(getShell(), "Add a partner");
 
@@ -218,34 +290,78 @@ public class PartnerSection extends ListSection {
 		}
 
 		XMLPartnerDeploymentInformation information = getDeploymentXMLPart().addNewPartner();
-
-		addPartnerTrackToAllTestCases(dialog.getPartnerName());
+		information.setName(dialog.getPartnerName());
+		
+		addPartnerTrackToAllTestCases(information);
 		updateValuesToModel(information, dialog);
 	}
 
-	private void addPartnerTrackToAllTestCases(String partnerName) {
-		List<XMLTestCase> testCases = getEditor().getTestSuite().getTestCases().getTestCaseList();
-
-		for (XMLTestCase testCase : testCases) {
-			testCase.addNewPartnerTrack().setName(partnerName);
-		}
-	}
-
 	@Override
-	protected void editPressed() {
-		XMLPartnerDeploymentInformation currentlySelectedItem = getCurrentlySelectedItem();
-
-		PartnerPropertiesDialog dialog = new PartnerPropertiesDialog(getShell(), "Edit a partner",
-				currentlySelectedItem.getName(), currentlySelectedItem.getWsdl(),
-				currentlySelectedItem.getPartnerWsdl());
+	protected void add2Pressed() {
+		HumanPartnerPropertiesDialog dialog = new HumanPartnerPropertiesDialog(getShell(),
+				"Add a partner");
 
 		if (dialog.open() != Window.OK) {
 			return;
 		}
 
-		changePartnerTrackNameInAllTestCases(currentlySelectedItem.getName(),
-				dialog.getPartnerName());
-		updateValuesToModel(currentlySelectedItem, dialog);
+		XMLHumanPartnerDeploymentInformation information = getDeploymentXMLPart()
+				.addNewHumanPartner();
+		information.setName(dialog.getPartnerName());
+
+		addPartnerTrackToAllTestCases(information);
+		updateValuesToModel(information, dialog);
+	}
+
+	private void addPartnerTrackToAllTestCases(XMLAbstractDeploymentInformation partner) {
+		List<XMLTestCase> testCases = getEditor().getTestSuite().getTestCases().getTestCaseList();
+
+		if (partner instanceof XMLPartnerDeploymentInformation) {
+
+			for (XMLTestCase testCase : testCases) {
+				testCase.addNewPartnerTrack().setName(partner.getName());
+			}
+		} else {
+			for (XMLTestCase testCase : testCases) {
+				testCase.addNewHumanPartnerTrack().setName(partner.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void editPressed() {
+		XMLAbstractDeploymentInformation currentlySelectedItem = getCurrentlySelectedItem();
+
+		if (currentlySelectedItem instanceof XMLPartnerDeploymentInformation) {
+			XMLPartnerDeploymentInformation currentPartner = (XMLPartnerDeploymentInformation) currentlySelectedItem;
+			PartnerPropertiesDialog dialog = new PartnerPropertiesDialog(getShell(),
+					"Edit a partner", currentPartner.getName(), currentPartner.getWsdl(),
+					currentPartner.getPartnerWsdl());
+
+			if (dialog.open() != Window.OK) {
+				return;
+			}
+
+			changePartnerTrackNameInAllTestCases(currentlySelectedItem.getName(),
+					dialog.getPartnerName());
+			updateValuesToModel(currentPartner, dialog);
+		}
+
+		if (currentlySelectedItem instanceof XMLHumanPartnerDeploymentInformation) {
+			XMLHumanPartnerDeploymentInformation currentPartner = (XMLHumanPartnerDeploymentInformation) currentlySelectedItem;
+			HumanPartnerPropertiesDialog dialog = new HumanPartnerPropertiesDialog(getShell(),
+					"Edit a partner", currentPartner.getName(), currentPartner.getWshtEndpoint(),
+					currentPartner.getUsername(), currentPartner.getPassword());
+
+			if (dialog.open() != Window.OK) {
+				return;
+			}
+
+			changePartnerTrackNameInAllTestCases(currentlySelectedItem.getName(),
+					dialog.getPartnerName());
+			updateValuesToModel(currentPartner, dialog);
+		}
+
 	}
 
 	private void changePartnerTrackNameInAllTestCases(String oldName, String newName) {
@@ -254,13 +370,24 @@ public class PartnerSection extends ListSection {
 					.getTestCaseList();
 
 			for (XMLTestCase testCase : testCases) {
-				List<XMLPartnerTrack> partnerTracks = testCase.getPartnerTrackList();
-				for (XMLPartnerTrack pt : partnerTracks) {
-					if (oldName.equals(pt.getName())) {
-						pt.setName(newName);
-						break;
-					}
-				}
+				renamePartnerInTestCase(oldName, newName, testCase);
+			}
+		}
+	}
+
+	private void renamePartnerInTestCase(String oldName, String newName, XMLTestCase testCase) {
+		List<XMLPartnerTrack> partnerTracks = testCase.getPartnerTrackList();
+		for (XMLPartnerTrack pt : partnerTracks) {
+			if (oldName.equals(pt.getName())) {
+				pt.setName(newName);
+				break;
+			}
+		}
+		List<XMLHumanPartnerTrack> humanPartnerTracks = testCase.getHumanPartnerTrackList();
+		for (XMLHumanPartnerTrack pt : humanPartnerTracks) {
+			if (oldName.equals(pt.getName())) {
+				pt.setName(newName);
+				break;
 			}
 		}
 	}
@@ -289,9 +416,29 @@ public class PartnerSection extends ListSection {
 		}
 	}
 
+	private void updateValuesToModel(XMLHumanPartnerDeploymentInformation modelItem,
+			HumanPartnerPropertiesDialog dialog) {
+		String name = dialog.getPartnerName();
+		String wshtEndpoint = dialog.getWSHTEndpoint();
+		String username = dialog.getUsername();
+		String password = dialog.getPassword();
+
+		if (name != null && wshtEndpoint != null && name.length() > 0 && wshtEndpoint.length() > 0
+				&& username != null && username.length() > 0 && password != null
+				&& password.length() > 0) {
+			modelItem.setName(name);
+			modelItem.setWshtEndpoint(wshtEndpoint);
+			modelItem.setUsername(username);
+			modelItem.setPassword(password);
+
+			getEditor().refresh();
+			markDirty();
+		}
+	}
+
 	@Override
 	protected void removePressed() {
-		XMLPartnerDeploymentInformation currentlySelectedItem = getCurrentlySelectedItem();
+		XMLAbstractDeploymentInformation currentlySelectedItem = getCurrentlySelectedItem();
 
 		removePartnerFromTestCases(currentlySelectedItem.getName());
 		removePartner(currentlySelectedItem);
@@ -310,12 +457,22 @@ public class PartnerSection extends ListSection {
 				XMLPartnerTrack pt = partnerTracks.get(i);
 				if (name.equals(pt.getName())) {
 					tc.removePartnerTrack(i);
+					break;
+				}
+			}
+
+			List<XMLHumanPartnerTrack> humanPartnerTracks = tc.getHumanPartnerTrackList();
+			for (int i = 0; i < humanPartnerTracks.size(); i++) {
+				XMLHumanPartnerTrack pt = humanPartnerTracks.get(i);
+				if (name.equals(pt.getName())) {
+					tc.removeHumanPartnerTrack(i);
+					break;
 				}
 			}
 		}
 	}
 
-	private void removePartner(XMLPartnerDeploymentInformation currentlySelectedItem) {
+	private void removePartner(XMLAbstractDeploymentInformation currentlySelectedItem) {
 		List<XMLPartnerDeploymentInformation> partnerList = getDeploymentXMLPart().getPartnerList();
 		for (int i = 0; i < partnerList.size(); i++) {
 			if (partnerList.get(i).equals(currentlySelectedItem)) {
@@ -323,10 +480,18 @@ public class PartnerSection extends ListSection {
 				break;
 			}
 		}
+		List<XMLHumanPartnerDeploymentInformation> humanPartnerList = getDeploymentXMLPart()
+				.getHumanPartnerList();
+		for (int i = 0; i < humanPartnerList.size(); i++) {
+			if (humanPartnerList.get(i).equals(currentlySelectedItem)) {
+				getDeploymentXMLPart().removeHumanPartner(i);
+				break;
+			}
+		}
 	}
 
-	private XMLPartnerDeploymentInformation getCurrentlySelectedItem() {
-		return (XMLPartnerDeploymentInformation) getViewerSelection();
+	private XMLAbstractDeploymentInformation getCurrentlySelectedItem() {
+		return (XMLAbstractDeploymentInformation) getViewerSelection();
 	}
 
 	@Override

@@ -18,6 +18,8 @@ import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
 import net.bpelunit.framework.client.eclipse.dialog.validate.NullValidator;
 import net.bpelunit.framework.control.util.ActivityUtil;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
+import net.bpelunit.framework.xml.suite.XMLHumanPartnerDeploymentInformation;
+import net.bpelunit.framework.xml.suite.XMLHumanPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLTestCase;
@@ -68,6 +70,9 @@ public class TestCaseAndTrackSection extends TreeSection {
 				return ((XMLTestCase) element).getName();
 			else if (element instanceof XMLPartnerTrack)
 				return ((XMLPartnerTrack) element).getName();
+			else if(element instanceof XMLHumanPartnerTrack) {
+				return ((XMLHumanPartnerTrack)element).getName();
+			}
 			else
 				return BPELUnitConstants.CLIENT_NAME;
 		}
@@ -115,10 +120,9 @@ public class TestCaseAndTrackSection extends TreeSection {
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof XMLTestCase) {
 				XMLTestCase testCase = (XMLTestCase) parentElement;
-				List<XMLTrack> tracks = new ArrayList<XMLTrack>();
-				for (XMLTrack t : testCase.getPartnerTrackList()) {
-					tracks.add(t);
-				}
+				List<Object> tracks = new ArrayList<Object>();
+				tracks.addAll(testCase.getPartnerTrackList());
+				tracks.addAll(testCase.getHumanPartnerTrackList());
 				if (testCase.getClientTrack() != null)
 					tracks.add(testCase.getClientTrack());
 				return tracks.toArray();
@@ -141,13 +145,28 @@ public class TestCaseAndTrackSection extends TreeSection {
 						return case1;
 				}
 			}
+			
+			if(element instanceof XMLHumanPartnerTrack) {
+				XMLHumanPartnerTrack track = (XMLHumanPartnerTrack) element;
+				List<XMLTestCase> testCaseList = fSection.getTestCaseList();
+				for (XMLTestCase case1 : testCaseList) {
+					List<XMLHumanPartnerTrack> partnerTrackList = case1
+							.getHumanPartnerTrackList();
+					for (XMLHumanPartnerTrack track2 : partnerTrackList) {
+						if (track2.equals(track))
+							return case1;
+					}
+				}
+			}
+			
 			return null;
 		}
 
 		public boolean hasChildren(Object element) {
 			if (element instanceof XMLTestCase) {
 				XMLTestCase testCase = (XMLTestCase) element;
-				return testCase.getPartnerTrackList().size() > 0
+				return testCase.getPartnerTrackList().size() > 0 ||
+						testCase.getHumanPartnerTrackList().size() > 0
 						|| testCase.getClientTrack() != null;
 			} else
 				return false;
@@ -157,7 +176,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 	public TestCaseAndTrackSection(Composite parent, TestSuitePage page,
 			FormToolkit toolkit) {
-		super(parent, toolkit, page, true, true);
+		super(parent, toolkit, page, true, true, null);
 		init();
 	}
 
@@ -198,6 +217,16 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 		if (name != null && name.length() > 0) {
 			XMLPartnerTrack track = to.addNewPartnerTrack();
+			track.setName(name);
+			adjust();
+		}
+	}
+	
+	protected void addHumanPartnerTrack(XMLTestCase to) {
+		String name = editHumanPartnerTrack("Add a new WS-HT Track", null);
+		
+		if (name != null && name.length() > 0) {
+			XMLHumanPartnerTrack track = to.addNewHumanPartnerTrack();
 			track.setName(name);
 			adjust();
 		}
@@ -264,11 +293,22 @@ public class TestCaseAndTrackSection extends TreeSection {
 		} else if (current instanceof XMLPartnerTrack) {
 			// TODO use a combo
 			editPartnerTrack((XMLPartnerTrack) current);
+		} else if (current instanceof XMLPartnerTrack) {
+			editHumanPartnerTrack((XMLHumanPartnerTrack) current);
 		}
 	}
 
 	private void editPartnerTrack(XMLPartnerTrack track) {
 		String name = editPartnerTrack("Edit a partner track", track.getName());
+		if (name != null) {
+			track.setName(name);
+			setEditRemoveDuplicateEnabled(true);
+			adjust();
+		}
+	}
+	
+	private void editHumanPartnerTrack(XMLHumanPartnerTrack track) {
+		String name = editPartnerTrack("Edit a WS-HT Track", track.getName());
 		if (name != null) {
 			track.setName(name);
 			setEditRemoveDuplicateEnabled(true);
@@ -282,8 +322,25 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 		if (current instanceof XMLTestCase) {
 			removeTestCase(current);
-		} else
+		} else if(current instanceof XMLTrack) {
 			removeTrack((XMLTrack) current);
+		} else if(current instanceof XMLHumanPartnerTrack) {
+			removeTrack((XMLHumanPartnerTrack) current);
+		}
+	}
+
+	private void removeTrack(XMLHumanPartnerTrack track) {
+		XMLTestCase current = getTestCase(track);
+		List<XMLHumanPartnerTrack> partnerTrackList = current.getHumanPartnerTrackList();
+		int index = partnerTrackList.indexOf(track);
+		if(index >= 0) {
+			current.removeHumanPartnerTrack(index);
+			getPage().postTrackSelected(null);
+		}
+
+		getViewer().refresh();
+		setEditRemoveDuplicateEnabled(false);
+		markDirty();
 	}
 
 	private void removeTestCase(Object current) {
@@ -302,30 +359,27 @@ public class TestCaseAndTrackSection extends TreeSection {
 		markDirty();
 	}
 
+	private XMLTestCase getTestCase(XmlObject o) {
+		XmlCursor c = o.newCursor();
+		if(!c.toParent()) {
+			return null;
+		}
+		
+		XmlObject object = c.getObject();
+		if(object instanceof XMLTestCase) {
+			return (XMLTestCase)object;
+		} else {
+			return null;
+		}
+	}
+	
 	private void removeTrack(XMLTrack track) {
-
-		XmlCursor c = track.newCursor();
-		if (c.toParent()) {
-			XmlObject o = c.getObject();
-			if (o instanceof XMLTestCase) {
-				XMLTestCase current = (XMLTestCase) o;
-				int i = 0;
-				boolean found = false;
-				List<XMLPartnerTrack> partnerTrackList = current
-						.getPartnerTrackList();
-				for (XMLPartnerTrack track2 : partnerTrackList) {
-					if (track2.equals(track)) {
-						found = true;
-						break;
-					}
-					i++;
-				}
-				if (found) {
-					current.removePartnerTrack(i);
-					// Inform the activity page that the track is gone
-					getPage().postTrackSelected(null);
-				}
-			}
+		XMLTestCase current = getTestCase(track);
+		List<XMLPartnerTrack> partnerTrackList = current.getPartnerTrackList();
+		int index = partnerTrackList.indexOf(track);
+		if(index >= 0) {
+			current.removePartnerTrack(index);
+			getPage().postTrackSelected(null);
 		}
 
 		getViewer().refresh();
@@ -419,6 +473,39 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 		return combo.getSelection();
 	}
+	
+	private String editHumanPartnerTrack(String title, String current) {
+		
+		List<XMLHumanPartnerDeploymentInformation> partnerList = getEditor()
+		.getTestSuite().getDeployment().getHumanPartnerList();
+		String[] partnerNames = new String[partnerList.size()];
+		
+		int i = 0;
+		boolean found = false;
+		for (XMLHumanPartnerDeploymentInformation information : partnerList) {
+			partnerNames[i] = information.getName();
+			if (partnerNames[i].equals(current))
+				found = true;
+			i++;
+		}
+		if (!found) {
+			// The partner track seems to have been deleted. Cannot display
+			// it...
+			current = null;
+		}
+		
+		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
+				title);
+		ComboField combo = new ComboField(dialog, "Name:", current,
+				partnerNames);
+		combo.setValidator(new NotEmptyValidator("Name"));
+		dialog.addField(combo);
+		
+		if (dialog.open() != Window.OK)
+			return null;
+		
+		return combo.getSelection();
+	}
 
 	private String[] editTestCase(String title, String currentName,
 			String currentBasedOn, boolean currentAbstractSetting,
@@ -505,6 +592,12 @@ public class TestCaseAndTrackSection extends TreeSection {
 						addPartnerTrack(testCase);
 					}
 				});
+				createAction(newMenu, "WS-HT Track", new Action() {
+					@Override
+					public void run() {
+						addHumanPartnerTrack(testCase);
+					}
+				});
 
 				Action newClientTrackAction = createAction(newMenu,
 						"Client Track", new Action() {
@@ -557,7 +650,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 	}
 
 	private boolean getIsEditEnabled(Object object) {
-		return (object instanceof XMLPartnerTrack || object instanceof XMLTestCase);
+		return (object instanceof XMLPartnerTrack || object instanceof XMLTestCase || object instanceof XMLHumanPartnerTrack);
 	}
 
 	private boolean getIsDuplicateEnabled(Object object) {
@@ -565,7 +658,8 @@ public class TestCaseAndTrackSection extends TreeSection {
 	}
 	
 	private boolean getIsDeleteEnabled(Object object) {
-		return (object instanceof XMLTestCase);
+		return object != null;
+		//(object instanceof XMLTestCase);
 	}
 
 }

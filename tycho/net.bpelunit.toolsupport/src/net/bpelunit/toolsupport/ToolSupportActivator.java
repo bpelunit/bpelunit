@@ -27,6 +27,7 @@ public class ToolSupportActivator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "net.bpelunit.toolsupport";
 
 	public static final String IMAGE_DEPLOYER = "img_deployer";
+	public static final String IMAGE_HUMANTASK = "img_deployer"; 
 	public static final String IMAGE_TESTCASE = "img_testcase";
 	public static final String IMAGE_ACTIVITY = "img_activity";
 
@@ -138,6 +139,7 @@ public class ToolSupportActivator extends AbstractUIPlugin {
 	protected void initializeImageRegistry(ImageRegistry reg) {
 		super.initializeImageRegistry(reg);
 		reg.put(IMAGE_DEPLOYER, getImageDescriptor("icons/deployer.gif"));
+		reg.put(IMAGE_HUMANTASK, getImageDescriptor("icons/deployer.gif"));
 		reg.put(IMAGE_TESTCASE, getImageDescriptor("icons/testCase.gif"));
 		reg.put(IMAGE_ACTIVITY, getImageDescriptor("icons/activity.gif"));
 		reg.put(IMAGE_LOCK, getImageDescriptor("icons/lock.gif"));

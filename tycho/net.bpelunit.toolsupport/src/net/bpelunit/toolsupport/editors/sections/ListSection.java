@@ -30,7 +30,12 @@ public abstract class ListSection extends StructuredSection {
 	private TableViewer fTableViewer;
 
 	public ListSection(Composite parent, FormToolkit toolkit, TestSuitePage page) {
-		super(parent, toolkit, page);
+		super(parent, toolkit, page, false, false, null);
+	}
+
+	public ListSection(Composite parent, FormToolkit toolkit, TestSuitePage page,
+			boolean enableUpDownButtons, boolean enableDuplicateButton, String add2ButtonLabel) {
+		super(parent, toolkit, page, enableUpDownButtons, enableDuplicateButton, add2ButtonLabel);
 	}
 
 	@Override

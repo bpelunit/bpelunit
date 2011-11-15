@@ -37,8 +37,8 @@ public abstract class TreeSection extends StructuredSection {
 		super(parent, toolkit, page, enableUpDownButtons);
 	}
 	
-	public TreeSection(Composite parent, FormToolkit toolkit, TestSuitePage page, boolean enableUpDownButtons, boolean enableDuplicateButton) {
-		super(parent, toolkit, page, enableUpDownButtons, enableDuplicateButton);
+	public TreeSection(Composite parent, FormToolkit toolkit, TestSuitePage page, boolean enableUpDownButtons, boolean enableDuplicateButton, String enableAdd2Button) {
+		super(parent, toolkit, page, enableUpDownButtons, enableDuplicateButton, enableAdd2Button);
 	}
 
 	@Override
