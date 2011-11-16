@@ -379,6 +379,7 @@ The referenced XML file must not contain SOAP message elements.</xs:documentatio
 		<xs:annotation>
 			<xs:documentation>A single activity</xs:documentation>
 		</xs:annotation>
+		<xs:sequence></xs:sequence>
 		<xs:attribute name="assume" type="xs:string"></xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="SoapActivity">
@@ -511,7 +512,9 @@ The referenced XML file must not contain SOAP message elements.</xs:documentatio
     </xs:complexType>
 
     <xs:complexType name="CompleteHumanTaskActivity">
-    	<xs:sequence>
+    	<xs:complexContent>
+    		<xs:extension base="Activity">
+    		<xs:sequence>
     		<xs:element name="taskName" type="xs:string"></xs:element>
     		<xs:element name="data" type="AnyElement"></xs:element>
     		<xs:element name="condition" type="Condition" minOccurs="0"
@@ -519,6 +522,8 @@ The referenced XML file must not contain SOAP message elements.</xs:documentatio
     		</xs:element>
     		<xs:element name="conditionGroup" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
     	</xs:sequence>
+    	</xs:extension>
+    	</xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="AbstractDeploymentInformation">
