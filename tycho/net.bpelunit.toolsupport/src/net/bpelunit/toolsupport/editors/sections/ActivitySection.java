@@ -22,8 +22,10 @@ import net.bpelunit.framework.control.util.ActivityUtil;
 import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.xml.suite.XMLActivity;
+import net.bpelunit.framework.xml.suite.XMLCompleteHumanTaskActivity;
 import net.bpelunit.framework.xml.suite.XMLCondition;
 import net.bpelunit.framework.xml.suite.XMLHeaderProcessor;
+import net.bpelunit.framework.xml.suite.XMLHumanPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLMapping;
 import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
 import net.bpelunit.framework.xml.suite.XMLSendActivity;
@@ -35,6 +37,7 @@ import net.bpelunit.toolsupport.ToolSupportActivator;
 import net.bpelunit.toolsupport.editors.TestSuitePage;
 import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
 import net.bpelunit.toolsupport.editors.wizards.ActivityWizard;
+import net.bpelunit.toolsupport.editors.wizards.CompleteHumanTaskActivityWizard;
 import net.bpelunit.toolsupport.editors.wizards.ReceiveOnlyWizard;
 import net.bpelunit.toolsupport.editors.wizards.ReceiveSendAsyncActivityWizard;
 import net.bpelunit.toolsupport.editors.wizards.ReceiveSendSyncActivityWizard;
@@ -93,11 +96,15 @@ public class ActivitySection extends TreeSection {
 		}
 
 		public String getText(Object element) {
-			if(element instanceof XMLActivity) {
+			if(element instanceof XMLSoapActivity) {
 				XMLSoapActivity xml = (XMLSoapActivity)element;
 				String operation = xml.getOperation();
 				operation = operation != null ? operation : "n/a";
 				return operation + " (" + ActivityUtil.getNiceName(element) + ")"; 
+			}
+			if(element instanceof XMLCompleteHumanTaskActivity) {
+				XMLCompleteHumanTaskActivity xml = (XMLCompleteHumanTaskActivity)element;
+				return xml.getTaskName() + " (" + ActivityUtil.getNiceName(element) + ")";
 			}
 			
 			if (ActivityUtil.isActivity(element)) {
@@ -141,8 +148,11 @@ public class ActivitySection extends TreeSection {
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof XMLTrack) {
 				return ActivityUtil.getActivities((XMLTrack) inputElement).toArray();
-			} else
+			} else if(inputElement instanceof XMLHumanPartnerTrack) {
+				return ((XMLHumanPartnerTrack) inputElement).getCompleteHumanTaskList().toArray();
+			} else {
 				return new Object[0];
+			}
 		}
 
 		public void dispose() {
@@ -204,6 +214,7 @@ public class ActivitySection extends TreeSection {
 
 	private XMLTrack fCurrentPartnerTrack;
 	private boolean fCtrlDown;
+	private XMLHumanPartnerTrack fCurrentHumanPartnerTrack;
 
 	public ActivitySection(Composite parent, TestSuitePage page, FormToolkit toolkit) {
 		super(parent, toolkit, page, true);
@@ -274,7 +285,7 @@ public class ActivitySection extends TreeSection {
 			 * navigating the tree structure (for example, for finding the
 			 * parent track of an activity).
 			 */
-			int currentActivityIndex = getActivityIndex(fCurrentPartnerTrack, currentActivity);
+			int currentActivityIndex = getActivityIndex(currentActivity);
 
 			// Clone:
 			XMLActivity copiedActivity = (XMLActivity) currentActivity.copy();
@@ -307,6 +318,8 @@ public class ActivitySection extends TreeSection {
 			case WAIT:
 				wizard = new WaitActivityWizard((XMLWaitActivity) currentActivity);
 				break;
+			case COMPLETEHUMANTASK:
+				wizard = new CompleteHumanTaskActivityWizard((XMLCompleteHumanTaskActivity)currentActivity);
 			}
 			if (wizard != null) {
 				if (code != null)
@@ -325,6 +338,20 @@ public class ActivitySection extends TreeSection {
 
 			}
 		}
+	}
+
+	private int getActivityIndex(XMLActivity currentActivity) {
+		if(fCurrentPartnerTrack != null) {
+			return getActivityIndex(fCurrentPartnerTrack, currentActivity);
+		} else if (fCurrentHumanPartnerTrack != null) {
+			return getActivityIndex(fCurrentHumanPartnerTrack, currentActivity);
+		}
+		return -1;
+	}
+
+	private int getActivityIndex(XMLHumanPartnerTrack humanPartnerTrack,
+			XMLActivity currentActivity) {
+		return humanPartnerTrack.getCompleteHumanTaskList().indexOf(currentActivity);
 	}
 
 	@Override
@@ -552,6 +579,17 @@ public class ActivitySection extends TreeSection {
 
 	public void handleTrackSelection(XMLTrack selection) {
 		fCurrentPartnerTrack = selection;
+		setEnabled(BUTTON_ADD, true);
+		setEnabled(BUTTON_EDIT, false);
+		setEnabled(BUTTON_REMOVE, false);
+		setEnabled(BUTTON_UP, false);
+		setEnabled(BUTTON_DOWN, false);
+		getViewer().setInput(selection);
+		getTreeViewer().expandToLevel(AbstractTreeViewer.ALL_LEVELS);
+	}
+	
+	public void handleTrackSelection(XMLHumanPartnerTrack selection) {
+		fCurrentHumanPartnerTrack = selection;
 		setEnabled(BUTTON_ADD, true);
 		setEnabled(BUTTON_EDIT, false);
 		setEnabled(BUTTON_REMOVE, false);

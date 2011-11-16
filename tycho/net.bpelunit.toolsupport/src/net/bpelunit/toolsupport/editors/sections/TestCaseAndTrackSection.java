@@ -335,7 +335,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 		int index = partnerTrackList.indexOf(track);
 		if(index >= 0) {
 			current.removeHumanPartnerTrack(index);
-			getPage().postTrackSelected(null);
+			getPage().postTrackSelected((XMLHumanPartnerTrack)null);
 		}
 
 		getViewer().refresh();
@@ -379,7 +379,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 		int index = partnerTrackList.indexOf(track);
 		if(index >= 0) {
 			current.removePartnerTrack(index);
-			getPage().postTrackSelected(null);
+			getPage().postTrackSelected((XMLTrack)null);
 		}
 
 		getViewer().refresh();
@@ -546,6 +546,9 @@ public class TestCaseAndTrackSection extends TreeSection {
 	protected void itemSelected(Object firstElement) {
 		if (firstElement instanceof XMLTrack) {
 			XMLTrack selection = (XMLTrack) firstElement;
+			getPage().postTrackSelected(selection);
+		} else if(firstElement instanceof XMLHumanPartnerTrack) {
+			XMLHumanPartnerTrack selection = (XMLHumanPartnerTrack) firstElement;
 			getPage().postTrackSelected(selection);
 		}
 		setEnabled(BUTTON_REMOVE, getIsDeleteEnabled(firstElement));
