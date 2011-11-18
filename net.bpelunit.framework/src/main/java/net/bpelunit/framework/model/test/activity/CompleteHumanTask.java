@@ -43,8 +43,6 @@ public class CompleteHumanTask extends Activity {
 
 	@Override
 	public void run(ActivityContext context) {
-		System.out.println("RUN HUMAN TASK!");
-
 		HumanPartner partner = (HumanPartner) getPartner();
 		WSHTClient client = partner.getWSHTClient();
 
@@ -62,9 +60,9 @@ public class CompleteHumanTask extends Activity {
 					}
 					
 					if(timeout >= maxTimeOut ) {
-						// XXX Not nice, acquiring lock so that the finally unlock() does work
 						WSHT_LOCK.lock();
-						// TODO Indicate error
+						// XXX Not nice, acquiring lock so that the finally unlock() does work
+						fStatus = ArtefactStatus.createErrorStatus("Timeout while waiting for task " + taskName);
 						return;
 					}
 				} while (taskList.size() == 0);
@@ -78,8 +76,12 @@ public class CompleteHumanTask extends Activity {
 				WSHT_LOCK.unlock();
 			}
 
+			if (dataSpec.hasProblems())
+				fStatus= dataSpec.getStatus();
+			else
+				fStatus= ArtefactStatus.createPassedStatus();
 		} catch (Exception e) {
-			e.printStackTrace();
+			fStatus= ArtefactStatus.createErrorStatus("Error while completing human task", e);
 		}
 
 	}

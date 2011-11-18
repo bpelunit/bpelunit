@@ -40,10 +40,16 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 	@Override
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> returner = new ArrayList<ITestArtefact>();
-		for (ReceiveCondition c : conditions )
+		for (ReceiveCondition c : conditions ) {
 			returner.add(c);
-		returner.add(new XMLData(this, "Input XML Data", inputXMLData.xmlText()));
-		returner.add(new XMLData(this, "Output XML Data", getOutputXMLData()));
+		}
+		
+		if(inputXMLData != null) {
+			returner.add(new XMLData(this, "Input XML Data", inputXMLData.xmlText().trim()));
+		} else {
+			returner.add(new XMLData(this, "Input XML Data", "(no data)"));
+		}
+		returner.add(new XMLData(this, "Output XML Data", getOutputXMLData().trim()));
 
 		return returner;
 	}
