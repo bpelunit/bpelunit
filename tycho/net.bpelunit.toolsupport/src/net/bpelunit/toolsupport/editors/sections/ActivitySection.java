@@ -96,7 +96,7 @@ public class ActivitySection extends TreeSection {
 		}
 
 		public String getText(Object element) {
-			if(element instanceof XMLSoapActivity) {
+			if(element instanceof XMLSoapActivity && ActivityUtil.getParentActivityFor(element) == null) {
 				XMLSoapActivity xml = (XMLSoapActivity)element;
 				String operation = xml.getOperation();
 				operation = operation != null ? operation : "n/a";
