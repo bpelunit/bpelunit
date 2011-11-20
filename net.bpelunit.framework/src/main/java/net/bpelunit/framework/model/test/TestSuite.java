@@ -320,7 +320,14 @@ public class TestSuite implements ITestArtefact {
 	 * not be wrapped, but rather be cloned and then extended.
 	 */
 	public VelocityContext createVelocityContext() throws Exception {
-		Velocity.init();
+		try {
+			Velocity.init();
+		} catch(Exception e) {
+			// XXX DL: This is stupid but it seems that the logger
+			// cannot be initialized on the first try when running
+			// under Eclipse and ATM I don't know a better solution
+			Velocity.init();
+		}
 
 		VelocityContext ctx = new VelocityContext();
 		ctx.put("baseURL", getBaseURL().toString());
