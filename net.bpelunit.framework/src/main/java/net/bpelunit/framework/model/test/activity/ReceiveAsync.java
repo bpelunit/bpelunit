@@ -120,9 +120,9 @@ public class ReceiveAsync extends Activity {
 			context.postAnswer(this.getPartnerTrack(), outgoing);
 
 			if (fReceiveSpec.hasProblems())
-				fStatus= fReceiveSpec.getStatus();
+				fStatus = fReceiveSpec.getStatus();
 			else
-				fStatus= ArtefactStatus.createPassedStatus();
+				fStatus = ArtefactStatus.createPassedStatus();
 
 		} catch (TimeoutException e) {
 			fStatus= ArtefactStatus.createErrorStatus("Timeout occurred while waiting for ACK for asynchronous receive.", e);

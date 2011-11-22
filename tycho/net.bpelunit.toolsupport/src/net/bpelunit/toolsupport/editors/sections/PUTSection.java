@@ -6,6 +6,7 @@
 package net.bpelunit.toolsupport.editors.sections;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.bpelunit.framework.client.eclipse.ExtensionControl;
@@ -185,7 +186,7 @@ public class PUTSection extends BPELUnitSection implements ContextPart, IHyperli
 				IBPELDeployer deployer = ExtensionControl.findDeployerExtension(deployerName)
 						.createNew();
 
-				List<String> possiblePropertyNames = ExtensionRegistry
+				Collection<String> possiblePropertyNames = ExtensionRegistry
 						.getPossibleConfigurationOptions(deployer.getClass(), true);
 
 				List<XMLProperty> currentProperties = getPUT().getPropertyList();

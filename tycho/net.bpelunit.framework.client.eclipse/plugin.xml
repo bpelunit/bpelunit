@@ -23,6 +23,12 @@
             class="net.bpelunit.framework.client.eclipse.preferences.BPELUnitCoveragePreferencePage"
             id="net.bpelunit.framework.client.eclipse.preferences.BPELUnit.coverage"
             name="Test Coverage"/>
+      <page
+            category="net.bpelunit.framework.client.eclipse.preferences.BPELUnit"
+            class="net.bpelunit.framework.client.eclipse.preferences.RegisteredExtensionsPreferencePage"
+            id="net.bpelunit.framework.client.eclipse.preferences.BPELUnit.extensionInformation"
+            name="Extension Information">
+      </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
