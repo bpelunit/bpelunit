@@ -30,7 +30,7 @@ public class BlackBoard<KEY, OBJECT> {
 	}
 
 	public synchronized void putObject(KEY key, OBJECT object) throws InterruptedException {
-
+		// XXX Synchronization is not right
 		while (map.containsKey(key)) {
 			wait(BPELUnitConstants.TIMEOUT_SLEEP_TIME);
 		}
@@ -39,7 +39,7 @@ public class BlackBoard<KEY, OBJECT> {
 	}
 
 	public synchronized OBJECT getObject(KEY key) throws TimeoutException /*, InterruptedException*/ {
-
+		// XXX Synchronization is not right
 		int timeout= 0;
 
 		while ( (!map.containsKey(key) && (timeout < BPELUnitRunner.getTimeout()))) {

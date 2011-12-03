@@ -52,7 +52,7 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 	/**
 	 * The activities of this partner track
 	 */
-	private List<Activity> fActivities;
+	private List<Activity> fActivities = new ArrayList<Activity>();
 
 	/**
 	 * The simulated partner
@@ -96,7 +96,11 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 	}
 
 	public void setActivities(List<Activity> activities) {
-		fActivities = activities;
+		if(activities != null) {
+			fActivities = activities;
+		} else {
+			fActivities.clear();
+		}
 	}
 
 	public void addActivity(Activity a) {
@@ -116,6 +120,8 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
+			// ignore because we are just waiting for some time
+			return;
 		}
 		
 		if (assumptionHolds(fAssumption)) {
