@@ -522,7 +522,8 @@ public class ActivitySection extends TreeSection {
 		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
 				"Create a new activity");
 
-		List<ActivityConstant> topLevelActivities = ActivityUtil.getTopLevelActivities();
+		if(fCurrentPartnerTrack != null) {
+		List<ActivityConstant> topLevelActivities = ActivityUtil.getTopLevelSoapActivities();
 		String[] names = new String[topLevelActivities.size()];
 		int i = 0;
 		for (ActivityConstant constant : topLevelActivities) {
@@ -575,9 +576,13 @@ public class ActivitySection extends TreeSection {
 
 		if (name != null)
 			addActivity(ActivityConstant.getForNiceName(name));
+		} else {
+			addActivity(ActivityConstant.COMPLETEHUMANTASK);
+		}
 	}
 
 	public void handleTrackSelection(XMLTrack selection) {
+		fCurrentHumanPartnerTrack = null;
 		fCurrentPartnerTrack = selection;
 		setEnabled(BUTTON_ADD, true);
 		setEnabled(BUTTON_EDIT, false);
@@ -589,6 +594,7 @@ public class ActivitySection extends TreeSection {
 	}
 	
 	public void handleTrackSelection(XMLHumanPartnerTrack selection) {
+		fCurrentPartnerTrack = null;
 		fCurrentHumanPartnerTrack = selection;
 		setEnabled(BUTTON_ADD, true);
 		setEnabled(BUTTON_EDIT, false);
@@ -696,7 +702,7 @@ public class ActivitySection extends TreeSection {
 				|| ((ssel.size() == 1) && ActivityUtil.isActivity(ssel.getFirstElement()) && !ActivityUtil
 						.isChildActivity(ssel.getFirstElement()))) {
 
-			List<ActivityConstant> topLevelActivities = ActivityUtil.getTopLevelActivities();
+			List<ActivityConstant> topLevelActivities = ActivityUtil.getTopLevelSoapActivities();
 			for (final ActivityConstant constant : topLevelActivities) {
 				createAction(newMenu, constant.getNiceName(), new Action() {
 					@Override
@@ -882,7 +888,7 @@ public class ActivitySection extends TreeSection {
 				added = sendRcvOp;
 			break;
 		}
-		case WAIT:
+		case WAIT: {
 			XMLWaitActivity waitAct = fCurrentPartnerTrack.addNewWait();
 			initializeWait(waitAct);
 			WaitActivityWizard wiz = new WaitActivityWizard(waitAct);
@@ -892,6 +898,17 @@ public class ActivitySection extends TreeSection {
 				added = waitAct;
 			}
 			break;
+		}
+		case COMPLETEHUMANTASK: {
+			XMLCompleteHumanTaskActivity completeHumanTaskActivity = fCurrentHumanPartnerTrack.addNewCompleteHumanTask();
+			CompleteHumanTaskActivityWizard wiz = new CompleteHumanTaskActivityWizard(completeHumanTaskActivity);
+			if (!openWizard(wiz)) {
+				removeActivity(fCurrentPartnerTrack, completeHumanTaskActivity);
+			} else {
+				added = completeHumanTaskActivity;
+			}
+			break;
+		}
 		}
 		if (added != null) {
 			adjust(false);

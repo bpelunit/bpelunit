@@ -85,7 +85,7 @@ public class ActivitySelectionWizardPage extends ActivityWizardPage {
 		fSelectionField.setTableColumns(new ListDialogField.ColumnsDescription(1, false));
 		fSelectionField.setLabelText(null);
 
-		fSelectionField.setElements(new ArrayList<Object>(ActivityUtil.getTopLevelActivities()));
+		fSelectionField.setElements(new ArrayList<Object>(ActivityUtil.getTopLevelSoapActivities()));
 
 		fSelectionField.doFillIntoGrid(composite, nColumns);
 

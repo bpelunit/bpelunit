@@ -120,16 +120,19 @@ public class ActivityUtil {
 	 * 
 	 * @return
 	 */
-	public static List<ActivityConstant> getTopLevelActivities() {
+	public static List<ActivityConstant> getTopLevelSoapActivities() {
 		ActivityConstant[] constants= ActivityConstant.values();
 		List<ActivityConstant> list= new ArrayList<ActivityConstant>();
 		for (int i= 0; i < constants.length; i++) {
-			if (!constants[i].equals(ActivityConstant.RECEIVE) && (!constants[i].equals(ActivityConstant.SEND)))
+			if (!constants[i].equals(ActivityConstant.RECEIVE) && 
+					(!constants[i].equals(ActivityConstant.SEND)) &&
+					(!constants[i].equals(ActivityConstant.COMPLETEHUMANTASK))
+				)
 				list.add(constants[i]);
 		}
 		return list;
 	}
-
+	
 	// ***************************** Activity identity checking ******************************
 
 	/**

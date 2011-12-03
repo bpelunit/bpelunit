@@ -17,7 +17,7 @@ public class CompleteHumanTaskActivityWizard extends Wizard {
 	@Override
 	public void addPages() {
 		super.addPages();
-		completeHumanTaskActivityWizardPage = new CompleteHumanTaskWizardPage("Complete WS-HT Task", xmlCompleteHumanTaskActivity);
+		completeHumanTaskActivityWizardPage = new CompleteHumanTaskWizardPage("Complete WS-HT Task", ActivityEditMode.EDIT, xmlCompleteHumanTaskActivity);
 		this.addPage(completeHumanTaskActivityWizardPage);
 		
 		
