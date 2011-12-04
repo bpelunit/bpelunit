@@ -1176,7 +1176,7 @@ public class SpecificationLoader {
 		XMLConditionGroup currentCG = cg;
 		cgs.add(currentCG);
 		while(currentCG.getInheritFrom() != null) {
-			currentCG = conditionGroups.get(cg.getInheritFrom());
+			currentCG = conditionGroups.get(currentCG.getInheritFrom());
 			cgs.add(0, currentCG);
 		}
 		

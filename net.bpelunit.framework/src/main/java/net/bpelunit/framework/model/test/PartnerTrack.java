@@ -117,8 +117,9 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 		fActivityContext = new ActivityContext(fRunner, this);
 
 		// wait till all partners are active
+		// XXX make this better
 		try {
-			Thread.sleep(500);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			// ignore because we are just waiting for some time
 			return;
