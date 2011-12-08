@@ -17,7 +17,7 @@ import org.example.wsHT.api.XMLTTask;
 public class CompleteHumanTask extends Activity {
 
 	private String taskName;
-	private int waitTime = 500;
+	private int waitTime = 50;
 	private int maxTimeOut = 10000;
 	private CompleteHumanTaskSpecification dataSpec;
 

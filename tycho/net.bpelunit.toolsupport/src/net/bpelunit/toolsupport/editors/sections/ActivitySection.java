@@ -96,34 +96,7 @@ public class ActivitySection extends TreeSection {
 		}
 
 		public String getText(Object element) {
-			if(element instanceof XMLSoapActivity && ActivityUtil.getParentActivityFor(element) == null) {
-				XMLSoapActivity xml = (XMLSoapActivity)element;
-				String operation = xml.getOperation();
-				operation = operation != null ? operation : "n/a";
-				return operation + " (" + ActivityUtil.getNiceName(element) + ")"; 
-			}
-			if(element instanceof XMLCompleteHumanTaskActivity) {
-				XMLCompleteHumanTaskActivity xml = (XMLCompleteHumanTaskActivity)element;
-				return xml.getTaskName() + " (" + ActivityUtil.getNiceName(element) + ")";
-			}
-			
-			if (ActivityUtil.isActivity(element)) {
-				return ActivityUtil.getNiceName(element);
-			} else if (element instanceof XMLMapping) {
-				return "Data Copy";
-			} else if (element instanceof XMLHeaderProcessor) {
-				return "Header Processor (" + ((XMLHeaderProcessor) element).getName() + ")";
-			} else if (element instanceof XMLCondition) {
-				return "Condition ("
-						+ StringUtils.abbreviate(BPELUnitUtil
-								.removeSpaceLineBreaks(((XMLCondition) element).getExpression()),
-								100) + ")";
-			}
-			if (element != null) {
-				return element.toString();
-			} else {
-				return "";
-			}
+			return ActivityUtil.getUIName(element);
 		}
 
 		public void addListener(ILabelProviderListener listener) {
