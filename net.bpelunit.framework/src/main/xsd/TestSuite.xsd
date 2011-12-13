@@ -281,12 +281,6 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
-					<xs:element name="xmlFile" type="xs:string">
-						<xs:annotation>
-							<xs:documentation>A file name (if relative it is evaluated relatively to the test suite file) for reading an XML source for this activity. The XML is used like the XML specified in the data element.
-
-The referenced XML file must not contain SOAP message elements.</xs:documentation>
-						</xs:annotation></xs:element>
 				</xs:choice>
 				<xs:element name="transportOption" type="Property"
 		maxOccurs="unbounded" minOccurs="0"></xs:element>
@@ -369,11 +363,15 @@ The referenced XML file must not contain SOAP message elements.</xs:documentatio
 	</xs:complexType>
 	<xs:complexType name="AnyElement" mixed="true">
 		<xs:annotation>
-			<xs:documentation>Wrapper for the XML Any Element</xs:documentation>
+			<xs:documentation>
+				Wrapper for the XML Any Element
+			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:any namespace="##any" processContents="skip" maxOccurs="unbounded"/>
+			<xs:any namespace="##any" processContents="skip"
+				maxOccurs="unbounded" minOccurs="0"/>
 		</xs:sequence>
+		<xs:attribute name="src" type="xs:string" use="optional"></xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="Activity">
 		<xs:annotation>
