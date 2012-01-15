@@ -79,16 +79,14 @@ public class WSHTClient {
 		return getReadyTaskList(null);
 	}
 	
-	public GetMyTasksResponse getReadyTaskList(String taskName) throws IOException, XmlException,
-			ParserConfigurationException, SAXException {
+	public GetMyTasksResponse getTaskList(String taskName, XMLTStatus.Enum[] state) throws IOException, XmlException, ParserConfigurationException, SAXException  {
 		XMLGetMyTasksDocument doc = XMLGetMyTasksDocument.Factory.newInstance();
 		GetMyTasks getMyTasks = doc.addNewGetMyTasks();
 		getMyTasks.setTaskType("TASK");
-		getMyTasks.setStatusArray(new XMLTStatus.Enum[] {XMLTStatus.Enum.forString("READY")});
+		getMyTasks.setStatusArray(state);
 		if(taskName != null) {
 			getMyTasks.setWhereClause("Task.Name = '" + taskName + "'");
 		}
-		//getMyTasks.setCreatedOnClause("Task.CreatedOn > '2011-11-09T17:40:00'");
 
 		Node result = makeWSHTSOAPRequest(doc.xmlText());
 
@@ -96,6 +94,11 @@ public class WSHTClient {
 				.parse(result);
 
 		return resDoc.getGetMyTasksResponse();
+	}
+	
+	public GetMyTasksResponse getReadyTaskList(String taskName) throws IOException, XmlException,
+			ParserConfigurationException, SAXException {
+		return getTaskList(taskName, new XMLTStatus.Enum[] {XMLTStatus.Enum.forString("READY")});
 	}
 
 	public void completeTaskWithOutput(String taskId, XmlObject completeData) {

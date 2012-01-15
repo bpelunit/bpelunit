@@ -1,9 +1,7 @@
 package net.bpelunit.framework.model.test.activity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 import net.bpelunit.framework.model.HumanPartner;
 import net.bpelunit.framework.model.test.PartnerTrack;
@@ -24,13 +22,6 @@ public class CompleteHumanTask extends Activity {
 	private CompleteHumanTaskSpecification dataSpec;
 	private String taskId;
 
-	/**
-	 * This lock is used to serialize requests to WS-HT services. This allows
-	 * two different tracks to complete tasks with the same name without
-	 * interfering with each other.
-	 */
-	private static final ReentrantLock WSHT_LOCK = new ReentrantLock();
-
 	public CompleteHumanTask(PartnerTrack pTrack) {
 		super(pTrack);
 	}
@@ -48,23 +39,24 @@ public class CompleteHumanTask extends Activity {
 	public void run(ActivityContext context) {
 		HumanPartner partner = (HumanPartner) getPartner();
 		WSHTClient client = partner.getWSHTClient();
-
+		boolean locked = false;
+		
 		try {
 			try {
 				int timeout = 0;
 				List<XMLTTask> taskList;
 				do {
-					WSHT_LOCK.lock();
+					HumanPartner.WSHT_LOCK.lock();
+					locked = true;
 					taskList = client.getReadyTaskList(taskName).getTaskAbstractList();
 					if(taskList.size() == 0) {
-						WSHT_LOCK.unlock();
+						HumanPartner.WSHT_LOCK.unlock();
+						locked = false;
 						timeout += waitTime ;
 						Thread.sleep(waitTime);
 					}
 					
 					if(timeout >= maxTimeOut ) {
-						WSHT_LOCK.lock();
-						// XXX Not nice, acquiring lock so that the finally unlock() does work
 						fStatus = ArtefactStatus.createErrorStatus("Timeout while waiting for task " + taskName);
 						return;
 					}
@@ -78,13 +70,16 @@ public class CompleteHumanTask extends Activity {
 				
 				client.completeTaskWithOutput(taskToFinish.getId(), output);
 			} finally {
-				WSHT_LOCK.unlock();
+				if(locked) {
+					HumanPartner.WSHT_LOCK.unlock();
+				}
 			}
 
-			if (dataSpec.hasProblems())
+			if (dataSpec.hasProblems()) {
 				fStatus= dataSpec.getStatus();
-			else
+			} else {
 				fStatus= ArtefactStatus.createPassedStatus();
+			}
 		} catch (Exception e) {
 			fStatus= ArtefactStatus.createErrorStatus("Error while completing human task: " + e.getMessage(), e);
 			e.printStackTrace();

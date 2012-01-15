@@ -59,6 +59,7 @@ import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.verify.ConditionGroupsExistInTestSuiteValidator;
 import net.bpelunit.framework.verify.ITestSuiteValidator;
 import net.bpelunit.framework.verify.NoCyclesInConditionGroupInheritanceValidator;
 import net.bpelunit.framework.verify.PartnersHaveUniqueNamesValidator;
@@ -192,6 +193,7 @@ public class SpecificationLoader {
 				new PartnersUsedInTestCaseAreDeclaredInTestSuiteValidator(),
 				new TestSuiteRootInformationValidator(),
 				new PartnersInTestCasesHaveNamesValidator(),
+				new ConditionGroupsExistInTestSuiteValidator(),
 				new NoCyclesInConditionGroupInheritanceValidator(),
 				new XMLDataIsEitherSetOrImportedValidator() };
 

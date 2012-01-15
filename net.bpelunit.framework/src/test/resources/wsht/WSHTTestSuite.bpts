@@ -33,7 +33,7 @@
                                             <htd:user>manager</htd:user>
                                         </htd:users>
                                     </htda:businessAdministrators>
-                                    <htda:createdOn xmlns:htda="http://www.example.org/WS-HT/api">2011-11-12T16:17:16.779Z</htda:createdOn>
+                                    <htda:createdOn xmlns:htda="http://www.example.org/WS-HT/api">2100-11-12T16:17:16.779Z</htda:createdOn>
                                     <htda:createdBy xmlns:htda="http://www.example.org/WS-HT/api">anonymous</htda:createdBy>
                                     <htda:activationTime xmlns:htda="http://www.example.org/WS-HT/api">2011-11-12T16:17:16.779Z</htda:activationTime>
                                     <htda:isSkipable xmlns:htda="http://www.example.org/WS-HT/api">false</htda:isSkipable>
@@ -75,7 +75,13 @@
                 <tes:receiveSend service="wsdl:TaskOperations" port="TaskOperationsPort" operation="getOutput">
                     <tes:send service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
                         <tes:data>
-                            <aetgt:getInputResponse xmlns:aetgt="http://www.example.org/WS-HT/api/xsd" xmlns:htdt="http://www.example.org/WS-HT/api/xsd" xmlns:result="http://saxon.sf.net/xquery-results" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><htdt:taskData><q0:NewOperation xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:aets="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:htapi="http://www.example.org/WS-HT/api" xmlns:htd="http://www.example.org/WS-HT" xmlns:htp="http://www.example.org/WS-HT/protocol" xmlns:q0="http://www.example.org/Demo/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><in>H</in></q0:NewOperation></htdt:taskData></aetgt:getInputResponse>
+                            <aetgt:getInputResponse xmlns:aetgt="http://www.example.org/WS-HT/api/xsd" xmlns:htdt="http://www.example.org/WS-HT/api/xsd" xmlns:result="http://saxon.sf.net/xquery-results" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                <htdt:taskData>
+                                    <q0:NewOperation xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:aets="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:htapi="http://www.example.org/WS-HT/api" xmlns:htd="http://www.example.org/WS-HT" xmlns:htp="http://www.example.org/WS-HT/protocol" xmlns:q0="http://www.example.org/Demo/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                        <in>H</in>
+                                    </q0:NewOperation>
+                                </htdt:taskData>
+                            </aetgt:getInputResponse>
                         </tes:data>
                     </tes:send>
                     <tes:receive service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
@@ -113,7 +119,7 @@
                         </tes:data>
                     </tes:send>
                     <tes:receive service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
-                    <tes:condition>
+                        <tes:condition>
                             <tes:expression>count(//wshtApiXsd:start)</tes:expression>
                             <tes:value>1</tes:value>
                         </tes:condition>
@@ -121,12 +127,12 @@
                             <tes:expression>//wshtApiXsd:identifier</tes:expression>
                             <tes:value>'urn:b4p:553'</tes:value>
                         </tes:condition>
-                        </tes:receive>
+                    </tes:receive>
                 </tes:receiveSend>
                 <tes:receiveSend service="wsdl:TaskOperations" port="TaskOperationsPort" operation="setOutput">
                     <tes:send service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
                         <tes:data>
-                            <exa1:setOutputResponse></exa1:setOutputResponse>
+                            <exa1:setOutputResponse/>
                         </tes:data>
                     </tes:send>
                     <tes:receive service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false"/>
@@ -134,11 +140,11 @@
                 <tes:receiveSend service="wsdl:TaskOperations" port="TaskOperationsPort" operation="complete">
                     <tes:send service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
                         <tes:data>
-                            <exa1:completeResponse></exa1:completeResponse>
+                            <exa1:completeResponse/>
                         </tes:data>
                     </tes:send>
                     <tes:receive service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
-                    <tes:condition>
+                        <tes:condition>
                             <tes:expression>count(//wshtApiXsd:complete)</tes:expression>
                             <tes:value>1</tes:value>
                         </tes:condition>
@@ -146,7 +152,7 @@
                             <tes:expression>//wshtApiXsd:identifier</tes:expression>
                             <tes:value>'urn:b4p:553'</tes:value>
                         </tes:condition>
-                        </tes:receive>
+                    </tes:receive>
                 </tes:receiveSend>
             </tes:clientTrack>
             <tes:humanPartnerTrack name="BankEmployee">
