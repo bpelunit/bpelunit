@@ -290,7 +290,7 @@ public class PartnerSection extends ListSection {
 		}
 
 		XMLPartnerDeploymentInformation information = getDeploymentXMLPart().addNewPartner();
-		information.setName(dialog.getPartnerName());
+		information.setName(dialog.getPartnerName().trim());
 		
 		addPartnerTrackToAllTestCases(information);
 		updateValuesToModel(information, dialog);
@@ -307,7 +307,7 @@ public class PartnerSection extends ListSection {
 
 		XMLHumanPartnerDeploymentInformation information = getDeploymentXMLPart()
 				.addNewHumanPartner();
-		information.setName(dialog.getPartnerName());
+		information.setName(dialog.getPartnerName().trim());
 
 		addPartnerTrackToAllTestCases(information);
 		updateValuesToModel(information, dialog);
