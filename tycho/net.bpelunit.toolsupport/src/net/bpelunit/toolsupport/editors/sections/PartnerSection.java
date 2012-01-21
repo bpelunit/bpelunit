@@ -290,7 +290,11 @@ public class PartnerSection extends ListSection {
 		}
 
 		XMLPartnerDeploymentInformation information = getDeploymentXMLPart().addNewPartner();
-		information.setName(dialog.getPartnerName().trim());
+		String partnerName = dialog.getPartnerName();
+		if(partnerName != null) {
+			partnerName = partnerName.trim();
+		}
+		information.setName(partnerName);
 		
 		addPartnerTrackToAllTestCases(information);
 		updateValuesToModel(information, dialog);
@@ -307,8 +311,12 @@ public class PartnerSection extends ListSection {
 
 		XMLHumanPartnerDeploymentInformation information = getDeploymentXMLPart()
 				.addNewHumanPartner();
-		information.setName(dialog.getPartnerName().trim());
-
+		
+		String partnerName = dialog.getPartnerName();
+		if(partnerName != null) {
+			partnerName = partnerName.trim();
+		}
+		information.setName(partnerName);
 		addPartnerTrackToAllTestCases(information);
 		updateValuesToModel(information, dialog);
 	}
@@ -343,7 +351,7 @@ public class PartnerSection extends ListSection {
 			}
 
 			changePartnerTrackNameInAllTestCases(currentlySelectedItem.getName(),
-					dialog.getPartnerName());
+					dialog.getPartnerName().trim());
 			updateValuesToModel(currentPartner, dialog);
 		}
 
@@ -399,7 +407,7 @@ public class PartnerSection extends ListSection {
 		String partnerWSDLFileName = dialog.getPartnerWSDLFileName();
 
 		if (name != null && wsdlFileName != null && name.length() > 0 && wsdlFileName.length() > 0) {
-			modelItem.setName(name);
+			modelItem.setName(name.trim());
 			modelItem.setWsdl(wsdlFileName);
 
 			manageTargetNamespace(wsdlFileName);
