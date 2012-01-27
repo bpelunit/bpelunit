@@ -22,6 +22,7 @@ import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -81,9 +82,11 @@ public class DocumentLiteralEncoder implements ISOAPEncoder {
 
 			NodeList nodes = literalElement.getChildNodes();
 			for (int i = 0; i < nodes.getLength(); i++) {
-				SOAPElement soapElement = sFactory
-						.createElement((Element) nodes.item(i));
-				data.addChildElement(soapElement);
+				final Node node = nodes.item(i);
+				if (node instanceof Element) {
+					SOAPElement soapElement = sFactory.createElement((Element) node);
+					data.addChildElement(soapElement);
+				}
 			}
 
 			return message;

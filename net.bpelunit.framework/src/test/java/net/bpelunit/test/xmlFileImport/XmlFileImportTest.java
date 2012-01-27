@@ -21,4 +21,12 @@ public class XmlFileImportTest {
 				new File(TEST_BPTS_DIR, "BookSearch-4results-data.bpts"),
 				new File(TEST_BPTS_DIR, "BookSearch-4results-fi.bpts"));
 	}
+
+	@Test
+	public void testSuccessfulXmlFileImportWithSrcAttribute() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+				"The same BPTS file should always produce the same results",
+				new File(TEST_BPTS_DIR, "BookSearch-4results-data.bpts"),
+				new File(TEST_BPTS_DIR, "BookSearch-4results-fi-src.bpts"));
+	}
 }

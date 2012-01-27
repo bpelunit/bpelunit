@@ -1,0 +1,7 @@
+<tac:tacResponse xmlns="http://www.bpelunit.org/schema/testSuite" xmlns:tac="http://xml.netbeans.org/schema/tacService" xmlns:tacbpel="http://enterprise.netbeans.org/bpel/TacService/tacService" xmlns:tacwsdl="http://j2ee.netbeans.org/wsdl/tacService">
+  <tac:lines>$collections.reverse($lines)
+#foreach($line in $lines)
+    <tac:line>$line</tac:line>
+#end
+  </tac:lines>
+</tac:tacResponse>

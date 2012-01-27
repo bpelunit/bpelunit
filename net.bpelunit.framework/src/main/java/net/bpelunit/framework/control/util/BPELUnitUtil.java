@@ -41,6 +41,8 @@ import org.w3c.dom.Node;
  */
 public class BPELUnitUtil {
 
+	public static final String DUMMY_ELEMENT_NAME = "literalData";
+
 	/**
 	 * The document builder to use.
 	 */
@@ -69,7 +71,7 @@ public class BPELUnitUtil {
 	 */
 	public static Element generateDummyElementNode() {
 		Document document= fgDocumentBuilder.newDocument();
-		Element root= document.createElement("literalData");
+		Element root= document.createElement(DUMMY_ELEMENT_NAME);
 		document.appendChild(root);
 		return root;
 	}

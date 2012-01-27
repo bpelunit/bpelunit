@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:exa="http://www.example.org/bookSearchWrapper/" xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:book="http://bpelunit.net/test/bookSearchArtifacts">
+    <tes:name>BookSearchTest</tes:name>
+    <tes:baseURL>http://localhost:7777/ws/</tes:baseURL>
+    <tes:deployment>
+        <tes:put type="testmode" name="BookSearch">
+            <tes:wsdl>BookSearchArtifacts.wsdl</tes:wsdl>
+        </tes:put>
+    </tes:deployment>
+    <tes:testCases>
+        <tes:testCase name="FourResults" basedOn="" abstract="false" vary="false">
+            <tes:clientTrack>
+                <tes:sendReceive service="exa:bookSearchService" port="bookSearchServiceSOAP" operation="search">
+                    <tes:send fault="false">
+                        <tes:data src="search.xml"/>
+                    </tes:send>
+                    <tes:receive fault="false">
+                        <tes:condition>
+                            <tes:expression>count(//exa:result)</tes:expression>
+                            <tes:value>4</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                </tes:sendReceive>
+            </tes:clientTrack>
+            <tes:partnerTrack name="BookSearch">
+                <tes:receiveSend service="book1:bookSearchHelper" port="bookSearchHelperSOAP" operation="search" xmlns:book1="http://www.example.org/bookSearchWrapper/">
+                    <tes:receive fault="false"/>
+                    <tes:send fault="false">
+                        <tes:data src="searchResponse.xml"/>
+                    </tes:send>
+                </tes:receiveSend>
+            </tes:partnerTrack>
+        </tes:testCase>
+    </tes:testCases>
+</tes:testSuite>

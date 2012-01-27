@@ -39,6 +39,19 @@ public class VelocityDataSourceTemplateTest extends AbstractTemplateTest {
 	}
 
 	/**
+	 * Checks that a template-based BPTS with a test-suite level data source
+	 * with an external reference to a .vm file and external references to .vm
+	 * templates produces the same results as the equivalent old style BPTS file.
+	 */
+	@Test
+	public void testSuiteSourceAndExternalTemplatesSameResultsAsOldStyleBPTS() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+			"Test suite data sources with external references to files "
+				+ "should produce the same results as the equivalent old-style "
+				+ "BPTS", TC_VDS_TCDS_NOTEMP, TC_VDS_TSDS_TEMP_SRCATTRIB);
+	}
+
+	/**
 	 * Checks that variables inside the activity context are available in
 	 * the XPath receive conditions (both expression and value).
 	 */

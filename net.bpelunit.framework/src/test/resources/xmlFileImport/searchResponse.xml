@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<exa:searchResponse xmlns:exa="http://www.example.org/bookSearchWrapper/">
+<exa:searchResponse xmlns:book="http://bpelunit.net/test/bookSearchArtifacts" xmlns:book1="http://www.example.org/bookSearchWrapper/" xmlns:exa="http://www.example.org/bookSearchWrapper/" xmlns:tes="http://www.bpelunit.org/schema/testSuite">
 	<exa:results>
 		<exa:result>A</exa:result>
 		<exa:result>B</exa:result>
