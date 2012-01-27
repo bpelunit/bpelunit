@@ -55,6 +55,15 @@ This does *NOT*:
     #set( $i = 0 )
       <foo>$i</foo>
     </template>
+    
+Alternatively, you can use an external template. Supposing `template.vm` contains:
+
+    #set($i = 0)
+    <foo>$i</foo>
+
+Then you can safely refer to it from the `.bpts` file, like this:
+
+    <template src="template.vm"/>
 
 Also, make sure your data source variables are named differently than the built-in variables listed in the rest of this document. Conflicting variables can lead to unexpected behaviour.
 
