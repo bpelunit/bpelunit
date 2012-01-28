@@ -1,3 +1,4 @@
+## This is a comment - this .vm file is NOT a valid XML document
 <tac:tacRequest xmlns="http://www.bpelunit.org/schema/testSuite" xmlns:tac="http://xml.netbeans.org/schema/tacService" xmlns:tacbpel="http://enterprise.netbeans.org/bpel/TacService/tacService" xmlns:tacwsdl="http://j2ee.netbeans.org/wsdl/tacService">
   <tac:lines>
 #foreach($line in $lines)

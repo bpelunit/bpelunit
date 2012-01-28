@@ -12,6 +12,7 @@
     <put name="tacService" type="testmode">
       <wsdl>tacService.wsdl</wsdl>
     </put>
+    <partner name="tacService" wsdl="tacService.wsdl"/>
   </deployment>
 
   <setUp>
