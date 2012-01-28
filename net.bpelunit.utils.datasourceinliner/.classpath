@@ -26,6 +26,6 @@
 	<classpathentry kind="var" path="M2_REPO/wsdl4j/wsdl4j/1.6.2/wsdl4j-1.6.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/xmlbeans/xmlbeans/2.3.0/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.framework"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/framework"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
