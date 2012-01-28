@@ -40,7 +40,7 @@ You should place Velocity commands at the start of their own lines. They will st
 
 *NOTE*: from now on, we will call test cases which use one or more templates *test case templates*.
 
-*IMPORTANT*: due to the way XMLBeans parses the BPTS files, you should put all VTL commands inside the first child of <template>. This works:
+*IMPORTANT*: due to the way XMLBeans parses the BPTS files, you should put all VTL commands inside the first child of `<template>`. This works:
 
     <template>
       <foo>
@@ -56,6 +56,7 @@ This does *NOT*:
       <foo>$i</foo>
     </template>
 
+Also, make sure your data source variables are named differently than the built-in variables listed in the rest of this document. Conflicting variables can lead to unexpected behaviour.
 
 Template variables
 ------------------
