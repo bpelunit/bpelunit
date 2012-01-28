@@ -2,7 +2,6 @@ package net.bpelunit.test.templates;
 
 import net.bpelunit.test.util.TestUtil;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**

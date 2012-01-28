@@ -5,7 +5,6 @@
  */
 package net.bpelunit.test.util;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -36,6 +35,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
+import org.custommonkey.xmlunit.DetailedDiff;
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.Difference;
+import org.custommonkey.xmlunit.DifferenceConstants;
+import org.custommonkey.xmlunit.DifferenceListener;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -45,11 +50,27 @@ import org.xml.sax.InputSource;
  * 
  * Some Test Utilities.
  * 
- * @version $Id: TestUtil.java,v 1.2 2006/07/11 14:27:43 phil Exp $
- * @author Philip Mayer
- * 
+ * @author Philip Mayer, Antonio García-Domínguez
  */
 public class TestUtil {
+
+	private static final class IgnorePrefixesDifferenceListener implements DifferenceListener {
+		@Override
+		public int differenceFound(Difference diff) {
+			if (diff.getId() == DifferenceConstants.NAMESPACE_PREFIX_ID) {
+				return DifferenceListener.RETURN_IGNORE_DIFFERENCE_NODES_IDENTICAL;
+			}
+			return DifferenceListener.RETURN_ACCEPT_DIFFERENCE;
+		}
+
+		@Override
+		public void skippedComparison(Node arg0, Node arg1) {
+			// do nothing
+		}
+	}
+
+	// This is an utility class with no non-static methods, so the constructor should be private
+	private TestUtil() {}
 
 	public static Element parse(String toEncode) throws Exception {
 		DocumentBuilderFactory factory= DocumentBuilderFactory.newInstance();
@@ -85,7 +106,7 @@ public class TestUtil {
 		options.setSavePrettyPrint();
 		final String xmlTextA = getXMLResults(bptsOriginal).xmlText(options);
 		final String xmlTextB = getXMLResults(bptsNew).xmlText(options);
-		assertEquals(msg, xmlTextA, xmlTextB);
+		assertEqualXML(xmlTextA, xmlTextB);
 	}
 
 	public static void assertDifferentResults(String msg, File bptsOriginal, File bptsNew) throws Exception {
@@ -118,5 +139,17 @@ public class TestUtil {
 		runner.testRun();
 		assertTrue("Test suites should pass all tests", runner.getTestSuite().getStatus().isPassed());
 		return runner.getTestSuite();
+	}
+
+	public static void assertEqualXML(String expected, String obtained) throws Exception {
+        XMLUnit.setNormalizeWhitespace(true);
+
+        final Diff diff = new Diff(expected, obtained);
+        diff.overrideDifferenceListener(new IgnorePrefixesDifferenceListener());
+        final DetailedDiff myDiff = new DetailedDiff(diff);
+        for (Object o : myDiff.getAllDifferences()) {
+                System.err.println(o);
+        }
+        assertTrue(myDiff.getAllDifferences().isEmpty());
 	}
 }
