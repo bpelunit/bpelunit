@@ -35,12 +35,14 @@ import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.HumanPartner;
 import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.ProcessUnderTest;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.activity.Activity;
+import net.bpelunit.framework.model.test.activity.CompleteHumanTask;
 import net.bpelunit.framework.model.test.activity.ReceiveAsync;
 import net.bpelunit.framework.model.test.activity.ReceiveSendAsync;
 import net.bpelunit.framework.model.test.activity.ReceiveSendSync;
@@ -49,24 +51,33 @@ import net.bpelunit.framework.model.test.activity.SendReceiveAsync;
 import net.bpelunit.framework.model.test.activity.SendReceiveSync;
 import net.bpelunit.framework.model.test.activity.TwoWayAsyncActivity;
 import net.bpelunit.framework.model.test.activity.Wait;
+import net.bpelunit.framework.model.test.data.CompleteHumanTaskSpecification;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
+import net.bpelunit.framework.model.test.data.DataSpecification;
 import net.bpelunit.framework.model.test.data.ReceiveCondition;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
-import net.bpelunit.framework.verify.NoCyclesInConditionGroupInheritanceValidator;
+import net.bpelunit.framework.verify.ConditionGroupsExistInTestSuiteValidator;
 import net.bpelunit.framework.verify.ITestSuiteValidator;
+import net.bpelunit.framework.verify.NoCyclesInConditionGroupInheritanceValidator;
+import net.bpelunit.framework.verify.PartnersHaveUniqueNamesValidator;
+import net.bpelunit.framework.verify.PartnersInTestCasesHaveNamesValidator;
 import net.bpelunit.framework.verify.PartnersUsedInTestCaseAreDeclaredInTestSuiteValidator;
 import net.bpelunit.framework.verify.TestSuiteRootInformationValidator;
 import net.bpelunit.framework.verify.TestSuiteXMLValidator;
+import net.bpelunit.framework.verify.XMLDataIsEitherSetOrImportedValidator;
 import net.bpelunit.framework.xml.suite.XMLActivity;
 import net.bpelunit.framework.xml.suite.XMLAnyElement;
+import net.bpelunit.framework.xml.suite.XMLCompleteHumanTaskActivity;
 import net.bpelunit.framework.xml.suite.XMLCondition;
 import net.bpelunit.framework.xml.suite.XMLConditionGroup;
 import net.bpelunit.framework.xml.suite.XMLCopy;
 import net.bpelunit.framework.xml.suite.XMLDeploymentSection;
 import net.bpelunit.framework.xml.suite.XMLHeaderProcessor;
+import net.bpelunit.framework.xml.suite.XMLHumanPartnerDeploymentInformation;
+import net.bpelunit.framework.xml.suite.XMLHumanPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLMapping;
 import net.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
@@ -124,6 +135,7 @@ public class SpecificationLoader {
 			XMLTestSuiteDocument doc = XMLTestSuiteDocument.Factory
 					.parse(suite);
 			validateTestSuite(doc);
+			inlineAnyElementSrcs(doc, path);
 			extractConditionGroups(doc);
 			TestSuite testSuite = parseSuite(path, doc);
 
@@ -160,9 +172,10 @@ public class SpecificationLoader {
 	}
 
 	private void extractConditionGroups(XMLTestSuiteDocument doc) {
-		if(doc == null || doc.getTestSuite() == null || doc.getTestSuite().getConditionGroups() == null)
+		if (doc == null || doc.getTestSuite() == null
+				|| doc.getTestSuite().getConditionGroups() == null)
 			return;
-		
+
 		List<XMLConditionGroup> cgList = doc.getTestSuite()
 				.getConditionGroups().getConditionGroupList();
 		if (cgList != null) {
@@ -176,9 +189,13 @@ public class SpecificationLoader {
 			throws SpecificationException {
 		ITestSuiteValidator[] validators = new ITestSuiteValidator[] {
 				new TestSuiteXMLValidator(),
+				new PartnersHaveUniqueNamesValidator(),
 				new PartnersUsedInTestCaseAreDeclaredInTestSuiteValidator(),
 				new TestSuiteRootInformationValidator(),
-				new NoCyclesInConditionGroupInheritanceValidator() };
+				new PartnersInTestCasesHaveNamesValidator(),
+				new ConditionGroupsExistInTestSuiteValidator(),
+				new NoCyclesInConditionGroupInheritanceValidator(),
+				new XMLDataIsEitherSetOrImportedValidator() };
 
 		for (ITestSuiteValidator v : validators) {
 			v.validate(doc);
@@ -199,15 +216,164 @@ public class SpecificationLoader {
 		// Load deployment information
 		XMLDeploymentSection xmlDeployment = xmlTestSuite.getDeployment();
 
-		// A map for the partners to re-identify them when reading
-		// PartnerTracks.
-		Map<String, Partner> suitePartners = new HashMap<String, Partner>();
-
 		/*
 		 * The Process Under Test and his Deployer.
 		 */
 
 		XMLPUTDeploymentInformation xmlPut = xmlDeployment.getPut();
+
+		Map<String, Partner> suitePartners = new HashMap<String, Partner>();
+		ProcessUnderTest processUnderTest = createProcessUnderTest(
+				testDirectory, suiteBaseURL, suitePartners, xmlPut);
+
+		/*
+		 * The Client. Note that the client uses the PUT's WSDL. This is
+		 * intended as the clients activities will all deal with the partners
+		 * operations.
+		 */
+
+		String xmlPutWSDL = xmlPut.getWsdl();
+		String xmlPutPartnerWSDL = xmlPut.getPartnerWSDL();
+		Partner suiteClient = new Partner(BPELUnitConstants.CLIENT_NAME,
+				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL,
+				suiteBaseURL.toString());
+
+		/*
+		 * The Partners. Each partner is initialized with the attached WSDL
+		 * information, which allows retrieving operations from this partner
+		 * later on.
+		 */
+
+		createPartners(testDirectory, suiteBaseURL, xmlDeployment,
+				suitePartners);
+		Map<String, HumanPartner> humanPartners = createHumanPartners(
+				testDirectory, xmlDeployment, testDirectory, suiteBaseURL);
+
+		// Create the suite.
+		TestSuite suite = new TestSuite(xmlSuiteName, suiteBaseURL,
+				processUnderTest);
+
+		// Process the contents of the setUp block, if any
+		try {
+			readTestSuiteSetUpBlock(suite, xmlTestSuite);
+		} catch (Exception ex) {
+			throw new SpecificationException("Error during test suite set up",
+					ex);
+		}
+
+		/*
+		 * The Test Cases. Each test case consists of a number of Partner
+		 * Tracks, which in turn consist of an ordered collection of Activities.
+		 */
+
+		createTestCases(testDirectory, xmlTestSuiteDocument, xmlTestSuite,
+				suitePartners, humanPartners, suiteClient, suite);
+
+		return suite;
+	}
+
+	private Map<String, HumanPartner> createHumanPartners(String testDirectory,
+			XMLDeploymentSection xmlDeployment, String basePath, URL baseURL)
+			throws SpecificationException {
+		Map<String, HumanPartner> humanPartners = new HashMap<String, HumanPartner>();
+
+		if (xmlDeployment.getHumanPartnerList() != null) {
+			for (XMLHumanPartnerDeploymentInformation hp : xmlDeployment
+					.getHumanPartnerList()) {
+				humanPartners.put(
+						hp.getName(),
+						new HumanPartner(hp.getName(), basePath, baseURL, hp
+								.getWshtEndpoint(), hp.getUsername(), hp
+								.getPassword()));
+			}
+		}
+
+		return humanPartners;
+	}
+
+	private void createTestCases(String testDirectory,
+			XMLTestSuiteDocument xmlTestSuiteDocument,
+			XMLTestSuite xmlTestSuite, Map<String, Partner> suitePartners,
+			Map<String, HumanPartner> suiteHumanPartners, Partner suiteClient,
+			TestSuite suite) throws SpecificationException {
+		XMLTestCasesSection xmlTestCases = xmlTestSuite.getTestCases();
+		List<XMLTestCase> xmlTestCaseList = xmlTestCases.getTestCaseList();
+
+		int currentNumber = 0;
+		for (XMLTestCase xmlTestCase : xmlTestCaseList) {
+
+			String xmlTestCaseName = xmlTestCase.getName();
+			if (xmlTestCaseName == null)
+				xmlTestCaseName = "Test Case " + currentNumber;
+			currentNumber++;
+
+			boolean isVary = xmlTestCase.getVary();
+			int rounds = computeNumberOfRounds(xmlTestSuiteDocument, isVary);
+			fLogger.info("Varying: " + isVary + " (Rounds: " + rounds + ")");
+
+			IDataSource dataSource = readDataSource(testDirectory,
+					xmlTestSuite, xmlTestCase);
+
+			final int nRows = dataSource != null ? dataSource.getNumberOfRows()
+					: 1;
+			final int nRounds = isVary && rounds > 0 ? rounds : 1;
+			for (int iRow = 0; iRow < nRows; ++iRow) {
+				for (int iRound = 0; iRound < nRounds; iRound++) {
+					String currentTestCaseName = xmlTestCaseName;
+					if (dataSource != null) {
+						currentTestCaseName = currentTestCaseName + " (Row "
+								+ (iRow + 1) + ")";
+					}
+					if (isVary && rounds > 0) {
+						// Create a non-computer-science name ;)
+						currentTestCaseName = currentTestCaseName + " (Round "
+								+ (iRound + 1) + ")";
+					}
+					if (!xmlTestCase.getAbstract()) {
+						TestCase test = createTestCase(suitePartners,
+								suiteHumanPartners, suiteClient, suite,
+								xmlTestCase, currentTestCaseName, iRound,
+								testDirectory);
+						test.setDataSource(dataSource);
+						test.setRowIndex(iRow);
+						suite.addTestCase(test);
+					}
+				}
+			}
+		}
+	}
+
+	private IDataSource readDataSource(String testDirectory,
+			XMLTestSuite xmlTestSuite, XMLTestCase xmlTestCase)
+			throws SpecificationException {
+		IDataSource dataSource;
+		try {
+			dataSource = DataSourceUtil.createDataSource(xmlTestSuite,
+					xmlTestCase, new File(testDirectory), fRunner);
+		} catch (DataSourceException e) {
+			throw new SpecificationException("There was a problem while "
+					+ "initializing the specified data source.", e);
+		}
+		return dataSource;
+	}
+
+	private void createPartners(String testDirectory, URL suiteBaseURL,
+			XMLDeploymentSection xmlDeployment,
+			Map<String, Partner> suitePartners) throws SpecificationException {
+		for (XMLPartnerDeploymentInformation xmlPDI : xmlDeployment
+				.getPartnerList()) {
+			String name = xmlPDI.getName();
+			String wsdl = xmlPDI.getWsdl();
+			String partnerWsdl = xmlPDI.getPartnerWsdl();
+			Partner p = new Partner(name, testDirectory, wsdl, partnerWsdl,
+					suiteBaseURL.toString());
+			suitePartners.put(p.getName(), p);
+		}
+	}
+
+	private ProcessUnderTest createProcessUnderTest(String testDirectory,
+			URL suiteBaseURL, Map<String, Partner> suitePartners,
+			XMLPUTDeploymentInformation xmlPut) throws SpecificationException {
 		String xmlPutName = xmlPut.getName();
 		String xmlPutWSDL = xmlPut.getWsdl();
 		String xmlPutPartnerWSDL = xmlPut.getPartnerWSDL();
@@ -235,102 +401,7 @@ public class SpecificationLoader {
 		 * replacement
 		 */
 		processUnderTest.setPartners(suitePartners);
-
-		/*
-		 * The Client. Note that the client uses the PUT's WSDL. This is
-		 * intended as the clients activities will all deal with the partners
-		 * operations.
-		 */
-
-		Partner suiteClient = new Partner(BPELUnitConstants.CLIENT_NAME,
-				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL,
-				suiteBaseURL.toString());
-
-		/*
-		 * The Partners. Each partner is initialized with the attached WSDL
-		 * information, which allows retrieving operations from this partner
-		 * later on.
-		 */
-
-		for (XMLPartnerDeploymentInformation xmlPDI : xmlDeployment
-				.getPartnerList()) {
-			String name = xmlPDI.getName();
-			String wsdl = xmlPDI.getWsdl();
-			String partnerWsdl = xmlPDI.getPartnerWsdl();
-			Partner p = new Partner(name, testDirectory, wsdl,
-					partnerWsdl, suiteBaseURL.toString());
-			suitePartners.put(p.getName(), p);
-		}
-
-		// Create the suite.
-		TestSuite suite = new TestSuite(xmlSuiteName, suiteBaseURL,
-				processUnderTest);
-
-		// Process the contents of the setUp block, if any
-		try {
-			readTestSuiteSetUpBlock(suite, xmlTestSuite);
-		} catch (Exception ex) {
-			throw new SpecificationException("Error during test suite set up",
-					ex);
-		}
-
-		/*
-		 * The Test Cases. Each test case consists of a number of Partner
-		 * Tracks, which in turn consist of an ordered collection of Activities.
-		 */
-
-		XMLTestCasesSection xmlTestCases = xmlTestSuite.getTestCases();
-		List<XMLTestCase> xmlTestCaseList = xmlTestCases.getTestCaseList();
-
-		int currentNumber = 0;
-		for (XMLTestCase xmlTestCase : xmlTestCaseList) {
-
-			String xmlTestCaseName = xmlTestCase.getName();
-			if (xmlTestCaseName == null)
-				xmlTestCaseName = "Test Case " + currentNumber;
-			currentNumber++;
-
-			boolean isVary = xmlTestCase.getVary();
-			int rounds = computeNumberOfRounds(xmlTestSuiteDocument, isVary);
-			fLogger.info("Varying: " + isVary + " (Rounds: " + rounds + ")");
-
-			IDataSource dataSource;
-			try {
-				dataSource = DataSourceUtil.createDataSource(xmlTestSuite,
-						xmlTestCase, new File(testDirectory), fRunner);
-			} catch (DataSourceException e) {
-				throw new SpecificationException("There was a problem while "
-						+ "initializing the specified data source.", e);
-			}
-
-			final int nRows = dataSource != null ? dataSource.getNumberOfRows()
-					: 1;
-			final int nRounds = isVary && rounds > 0 ? rounds : 1;
-			for (int iRow = 0; iRow < nRows; ++iRow) {
-				for (int iRound = 0; iRound < nRounds; iRound++) {
-					String currentTestCaseName = xmlTestCaseName;
-					if (dataSource != null) {
-						currentTestCaseName = currentTestCaseName + " (Row "
-								+ (iRow + 1) + ")";
-					}
-					if (isVary && rounds > 0) {
-						// Create a non-computer-science name ;)
-						currentTestCaseName = currentTestCaseName + " (Round "
-								+ (iRound + 1) + ")";
-					}
-					if (!xmlTestCase.getAbstract()) {
-						TestCase test = createTestCase(suitePartners,
-								suiteClient, suite, xmlTestCase,
-								currentTestCaseName, iRound, testDirectory);
-						test.setDataSource(dataSource);
-						test.setRowIndex(iRow);
-						suite.addTestCase(test);
-					}
-				}
-			}
-		}
-
-		return suite;
+		return processUnderTest;
 	}
 
 	private URL getBaseURL(XMLTestSuite xmlTestSuite)
@@ -418,51 +489,136 @@ public class SpecificationLoader {
 	}
 
 	private TestCase createTestCase(Map<String, Partner> suitePartners,
-			Partner suiteClient, TestSuite suite, XMLTestCase xmlTestCase,
-			String xmlTestCaseName, int round, String testDirectory)
-			throws SpecificationException {
+			Map<String, HumanPartner> suiteHumanPartners, Partner suiteClient,
+			TestSuite suite, XMLTestCase xmlTestCase, String xmlTestCaseName,
+			int round, String testDirectory) throws SpecificationException {
 
 		TestCase test = new TestCase(suite, xmlTestCaseName);
 
-		// Load metadata
-		for (XMLProperty data : xmlTestCase.getPropertyList()) {
-			String xmlPropertyName = data.getName();
-			String xmlPropertyData = data.getStringValue();
-			test.addProperty(xmlPropertyName, xmlPropertyData);
+		readMetaData(xmlTestCase, test);
+		readTestCaseSetUpBlock(test, xmlTestCase);
+		readClientTrack(suiteClient, xmlTestCase, round, testDirectory, test);
+
+		// Partners Partner Track
+		readPartners(suitePartners, xmlTestCase, round, testDirectory, test);
+		readHumanPartners(suiteHumanPartners, xmlTestCase, round,
+				testDirectory, test);
+		return test;
+	}
+
+	private void readHumanPartners(
+			Map<String, HumanPartner> suiteHumanPartners,
+			XMLTestCase xmlTestCase, int round, String testDirectory,
+			TestCase test) throws SpecificationException {
+		List<XMLHumanPartnerTrack> humanPartnerTrackList = xmlTestCase
+				.getHumanPartnerTrackList();
+
+		if (humanPartnerTrackList != null) {
+			for (XMLHumanPartnerTrack xmlHumanPartnerTrack : humanPartnerTrackList) {
+				readHumanPartner(suiteHumanPartners, xmlTestCase, round,
+						testDirectory, test, xmlHumanPartnerTrack);
+			}
 		}
 
-		// Set up block
-		readTestCaseSetUpBlock(test, xmlTestCase);
+	}
 
-		// Client Partner Track
+	private void readHumanPartner(Map<String, HumanPartner> suiteHumanPartners,
+			XMLTestCase xmlTestCase, int round, String testDirectory,
+			TestCase test, XMLHumanPartnerTrack xmlHumanPartnerTrack)
+			throws SpecificationException {
+		String xmlPartnerTrackName = xmlHumanPartnerTrack.getName();
+		HumanPartner realPartner = suiteHumanPartners.get(xmlPartnerTrackName);
+
+		PartnerTrack pTrack = new PartnerTrack(test, realPartner);
+		readActivities(pTrack, xmlTestCase, xmlHumanPartnerTrack, round,
+				testDirectory);
+		pTrack.setNamespaceContext(getNamespaceMap(xmlHumanPartnerTrack
+				.newCursor()));
+		test.addPartnerTrack(pTrack);
+	}
+
+	private void readActivities(PartnerTrack pTrack, XMLTestCase xmlTestCase,
+			XMLHumanPartnerTrack xmlHumanPartnerTrack, int round,
+			String testDirectory) throws SpecificationException {
+		if (xmlHumanPartnerTrack.getCompleteHumanTaskList() != null) {
+			for (XMLCompleteHumanTaskActivity xmlActivity : xmlHumanPartnerTrack
+					.getCompleteHumanTaskList()) {
+				CompleteHumanTask activity = new CompleteHumanTask(pTrack);
+				activity.setTaskName(xmlActivity.getTaskName());
+				NamespaceContext context = getNamespaceMap(xmlActivity
+						.newCursor());
+				CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(
+						activity, context, xmlActivity.getData(), pTrack);
+
+				// get conditions
+				List<XMLCondition> xmlConditionList = xmlActivity
+						.getConditionList();
+				List<ReceiveCondition> cList = new ArrayList<ReceiveCondition>();
+				if (xmlConditionList != null) {
+					for (XMLCondition xmlCondition : xmlConditionList) {
+						cList.add(new ReceiveCondition(spec, xmlCondition
+								.getExpression(), xmlCondition.getTemplate(),
+								xmlCondition.getValue()));
+					}
+				}
+
+				addConditionsFromConditionGroups(
+						xmlActivity.getConditionGroupList(), spec, cList);
+
+				spec.setConditions(cList);
+				activity.initialize(spec);
+				pTrack.addActivity(activity);
+			}
+		}
+
+	}
+
+	private void readPartners(Map<String, Partner> suitePartners,
+			XMLTestCase xmlTestCase, int round, String testDirectory,
+			TestCase test) throws SpecificationException {
+		List<XMLPartnerTrack> partnerTrackList = xmlTestCase
+				.getPartnerTrackList();
+		if (partnerTrackList != null)
+			for (XMLPartnerTrack xmlPartnerTrack : partnerTrackList) {
+				readPartner(suitePartners, xmlTestCase, round, testDirectory,
+						test, xmlPartnerTrack);
+			}
+	}
+
+	private void readPartner(Map<String, Partner> suitePartners,
+			XMLTestCase xmlTestCase, int round, String testDirectory,
+			TestCase test, XMLPartnerTrack xmlPartnerTrack)
+			throws SpecificationException {
+		String xmlPartnerTrackName = xmlPartnerTrack.getName();
+		Partner realPartner = suitePartners.get(xmlPartnerTrackName);
+
+		PartnerTrack pTrack = new PartnerTrack(test, realPartner);
+		readActivities(pTrack, xmlTestCase, xmlPartnerTrack, round,
+				testDirectory);
+		pTrack.setNamespaceContext(getNamespaceMap(xmlPartnerTrack.newCursor()));
+		if (xmlPartnerTrack.isSetAssume()) {
+			pTrack.setAssumption(xmlPartnerTrack.getAssume());
+		}
+		test.addPartnerTrack(pTrack);
+	}
+
+	private void readClientTrack(Partner suiteClient, XMLTestCase xmlTestCase,
+			int round, String testDirectory, TestCase test)
+			throws SpecificationException {
 		XMLTrack xmlClientTrack = xmlTestCase.getClientTrack();
 
 		PartnerTrack track = new PartnerTrack(test, suiteClient);
 		readActivities(track, xmlTestCase, xmlClientTrack, round, testDirectory);
 		track.setNamespaceContext(getNamespaceMap(xmlClientTrack.newCursor()));
 		test.addPartnerTrack(track);
+	}
 
-		// Partners Partner Track
-		List<XMLPartnerTrack> partnerTrackList = xmlTestCase
-				.getPartnerTrackList();
-		// There might be no partners.
-		if (partnerTrackList != null)
-			for (XMLPartnerTrack xmlPartnerTrack : partnerTrackList) {
-
-				String xmlPartnerTrackName = xmlPartnerTrack.getName();
-				Partner realPartner = suitePartners.get(xmlPartnerTrackName);
-
-				PartnerTrack pTrack = new PartnerTrack(test, realPartner);
-				readActivities(pTrack, xmlTestCase, xmlPartnerTrack, round,
-						testDirectory);
-				pTrack.setNamespaceContext(getNamespaceMap(xmlPartnerTrack
-						.newCursor()));
-				if (xmlPartnerTrack.isSetAssume()) {
-					pTrack.setAssumption(xmlPartnerTrack.getAssume());
-				}
-				test.addPartnerTrack(pTrack);
-			}
-		return test;
+	private void readMetaData(XMLTestCase xmlTestCase, TestCase test) {
+		for (XMLProperty data : xmlTestCase.getPropertyList()) {
+			String xmlPropertyName = data.getName();
+			String xmlPropertyData = data.getStringValue();
+			test.addProperty(xmlPropertyName, xmlPropertyData);
+		}
 	}
 
 	private void readTestCaseSetUpBlock(TestCase test, XMLTestCase xmlTestCase) {
@@ -799,22 +955,9 @@ public class SpecificationLoader {
 		String soapAction = operation.getSOAPHTTPAction();
 		ISOAPEncoder encoder = fRunner.createNewSOAPEncoder(encodingStyle);
 
-		// Check that we have everything
-		int xmlSourceCount = 0;
-		if (xmlSend.isSetData())
-			xmlSourceCount++;
-		if (xmlSend.isSetTemplate())
-			xmlSourceCount++;
-		if (xmlSend.isSetXmlFile())
-			xmlSourceCount++;
-		if (xmlSourceCount != 1) {
-			throw new SpecificationException(
-					"Send Element must have exactly one of <data>, <template>, or <xmlFile> ");
-		}
-
-		if (xmlSend.isSetXmlFile()) {
-			importXmlFileAndSetAsData(xmlSend, testDirectory);
-		}
+		// if (xmlSend.isSetXmlFile()) {
+		// importXmlFileAndSetAsData(xmlSend, testDirectory);
+		// }
 
 		XMLAnyElement xmlData = xmlSend.getData();
 		XMLAnyElement xmlTemplate = xmlSend.getTemplate();
@@ -876,20 +1019,6 @@ public class SpecificationLoader {
 					templateText, faultCode, faultString);
 
 		return spec;
-	}
-
-	private void importXmlFileAndSetAsData(XMLSendActivity xmlSend,
-			String testDirectory) throws SpecificationException {
-		File xmlFile = new File(testDirectory, xmlSend.getXmlFile());
-		xmlSend.setData(XMLAnyElement.Factory.newInstance());
-		xmlSend.unsetXmlFile();
-		try {
-			xmlSend.getData().set(XmlObject.Factory.parse(xmlFile));
-		} catch (Exception e) {
-			throw new SpecificationException(
-					"Error while loading imported XML File: " + e.getMessage(),
-					e);
-		}
 	}
 
 	private Element copyAsRootWithNamespaces(XMLAnyElement xmlData)
@@ -976,7 +1105,8 @@ public class SpecificationLoader {
 			}
 		}
 
-		addConditionsFromConditionGroups(xmlReceive, spec, cList);
+		addConditionsFromConditionGroups(xmlReceive.getConditionGroupList(),
+				spec, cList);
 
 		// Add fault code and string. These will be only checked if this message
 		// is a fault and if
@@ -990,10 +1120,10 @@ public class SpecificationLoader {
 	}
 
 	private void addConditionsFromConditionGroups(
-			XMLReceiveActivity xmlReceive, ReceiveDataSpecification spec,
+			List<String> conditionGroupNames, DataSpecification spec,
 			List<ReceiveCondition> cList) throws SpecificationException {
-		if (xmlReceive.getConditionGroupList() != null) {
-			for (String cgName : xmlReceive.getConditionGroupList()) {
+		if (conditionGroupNames != null) {
+			for (String cgName : conditionGroupNames) {
 				XMLConditionGroup cg = conditionGroups.get(cgName);
 				addConditionsFromConditionGroup(spec, cList, cg);
 
@@ -1001,7 +1131,7 @@ public class SpecificationLoader {
 		}
 	}
 
-	private void addConditionsFromConditionGroup(ReceiveDataSpecification spec,
+	private void addConditionsFromConditionGroup(DataSpecification spec,
 			List<ReceiveCondition> cList, XMLConditionGroup cg)
 			throws SpecificationException {
 
@@ -1017,27 +1147,27 @@ public class SpecificationLoader {
 
 	private List<XMLCondition> resolveConditionsForGroup(XMLConditionGroup cg) {
 		List<XMLConditionGroup> cgs = getInheritanceBranch(cg);
-		
+
 		List<XMLCondition> conditions = new ArrayList<XMLCondition>();
-		for(XMLConditionGroup currentCG : cgs) {
-			if(currentCG.getConditionList() != null) {
+		for (XMLConditionGroup currentCG : cgs) {
+			if (currentCG.getConditionList() != null) {
 				conditions.addAll(currentCG.getConditionList());
 			}
 		}
-		
+
 		return conditions;
 	}
 
 	private List<XMLConditionGroup> getInheritanceBranch(XMLConditionGroup cg) {
 		List<XMLConditionGroup> cgs = new ArrayList<XMLConditionGroup>();
-		
+
 		XMLConditionGroup currentCG = cg;
 		cgs.add(currentCG);
-		while(currentCG.getInheritFrom() != null) {
-			currentCG = conditionGroups.get(cg.getInheritFrom());
+		while (currentCG.getInheritFrom() != null) {
+			currentCG = conditionGroups.get(currentCG.getInheritFrom());
 			cgs.add(0, currentCG);
 		}
-		
+
 		return cgs;
 	}
 
@@ -1099,7 +1229,7 @@ public class SpecificationLoader {
 			SOAPOperationDirectionIdentifier direction)
 			throws SpecificationException {
 
-		Partner partner = activity.getPartner();
+		Partner partner = (Partner) activity.getPartner();
 
 		if (service == null)
 			throw new SpecificationException(
@@ -1221,6 +1351,37 @@ public class SpecificationLoader {
 			return list;
 		}
 		return null;
+	}
+
+	void inlineAnyElementSrcs(XMLTestSuiteDocument tsd, String path) throws SpecificationException {
+		XmlCursor cursor = tsd.newCursor();
+		try {
+		cursor.toFirstChild();
+		while(cursor.hasNextToken()) {
+			cursor.toNextToken();
+			if(cursor.getObject() instanceof XMLAnyElement) {
+				XMLAnyElement any = (XMLAnyElement)cursor.getObject();
+				if(any.getSrc() != null) {
+					importXmlFileAndSetAsData(any, path);
+				}
+			}
+		}
+		} finally {
+			cursor.dispose();
+		}
+	}
+
+	private void importXmlFileAndSetAsData(XMLAnyElement xmlAny,
+			String testDirectory) throws SpecificationException {
+		File xmlFile = new File(testDirectory, xmlAny.getSrc());
+		xmlAny.unsetSrc();
+		try {
+			xmlAny.set(XmlObject.Factory.parse(xmlFile));
+		} catch (Exception e) {
+			throw new SpecificationException(
+					"Error while loading imported XML File: " + e.getMessage(),
+					e);
+		}
 	}
 
 }

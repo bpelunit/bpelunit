@@ -30,30 +30,13 @@ import com.ibm.wsdl.Constants;
  * @author Philip Mayer
  * 
  */
-public class Partner {
-
-	/**
-	 * The name of the partner, identifying it in the test suite document and in the URLs of the
-	 * partner WSDL.
-	 * 
-	 */
-	private String fName;
+public class Partner extends AbstractPartner {
 
 	/**
 	 * Path to the WSDL file (including file name) of this partner, relative to the test base path,
 	 * which denotes the location of the .bpts file.
 	 */
 	private String fPathToWSDL;
-
-	/**
-	 * The URL which this partner simulates (base url plus partner name)
-	 */
-	private String fSimulatedURL;
-
-	/**
-	 * Base path of the test suite (location of .bpts file)
-	 */
-	private String fBasePath;
 
 	private String fPathToPartnerWSDL;
 
@@ -62,14 +45,7 @@ public class Partner {
 	private Definition fPartnerWSDLDefinition;
 
 	public Partner(String name, String testBasePath, String wsdlName, String partnerWSDLName, String baseURL) throws SpecificationException {
-		fName= name;
-		
-		fBasePath= testBasePath;
-
-		fSimulatedURL= baseURL;
-		if (!fSimulatedURL.endsWith("/"))
-			fSimulatedURL+= "/";
-		fSimulatedURL+= fName;
+		super(name, testBasePath, baseURL);
 
 		fPathToWSDL= testBasePath + wsdlName;
 		fWSDLDefinition = loadWsdlDefinition(fPathToWSDL);
@@ -101,17 +77,6 @@ public class Partner {
 		}
 	}
 
-	public String getName() {
-		return fName;
-	}
-
-	public String getSimulatedURL() {
-		return fSimulatedURL;
-	}
-
-	public String getBasePath() {
-		return fBasePath;
-	}
 
 	public SOAPOperationCallIdentifier getOperation(QName service, String port, String operationName, SOAPOperationDirectionIdentifier direction)
 			throws SpecificationException {
@@ -127,10 +92,4 @@ public class Partner {
 		
 		return new SOAPOperationCallIdentifier(definition, service, port, operationName, direction);
 	}
-	
-	@Override
-	public String toString() {
-		return getName();
-	}
-
 }

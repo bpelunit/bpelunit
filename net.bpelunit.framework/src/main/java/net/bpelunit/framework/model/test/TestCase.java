@@ -251,6 +251,5 @@ public class TestCase implements ITestArtefact {
 	public int getRowIndex() {
 		return fRowIndex;
 	}
-
 }
 

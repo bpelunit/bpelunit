@@ -1,0 +1,79 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://www.example.org/WS-HT/protocol"
+            xmlns:htd="http://www.example.org/WS-HT"
+            xmlns:htda="http://www.example.org/WS-HT/api"
+            blockDefault="#all"
+            elementFormDefault="qualified"
+            targetNamespace="http://www.example.org/WS-HT/protocol">
+
+  <xsd:import namespace="http://www.w3.org/XML/1998/namespace"
+               schemaLocation="xml.xsd"/>
+  <xsd:import namespace="http://www.example.org/WS-HT" schemaLocation="ws-humantask.xsd"/>
+  <xsd:import namespace="http://www.example.org/WS-HT/api"
+               schemaLocation="ws-humantask-api.xsd"/>
+
+  <xsd:element name="humanTaskContext" type="tHumanTaskContext"/>
+  <xsd:complexType name="tHumanTaskContext">
+      <xsd:sequence>
+         <xsd:element minOccurs="0" name="priority" type="xsd:nonNegativeInteger"/>
+         <xsd:element minOccurs="0" name="peopleAssignments" type="tPeopleAssignments"/>
+         <xsd:element minOccurs="0" name="isSkipable" type="xsd:boolean"/>
+         <xsd:element minOccurs="0" name="deferActivationTime" type="xsd:dateTime"/>
+         <xsd:element minOccurs="0" name="expirationTime" type="xsd:dateTime"/>
+         <xsd:element minOccurs="0" name="attachments" type="tAttachments"/>
+      </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="tPeopleAssignments">
+      <xsd:sequence>
+         <xsd:group maxOccurs="unbounded" minOccurs="0" ref="genericHumanRole"/>
+      </xsd:sequence>
+  </xsd:complexType>
+  <xsd:group name="genericHumanRole">
+      <xsd:choice>
+         <xsd:element ref="potentialOwners"/>
+         <xsd:element ref="excludedOwners"/>
+         <xsd:element ref="taskInitiator"/>
+         <xsd:element ref="taskStakeholders"/>
+         <xsd:element ref="businessAdministrators"/>
+         <xsd:element ref="recipients"/>
+      </xsd:choice>
+  </xsd:group>
+  <xsd:element name="potentialOwners" type="tGenericHumanRole"/>
+  <xsd:element name="excludedOwners" type="tGenericHumanRole"/>
+  <xsd:element name="taskInitiator" type="tGenericHumanRole"/>
+  <xsd:element name="taskStakeholders" type="tGenericHumanRole"/>
+  <xsd:element name="businessAdministrators" type="tGenericHumanRole"/>
+  <xsd:element name="recipients" type="tGenericHumanRole"/>
+  <xsd:complexType name="tGenericHumanRole">
+      <xsd:sequence>
+         <xsd:element ref="htd:organizationalEntity"/>
+      </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="tAttachments">
+      <xsd:sequence>
+         <xsd:element minOccurs="0" name="returnAttachments" type="tReturnAttachments"/>
+         <xsd:element maxOccurs="unbounded" minOccurs="0" ref="htda:attachment"/>
+      </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="tReturnAttachments">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="all"/>
+         <xsd:enumeration value="newOnly"/>
+         <xsd:enumeration value="none"/>
+      </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="ProtocolMsgType">
+      <xsd:sequence>
+         <xsd:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+      </xsd:sequence>
+      <xsd:anyAttribute namespace="##any" processContents="lax"/>
+  </xsd:complexType>
+
+  <xsd:element name="skipped" type="ProtocolMsgType"/>
+  <xsd:element name="exit" type="ProtocolMsgType"/>
+  <xsd:element name="fault" type="ProtocolMsgType"/>
+
+</xsd:schema>

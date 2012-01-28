@@ -22,8 +22,10 @@ import net.bpelunit.framework.control.util.ActivityUtil;
 import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.xml.suite.XMLActivity;
+import net.bpelunit.framework.xml.suite.XMLCompleteHumanTaskActivity;
 import net.bpelunit.framework.xml.suite.XMLCondition;
 import net.bpelunit.framework.xml.suite.XMLHeaderProcessor;
+import net.bpelunit.framework.xml.suite.XMLHumanPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLMapping;
 import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
 import net.bpelunit.framework.xml.suite.XMLSendActivity;
@@ -35,6 +37,7 @@ import net.bpelunit.toolsupport.ToolSupportActivator;
 import net.bpelunit.toolsupport.editors.TestSuitePage;
 import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
 import net.bpelunit.toolsupport.editors.wizards.ActivityWizard;
+import net.bpelunit.toolsupport.editors.wizards.CompleteHumanTaskActivityWizard;
 import net.bpelunit.toolsupport.editors.wizards.ReceiveOnlyWizard;
 import net.bpelunit.toolsupport.editors.wizards.ReceiveSendAsyncActivityWizard;
 import net.bpelunit.toolsupport.editors.wizards.ReceiveSendSyncActivityWizard;
@@ -93,30 +96,7 @@ public class ActivitySection extends TreeSection {
 		}
 
 		public String getText(Object element) {
-			if(element instanceof XMLActivity) {
-				XMLSoapActivity xml = (XMLSoapActivity)element;
-				String operation = xml.getOperation();
-				operation = operation != null ? operation : "n/a";
-				return operation + " (" + ActivityUtil.getNiceName(element) + ")"; 
-			}
-			
-			if (ActivityUtil.isActivity(element)) {
-				return ActivityUtil.getNiceName(element);
-			} else if (element instanceof XMLMapping) {
-				return "Data Copy";
-			} else if (element instanceof XMLHeaderProcessor) {
-				return "Header Processor (" + ((XMLHeaderProcessor) element).getName() + ")";
-			} else if (element instanceof XMLCondition) {
-				return "Condition ("
-						+ StringUtils.abbreviate(BPELUnitUtil
-								.removeSpaceLineBreaks(((XMLCondition) element).getExpression()),
-								100) + ")";
-			}
-			if (element != null) {
-				return element.toString();
-			} else {
-				return "";
-			}
+			return ActivityUtil.getUIName(element);
 		}
 
 		public void addListener(ILabelProviderListener listener) {
@@ -141,8 +121,11 @@ public class ActivitySection extends TreeSection {
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof XMLTrack) {
 				return ActivityUtil.getActivities((XMLTrack) inputElement).toArray();
-			} else
+			} else if(inputElement instanceof XMLHumanPartnerTrack) {
+				return ((XMLHumanPartnerTrack) inputElement).getCompleteHumanTaskList().toArray();
+			} else {
 				return new Object[0];
+			}
 		}
 
 		public void dispose() {
@@ -204,6 +187,7 @@ public class ActivitySection extends TreeSection {
 
 	private XMLTrack fCurrentPartnerTrack;
 	private boolean fCtrlDown;
+	private XMLHumanPartnerTrack fCurrentHumanPartnerTrack;
 
 	public ActivitySection(Composite parent, TestSuitePage page, FormToolkit toolkit) {
 		super(parent, toolkit, page, true);
@@ -274,7 +258,7 @@ public class ActivitySection extends TreeSection {
 			 * navigating the tree structure (for example, for finding the
 			 * parent track of an activity).
 			 */
-			int currentActivityIndex = getActivityIndex(fCurrentPartnerTrack, currentActivity);
+			int currentActivityIndex = getActivityIndex(currentActivity);
 
 			// Clone:
 			XMLActivity copiedActivity = (XMLActivity) currentActivity.copy();
@@ -307,6 +291,8 @@ public class ActivitySection extends TreeSection {
 			case WAIT:
 				wizard = new WaitActivityWizard((XMLWaitActivity) currentActivity);
 				break;
+			case COMPLETEHUMANTASK:
+				wizard = new CompleteHumanTaskActivityWizard((XMLCompleteHumanTaskActivity)currentActivity);
 			}
 			if (wizard != null) {
 				if (code != null)
@@ -325,6 +311,20 @@ public class ActivitySection extends TreeSection {
 
 			}
 		}
+	}
+
+	private int getActivityIndex(XMLActivity currentActivity) {
+		if(fCurrentPartnerTrack != null) {
+			return getActivityIndex(fCurrentPartnerTrack, currentActivity);
+		} else if (fCurrentHumanPartnerTrack != null) {
+			return getActivityIndex(fCurrentHumanPartnerTrack, currentActivity);
+		}
+		return -1;
+	}
+
+	private int getActivityIndex(XMLHumanPartnerTrack humanPartnerTrack,
+			XMLActivity currentActivity) {
+		return humanPartnerTrack.getCompleteHumanTaskList().indexOf(currentActivity);
 	}
 
 	@Override
@@ -495,7 +495,8 @@ public class ActivitySection extends TreeSection {
 		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
 				"Create a new activity");
 
-		List<ActivityConstant> topLevelActivities = ActivityUtil.getTopLevelActivities();
+		if(fCurrentPartnerTrack != null) {
+		List<ActivityConstant> topLevelActivities = ActivityUtil.getTopLevelSoapActivities();
 		String[] names = new String[topLevelActivities.size()];
 		int i = 0;
 		for (ActivityConstant constant : topLevelActivities) {
@@ -548,10 +549,26 @@ public class ActivitySection extends TreeSection {
 
 		if (name != null)
 			addActivity(ActivityConstant.getForNiceName(name));
+		} else {
+			addActivity(ActivityConstant.COMPLETEHUMANTASK);
+		}
 	}
 
 	public void handleTrackSelection(XMLTrack selection) {
+		fCurrentHumanPartnerTrack = null;
 		fCurrentPartnerTrack = selection;
+		setEnabled(BUTTON_ADD, true);
+		setEnabled(BUTTON_EDIT, false);
+		setEnabled(BUTTON_REMOVE, false);
+		setEnabled(BUTTON_UP, false);
+		setEnabled(BUTTON_DOWN, false);
+		getViewer().setInput(selection);
+		getTreeViewer().expandToLevel(AbstractTreeViewer.ALL_LEVELS);
+	}
+	
+	public void handleTrackSelection(XMLHumanPartnerTrack selection) {
+		fCurrentPartnerTrack = null;
+		fCurrentHumanPartnerTrack = selection;
 		setEnabled(BUTTON_ADD, true);
 		setEnabled(BUTTON_EDIT, false);
 		setEnabled(BUTTON_REMOVE, false);
@@ -658,7 +675,7 @@ public class ActivitySection extends TreeSection {
 				|| ((ssel.size() == 1) && ActivityUtil.isActivity(ssel.getFirstElement()) && !ActivityUtil
 						.isChildActivity(ssel.getFirstElement()))) {
 
-			List<ActivityConstant> topLevelActivities = ActivityUtil.getTopLevelActivities();
+			List<ActivityConstant> topLevelActivities = ActivityUtil.getTopLevelSoapActivities();
 			for (final ActivityConstant constant : topLevelActivities) {
 				createAction(newMenu, constant.getNiceName(), new Action() {
 					@Override
@@ -844,7 +861,7 @@ public class ActivitySection extends TreeSection {
 				added = sendRcvOp;
 			break;
 		}
-		case WAIT:
+		case WAIT: {
 			XMLWaitActivity waitAct = fCurrentPartnerTrack.addNewWait();
 			initializeWait(waitAct);
 			WaitActivityWizard wiz = new WaitActivityWizard(waitAct);
@@ -854,6 +871,17 @@ public class ActivitySection extends TreeSection {
 				added = waitAct;
 			}
 			break;
+		}
+		case COMPLETEHUMANTASK: {
+			XMLCompleteHumanTaskActivity completeHumanTaskActivity = fCurrentHumanPartnerTrack.addNewCompleteHumanTask();
+			CompleteHumanTaskActivityWizard wiz = new CompleteHumanTaskActivityWizard(completeHumanTaskActivity);
+			if (!openWizard(wiz)) {
+				removeActivity(fCurrentPartnerTrack, completeHumanTaskActivity);
+			} else {
+				added = completeHumanTaskActivity;
+			}
+			break;
+		}
 		}
 		if (added != null) {
 			adjust(false);

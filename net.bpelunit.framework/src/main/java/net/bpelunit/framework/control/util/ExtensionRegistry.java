@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.apache.xmlbeans.XmlException;
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDataSource;
+import net.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerOption;
@@ -439,31 +441,44 @@ public class ExtensionRegistry {
 	 * @param forSuite
 	 * @return
 	 */
-	public static List<String> getPossibleConfigurationOptions(
+	public static Collection<String> getPossibleConfigurationOptions(
 			Class<? extends IBPELDeployer> deployerClass, boolean forSuite) {
-		List<String> configurationOptions = new ArrayList<String>();
 
+		return getConfigurationAnnotations(deployerClass, forSuite).keySet();
+	}
+
+	/**
+	 * Returns a list of possible configuration options for a given deployer
+	 * 
+	 * @param deployer
+	 * @param forSuite
+	 * @return
+	 */
+	public static Map<String, IBPELDeployerOption> getConfigurationAnnotations(
+			Class<? extends IBPELDeployer> deployerClass, boolean forSuite) {
+		Map<String, IBPELDeployerOption> configurationOptions = new HashMap<String, IBPELDeployerOption>();
+		
 		for (Method m : deployerClass.getMethods()) {
 			String name = m.getName();
 			IBPELDeployerOption annotation = m
-					.getAnnotation(IBPELDeployerOption.class);
+			.getAnnotation(IBPELDeployerOption.class);
 			Class<?>[] parameters = m.getParameterTypes();
 			Class<?> returnType = m.getReturnType();
-
+			
 			if (annotation != null && name.startsWith("set")
 					&& parameters.length == 1
 					&& String.class.equals(parameters[0])
 					&& returnType.equals(void.class)) {
 				if (forSuite || !annotation.testSuiteSpecific()) {
 					name = name.substring(3); // subtract "set"
-					configurationOptions.add(name);
+					configurationOptions.put(name, annotation);
 				}
 			}
 		}
-
+		
 		return configurationOptions;
 	}
-
+	
 	/**
 	 * Returns the default value of a configuration parameter of an
 	 * IBPELDeployer as specified by its annotations. The method never returns
@@ -488,6 +503,30 @@ public class ExtensionRegistry {
 			// we haven't found it or something else, so "" is the default
 			return "";
 		}
+	}
+
+	public static Map<String, ConfigurationOption> getConfigurationAnnotations(
+			Class<? extends IDataSource> dsClass) {
+		Map<String, ConfigurationOption> configurationOptions = new HashMap<String, ConfigurationOption>();
+		
+		for (Method m : dsClass.getMethods()) {
+			String name = m.getName();
+			ConfigurationOption annotation = m
+			.getAnnotation(ConfigurationOption.class);
+			Class<?>[] parameters = m.getParameterTypes();
+			Class<?> returnType = m.getReturnType();
+			
+			if (annotation != null && name.startsWith("set")
+					&& parameters.length == 1
+					&& String.class.equals(parameters[0])
+					&& returnType.equals(void.class)) {
+					name = name.substring(3); // subtract "set"
+					configurationOptions.put(name, annotation);
+			}
+		}
+		
+		return configurationOptions;
+		
 	}
 
 }

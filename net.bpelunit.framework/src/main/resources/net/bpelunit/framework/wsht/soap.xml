@@ -1,0 +1,3 @@
+<S:Envelope  xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">  
+  <S:Body>%xml%</S:Body>  
+</S:Envelope>

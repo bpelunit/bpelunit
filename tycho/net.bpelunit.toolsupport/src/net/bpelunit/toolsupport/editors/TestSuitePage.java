@@ -5,12 +5,14 @@
  */
 package net.bpelunit.toolsupport.editors;
 
+import net.bpelunit.framework.xml.suite.XMLHumanPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLTrack;
 import net.bpelunit.toolsupport.editors.sections.ActivitySection;
 import net.bpelunit.toolsupport.editors.sections.PUTSection;
 import net.bpelunit.toolsupport.editors.sections.PartnerSection;
 import net.bpelunit.toolsupport.editors.sections.TestCaseAndTrackSection;
 import net.bpelunit.toolsupport.editors.sections.TestSuiteSection;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -119,6 +121,10 @@ public class TestSuitePage extends FormPage {
 	}
 
 	public void postTrackSelected(XMLTrack selection) {
+		fTrackSection.handleTrackSelection(selection);
+	}
+	
+	public void postTrackSelected(XMLHumanPartnerTrack selection) {
 		fTrackSection.handleTrackSelection(selection);
 	}
 

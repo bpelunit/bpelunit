@@ -72,13 +72,21 @@
 		</xs:annotation>
 		<xs:sequence>
 			<!-- Emulate <all> with unbounded elements -->
-			<xs:element ref="partner" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="partner" minOccurs="0"
+				maxOccurs="unbounded" />
 			<xs:element name="put" type="PUTDeploymentInformation">
 				<xs:annotation>
-					<xs:documentation>The Process Under Test, which will be tested in this suite.</xs:documentation>
+					<xs:documentation>
+						The Process Under Test, which will be tested in
+						this suite.
+					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element ref="partner" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="partner" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element ref="humanPartner"
+				minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="PUTDeploymentInformation">
@@ -110,19 +118,28 @@
 	</xs:complexType>
 	<xs:complexType name="PartnerDeploymentInformation">
 		<xs:annotation>
-			<xs:documentation>A partner deployment information</xs:documentation>
+			<xs:documentation>
+				A partner deployment information
+			</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="name" type="xs:string" use="required">
-			<xs:annotation>
-				<xs:documentation>A name for this partner, to be used in the testCase section. This name forms the partner URL $baseURL/name.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="wsdl" type="xs:string" use="required">
-			<xs:annotation>
-				<xs:documentation>Location of the defining WSDL file</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
-		<xs:attribute name="partnerWsdl" type="xs:string" use="optional"></xs:attribute>
+		<xs:complexContent>
+			<xs:extension base="AbstractDeploymentInformation">
+
+				<xs:attribute name="wsdl" type="xs:string"
+					use="required">
+					<xs:annotation>
+						<xs:documentation>
+							Location of the defining WSDL file
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+
+				<xs:attribute name="partnerWsdl" type="xs:string"
+					use="optional">
+				</xs:attribute>
+
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="TestCasesSection">
 		<xs:annotation>
@@ -141,11 +158,17 @@
 			<xs:documentation>A testCase</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element name="setUp" type="SetUp" minOccurs="0" maxOccurs="1"></xs:element>
+			<xs:element ref="property" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element name="setUp" type="SetUp" minOccurs="0"
+				maxOccurs="1">
+			</xs:element>
 			<xs:element name="clientTrack" type="Track" />
 			<xs:element name="partnerTrack" type="PartnerTrack"
 				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="humanPartnerTrack"
+				type="HumanPartnerTrack" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="vary" type="xs:boolean" use="optional" default="false"/>
@@ -258,12 +281,6 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
-					<xs:element name="xmlFile" type="xs:string">
-						<xs:annotation>
-							<xs:documentation>A file name (if relative it is evaluated relatively to the test suite file) for reading an XML source for this activity. The XML is used like the XML specified in the data element.
-
-The referenced XML file must not contain SOAP message elements.</xs:documentation>
-						</xs:annotation></xs:element>
 				</xs:choice>
 				<xs:element name="transportOption" type="Property"
 		maxOccurs="unbounded" minOccurs="0"></xs:element>
@@ -346,16 +363,21 @@ The referenced XML file must not contain SOAP message elements.</xs:documentatio
 	</xs:complexType>
 	<xs:complexType name="AnyElement" mixed="true">
 		<xs:annotation>
-			<xs:documentation>Wrapper for the XML Any Element</xs:documentation>
+			<xs:documentation>
+				Wrapper for the XML Any Element
+			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:any namespace="##any" processContents="skip" maxOccurs="unbounded"/>
+			<xs:any namespace="##any" processContents="skip"
+				maxOccurs="unbounded" minOccurs="0"/>
 		</xs:sequence>
+		<xs:attribute name="src" type="xs:string" use="optional"></xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="Activity">
 		<xs:annotation>
 			<xs:documentation>A single activity</xs:documentation>
 		</xs:annotation>
+		<xs:sequence></xs:sequence>
 		<xs:attribute name="assume" type="xs:string"></xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="SoapActivity">
@@ -467,5 +489,44 @@ The referenced XML file must not contain SOAP message elements.</xs:documentatio
         	</xs:element>
         </xs:sequence>
 	</xs:complexType>
+
+    <xs:element name="humanPartner" type="HumanPartnerDeploymentInformation"></xs:element>
+
+    <xs:complexType name="HumanPartnerDeploymentInformation">
+    	<xs:complexContent>
+    		<xs:extension base="AbstractDeploymentInformation">
+    			<xs:attribute name="wshtEndpoint" type="xs:anyURI"></xs:attribute>
+    			<xs:attribute name="username" type="xs:string"></xs:attribute>
+    			<xs:attribute name="password" type="xs:string"></xs:attribute>
+    		</xs:extension>
+    	</xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="HumanPartnerTrack">
+    	<xs:sequence>
+    		<xs:element name="completeHumanTask" type="CompleteHumanTaskActivity" minOccurs="0" maxOccurs="unbounded"></xs:element>
+    	</xs:sequence>
+    	<xs:attribute name="name" type="xs:string"></xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="CompleteHumanTaskActivity">
+    	<xs:complexContent>
+    		<xs:extension base="Activity">
+    		<xs:sequence>
+    		<xs:element name="taskName" type="xs:string"></xs:element>
+    		<xs:element name="data" type="AnyElement"></xs:element>
+    		<xs:element name="condition" type="Condition" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</xs:element>
+    		<xs:element name="conditionGroup" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
+    	</xs:sequence>
+    	</xs:extension>
+    	</xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="AbstractDeploymentInformation">
+    	<xs:sequence></xs:sequence>
+    	<xs:attribute name="name" type="xs:string"></xs:attribute>
+    </xs:complexType>
 </xs:schema>
 

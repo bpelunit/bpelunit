@@ -37,7 +37,7 @@ import org.w3c.dom.Element;
  * @author Philip Mayer
  * 
  */
-public class ActivityContext {
+public class ActivityContext implements VelocityContextProvider {
 
 	/**
 	 * Runner for the current test case

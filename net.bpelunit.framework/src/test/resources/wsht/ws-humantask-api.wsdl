@@ -1,0 +1,1322 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns="http://www.example.org/WS-HT/api/wsdl"
+                  xmlns:htd="http://www.example.org/WS-HT"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:htda="http://www.example.org/WS-HT/api"
+                  xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+                  targetNamespace="http://www.example.org/WS-HT/api/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+
+  <wsdl:types>
+      <xsd:schema>
+         <xsd:import namespace="http://www.example.org/WS-HT"
+                     schemaLocation="ws-humantask.xsd"/>
+         <xsd:import namespace="http://www.example.org/WS-HT/api"
+                     schemaLocation="ws-humantask-api.xsd"/>
+         <xsd:import namespace="http://www.example.org/WS-HT/api/xsd"
+                     schemaLocation="ws-humantask-api-wsdl.xsd"/>
+      </xsd:schema>
+  </wsdl:types>
+
+  <!-- Declaration of messages -->
+  <wsdl:message name="claim">
+      <wsdl:part element="htdt:claim" name="claim"/>
+  </wsdl:message>
+
+  <wsdl:message name="claimResponse">
+      <wsdl:part element="htdt:claimResponse" name="claimResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="start">
+      <wsdl:part element="htdt:start" name="start"/>
+  </wsdl:message>
+
+  <wsdl:message name="startResponse">
+      <wsdl:part element="htdt:startResponse" name="startResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="stop">
+      <wsdl:part element="htdt:stop" name="stop"/>
+  </wsdl:message>
+
+  <wsdl:message name="stopResponse">
+      <wsdl:part element="htdt:stopResponse" name="stopResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="release">
+      <wsdl:part element="htdt:release" name="release"/>
+  </wsdl:message>
+
+  <wsdl:message name="releaseResponse">
+      <wsdl:part element="htdt:releaseResponse" name="releaseResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="suspend">
+      <wsdl:part element="htdt:suspend" name="suspend"/>
+  </wsdl:message>
+
+  <wsdl:message name="suspendResponse">
+      <wsdl:part element="htdt:suspendResponse" name="suspendResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="suspendUntil">
+      <wsdl:part element="htdt:suspendUntil" name="suspendUntil"/>
+  </wsdl:message>
+
+  <wsdl:message name="suspendUntilResponse">
+      <wsdl:part element="htdt:suspendUntilResponse" name="suspendUntilResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="resume">
+      <wsdl:part element="htdt:resume" name="resume"/>
+  </wsdl:message>
+
+  <wsdl:message name="resumeResponse">
+      <wsdl:part element="htdt:resumeResponse" name="resumeResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="complete">
+      <wsdl:part element="htdt:complete" name="complete"/>
+  </wsdl:message>
+
+  <wsdl:message name="completeResponse">
+      <wsdl:part element="htdt:completeResponse" name="completeResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="remove">
+      <wsdl:part element="htdt:remove" name="remove"/>
+  </wsdl:message>
+
+  <wsdl:message name="removeResponse">
+      <wsdl:part element="htdt:removeResponse" name="removeResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="fail">
+      <wsdl:part element="htdt:fail" name="fail"/>
+  </wsdl:message>
+
+  <wsdl:message name="failResponse">
+      <wsdl:part element="htdt:failResponse" name="failResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="setPriority">
+      <wsdl:part element="htdt:setPriority" name="setPriority"/>
+  </wsdl:message>
+
+  <wsdl:message name="setPriorityResponse">
+      <wsdl:part element="htdt:setPriorityResponse" name="setPriorityResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="addAttachment">
+      <wsdl:part element="htdt:addAttachment" name="addAttachment"/>
+  </wsdl:message>
+
+  <wsdl:message name="addAttachmentResponse">
+      <wsdl:part element="htdt:addAttachmentResponse" name="addAttachmentResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getAttachmentInfos">
+      <wsdl:part element="htdt:getAttachmentInfos" name="getAttachmentInfos"/>
+  </wsdl:message>
+
+  <wsdl:message name="getAttachmentInfosResponse">
+      <wsdl:part element="htdt:getAttachmentInfosResponse" name="getAttachmentInfosResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getAttachments">
+      <wsdl:part element="htdt:getAttachments" name="getAttachments"/>
+  </wsdl:message>
+
+  <wsdl:message name="getAttachmentsResponse">
+      <wsdl:part element="htdt:getAttachmentsResponse" name="getAttachmentsResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="deleteAttachments">
+      <wsdl:part element="htdt:deleteAttachments" name="deleteAttachments"/>
+  </wsdl:message>
+
+  <wsdl:message name="deleteAttachmentsResponse">
+      <wsdl:part element="htdt:deleteAttachmentsResponse" name="deleteAttachmentsResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="addComment">
+      <wsdl:part element="htdt:addComment" name="addComment"/>
+  </wsdl:message>
+
+  <wsdl:message name="addCommentResponse">
+      <wsdl:part element="htdt:addCommentResponse" name="addCommentResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getComments">
+      <wsdl:part element="htdt:getComments" name="getComments"/>
+  </wsdl:message>
+
+  <wsdl:message name="getCommentsResponse">
+      <wsdl:part element="htdt:getCommentsResponse" name="getCommentsResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="skip">
+      <wsdl:part element="htdt:skip" name="skip"/>
+  </wsdl:message>
+
+  <wsdl:message name="skipResponse">
+      <wsdl:part element="htdt:skipResponse" name="skipResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="forward">
+      <wsdl:part element="htdt:forward" name="forward"/>
+  </wsdl:message>
+
+  <wsdl:message name="forwardResponse">
+      <wsdl:part element="htdt:forwardResponse" name="forwardResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="delegate">
+      <wsdl:part element="htdt:delegate" name="delegate"/>
+  </wsdl:message>
+
+  <wsdl:message name="delegateResponse">
+      <wsdl:part element="htdt:delegateResponse" name="delegateResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getRendering">
+      <wsdl:part element="htdt:getRendering" name="getRendering"/>
+  </wsdl:message>
+
+  <wsdl:message name="getRenderingResponse">
+      <wsdl:part element="htdt:getRenderingResponse" name="getRenderingResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getRenderingTypes">
+      <wsdl:part element="htdt:getRenderingTypes" name="getRenderingTypes"/>
+  </wsdl:message>
+
+  <wsdl:message name="getRenderingTypesResponse">
+      <wsdl:part element="htdt:getRenderingTypesResponse" name="getRenderingTypesResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getTaskInfo">
+      <wsdl:part element="htdt:getTaskInfo" name="getTaskInfo"/>
+  </wsdl:message>
+
+  <wsdl:message name="getTaskInfoResponse">
+      <wsdl:part element="htdt:getTaskInfoResponse" name="getTaskInfoResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getTaskDescription">
+      <wsdl:part element="htdt:getTaskDescription" name="getTaskDescription"/>
+  </wsdl:message>
+
+  <wsdl:message name="getTaskDescriptionResponse">
+      <wsdl:part element="htdt:getTaskDescriptionResponse" name="getTaskDescriptionResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="setOutput">
+      <wsdl:part element="htdt:setOutput" name="setOutput"/>
+  </wsdl:message>
+
+  <wsdl:message name="setOutputResponse">
+      <wsdl:part element="htdt:setOutputResponse" name="setOutputResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="deleteOutput">
+      <wsdl:part element="htdt:deleteOutput" name="deleteOutput"/>
+  </wsdl:message>
+
+  <wsdl:message name="deleteOutputResponse">
+      <wsdl:part element="htdt:deleteOutputResponse" name="deleteOutputResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="setFault">
+      <wsdl:part element="htdt:setFault" name="setFault"/>
+  </wsdl:message>
+
+  <wsdl:message name="setFaultResponse">
+      <wsdl:part element="htdt:setFaultResponse" name="setFaultResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="deleteFault">
+      <wsdl:part element="htdt:deleteFault" name="deleteFault"/>
+  </wsdl:message>
+
+  <wsdl:message name="deleteFaultResponse">
+      <wsdl:part element="htdt:deleteFaultResponse" name="deleteFaultResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getInput">
+      <wsdl:part element="htdt:getInput" name="getInput"/>
+  </wsdl:message>
+
+  <wsdl:message name="getInputResponse">
+      <wsdl:part element="htdt:getInputResponse" name="getInputResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getOutput">
+      <wsdl:part element="htdt:getOutput" name="getOutput"/>
+  </wsdl:message>
+
+  <wsdl:message name="getOutputResponse">
+      <wsdl:part element="htdt:getOutputResponse" name="getOutputResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getFault">
+      <wsdl:part element="htdt:getFault" name="getFault"/>
+  </wsdl:message>
+
+  <wsdl:message name="getFaultResponse">
+      <wsdl:part element="htdt:getFaultResponse" name="getFaultResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getMyTaskAbstracts">
+      <wsdl:part element="htdt:getMyTaskAbstracts" name="getMyTaskAbstracts"/>
+  </wsdl:message>
+
+  <wsdl:message name="getMyTaskAbstractsResponse">
+      <wsdl:part element="htdt:getMyTaskAbstractsResponse" name="getMyTaskAbstractsResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="getMyTasks">
+      <wsdl:part element="htdt:getMyTasks" name="getMyTasks"/>
+  </wsdl:message>
+
+  <wsdl:message name="getMyTasksResponse">
+      <wsdl:part element="htdt:getMyTasksResponse" name="getMyTasksResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="query">
+      <wsdl:part element="htdt:query" name="query"/>
+  </wsdl:message>
+
+  <wsdl:message name="queryResponse">
+      <wsdl:part element="htdt:queryResponse" name="queryResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="activate">
+      <wsdl:part element="htdt:activate" name="activate"/>
+  </wsdl:message>
+
+  <wsdl:message name="activateResponse">
+      <wsdl:part element="htdt:activateResponse" name="activateResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="nominate">
+      <wsdl:part element="htdt:nominate" name="nominate"/>
+  </wsdl:message>
+
+  <wsdl:message name="nominateResponse">
+      <wsdl:part element="htdt:nominateResponse" name="nominateResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="setGenericHumanRole">
+      <wsdl:part element="htdt:setGenericHumanRole" name="setGenericHumanRole"/>
+  </wsdl:message>
+
+  <wsdl:message name="setGenericHumanRoleResponse">
+      <wsdl:part element="htdt:setGenericHumanRoleResponse" name="setGenericHumanRoleResponse"/>
+  </wsdl:message>
+
+  <!-- Declaration of fault messages -->
+  <wsdl:message name="illegalStateFault">
+      <wsdl:part element="htdt:illegalState" name="illegalState"/>
+  </wsdl:message>
+
+  <wsdl:message name="illegalArgumentFault">
+      <wsdl:part element="htdt:illegalArgument" name="illegalArgument"/>
+  </wsdl:message>
+
+  <wsdl:message name="illegalAccessFault">
+      <wsdl:part element="htdt:illegalAccess" name="illegalAccess"/>
+  </wsdl:message>
+
+  <wsdl:message name="illegalOperationFault">
+      <wsdl:part element="htdt:illegalOperation" name="illegalOperation"/>
+  </wsdl:message>
+
+  <wsdl:message name="recipientNotAllowed">
+      <wsdl:part element="htdt:recipientNotAllowed" name="recipientNotAllowed"/>
+  </wsdl:message>
+
+  <!-- Port type definition -->
+  <wsdl:portType name="taskOperations">
+
+      <wsdl:operation name="claim">
+         <wsdl:input message="claim"/>
+         <wsdl:output message="claimResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="start">
+         <wsdl:input message="start"/>
+         <wsdl:output message="startResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="stop">
+         <wsdl:input message="stop"/>
+         <wsdl:output message="stopResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="release">
+         <wsdl:input message="release"/>
+         <wsdl:output message="releaseResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="suspend">
+         <wsdl:input message="suspend"/>
+         <wsdl:output message="suspendResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="suspendUntil">
+         <wsdl:input message="suspendUntil"/>
+         <wsdl:output message="suspendUntilResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="resume">
+         <wsdl:input message="resume"/>
+         <wsdl:output message="resumeResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="complete">
+         <wsdl:input message="complete"/>
+         <wsdl:output message="completeResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="remove">
+         <wsdl:input message="remove"/>
+         <wsdl:output message="removeResponse"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="fail">
+         <wsdl:input message="fail"/>
+         <wsdl:output message="failResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+         <wsdl:fault message="illegalOperationFault" name="illegalOperationFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="setPriority">
+         <wsdl:input message="setPriority"/>
+         <wsdl:output message="setPriorityResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="addAttachment">
+         <wsdl:input message="addAttachment"/>
+         <wsdl:output message="addAttachmentResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttachmentInfos">
+         <wsdl:input message="getAttachmentInfos"/>
+         <wsdl:output message="getAttachmentInfosResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttachments">
+         <wsdl:input message="getAttachments"/>
+         <wsdl:output message="getAttachmentsResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteAttachments">
+         <wsdl:input message="deleteAttachments"/>
+         <wsdl:output message="deleteAttachmentsResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="addComment">
+         <wsdl:input message="addComment"/>
+         <wsdl:output message="addCommentResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getComments">
+         <wsdl:input message="getComments"/>
+         <wsdl:output message="getCommentsResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="skip">
+         <wsdl:input message="skip"/>
+         <wsdl:output message="skipResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+         <wsdl:fault message="illegalOperationFault" name="illegalOperationFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="forward">
+         <wsdl:input message="forward"/>
+         <wsdl:output message="forwardResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="delegate">
+         <wsdl:input message="delegate"/>
+         <wsdl:output message="delegateResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+         <wsdl:fault message="recipientNotAllowed" name="recipientNotAllowed"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getRendering">
+         <wsdl:input message="getRendering"/>
+         <wsdl:output message="getRenderingResponse"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getRenderingTypes">
+         <wsdl:input message="getRenderingTypes"/>
+         <wsdl:output message="getRenderingTypesResponse"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getTaskInfo">
+         <wsdl:input message="getTaskInfo"/>
+         <wsdl:output message="getTaskInfoResponse"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getTaskDescription">
+         <wsdl:input message="getTaskDescription"/>
+         <wsdl:output message="getTaskDescriptionResponse"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="setOutput">
+         <wsdl:input message="setOutput"/>
+         <wsdl:output message="setOutputResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteOutput">
+         <wsdl:input message="deleteOutput"/>
+         <wsdl:output message="deleteOutputResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="setFault">
+         <wsdl:input message="setFault"/>
+         <wsdl:output message="setFaultResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+         <wsdl:fault message="illegalOperationFault" name="illegalOperationFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteFault">
+         <wsdl:input message="deleteFault"/>
+         <wsdl:output message="deleteFaultResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getInput">
+         <wsdl:input message="getInput"/>
+         <wsdl:output message="getInputResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getOutput">
+         <wsdl:input message="getOutput"/>
+         <wsdl:output message="getOutputResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getFault">
+         <wsdl:input message="getFault"/>
+         <wsdl:output message="getFaultResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+         <wsdl:fault message="illegalOperationFault" name="illegalOperationFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getMyTaskAbstracts">
+         <wsdl:input message="getMyTaskAbstracts"/>
+         <wsdl:output message="getMyTaskAbstractsResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getMyTasks">
+         <wsdl:input message="getMyTasks"/>
+         <wsdl:output message="getMyTasksResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="query">
+         <wsdl:input message="query"/>
+         <wsdl:output message="queryResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="activate">
+         <wsdl:input message="activate"/>
+         <wsdl:output message="activateResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="nominate">
+         <wsdl:input message="nominate"/>
+         <wsdl:output message="nominateResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="setGenericHumanRole">
+         <wsdl:input message="setGenericHumanRole"/>
+         <wsdl:output message="setGenericHumanRoleResponse"/>
+         <wsdl:fault message="illegalStateFault" name="illegalStateFault"/>
+         <wsdl:fault message="illegalArgumentFault" name="illegalArgumentFault"/>
+         <wsdl:fault message="illegalAccessFault" name="illegalAccessFault"/>
+      </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="TaskOperationsBinding" type="taskOperations">
+  	<soap:binding style="document"
+  		transport="http://schemas.xmlsoap.org/soap/http" />
+  	<wsdl:operation name="claim">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/claim" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="start">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/start" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="stop">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/stop" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="release">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/release" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="suspend">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/suspend" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="suspendUntil">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/suspendUntil" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="resume">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/resume" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="complete">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/complete" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="remove">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/remove" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="fail">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/fail" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalOperationFault">
+  			<soap:fault use="literal" name="illegalOperationFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="setPriority">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/setPriority" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="addAttachment">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/addAttachment" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getAttachmentInfos">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getAttachmentInfos" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getAttachments">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getAttachments" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="deleteAttachments">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/deleteAttachments" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="addComment">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/addComment" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getComments">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getComments" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="skip">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/skip" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalOperationFault">
+  			<soap:fault use="literal" name="illegalOperationFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="forward">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/forward" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="delegate">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/delegate" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="recipientNotAllowed">
+  			<soap:fault use="literal" name="recipientNotAllowed" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getRendering">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getRendering" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getRenderingTypes">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getRenderingTypes" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getTaskInfo">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getTaskInfo" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getTaskDescription">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getTaskDescription" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="setOutput">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/setOutput" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="deleteOutput">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/deleteOutput" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="setFault">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/setFault" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalOperationFault">
+  			<soap:fault use="literal" name="illegalOperationFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="deleteFault">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/deleteFault" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getInput">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getInput" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getOutput">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getOutput" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getFault">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getFault" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalOperationFault">
+  			<soap:fault use="literal" name="illegalOperationFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getMyTaskAbstracts">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getMyTaskAbstracts" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="getMyTasks">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/getMyTasks" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="query">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/query" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="activate">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/activate" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="nominate">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/nominate" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  	<wsdl:operation name="setGenericHumanRole">
+  		<soap:operation
+  			soapAction="http://www.example.org/WS-HT/api/wsdl/setGenericHumanRole" />
+  		<wsdl:input>
+  			<soap:body use="literal" />
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal" />
+  		</wsdl:output>
+  		<wsdl:fault name="illegalStateFault">
+  			<soap:fault use="literal" name="illegalStateFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalArgumentFault">
+  			<soap:fault use="literal" name="illegalArgumentFault" />
+  		</wsdl:fault>
+  		<wsdl:fault name="illegalAccessFault">
+  			<soap:fault use="literal" name="illegalAccessFault" />
+  		</wsdl:fault>
+  	</wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TaskOperations">
+  	<wsdl:port name="TaskOperationsPort" binding="TaskOperationsBinding">
+  		<soap:address location="http://localhost:7777/ws/client" />
+  	</wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

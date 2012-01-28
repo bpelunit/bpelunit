@@ -6,6 +6,7 @@
 package net.bpelunit.framework.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +143,7 @@ public class ProcessUnderTest extends Partner {
 		// merge global options and test suite options
 		// test suite options have precedence over global ones
 		Map<String, String> options = new HashMap<String, String>();
-		List<String> keys = ExtensionRegistry.getPossibleConfigurationOptions(
+		Collection<String> keys = ExtensionRegistry.getPossibleConfigurationOptions(
 				fDeployer.getClass(), true);
 
 		for (String key : keys) {

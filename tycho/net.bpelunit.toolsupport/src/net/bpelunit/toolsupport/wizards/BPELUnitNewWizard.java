@@ -98,7 +98,8 @@ public class BPELUnitNewWizard extends BasicNewResourceWizard {
 		IWorkbenchWindow dw= getWorkbench().getActiveWorkbenchWindow();
 
 		try {
-			file.setContents(document.newInputStream( BPELUnitUtil.getDefaultXMLOptions()), IResource.NONE, new NullProgressMonitor());
+			file.setCharset("UTF-8", null);
+			file.setContents(document.newInputStream( BPELUnitUtil.getDefaultXMLOptions() ), IResource.NONE, new NullProgressMonitor());
 		} catch (CoreException e) {
 			MessageDialog.openError(getShell(), "Error writing initial data", "Could not create the .bpts file");
 		}

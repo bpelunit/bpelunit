@@ -1,0 +1,722 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://www.example.org/WS-HT/api/xsd"
+            xmlns:htd="http://www.example.org/WS-HT"
+            xmlns:api="http://www.example.org/WS-HT/api"
+            blockDefault="#all"
+            elementFormDefault="qualified"
+            targetNamespace="http://www.example.org/WS-HT/api/xsd">
+
+  <xsd:import namespace="http://www.example.org/WS-HT/api"
+               schemaLocation="ws-humantask-api.xsd"/>
+
+  <xsd:import namespace="http://www.example.org/WS-HT"
+               schemaLocation="ws-humantask.xsd"/>
+
+  <xsd:element name="claim">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="claimResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="start">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="startResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="stop">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="stopResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="release">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="releaseResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="suspend">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="suspendResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="suspendUntil">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="time" type="tTime"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="tTime">
+      <xsd:choice>
+         <xsd:element name="timePeriod" type="xsd:duration"/>
+         <xsd:element name="pointOfTime" type="xsd:dateTime"/>
+      </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:element name="suspendUntilResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="resume">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="resumeResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="complete">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element minOccurs="0" name="taskData" type="xsd:anyType"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="completeResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="remove">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="removeResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="fail">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element minOccurs="0" name="faultName" type="xsd:NCName"/>
+            <xsd:element minOccurs="0" name="faultData" type="xsd:anyType"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="failResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="setPriority">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="priority" type="xsd:nonNegativeInteger"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="setPriorityResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="addAttachment">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="accessType" type="xsd:string"/>
+            <xsd:element name="contentType" type="xsd:string"/>
+            <xsd:element name="attachment" type="xsd:anyType"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="addAttachmentResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getAttachmentInfos">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getAttachmentInfosResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="info" type="api:tAttachmentInfo"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getAttachments">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="attachmentName" type="xsd:string"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getAttachmentsResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="attachment" type="api:tAttachment"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="deleteAttachments">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="attachmentName" type="xsd:string"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="deleteAttachmentsResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="addComment">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="text" type="xsd:string"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="addCommentResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getComments">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getCommentsResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="comment" type="api:tComment"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="skip">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="skipResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="forward">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="organizationalEntity" type="htd:tOrganizationalEntity"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="forwardResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="delegate">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="organizationalEntity" type="htd:tOrganizationalEntity"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="delegateResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getRendering">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyType"/>
+            <xsd:element name="renderingType" type="xsd:QName"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getRenderingResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="rendering" type="xsd:anyType"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getRenderingTypes">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyType"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getRenderingTypesResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="renderingType" type="xsd:QName"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getTaskInfo">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getTaskInfoResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="task" type="api:tTask"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getTaskDescription">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element minOccurs="0" name="contentType" type="xsd:string"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getTaskDescriptionResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="description" type="xsd:string"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="setOutput">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element minOccurs="0" name="part" type="xsd:NCName"/>
+            <xsd:element name="taskData" type="xsd:anyType"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="setOutputResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="deleteOutput">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="deleteOutputResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="setFault">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="faultName" type="xsd:NCName"/>
+            <xsd:element name="faultData" type="xsd:anyType"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="setFaultResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="deleteFault">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="deleteFaultResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getInput">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element minOccurs="0" name="part" type="xsd:NCName"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getInputResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="taskData" type="xsd:anyType"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getOutput">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element minOccurs="0" name="part" type="xsd:NCName"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getOutputResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="taskData" type="xsd:anyType"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getFault">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getFaultResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="faultName" type="xsd:NCName"/>
+            <xsd:element name="faultData" type="xsd:anyType"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getMyTaskAbstracts">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="taskType" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="genericHumanRole" type="api:tGenericHumanRoleType"/>
+            <xsd:element minOccurs="0" name="workQueue" type="xsd:string"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="status" type="api:tStatus"/>
+            <xsd:element minOccurs="0" name="whereClause" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="createdOnClause" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="maxTasks" type="xsd:int"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getMyTaskAbstractsResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="taskAbstract"
+                         type="api:tTaskAbstract"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getMyTasks">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="taskType" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="genericHumanRole" type="api:tGenericHumanRoleType"/>
+            <xsd:element minOccurs="0" name="workQueue" type="xsd:string"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="status" type="api:tStatus"/>
+            <xsd:element minOccurs="0" name="whereClause" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="createdOnClause" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="maxTasks" type="xsd:int"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="getMyTasksResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="taskAbstract" type="api:tTask"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="query">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="selectClause" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="whereClause" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="orderByClause" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="maxTasks" type="xsd:int"/>
+            <xsd:element minOccurs="0" name="taskIndexOffset" type="xsd:int"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="queryResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="query" type="api:tTaskQueryResultSet"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="activate">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="activateResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="nominate">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="organizationalEntity" type="htd:tOrganizationalEntity"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="nominateResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="setGenericHumanRole">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="identifier" type="xsd:anyURI"/>
+            <xsd:element name="genericHumanRole" type="api:tGenericHumanRoleType"/>
+            <xsd:element name="organizationalEntity" type="htd:tOrganizationalEntity"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="setGenericHumanRoleResponse">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:annotation>
+               <xsd:documentation>Empty message</xsd:documentation>
+            </xsd:annotation>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="illegalState">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="status" type="api:tStatus"/>
+            <xsd:element name="message" type="xsd:string"/>
+         </xsd:sequence>
+      </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="illegalArgument" type="xsd:string"/>
+
+  <xsd:element name="illegalAccess" type="xsd:string"/>
+
+  <xsd:element name="illegalOperation" type="xsd:string"/>
+
+  <xsd:element name="recipientNotAllowed" type="xsd:string"/>
+
+</xsd:schema>

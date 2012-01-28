@@ -1,0 +1,40 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns="http://www.example.org/WS-HT/protocol/wsdl"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:htdp="http://www.example.org/WS-HT/protocol"
+                  targetNamespace="http://www.example.org/WS-HT/protocol/wsdl">
+
+  <wsdl:types>
+      <xsd:schema>
+         <xsd:import namespace="http://www.example.org/WS-HT/protocol"
+                     schemaLocation="../schema/ws-humantask-protocol.xsd"/>
+      </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="skipped">
+      <wsdl:part element="htdp:skipped" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="fault">
+      <wsdl:part element="htdp:fault" name="parameters"/>
+  </wsdl:message>
+
+  <wsdl:message name="exit">
+      <wsdl:part element="htdp:exit" name="parameters"/>
+  </wsdl:message>
+
+  <wsdl:portType name="clientParticipantPortType">
+      <wsdl:operation name="skippedOperation">
+         <wsdl:input message="skipped"/>
+      </wsdl:operation>
+      <wsdl:operation name="faultOperation">
+         <wsdl:input message="fault"/>
+      </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:portType name="humanTaskParticipantPortType">
+      <wsdl:operation name="exitOperation">
+         <wsdl:input message="exit"/>
+      </wsdl:operation>
+  </wsdl:portType>
+
+</wsdl:definitions>

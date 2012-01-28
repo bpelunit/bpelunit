@@ -16,7 +16,7 @@ import javax.xml.xpath.XPathVariableResolver;
 
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.SpecificationException;
-import net.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -52,7 +52,7 @@ public class ReceiveCondition implements ITestArtefact {
 	/**
 	 * Parent receive data specification
 	 */
-	private ReceiveDataSpecification fParent;
+	private DataSpecification fParent;
 
 	/**
 	 * Status of this object
@@ -66,7 +66,11 @@ public class ReceiveCondition implements ITestArtefact {
 
 	// ******************** Initialization ************************
 
-	public ReceiveCondition(ReceiveDataSpecification rSpec, String condition, String template, String value) throws SpecificationException {
+	/**
+	 * Data Specification can reasonably only by a ReceiveDataCondition or a
+	 * CompleteHumanTaskSpecification
+	 */
+	public ReceiveCondition(DataSpecification rSpec, String condition, String template, String value) throws SpecificationException {
 		fExpression= condition;
 		fTemplate= template;
 		fExpectedValue= value;
@@ -82,7 +86,7 @@ public class ReceiveCondition implements ITestArtefact {
 
 	// ******************** Implementation ***************************
 
-	public void evaluate(ActivityContext activityContext, Element literalData, NamespaceContext context, XPathVariableResolver variableResolver) {
+	public void evaluate(VelocityContextProvider activityContext, Element literalData, NamespaceContext context, XPathVariableResolver variableResolver) {
 
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		xpath.setNamespaceContext(context);

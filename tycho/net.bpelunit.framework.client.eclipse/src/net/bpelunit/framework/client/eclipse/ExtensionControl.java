@@ -41,6 +41,22 @@ public class ExtensionControl {
 	public static final String DATASOURCE_EXTENSION_POINT_ID = "net.bpelunit.framework.client.eclipse.dataSource";
 
 	private static Map<String, DeployerExtension> fDeployers = new HashMap<String, DeployerExtension>();
+	public static Map<String, DeployerExtension> getDeployers() {
+		return fDeployers;
+	}
+
+	public static Map<String, HeaderProcessorExtension> getHeaderProcessors() {
+		return new HashMap<String, HeaderProcessorExtension>(fHeaderProcessors);
+	}
+
+	public static Map<String, SOAPEncoderExtension> getSOAPEncoders() {
+		return new HashMap<String, SOAPEncoderExtension>(fSOAPEncoders);
+	}
+
+	public static Map<String, DataSourceExtension> getDataSources() {
+		return new HashMap<String, DataSourceExtension>(fDataSources);
+	}
+
 	private static Map<String, HeaderProcessorExtension> fHeaderProcessors = new HashMap<String, HeaderProcessorExtension>();
 	private static Map<String, SOAPEncoderExtension> fSOAPEncoders = new HashMap<String, SOAPEncoderExtension>();
 	private static Map<String, DataSourceExtension> fDataSources = new HashMap<String, DataSourceExtension>();

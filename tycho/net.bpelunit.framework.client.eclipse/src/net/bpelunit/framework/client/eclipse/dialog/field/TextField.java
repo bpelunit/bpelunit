@@ -32,6 +32,7 @@ public class TextField extends Field {
 	private Style fStyle;
 
 	private String fCurrentSelection;
+	private Character fEchoChar;
 
 	public enum Style {
 		SINGLE, MULTI
@@ -66,6 +67,10 @@ public class TextField extends Field {
 		}
 		fText.setLayoutData(gridData);
 
+		if(fEchoChar != null) {
+			fText.setEchoChar(fEchoChar);
+		}
+		
 		label.setSize(label.getSize().x, fText.getSize().y);
 
 		if (getInitialValue() != null) {
@@ -90,5 +95,9 @@ public class TextField extends Field {
 
 	public void setText(String text) {
 		this.fText.setText(text);
+	}
+	
+	public void setEchoChar(char echoChar) {
+		this.fEchoChar = echoChar;
 	}
 }

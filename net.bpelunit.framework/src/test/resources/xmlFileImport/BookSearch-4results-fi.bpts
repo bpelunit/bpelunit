@@ -13,7 +13,7 @@
             <tes:clientTrack>
                 <tes:sendReceive service="exa:bookSearchService" port="bookSearchServiceSOAP" operation="search">
                     <tes:send fault="false">
-                        <tes:xmlFile>search.xml</tes:xmlFile>
+                    	<tes:data src="search.xml" />
                     </tes:send>
                     <tes:receive fault="false">
                         <tes:condition>
@@ -27,7 +27,7 @@
                 <tes:receiveSend service="book1:bookSearchHelper" port="bookSearchHelperSOAP" operation="search" xmlns:book1="http://www.example.org/bookSearchWrapper/">
                     <tes:receive fault="false"/>
                     <tes:send fault="false">
-                        <tes:xmlFile>searchResponse.xml</tes:xmlFile>
+                    	<tes:data src="searchResponse.xml" />
                     </tes:send>
                 </tes:receiveSend>
             </tes:partnerTrack>
