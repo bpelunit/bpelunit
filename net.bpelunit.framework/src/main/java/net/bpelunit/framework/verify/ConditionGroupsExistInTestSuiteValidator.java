@@ -56,16 +56,15 @@ public class ConditionGroupsExistInTestSuiteValidator implements
 		return retval;
 	}
 
-	private Set<String> extractConditionGroupNamesUsedInCondtionGroupInheritance(
-			XMLTestSuite suite) {
+	private Set<String> extractConditionGroupNamesUsedInCondtionGroupInheritance(XMLTestSuite suite) {
 		Set<String> retval = new HashSet<String>();
-		for (XMLConditionGroup cg : suite.getConditionGroups()
-				.getConditionGroupList()) {
-			if(cg.getInheritFrom() != null) {
-				retval.add(cg.getInheritFrom());
+		if (suite.getConditionGroups() != null) {
+			for (XMLConditionGroup cg : suite.getConditionGroups().getConditionGroupList()) {
+				if (cg.getInheritFrom() != null) {
+					retval.add(cg.getInheritFrom());
+				}
 			}
 		}
-
 		return retval;
 	}
 
