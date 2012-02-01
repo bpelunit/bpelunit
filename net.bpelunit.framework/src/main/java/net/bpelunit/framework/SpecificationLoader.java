@@ -94,11 +94,11 @@ import net.bpelunit.framework.xml.suite.XMLTrack;
 import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import net.bpelunit.framework.xml.suite.XMLWaitActivity;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
-import org.codehaus.plexus.util.FileUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
@@ -1000,10 +1000,15 @@ public class SpecificationLoader {
 			if (xmlSend.getTemplate().isSetSrc()) {
 				// 'src' attribute in <template> - load as raw text, *not* XML - much less escaping involved
 				// Cannot reuse namespaces in .bpts - user must set namespaces in the .vm (same as when loading an external XML file)
-				final String path = xmlSend.getTemplate().getSrc();
-				templateText = "<" + BPELUnitUtil.DUMMY_ELEMENT_NAME + ">"
-						+ FileUtils.fileRead(new File(testDirectory, path))
-						+ "</" + BPELUnitUtil.DUMMY_ELEMENT_NAME + ">";
+				final StringBuffer sbuf = new StringBuffer();
+				sbuf.append("<");
+				sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
+				sbuf.append(">");
+				sbuf.append(FileUtils.readFileToString(new File(testDirectory, xmlSend.getTemplate().getSrc())));
+				sbuf.append("</");
+				sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
+				sbuf.append(">");
+				templateText = sbuf.toString();
 			} else {
 				// Embedded templates are parsed as XML and can reuse existing templates
 				Element templateRoot = copyAsRootWithNamespaces(xmlSend.getTemplate());
