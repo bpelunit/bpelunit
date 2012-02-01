@@ -9,6 +9,7 @@ import java.io.StringWriter;
 
 import javax.xml.namespace.NamespaceContext;
 
+import net.bpelunit.framework.control.util.XMLPrinterTool;
 import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.activity.Activity;
@@ -80,6 +81,7 @@ public abstract class DataSpecification implements ITestArtefact {
 	protected String expandTemplateToString(VelocityContextProvider context, String template) throws Exception {
 		VelocityContext velocityCtx = fCloner.deepClone(context.createVelocityContext());
 		velocityCtx.put("xpath", new XPathTool(fNamespaceContext));
+		velocityCtx.put("printer", new XMLPrinterTool());
 
 		// Expand the template as a regular string
 		StringWriter writer = new StringWriter();

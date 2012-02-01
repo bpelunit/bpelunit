@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testSuite xmlns:tacbpel="http://enterprise.netbeans.org/bpel/TacService/tacService" xmlns:tacwsdl="http://j2ee.netbeans.org/wsdl/tacService" xmlns:tac="http://xml.netbeans.org/schema/tacService" xmlns="http://www.bpelunit.org/schema/testSuite">
+    <name>tacService</name>
+    <baseURL>http://localhost:7777/ws</baseURL>
+    <deployment>
+        <put name="tacService" type="testmode">
+            <wsdl>tacService.wsdl</wsdl>
+        </put>
+        <partner name="tacService" wsdl="tacService.wsdl"/>
+    </deployment>
+    <testCases>
+        <testCase name="MainTemplate (Row 1)" basedOn="" abstract="false" vary="true">
+            <clientTrack>
+                <sendReceive service="tacwsdl:tacService" port="tacServicePort" operation="reverseLines">
+                    <send fault="false">
+                        <data>
+                            <tac:tacRequest>
+                                <tac:lines></tac:lines>
+                            </tac:tacRequest>
+                        </data>
+                    </send>
+                    <receive fault="false"/>
+                </sendReceive>
+            </clientTrack>
+            <partnerTrack name="tacService">
+                <receiveSend service="tacwsdl:tacService" port="tacServicePort" operation="reverseLines">
+                    <receive fault="false"/>
+                    <send delaySequence="0,1" fault="false">
+                        <data>
+                            <tac:tacResponse>
+                                <tac:lines></tac:lines>
+                            </tac:tacResponse>
+                        </data>
+                    </send>
+                </receiveSend>
+            </partnerTrack>
+        </testCase>
+        <testCase name="MainTemplate (Row 2)" basedOn="" abstract="false" vary="true">
+            <clientTrack>
+                <sendReceive service="tacwsdl:tacService" port="tacServicePort" operation="reverseLines">
+                    <send>
+                        <data>
+                            <tac:tacRequest>
+                                <tac:lines>
+                                    <tac:line>A</tac:line>
+                                </tac:lines>
+                            </tac:tacRequest>
+                        </data>
+                    </send>
+                    <receive/>
+                </sendReceive>
+            </clientTrack>
+            <partnerTrack name="tacService">
+                <receiveSend service="tacwsdl:tacService" port="tacServicePort" operation="reverseLines">
+                    <receive/>
+                    <send delaySequence="0,1">
+                        <data>
+                            <tac:tacResponse>
+                                <tac:lines>
+                                    <tac:line>A</tac:line>
+                                </tac:lines>
+                            </tac:tacResponse>
+                        </data>
+                    </send>
+                </receiveSend>
+            </partnerTrack>
+        </testCase>
+    </testCases>
+</testSuite>

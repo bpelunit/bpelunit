@@ -46,4 +46,11 @@ public class NoDataSourceTemplateTest extends AbstractTemplateTest {
 				"messages previously received and sent from the current partner " +
 				"track", TC_PTRACKHIST_ONLYREQ, TC_PTRACKHIST_ALLVARS);
 	}
+
+	@Test
+	public void printerUtilityWorks() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+				"XMLPrinterTool#print prints back the right XML fragment",
+				TC_PRINTER_NOTEMP, TC_PRINTER_TEMP);
+	}
 }

@@ -37,4 +37,7 @@ public abstract class AbstractTemplateTest {
 
 	protected static final File TC_PTRACKHIST_ONLYREQ = new File(TEST_BPTS_DIR, "doubleWithHistory-onlyrequest.bpts");
 	protected static final File TC_PTRACKHIST_ALLVARS = new File(TEST_BPTS_DIR, "doubleWithHistory-allvars.bpts");
+
+	protected static final File TC_PRINTER_NOTEMP = new File(TEST_BPTS_DIR, "tacService-printer-nt.bpts");
+	protected static final File TC_PRINTER_TEMP = new File(TEST_BPTS_DIR, "tacService-printer-t.bpts");
 }

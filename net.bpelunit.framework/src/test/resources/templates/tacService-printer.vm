@@ -1,0 +1,4 @@
+#set($lines = $xpath.evaluateAsList("//tac:lines[1]", $request).get(0))
+<tac:tacResponse xmlns:tac="http://xml.netbeans.org/schema/tacService">
+  $printer.print($lines)
+</tac:tacResponse>

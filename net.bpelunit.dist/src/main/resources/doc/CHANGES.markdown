@@ -10,6 +10,7 @@ Staged for next version
 * _Feature_: Support for having two WSDLs per partnerlink so that BPEL partner link types can be better imitated.
 * _Feature_: Support for condition groups. Allows reuse of conditions across different receives.
 * _Feature_: `<data>` and `<template>` in `<send>` can use the `src` attribute to load an XML document or Velocity template from a separate file.
+* _Feature_: templates can use the new `printer` predefined context variable to print DOM elements back as XML.
 
 Version 1.5.0
 -----------------------

@@ -135,6 +135,7 @@ If you have set up a data source, it will place some variables into the context 
 ### Predefined activity variables ###
 
 - `$xpath` (net.bpelunit.framework.util.control.XPathTool): utility object for running XPath queries on DOM nodes. For more information, please see below.
+- `$printer` (net.bpelunit.framework.util.control.XMLPrinterTool): utility object for printing DOM nodes back as XML using its `print(Node)` method.
 
 ### Custom activity variables ###
 
