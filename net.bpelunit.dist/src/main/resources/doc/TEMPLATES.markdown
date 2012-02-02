@@ -100,9 +100,13 @@ To add a new variable or change the value of an existing variable for all test c
 
 - `$testCaseName` (String): name of the current test case.
 
+### Data source variables ###
+
+If you have set up a data source, it will place some variables into the context at this point. The values will depend on the current "row" of the contents of the data source. Please see the "Working with data sources" section below for more details.
+
 ### Custom test case variables ###
 
-To customize the variables for all activities in a specific test case, a `<script>` element with the proper Velocity template must be added to the test case `<setUp>` block. This template has access to all the test suite variables and the predefined test case variables. It would look like this:
+To customize the variables for all activities in a specific test case, a `<script>` element with the proper Velocity template must be added to the test case `<setUp>` block. This template has access to all the test suite variables, the predefined test case variables and the variables loaded from the data source. It would look like this:
 
     <testCase>
       ...
@@ -119,10 +123,6 @@ To customize the variables for all activities in a specific test case, a `<scrip
 Changes done in a test case setup block will _not_ be carried over to the next test case, to keep them isolated from each other and ensure no hidden data dependencies are introduced. All variables that were added or changed in a test case setup block will be removed and reverted in the following test case, even if there is no setup block there.
 
 Setup blocks are _not_ inherited, even if the `basedOn` attribute is used. Please use test suite setup blocks if you want to have the same variables in several test cases (see above).
-
-### Data source variables ###
-
-If you have set up a data source, it will place some variables into the context at this point. The values will depend on the current "row" of the contents of the data source. Please see the "Working with data sources" section below for more details.
 
 ### Predefined partner track variables ###
 

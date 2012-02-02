@@ -218,12 +218,12 @@ public class TestCase implements ITestArtefact {
 		}
 		VelocityContext ctx = fCloner.deepClone(fTestSuiteVelocityContext);
 		ctx.put("testCaseName", getRawName());
+		if (fDataSource != null) {
+			DataSourceUtil.initializeContext(ctx, fDataSource, fRowIndex);
+		}
 		if (fSetUpVelocityScript != null) {
 			StringWriter sW = new StringWriter();
 			Velocity.evaluate(ctx, sW, "setUpTestCase", fSetUpVelocityScript);
-		}
-		if (fDataSource != null) {
-			DataSourceUtil.initializeContext(ctx, fDataSource, fRowIndex);
 		}
 		return ctx;
 	}
