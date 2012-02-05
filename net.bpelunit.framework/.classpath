@@ -29,5 +29,10 @@
 	<classpathentry exported="true" kind="lib" path="target/dependency/cloning-1.7.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/xmlbeans-2.4.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/velocity-1.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/commons-beanutils-1.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/commons-digester-1.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/dom4j-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/oro-2.0.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="target/dependency/velocity-tools-2.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
