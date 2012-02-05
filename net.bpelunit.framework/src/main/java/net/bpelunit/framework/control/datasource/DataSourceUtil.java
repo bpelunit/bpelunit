@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
-import org.apache.velocity.VelocityContext;
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
@@ -26,6 +24,9 @@ import net.bpelunit.framework.xml.suite.XMLDataSource;
 import net.bpelunit.framework.xml.suite.XMLProperty;
 import net.bpelunit.framework.xml.suite.XMLTestCase;
 import net.bpelunit.framework.xml.suite.XMLTestSuite;
+
+import org.apache.log4j.Logger;
+import org.apache.velocity.context.Context;
 
 /**
  * Utility methods for working with data sources.
@@ -256,7 +257,7 @@ public class DataSourceUtil {
 	 * @throws DataSourceException There was a problem while initializing the
 	 * context variables with the contents of the <code>rowIndex</code>-th row.
 	 */
-	public static void initializeContext(VelocityContext ctx, IDataSource ds, int rowIndex) throws DataSourceException {
+	public static void initializeContext(Context ctx, IDataSource ds, int rowIndex) throws DataSourceException {
 		ds.setRow(rowIndex);
 		String[] fieldNames = ds.getFieldNames();
 

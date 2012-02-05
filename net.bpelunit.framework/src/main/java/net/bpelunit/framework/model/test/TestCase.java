@@ -11,14 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import net.bpelunit.framework.control.datasource.DataSourceUtil;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.context.Context;
 
 import com.rits.cloning.Cloner;
 
@@ -70,7 +71,7 @@ public class TestCase implements ITestArtefact {
 
 	private String fSetUpVelocityScript;
 
-	private VelocityContext fTestSuiteVelocityContext;
+	private Context fTestSuiteVelocityContext;
 
 	private IDataSource fDataSource;
 
@@ -212,11 +213,11 @@ public class TestCase implements ITestArtefact {
 	 * @return VelocityContext with information about the test suite and test
 	 * case.
 	 * */
-	public VelocityContext createVelocityContext() throws Exception {
+	public Context createVelocityContext() throws Exception {
 		if (fTestSuiteVelocityContext == null) {
 			fTestSuiteVelocityContext = getSuite().createVelocityContext();
 		}
-		VelocityContext ctx = fCloner.deepClone(fTestSuiteVelocityContext);
+		Context ctx = fCloner.deepClone(fTestSuiteVelocityContext);
 		ctx.put("testCaseName", getRawName());
 		if (fDataSource != null) {
 			DataSourceUtil.initializeContext(ctx, fDataSource, fRowIndex);

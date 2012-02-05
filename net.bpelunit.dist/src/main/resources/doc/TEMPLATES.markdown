@@ -5,6 +5,8 @@ BPELUnit can now build the body of the SOAP messages to be sent from the mockups
 
 Template variables can also be used to skip partner tracks and activities and inside receive conditions, and control delays when sending messages. See below for more details.
 
+In addition, BPELUnit integrates all the generic tools in Velocity Tools 2.0, using the default configuration and keys listed [here](http://velocity.apache.org/tools/releases/2.0/summary.html). These can be useful if you need to perform more advanced tasks in your templates, such as comparing or manipulating dates, converting to/from strings, and so on. You can also extend the available tools: for details, please check the relevant section near the end of this file.
+
 How to build messages using templates
 -------------------------------------
 
@@ -56,7 +58,7 @@ This does *NOT*:
       <foo>$i</foo>
     </template>
     
-Alternatively, you can use an external template. Supposing `template.vm` contains:
+Alternatively, you can use an external template to work around the previous restriction and reuse templates over multiple activities or test cases. Supposing `template.vm` contains:
 
     #set($i = 0)
     <foo>$i</foo>
@@ -427,6 +429,19 @@ BPELUnit includes an utility which does just this. To run it, add the proper wra
     (dsexpand script) (bpts) > expanded.bpts
 
 The script will create an instance of every test case template for each row in their data sources, removing all data sources and adding setup blocks with the old test suite setup script, the old test case setup script, and variable assignments for that row of the data source. Test cases which do not have data sources are mostly left as-is, except for the setup script, which has the old test suite setup script and the old test case setup script.
+
+Extending Velocity Tools in BPELUnit with additional tools
+----------------------------------------------------------
+
+BPELUnit integrates Velocity Tools using the provided `org.apache.velocity.tools.ToolManager` class. In addition to the default tools, Velocity Tools will check these paths by default:
+
+- `tools.xml` at the root of your classpath,
+- `tools.properties` at the root of your classpath,
+- `tools.xml` at the current directory,
+- `tools.properties` at the current directory and
+- the path specified by the `org.apache.velocity.tools` system property.
+
+You can integrate additional tools through these paths. For details, please check the [configuration](http://velocity.apache.org/tools/releases/2.0/config.html) and [tool creation](http://velocity.apache.org/tools/releases/2.0/creatingtools.html) sections of the official Velocity Tools documentation.-
 
 Pending tasks
 -------------

@@ -32,7 +32,7 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
-import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
 
 /**
  * 
@@ -432,7 +432,7 @@ public class TestCaseRunner {
 
 	// ********************* Velocity contexts *********************
 
-	public VelocityContext createVelocityContext() throws Exception {
+	public Context createVelocityContext() throws Exception {
 		return fTestCase.createVelocityContext();
 	}
 }

@@ -27,7 +27,6 @@ import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
 
 import org.apache.log4j.Logger;
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.w3c.dom.Document;
 
@@ -78,7 +77,7 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 
 	private NamespaceContext fNamespaceContext;
 
-	private VelocityContext fTestCaseVelocityContext;
+	private Context fTestCaseVelocityContext;
 
 	private ActivityContext fActivityContext;
 
@@ -246,12 +245,11 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 	 * 
 	 * @return Base VelocityContext for the partner track.
 	 */
-	public VelocityContext createVelocityContext() throws Exception {
+	public Context createVelocityContext() throws Exception {
 		if (fTestCaseVelocityContext == null) {
 			fTestCaseVelocityContext = fRunner.createVelocityContext();
 		}
-		VelocityContext ctx = (VelocityContext) fCloner
-				.deepClone(fTestCaseVelocityContext);
+		Context ctx = fCloner.deepClone(fTestCaseVelocityContext);
 		ctx.put("partnerTrackName", getRawName());
 		
 		if(getPartner() instanceof Partner) {

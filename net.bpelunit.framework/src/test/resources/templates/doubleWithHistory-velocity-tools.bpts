@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:doub="http://www.example.org/doubleWithHistory/">
+    <tes:name>suite.bpts</tes:name>
+    <tes:baseURL>http://localhost:7777/ws/</tes:baseURL>
+    <tes:deployment>
+        <tes:put type="testmode" name="DoubleWithHistory">
+            <tes:wsdl>doubleWithHistory.wsdl</tes:wsdl>
+        </tes:put>
+        <tes:partner name="DoubleWithHistory" wsdl="doubleWithHistory.wsdl"/>
+    </tes:deployment>
+    <tes:testCases>
+        <tes:testCase name="MainTemplate" basedOn="" abstract="false" vary="false">
+            <tes:clientTrack>
+                <tes:sendReceive service="doub:DoubleWHistoryService" port="main" operation="double">
+                    <tes:send>
+                        <tes:template>
+                            <doub:doubleRequest>30</doub:doubleRequest>
+                        </tes:template>
+                    </tes:send>
+                    <tes:receive/>
+                </tes:sendReceive>
+                <tes:sendReceive service="doub:DoubleWHistoryService" port="main" operation="double">
+                    <tes:send>
+                        <tes:template>
+                            <doub:doubleRequest>70</doub:doubleRequest>
+                        </tes:template>
+                    </tes:send>
+                    <tes:receive/>
+                </tes:sendReceive>
+            </tes:clientTrack>
+            <tes:partnerTrack name="DoubleWithHistory">
+                <tes:receiveSend service="doub:DoubleWHistoryService" port="main" operation="double">
+                    <tes:send>
+                        <tes:template>
+                            <doub:doubleResponse>
+#set( $amount = $convert.toInteger($xpath.evaluateAsString("doub:doubleRequest", $request)) )
+#set( $doubled = $amount * 2 )
+                                <result>
+                                    <original>$amount</original>
+                                    <doubled>$doubled</doubled>
+                                </result>
+                            </doub:doubleResponse>
+                        </tes:template>
+                    </tes:send>
+                    <tes:receive/>
+                </tes:receiveSend>
+                <tes:receiveSend service="doub:DoubleWHistoryService" port="main" operation="double">
+                    <tes:send>
+                        <tes:template>
+                            <doub:doubleResponse>
+#set( $amount1 = $xpath.evaluateAsString("doub:doubleRequest", $partnerTrackReceived.get(0)) )
+#set( $amount2 = $xpath.evaluateAsString("doub:doubleRequest", $partnerTrackReceived.get(1)) )
+#set( $doubled1 = $xpath.evaluateAsString("//doubled", $partnerTrackSent.get(0)) )
+#set( $doubled2 = $convert.toInteger($xpath.evaluateAsString("doub:doubleRequest", $request)) * 2 )
+                                <result>
+                                    <original>$amount1</original>
+                                    <doubled>$doubled1</doubled>
+                                </result>
+                                <result>
+                                    <original>$amount2</original>
+                                    <doubled>$doubled2</doubled>
+                                </result>
+                            </doub:doubleResponse>
+                        </tes:template>
+                    </tes:send>
+                    <tes:receive/>
+                </tes:receiveSend>
+            </tes:partnerTrack>
+        </tes:testCase>
+    </tes:testCases>
+</tes:testSuite>

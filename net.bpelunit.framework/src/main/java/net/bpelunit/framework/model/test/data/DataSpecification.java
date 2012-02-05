@@ -17,8 +17,8 @@ import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.context.Context;
 
 import com.rits.cloning.Cloner;
 
@@ -79,7 +79,7 @@ public abstract class DataSpecification implements ITestArtefact {
 	}
 
 	protected String expandTemplateToString(VelocityContextProvider context, String template) throws Exception {
-		VelocityContext velocityCtx = fCloner.deepClone(context.createVelocityContext());
+		Context velocityCtx = fCloner.deepClone(context.createVelocityContext());
 		velocityCtx.put("xpath", new XPathTool(fNamespaceContext));
 		velocityCtx.put("printer", new XMLPrinterTool());
 

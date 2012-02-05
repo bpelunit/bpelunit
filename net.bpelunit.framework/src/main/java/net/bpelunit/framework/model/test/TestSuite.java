@@ -12,9 +12,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.result.ITestResultListener;
 import net.bpelunit.framework.control.ws.LocalHTTPServer;
@@ -24,6 +21,11 @@ import net.bpelunit.framework.model.ProcessUnderTest;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+
+import org.apache.log4j.Logger;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.context.Context;
+import org.apache.velocity.tools.ToolManager;
 
 /**
  * A BPELUnit TestSuite is a collection of TestCases, along with the description
@@ -97,6 +99,8 @@ public class TestSuite implements ITestArtefact {
 	private Logger fLogger;
 
 	private String fSetUpVelocityScript;
+
+	private final ToolManager toolManager = new ToolManager();
 
 	// ****************************** Initialization **************************
 
@@ -319,7 +323,7 @@ public class TestSuite implements ITestArtefact {
 	 * NOTE: to keep test cases and activities isolated, this context should
 	 * not be wrapped, but rather be cloned and then extended.
 	 */
-	public VelocityContext createVelocityContext() throws Exception {
+	public Context createVelocityContext() throws Exception {
 		try {
 			Velocity.init();
 		} catch(Exception e) {
@@ -329,7 +333,7 @@ public class TestSuite implements ITestArtefact {
 			Velocity.init();
 		}
 
-		VelocityContext ctx = new VelocityContext();
+		Context ctx = toolManager.createContext();
 		ctx.put("baseURL", getBaseURL().toString());
 		ctx.put("collections", java.util.Collections.class);
 		ctx.put("putName", fProcessUnderTest.getName());

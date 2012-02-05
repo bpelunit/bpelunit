@@ -1,8 +1,8 @@
 package net.bpelunit.framework.model.test.activity;
 
-import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
 
 public interface VelocityContextProvider {
 
-	public VelocityContext createVelocityContext() throws Exception;
+	public Context createVelocityContext() throws Exception;
 }

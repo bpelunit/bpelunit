@@ -48,6 +48,14 @@ public class NoDataSourceTemplateTest extends AbstractTemplateTest {
 	}
 
 	@Test
+	public void velocityToolsIsWellIntegrated() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+				"partnerTrackReceived and partnerTrackSent contain all the " +
+				"messages previously received and sent from the current partner " +
+				"track", TC_PTRACKHIST_ONLYREQ, TC_PTRACKHIST_VELOCITYTOOLS);
+	}
+
+	@Test
 	public void printerUtilityWorks() throws Exception {
 		TestUtil.assertSameAndSuccessfulResults(
 				"XMLPrinterTool#print prints back the right XML fragment",
