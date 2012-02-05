@@ -65,28 +65,6 @@ public class VelocityDataSource implements IDataSource {
 		fContext = null;
 	}
 	
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public void initializeContext(Context ctx, int rowIndex)
-//			throws DataSourceException {
-//		if (rowIndex < 0 || rowIndex >= fRowCount) {
-//			throw new DataSourceException(String.format("Invalid row index. "
-//					+ "Valid row indexes are in the [0,%d] range.", fRowCount));
-//		}
-//
-//		for (Object oKey : fContext.getKeys()) {
-//			String sKey = (String) oKey;
-//			Object value = fContext.get(sKey);
-//			if (fIteratedVars.contains(sKey)) {
-//				// Iterated variable: put its n-th element
-//				ctx.put(sKey, ((List) value).get(rowIndex));
-//			} else {
-//				// Copy it as-is
-//				ctx.put(sKey, value);
-//			}
-//		}
-//	}
-
 	public void loadFromStream(InputStream is) throws DataSourceException {
 		try {
 			Velocity.init();
