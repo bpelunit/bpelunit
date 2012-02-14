@@ -113,7 +113,6 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 	public void run() {
 
 		fLogger.info(getName() + " now active.");
-		fRunner.started(this);
 		fActivityContext = new ActivityContext(fRunner, this);
 
 		// wait till all partners are active

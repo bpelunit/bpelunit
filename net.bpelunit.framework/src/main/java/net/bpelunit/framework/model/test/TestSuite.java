@@ -271,18 +271,6 @@ public class TestSuite implements ITestArtefact {
 		}
 	}
 
-	public void startTrack(TestCase testCase, PartnerTrack track) {
-		for (ITestResultListener listener : fResultListeners) {
-			listener.trackStarted(testCase, track);
-		}
-	}
-
-	public void endTrack(TestCase testCase, PartnerTrack track) {
-		for (ITestResultListener listener : fResultListeners) {
-			listener.trackEnded(testCase, track);
-		}
-	}
-
 	// ******************* Getters ******************************
 
 	public boolean hasTestCase(String testCaseName) {

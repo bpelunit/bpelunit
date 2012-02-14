@@ -9,18 +9,16 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.base.BPELUnitBaseRunner;
 import net.bpelunit.framework.control.result.ITestResultListener;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
-import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
-
-import org.apache.commons.io.FileUtils;
 
 /**
  * 
@@ -35,8 +33,6 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 	private int fProblems;
 
 	private int fPassed;
-
-	private int fTracksStarted, fTracksEnded;
 
 	private TestSuite fSuite;
 
@@ -81,14 +77,6 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 		return fPassed;
 	}
 
-	public int getTracksStarted() {
-		return fTracksStarted;
-	}
-
-	public int getTracksEnded() {
-		return fTracksEnded;
-	}
-
 	public void progress(ITestArtefact test) {
 
 	}
@@ -101,7 +89,7 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 	}
 
 	public void testCaseStarted(TestCase test) {
-		// do nothing
+
 	}
 
 	@Override
@@ -111,16 +99,6 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 
 	public TestSuite getTestSuite() {
 		return fSuite;
-	}
-
-	@Override
-	public void trackStarted(TestCase testCase, PartnerTrack track) {
-		++fTracksStarted;
-	}
-
-	@Override
-	public void trackEnded(TestCase testCase, PartnerTrack track) {
-		++fTracksEnded;
 	}
 
 }

@@ -86,8 +86,6 @@ public class End2EndTester {
 		runner.testRun();
 		assertEquals(1, runner.getPassed());
 		assertEquals(0, runner.getProblems());
-		assertEquals(2, runner.getTracksStarted());
-		assertEquals(2, runner.getTracksEnded());
 	}
 
 	/**
@@ -101,8 +99,6 @@ public class End2EndTester {
 		runner.testRun();
 		assertEquals(2, runner.getPassed());
 		assertEquals(0, runner.getProblems());
-		assertEquals(4, runner.getTracksStarted());
-		assertEquals(4, runner.getTracksEnded());
 	}
 
 	/**
@@ -116,8 +112,6 @@ public class End2EndTester {
 		runner.testRun();
 		assertEquals(3, runner.getPassed());
 		assertEquals(0, runner.getProblems());
-		assertEquals(6, runner.getTracksStarted());
-		assertEquals(6, runner.getTracksEnded());
 	}
 
 	/**

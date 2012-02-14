@@ -5,7 +5,6 @@
  */
 package net.bpelunit.framework.control.result;
 
-import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 
@@ -34,28 +33,6 @@ public interface ITestResultListener {
 	 * @param testCase the test case
 	 */
 	public void testCaseEnded(TestCase testCase);
-
-	/**
-	 * A client or partner track started. This method should be called from the
-	 * thread running the track itself.
-	 *
-	 * @param testCase
-	 *            the test case
-	 * @param track
-	 *            the client or partner track.
-	 */
-	public void trackStarted(TestCase testCase, PartnerTrack track);
-
-	/**
-	 * A client or partner track ended. This method should be called from the
-	 * thread running the track itself.
-	 *
-	 * @param testCase
-	 *            the test case
-	 * @param track
-	 *            the client or partner track.
-	 */
-	public void trackEnded(TestCase testCase, PartnerTrack track);
 
 	/**
 	 * There was progress in a test artefact.

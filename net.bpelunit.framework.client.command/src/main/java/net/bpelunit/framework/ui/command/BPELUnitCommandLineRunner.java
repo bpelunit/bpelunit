@@ -348,12 +348,6 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 		return logFileName;
 	}
 
-	public void trackStarted(TestCase testCase, PartnerTrack track) {
-		// do nothing
-	}
 
-	public void trackEnded(TestCase testCase, PartnerTrack track) {
-		// do nothing
-	}
 
 }
