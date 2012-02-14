@@ -38,17 +38,13 @@ public class BlackBoard<KEY, OBJECT> {
 		notifyAll();
 	}
 
-	public synchronized OBJECT getObject(KEY key) throws TimeoutException /*, InterruptedException*/ {
+	public synchronized OBJECT getObject(KEY key) throws TimeoutException, InterruptedException {
 		// XXX Synchronization is not right
 		int timeout= 0;
 
 		while ( (!map.containsKey(key) && (timeout < BPELUnitRunner.getTimeout()))) {
 			timeout+= BPELUnitConstants.TIMEOUT_SLEEP_TIME;
-			try {
 			wait(BPELUnitConstants.TIMEOUT_SLEEP_TIME);
-			} catch(InterruptedException e) {
-				// If we are interrupted we still need to wait whether a message arrives
-			}
 		}
 
 		if (timeout >= BPELUnitRunner.getTimeout()) {
