@@ -42,6 +42,7 @@ import net.bpelunit.framework.control.result.ITestResultListener;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
@@ -367,6 +368,14 @@ public class BPELUnitMojo extends AbstractMojo {
 					property.setAttribute("value", value);
 				}
 			}
+		}
+
+		public void trackStarted(TestCase testCase, PartnerTrack track) {
+			// do nothing
+		}
+
+		public void trackEnded(TestCase testCase, PartnerTrack track) {
+			// do nothing
 		}
 
 	}

@@ -413,4 +413,14 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 		fActivityProgress.abort();
 		fTestCaseProgress.abort();
 	}
+
+	@Override
+	public void trackStarted(TestCase testCase, PartnerTrack track) {
+		// do nothing
+	}
+
+	@Override
+	public void trackEnded(TestCase testCase, PartnerTrack track) {
+		// do nothing
+	}
 }

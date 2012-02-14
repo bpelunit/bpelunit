@@ -345,6 +345,10 @@ public class TestCaseRunner {
 
 	// ************* Accessor functions for partner tracks
 
+	public synchronized void started(PartnerTrack track) {
+		fTestCase.getSuite().startTrack(fTestCase, track);
+	}
+
 	/**
 	 * This method signals that the given partner track has completed its
 	 * actions without any fault. The partner track thread should terminate
@@ -354,6 +358,7 @@ public class TestCaseRunner {
 	 */
 	public synchronized void done(PartnerTrack track) {
 		fPartnerTracks.put(track, PartnerTrackResult.COMPLETED);
+		fTestCase.getSuite().endTrack(fTestCase, track);
 		notifyAll();
 	}
 
@@ -367,6 +372,7 @@ public class TestCaseRunner {
 	public synchronized void doneWithFault(PartnerTrack track) {
 		fProblemOccurred = true;
 		fPartnerTracks.put(track, PartnerTrackResult.COMPLETED);
+		fTestCase.getSuite().endTrack(fTestCase, track);
 		notifyAll();
 	}
 
