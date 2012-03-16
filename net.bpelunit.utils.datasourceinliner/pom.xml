@@ -11,6 +11,30 @@
   <version>1.5.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>BPELUnit :: Data Source Inliner</name>
+
+  <properties>
+    <mainclass>net.bpelunit.utils.datasourceinliner.CLIRunner</mainclass>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>${mainclass}</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+          <artifactId>maven-shade-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>

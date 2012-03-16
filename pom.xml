@@ -308,6 +308,29 @@
             <manifestLocation>META-INF</manifestLocation>
           </configuration>
         </plugin>
+        <plugin>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>1.5</version>
+          <executions>
+            <execution>
+              <id>jar-with-deps</id>
+              <goals><goal>shade</goal></goals>
+              <configuration>
+                <shadedArtifactAttached>true</shadedArtifactAttached>
+                <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
+                <filters>
+                  <filter>
+                    <artifact>*</artifact>
+                    <excludes>
+                      <exclude>**/*.RSA</exclude>
+                      <exclude>**/*.SF</exclude>
+                    </excludes>
+                  </filter>
+                </filters>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
