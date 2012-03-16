@@ -87,14 +87,14 @@ public class SplitIntoPermutations {
 		return fileName;
 	}
 
-	private static String getSuiteFileName(String prefix, Collection<Integer> testcaseIndices) {
+	static String getSuiteFileName(String prefix, Collection<Integer> testcaseIndices) {
 		List<Integer> sortedTestCaseIndices = sortSet(testcaseIndices);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(prefix);
 
 		for (int i : sortedTestCaseIndices) {
-			sb.append("-").append(i);
+			sb.append("-").append(i + 1);
 		}
 
 		sb.append(".bpts");
