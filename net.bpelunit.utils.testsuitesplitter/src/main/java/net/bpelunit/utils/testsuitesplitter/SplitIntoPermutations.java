@@ -33,7 +33,7 @@ public class SplitIntoPermutations {
 	
 	public static void main(String[] args) throws IOException, XmlException {
 		
-		if(args.length == 0 || args[1].equals("--help")) {
+		if(args.length == 0 || args[0].equals("--help")) {
 			help();
 		} 
 		
