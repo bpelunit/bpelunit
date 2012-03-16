@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testSuite xsi:schemaLocation="http://www.bpelunit.org/schema/testSuite C:\java\bpelunitws\net.bpelunit.framework\schema\TestSuite.xsd" xmlns="http://www.bpelunit.org/schema/testSuite" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:loan="http://examples.bpelunit.org/LoanService">
+    <name>Test Suite for Testing Permutation Generation</name>
+    <deployment>
+        <put type="testmode" name="LoanService">
+            <wsdl>LoanService.wsdl</wsdl>
+        </put>
+        <partner name="LoanService" wsdl="LoanService.wsdl"/>
+    </deployment>
+    <testCases>
+        <testCase name="0" vary="true">
+            <clientTrack>
+            </clientTrack>
+        </testCase>
+    </testCases>
+</testSuite>

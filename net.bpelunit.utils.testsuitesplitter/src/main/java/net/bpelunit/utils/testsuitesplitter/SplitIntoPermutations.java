@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.bpelunit.framework.xml.suite.XMLTestCasesSection;
@@ -35,17 +37,34 @@ public class SplitIntoPermutations {
 			help();
 		} 
 		
-		XMLTestSuiteDocument x = XMLTestSuiteDocument.Factory.parse(new File(
+		XMLTestSuiteDocument tsd = XMLTestSuiteDocument.Factory.parse(new File(
 				args[0]));
 		String prefix = getFileNameWithoutSuffix(args[0]);
 		
-		Set<Set<Integer>> permutationSet = permutationBuilder.getPermutationSet(x.getTestSuite()
+		Map<Set<Integer>, XMLTestSuiteDocument> permutedTestSuites = generatePermutedTestSuites(tsd);
+		
+		for(Set<Integer> currentSet : permutedTestSuites.keySet()) {
+			XMLTestSuiteDocument permutedTestSuite = permutedTestSuites.get(currentSet);
+			
+			String suiteFileName = getSuiteFileName(prefix, currentSet);
+			permutedTestSuite.getTestSuite().setName(suiteFileName);
+			System.out.println("Writing " + suiteFileName + "...");
+			permutedTestSuite.save(new File(suiteFileName));
+		}
+		
+	}
+
+	static Map<Set<Integer>, XMLTestSuiteDocument> generatePermutedTestSuites(XMLTestSuiteDocument tsd) throws IOException {
+		
+		Map<Set<Integer>, XMLTestSuiteDocument> result = new HashMap<Set<Integer>, XMLTestSuiteDocument>();
+		
+		Set<Set<Integer>> permutationSet = permutationBuilder.getPermutationSet(tsd.getTestSuite()
 				.getTestCases().getTestCaseList().size() - 1);
 
 		for (Set<Integer> currentSet : permutationSet) {
-			XMLTestSuiteDocument testSuiteDocumentCopy = (XMLTestSuiteDocument) x.copy();
+			XMLTestSuiteDocument permutedTestSuite = (XMLTestSuiteDocument) tsd.copy();
 
-			XMLTestCasesSection testCases = testSuiteDocumentCopy.getTestSuite().getTestCases();
+			XMLTestCasesSection testCases = permutedTestSuite.getTestSuite().getTestCases();
 			for (int i = testCases.sizeOfTestCaseArray() - 1; i >= 0; i--) {
 
 				if (!currentSet.contains(i)) {
@@ -53,11 +72,12 @@ public class SplitIntoPermutations {
 				}
 			}
 
-			String suiteFileName = getSuiteFileName(prefix, currentSet);
-			testSuiteDocumentCopy.getTestSuite().setName(suiteFileName);
-			System.out.println("Writing " + suiteFileName + "...");
-			testSuiteDocumentCopy.save(new File(suiteFileName));
+			result.put(currentSet, permutedTestSuite);
+			
+			
 		}
+		
+		return result;
 	}
 
 	private static void help() {
