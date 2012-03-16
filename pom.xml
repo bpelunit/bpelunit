@@ -444,6 +444,7 @@
     <module>net.bpelunit.framework.control.datasource.html</module>
     <module>net.bpelunit.framework.control.datasource.ods</module>
     <module>net.bpelunit.utils.datasourceinliner</module>
+    <module>net.bpelunit.utils.testsuitesplitter</module>
   </modules>
 
   <profiles>
