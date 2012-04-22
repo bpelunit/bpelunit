@@ -69,6 +69,7 @@ import net.bpelunit.framework.verify.TestSuiteRootInformationValidator;
 import net.bpelunit.framework.verify.TestSuiteXMLValidator;
 import net.bpelunit.framework.verify.XMLDataIsEitherSetOrImportedValidator;
 import net.bpelunit.framework.xml.suite.XMLActivity;
+import net.bpelunit.framework.xml.suite.XMLAnyElement;
 import net.bpelunit.framework.xml.suite.XMLCompleteHumanTaskActivity;
 import net.bpelunit.framework.xml.suite.XMLCondition;
 import net.bpelunit.framework.xml.suite.XMLConditionGroup;
@@ -546,7 +547,7 @@ public class SpecificationLoader {
 				NamespaceContext context = getNamespaceMap(xmlActivity
 						.newCursor());
 				CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(
-						activity, context, xmlActivity.getData(), pTrack);
+						activity, context, (Element)getLiteralDataForSend(xmlActivity.getData(), testDirectory).getFirstChild(), pTrack);
 
 				// get conditions
 				List<XMLCondition> xmlConditionList = xmlActivity
@@ -987,14 +988,7 @@ public class SpecificationLoader {
 
 		try {
 		if (xmlSend.isSetData()) {
-			if (xmlSend.getData().isSetSrc()) {
-				// src attribute in <data>
-				final String path = xmlSend.getData().getSrc();
-				rawDataRoot = copyAsRootWithNamespaces(XmlObject.Factory.parse(new File(testDirectory, path)));
-			}
-			else {
-				rawDataRoot = copyAsRootWithNamespaces(xmlSend.getData());
-			}
+			rawDataRoot = getLiteralDataForSend(xmlSend.getData(), testDirectory);
 		}
 		else if (xmlSend.isSetTemplate()) {
 			if (xmlSend.getTemplate().isSetSrc()) {
@@ -1047,6 +1041,24 @@ public class SpecificationLoader {
 					templateText, faultCode, faultString);
 
 		return spec;
+	}
+
+	private Element getLiteralDataForSend(XMLAnyElement dataInSend,
+			String testDirectory) throws SpecificationException {
+		Element rawDataRoot;
+		if (dataInSend.isSetSrc()) {
+			// src attribute in <data>
+			final String path = dataInSend.getSrc();
+			try {
+				rawDataRoot = copyAsRootWithNamespaces(XmlObject.Factory.parse(new File(testDirectory, path)));
+			} catch (Exception e) {
+				throw new SpecificationException("Error while importing data: " + e.getMessage(), e);
+			}
+		}
+		else {
+			rawDataRoot = copyAsRootWithNamespaces(dataInSend);
+		}
+		return rawDataRoot;
 	}
 
 	private Element copyAsRootWithNamespaces(XmlObject xmlData)

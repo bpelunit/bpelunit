@@ -1,0 +1,3 @@
+<demo:NewOperationResponse xmlns:demo="http://www.example.org/Demo/">
+  <out>Hallo, this is a BPELUnit test</out>
+</demo:NewOperationResponse>

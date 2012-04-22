@@ -14,6 +14,7 @@ import net.bpelunit.framework.model.test.report.StateData;
 import net.bpelunit.framework.xml.suite.XMLAnyElement;
 
 import org.apache.velocity.context.Context;
+import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.w3c.dom.Element;
 
@@ -25,10 +26,14 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 	private XMLAnyElement outputXMLData;
 	
 	public CompleteHumanTaskSpecification(Activity parent,
-			NamespaceContext nsContext, XMLAnyElement xmlAnyElement, PartnerTrack partnerTrack) throws SpecificationException {
+			NamespaceContext nsContext, Element xmlAnyElement, PartnerTrack partnerTrack) throws SpecificationException {
 		super(parent, nsContext);
-		this.outputXMLData = xmlAnyElement;
+		try {
+			this.outputXMLData = XMLAnyElement.Factory.parse(xmlAnyElement, null);
 		this.partnerTrack = partnerTrack;
+		} catch (XmlException e) {
+			throw new SpecificationException("Could not save XML Element data: " +e.getMessage(), e);
+		}
 	}
 
 
@@ -65,7 +70,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 		return outputXMLData.xmlText();
 	}
 
-	public XmlObject handle(XmlObject input) {
+	public XMLAnyElement handle(XmlObject input) {
 		this.inputXMLData = input;
 		
 		validateConditions();

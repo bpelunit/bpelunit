@@ -5,10 +5,14 @@
 package net.bpelunit.test.wsht;
 
 import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.test.util.TestTestRunner;
+import net.bpelunit.test.util.TestUtil;
 
 import org.junit.Test;
 
@@ -29,5 +33,13 @@ public class WSHTTest {
 		runner.testRun();
 		assertEquals(1, runner.getPassed());
 		assertEquals(0, runner.getProblems());
+	}
+	
+	@Test
+	public void wshtCompleteTaskDataSrcWorks() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+				"Using external files or embedding the data in the BPTS should always produce the same results",
+				new File(BASEPATH, "WSHTTestSuite.bpts"),
+				new File(BASEPATH, "WSHTTestSuite-fi.bpts"));
 	}
 }

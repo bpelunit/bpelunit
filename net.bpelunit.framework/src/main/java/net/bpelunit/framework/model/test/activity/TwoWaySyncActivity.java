@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
-import net.bpelunit.framework.model.test.data.DataSpecification;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
