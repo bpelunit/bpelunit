@@ -43,6 +43,11 @@ Please note that due to a limitation in Tycho, the core projects and the Eclipse
 Note for the maintainer: if you want to deploy a release to the Sonatype OSS server, please use the ``sonatype-deploy`` profile, and make sure you have a GPG keypair which has been published to ``pgp.mit.edu``. You can run the profile like this:
 
     mvn -P sonatype-deploy
+    
+If you experience a StackOverflowException most likely you will need to increase the per thread stack size. To do so use the following command
+
+	set MAVEN_OPTS="-Xss12m" (Windows)
+	export MAVEN_OPTS="-Xss12m" (Linux)
 
 Building with Eclipse PDE
 -------------------------
