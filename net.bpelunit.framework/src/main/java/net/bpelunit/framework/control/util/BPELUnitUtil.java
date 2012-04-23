@@ -172,25 +172,28 @@ public class BPELUnitUtil {
 		return opts;
 	}
 
-	private static class SOAPClassLoader extends ClassLoader {
-		private HashSet<String> exceptionalClasses= new HashSet<String>();
-
-		public SOAPClassLoader(ClassLoader parentClassLoader) {
-			super(parentClassLoader);
-			exceptionalClasses.add("com.sun.xml.messaging.saaj.soap.SAAJMetaFactoryImpl");
-		}
-
-		@Override
-		public Class<?> loadClass(String name) throws ClassNotFoundException {
-			if (exceptionalClasses.contains(name)) {
-				return Class.forName(name);
-			} else {
-				return super.loadClass(name);
-			}
-		}
-	}
+//	private static class SOAPClassLoader extends ClassLoader {
+//		private HashSet<String> exceptionalClasses= new HashSet<String>();
+//
+//		public SOAPClassLoader(ClassLoader parentClassLoader) {
+//			super(parentClassLoader);
+//			exceptionalClasses.add("com.sun.xml.messaging.saaj.soap.SAAJMetaFactoryImpl");
+//		}
+//
+//		@Override
+//		public Class<?> loadClass(String name) throws ClassNotFoundException {
+//			if (exceptionalClasses.contains(name)) {
+//				return Class.forName(name);
+//			} else {
+//				return super.loadClass(name);
+//			}
+//		}
+//	}
 
 	/**
+	 * <p>Logic removed by Daniel Lübke because it causes conflicts with 
+	 * JAX-WS from JDK and seems not be necessary anymore.</p>
+	 * 
 	 * <p>
 	 * Returns a new message factory instance. The problem with a new factory instance is the code
 	 * inside {@link javax.xml.soap.MessageFactory#newInstance()}, or rather the method called by
@@ -243,9 +246,9 @@ public class BPELUnitUtil {
 	 */
 	public static MessageFactory getMessageFactoryInstance() throws SOAPException {
 
-		ClassLoader classLoader= Thread.currentThread().getContextClassLoader();
-		classLoader= new SOAPClassLoader(classLoader);
-		Thread.currentThread().setContextClassLoader(classLoader);
+//		ClassLoader classLoader= Thread.currentThread().getContextClassLoader();
+//		classLoader= new SOAPClassLoader(classLoader);
+//		Thread.currentThread().setContextClassLoader(classLoader);
 
 		return MessageFactory.newInstance();
 	}
