@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Export-Package: net.bpelunit.framework.control.deploy.activevos9;uses:
  ="net.bpelunit.framework.control.ext,net.bpelunit.framework.model,net
  .bpelunit.framework.exception,org.w3c.dom,javax.xml.namespace,org.apa
- che.commons.io,org.xml.sax"
+ che.commons.io,org.xml.sax,javax.xml.parsers,javax.xml.ws"
 Built-By: dluebke
 Tool: Bnd-0.0.357
 Bundle-Name: BPELUnit :: ActiveVOS 9 Deployer
@@ -13,7 +13,7 @@ Require-Bundle: net.bpelunit.framework.client.eclipse,net.bpelunit.fra
 Bundle-Vendor: Leibniz Universität Hannover
 Build-Jdk: 1.6.0_24
 Bundle-Version: 1.5.1.SNAPSHOT
-Bnd-LastModified: 1335205006575
+Bnd-LastModified: 1335209117462
 Bundle-ManifestVersion: 2
 Bundle-License: http://www.eclipse.org/legal/epl-v10.html
 Bundle-Description: BPEL has become the defacto standard language for 
@@ -26,10 +26,12 @@ Bundle-Description: BPEL has become the defacto standard language for
  e testing frameworks allow developers to easily test small chunks of 
  the code that they have written. Until recently, BPEL lacked such sup
  port. However, BPELUnit was developed for closing this gap.
-Import-Package: javax.xml.namespace,javax.xml.parsers,net.bpelunit.fra
- mework.control.deploy.activevos9,net.bpelunit.framework.control.ext,n
- et.bpelunit.framework.exception,net.bpelunit.framework.model,org.apac
- he.commons.io,org.w3c.dom,org.xml.sax
+Import-Package: javax.jws,javax.jws.soap,javax.xml.bind,javax.xml.bind
+ .annotation,javax.xml.bind.annotation.adapters,javax.xml.datatype,jav
+ ax.xml.namespace,javax.xml.parsers,javax.xml.ws,net.bpelunit.framewor
+ k.control.deploy.activevos9,net.bpelunit.framework.control.ext,net.bp
+ elunit.framework.exception,net.bpelunit.framework.model,org.apache.co
+ mmons.io,org.w3c.dom,org.xml.sax
 Bundle-SymbolicName: net.bpelunit.framework.control.deployer.activevos
  9;singleton:=true
 

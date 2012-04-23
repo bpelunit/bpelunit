@@ -1,10 +1,14 @@
 package net.bpelunit.framework.control.deploy.activevos9;
 
+import java.io.File;
+import java.io.IOException;
+
 import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.ext.IDeployment;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.control.ext.IDeployment;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.util.FileUtil;
 
 @IBPELDeployerCapabilities(canDeploy=true, canIntroduceMocks=false, canMeasureTestCoverage=false)
 public class ActiveVOS9Deployer implements IBPELDeployer {
@@ -13,6 +17,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	private String deploymentServiceEndpoint = "http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR";
 	private String deployerUserName = "bpelunit";
 	private String deployerPassword = "";
+	private ActiveVOSAdministrativeFunctions administrativeFunctions = null;
 	
 	@IBPELDeployerOption(defaultValue="")
 	public void setDeploymentLocation(String deploymentLocation) {
@@ -34,27 +39,42 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 		this.deployerPassword = deployerPassword;
 	}
 
-	public String getDeployerUserName() {
+	protected String getDeployerUserName() {
 		return deployerUserName;
 	}
 	
-	public String getDeployerPassword() {
+	protected String getDeployerPassword() {
 		return deployerPassword;
 	}
 
-	public String getDeploymentLocation() {
+	protected String getDeploymentLocation() {
 		return deploymentLocation;
 	}
 
-	public String getDeploymentServiceEndpoint() {
+	protected String getDeploymentServiceEndpoint() {
 		return deploymentServiceEndpoint;
 	}
 	
 	@Override
 	public void deploy(String pathToTest, ProcessUnderTest processUnderTest)
 			throws DeploymentException {
-		// TODO Auto-generated method stub
+		
+		try {
+			File bprFile = new File(getArchiveLocation(pathToTest));
 
+			if(!bprFile.isFile() || !bprFile.canRead()) {
+				throw new DeploymentException("Cannot find or read BPR archive '" + bprFile.getAbsolutePath() + "'");
+			}
+			
+			byte[] bprContents = FileUtil.readFile(bprFile);
+			String fileName = new File(deploymentLocation).getName();
+			
+			getAdministrativeFunctions().deployBpr(fileName, bprContents);
+			
+		} catch(IOException e) {
+			e.printStackTrace();
+			throw new DeploymentException("Error while deploying: " + e.getMessage(), e);
+		}
 	}
 
 	@Override
@@ -73,8 +93,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 
 	@Override
 	public String getArchiveLocation(String pathToTest) {
-		// TODO Auto-generated method stub
-		return null;
+		return new File(pathToTest, this.deploymentLocation).getAbsolutePath();
 	}
 
 	@Override
@@ -87,6 +106,14 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	public void cleanUpAfterTestCase() throws Exception {
 		// TODO Auto-generated method stub
 
+	}
+
+	public synchronized ActiveVOSAdministrativeFunctions getAdministrativeFunctions() {
+		if(this.administrativeFunctions == null) {
+			this.administrativeFunctions = new ActiveVOSAdministrativeFunctions(this.deploymentServiceEndpoint, this.deployerUserName, this.deployerPassword);
+		}
+		
+		return administrativeFunctions;
 	}
 
 }

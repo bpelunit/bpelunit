@@ -40,7 +40,7 @@ public class ZipUtilTest {
 	public void testUnzip() throws Exception {
 		File zipArchive = createZipForTesting();
 		
-		File tempDir = createTempDir();
+		File tempDir = FileUtil.createTempDirectory();
 		ZipUtil.unzipFile(zipArchive, tempDir);
 		
 		assertTrue(new File(tempDir, "a.txt").isFile());
@@ -49,15 +49,8 @@ public class ZipUtilTest {
 		assertTrue(new File(tempDir, "subdir/a.txt").isFile());
 	}
 	
-	private File createTempDir() throws IOException {
-		File tempDir = File.createTempFile("bpelunit", "test");
-		tempDir.delete();
-		tempDir.mkdir();
-		return tempDir;
-	}
-
 	private File createZipForTesting() throws IOException {
-		File tempDir = createTempDir();
+		File tempDir = FileUtil.createTempDirectory();
 		
 		new File(tempDir, "a.txt").createNewFile();
 		new File(tempDir, "b.txt").createNewFile();

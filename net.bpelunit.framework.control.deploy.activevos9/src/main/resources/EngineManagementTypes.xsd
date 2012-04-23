@@ -1,0 +1,166 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://schemas.active-endpoints.com/engineapi/2010/05/EngineManagementTypes.xsd"
+            xmlns:types="http://schemas.active-endpoints.com/engineapi/2010/05/EngineAPITypes.xsd"
+            elementFormDefault="qualified"
+            targetNamespace="http://schemas.active-endpoints.com/engineapi/2010/05/EngineManagementTypes.xsd">
+
+   <xsd:import namespace="http://schemas.active-endpoints.com/engineapi/2010/05/EngineAPITypes.xsd"
+               schemaLocation="EngineAPITypes.xsd"/>
+
+   <xsd:element name="adminFault" type="types:AesAdminFault"/>
+
+   <xsd:element name="searchContributions" type="types:AesContributionSearchFilter"/>
+   <xsd:element name="searchContributionsResponse" type="types:AesContributionListResult"/>
+
+   <xsd:element name="getContributionDetail" type="xsd:int"/>
+   <xsd:element name="getContributionDetailResponse" type="types:AesContributionDetail"/>
+
+   <xsd:element name="takeContributionOffline" type="xsd:int"/>
+   <xsd:element name="takeContributionOfflineResponse" type="types:AesVoidType"/>
+
+   <xsd:complexType name="AesDeleteContributionType">
+      <xsd:sequence>
+         <xsd:element name="contributionId" type="xsd:int"/>
+         <xsd:element name="deleteProcesses" type="xsd:boolean"/>
+      </xsd:sequence>
+   </xsd:complexType>
+      
+   <xsd:element name="deleteContribution" type="tns:AesDeleteContributionType"/>
+   <xsd:element name="deleteContributionResponse" type="types:AesVoidType"/>
+   
+   <xsd:complexType name="AesSetOnlineType">
+      <xsd:sequence>
+         <xsd:element name="contributionUri" type="xsd:anyURI"/>
+         <xsd:element name="version" type="xsd:string"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   
+   <xsd:element name="setContributionOnline" type="tns:AesSetOnlineType"/>
+   <xsd:element name="setContributionOnlineResponse" type="types:AesVoidType"/>
+   
+   <xsd:element name="getDeploymentLog" type="xsd:int"/>
+   <xsd:element name="getDeploymentLogResponse" type="xsd:string"/>
+
+   <xsd:element name="takePlanOffline" type="xsd:int"/>
+   <xsd:element name="takePlanOfflineResponse" type="types:AesVoidType"/>
+   
+   <xsd:element name="setPlanOnline" type="xsd:int"/>
+   <xsd:element name="setPlanOnlineResponse" type="types:AesVoidType"/>
+   
+   <xsd:element name="purgeOffline" type="types:AesVoidType"/>
+   <xsd:element name="purgeOfflineResponse" type="xsd:int"/>
+   
+   <xsd:complexType name="AesTenantKey">
+      <xsd:sequence>
+         <xsd:element name="tenantContextId" type="xsd:string"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   
+   <!-- Elements for URN management -->
+   <xsd:complexType name="AesUpsertURN">
+      <xsd:sequence>
+         <xsd:element maxOccurs="unbounded" name="URNMapping" type="types:AesURNMapping"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   
+   <xsd:complexType name="AesDeleteURN">
+      <xsd:sequence>
+         <xsd:element maxOccurs="1" minOccurs="1" name="tenantContextId" type="xsd:string"/>
+         <xsd:element maxOccurs="unbounded" name="URN" type="xsd:string"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   
+   <xsd:element name="deletePlan" type="xsd:int"/>
+   <xsd:element name="deletePlanResponse" type="types:AesVoidType"/>
+   
+   <xsd:element name="upsertURN" type="tns:AesUpsertURN"/>
+   <xsd:element name="upsertURNResponse" type="types:AesVoidType"/>
+   
+   <xsd:element name="deleteURN" type="tns:AesDeleteURN"/>
+   <xsd:element name="deleteURNResponse" type="types:AesVoidType"/>
+   
+   <xsd:element name="getUrnDefinitions" type="tns:AesTenantKey"/>
+   <xsd:element name="getUrnDefinitionsResponse" type="types:AesURNListResult"/>
+   
+   <xsd:element name="getAllUrnDefinitions" type="types:AesVoidType"/>
+   <xsd:element name="getAllUrnDefinitionsResponse" type="types:AesURNListResult"/>
+   
+   <!-- Elements for catalog management -->
+   <xsd:complexType name="AesCatalogKey">
+      <xsd:sequence>
+         <xsd:element name="location" type="xsd:string"/>
+         <xsd:element minOccurs="0" name="version" type="xsd:string"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   
+   <xsd:complexType name="AesCatalogInsert">
+      <xsd:sequence>
+         <xsd:element name="location" type="xsd:string"/>
+         <xsd:element minOccurs="0" name="processGroup" type="xsd:string"/>
+         <xsd:element minOccurs="0" name="description" type="xsd:string"/>
+         <xsd:element name="typeUri" type="xsd:string"/>
+         <xsd:element name="contentType" type="xsd:string"/>
+         <xsd:element name="content" type="xsd:base64Binary"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   
+   <xsd:complexType name="AesCatalogUpdate">
+      <xsd:complexContent>
+         <xsd:extension base="tns:AesCatalogInsert">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="version" type="xsd:string"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   
+   <xsd:element name="searchCatalog" type="types:AesCatalogSearchFilter"/>
+   <xsd:element name="searchCatalogResponse" type="types:AesCatalogListResult"/>
+   
+   <xsd:element name="getItem" type="tns:AesCatalogKey"/>
+   <xsd:element name="getItemResponse" type="types:AesCatalogDetail"/>
+   
+   <xsd:element name="insertItem" type="tns:AesCatalogInsert"/>
+   <xsd:element name="insertItemResponse" type="types:AesVoidType"/>
+   
+   <xsd:element name="updateItem" type="tns:AesCatalogUpdate"/>
+   <xsd:element name="updateItemResponse" type="types:AesVoidType"/>
+   
+   <xsd:element name="deleteItem" type="tns:AesCatalogKey"/>
+   <xsd:element name="deleteItemResponse" type="types:AesVoidType"/>
+   
+   <!-- Elements for scheduler management -->
+   <xsd:complexType name="AesScheduleIdList">
+      <xsd:sequence>
+         <xsd:element maxOccurs="unbounded" name="scheduleId" type="xsd:long"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   
+   <xsd:complexType name="AesScheduleStatusList">
+      <xsd:complexContent>
+         <xsd:extension base="tns:AesScheduleIdList">
+            <xsd:sequence>
+               <xsd:element name="enabled" type="xsd:boolean"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   
+   <xsd:element name="getAllSchedules" type="tns:AesTenantKey"/>
+   <xsd:element name="getAllSchedulesResponse" type="types:AesScheduledItemListResult"/>
+   
+   <xsd:element name="createSchedule" type="types:AesScheduledItem"/>
+   <xsd:element name="createScheduleResponse" type="xsd:boolean"/>
+   
+   <xsd:element name="editSchedule" type="types:AesPersistedScheduledItem"/>
+   <xsd:element name="editScheduleResponse" type="xsd:boolean"/>
+   
+   <xsd:element name="deleteSchedule" type="tns:AesScheduleIdList"/>
+   <xsd:element name="deleteScheduleResponse" type="xsd:boolean"/>
+   
+   <xsd:element name="setScheduleStatus" type="tns:AesScheduleStatusList"/>
+   <xsd:element name="setScheduleStatusResponse" type="xsd:boolean"/>
+   
+   <xsd:element name="runNow" type="tns:AesScheduleIdList"/>
+   <xsd:element name="runNowResponse" type="types:AesVoidType"/>
+</xsd:schema>

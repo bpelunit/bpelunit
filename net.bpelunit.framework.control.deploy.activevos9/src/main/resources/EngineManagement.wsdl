@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://docs.active-endpoints.com/wsdl/engineapi/2010/05/EngineManagement.wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://docs.active-endpoints.com/wsdl/engineapi/2010/05/EngineManagement.wsdl" xmlns:wsdlTypes="http://schemas.active-endpoints.com/engineapi/2010/05/EngineManagementTypes.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:types="http://schemas.active-endpoints.com/engineapi/2010/05/EngineAPITypes.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+<plnk:partnerLinkType xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+                      name="SchedulerManagementPLT">
+   <plnk:role name="provider" portType="tns:IAeSchedulerManagement"/>
+</plnk:partnerLinkType><plnk:partnerLinkType xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+                      name="URNManagementPLT">
+   <plnk:role name="provider" portType="tns:IAeURNManagement"/>
+</plnk:partnerLinkType><plnk:partnerLinkType xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+                      name="ContributionManagementPLT">
+   <plnk:role name="provider" portType="tns:IAeContributionManagement"/>
+</plnk:partnerLinkType><plnk:partnerLinkType xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+                      name="CatalogManagementPLT">
+   <plnk:role name="provider" portType="tns:IAeCatalogManagement"/>
+</plnk:partnerLinkType>  <wsdl:types>
+    <xsd:schema>
+         <xsd:import namespace="http://schemas.active-endpoints.com/engineapi/2010/05/EngineManagementTypes.xsd" schemaLocation="EngineManagementTypes.xsd"/>
+      </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="TakePlanOffline">
+    <wsdl:part name="input" element="wsdlTypes:takePlanOffline">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteContribution">
+    <wsdl:part name="input" element="wsdlTypes:deleteContribution">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SearchContributions">
+    <wsdl:part name="input" element="wsdlTypes:searchContributions">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateScheduleResponse">
+    <wsdl:part name="output" element="wsdlTypes:createScheduleResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PurgeOfflineResponse">
+    <wsdl:part name="output" element="wsdlTypes:purgeOfflineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="EditSchedule">
+    <wsdl:part name="input" element="wsdlTypes:editSchedule">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SetPlanOnlineResponse">
+    <wsdl:part name="output" element="wsdlTypes:setPlanOnlineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteItem">
+    <wsdl:part name="input" element="wsdlTypes:deleteItem">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="AdminAPIFault">
+    <wsdl:part name="fault" element="wsdlTypes:adminFault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeletePlan">
+    <wsdl:part name="input" element="wsdlTypes:deletePlan">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetItem">
+    <wsdl:part name="input" element="wsdlTypes:getItem">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetAllSchedules">
+    <wsdl:part name="input" element="wsdlTypes:getAllSchedules">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetUrnDefinitions">
+    <wsdl:part name="input" element="wsdlTypes:getUrnDefinitions">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SearchContributionsResponse">
+    <wsdl:part name="output" element="wsdlTypes:searchContributionsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PurgeOffline">
+    <wsdl:part name="input" element="wsdlTypes:purgeOffline">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteScheduleResponse">
+    <wsdl:part name="output" element="wsdlTypes:deleteScheduleResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SetScheduleStatusResponse">
+    <wsdl:part name="output" element="wsdlTypes:setScheduleStatusResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RunNow">
+    <wsdl:part name="input" element="wsdlTypes:runNow">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RunNowResponse">
+    <wsdl:part name="output" element="wsdlTypes:runNowResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TakeContributionOfflineResponse">
+    <wsdl:part name="output" element="wsdlTypes:takeContributionOfflineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SearchCatalogResponse">
+    <wsdl:part name="output" element="wsdlTypes:searchCatalogResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TakeContributionOffline">
+    <wsdl:part name="input" element="wsdlTypes:takeContributionOffline">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SetScheduleStatus">
+    <wsdl:part name="input" element="wsdlTypes:setScheduleStatus">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TakePlanOfflineResponse">
+    <wsdl:part name="output" element="wsdlTypes:takePlanOfflineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InsertItem">
+    <wsdl:part name="input" element="wsdlTypes:insertItem">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InsertItemResponse">
+    <wsdl:part name="output" element="wsdlTypes:insertItemResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetAllUrnDefinitions">
+    <wsdl:part name="input" element="wsdlTypes:getAllUrnDefinitions">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeletePlanResponse">
+    <wsdl:part name="output" element="wsdlTypes:deletePlanResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetDeploymentLogResponse">
+    <wsdl:part name="output" element="wsdlTypes:getDeploymentLogResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SearchCatalog">
+    <wsdl:part name="input" element="wsdlTypes:searchCatalog">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetUrnDefinitionsResponse">
+    <wsdl:part name="output" element="wsdlTypes:getUrnDefinitionsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SetContributionOnlineResponse">
+    <wsdl:part name="output" element="wsdlTypes:setContributionOnlineResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateSchedule">
+    <wsdl:part name="input" element="wsdlTypes:createSchedule">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteContributionResponse">
+    <wsdl:part name="output" element="wsdlTypes:deleteContributionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpsertURNResponse">
+    <wsdl:part name="output" element="wsdlTypes:upsertURNResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteURNResponse">
+    <wsdl:part name="output" element="wsdlTypes:deleteURNResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpsertURN">
+    <wsdl:part name="input" element="wsdlTypes:upsertURN">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteSchedule">
+    <wsdl:part name="input" element="wsdlTypes:deleteSchedule">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetContributionDetailResponse">
+    <wsdl:part name="output" element="wsdlTypes:getContributionDetailResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateItem">
+    <wsdl:part name="input" element="wsdlTypes:updateItem">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SetContributionOnline">
+    <wsdl:part name="input" element="wsdlTypes:setContributionOnline">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetDeploymentLog">
+    <wsdl:part name="input" element="wsdlTypes:getDeploymentLog">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetAllUrnDefinitionsResponse">
+    <wsdl:part name="output" element="wsdlTypes:getAllUrnDefinitionsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateItemResponse">
+    <wsdl:part name="output" element="wsdlTypes:updateItemResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetItemResponse">
+    <wsdl:part name="output" element="wsdlTypes:getItemResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteURN">
+    <wsdl:part name="input" element="wsdlTypes:deleteURN">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="EditScheduleResponse">
+    <wsdl:part name="output" element="wsdlTypes:editScheduleResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetContributionDetail">
+    <wsdl:part name="input" element="wsdlTypes:getContributionDetail">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetAllSchedulesResponse">
+    <wsdl:part name="output" element="wsdlTypes:getAllSchedulesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SetPlanOnline">
+    <wsdl:part name="input" element="wsdlTypes:setPlanOnline">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteItemResponse">
+    <wsdl:part name="output" element="wsdlTypes:deleteItemResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IAeCatalogManagement">
+    <wsdl:operation name="searchCatalog">
+      <wsdl:input message="tns:SearchCatalog">
+    </wsdl:input>
+      <wsdl:output message="tns:SearchCatalogResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getItem">
+      <wsdl:input message="tns:GetItem">
+    </wsdl:input>
+      <wsdl:output message="tns:GetItemResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="insertItem">
+      <wsdl:input message="tns:InsertItem">
+    </wsdl:input>
+      <wsdl:output message="tns:InsertItemResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateItem">
+      <wsdl:input message="tns:UpdateItem">
+    </wsdl:input>
+      <wsdl:output message="tns:UpdateItemResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteItem">
+      <wsdl:input message="tns:DeleteItem">
+    </wsdl:input>
+      <wsdl:output message="tns:DeleteItemResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IAeURNManagement">
+    <wsdl:operation name="upsertURN">
+      <wsdl:input message="tns:UpsertURN">
+    </wsdl:input>
+      <wsdl:output message="tns:UpsertURNResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteURN">
+      <wsdl:input message="tns:DeleteURN">
+    </wsdl:input>
+      <wsdl:output message="tns:DeleteURNResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUrnDefinitions">
+      <wsdl:input message="tns:GetUrnDefinitions">
+    </wsdl:input>
+      <wsdl:output message="tns:GetUrnDefinitionsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllUrnDefinitions">
+      <wsdl:input message="tns:GetAllUrnDefinitions">
+    </wsdl:input>
+      <wsdl:output message="tns:GetAllUrnDefinitionsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IAeSchedulerManagement">
+    <wsdl:operation name="getAllSchedules">
+      <wsdl:input message="tns:GetAllSchedules">
+    </wsdl:input>
+      <wsdl:output message="tns:GetAllSchedulesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createSchedule">
+      <wsdl:input message="tns:CreateSchedule">
+    </wsdl:input>
+      <wsdl:output message="tns:CreateScheduleResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="editSchedule">
+      <wsdl:input message="tns:EditSchedule">
+    </wsdl:input>
+      <wsdl:output message="tns:EditScheduleResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteSchedule">
+      <wsdl:input message="tns:DeleteSchedule">
+    </wsdl:input>
+      <wsdl:output message="tns:DeleteScheduleResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setScheduleStatus">
+      <wsdl:input message="tns:SetScheduleStatus">
+    </wsdl:input>
+      <wsdl:output message="tns:SetScheduleStatusResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="runNow">
+      <wsdl:input message="tns:RunNow">
+    </wsdl:input>
+      <wsdl:output message="tns:RunNowResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IAeContributionManagement">
+ 	<jaxws:bindings xmlns:jaxws="http://java.sun.com/xml/ns/jaxws">
+ 		<jaxws:enableWrapperStyle>false</jaxws:enableWrapperStyle>
+    </jaxws:bindings>
+    <wsdl:operation name="searchContributions">
+      <wsdl:input message="tns:SearchContributions">
+    </wsdl:input>
+      <wsdl:output message="tns:SearchContributionsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContributionDetail">
+      <wsdl:input message="tns:GetContributionDetail">
+    </wsdl:input>
+      <wsdl:output message="tns:GetContributionDetailResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="takeContributionOffline">
+      <wsdl:input message="tns:TakeContributionOffline">
+    </wsdl:input>
+      <wsdl:output message="tns:TakeContributionOfflineResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteContribution">
+      <wsdl:input message="tns:DeleteContribution">
+    </wsdl:input>
+      <wsdl:output message="tns:DeleteContributionResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setContributionOnline">
+      <wsdl:input message="tns:SetContributionOnline">
+    </wsdl:input>
+      <wsdl:output message="tns:SetContributionOnlineResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDeploymentLog">
+      <wsdl:input message="tns:GetDeploymentLog">
+    </wsdl:input>
+      <wsdl:output message="tns:GetDeploymentLogResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="takePlanOffline">
+      <wsdl:input message="tns:TakePlanOffline">
+    </wsdl:input>
+      <wsdl:output message="tns:TakePlanOfflineResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setPlanOnline">
+      <wsdl:input message="tns:SetPlanOnline">
+    </wsdl:input>
+      <wsdl:output message="tns:SetPlanOnlineResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="purgeOffline">
+      <wsdl:input message="tns:PurgeOffline">
+    </wsdl:input>
+      <wsdl:output message="tns:PurgeOfflineResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deletePlan">
+      <wsdl:input message="tns:DeletePlan">
+    </wsdl:input>
+      <wsdl:output message="tns:DeletePlanResponse">
+    </wsdl:output>
+      <wsdl:fault name="AdminAPIFault" message="tns:AdminAPIFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>
+

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://docs.active-endpoints.com/wsdl/engineapi/2010/05/EngineManagement.wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://docs.active-endpoints.com/wsdl/engineapi/2010/05/EngineManagement.wsdl" xmlns:wsdlTypes="http://schemas.active-endpoints.com/engineapi/2010/05/EngineManagementTypes.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:types="http://schemas.active-endpoints.com/engineapi/2010/05/EngineAPITypes.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <wsdl:import namespace="http://docs.active-endpoints.com/wsdl/engineapi/2010/05/EngineManagement.wsdl" location="EngineManagement.wsdl">
+    </wsdl:import>
+  <wsdl:binding name="ContributionManagementSOAP12" type="tns:IAeContributionManagement">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="searchContributions">
+    <soap12:operation soap12Action=""/>
+      <wsdl:input>
+    <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContributionDetail">
+    <soap12:operation soap12Action=""/>
+      <wsdl:input>
+    <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="takeContributionOffline">
+    <soap12:operation soap12Action=""/>
+      <wsdl:input>
+    <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <soap12:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteContribution">
+    <soap12:operation soap12Action=""/>
+      <wsdl:input>
+    <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <soap12:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setContributionOnline">
+    <soap12:operation soap12Action=""/>
+      <wsdl:input>
+    <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <soap12:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDeploymentLog">
+    <soap12:operation soap12Action=""/>
+      <wsdl:input>
+    <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <soap12:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="takePlanOffline">
+    <soap12:operation soapAction=""/>
+      <wsdl:input>
+    <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <soap12:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setPlanOnline">
+    <soap12:operation soapAction=""/>
+      <wsdl:input>
+    <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <soap12:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="purgeOffline">
+    <soap12:operation soapAction=""/>
+      <wsdl:input>
+    <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <soap12:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deletePlan">
+    <soap12:operation soapAction=""/>
+      <wsdl:input>
+    <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <soap12:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ContributionManagement" type="tns:IAeContributionManagement">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="searchContributions">
+    <wsdlsoap:operation soapAction=""/>
+      <wsdl:input>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContributionDetail">
+    <wsdlsoap:operation soapAction=""/>
+      <wsdl:input>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="takeContributionOffline">
+    <wsdlsoap:operation soapAction=""/>
+      <wsdl:input>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <wsdlsoap:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteContribution">
+    <wsdlsoap:operation soapAction=""/>
+      <wsdl:input>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <wsdlsoap:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setContributionOnline">
+    <wsdlsoap:operation soapAction=""/>
+      <wsdl:input>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <wsdlsoap:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDeploymentLog">
+    <wsdlsoap:operation soapAction=""/>
+      <wsdl:input>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <wsdlsoap:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="takePlanOffline">
+    <wsdlsoap:operation soapAction=""/>
+      <wsdl:input>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <wsdlsoap:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setPlanOnline">
+    <wsdlsoap:operation soapAction=""/>
+      <wsdl:input>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <wsdlsoap:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="purgeOffline">
+    <wsdlsoap:operation soapAction=""/>
+      <wsdl:input>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <wsdlsoap:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deletePlan">
+    <wsdlsoap:operation soapAction=""/>
+      <wsdl:input>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+    <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AdminAPIFault">
+    <wsdlsoap:fault name="AdminAPIFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ContributionManagementService">
+    <wsdl:port name="ContributionManagementPort" binding="tns:ContributionManagement">
+    <wsdlsoap:address location="http://localhost:8080/active-bpel/services/AeContributionManagement"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
