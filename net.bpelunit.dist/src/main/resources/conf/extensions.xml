@@ -5,6 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	
 	<deployer extensionClass="net.bpelunit.framework.control.deploy.activebpel.ActiveBPELDeployer" type="activebpel"/>
+	<deployer extensionClass="net.bpelunit.framework.control.deploy.activevos9.ActiveVOS9Deployer" type="activevos9"/>
 	<deployer extensionClass="net.bpelunit.framework.control.deploy.oracle.OracleDeployer" type="oracle"/>
 	<deployer extensionClass="net.bpelunit.framework.control.deploy.simple.TestModeDeployer" type="testmode"/>
 	<deployer extensionClass="net.bpelunit.framework.control.deploy.simple.FixedDeployer" type="fixed"/>
