@@ -20,7 +20,7 @@ import net.bpelunit.util.FileUtil;
 
 /**
  * This class is the deployer for ActiveVOS 9.x. It contains the logic to 
- * deploy and undeploy BPRs as part of the BPELUnit test run
+ * deploy and undeploy BPRs as part of the BPELUnit test run.
  * 
  * TODOs:
  * - Coverage Support
@@ -38,6 +38,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	private String deployerUserName = "bpelunit";
 	private String deployerPassword = "";
 	private boolean doUndeploy = false;	
+	private boolean terminatePendingProcessesBeforeTestSuiteIsRun = false; 
 	
 	private ActiveVOSAdministrativeFunctions administrativeFunctions = null;
 	private List<AesContribution> previouslyDeployedContributions;
@@ -64,13 +65,12 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 
 	@IBPELDeployerOption(defaultValue="false")
 	public void setDoUndeploy(String doUndeploy) {
-		String value = doUndeploy.toLowerCase();
-		
-		if("true".equals(value) || "yes".equals(value)) {
-			this.doUndeploy = true;
-		} else {
-			this.doUndeploy = false;
-		}
+		this.doUndeploy = new Boolean(doUndeploy);
+	}
+	
+	@IBPELDeployerOption(defaultValue="false")
+	public void setTerminatePendingProcessesBeforeTestSuiteIsRun(String terminatePendingProcessesBeforeTestSuiteIsRun) {
+		this.terminatePendingProcessesBeforeTestSuiteIsRun = new Boolean(terminatePendingProcessesBeforeTestSuiteIsRun);
 	}
 	
 	protected String getDeployerUserName() {
@@ -94,6 +94,11 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			throws DeploymentException {
 		
 		ActiveVOSAdministrativeFunctions activevos = getAdministrativeFunctions();
+		
+		if(terminatePendingProcessesBeforeTestSuiteIsRun) {
+			activevos.terminateAllProcessInstances();
+		}
+		
 		previouslyDeployedContributions = activevos.getAllContributions();
 		
 		try {

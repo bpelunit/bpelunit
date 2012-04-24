@@ -120,7 +120,7 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 				tempBPR = File.createTempFile(bpr.getName(), ".bpr");
 				ZipUtil.zipDirectory(tempDirectory, tempBPR);
 				return new FileInputStream(tempBPR);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				throw new DeploymentException("Error while repackaging BPR", e);
 			}
 		} else {

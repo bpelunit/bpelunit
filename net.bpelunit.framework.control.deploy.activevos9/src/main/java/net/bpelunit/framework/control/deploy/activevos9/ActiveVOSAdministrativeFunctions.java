@@ -158,4 +158,8 @@ class ActiveVOSAdministrativeFunctions {
 		return dBuilder.parse(new ByteArrayInputStream(responseMessage
 				.getBytes("UTF-8")));
 	}
+
+	public void terminateAllProcessInstances() {
+		// TODO Auto-generated method stub
+	}
 }

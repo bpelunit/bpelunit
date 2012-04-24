@@ -15,6 +15,11 @@ import java.io.UnsupportedEncodingException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -57,13 +62,14 @@ public class XMLUtil {
 		}
 	}
 
-	public static void writeXML(Document xml, File file) throws IOException {
+	public static void writeXML(Document xml, File file) throws IOException, TransformerException {
 		writeXML(xml, new FileOutputStream(file));
 	}
 
-	public static void writeXML(Document xml, OutputStream fileOutputStream) {
-		System.out.println(xml.toString());
-		// TODO Auto-generated method stub
+	public static void writeXML(Document xml, OutputStream outputStream) throws TransformerException {
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer t = tf.newTransformer();
+		t.transform(new DOMSource(xml), new StreamResult(outputStream));
 	}
 
 }

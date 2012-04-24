@@ -4,15 +4,13 @@
  */
 package net.bpelunit.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 
-import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
-
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.w3c.dom.Document;
-
 
 public class XMLUtilTest {
 
@@ -23,7 +21,10 @@ public class XMLUtilTest {
 		
 		XMLUtil.writeXML(doc, out);
 		
-		// TODO Assertionks
+		ByteArrayOutputStream reference = new ByteArrayOutputStream();
+		IOUtils.copy(getClass().getResourceAsStream("simple.xml"), reference);
+		
+		assertEquals(reference.toString().trim(), out.toString().trim());
 	}
 	
 }
