@@ -1,7 +1,5 @@
 package net.bpelunit.framework.control.deploy.activevos9;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -101,6 +99,10 @@ class ActiveVOSAdministrativeFunctions {
 		return result;
 	}
 
+	public void takeContributionOffline(int contributionId) throws AdminAPIFault {
+		contributionManagementPort.takeContributionOffline(contributionId);
+	}
+	
 	public void deleteContribution(int contributionId, boolean deleteProcesses) throws AdminAPIFault {
 		AesDeleteContributionType input = new AesDeleteContributionType();
 		input.setContributionId(contributionId);
@@ -150,15 +152,5 @@ class ActiveVOSAdministrativeFunctions {
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		return dBuilder.parse(new ByteArrayInputStream(responseMessage
 				.getBytes("UTF-8")));
-	}
-
-	public static void main(String[] args) throws FileNotFoundException {
-		ActiveVOSAdministrativeFunctions t = new ActiveVOSAdministrativeFunctions(
-				"http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR",
-				null, null);
-		t.deployBpr(
-				"Test",
-				new FileInputStream(
-						"C:\\Users\\dluebke\\workspaces\\egvt-mvn\\ch.terravis.egvt.process.egvt2\\deploy\\egvt-2.bpr"));
 	}
 }

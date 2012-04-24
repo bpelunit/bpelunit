@@ -2,6 +2,10 @@ package net.bpelunit.framework.control.deploy.activevos9;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
+import com.active_endpoints.docs.wsdl.engineapi._2010._05.enginemanagement.AdminAPIFault;
+import com.active_endpoints.schemas.engineapi._2010._05.engineapitypes.AesContribution;
 
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
@@ -17,7 +21,10 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	private String deploymentServiceEndpoint = "http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR";
 	private String deployerUserName = "bpelunit";
 	private String deployerPassword = "";
+	private boolean doUndeploy = false;	
+	
 	private ActiveVOSAdministrativeFunctions administrativeFunctions = null;
+	private List<AesContribution> previouslyDeployedContributions;
 	
 	@IBPELDeployerOption(defaultValue="")
 	public void setDeploymentLocation(String deploymentLocation) {
@@ -39,6 +46,17 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 		this.deployerPassword = deployerPassword;
 	}
 
+	@IBPELDeployerOption(defaultValue="false")
+	public void setDoUndeploy(String doUndeploy) {
+		String value = doUndeploy.toLowerCase();
+		
+		if("true".equals(value) || "yes".equals(value)) {
+			this.doUndeploy = true;
+		} else {
+			this.doUndeploy = false;
+		}
+	}
+	
 	protected String getDeployerUserName() {
 		return deployerUserName;
 	}
@@ -59,6 +77,9 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	public void deploy(String pathToTest, ProcessUnderTest processUnderTest)
 			throws DeploymentException {
 		
+		ActiveVOSAdministrativeFunctions activevos = getAdministrativeFunctions();
+		previouslyDeployedContributions = activevos.getAllContributions();
+		
 		try {
 			File bprFile = new File(getArchiveLocation(pathToTest));
 
@@ -69,7 +90,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			byte[] bprContents = FileUtil.readFile(bprFile);
 			String fileName = new File(deploymentLocation).getName();
 			
-			getAdministrativeFunctions().deployBpr(fileName, bprContents);
+			activevos.deployBpr(fileName, bprContents);
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -80,8 +101,23 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	@Override
 	public void undeploy(String testPath, ProcessUnderTest processUnderTest)
 			throws DeploymentException {
-		// TODO Auto-generated method stub
-
+		
+		ActiveVOSAdministrativeFunctions activevos = getAdministrativeFunctions();
+		List<AesContribution> allContributions = activevos.getAllContributions();
+		
+		List<Integer> previousIds = activevos.extractContributionIds(previouslyDeployedContributions);
+		List<Integer> idsToRemove = activevos.extractContributionIds(allContributions);
+		
+		idsToRemove.removeAll(previousIds);
+		
+		for(Integer contributionId : idsToRemove) {
+			try {
+				activevos.takeContributionOffline(contributionId);
+				activevos.deleteContribution(contributionId, true);
+			} catch (AdminAPIFault e) {
+				throw new DeploymentException("Cannot undeploy process: " + e.getMessage(), e);
+			}
+		}
 	}
 
 	@Override
