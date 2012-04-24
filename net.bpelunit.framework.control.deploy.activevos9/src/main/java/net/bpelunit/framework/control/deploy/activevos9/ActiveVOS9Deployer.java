@@ -102,20 +102,22 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	public void undeploy(String testPath, ProcessUnderTest processUnderTest)
 			throws DeploymentException {
 		
-		ActiveVOSAdministrativeFunctions activevos = getAdministrativeFunctions();
-		List<AesContribution> allContributions = activevos.getAllContributions();
-		
-		List<Integer> previousIds = activevos.extractContributionIds(previouslyDeployedContributions);
-		List<Integer> idsToRemove = activevos.extractContributionIds(allContributions);
-		
-		idsToRemove.removeAll(previousIds);
-		
-		for(Integer contributionId : idsToRemove) {
-			try {
-				activevos.takeContributionOffline(contributionId);
-				activevos.deleteContribution(contributionId, true);
-			} catch (AdminAPIFault e) {
-				throw new DeploymentException("Cannot undeploy process: " + e.getMessage(), e);
+		if(doUndeploy) {
+			ActiveVOSAdministrativeFunctions activevos = getAdministrativeFunctions();
+			List<AesContribution> allContributions = activevos.getAllContributions();
+			
+			List<Integer> previousIds = activevos.extractContributionIds(previouslyDeployedContributions);
+			List<Integer> idsToRemove = activevos.extractContributionIds(allContributions);
+			
+			idsToRemove.removeAll(previousIds);
+			
+			for(Integer contributionId : idsToRemove) {
+				try {
+					activevos.takeContributionOffline(contributionId);
+					activevos.deleteContribution(contributionId, true);
+				} catch (AdminAPIFault e) {
+					throw new DeploymentException("Cannot undeploy process: " + e.getMessage(), e);
+				}
 			}
 		}
 	}
