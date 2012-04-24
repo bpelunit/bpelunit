@@ -1,3 +1,7 @@
+/**
+ * This file belongs to the BPELUnit utility and Eclipse plugin set. See enclosed
+ * license file for more information.
+ */
 package net.bpelunit.framework.control.deploy.activevos9;
 
 import java.io.File;
@@ -14,6 +18,18 @@ import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
 import net.bpelunit.util.FileUtil;
 
+/**
+ * This class is the deployer for ActiveVOS 9.x. It contains the logic to 
+ * deploy and undeploy BPRs as part of the BPELUnit test run
+ * 
+ * TODOs:
+ * - Coverage Support
+ * - Logging
+ * - Endpoint Replacement
+ * - Scenario testing with mocked ActiveVOSAdministrativeFunctions
+ * 
+ * @author Daniel Luebke
+ */
 @IBPELDeployerCapabilities(canDeploy=true, canIntroduceMocks=false, canMeasureTestCoverage=false)
 public class ActiveVOS9Deployer implements IBPELDeployer {
 

@@ -1,3 +1,7 @@
+/**
+ * This file belongs to the BPELUnit utility and Eclipse plugin set. See enclosed
+ * license file for more information.
+ */
 package net.bpelunit.util;
 
 import java.io.ByteArrayInputStream;

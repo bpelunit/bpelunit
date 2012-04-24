@@ -1,4 +1,9 @@
+/**
+ * This file belongs to the BPELUnit utility and Eclipse plugin set. See enclosed
+ * license file for more information.
+ */
 package net.bpelunit.framework.control.deploy.activevos9;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

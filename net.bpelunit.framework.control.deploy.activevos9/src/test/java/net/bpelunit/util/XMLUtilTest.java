@@ -1,3 +1,7 @@
+/**
+ * This file belongs to the BPELUnit utility and Eclipse plugin set. See enclosed
+ * license file for more information.
+ */
 package net.bpelunit.util;
 
 import static org.junit.Assert.*;
@@ -18,6 +22,8 @@ public class XMLUtilTest {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
 		XMLUtil.writeXML(doc, out);
+		
+		// TODO Assertionks
 	}
 	
 }
