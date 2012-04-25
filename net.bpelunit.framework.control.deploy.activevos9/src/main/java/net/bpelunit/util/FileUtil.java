@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 
-public class FileUtil {
+public final class FileUtil {
 
 	private FileUtil() {
 		// utility class

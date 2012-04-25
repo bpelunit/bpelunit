@@ -19,7 +19,7 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-public class ZipUtil {
+public final class ZipUtil {
 
 	private ZipUtil() {
 		// utility class

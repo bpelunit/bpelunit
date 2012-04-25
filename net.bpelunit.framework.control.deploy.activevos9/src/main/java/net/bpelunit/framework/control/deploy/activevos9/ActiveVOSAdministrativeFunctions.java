@@ -48,18 +48,35 @@ class ActiveVOSAdministrativeFunctions {
 	public static final String CONTRIBUTION_MANAGEMENT_SERVICE_WSDL_RESOURCE = "/AeContributionManagement.wsdl";
 	
 	public static final String ATTRIBUTE_ERROR_COUNT = "numErrors";
+	private static final String ENDPOINT_PATH_ACTIVE_BPEL_ADMIN_SERVICE = "/ActiveBpelDeployBPR";
+	private static final String ENDPOINT_PATH_CONTRIBUTION_MANAGEMENT_SERVICE = "/AeContributionManagement";
 	
 	private IAeAxisActiveBpelAdmin activeBpelAdminPort;
 	private IAeContributionManagement contributionManagementPort;
+	private String baseEndpoint;
 
 	public ActiveVOSAdministrativeFunctions(String endpoint, String username,
 			String password) {
-		initializeActiveBpelAdminPort(username, password);
-		initializeContributionManagementPort(username, password);
+		calculateBaseEndpoint(endpoint);
+		
+		initializeActiveBpelAdminPort(username, password, baseEndpoint + ENDPOINT_PATH_ACTIVE_BPEL_ADMIN_SERVICE);
+		initializeContributionManagementPort(username, password, baseEndpoint + ENDPOINT_PATH_CONTRIBUTION_MANAGEMENT_SERVICE);
+	}
+
+	private void calculateBaseEndpoint(String endpoint) {
+		if(endpoint.endsWith(ENDPOINT_PATH_ACTIVE_BPEL_ADMIN_SERVICE)) {
+			baseEndpoint = endpoint.substring(0, endpoint.length() - ENDPOINT_PATH_ACTIVE_BPEL_ADMIN_SERVICE.length() + 1);
+		} else {
+			baseEndpoint = endpoint;
+		}
+		
+		if(baseEndpoint.endsWith("/")) {
+			baseEndpoint += "/";
+		}
 	}
 
 	private void initializeContributionManagementPort(String username,
-			String password) {
+			String password, String endpoint) {
 		ContributionManagementService contributionManagementService = new
 		ContributionManagementService(ActiveVOSAdministrativeFunctions.class
 				.getResource(CONTRIBUTION_MANAGEMENT_SERVICE_WSDL_RESOURCE), CONTRIBUTION_MANAGEMENT_SERVICE_NAME);
@@ -67,9 +84,10 @@ class ActiveVOSAdministrativeFunctions {
 		contributionManagementPort = contributionManagementService.getContributionManagementPort();
 		setBasicAuthenticationForBindingProvider(contributionManagementPort, username,
 				password);
+		setEndpointForBindingProvider(contributionManagementPort, endpoint);
 	}
 
-	private void initializeActiveBpelAdminPort(String username, String password) {
+	private void initializeActiveBpelAdminPort(String username, String password, String endpoint) {
 		ActiveBpelAdmin activeBpelAdmin = new ActiveBpelAdmin(
 				ActiveVOSAdministrativeFunctions.class
 						.getResource(ACTIVE_BPEL_ADMIN_WSDL_RESOURCE),
@@ -78,6 +96,13 @@ class ActiveVOSAdministrativeFunctions {
 		activeBpelAdminPort = activeBpelAdmin.getActiveBpelAdminPort();
 		setBasicAuthenticationForBindingProvider(activeBpelAdminPort, username,
 				password);
+		setEndpointForBindingProvider(activeBpelAdminPort, endpoint);
+	}
+
+	private void setEndpointForBindingProvider(Object port, String endpoint) {
+		Map<String, Object> requestContext = ((BindingProvider) port)
+				.getRequestContext();
+		requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
 	}
 
 	private void setBasicAuthenticationForBindingProvider(Object port,

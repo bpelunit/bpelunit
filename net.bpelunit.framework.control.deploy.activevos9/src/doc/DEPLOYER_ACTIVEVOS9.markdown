@@ -58,3 +58,6 @@ To do so, make sure that in the PDD the invoke handler is set to WSA-Address
 (and not WSDL port) and specify a URN like urn:domain:webservice:a as the 
 endpoint. Afterwards, go to the URN Mapping section in the Administrative Console
 and set the URN you specified before to the real URL.
+
+Because you can configure different URN Mappings on different servers, you can use
+the same BPR for deploying to different environments (developer, test, prod, ...)

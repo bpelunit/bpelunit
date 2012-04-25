@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
+import javax.xml.parsers.ParserConfigurationException;
 
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.util.FileUtil;
@@ -183,6 +184,10 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 			} catch (FileNotFoundException e) {
 				throw new DeploymentException("File could not be read: " + bpelFile.getAbsolutePath(), e);
 			} catch (SAXException e) {
+				throw new DeploymentException("BPEL file could not be parsed: " + bpelFile.getAbsolutePath(), e);
+			} catch (IOException e) {
+				throw new DeploymentException("BPEL file could not be parsed: " + bpelFile.getAbsolutePath(), e);
+			} catch (ParserConfigurationException e) {
 				throw new DeploymentException("BPEL file could not be parsed: " + bpelFile.getAbsolutePath(), e);
 			}
 		}

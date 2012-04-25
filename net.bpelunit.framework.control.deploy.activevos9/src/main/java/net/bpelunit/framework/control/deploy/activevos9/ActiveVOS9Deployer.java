@@ -44,7 +44,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	private List<AesContribution> previouslyDeployedContributions;
 	
 	@IBPELDeployerOption(
-			defaultValue="",
+			testSuiteSpecific=true,
 			description="The (relative) path to the BPR to be deployed."
 	)
 	public void setDeploymentLocation(String deploymentLocation) {
@@ -80,7 +80,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			description="Controls whether the process should be undeployed after the test suite has run. Valid values are true/false."
 	)
 	public void setDoUndeploy(String doUndeploy) {
-		this.doUndeploy = new Boolean(doUndeploy);
+		this.doUndeploy = Boolean.valueOf(doUndeploy);
 	}
 	
 	@IBPELDeployerOption(
@@ -88,7 +88,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			description="If set to true, all running process instances will be terminated before running the test suite. DO USE WITH CARE!"
 	)
 	public void setTerminatePendingProcessesBeforeTestSuiteIsRun(String terminatePendingProcessesBeforeTestSuiteIsRun) {
-		this.terminatePendingProcessesBeforeTestSuiteIsRun = new Boolean(terminatePendingProcessesBeforeTestSuiteIsRun);
+		this.terminatePendingProcessesBeforeTestSuiteIsRun = Boolean.valueOf(terminatePendingProcessesBeforeTestSuiteIsRun);
 	}
 	
 	protected String getDeployerUserName() {
@@ -132,7 +132,6 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			activevos.deployBpr(fileName, bprContents);
 			
 		} catch(IOException e) {
-			e.printStackTrace();
 			throw new DeploymentException("Error while deploying: " + e.getMessage(), e);
 		}
 	}
@@ -176,13 +175,11 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	@Override
 	public void setArchiveLocation(String archive) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public void cleanUpAfterTestCase() throws Exception {
+	public void cleanUpAfterTestCase() {
 		// TODO Auto-generated method stub
-
 	}
 
 	public synchronized ActiveVOSAdministrativeFunctions getAdministrativeFunctions() {
