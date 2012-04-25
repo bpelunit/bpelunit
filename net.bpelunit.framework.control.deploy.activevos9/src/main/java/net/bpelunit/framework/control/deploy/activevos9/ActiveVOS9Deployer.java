@@ -43,32 +43,50 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	private ActiveVOSAdministrativeFunctions administrativeFunctions = null;
 	private List<AesContribution> previouslyDeployedContributions;
 	
-	@IBPELDeployerOption(defaultValue="")
+	@IBPELDeployerOption(
+			defaultValue="",
+			description="The (relative) path to the BPR to be deployed."
+	)
 	public void setDeploymentLocation(String deploymentLocation) {
 		this.deploymentLocation = deploymentLocation;
 	}
 	
-	@IBPELDeployerOption(defaultValue="http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR")
+	@IBPELDeployerOption(
+			defaultValue="http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR",
+			description="The URL of ActiveVOS' deployment service."
+	)
 	public void setDeploymentServiceEndpoint(String deploymentServiceEndpoint) {
 		this.deploymentServiceEndpoint  = deploymentServiceEndpoint;
 	}
 
-	@IBPELDeployerOption(defaultValue="bpelunit")
+	@IBPELDeployerOption(
+			defaultValue="bpelunit",
+			description="The user name of the user that has deploy rights."
+	)
 	public void setDeployerUserName(String deployerUserName) {
 		this.deployerUserName = deployerUserName;
 	}
 	
-	@IBPELDeployerOption(defaultValue="")
+	@IBPELDeployerOption(
+			defaultValue="",
+			description="The password of the user specified in DeployerUserName."
+	)
 	public void setDeployerPassword(String deployerPassword) {
 		this.deployerPassword = deployerPassword;
 	}
 
-	@IBPELDeployerOption(defaultValue="false")
+	@IBPELDeployerOption(
+			defaultValue="false",
+			description="Controls whether the process should be undeployed after the test suite has run. Valid values are true/false."
+	)
 	public void setDoUndeploy(String doUndeploy) {
 		this.doUndeploy = new Boolean(doUndeploy);
 	}
 	
-	@IBPELDeployerOption(defaultValue="false")
+	@IBPELDeployerOption(
+			defaultValue="false",
+			description="If set to true, all running process instances will be terminated before running the test suite. DO USE WITH CARE!"
+	)
 	public void setTerminatePendingProcessesBeforeTestSuiteIsRun(String terminatePendingProcessesBeforeTestSuiteIsRun) {
 		this.terminatePendingProcessesBeforeTestSuiteIsRun = new Boolean(terminatePendingProcessesBeforeTestSuiteIsRun);
 	}

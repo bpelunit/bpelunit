@@ -65,6 +65,8 @@ public interface IBPELDeployer {
 		String defaultValue() default "";
 
 		boolean testSuiteSpecific() default false;
+		
+		String description() default "";
 	}
 
 	/**
