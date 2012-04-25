@@ -49,5 +49,18 @@ public class ActiveVOSAdministrativeFunctionsTest {
 		assertEquals("user", cp.getRequestContext().get(BindingProvider.USERNAME_PROPERTY));
 		assertEquals("pwd", cp.getRequestContext().get(BindingProvider.PASSWORD_PROPERTY));
 		assertEquals("http://localhost:8081/active-bpel/services/AeContributionManagement", cp.getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
+
+		
+		activevos = new ActiveVOSAdministrativeFunctions("http://localhost:8081/active-bpel/services/ActiveBpelDeployBPR", "user", "pwd");
+		ap = (BindingProvider)activevos.activeBpelAdminPort;
+		cp = (BindingProvider)activevos.contributionManagementPort;
+		
+		assertEquals("user", ap.getRequestContext().get(BindingProvider.USERNAME_PROPERTY));
+		assertEquals("pwd", ap.getRequestContext().get(BindingProvider.PASSWORD_PROPERTY));
+		assertEquals("http://localhost:8081/active-bpel/services/ActiveBpelDeployBPR", ap.getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
+		
+		assertEquals("user", cp.getRequestContext().get(BindingProvider.USERNAME_PROPERTY));
+		assertEquals("pwd", cp.getRequestContext().get(BindingProvider.PASSWORD_PROPERTY));
+		assertEquals("http://localhost:8081/active-bpel/services/AeContributionManagement", cp.getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
 	}
 }

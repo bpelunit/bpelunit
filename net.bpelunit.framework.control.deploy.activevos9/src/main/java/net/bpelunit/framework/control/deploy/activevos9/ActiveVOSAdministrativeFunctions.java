@@ -73,7 +73,7 @@ class ActiveVOSAdministrativeFunctions {
 		}
 		
 		if(baseEndpoint.endsWith("/")) {
-			baseEndpoint += "/";
+			baseEndpoint = baseEndpoint.substring(0, baseEndpoint.length() - 1);
 		}
 	}
 
