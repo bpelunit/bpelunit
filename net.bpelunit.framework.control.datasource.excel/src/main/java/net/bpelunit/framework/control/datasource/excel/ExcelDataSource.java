@@ -38,8 +38,8 @@ public class ExcelDataSource implements IDataSource {
 
 	private Sheet sheet;
 	private List<String> headings;
-	private final int headingRowIndex = 0;
-	private final int startDataRowIndex = 1;
+	private static final int HEADING_ROW_INDEX = 0;
+	private static final int START_DATA_ROW_INDEX = 1;
 	private int currentDataRow = -1;
 	private short firstCellIndex = 0;
 	private int sheetIndex = DEFAULT_SHEET_INDEX;
@@ -56,7 +56,7 @@ public class ExcelDataSource implements IDataSource {
 
 	@Override
 	public String getValueFor(String fieldName) {
-		Row row = sheet.getRow(startDataRowIndex + currentDataRow);
+		Row row = sheet.getRow(START_DATA_ROW_INDEX + currentDataRow);
 		int cellIndex = firstCellIndex + headings.indexOf(fieldName);
 
 		Cell cell = row.getCell(cellIndex);
@@ -70,7 +70,7 @@ public class ExcelDataSource implements IDataSource {
 	@Override
 	public void setRow(int index) throws DataSourceException {
 		if (index < getNumberOfRows()
-				&& sheet.getRow(startDataRowIndex + index) != null) {
+				&& sheet.getRow(START_DATA_ROW_INDEX + index) != null) {
 			currentDataRow = index;
 		} else {
 			throw new DataSourceException(String.format(
@@ -88,8 +88,7 @@ public class ExcelDataSource implements IDataSource {
 	protected Workbook readWorkbook(InputStream data)
 			throws DataSourceException {
 		try {
-			Workbook wb = WorkbookFactory.create(data);
-			return wb;
+			return WorkbookFactory.create(data);
 		} catch (InvalidFormatException e) {
 			throw new DataSourceException(
 					"The data source is not a valid MS Excel File!", e);
@@ -107,23 +106,21 @@ public class ExcelDataSource implements IDataSource {
 			return workbook.getSheetAt(sheetIndex);
 		} catch (IllegalArgumentException e) {
 			throw new DataSourceException("Could not find sheet with index "
-					+ sheetIndex);
+					+ sheetIndex, e);
 		}
 	}
 
 	private void extractFieldNames() throws DataSourceException {
-		List<String> headings = new ArrayList<String>();
-		Row headingRow = sheet.getRow(headingRowIndex);
+		headings = new ArrayList<String>();
+		Row headingRow = sheet.getRow(HEADING_ROW_INDEX);
 
-		checkForNull(headingRow, "No headings found at row " + headingRowIndex);
+		checkForNull(headingRow, "No headings found at row " + HEADING_ROW_INDEX);
 
 		firstCellIndex = headingRow.getFirstCellNum();
 		for (short i = firstCellIndex; i < headingRow.getLastCellNum(); i++) {
 			String heading = headingRow.getCell(i).getStringCellValue();
 			headings.add(heading);
 		}
-
-		this.headings = headings;
 	}
 
 	private void checkForNull(Object o, String message)
@@ -140,7 +137,7 @@ public class ExcelDataSource implements IDataSource {
 			this.sheetIndex = Integer.parseInt(index) - 1;
 		} catch (Exception e) {
 			throw new IllegalArgumentException(
-					"Sheet Index must be a positive number");
+					"Sheet Index must be a positive number", e);
 		}
 	}
 
