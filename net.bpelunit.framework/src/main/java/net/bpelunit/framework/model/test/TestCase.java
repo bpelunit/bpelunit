@@ -77,7 +77,7 @@ public class TestCase implements ITestArtefact {
 
 	private int fRowIndex;
 
-	private static final Cloner fCloner = new Cloner();
+	private static final Cloner CLONER = new Cloner();
 
 	// ****************** Initialization ************************
 
@@ -217,7 +217,7 @@ public class TestCase implements ITestArtefact {
 		if (fTestSuiteVelocityContext == null) {
 			fTestSuiteVelocityContext = getSuite().createVelocityContext();
 		}
-		Context ctx = fCloner.deepClone(fTestSuiteVelocityContext);
+		Context ctx = CLONER.deepClone(fTestSuiteVelocityContext);
 		ctx.put("testCaseName", getRawName());
 		if (fDataSource != null) {
 			DataSourceUtil.initializeContext(ctx, fDataSource, fRowIndex);

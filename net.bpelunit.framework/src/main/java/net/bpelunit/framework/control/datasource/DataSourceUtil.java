@@ -35,7 +35,7 @@ import org.apache.velocity.context.Context;
  * @version 1.1
  */
 public class DataSourceUtil {
-	private static final Logger logger = Logger.getLogger(DataSourceUtil.class);
+	private static final Logger LOGGER = Logger.getLogger(DataSourceUtil.class);
 
 	/**
 	 * Creates the effective IDataSource for a test case inside a test suite. It
@@ -262,7 +262,7 @@ public class DataSourceUtil {
 		String[] fieldNames = ds.getFieldNames();
 
 		for(String fieldName : fieldNames) {
-			logger.debug("Put " + fieldName + " -> " + ds.getValueFor(fieldName));
+			LOGGER.debug("Put " + fieldName + " -> " + ds.getValueFor(fieldName));
 			ctx.put(fieldName, ds.getValueFor(fieldName));
 		}
 	}

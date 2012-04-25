@@ -13,6 +13,10 @@ import org.apache.commons.io.IOUtils;
 
 public class FileUtil {
 
+	private FileUtil() {
+		// utility class
+	}
+	
 	public static File createTempDirectory() throws IOException {
 		File tmp = File.createTempFile("bpelunit", "");
 		tmp.delete();

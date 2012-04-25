@@ -128,9 +128,8 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 		Map<String, List<String>> configMap = ExtensionRegistry.loadCoverageToolConfiguration(new File(coverageFile));
 		List<String> directory=new ArrayList<String>();
 		directory.add(FilenameUtils.concat(fHomeDirectory,CONFIG_DIR));
-		System.out.println("BPELUnitBaseRunner: configuration for Coverage Measurment loaded");
-		coverageTool.configureMetrics(configMap);
 		
+		coverageTool.configureMetrics(configMap);
 	}
 
 

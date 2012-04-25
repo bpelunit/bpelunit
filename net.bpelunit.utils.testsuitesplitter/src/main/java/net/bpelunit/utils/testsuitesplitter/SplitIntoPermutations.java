@@ -29,7 +29,11 @@ public class SplitIntoPermutations {
 
 	private static final String BPTS_FILENAME_SUFFIX = ".bpts";
 
-	private static final PermutationBuilder permutationBuilder = new PermutationBuilder();
+	private static final PermutationBuilder PERMUTATION_BUILDER = new PermutationBuilder();
+	
+	private SplitIntoPermutations() {
+		// main only
+	}
 	
 	public static void main(String[] args) throws IOException, XmlException {
 		
@@ -58,7 +62,7 @@ public class SplitIntoPermutations {
 		
 		Map<Set<Integer>, XMLTestSuiteDocument> result = new HashMap<Set<Integer>, XMLTestSuiteDocument>();
 		
-		Set<Set<Integer>> permutationSet = permutationBuilder.getPermutationSet(tsd.getTestSuite()
+		Set<Set<Integer>> permutationSet = PERMUTATION_BUILDER.getPermutationSet(tsd.getTestSuite()
 				.getTestCases().getTestCaseList().size() - 1);
 
 		for (Set<Integer> currentSet : permutationSet) {

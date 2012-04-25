@@ -16,6 +16,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import net.bpelunit.framework.control.ext.GenericDeployment;
 import net.bpelunit.framework.control.ext.PartnerLink;
@@ -205,19 +206,8 @@ public class ODEDeployment extends GenericDeployment {
 					"An I/O error occurred when writing deployment descriptor: "
 							+ fDescriptorPath, e);
 		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-				}
-			}
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (IOException e) {
-					System.out.println("Hello.");
-				}
-			}
+			IOUtils.closeQuietly(is);
+			IOUtils.closeQuietly(writer);
 		}
 	}
 

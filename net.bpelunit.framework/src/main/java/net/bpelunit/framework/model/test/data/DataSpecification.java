@@ -31,7 +31,7 @@ import com.rits.cloning.Cloner;
  */
 public abstract class DataSpecification implements ITestArtefact {
 
-	private static final Cloner fCloner = new Cloner();
+	private static final Cloner CLONER = new Cloner();
 
 	/**
 	 * Next parent activity this data specification belongs to.
@@ -79,7 +79,7 @@ public abstract class DataSpecification implements ITestArtefact {
 	}
 
 	protected String expandTemplateToString(VelocityContextProvider context, String template) throws Exception {
-		Context velocityCtx = fCloner.deepClone(context.createVelocityContext());
+		Context velocityCtx = CLONER.deepClone(context.createVelocityContext());
 		velocityCtx.put("xpath", new XPathTool(fNamespaceContext));
 		velocityCtx.put("printer", new XMLPrinterTool());
 

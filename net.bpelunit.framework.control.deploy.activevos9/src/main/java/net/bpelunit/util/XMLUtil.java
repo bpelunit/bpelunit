@@ -26,6 +26,10 @@ import org.xml.sax.SAXException;
 
 public class XMLUtil {
 
+	private XMLUtil() {
+		// utility class
+	}
+	
 	/**
 	 * @param xmlAsString document in string form, encoding specified in XML should be UTF-8
 	 * @return

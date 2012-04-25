@@ -79,7 +79,7 @@ public class HtmlDataSource implements IDataSource {
 
 		private static final long serialVersionUID = 1L;
 
-		public HTMLEditorKit.Parser getParser() {
+		public HTMLEditorKit.Parser getParserPublic() {
 			return super.getParser();
 		}
 	}
@@ -89,7 +89,6 @@ public class HtmlDataSource implements IDataSource {
 	private List<List<String>> data;
 	private List<String> currentRow;
 	private boolean hadRowOrColSpan = false;
-	private int currentRowIndex = -1;
 
 	@Override
 	public void close() {
@@ -127,7 +126,7 @@ public class HtmlDataSource implements IDataSource {
 
 	@Override
 	public void loadFromStream(InputStream is) throws DataSourceException {
-		Parser parser = new HTMLParse().getParser();
+		Parser parser = new HTMLParse().getParserPublic();
 
 		data = new ArrayList<List<String>>();
 
@@ -154,12 +153,12 @@ public class HtmlDataSource implements IDataSource {
 
 	@Override
 	public void setRow(int index) throws DataSourceException {
-		if (index >= getNumberOfRows())
+		if (index >= getNumberOfRows()) {
 			throw new DataSourceException(String.format(
 					"Index %d out of bounds [0, %d]", index,
 					getNumberOfRows() - 1));
-		currentRowIndex = index;
-		currentRow = data.get(currentRowIndex);
+		}
+		currentRow = data.get(index);
 	}
 
 	@ConfigurationOption(defaultValue = "1", description = "The index of the table in the HTML file in which the data is contained")

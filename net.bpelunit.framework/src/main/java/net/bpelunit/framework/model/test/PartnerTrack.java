@@ -81,7 +81,7 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 
 	private ActivityContext fActivityContext;
 
-	private static final Cloner fCloner = new Cloner();
+	private static final Cloner CLONER = new Cloner();
 
 	public PartnerTrack(TestCase testCase, AbstractPartner client) {
 		fPartner = client;
@@ -249,7 +249,7 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 		if (fTestCaseVelocityContext == null) {
 			fTestCaseVelocityContext = fRunner.createVelocityContext();
 		}
-		Context ctx = fCloner.deepClone(fTestCaseVelocityContext);
+		Context ctx = CLONER.deepClone(fTestCaseVelocityContext);
 		ctx.put("partnerTrackName", getRawName());
 		
 		if(getPartner() instanceof Partner) {

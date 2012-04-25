@@ -39,12 +39,12 @@ public class OdsDataSource implements IDataSource {
 	public void setSheet(String index) {
 		checkIfMayAlterConfiguration();
 		try {
-			int sheetIndex = Integer.parseInt(index) - 1;
-			if (sheetIndex < 0) {
+			int currentSheetIndex = Integer.parseInt(index) - 1;
+			if (currentSheetIndex < 0) {
 				throw new IllegalArgumentException(
 						"Sheet Index must be a positive number");
 			}
-			this.sheetIndex = sheetIndex;
+			this.sheetIndex = currentSheetIndex;
 		} catch (Exception e) {
 			throw new IllegalArgumentException(
 					"Sheet Index must be a positive number");
@@ -109,10 +109,10 @@ public class OdsDataSource implements IDataSource {
 	}
 
 	private void extractFieldNames() throws DataSourceException {
-		List<String> headings = new ArrayList<String>();
+		headings = new ArrayList<String>();
 		OdfTableRow headingRow = table.getRowByIndex(headingRowIndex);
 
-		firstCellIndex = findFirstCellIndex(headingRow);
+		findFirstCellIndex(headingRow);
 
 		if (firstCellIndex < 0) {
 			throw new DataSourceException("No headings found at row "
@@ -127,21 +127,20 @@ public class OdsDataSource implements IDataSource {
 		} while (!StringUtils.isEmpty(headingRow.getCellByIndex(i)
 				.getStringValue()));
 
-		this.headings = headings;
 		this.currentRowIndex = this.headingRowIndex;
 	}
 
-	private int findFirstCellIndex(OdfTableRow headingRow) {
-		int firstCellIndex = 0;
+	private void findFirstCellIndex(OdfTableRow headingRow) {
+		firstCellIndex = 0;
 		while (StringUtils.isEmpty(headingRow.getCellByIndex(firstCellIndex)
 				.getStringValue())) {
 			if (firstCellIndex > MAX_CELL_SEARCH_DEPTH) {
-				return -1;
+				firstCellIndex = -1;
+				return;
 			}
 
 			firstCellIndex++;
 		}
-		return firstCellIndex;
 	}
 
 	private void checkIfMayAlterConfiguration() {

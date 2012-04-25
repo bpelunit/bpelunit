@@ -21,6 +21,10 @@ import org.apache.commons.io.IOUtils;
 
 public class ZipUtil {
 
+	private ZipUtil() {
+		// utility class
+	}
+	
 	public static void unzipFile(File zip, File dir) throws IOException {
 		InputStream in = null;
 		OutputStream out = null;

@@ -282,11 +282,8 @@ public class BpelXMLTools {
 
 	public static boolean canCreateInstance(Element activity) {
 		String value = activity.getAttributeValue(CREATE_INSTANCE_ATTR, "no");
-		if (value.equals("yes")) {
-			return true;
-		} else {
-			return false;
-		}
+		
+		return "yes".equals(value);
 	}
 
 	/**

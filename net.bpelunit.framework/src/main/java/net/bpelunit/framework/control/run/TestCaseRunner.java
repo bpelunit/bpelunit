@@ -70,7 +70,7 @@ public class TestCaseRunner {
 	private LocalHTTPServer fServer;
 
 	// Pool connections over all test cases, to avoid socket leaks
-	private static final MultiThreadedHttpConnectionManager fConnectionManager
+	private static final MultiThreadedHttpConnectionManager CONNECTION_MANAGER
 		= new NoPersistenceConnectionManager();
 
 	private HttpClient fClient;
@@ -93,7 +93,7 @@ public class TestCaseRunner {
 		fProblemOccurred = false;
 		fAbortedByUser = false;
 
-		fClient = new HttpClient(fConnectionManager);
+		fClient = new HttpClient(CONNECTION_MANAGER);
 
 		initializePartnerTracks(caseToRun);
 

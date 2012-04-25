@@ -129,10 +129,10 @@ public class CSVDataSource implements IDataSource {
 		checkIfMayAlterConfiguration();
 
 		if (headerNames != null && !headerNames.equals("")) {
-			String[] headers = headerNames.split(",");
-			trim(headers);
+			String[] headerArray = headerNames.split(",");
+			trim(headerArray);
 
-			this.headers = Arrays.asList(headers);
+			this.headers = Arrays.asList(headerArray);
 		}
 	}
 
