@@ -37,23 +37,25 @@ import com.active_endpoints.schemas.engineapi._2010._05.enginemanagementtypes.Ae
 
 class ActiveVOSAdministrativeFunctions {
 
-	public static final QName ACTIVE_BPEL_ADMIN_SERVICE_NAME = new QName(
+	private static final QName ACTIVE_BPEL_ADMIN_SERVICE_NAME = new QName(
 			"http://docs.active-endpoints/wsdl/activebpeladmin/2007/01/activebpeladmin.wsdl",
 			"ActiveBpelAdmin");
-	public static final QName CONTRIBUTION_MANAGEMENT_SERVICE_NAME = new QName(
+	private static final QName CONTRIBUTION_MANAGEMENT_SERVICE_NAME = new QName(
 			"http://docs.active-endpoints.com/wsdl/engineapi/2010/05/EngineManagement.wsdl",
 			"ContributionManagementService");
 
-	public static final String ACTIVE_BPEL_ADMIN_WSDL_RESOURCE = "/ActiveBpelDeployBPR.wsdl";
-	public static final String CONTRIBUTION_MANAGEMENT_SERVICE_WSDL_RESOURCE = "/AeContributionManagement.wsdl";
+	private static final String ACTIVE_BPEL_ADMIN_WSDL_RESOURCE = "/ActiveBpelDeployBPR.wsdl";
+	private static final String CONTRIBUTION_MANAGEMENT_SERVICE_WSDL_RESOURCE = "/AeContributionManagement.wsdl";
 	
-	public static final String ATTRIBUTE_ERROR_COUNT = "numErrors";
+	private static final String ATTRIBUTE_ERROR_COUNT = "numErrors";
 	private static final String ENDPOINT_PATH_ACTIVE_BPEL_ADMIN_SERVICE = "/ActiveBpelDeployBPR";
 	private static final String ENDPOINT_PATH_CONTRIBUTION_MANAGEMENT_SERVICE = "/AeContributionManagement";
 	
-	private IAeAxisActiveBpelAdmin activeBpelAdminPort;
-	private IAeContributionManagement contributionManagementPort;
 	private String baseEndpoint;
+	
+	// Package protected for testing only
+	IAeAxisActiveBpelAdmin activeBpelAdminPort;
+	IAeContributionManagement contributionManagementPort;
 
 	public ActiveVOSAdministrativeFunctions(String endpoint, String username,
 			String password) {

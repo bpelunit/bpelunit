@@ -9,6 +9,8 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.ws.BindingProvider;
+
 import org.junit.Test;
 
 import com.active_endpoints.schemas.engineapi._2010._05.engineapitypes.AesContribution;
@@ -18,7 +20,7 @@ public class ActiveVOSAdministrativeFunctionsTest {
 
 	@Test
 	public void testExtractContributionIds() throws Exception {
-		ActiveVOSAdministrativeFunctions activevos = new ActiveVOSAdministrativeFunctions(null, null, null);
+		ActiveVOSAdministrativeFunctions activevos = new ActiveVOSAdministrativeFunctions("", null, null);
 		
 		List<AesContribution> contributions = new ArrayList<AesContribution>();
 		contributions.add(new AesContribution());
@@ -33,4 +35,19 @@ public class ActiveVOSAdministrativeFunctionsTest {
 		assertEquals(5, (int)ids.get(1));
 	}
 	
+	@Test
+	public void testCorrectPortTypeInitialization() throws Exception {
+		ActiveVOSAdministrativeFunctions activevos = new ActiveVOSAdministrativeFunctions("http://localhost:8081/active-bpel/services", "user", "pwd");
+		
+		BindingProvider ap = (BindingProvider)activevos.activeBpelAdminPort;
+		BindingProvider cp = (BindingProvider)activevos.contributionManagementPort;
+		
+		assertEquals("user", ap.getRequestContext().get(BindingProvider.USERNAME_PROPERTY));
+		assertEquals("pwd", ap.getRequestContext().get(BindingProvider.PASSWORD_PROPERTY));
+		assertEquals("http://localhost:8081/active-bpel/services/ActiveBpelDeployBPR", ap.getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
+		
+		assertEquals("user", cp.getRequestContext().get(BindingProvider.USERNAME_PROPERTY));
+		assertEquals("pwd", cp.getRequestContext().get(BindingProvider.PASSWORD_PROPERTY));
+		assertEquals("http://localhost:8081/active-bpel/services/AeContributionManagement", cp.getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
+	}
 }
