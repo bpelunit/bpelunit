@@ -40,7 +40,7 @@ public class WSHTClient {
 	private static final String NAMESPACE_SOAP = "http://schemas.xmlsoap.org/soap/envelope/";
 	private URL wsHtEndpoint;
 	private SOAPCreator soapCreator;
-	String authorizationRealm;
+	private String authorizationRealm;
 
 	private static class SOAPCreator {
 
@@ -186,7 +186,7 @@ public class WSHTClient {
 		HttpURLConnection con = (HttpURLConnection) wsHtEndpoint
 				.openConnection();
 		con.setRequestMethod("POST");
-		con.setRequestProperty("Authorization", "Basic " + authorizationRealm);
+		con.setRequestProperty("Authorization", "Basic " + getAuthorizationRealm());
 		con.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
 		con.setRequestProperty("Accept", "application/soap+xml, text/xml");
 		con.setDoOutput(true);
@@ -206,5 +206,12 @@ public class WSHTClient {
 				.item(0);
 
 		return soapBody.getFirstChild();
+	}
+
+	/**
+	 * For test purposes only
+	 */
+	String getAuthorizationRealm() {
+		return authorizationRealm;
 	}
 }
