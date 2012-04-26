@@ -16,12 +16,12 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.exception.ConfigurationException;
-import net.bpelunit.framework.exception.DeploymentException;
-import net.bpelunit.framework.exception.SpecificationException;
 
 /**
  * <p>
@@ -47,14 +47,9 @@ import net.bpelunit.framework.exception.SpecificationException;
 public class BPELUnit extends Task {
 
 	/**
-	 * The test suite path and file name
-	 */
-	private String fTestSuite;
-
-	/**
 	 * The BPELUnit home directory
 	 */
-	private String fBPELUnitDir;
+	private String fBPELUnitDir = System.getenv("BPELUNIT_HOME");
 
 	/**
 	 * If true, the framework halts on errors
@@ -76,25 +71,38 @@ public class BPELUnit extends Task {
 	 */
 	private List<Logging> fLoggingList= new ArrayList<Logging>();
 
+	/**
+	 * The test suite file
+	 */
+	private File fTestSuiteFile;
+
 	@Override
 	public void execute() {
+		checkAttributes();
+		
+		HashMap<String, String> options = new HashMap<String, String>();
+		options.put(BPELUnitRunner.HALT_ON_ERROR, Boolean.toString(fHaltOnError));
+		options.put(BPELUnitRunner.HALT_ON_FAILURE, Boolean.toString(fHaltOnFailure));
 
-		// Check attributes
+		BPELUnitAntRunner runner = new BPELUnitAntRunner(fBPELUnitDir, fLoggingList, fOutputList);
+		try {
+			runner.initialize(options);
+			runner.run(fTestSuiteFile);
+		} catch (Exception e) {
+			throw new BuildException(e.getMessage(), e);
+		}
+	}
 
-		if (fTestSuite == null || fTestSuite.equals("")) {
+	private void checkAttributes() {
+		if (fTestSuiteFile == null) {
 			throw new BuildException("The testsuite argument is required.");
 		}
-
-		File testSuite= new File(fTestSuite);
-		if (!testSuite.exists()) {
+		
+		if (!fTestSuiteFile.exists()) {
 			throw new BuildException("The testsuite file does not exist.");
 		}
 
-		if (fBPELUnitDir == null || fBPELUnitDir.equals("")) {
-			fBPELUnitDir= System.getenv("BPELUNIT_HOME");
-		}
-
-		if (fBPELUnitDir == null || fBPELUnitDir.equals("")) {
+		if (StringUtils.isEmpty(fBPELUnitDir)) {
 			throw new BuildException("The BPELUnit directory is required - either specify an argument or set environment variable BPELUNIT_HOME.");
 		}
 		
@@ -109,27 +117,10 @@ public class BPELUnit extends Task {
 				throw new BuildException("A logging specification is missing the level attribute, or wrong level specified.");
 			}
 		}
-
-		HashMap<String, String> options= new HashMap<String, String>();
-		options.put(BPELUnitRunner.HALT_ON_ERROR, Boolean.toString(fHaltOnError));
-		options.put(BPELUnitRunner.HALT_ON_FAILURE, Boolean.toString(fHaltOnFailure));
-
-		BPELUnitAntRunner runner= new BPELUnitAntRunner(fBPELUnitDir, fLoggingList, fOutputList);
-		try {
-			runner.initialize(options);
-			runner.run(testSuite);
-		} catch (ConfigurationException e) {
-			throw new BuildException(e.getMessage(), e);
-		} catch (SpecificationException e) {
-			throw new BuildException(e.getMessage(), e);
-		} catch (DeploymentException e) {
-			throw new BuildException(e.getMessage(), e);
-		}
-
 	}
 
 	public void setTestSuite(String testSuite) {
-		fTestSuite= testSuite;
+		fTestSuiteFile = new File(testSuite);
 	}
 
 	public void setBPELUnitDir(String bpelUnitDir) {
@@ -188,14 +179,7 @@ public class BPELUnit extends Task {
 		}
 
 		public void dispose() {
-			if (fOutput != null) {
-				try {
-					fOutput.flush();
-					fOutput.close();
-				} catch (IOException e) {
-					// ignore
-				}
-			}
+			IOUtils.closeQuietly(fOutput);
 		}
 
 		private OutputStream createOutputStream() throws ConfigurationException {
@@ -207,7 +191,7 @@ public class BPELUnit extends Task {
 				try {
 					return new FileOutputStream(fFile);
 				} catch (FileNotFoundException e) {
-					throw new ConfigurationException("Cannot create file with name " + fFile + " for output.");
+					throw new ConfigurationException("Cannot create file with name " + fFile + " for output.", e);
 				}
 			} else {
 				return System.out;
