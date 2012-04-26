@@ -64,6 +64,7 @@ import org.apache.log4j.varia.NullAppender;
 public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITestResultListener {
 
 	private static final int MAX_LINE_LENGTH = 800;
+	private final Logger logger = Logger.getLogger(getClass());
 	private Console console;
 	
 	private boolean saveCoverageDetails = false;
@@ -184,8 +185,16 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 	
 	// ************************* Implementation *********************
 
-	private void abort(String string) {
-		screen.println(string);
+	private void abort(String message) {
+		abort(message, null);
+	}
+	
+	private void abort(String message, Exception e) {
+		screen.println(message);
+		if(e != null) {
+			screen.println("Description: " + e.getMessage());
+			logger.error("Error while writing coverage information", e);
+		}
 		console.exit(1);
 	}
 
@@ -217,9 +226,10 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 			TestSuite suite = loadTestSuite(testSuiteFile);
 
 			// Test if all the test names are ok
-			for (String string : testCaseNames) {
-				if (!suite.hasTestCase(string))
-					abort("Suite does not have test case with name " + string);
+			for (String testCaseName : testCaseNames) {
+				if (!suite.hasTestCase(testCaseName)) {
+					abort("Suite does not have test case with name " + testCaseName);
+				}
 			}
 
 			screen.println("Test Suite sucessfully loaded.");
@@ -228,14 +238,12 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 			try {
 				suite.setUp();
 			} catch (DeploymentException e) {
-				screen.println("A deployment error occurred when deploying services for this test suite:");
-				screen.println("  " + e.getMessage());
 				try {
 					suite.shutDown();
 				} catch (DeploymentException e1) {
 					// do nothing
 				}
-				console.exit(1);
+				abort("A deployment error occurred when deploying services for this test suite", e);
 			}
 
 			screen.println("Services successfully deployed.");
@@ -259,7 +267,7 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 				try {
 					XMLResultProducer.writeXML(new FileOutputStream(xmlFileName), suite);
 				} catch (Exception e) {
-					screen.println("Sorry - could not write XML output to " + xmlFileName + ": " + e.getMessage());
+					abort("Sorry - could not write XML output to " + xmlFileName, e);
 				}
 			}
 			
@@ -268,35 +276,29 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 			try {
 				suite.shutDown();
 			} catch (DeploymentException e) {
-				screen.println("An undeployment error occurred when undeploying services for this test suite:");
-				screen.println("  " + e.getMessage());
-				console.exit(1);
+				abort("An undeployment error occurred when undeploying services for this test suite", e);
 			}
 			if (covFileName != null) {
 				try {
 					ICoverageMeasurementTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
-					if(tool!=null)
-					XMLCoverageResultProducer.writeResult(new FileOutputStream(
-							covFileName),tool.getStatistics(),tool.getErrorStatus(),saveCoverageDetails);
+					if (tool != null) {
+						XMLCoverageResultProducer.writeResult(
+								new FileOutputStream(covFileName),
+								tool.getStatistics(), tool.getErrorStatus(),
+								saveCoverageDetails);
+					}
 				} catch (IOException e) {
-
-					System.out
-							.println("Sorry - could not write XML coverage output to "
-									+ covFileName + ": " + e.getMessage());
-					e.printStackTrace();
+					abort("Sorry - could not write XML coverage output to "
+									+ covFileName, e);
 				}
 			}
 			screen.println("Services undeployed.");
 			screen.println("Shutting down. Have a nice day!");
 
 		} catch (ConfigurationException e) {
-			screen.println("A configuration error was encountered when initializing BPELUnit:");
-			screen.println(" " + e.getMessage());
-			console.exit(1);
+			abort("A configuration error was encountered when initializing BPELUnit", e);
 		} catch (SpecificationException e) {
-			screen.println("An error was encountered when reading the test suite specification:");
-			screen.println(" " + e.getMessage());
-			console.exit(1);
+			abort("An error was encountered when reading the test suite specification", e);
 		} finally {
 			BPELUnitRunner.setCoverageMeasurmentTool(null);
 		}
@@ -313,13 +315,14 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 			status = "failed";
 			error = test.getStatus().getMessage();
 		}
-		if (test.getStatus().isAborted())
+		if (test.getStatus().isAborted()) {
 			status = "was aborted";
-		if (test.getStatus().isPassed())
+		}
+		if (test.getStatus().isPassed()) {
 			status = "passed";
+		}
 		screen.println("Test Case " + status + ": " + test.getName() + "."
 				+ ((error != null) ? error : ""));
-
 	}
 
 	public void testCaseStarted(TestCase test) {
@@ -356,9 +359,10 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 							+ StringUtils.abbreviate(BPELUnitUtil
 									.removeSpaceLineBreaks(sd.getXmlData()),
 									MAX_LINE_LENGTH) + "\n");
-				} else
+				} else {
 					output.append(createReadableOutputInternal(child,
 							recursive, internalInline));
+				}
 			}
 		}
 		output.append(inline + "</Artefact \"" + artefact.getName() + "\">\n");
