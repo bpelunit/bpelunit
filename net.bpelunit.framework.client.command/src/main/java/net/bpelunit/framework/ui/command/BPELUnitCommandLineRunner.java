@@ -63,6 +63,11 @@ import org.apache.log4j.varia.NullAppender;
  */
 public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITestResultListener {
 
+	private static final String PARAMETER_DETAILEDCOVERAGEFILE = "d";
+	private static final String PARAMETER_COVERAGEFILE = "c";
+	private static final String PARAMETER_LOGFILE = "l";
+	private static final String PARAMETER_XMLFILE = "x";
+	private static final String PARAMETER_VERBOSE = "v";
 	private static final int MAX_LINE_LENGTH = 800;
 	private final Logger logger = Logger.getLogger(getClass());
 	private Console console;
@@ -93,27 +98,27 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 	private final void createOptions() {
 		options = new Options();
 		
-		options.addOption("v", false, "adds detailled output");
+		options.addOption(PARAMETER_VERBOSE, false, "adds detailled output");
 		options.addOption(OptionBuilder
                 .withDescription("write XML output to the given file")
                 .hasArg()
                 .withArgName("FILE")
-                .create("x") );
+                .create(PARAMETER_XMLFILE) );
 		options.addOption(OptionBuilder
 				.withDescription("write logging messages to the given file")
 				.hasArg()
 				.withArgName("FILE")
-				.create("l") );
+				.create(PARAMETER_LOGFILE) );
 		options.addOption(OptionBuilder
 				.withDescription("write test coverage to the given file")
 				.hasArg()
 				.withArgName("FILE")
-				.create("c") );
+				.create(PARAMETER_COVERAGEFILE) );
 		options.addOption(OptionBuilder
 				.withDescription("write detailled test coverage to the given file")
 				.hasArg()
 				.withArgName("FILE")
-				.create("d") );
+				.create(PARAMETER_DETAILEDCOVERAGEFILE) );
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -126,14 +131,14 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 			
 			verifyCommandLineArguments(cmd);
 			
-			verbose = cmd.hasOption("v");
-			xmlFileName = trimEqualsSignFromStart(cmd.getOptionValue("x"));
-			logFileName = trimEqualsSignFromStart(cmd.getOptionValue("l"));
-			if(cmd.hasOption("c")) {
-				covFileName = trimEqualsSignFromStart(cmd.getOptionValue("c")); 
+			verbose = cmd.hasOption(PARAMETER_VERBOSE);
+			xmlFileName = trimEqualsSignFromStart(cmd.getOptionValue(PARAMETER_XMLFILE));
+			logFileName = trimEqualsSignFromStart(cmd.getOptionValue(PARAMETER_LOGFILE));
+			if(cmd.hasOption(PARAMETER_COVERAGEFILE)) {
+				covFileName = trimEqualsSignFromStart(cmd.getOptionValue(PARAMETER_COVERAGEFILE)); 
 			}
-			if(cmd.hasOption("d")) {
-				covFileName = trimEqualsSignFromStart(cmd.getOptionValue("d"));
+			if(cmd.hasOption(PARAMETER_DETAILEDCOVERAGEFILE)) {
+				covFileName = trimEqualsSignFromStart(cmd.getOptionValue(PARAMETER_DETAILEDCOVERAGEFILE));
 				saveCoverageDetails = true;
 			}
 			
@@ -165,8 +170,8 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 	}
 
 	private void verifyCommandLineArguments(CommandLine cmd) {
-		if(cmd.hasOption("c") && cmd.hasOption("d")) {
-			abort("-c and -d cannot be specified at the same time!");
+		if(cmd.hasOption(PARAMETER_COVERAGEFILE) && cmd.hasOption(PARAMETER_DETAILEDCOVERAGEFILE)) {
+			abort(String.format("-%s and -%s cannot be specified at the same time!", PARAMETER_COVERAGEFILE, PARAMETER_DETAILEDCOVERAGEFILE));
 		}
 		
 		if(cmd.getArgList().size() == 0) {
