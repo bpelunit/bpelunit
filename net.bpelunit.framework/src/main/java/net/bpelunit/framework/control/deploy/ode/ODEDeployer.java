@@ -62,12 +62,18 @@ public class ODEDeployer implements IBPELDeployer {
 		fFactory = ODERequestEntityFactory.newInstance();
 	}
 
-	@IBPELDeployerOption(testSuiteSpecific = true)
+	@IBPELDeployerOption(
+			testSuiteSpecific=true,
+			description="The (relative) path to the deployment archive that is to be deployed."
+	)
 	public void setDeploymentArchive(String archive) {
 		this.fArchive = archive;
 	}
 
-	@IBPELDeployerOption(defaultValue = "http://localhost:8080/ode/processes/DeploymentService")
+	@IBPELDeployerOption(
+			defaultValue="http://localhost:8080/ode/processes/DeploymentService",
+			description="The endpoint of the Apache ODE Deployment Service."
+	)
 	public void setODEDeploymentServiceURL(String deploymentAdminServiceURL) {
 		this.fDeploymentAdminServiceURL = deploymentAdminServiceURL;
 	}

@@ -7,6 +7,7 @@
 package net.bpelunit.framework.control.ext;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -44,7 +45,7 @@ public abstract class GenericDeployment implements IDeployment {
 
 	public GenericDeployment(Partner[] partners, String archive)
 			throws DeploymentException {
-		this.fPartners = partners;
+		this.fPartners = Arrays.copyOf(partners, partners.length);
 		this.fArchive = archive;
 		this.fPut = findPUT();
 

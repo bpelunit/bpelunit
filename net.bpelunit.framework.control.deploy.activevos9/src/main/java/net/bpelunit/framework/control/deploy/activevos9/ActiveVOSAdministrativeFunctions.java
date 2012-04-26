@@ -37,6 +37,17 @@ import com.active_endpoints.schemas.engineapi._2010._05.enginemanagementtypes.Ae
 
 class ActiveVOSAdministrativeFunctions {
 
+	@SuppressWarnings("serial")
+	class DeployException extends Exception {
+		public DeployException(String message, Throwable t) {
+			super(message, t);
+		}
+
+		public DeployException(String message) {
+			super(message);
+		}
+	}
+	
 	private static final QName ACTIVE_BPEL_ADMIN_SERVICE_NAME = new QName(
 			"http://docs.active-endpoints/wsdl/activebpeladmin/2007/01/activebpeladmin.wsdl",
 			"ActiveBpelAdmin");
@@ -53,9 +64,8 @@ class ActiveVOSAdministrativeFunctions {
 	
 	private String baseEndpoint;
 	
-	// Package protected for testing only
-	IAeAxisActiveBpelAdmin activeBpelAdminPort;
-	IAeContributionManagement contributionManagementPort;
+	private IAeAxisActiveBpelAdmin activeBpelAdminPort;
+	private IAeContributionManagement contributionManagementPort;
 
 	public ActiveVOSAdministrativeFunctions(String endpoint, String username,
 			String password) {
@@ -142,40 +152,38 @@ class ActiveVOSAdministrativeFunctions {
 		contributionManagementPort.deleteContribution(input);
 	}
 	
-	public void deployBpr(String bprFileName, InputStream contents) {
+	public void deployBpr(String bprFileName, InputStream contents) throws DeployException {
 		try {
 			deployBpr(bprFileName, IOUtils.toByteArray(contents));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new DeployException("Error reading BPR : " + e.getMessage(), e);
 		}
 	}
 
-	public void deployBpr(String bprFileName, byte[] contents) {
+	public void deployBpr(String bprFileName, byte[] contents) throws DeployException {
 		AesDeployBprType deployBprInput = new AesDeployBprType();
 		AesStringResponseType deployBpr;
-		try {
-			deployBprInput.setBprFilename(bprFileName);
-			deployBprInput.setBase64File(contents);
-			deployBpr = activeBpelAdminPort.deployBpr(deployBprInput);
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"Error while calling deployment service: " + e.getMessage(),
-					e);
-		}
+		
+		deployBprInput.setBprFilename(bprFileName);
+		deployBprInput.setBase64File(contents);
+		deployBpr = activeBpelAdminPort.deployBpr(deployBprInput);
 
+		String responseMessage = deployBpr.getResponse();
 		try {
-			String responseMessage = deployBpr.getResponse();
 			Document xml = parseXMLFromString(responseMessage);
-
 			Node item = xml.getFirstChild().getAttributes()
-					.getNamedItem(ATTRIBUTE_ERROR_COUNT);
+			.getNamedItem(ATTRIBUTE_ERROR_COUNT);
 			if (Integer.parseInt(item.getTextContent()) != 0) {
-				throw new RuntimeException("Errors while deploying process: "
-						+ responseMessage);
+				throw new DeployException("Errors while deploying process: "
+					+ responseMessage);
 			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		} catch (ParserConfigurationException e) {
+			throw new DeployException("Internal error: " + e.getMessage(), e);
+		} catch (SAXException e) {
+			throw new DeployException("Internal reading response XML: " + e.getMessage(), e);
+		} catch (IOException e) {
+			throw new DeployException(e.getMessage(), e);
+		} 
 	}
 
 	private Document parseXMLFromString(String responseMessage)
@@ -188,5 +196,38 @@ class ActiveVOSAdministrativeFunctions {
 
 	public void terminateAllProcessInstances() {
 		// TODO Auto-generated method stub
+	}
+	
+	//=================================
+	// Accessors for testing only
+	//=================================
+
+	/**
+	 * For testing only
+	 */
+	IAeAxisActiveBpelAdmin getActiveBpelAdminPort() {
+		return activeBpelAdminPort;
+	}
+
+	/**
+	 * For testing only
+	 */
+	void setActiveBpelAdminPort(IAeAxisActiveBpelAdmin activeBpelAdminPort) {
+		this.activeBpelAdminPort = activeBpelAdminPort;
+	}
+
+	/**
+	 * For testing only
+	 */
+	IAeContributionManagement getContributionManagementPort() {
+		return contributionManagementPort;
+	}
+
+	/**
+	 * For testing only
+	 */
+	void setContributionManagementPort(
+			IAeContributionManagement contributionManagementPort) {
+		this.contributionManagementPort = contributionManagementPort;
 	}
 }

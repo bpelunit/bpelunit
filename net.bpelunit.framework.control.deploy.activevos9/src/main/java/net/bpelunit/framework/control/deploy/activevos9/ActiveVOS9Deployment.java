@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
 
 public abstract class ActiveVOS9Deployment implements IDeployment {
 	
-	private class BPELInfo implements IBPELProcess {
+	private final class BPELInfo implements IBPELProcess {
 		
 		BPELInfo(File bpelFile, File pddFile, QName name, Document xml) {
 			super();
@@ -40,11 +40,23 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 			this.xml = xml;
 		}
 		
-		File bpelFile;
-		File pddFile;
-		QName name;
-		Document xml;
+		private File bpelFile;
+		private File pddFile;
+		private QName name;
+		private Document xml;
 		
+		File getBpelFile() {
+			return bpelFile;
+		}
+
+		File getPddFile() {
+			return pddFile;
+		}
+
+		Document getXml() {
+			return xml;
+		}
+
 		@Override
 		public QName getName() {
 			return name;
@@ -82,9 +94,6 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 	private Set<BPELInfo> checkedOutProcesses = new HashSet<BPELInfo>();
 	private List<BPELInfo> allProcesses = new ArrayList<BPELInfo>();
 	
-	/** Has the same order like allProcesses */
-	private List<QName> bpelNames = new ArrayList<QName>();
-	
 	public ActiveVOS9Deployment(File bpr) throws DeploymentException {
 		if(!bpr.isFile() || !bpr.canRead()) {
 			throw new DeploymentException("The given BPR does not exist or cannot be read:" + bpr.getAbsolutePath());
@@ -94,10 +103,12 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 	}
 	
 	/**
+	 * @throws DeploymentException 
 	 * @see net.bpelunit.framework.control.deploy.activevos9.IDeployment#getBPELProcessAsXML(javax.xml.namespace.QName)
 	 */
 	@Override
-	public List<IBPELProcess> getBPELProcesses() {
+	public List<IBPELProcess> getBPELProcesses() throws DeploymentException {
+		extractBPRIfNecessary();
 		return new ArrayList<IBPELProcess>(allProcesses);
 	}
 	
@@ -114,7 +125,7 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 			try {
 				// write out all files
 				for(BPELInfo bpel : checkedOutProcesses) {
-					XMLUtil.writeXML(bpel.xml, bpel.bpelFile);
+					XMLUtil.writeXML(bpel.getXml(), bpel.getBpelFile());
 				}
 				
 				// repackage
@@ -139,11 +150,13 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 	void cleanUp() throws DeploymentException {
 		if(tempBPR != null) {
 			tempBPR.delete();
+			tempBPR = null;
 		}
 		
 		if(tempDirectory != null) {
 			try {
 				FileUtils.deleteDirectory(tempDirectory);
+				tempDirectory = null;
 			} catch (IOException e) {
 				throw new DeploymentException("Cannot delete temp directory: " + tempDirectory.getAbsolutePath(), e);
 			}

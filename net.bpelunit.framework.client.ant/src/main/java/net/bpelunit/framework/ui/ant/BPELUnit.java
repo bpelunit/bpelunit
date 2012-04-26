@@ -81,27 +81,33 @@ public class BPELUnit extends Task {
 
 		// Check attributes
 
-		if (fTestSuite == null || fTestSuite.equals(""))
+		if (fTestSuite == null || fTestSuite.equals("")) {
 			throw new BuildException("The testsuite argument is required.");
+		}
 
 		File testSuite= new File(fTestSuite);
-		if (!testSuite.exists())
+		if (!testSuite.exists()) {
 			throw new BuildException("The testsuite file does not exist.");
+		}
 
-		if (fBPELUnitDir == null || fBPELUnitDir.equals(""))
+		if (fBPELUnitDir == null || fBPELUnitDir.equals("")) {
 			fBPELUnitDir= System.getenv("BPELUNIT_HOME");
+		}
 
-		if (fBPELUnitDir == null || fBPELUnitDir.equals(""))
+		if (fBPELUnitDir == null || fBPELUnitDir.equals("")) {
 			throw new BuildException("The BPELUnit directory is required - either specify an argument or set environment variable BPELUNIT_HOME.");
-
+		}
+		
 		for (Output output : fOutputList) {
-			if (!output.hasValidStyle())
+			if (!output.hasValidStyle()) {
 				throw new BuildException("An output specification is missing the style attribute, or wrong style specified.");
+			}
 		}
 
 		for (Logging logging : fLoggingList) {
-			if (!logging.hasValidLevel())
+			if (!logging.hasValidLevel()) {
 				throw new BuildException("A logging specification is missing the level attribute, or wrong level specified.");
+			}
 		}
 
 		HashMap<String, String> options= new HashMap<String, String>();
@@ -195,16 +201,17 @@ public class BPELUnit extends Task {
 		private OutputStream createOutputStream() throws ConfigurationException {
 			if (fFile != null) {
 				String dir= FilenameUtils.getPath(fFile);
-				if (!"".equals(dir))
+				if (!"".equals(dir)) {
 					new File(dir).mkdirs();
-
+				}
 				try {
 					return new FileOutputStream(fFile);
 				} catch (FileNotFoundException e) {
 					throw new ConfigurationException("Cannot create file with name " + fFile + " for output.");
 				}
-			} else
+			} else {
 				return System.out;
+			}
 		}
 
 		public void write(String line) throws IOException {
@@ -225,8 +232,9 @@ public class BPELUnit extends Task {
 		private String fLevel;
 
 		public boolean hasValidLevel() {
-			if (fLevel == null)
+			if (fLevel == null) {
 				return false;
+			}
 			try {
 				Level.parse(fLevel);
 				return true;
@@ -247,5 +255,4 @@ public class BPELUnit extends Task {
 			return getOutput();
 		}
 	}
-
 }

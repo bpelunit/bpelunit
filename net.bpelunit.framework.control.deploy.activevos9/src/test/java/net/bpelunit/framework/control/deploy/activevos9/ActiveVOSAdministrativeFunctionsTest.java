@@ -39,8 +39,8 @@ public class ActiveVOSAdministrativeFunctionsTest {
 	public void testCorrectPortTypeInitialization() throws Exception {
 		ActiveVOSAdministrativeFunctions activevos = new ActiveVOSAdministrativeFunctions("http://localhost:8081/active-bpel/services", "user", "pwd");
 		
-		BindingProvider ap = (BindingProvider)activevos.activeBpelAdminPort;
-		BindingProvider cp = (BindingProvider)activevos.contributionManagementPort;
+		BindingProvider ap = (BindingProvider)activevos.getActiveBpelAdminPort();
+		BindingProvider cp = (BindingProvider)activevos.getContributionManagementPort();
 		
 		assertEquals("user", ap.getRequestContext().get(BindingProvider.USERNAME_PROPERTY));
 		assertEquals("pwd", ap.getRequestContext().get(BindingProvider.PASSWORD_PROPERTY));
@@ -52,8 +52,8 @@ public class ActiveVOSAdministrativeFunctionsTest {
 
 		
 		activevos = new ActiveVOSAdministrativeFunctions("http://localhost:8081/active-bpel/services/ActiveBpelDeployBPR", "user", "pwd");
-		ap = (BindingProvider)activevos.activeBpelAdminPort;
-		cp = (BindingProvider)activevos.contributionManagementPort;
+		ap = (BindingProvider)activevos.getActiveBpelAdminPort();
+		cp = (BindingProvider)activevos.getContributionManagementPort();
 		
 		assertEquals("user", ap.getRequestContext().get(BindingProvider.USERNAME_PROPERTY));
 		assertEquals("pwd", ap.getRequestContext().get(BindingProvider.PASSWORD_PROPERTY));

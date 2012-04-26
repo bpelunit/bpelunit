@@ -6,7 +6,6 @@
 package net.bpelunit.framework.control.util;
 
 import java.io.ByteArrayOutputStream;
-import java.util.HashSet;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;

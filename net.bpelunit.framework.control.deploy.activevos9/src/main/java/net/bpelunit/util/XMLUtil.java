@@ -39,7 +39,7 @@ public final class XMLUtil {
 	 * @throws ParserConfigurationException 
 	 */
 	public static Document parseXML(String xmlAsString)
-			throws SAXException, UnsupportedEncodingException, IOException, ParserConfigurationException {
+			throws SAXException, IOException, ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			return dBuilder.parse(new ByteArrayInputStream(xmlAsString
