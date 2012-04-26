@@ -22,10 +22,6 @@ public class BPELUnitCommandLineRunnerTest {
 	private static final String FILENAME_TESTSUITE = "src/test/resources/testsuite.bpts";
 	
 	private ConsoleMock commandLineMock;
-	private boolean verbose;
-	private String xmlFileName;
-	private String logFileName;
-	private String covFileName;
 
 	private class BPELUnitCommandLineRunnerWithoutRunAndExit extends
 			BPELUnitCommandLineRunner {
@@ -33,17 +29,6 @@ public class BPELUnitCommandLineRunnerTest {
 		public BPELUnitCommandLineRunnerWithoutRunAndExit(ConsoleMock cmd,
 				String[] args) {
 			super(cmd, args);
-		}
-
-		@Override
-		public void setOptions(boolean verbose, String xmlFileName,
-				String logFileName, String covFileName) {
-			super.setOptions(verbose, xmlFileName, logFileName, covFileName);
-
-			BPELUnitCommandLineRunnerTest.this.verbose = verbose;
-			BPELUnitCommandLineRunnerTest.this.xmlFileName = xmlFileName;
-			BPELUnitCommandLineRunnerTest.this.logFileName = logFileName;
-			BPELUnitCommandLineRunnerTest.this.covFileName = covFileName;
 		}
 
 		String getTestSuiteFileName() {
@@ -81,10 +66,10 @@ public class BPELUnitCommandLineRunnerTest {
 			fail(commandLineMock.getConsoleBuffer());
 		}
 
-		assertEquals(false, verbose);
-		assertNull(xmlFileName);
-		assertNull(logFileName);
-		assertNull(covFileName);
+		assertEquals(false, runner.isVerbose());
+		assertNull(runner.getXmlFileName());
+		assertNull(runner.getLogFileName());
+		assertNull(runner.getCovFileName());
 		assertFalse(runner.getCoverageDetails());
 		assertEquals(FILENAME_TESTSUITE, runner.getTestSuiteFileName());
 		assertEquals(0, runner.getTestCaseNames().size());
@@ -107,10 +92,10 @@ public class BPELUnitCommandLineRunnerTest {
 			fail(commandLineMock.getConsoleBuffer());
 		}
 
-		assertEquals(true, verbose);
-		assertEquals(FILE_XML, xmlFileName);
-		assertEquals(FILE_LOG, logFileName);
-		assertEquals(FILE_COV, covFileName);
+		assertEquals(true, runner.isVerbose());
+		assertEquals(FILE_XML, runner.getXmlFileName());
+		assertEquals(FILE_LOG, runner.getLogFileName());
+		assertEquals(FILE_COV, runner.getCovFileName());
 		assertFalse(runner.getCoverageDetails());
 		assertEquals(FILENAME_TESTSUITE, runner.getTestSuiteFileName());
 		assertEquals(2, runner.getTestCaseNames().size());
@@ -136,10 +121,10 @@ public class BPELUnitCommandLineRunnerTest {
 			fail(commandLineMock.getConsoleBuffer());
 		}
 
-		assertEquals(true, verbose);
-		assertEquals(FILE_XML, xmlFileName);
-		assertEquals(FILE_LOG, logFileName);
-		assertEquals(FILE_COV, covFileName);
+		assertEquals(true, runner.isVerbose());
+		assertEquals(FILE_XML, runner.getXmlFileName());
+		assertEquals(FILE_LOG, runner.getLogFileName());
+		assertEquals(FILE_COV, runner.getCovFileName());
 		assertTrue(runner.getCoverageDetails());
 		assertEquals(FILENAME_TESTSUITE, runner.getTestSuiteFileName());
 		assertEquals(2, runner.getTestCaseNames().size());

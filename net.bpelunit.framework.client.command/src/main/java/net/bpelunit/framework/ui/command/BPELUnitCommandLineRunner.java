@@ -33,7 +33,13 @@ import net.bpelunit.framework.model.test.data.XMLData;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.util.Console;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
@@ -60,14 +66,15 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 	private static final int MAX_LINE_LENGTH = 800;
 	private Console console;
 	
-	private boolean fCoverageDetails = false;
-	private boolean fVerbose;
-	private String fXmlFileName;
-	private String fLogFileName;
-	private String fCovFileName;
+	private boolean saveCoverageDetails = false;
+	private boolean verbose;
+	private String xmlFileName;
+	private String logFileName;
+	private String covFileName;
 	private PrintWriter screen;
 	private File testSuiteFile;
 	private List<String> testCaseNames;
+	private Options options;
 
 	public BPELUnitCommandLineRunner(String[] args) {
 		this(new Console(), args);
@@ -77,96 +84,93 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 		this.console = consoleToUse;
 		this.screen = console.getScreen();
 	
-		screen.println("BPELUnit Command Line Runner");
-		screen.println("---------------------------------------------");
-
-		parseOptionsFromCommandLine(args);
-		this.run();
+		this.createOptions();
+		this.parseOptionsFromCommandLine(args);
 	}
 
-	private Options createOptions() {
-		Options options = new Options();
-		options.addOption("x", true, "write XML output to the given file");
-		options.addOption("l", true, "write logging messages to the given file");
-		options.addOption("c", true, "write test coverage into the given file");
-		options.addOption("d", true, "write detailled test coverage into the given file");
+	@SuppressWarnings("static-access")
+	private final void createOptions() {
+		options = new Options();
 		
-		return options;
+		options.addOption("v", false, "adds detailled output");
+		options.addOption(OptionBuilder
+                .withDescription("write XML output to the given file")
+                .hasArg()
+                .withArgName("FILE")
+                .create("x") );
+		options.addOption(OptionBuilder
+				.withDescription("write logging messages to the given file")
+				.hasArg()
+				.withArgName("FILE")
+				.create("l") );
+		options.addOption(OptionBuilder
+				.withDescription("write test coverage to the given file")
+				.hasArg()
+				.withArgName("FILE")
+				.create("c") );
+		options.addOption(OptionBuilder
+				.withDescription("write detailled test coverage to the given file")
+				.hasArg()
+				.withArgName("FILE")
+				.create("d") );
 	}
 	
-	private void parseOptionsFromCommandLine(String[] args) {
-		int index = 0;
-		boolean verbose = false;
-		String logFileName = null;
-		String xmlFileName = null;
-		String coverageFileName = null;
-		fCoverageDetails = false;
+	@SuppressWarnings("unchecked")
+	private final void parseOptionsFromCommandLine(String[] args) {
+		saveCoverageDetails = false;
 
-		if (args.length == 0) {
-			abort();
+		CommandLineParser parser = new PosixParser();
+		try {
+			CommandLine cmd = parser.parse(options, args);
+			
+			verifyCommandLineArguments(cmd);
+			
+			verbose = cmd.hasOption("v");
+			xmlFileName = trimEqualsSignFromStart(cmd.getOptionValue("x"));
+			logFileName = trimEqualsSignFromStart(cmd.getOptionValue("l"));
+			if(cmd.hasOption("c")) {
+				covFileName = trimEqualsSignFromStart(cmd.getOptionValue("c")); 
+			}
+			if(cmd.hasOption("d")) {
+				covFileName = trimEqualsSignFromStart(cmd.getOptionValue("d"));
+				saveCoverageDetails = true;
+			}
+			
+			ArrayList<String> remainingOptions = new ArrayList<String>(cmd.getArgList());
+			setAndValidateTestSuiteFileName(remainingOptions.remove(0));
+			testCaseNames = remainingOptions;
+		} catch (ParseException e) {
+			showHelpAndExit();
 		}
+	}
 
-		// ********** Check for extended output flag ***********
-
-		if ("-v".equals(args[0])) {
-			index++;
-			verbose= true;
-		}
-
-		if (args.length < index + 1) {
-			abort();
-		}
-
-		// ************* Check for XML output flag **************
-
-		if (args[index].startsWith("-x")) {
-			xmlFileName= findFileName(args[index], "xml");
-			index++;
-		}
-
-		if (args.length < index + 1) {
-			abort();
-		}
-
-		// ************* Check for LOG output flag **************
-
-		if (args[index].startsWith("-l")) {
-			logFileName= findFileName(args[index], "log");
-			index++;
-		}
-		
-		// ************* Check for coverage output flag **************
-
-		if (args[index].startsWith("-c")) {
-			coverageFileName = findFileName(args[index], "xml");
-			index++;
-		} else if(args[index].startsWith("-d")){
-			coverageFileName = findFileName(args[index], "xml");
-			fCoverageDetails = true;
-			index++;
-		}
-
-		if (args.length < index + 1) {
-			abort();
-		}
-
-
-		// ************** Check actual test suite ***************
-
-		testSuiteFile = new File(args[index]);
+	private void setAndValidateTestSuiteFileName(String testSuiteFileName) {
+		testSuiteFile = new File(testSuiteFileName);
 		if (!testSuiteFile.exists()) {
 			abort("Cannot find test suite file with path " + testSuiteFile);
 		}
+	}
 
-		// ************** Check test case names ***************
-
-		testCaseNames = new ArrayList<String>();
-		for (int i= index + 1; i < args.length; i++) {
-			testCaseNames.add(args[i]);
+	private String trimEqualsSignFromStart(String optionValue) {
+		if(optionValue == null) {
+			return null;
 		}
+		
+		if(!optionValue.startsWith("=")) {
+			return optionValue;
+		}
+		
+		return optionValue.substring(1);
+	}
 
-		this.setOptions(verbose, xmlFileName, logFileName,
-				coverageFileName);
+	private void verifyCommandLineArguments(CommandLine cmd) {
+		if(cmd.hasOption("c") && cmd.hasOption("d")) {
+			abort("-c and -d cannot be specified at the same time!");
+		}
+		
+		if(cmd.getArgList().size() == 0) {
+			showHelpAndExit();
+		}
 	}
 	
 	/**
@@ -175,16 +179,8 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new BPELUnitCommandLineRunner(args);
+		new BPELUnitCommandLineRunner(args).run();
 	}
-
-	public void setOptions(boolean verbose, String xmlFileName, String logFileName, String covFileName) {
-		fVerbose = verbose;
-		fXmlFileName = xmlFileName;
-		fLogFileName = logFileName;
-		fCovFileName = covFileName;
-	}
-
 	
 	// ************************* Implementation *********************
 
@@ -193,20 +189,22 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 		console.exit(1);
 	}
 
-	private void abort() {
-		screen.println("Usage: bpelunit [-v] [-x=filename] [-l=filename] [-c=filename]|[-d=filename] testsuite.bpts [testcase1] [testcase2]");
-		screen.println("		-v adds detailed output");
-		screen.println("		-x=filename send XML output into the given file");
-		screen.println("		-l=filename send logging messages into the given file");
-		screen.println("		-c=filename send test coverage into the given file");
-		screen.println("		-d=filename send detailed test coverage into the given file");
+	private void showHelpAndExit() {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp(
+			"bpelunit [options] testsuite.bpts [testcase...]", 
+			options
+		);
 		console.exit(1);
 	}
 
 	void run() {
+		screen.println("BPELUnit Command Line Runner");
+		screen.println("----------------------------");
+		
 		try {			
 			Map<String, String> options;
-			if (fCovFileName != null) {
+			if (covFileName != null) {
 				options = new HashMap<String, String>();
 				options.put(BPELUnitRunner.MEASURE_COVERAGE, "true");
 			} else {
@@ -257,14 +255,13 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 			suite.removeResultListener(this);
 			screen.println("Done running test cases.");
 
-			if (fXmlFileName != null) {
+			if (xmlFileName != null) {
 				try {
-					XMLResultProducer.writeXML(new FileOutputStream(fXmlFileName), suite);
+					XMLResultProducer.writeXML(new FileOutputStream(xmlFileName), suite);
 				} catch (Exception e) {
-					screen.println("Sorry - could not write XML output to " + fXmlFileName + ": " + e.getMessage());
+					screen.println("Sorry - could not write XML output to " + xmlFileName + ": " + e.getMessage());
 				}
 			}
-			
 			
 			screen.println("Undeploying services...");
 
@@ -275,17 +272,17 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 				screen.println("  " + e.getMessage());
 				console.exit(1);
 			}
-			if (fCovFileName != null) {
+			if (covFileName != null) {
 				try {
 					ICoverageMeasurementTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
 					if(tool!=null)
 					XMLCoverageResultProducer.writeResult(new FileOutputStream(
-							fCovFileName),tool.getStatistics(),tool.getErrorStatus(),fCoverageDetails);
+							covFileName),tool.getStatistics(),tool.getErrorStatus(),saveCoverageDetails);
 				} catch (IOException e) {
 
 					System.out
 							.println("Sorry - could not write XML coverage output to "
-									+ fCovFileName + ": " + e.getMessage());
+									+ covFileName + ": " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -300,60 +297,68 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 			screen.println("An error was encountered when reading the test suite specification:");
 			screen.println(" " + e.getMessage());
 			console.exit(1);
-		} finally{
+		} finally {
 			BPELUnitRunner.setCoverageMeasurmentTool(null);
 		}
-
 	}
 
 	public void testCaseEnded(TestCase test) {
-		String status= "ended";
-		String error= null;
+		String status = "ended";
+		String error = null;
 		if (test.getStatus().isError()) {
-			status= "had an error";
-			error= test.getStatus().getMessage();
+			status = "had an error";
+			error = test.getStatus().getMessage();
 		}
 		if (test.getStatus().isFailure()) {
-			status= "failed";
-			error= test.getStatus().getMessage();
+			status = "failed";
+			error = test.getStatus().getMessage();
 		}
 		if (test.getStatus().isAborted())
-			status= "was aborted";
+			status = "was aborted";
 		if (test.getStatus().isPassed())
-			status= "passed";
-		screen.println("Test Case " + status + ": " + test.getName() + "." + ( (error != null) ? error : ""));
+			status = "passed";
+		screen.println("Test Case " + status + ": " + test.getName() + "."
+				+ ((error != null) ? error : ""));
 
 	}
 
 	public void testCaseStarted(TestCase test) {
-		if (fVerbose) {
+		if (verbose) {
 			screen.println("Test Case started: " + test.getName() + ".\n");
 		}
 	}
 
 	public void progress(ITestArtefact test) {
-		if (fVerbose && test instanceof PartnerTrack) {
+		if (verbose && test instanceof PartnerTrack) {
 			screen.println(createReadableOutput(test, false));
 		}
 	}
 
-	private static String createReadableOutput(ITestArtefact artefact, boolean recursive) {
+	private String createReadableOutput(ITestArtefact artefact,
+			boolean recursive) {
 		return createReadableOutputInternal(artefact, recursive, "");
 	}
 
-	private static String createReadableOutputInternal(ITestArtefact artefact, boolean recursive, String inline) {
-		StringBuffer output= new StringBuffer();
+	private String createReadableOutputInternal(ITestArtefact artefact,
+			boolean recursive, String inline) {
+		StringBuffer output = new StringBuffer();
 		output.append(inline + "<Artefact \"" + artefact.getName() + "\">\n");
-		String internalInline= inline + "  ";
-		output.append(internalInline + "Status: " + artefact.getStatus().toString() + "\n");
+		String internalInline = inline + "  ";
+		output.append(internalInline + "Status: "
+				+ artefact.getStatus().toString() + "\n");
 		if (recursive) {
 			for (ITestArtefact child : artefact.getChildren()) {
 				if (artefact instanceof XMLData) {
-					XMLData sd= (XMLData) artefact;
-					output.append(internalInline + sd.getName() + " : "
-							+ StringUtils.abbreviate(BPELUnitUtil.removeSpaceLineBreaks(sd.getXmlData()), MAX_LINE_LENGTH) + "\n");
+					XMLData sd = (XMLData) artefact;
+					output.append(internalInline
+							+ sd.getName()
+							+ " : "
+							+ StringUtils.abbreviate(BPELUnitUtil
+									.removeSpaceLineBreaks(sd.getXmlData()),
+									MAX_LINE_LENGTH) + "\n");
 				} else
-					output.append(createReadableOutputInternal(child, recursive, internalInline));
+					output.append(createReadableOutputInternal(child,
+							recursive, internalInline));
 			}
 		}
 		output.append(inline + "</Artefact \"" + artefact.getName() + "\">\n");
@@ -362,9 +367,10 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 
 	public void configureLogging() throws ConfigurationException {
 		Logger.getRootLogger().removeAllAppenders();
-		if (fLogFileName != null) {
+		if (logFileName != null) {
 			try {
-				Logger.getRootLogger().addAppender(new FileAppender(new PatternLayout(), fLogFileName));
+				Logger.getRootLogger().addAppender(
+						new FileAppender(new PatternLayout(), logFileName));
 			} catch (IOException e) {
 				screen.println("Error trying to write to log file. Disabling logging...");
 			}
@@ -374,34 +380,16 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 		}
 	}
 
-	private String findFileName(String string, String type) {
-		String logFileName= null;
-		int i = string.indexOf('=');
-		if (i != -1) {
-			logFileName = string.substring(i + 1);
-			try {
-				new File(logFileName).createNewFile();
-			} catch (IOException e) {
-				abort("Problem creating " + type + " file: " + e.getMessage());
-			}
-		} else {
-			abort(type + " file not specified!");
-		}
-
-		return logFileName;
-	}
-	
 	/**
 	 * Only for tests
 	 */
 	boolean getCoverageDetails() {
-		return fCoverageDetails;
+		return saveCoverageDetails;
 	}
-	
+
 	/**
 	 * Only for tests
 	 */
-
 	File getTestSuiteFile() {
 		return testSuiteFile;
 	}
@@ -413,4 +401,38 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 		return new ArrayList<String>(testCaseNames);
 	}
 
+	/**
+	 * Only for tests
+	 */
+	boolean isSaveCoverageDetails() {
+		return saveCoverageDetails;
+	}
+
+	/**
+	 * Only for tests
+	 */
+	boolean isVerbose() {
+		return verbose;
+	}
+
+	/**
+	 * Only for tests
+	 */
+	String getXmlFileName() {
+		return xmlFileName;
+	}
+
+	/**
+	 * Only for tests
+	 */
+	String getLogFileName() {
+		return logFileName;
+	}
+
+	/**
+	 * Only for tests
+	 */
+	String getCovFileName() {
+		return covFileName;
+	}
 }

@@ -9,7 +9,7 @@ public class ConsoleMock extends Console {
 
 	private StringWriter consoleBuffer = new StringWriter();
 	private PrintWriter consoleWriter = new PrintWriter(consoleBuffer);
-	
+
 	@SuppressWarnings("serial")
 	public static class ProgramExitException extends RuntimeException {
 		private int exitCode;
@@ -25,7 +25,7 @@ public class ConsoleMock extends Console {
 	
 	@Override
 	public PrintWriter getScreen() {
-		return consoleWriter ;
+		return consoleWriter;
 	}
 	
 	@Override
@@ -36,5 +36,4 @@ public class ConsoleMock extends Console {
 	public String getConsoleBuffer() {
 		return consoleBuffer.toString();
 	}
-	
 }
