@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.bpelunit.framework.control.util.JDomHelper;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import net.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
 import net.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
@@ -18,6 +17,8 @@ import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.CMServiceFa
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import net.bpelunit.framework.coverage.exceptions.BpelException;
 import net.bpelunit.framework.coverage.exceptions.BpelVersionException;
+import net.bpelunit.util.JDomUtil;
+
 import org.jdom.Comment;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -95,7 +96,7 @@ public class Instrumenter {
 	 */
 	@SuppressWarnings("serial")
 	private void replaceInlineHandler(Element process_element) {
-		Iterator<Element> iter = JDomHelper.getDescendants(process_element,
+		Iterator<Element> iter = JDomUtil.getDescendants(process_element,
 				new ElementFilter(BasicActivities.INVOKE_ACTIVITY,
 						process_element.getNamespace()) {
 
@@ -103,15 +104,15 @@ public class Instrumenter {
 					public boolean matches(Object o) {
 						if (super.matches(o)) {
 							Element invoke = (Element) o;
-							List<Element> children = JDomHelper.getChildren(
+							List<Element> children = JDomUtil.getChildren(
 									invoke, BpelXMLTools.CATCH_ELEMENT);
 							if (children.size() > 0)
 								return true;
-							children = JDomHelper.getChildren(invoke,
+							children = JDomUtil.getChildren(invoke,
 									BpelXMLTools.CATCHALL_ELEMENT);
 							if (children.size() > 0)
 								return true;
-							children = JDomHelper.getChildren(invoke,
+							children = JDomUtil.getChildren(invoke,
 									BpelXMLTools.COMPENSATION_HANDLER);
 							if (children.size() > 0)
 								return true;
@@ -127,9 +128,9 @@ public class Instrumenter {
 
 	private void replaceInlineHandlerForInvoke(Element element) {
 		Element scope = null;
-		List<Element> inlineElements = JDomHelper.getChildren(element,
+		List<Element> inlineElements = JDomUtil.getChildren(element,
 				BpelXMLTools.CATCH_ELEMENT);
-		List<Element> inlineElements2 = JDomHelper.getChildren(element,
+		List<Element> inlineElements2 = JDomUtil.getChildren(element,
 				BpelXMLTools.CATCHALL_ELEMENT);
 		if (inlineElements.size() > 0 || inlineElements2.size() > 0) {
 			scope = BpelXMLTools
@@ -146,7 +147,7 @@ public class Instrumenter {
 			}
 		}
 
-		inlineElements = JDomHelper.getChildren(element,
+		inlineElements = JDomUtil.getChildren(element,
 				BpelXMLTools.COMPENSATION_HANDLER);
 		if (inlineElements.size() > 0) {
 			if (scope == null)
@@ -242,7 +243,7 @@ public class Instrumenter {
 
 	private void handleCoverageLabelsInElement(Element element, String variable) {
 		List<Element> childElements = new ArrayList<Element>();
-		List<Element> children = JDomHelper.getElementsInContent(element);
+		List<Element> children = JDomUtil.getElementsInContent(element);
 		for (int i = 0; i < children.size(); i++) {
 			childElements.add(children.get(i));
 		}
@@ -261,7 +262,7 @@ public class Instrumenter {
 	private void replaceCoverageLabelsWithReportInvokes(Element element,
 			String variable) {
 		List<Comment> children;
-		children = JDomHelper.getCommentsInContent(element);
+		children = JDomUtil.getCommentsInContent(element);
 		int indexOfLastMarker = -1;
 		int index;
 		Comment comment;

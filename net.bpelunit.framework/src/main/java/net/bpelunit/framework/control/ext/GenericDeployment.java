@@ -16,12 +16,13 @@ import javax.wsdl.Definition;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
-import net.bpelunit.framework.control.util.JDomHelper;
 import net.bpelunit.framework.control.util.ParseUtil;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.EndPointException;
 import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.util.JDomUtil;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
@@ -96,12 +97,12 @@ public abstract class GenericDeployment implements IDeployment {
 
 		Element definition = document.getRootElement();
 
-		Iterator<Element> services = JDomHelper.getDescendants(definition,
+		Iterator<Element> services = JDomUtil.getDescendants(definition,
 				new ElementFilter(SERVICE_ELEMENT));
 
 		while (services.hasNext()) {
 			Element service = services.next();
-			Iterator<Element> ports = JDomHelper.getDescendants(service, new ElementFilter(
+			Iterator<Element> ports = JDomUtil.getDescendants(service, new ElementFilter(
 					PORT_ELEMENT));
 
 			if (partnerPort != null) {

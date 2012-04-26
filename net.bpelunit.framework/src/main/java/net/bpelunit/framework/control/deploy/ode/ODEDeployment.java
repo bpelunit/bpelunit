@@ -14,18 +14,19 @@ import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.control.ext.GenericDeployment;
 import net.bpelunit.framework.control.ext.PartnerLink;
-import net.bpelunit.framework.control.util.JDomHelper;
 import net.bpelunit.framework.control.util.ParseUtil;
 import net.bpelunit.framework.coverage.CoverageConstants;
 import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.Partner;
+import net.bpelunit.util.JDomUtil;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
@@ -86,7 +87,7 @@ public class ODEDeployment extends GenericDeployment {
 		ArrayList<PartnerLink> links = new ArrayList<PartnerLink>();
 		Element envelope = fDescriptorDocument.getRootElement();
 
-		Iterator<Element> processes = JDomHelper.getDescendants(envelope,
+		Iterator<Element> processes = JDomUtil.getDescendants(envelope,
 				new ElementFilter(PROCESS_ELEMENT));
 
 		while (processes.hasNext()) {
@@ -94,7 +95,7 @@ public class ODEDeployment extends GenericDeployment {
 			String processName = process.getAttributeValue(NAME_ATTR);
 
 			if (processName.contains(getProcessUnderTest().getName())) {
-				Iterator<Element> invokes = JDomHelper.getDescendants(
+				Iterator<Element> invokes = JDomUtil.getDescendants(
 						process, new ElementFilter(INVOKE_ATTR));
 
 				while (invokes.hasNext()) {
@@ -179,7 +180,7 @@ public class ODEDeployment extends GenericDeployment {
 
 		try {
 			Element deploy = fDescriptorDocument.getRootElement();
-			Iterator<Element> processes = JDomHelper.getDescendants(deploy,
+			Iterator<Element> processes = JDomUtil.getDescendants(deploy,
 					new ElementFilter(PROCESS_ELEMENT));
 			deploy
 					.addNamespaceDeclaration(CoverageConstants.COVERAGETOOL_NAMESPACE);

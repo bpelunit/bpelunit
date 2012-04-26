@@ -14,6 +14,15 @@ import java.util.Map;
 
 import javax.xml.soap.SOAPException;
 
+import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.control.ext.IDeployment;
+import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.model.Partner;
+import net.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.util.JDomUtil;
+
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -22,14 +31,6 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.ext.IDeployment;
-import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
-import net.bpelunit.framework.control.util.JDomHelper;
-import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
-import net.bpelunit.framework.exception.DeploymentException;
-import net.bpelunit.framework.model.Partner;
-import net.bpelunit.framework.model.ProcessUnderTest;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -294,7 +295,7 @@ public class ODEDeployer implements IBPELDeployer {
 			Document doc = builder.build(new StringReader(responseBody));
 			Element envelope = doc.getRootElement();
 
-			Iterator<Element> it = JDomHelper.getDescendants(envelope,
+			Iterator<Element> it = JDomUtil.getDescendants(envelope,
 					new ElementFilter("name"));
 			Element idElement = it.next();
 

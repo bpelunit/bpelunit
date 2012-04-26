@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.bpelunit.framework.control.util.JDomHelper;
 import net.bpelunit.framework.coverage.CoverageConstants;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.ExpressionLanguage;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.exprlang.XpathLanguage;
+import net.bpelunit.util.JDomUtil;
+
 import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -197,7 +198,7 @@ public class BpelXMLTools {
 			variables = new Element(VARIABLES_ELEMENT, getProcessNamespace());
 			scope.addContent(0, variables);
 		}
-		List<Element> allVariables = JDomHelper.getChildren(variables,
+		List<Element> allVariables = JDomUtil.getChildren(variables,
 				VARIABLE_ELEMENT, getProcessNamespace());
 		boolean exist = false;
 		String variableName = variable.getAttributeValue(NAME_ATTR);
@@ -270,7 +271,7 @@ public class BpelXMLTools {
 	 */
 	public static Element getFirstEnclosedActivity(Element element) {
 		Element activity = null;
-		List<Element> children = JDomHelper.getElementsInContent(element);
+		List<Element> children = JDomUtil.getElementsInContent(element);
 		for (Element child : children) {
 			if (isActivity(child)) {
 				activity = child;
@@ -474,7 +475,7 @@ public class BpelXMLTools {
 
 	public static List<Element> getCatchBlocks(Element faultHandler) {
 		List<Element> catchBlocks = new ArrayList<Element>();
-		List<Element> children = JDomHelper.getChildren(faultHandler,
+		List<Element> children = JDomUtil.getChildren(faultHandler,
 				CATCH_ELEMENT, getProcessNamespace());
 		Iterator<Element> iter = children.iterator();
 		while (iter.hasNext()) {

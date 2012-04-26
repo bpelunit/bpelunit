@@ -17,15 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.apache.log4j.Logger;
-import org.apache.xmlbeans.XmlException;
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerOption;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
-import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerOption;
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.coverage.CoverageConstants;
 import net.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
@@ -42,6 +40,10 @@ import net.bpelunit.framework.xml.config.XMLTestConfigurationDocument;
 import net.bpelunit.framework.xml.extension.XMLBPELUnitCoreExtensions;
 import net.bpelunit.framework.xml.extension.XMLExtension;
 import net.bpelunit.framework.xml.extension.XMLExtensionRegistryDocument;
+import net.bpelunit.util.JDomUtil;
+
+import org.apache.log4j.Logger;
+import org.apache.xmlbeans.XmlException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -385,7 +387,7 @@ public class ExtensionRegistry {
 	private static Map<String, List<String>> handleMetricElements(Element config) {
 		String attribute;
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		List<Element> children = JDomHelper.getChildren(config,
+		List<Element> children = JDomUtil.getChildren(config,
 				CoverageConstants.CONFIG_METRIC_ELEMENT,
 				CoverageConstants.NAMESPACE_CONFIGURATION);
 		for (Iterator<Element> iter = children.iterator(); iter.hasNext();) {
