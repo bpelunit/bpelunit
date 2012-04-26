@@ -32,7 +32,6 @@ import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
-import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.HumanPartner;
@@ -640,9 +639,6 @@ public class SpecificationLoader {
 	 *            the list of XML activities
 	 * @param round
 	 * @throws SpecificationException
-	 * @throws IOException 
-	 * @throws XmlException 
-	 * @throws ConfigurationException
 	 */
 	private void readActivities(PartnerTrack partnerTrack,
 			XMLTestCase xmlTestCase, XMLTrack xmlTrack, int round,
@@ -868,9 +864,6 @@ public class SpecificationLoader {
 	 *            the XML data
 	 * @param round
 	 * @throws SpecificationException
-	 * @throws IOException 
-	 * @throws XmlException 
-	 * @throws ConfigurationException
 	 */
 	private void fillAsyncTwoWay(TwoWayAsyncActivity twoWayActivity,
 			XMLTwoWayActivity xmlAsyncTwoWay, int round, String testDirectory)
