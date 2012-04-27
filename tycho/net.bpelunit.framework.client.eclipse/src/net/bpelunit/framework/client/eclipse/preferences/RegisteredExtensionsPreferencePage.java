@@ -259,6 +259,7 @@ public class RegisteredExtensionsPreferencePage extends PreferencePage
 							item.setText(new String[] {
 									option,
 									annotation.defaultValue(),
+									annotation.description(),
 									new Boolean(annotation.testSuiteSpecific())
 											.toString() });
 						}
@@ -279,6 +280,7 @@ public class RegisteredExtensionsPreferencePage extends PreferencePage
 		deployersOptionTree = createTree(deployersComposite);
 		addTreeColumn(deployersOptionTree, "Deployer Option", 200);
 		addTreeColumn(deployersOptionTree, "Default Value", 200);
+		addTreeColumn(deployersOptionTree, "Description", 200);
 		addTreeColumn(deployersOptionTree, "Test Suite Only", 100);
 	}
 
