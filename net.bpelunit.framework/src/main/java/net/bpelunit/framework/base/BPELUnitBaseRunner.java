@@ -11,18 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FilenameUtils;
 import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.ext.ExtensionRegistry;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
-import net.bpelunit.framework.control.util.ExtensionRegistry;
 import net.bpelunit.framework.coverage.CoverageConstants;
 import net.bpelunit.framework.coverage.CoverageMeasurementTool;
 import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.SpecificationException;
+
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Basic test runner which uses XML configuration files for configuring extensions and configuring

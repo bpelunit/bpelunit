@@ -13,12 +13,12 @@ import net.bpelunit.framework.client.model.DataSourceExtension;
 import net.bpelunit.framework.client.model.DeployerExtension;
 import net.bpelunit.framework.client.model.HeaderProcessorExtension;
 import net.bpelunit.framework.client.model.SOAPEncoderExtension;
+import net.bpelunit.framework.control.ext.ExtensionRegistry;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerOption;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
-import net.bpelunit.framework.control.util.ExtensionRegistry;
 import net.bpelunit.framework.exception.SpecificationException;
 
 import org.eclipse.jface.preference.PreferencePage;
