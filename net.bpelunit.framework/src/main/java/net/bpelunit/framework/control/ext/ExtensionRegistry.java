@@ -18,12 +18,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 import net.bpelunit.framework.BPELUnitRunner;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerOption;
-import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
-import net.bpelunit.framework.control.ext.IHeaderProcessor;
-import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.coverage.CoverageConstants;
 import net.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
@@ -61,16 +57,15 @@ public class ExtensionRegistry {
 	private static Logger fsLogger = Logger
 			.getLogger("net.bpelunit.framework.ExtensionRegistry");
 
-	// TODO Make the maps parameterized with the correct Class<? extends X>
-	private static Map<String, Class<?>> fsDeployerRegistry;
+	private static Map<String, Class<?extends IBPELDeployer>> fsDeployerRegistry;
 
 	private static Map<String, Map<String, String>> fsDeployerOptions;
 
-	private static Map<String, Class<?>> fsEncoderRegistry;
+	private static Map<String, Class<?extends ISOAPEncoder>> fsEncoderRegistry;
 
-	private static Map<String, Class<?>> fsHeaderRegistry;
+	private static Map<String, Class<?extends IHeaderProcessor>> fsHeaderRegistry;
 
-	private static Map<String, Class<?>> fsDataSourceRegistry;
+	private static Map<String, Class<?extends IDataSource>> fsDataSourceRegistry;
 
 	private static boolean fsIgnoreOnNotFound;
 
@@ -91,10 +86,10 @@ public class ExtensionRegistry {
 
 		fsIgnoreOnNotFound = ignoreOnNotFound;
 
-		fsDeployerRegistry = new HashMap<String, Class<?>>();
-		fsEncoderRegistry = new HashMap<String, Class<?>>();
-		fsHeaderRegistry = new HashMap<String, Class<?>>();
-		fsDataSourceRegistry = new HashMap<String, Class<?>>();
+		fsDeployerRegistry = new HashMap<String, Class<?extends IBPELDeployer>>();
+		fsEncoderRegistry = new HashMap<String, Class<?extends ISOAPEncoder>>();
+		fsHeaderRegistry = new HashMap<String, Class<? extends IHeaderProcessor>>();
+		fsDataSourceRegistry = new HashMap<String, Class<?extends IDataSource>>();
 		fsDeployerOptions = new HashMap<String, Map<String, String>>();
 
 		XMLExtensionRegistryDocument document;
@@ -203,9 +198,10 @@ public class ExtensionRegistry {
 	private static Object createObject(Class<?> clazz, String type)
 			throws SpecificationException {
 
-		if (clazz == null)
+		if (clazz == null) {
 			throw new SpecificationException(
 					"No deployer class registered for type " + type);
+		}
 		Object deployer = null;
 		try {
 			deployer = clazz.newInstance();
@@ -225,8 +221,9 @@ public class ExtensionRegistry {
 		}
 	}
 
-	private static <T> void load(XMLExtension extension, Class<T> requiredType,
-			String readableName, Map<String, Class<?>> registry)
+	@SuppressWarnings("unchecked")
+	private static <T> void load(XMLExtension extension, Class<?extends T> requiredType,
+			String readableName, Map<String, Class<?extends T>> registry)
 			throws ConfigurationException {
 		try {
 			Class<?> theClazz = getClassFor(extension);
@@ -236,16 +233,15 @@ public class ExtensionRegistry {
 						+ " from the configuration does not implement "
 						+ requiredType.getSimpleName());
 
-			registry.put(extension.getType(), theClazz);
-
+			registry.put(extension.getType(), (Class<T>) theClazz);
 		} catch (ConfigurationException e) {
-			if (!fsIgnoreOnNotFound)
-				throw e;
+			if (!fsIgnoreOnNotFound) {
+				throw new ConfigurationException(e.getMessage(), e);
+			}
 			else {
 				fsLogger.debug("Configuration Error in extensions.xml; "
 						+ e.getMessage());
 			}
-
 		}
 	}
 
@@ -426,8 +422,9 @@ public class ExtensionRegistry {
 
 	private static List<String> analyzeString(String activities) {
 		List<String> basicActivities = new ArrayList<String>();
-		if (!activities.endsWith(","))
+		if (!activities.endsWith(",")) {
 			activities = activities + ",";
+		}
 		Scanner scanner = new Scanner(activities);
 		scanner.useDelimiter(",");
 		while (scanner.hasNext()) {
@@ -528,7 +525,5 @@ public class ExtensionRegistry {
 		}
 		
 		return configurationOptions;
-		
 	}
-
 }
