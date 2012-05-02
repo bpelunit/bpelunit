@@ -10,23 +10,24 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.WriterAppender;
-import org.apache.log4j.varia.NullAppender;
 import net.bpelunit.framework.base.BPELUnitBaseRunner;
-import net.bpelunit.framework.control.result.ITestResultListener;
 import net.bpelunit.framework.control.result.XMLResultProducer;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.ITestResultListener;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.ui.ant.BPELUnit.Logging;
 import net.bpelunit.framework.ui.ant.BPELUnit.Output;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.WriterAppender;
+import org.apache.log4j.varia.NullAppender;
 
 /**
  * The ant implementation of the BPELUnit runner. Offers support for outputting logging and test

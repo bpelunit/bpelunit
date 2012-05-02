@@ -9,16 +9,17 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.base.BPELUnitBaseRunner;
-import net.bpelunit.framework.control.result.ITestResultListener;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.ITestResultListener;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
+
+import org.apache.commons.io.FileUtils;
 
 /**
  * 

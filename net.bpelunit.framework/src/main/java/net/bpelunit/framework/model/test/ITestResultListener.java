@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package net.bpelunit.framework.control.result;
+package net.bpelunit.framework.model.test;
 
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.report.ITestArtefact;

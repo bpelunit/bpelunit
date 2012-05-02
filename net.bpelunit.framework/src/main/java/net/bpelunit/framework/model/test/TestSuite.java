@@ -13,7 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import net.bpelunit.framework.BPELUnitRunner;
-import net.bpelunit.framework.control.result.ITestResultListener;
 import net.bpelunit.framework.control.ws.LocalHTTPServer;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.TestCaseNotFoundException;

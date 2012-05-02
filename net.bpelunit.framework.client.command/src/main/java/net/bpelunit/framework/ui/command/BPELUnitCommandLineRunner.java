@@ -16,7 +16,6 @@ import java.util.Map;
 
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.base.BPELUnitBaseRunner;
-import net.bpelunit.framework.control.result.ITestResultListener;
 import net.bpelunit.framework.control.result.XMLResultProducer;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
@@ -26,6 +25,7 @@ import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.exception.TestCaseNotFoundException;
+import net.bpelunit.framework.model.test.ITestResultListener;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.TestSuite;

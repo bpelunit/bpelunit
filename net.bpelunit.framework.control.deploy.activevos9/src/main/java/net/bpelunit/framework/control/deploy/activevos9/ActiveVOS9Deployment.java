@@ -32,18 +32,20 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 	
 	private final class BPELInfo implements IBPELProcess {
 		
-		BPELInfo(File bpelFile, File pddFile, QName name, Document xml) {
+		BPELInfo(File bpelFile, File pddFile, QName name, Document bpel, Document pdd) {
 			super();
 			this.bpelFile = bpelFile;
 			this.pddFile = pddFile;
 			this.name = name;
-			this.xml = xml;
+			this.bpelXml = bpel;
+			this.pddXml = pdd;
 		}
 		
 		private File bpelFile;
 		private File pddFile;
 		private QName name;
-		private Document xml;
+		private Document bpelXml;
+		private Document pddXml;
 		
 		File getBpelFile() {
 			return bpelFile;
@@ -54,7 +56,7 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 		}
 
 		Document getXml() {
-			return xml;
+			return bpelXml;
 		}
 
 		@Override
@@ -66,22 +68,24 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 		public void addWSDLImport(String wsdlFileName, InputStream contents) {
 			// TODO Auto-generated method stub
 		}
-		@Override
-		public void addPartnerlink(String name, QName partnerlinkType,
-				String processRole, String partnerRole) {
-			// TODO Auto-generated method stub
-			
-		}
 		
 		@Override
 		public Document getXML() {
 			ActiveVOS9Deployment.this.checkedOutProcesses.add(this);
-			return xml;
+			return bpelXml;
 		}
 
 		@Override
-		public void addPartnerlinkBinding(String partnerlinkName,
-				QName service, String port, String endpointURL) {
+		public void addPartnerlink(String name, QName partnerlinkType,
+				String processRole, String partnerRole, QName service,
+				String port, String endpointURL) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void changePartnerEndpoint(String partnerLinkName,
+				String newEndpoint) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -162,8 +166,13 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 			}
 		}
 	}
-	
 
+	/**
+	 * This method will extract the BPR file if it isn't already and
+	 * will initialize the state of this deployment
+	 * 
+	 * @throws DeploymentException
+	 */
 	private synchronized void extractBPRIfNecessary() throws DeploymentException {
 		if(tempDirectory != null) {
 			try {
@@ -171,7 +180,6 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 				ZipUtil.unzipFile(bpr, tempDirectory);
 
 				scanForBPELFiles();
-				
 			} catch (IOException e) {
 				throw new DeploymentException("Error while temporarily extracting the BPR: " + e.getMessage(), e);
 			}
@@ -193,13 +201,13 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 							root.getAttribute("name")
 						);
 				
-				allProcesses.add(new BPELInfo(bpelFile, null, name, d));
+				allProcesses.add(new BPELInfo(bpelFile, null, name, d, null));
 			} catch (FileNotFoundException e) {
 				throw new DeploymentException("File could not be read: " + bpelFile.getAbsolutePath(), e);
 			} catch (SAXException e) {
 				throw new DeploymentException("BPEL file could not be parsed: " + bpelFile.getAbsolutePath(), e);
 			} catch (IOException e) {
-				throw new DeploymentException("BPEL file could not be parsed: " + bpelFile.getAbsolutePath(), e);
+				throw new DeploymentException("BPEL file could not be read: " + bpelFile.getAbsolutePath(), e);
 			} catch (ParserConfigurationException e) {
 				throw new DeploymentException("BPEL file could not be parsed: " + bpelFile.getAbsolutePath(), e);
 			}
