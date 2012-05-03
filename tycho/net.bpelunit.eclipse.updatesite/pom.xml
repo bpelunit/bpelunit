@@ -5,11 +5,11 @@
   <parent>
     <groupId>net.bpelunit</groupId>
     <artifactId>bpelunit-tycho-parent</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.6.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>eclipse-update-site</artifactId>
-  <version>1.5.1-SNAPSHOT</version>
+  <version>1.6.1-SNAPSHOT</version>
   <packaging>eclipse-update-site</packaging>
   <name>BPELUnit :: Eclipse Update Site</name>
 
