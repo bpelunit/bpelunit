@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>bpelunit</artifactId>
 		<groupId>net.bpelunit</groupId>
-		<version>1.6.0</version>
+		<version>1.6.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>deployer-activevos9</artifactId>
-	<version>1.6.0</version>
+	<version>1.6.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>BPELUnit :: ActiveVOS 9 Deployer</name>
 	<build>
