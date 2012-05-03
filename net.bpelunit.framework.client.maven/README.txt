@@ -8,7 +8,7 @@ Reports will be written to ${project.build.directory}/bpelunit-reports
 			<plugin>
 				<groupId>net.bpelunit</groupId>
 				<artifactId>maven-bpelunit-plugin</artifactId>
-				<version>1.5.1-SNAPSHOT</version>
+				<version>1.6.0</version>
 				<configuration>
 					<includes>
 						<include>**/*.bpts</include>

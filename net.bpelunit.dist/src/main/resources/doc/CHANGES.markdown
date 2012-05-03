@@ -3,6 +3,11 @@ Changelog
 
 Staged for next version
 -----------------------
+
+* None yet: please check back soon!
+
+Version 1.6.0
+-----------------------
 * _Change_: BPELUnit uses a different HTTP connection for each sendReceive activity. This ensures sendReceive activities are kept separate from each other and avoids race conditions.
 * _Change_: the `<script>` in a test case `<setUp>` block is now run after loading the current row of the data source, so it can access its variables as well.
 * _Change_: upgraded Velocity to 1.7 and integrated Velocity Tools 2.0 into the templates.
