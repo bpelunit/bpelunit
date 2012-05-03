@@ -47,8 +47,21 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	 * body
 	 */
 	private static class RequestResult {
-		public int statusCode;
-		public String responseBody;
+		private int statusCode;
+		private String responseBody;
+		
+		public void setStatusCode(int statusCode) {
+			this.statusCode = statusCode;
+		}
+		public int getStatusCode() {
+			return statusCode;
+		}
+		public void setResponseBody(String responseBody) {
+			this.responseBody = responseBody;
+		}
+		public String getResponseBody() {
+			return responseBody;
+		}
 	}
 
 	// Strings which enclose the number of deployment errors in the summary
@@ -80,7 +93,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	private ProcessUnderTest put;
 
 	/* for unit testing */
-	static int _terminatedProcessCount = 0;
+	private static int terminatedProcessCount = 0;
 
 	@IBPELDeployerOption(testSuiteSpecific = false)
 	public void setBPRFile(String bprFile) {
@@ -138,9 +151,10 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 		File uploadingFile = new File(archivePath);
 
-		if (!uploadingFile.exists())
+		if (!uploadingFile.exists()) {
 			throw new DeploymentException(
 					"ActiveBPEL deployer could not find BPR file " + fBPRFile);
+		}
 
 		File resultingFile = new File(fDeploymentDirectory, fBPRFile.getName());
 
@@ -152,11 +166,11 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		} catch (IOException e) {
 			throw new DeploymentException(
 					"An input/output error occured in ActivBPEL deployer when deploying: "
-							+ e.getMessage());
+							+ e.getMessage(), e);
 		} catch (SOAPException e) {
 			throw new DeploymentException(
 					"An error occurred while creating SOAP message for ActiveBPEL deployment: "
-							+ e.getMessage());
+							+ e.getMessage(), e);
 		}
 
 		fLogger
@@ -166,10 +180,10 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		try {
 			RequestResult result = sendRequestToActiveBPEL(fDeploymentAdminServiceURL, re);
 
-			if (result.statusCode < 200 || result.statusCode > 299 || errorsInSummary(result.responseBody)) {
+			if (result.getStatusCode() < 200 || result.getStatusCode() > 299 || errorsInSummary(result.getResponseBody())) {
 				throw new DeploymentException(
 						"ActiveBPEL Server reported a Deployment Error: "
-								+ result.responseBody);
+								+ result.getResponseBody());
 			}
 
 			// done.
@@ -193,27 +207,29 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	public void undeploy(String path, ProcessUnderTest deployable)
 			throws DeploymentException {
 		// undeploy may be called even if deploy was not successful
-		if (fResultingFile == null)
+		if (fResultingFile == null) {
 			return;
+		}
 
 		File bprFile = new File(fResultingFile);
-		if (fResultingFile == null)
+		if (fResultingFile == null) {
 			throw new DeploymentException("Cannot undeploy BPR for Deployable "
 					+ deployable + ": Metadata about file name not found.");
-		if (!bprFile.exists())
+		}
+		if (!bprFile.exists()) {
 			throw new DeploymentException("Cannot undeploy BPR for Deployable "
 					+ deployable + ": File " + bprFile + " not found.");
-
-		if (!bprFile.delete())
+		}
+		if (!bprFile.delete()) {
 			throw new DeploymentException("Cannot undeploy BPR for Deployable "
 					+ deployable + ": File " + bprFile
 					+ " could not be deleted.");
-
+		}
+		
 		try {
 			terminateAllRunningProcesses(deployable.getName());
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new DeploymentException(e.getLocalizedMessage());
+			throw new DeploymentException(e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -238,10 +254,11 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	private void check(Object toCheck, String description)
 			throws DeploymentException {
-		if (toCheck == null)
+		if (toCheck == null) {
 			throw new DeploymentException(
 					"ActiveBPEL deployment configuration is missing the "
 							+ description + ".");
+		}
 	}
 
 	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
@@ -275,8 +292,8 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 			// We need to read the response body right now: if it is called
 			// after the connection is released, it will only return null
 			RequestResult result = new RequestResult();
-			result.statusCode    = method.getStatusCode();
-			result.responseBody  = method.getResponseBodyAsString();
+			result.setStatusCode(method.getStatusCode());
+			result.setResponseBody(method.getResponseBodyAsString());
 
 			return result;
 		}  finally {
@@ -286,33 +303,33 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		}
 	}
 
-	private void terminateAllRunningProcesses(String processName) throws Exception {
+	private void terminateAllRunningProcesses(String processName) throws DeploymentException {
 	    for (int pid : listRunningProcesses(processName)) {
 	        terminateProcess(pid);
 	    }
 	}
 
-	  private List<Integer> listRunningProcesses(String processName) throws Exception {
+	  private List<Integer> listRunningProcesses(String processName) throws DeploymentException {
 		try {
 			ArrayList<Integer> vProcesses = new ArrayList<Integer>();
 			RequestResult listResponse = sendRequestToActiveBPEL(
 				fAdminServiceURL,
 				new ProcessListRequestEntity(processName));
 
-			if (listResponse.statusCode != 200) {
-				throw new Exception(
+			if (listResponse.getStatusCode() != 200) {
+				throw new DeploymentException(
 					String.format(
 						"Could not obtain the running process list: "
 						+ "got status code %d\nResponse:\n%s",
-						listResponse.statusCode,
-						listResponse.responseBody));
+						listResponse.getStatusCode(),
+						listResponse.getResponseBody()));
 			}
 
 			// No need to perform XML parsing: we're only interested
 			// in some simple elements
 			Pattern patPID = Pattern.compile(
 				"<[^>]*processId>\\s*([0-9]+)\\s*</[^>]+>");
-			Matcher matcher = patPID.matcher(listResponse.responseBody);
+			Matcher matcher = patPID.matcher(listResponse.getResponseBody());
 			while (matcher.find()) {
 				vProcesses.add(Integer.parseInt(matcher.group(1)));
 			}
@@ -320,31 +337,29 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 			return vProcesses;
 		}
 		catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception(
+			throw new DeploymentException(
 				"Could not obtain the running process list: "
 				+ e.toString(), e);
 		}
 	}
 
-	private void terminateProcess(int pid) throws Exception {
+	private void terminateProcess(int pid) throws DeploymentException {
 		try {
-			++_terminatedProcessCount;
+			++terminatedProcessCount;
 			RequestResult response = sendRequestToActiveBPEL(
 				fAdminServiceURL,
 				new TerminateProcessRequestEntity(pid));
-			if (response.statusCode != 200) {
+			if (response.getStatusCode() != 200) {
 				throw new Exception(
 					String.format(
 						"Could not kill process #%d: "
 						+ "non-OK status code %d\nResponse:\n%s",
 						pid,
-						response.statusCode,
-						response.responseBody));
+						response.getStatusCode(),
+						response.getResponseBody()));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception(
+			throw new DeploymentException(
 				String.format(
 					"Could not kill process #%d: %s",
 					pid, e.toString()), e);
@@ -353,11 +368,15 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	private boolean errorsInSummary(String responseBody) {
 		int startErrorCount = responseBody.indexOf(ERRCOUNT_START);
-		if (startErrorCount == -1) return false;
+		if (startErrorCount == -1) {
+			return false;
+		}
 		startErrorCount += ERRCOUNT_START.length();
 
 		final int endErrorCount = responseBody.indexOf(ERRCOUNT_END, startErrorCount);
-		if (endErrorCount == -1) return false;
+		if (endErrorCount == -1) {
+			return false;
+		}
 
 		final String sErrorCount
 			= responseBody.substring(startErrorCount, endErrorCount);
@@ -366,9 +385,13 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		return errorCount > 0;
 	}
 
-    public void cleanUpAfterTestCase() throws Exception {
+    public void cleanUpAfterTestCase() throws DeploymentException {
         terminateAllRunningProcesses(put.getName());
     }
+
+	static int getTerminatedProcessCount() {
+		return terminatedProcessCount;
+	}
 }
 
 

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.ws.LocalHTTPServer;
@@ -50,7 +51,7 @@ public class TestSuite implements ITestArtefact {
 	 * The test cases. Note: Must be a LinkedHashMap, as ordering is important.
 	 * Maps the all-lowercase test case name to the test case object.
 	 */
-	private LinkedHashMap<String, TestCase> fTestCaseMap;
+	private Map<String, TestCase> fTestCaseMap;
 
 	/**
 	 * The local HTTP server handling incoming requests
@@ -150,8 +151,9 @@ public class TestSuite implements ITestArtefact {
 	public void setFilter(List<String> testCaseNames)
 			throws TestCaseNotFoundException {
 		List<TestCase> filtered = new ArrayList<TestCase>();
-		for (String name : testCaseNames)
+		for (String name : testCaseNames) {
 			addTestCaseToFilter(filtered, name);
+		}
 
 		fTestCaseFilter = filtered;
 	}
@@ -204,8 +206,9 @@ public class TestSuite implements ITestArtefact {
 		boolean error = false;
 		boolean failure = false;
 
-		if (fTestCaseFilter == null)
+		if (fTestCaseFilter == null) {
 			fTestCaseFilter = new ArrayList<TestCase>(fTestCaseMap.values());
+		}
 
 		for (TestCase testCase : fTestCaseFilter) {
 			fCurrentTestCase = testCase;
@@ -213,7 +216,7 @@ public class TestSuite implements ITestArtefact {
 			try {
 			  fProcessUnderTest.cleanUpAfterTestCase();
 			} catch (Exception ex) {
-			    ex.printStackTrace();
+				fLogger.error(ex.getMessage(), ex);
 			    failure = true;
 			}
 			if (testCase.getStatus().isError()) {
@@ -223,26 +226,29 @@ public class TestSuite implements ITestArtefact {
 			}
 			if (testCase.getStatus().isFailure()) {
 				failure = true;
-				if (BPELUnitRunner.isHaltOnFailure())
+				if (BPELUnitRunner.isHaltOnFailure()) {
 					break;
+				}
 			}
 
-			if (fAbortedByUser)
+			if (fAbortedByUser) {
 				break;
+			}
 		}
 
 		fCurrentTestCase = null;
 
-		if (error)
+		if (error) {
 			fStatus = ArtefactStatus
 					.createErrorStatus("A test case had an error");
-		else if (failure)
+		} else if (failure) {
 			fStatus = ArtefactStatus
 					.createFailedStatus("A test case had a failure");
-		else if (fAbortedByUser)
+		} else if (fAbortedByUser) {
 			fStatus = ArtefactStatus.createAbortedStatus("Aborted by user");
-		else
+		} else {
 			fStatus = ArtefactStatus.createPassedStatus();
+		}
 
 		fCurrentlyRunning = false;
 		fLogger.info("Now stopping test suite: " + this);
@@ -311,7 +317,12 @@ public class TestSuite implements ITestArtefact {
 		return fBaseURL;
 	}
 
-	public void setBaseURL(URL fBaseURL) {
+	/**
+	 * final because called from constructor
+	 * 
+	 * @param fBaseURL
+	 */
+	public final void setBaseURL(URL fBaseURL) {
 		this.fBaseURL = fBaseURL;
 	}
 
@@ -322,7 +333,7 @@ public class TestSuite implements ITestArtefact {
 	 * NOTE: to keep test cases and activities isolated, this context should
 	 * not be wrapped, but rather be cloned and then extended.
 	 */
-	public Context createVelocityContext() throws Exception {
+	public Context createVelocityContext()  {
 		try {
 			Velocity.init();
 		} catch(Exception e) {

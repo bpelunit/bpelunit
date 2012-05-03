@@ -77,8 +77,9 @@ public class ActivityUtil {
 		public static ActivityConstant getForXmlName(String xmlName) {
 			ActivityConstant[] values = values();
 			for (int i = 0; i < values.length; i++) {
-				if (values[i].getXmlName().equals(xmlName))
+				if (values[i].getXmlName().equals(xmlName)) {
 					return values[i];
+				}
 			}
 			return null;
 		}
@@ -86,13 +87,18 @@ public class ActivityUtil {
 		public static ActivityConstant getForNiceName(String niceName) {
 			ActivityConstant[] values = values();
 			for (int i = 0; i < values.length; i++) {
-				if (values[i].getNiceName().equals(niceName))
+				if (values[i].getNiceName().equals(niceName)) {
 					return values[i];
+				}
 			}
 			return null;
 		}
 	}
 
+	private ActivityUtil() {
+		// Utility class
+	}
+	
 	// ****************************** Activity names & constants
 	// **************************
 
@@ -106,8 +112,9 @@ public class ActivityUtil {
 	 */
 	public static ActivityConstant getActivityConstant(Object presumedActivity) {
 
-		if (!(presumedActivity instanceof XmlObject))
+		if (!(presumedActivity instanceof XmlObject)) {
 			return null;
+		}
 		XmlObject activity = (XmlObject) presumedActivity;
 
 		Node node = activity.getDomNode();
@@ -140,11 +147,12 @@ public class ActivityUtil {
 		ActivityConstant[] constants = ActivityConstant.values();
 		List<ActivityConstant> list = new ArrayList<ActivityConstant>();
 		for (int i = 0; i < constants.length; i++) {
-			if (!constants[i].equals(ActivityConstant.RECEIVE)
+			if (!constants[i].equals(ActivityConstant.RECEIVE) 
 					&& (!constants[i].equals(ActivityConstant.SEND))
 					&& (!constants[i]
-							.equals(ActivityConstant.COMPLETEHUMANTASK)))
+							.equals(ActivityConstant.COMPLETEHUMANTASK))) {
 				list.add(constants[i]);
+			}
 		}
 		return list;
 	}
@@ -173,8 +181,9 @@ public class ActivityUtil {
 	public static boolean isActivity(Object presumedActivity,
 			ActivityConstant constant) {
 		String localName = getName(presumedActivity);
-		if (localName == null)
+		if (localName == null) {
 			return false;
+		}
 
 		return constant.getXmlName().equals(localName);
 	}
@@ -242,14 +251,16 @@ public class ActivityUtil {
 	 * Returns the XML name of an object, if it is an activity.
 	 */
 	public static String getName(Object presumedActivity) {
-		if (!(presumedActivity instanceof XMLActivity))
+		if (!(presumedActivity instanceof XMLActivity)) {
 			return null;
+		}
 
 		XMLActivity activity = (XMLActivity) presumedActivity;
 		Node node = activity.getDomNode();
 
-		if (node == null)
+		if (node == null) {
 			return null;
+		}
 
 		return node.getLocalName();
 	}
@@ -263,8 +274,9 @@ public class ActivityUtil {
 	public static String getNiceName(Object presumedActivity) {
 		ActivityConstant constant = ActivityUtil
 				.getActivityConstant(presumedActivity);
-		if (constant == null)
+		if (constant == null) {
 			return "Unknown activity";
+		}
 
 		return constant.getNiceName();
 	}
@@ -345,15 +357,17 @@ public class ActivityUtil {
 	 * @return
 	 */
 	public static XMLActivity getParentActivityFor(Object viewerSelection) {
-		if (!(viewerSelection instanceof XmlObject))
+		if (!(viewerSelection instanceof XmlObject)) {
 			return null;
+		}
 		return getParentActivityForActivity((XmlObject) viewerSelection);
 	}
 
 	private static XMLActivity getParentActivityForActivity(XmlObject parent) {
 
-		if (parent == null)
+		if (parent == null) {
 			return null;
+		}
 
 		XmlCursor cursor = parent.newCursor();
 		if (cursor.toParent()) {
@@ -376,10 +390,11 @@ public class ActivityUtil {
 		XmlCursor c = activity.newCursor();
 		while (c.toParent()) {
 			XmlObject object = c.getObject();
-			if (object == null)
+			if (object == null) {
 				return null;
-			else if (object instanceof XMLTrack)
+			} else if (object instanceof XMLTrack) {
 				return ((XMLTrack) object);
+			}
 		}
 		return null;
 	}
@@ -394,8 +409,9 @@ public class ActivityUtil {
 	public static boolean getReceiveFault(XMLActivity activity) {
 		if (isTwoWayActivity(activity)) {
 			return ((XMLTwoWayActivity) activity).getReceive().getFault();
-		} else
+		} else {
 			return getSimpleFault(activity);
+		}
 	}
 
 	/**
@@ -405,8 +421,9 @@ public class ActivityUtil {
 	public static boolean getSendFault(XMLActivity activity) {
 		if (isTwoWayActivity(activity)) {
 			return ((XMLTwoWayActivity) activity).getSend().getFault();
-		} else
+		} else {
 			return getSimpleFault(activity);
+		}
 	}
 
 	/**
@@ -417,8 +434,9 @@ public class ActivityUtil {
 	public static String getReceiveFaultString(XMLActivity activity) {
 		if (isTwoWayActivity(activity)) {
 			return ((XMLTwoWayActivity) activity).getReceive().getFaultstring();
-		} else
+		} else {
 			return getSimpleFaultString(activity);
+		}
 	}
 
 	/**
@@ -428,8 +446,9 @@ public class ActivityUtil {
 	public static String getSendFaultString(XMLActivity activity) {
 		if (isTwoWayActivity(activity)) {
 			return ((XMLTwoWayActivity) activity).getSend().getFaultstring();
-		} else
+		} else {
 			return getSimpleFaultString(activity);
+		}
 	}
 
 	/**
@@ -447,8 +466,9 @@ public class ActivityUtil {
 			return ((XMLReceiveActivity) activity).getFault();
 		} else if (ActivityUtil
 				.isActivity(activity, ActivityConstant.SEND_ONLY)
-				|| ActivityUtil.isActivity(activity, ActivityConstant.SEND))
+				|| ActivityUtil.isActivity(activity, ActivityConstant.SEND)) {
 			return ((XMLSendActivity) activity).getFault();
+		}
 
 		return false;
 	}
@@ -468,8 +488,9 @@ public class ActivityUtil {
 			return ((XMLReceiveActivity) activity).getFaultstring();
 		} else if (ActivityUtil
 				.isActivity(activity, ActivityConstant.SEND_ONLY)
-				|| ActivityUtil.isActivity(activity, ActivityConstant.SEND))
+				|| ActivityUtil.isActivity(activity, ActivityConstant.SEND)) {
 			return ((XMLSendActivity) activity).getFaultstring();
+		}
 		return null;
 	}
 
@@ -482,8 +503,9 @@ public class ActivityUtil {
 	 */
 	public static void addActivity(List<XMLActivity> activities,
 			XmlObject presumedActivity) {
-		if (presumedActivity instanceof XMLActivity)
+		if (presumedActivity instanceof XMLActivity) {
 			activities.add((XMLActivity) presumedActivity);
+		}
 	}
 
 	/**
@@ -526,8 +548,9 @@ public class ActivityUtil {
 	 */
 	public static int getIndexFor(Object[] objects, Object object) {
 		for (int i = 0; i < objects.length; i++) {
-			if (objects[i].equals(object))
+			if (objects[i].equals(object)) {
 				return i;
+			}
 		}
 		return -1;
 	}

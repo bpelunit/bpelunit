@@ -141,5 +141,5 @@ public interface IBPELDeployer {
 	 * @throws Exception There was a problem while cleaning up after the
 	 * test case.
 	 */
-	public void cleanUpAfterTestCase() throws Exception;
+	public void cleanUpAfterTestCase() throws DeploymentException;
 }

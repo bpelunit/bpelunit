@@ -316,7 +316,7 @@ public class ODEDeployer implements IBPELDeployer {
 	}
 
 	@Override
-	public void cleanUpAfterTestCase() throws Exception {
+	public void cleanUpAfterTestCase() throws DeploymentException {
 		// do nothing.
 	}
 
