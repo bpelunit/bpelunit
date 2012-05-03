@@ -21,7 +21,7 @@ import org.junit.Test;
  */
 public class WSHTTest {
 
-	private static final String BASEPATH= "src/test/resources/wsht/";
+	private static final String BASEPATH = "src/test/resources/wsht/";
 
 	public static TestTestRunner getWSHTTestSuite() throws ConfigurationException, SpecificationException {
 		return new TestTestRunner(BASEPATH, "WSHTTestSuite.bpts");

@@ -53,6 +53,10 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 
 		fSuite = loadTestSuite(fBPTS);
 		fSuite.addResultListener(this);
+		
+		// TODO DL: Fix structure:
+		// Option A: Pass option flags to TestSuite and remove dep TestSuite->Runner (easy change)
+		// Option B: Move execution logic to runner (seems more natural)
 	}
 
 	public TestTestRunner(String path, String bpts) throws ConfigurationException, SpecificationException {

@@ -1,7 +1,9 @@
 package net.bpelunit.utils.testsuitesplitter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,23 +22,30 @@ import org.apache.xmlbeans.XmlException;
  * This is a small tool that splits up a test suite into all possible
  * combinations and writes them to separate files.
  * 
- * This tool is a quick hack. There are no tests nor is it guaranteed to work.
+ * This tool is a quick hack. There are not enough tests nor is it guaranteed 
+ * to work.
+ * 
  * USE AT YOUR OWN RISK
  * 
  * @author Daniel Luebke
  */
-public class SplitIntoPermutations {
+public final class SplitIntoPermutations {
 
 	private static final String BPTS_FILENAME_SUFFIX = ".bpts";
 
 	private static final PermutationBuilder PERMUTATION_BUILDER = new PermutationBuilder();
+
+	private static final PrintWriter CONSOLE =
+		System.console() != null ? 
+			System.console().writer() :
+			new PrintWriter(new ByteArrayOutputStream());
 	
 	private SplitIntoPermutations() {
 		// main only
 	}
 	
 	public static void main(String[] args) throws IOException, XmlException {
-		
+	
 		if(args.length == 0 || args[0].equals("--help")) {
 			help();
 		} 
@@ -52,7 +61,7 @@ public class SplitIntoPermutations {
 			
 			String suiteFileName = getSuiteFileName(prefix, currentSet);
 			permutedTestSuite.getTestSuite().setName(suiteFileName);
-			System.out.println("Writing " + suiteFileName + "...");
+			CONSOLE.write("Writing " + suiteFileName + "...\n");
 			permutedTestSuite.save(new File(suiteFileName));
 		}
 		
@@ -77,20 +86,18 @@ public class SplitIntoPermutations {
 			}
 
 			result.put(currentSet, permutedTestSuite);
-			
-			
 		}
 		
 		return result;
 	}
 
 	private static void help() {
-		System.out.println("SplitIntoPermutations");
-		System.out.println();
-		System.out.println("SplitIntoPermutations file.bpts");
-		System.out.println();
-		System.out.println("Splits a BPELUnit test suite into several files. Every combination of test cases is generated.");
-		System.out.println();
+		CONSOLE.write("SplitIntoPermutations\n");
+		CONSOLE.write("\n");
+		CONSOLE.write("SplitIntoPermutations file.bpts\n");
+		CONSOLE.write("\n");
+		CONSOLE.write("Splits a BPELUnit test suite into several files. Every combination of test cases is generated.\n");
+		CONSOLE.write("\n");
 		
 		System.exit(1);
 	}

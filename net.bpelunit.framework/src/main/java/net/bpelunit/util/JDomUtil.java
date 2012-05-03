@@ -1,4 +1,4 @@
-package net.bpelunit.framework.control.util;
+package net.bpelunit.util;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,9 +15,9 @@ import org.jdom.filter.ElementFilter;
  * Used for getting rid of some compile warnings
  * 
  * @author Daniel Luebke <bpelunit@daniel-luebke.de>
- *
+ * 
  */
-public class JDomHelper {
+public class JDomUtil {
 
 	@SuppressWarnings("unchecked")
 	public static Iterator<Element> getDescendants(Element parent, ElementFilter filter) {

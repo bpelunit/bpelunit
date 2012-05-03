@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,7 +38,7 @@ public final class XMLUtil {
 	 * @throws ParserConfigurationException 
 	 */
 	public static Document parseXML(String xmlAsString)
-			throws SAXException, UnsupportedEncodingException, IOException, ParserConfigurationException {
+			throws SAXException, IOException, ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			return dBuilder.parse(new ByteArrayInputStream(xmlAsString

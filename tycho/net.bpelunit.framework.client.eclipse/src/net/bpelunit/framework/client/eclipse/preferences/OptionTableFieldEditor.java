@@ -19,8 +19,9 @@ import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
 import net.bpelunit.framework.client.model.ConfigurationOption;
 import net.bpelunit.framework.client.model.DeployerExtension;
 import net.bpelunit.framework.client.model.ExtensionUtil;
+import net.bpelunit.framework.control.ext.ExtensionRegistry;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.util.ExtensionRegistry;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditor;

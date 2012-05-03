@@ -10,10 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.bpelunit.framework.base.BPELUnitBaseRunner;
+import net.bpelunit.framework.control.ext.ExtensionRegistry;
 import net.bpelunit.framework.control.ext.IDataSource;
-import net.bpelunit.framework.control.util.ExtensionRegistry;
 import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.SpecificationException;
+
 import org.junit.Before;
 import org.junit.Test;
 

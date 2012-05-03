@@ -11,6 +11,7 @@ import java.util.List;
 import com.active_endpoints.docs.wsdl.engineapi._2010._05.enginemanagement.AdminAPIFault;
 import com.active_endpoints.schemas.engineapi._2010._05.engineapitypes.AesContribution;
 
+import net.bpelunit.framework.control.deploy.activevos9.ActiveVOSAdministrativeFunctions.DeployException;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import net.bpelunit.framework.control.ext.IDeployment;
@@ -132,6 +133,8 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			activevos.deployBpr(fileName, bprContents);
 			
 		} catch(IOException e) {
+			throw new DeploymentException("Error while deploying: " + e.getMessage(), e);
+		} catch (DeployException e) {
 			throw new DeploymentException("Error while deploying: " + e.getMessage(), e);
 		}
 	}

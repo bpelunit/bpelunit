@@ -13,10 +13,10 @@ import java.util.Map;
 
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.ext.DeploymentOption;
+import net.bpelunit.framework.control.ext.ExtensionRegistry;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDeployment;
 import net.bpelunit.framework.control.ext.PartnerLink;
-import net.bpelunit.framework.control.util.ExtensionRegistry;
 import net.bpelunit.framework.coverage.ArchiveUtil;
 import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.DeploymentException;

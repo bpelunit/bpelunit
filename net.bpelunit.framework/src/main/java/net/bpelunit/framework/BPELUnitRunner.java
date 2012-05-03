@@ -10,13 +10,13 @@ import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.bpelunit.framework.control.ext.ExtensionRegistry;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
-import net.bpelunit.framework.control.util.ExtensionRegistry;
 import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.SpecificationException;
@@ -144,9 +144,6 @@ public abstract class BPELUnitRunner {
 		if ((measureCoverage != null)
 				&& (measureCoverage.equalsIgnoreCase("true"))) {
 			fMeasureCoverage = true;
-//			System.out.println("MEASURECOVERAGE=TRUE");
-		} else {
-//			System.out.println("MEASURECOVERAGE=FALSE");
 		}
 
 		String changeEndpoints = options.get(CHANGE_ENDPOINTS);

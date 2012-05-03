@@ -9,8 +9,8 @@ import java.util.List;
 
 import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetricHandler;
 import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.IStructuredActivityHandler;
-import net.bpelunit.framework.coverage.exceptions.BpelException;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
@@ -33,7 +33,6 @@ public class SequenceHandler implements IStructuredActivityHandler {
 	 * um die Ausführung der Zweige zu erfassen.
 	 * 
 	 * @param structured_activity
-	 * @throws BpelException
 	 */
 	public void insertBranchMarkers(Element structured_activity) {
 		List<Element> children = structured_activity.getContent(new ElementFilter(

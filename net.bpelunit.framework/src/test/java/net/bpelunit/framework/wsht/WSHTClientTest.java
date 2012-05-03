@@ -25,23 +25,23 @@ public class WSHTClientTest {
 	
 	@Test
 	public void testSetAuthorizationRealm() {
-		assertEquals("ZG9uYWxkOmR1Y2s=", client.authorizationRealm);
+		assertEquals("ZG9uYWxkOmR1Y2s=", client.getAuthorizationRealm());
 		
 		client.setAuthorizationRealm("Mickey", "Mouse");
-		assertEquals("TWlja2V5Ok1vdXNl", client.authorizationRealm);
+		assertEquals("TWlja2V5Ok1vdXNl", client.getAuthorizationRealm());
 
 		// taken from http://en.wikipedia.org/wiki/Basic_access_authentication (2011-11-12)
 		client.setAuthorizationRealm("Aladdin", "open sesame");
-		assertEquals("QWxhZGRpbjpvcGVuIHNlc2FtZQ==", client.authorizationRealm);
+		assertEquals("QWxhZGRpbjpvcGVuIHNlc2FtZQ==", client.getAuthorizationRealm());
 	}
 	
 	@Test
 	public void testEmptyPasswordIsSameAsNullPassword() {
 		client.setAuthorizationRealm("Donald", null);
-		String ar1 = client.authorizationRealm;
+		String ar1 = client.getAuthorizationRealm();
 		
 		client.setAuthorizationRealm("Donald", "");
-		String ar2 = client.authorizationRealm;
+		String ar2 = client.getAuthorizationRealm();
 		
 		assertEquals(ar1, ar2);
 	}

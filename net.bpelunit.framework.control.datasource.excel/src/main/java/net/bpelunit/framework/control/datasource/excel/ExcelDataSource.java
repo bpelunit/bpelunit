@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -60,11 +61,7 @@ public class ExcelDataSource implements IDataSource {
 		int cellIndex = firstCellIndex + headings.indexOf(fieldName);
 
 		Cell cell = row.getCell(cellIndex);
-		if (cell == null) {
-			return "";
-		} else {
-			return cell.getStringCellValue();
-		}
+		return StringUtils.defaultString(cell.getStringCellValue());
 	}
 
 	@Override

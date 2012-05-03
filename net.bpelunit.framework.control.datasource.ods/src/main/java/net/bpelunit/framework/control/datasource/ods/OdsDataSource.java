@@ -1,12 +1,14 @@
 package net.bpelunit.framework.control.datasource.ods;
 
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.List;
 
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IDataSource.DataSource;
 import net.bpelunit.framework.exception.DataSourceException;
+
+import org.apache.commons.lang.StringUtils;
 import org.odftoolkit.odfdom.doc.OdfDocument;
 import org.odftoolkit.odfdom.doc.OdfSpreadsheetDocument;
 import org.odftoolkit.odfdom.doc.table.OdfTable;
@@ -42,12 +44,12 @@ public class OdsDataSource implements IDataSource {
 			int currentSheetIndex = Integer.parseInt(index) - 1;
 			if (currentSheetIndex < 0) {
 				throw new IllegalArgumentException(
-						"Sheet Index must be a positive number");
+						"Sheet Index must be a positive number but was " + currentSheetIndex);
 			}
 			this.sheetIndex = currentSheetIndex;
 		} catch (Exception e) {
 			throw new IllegalArgumentException(
-					"Sheet Index must be a positive number");
+					"Sheet Index must be a positive number", e);
 		}
 	}
 
@@ -84,15 +86,13 @@ public class OdsDataSource implements IDataSource {
 		OdfDocument ods;
 		try {
 			ods = OdfSpreadsheetDocument.loadDocument(data);
-			table = ods.getTableList().get(sheetIndex);
-			extractFieldNames();
-			calculateRowCount();
-		} catch (DataSourceException e) {
-			throw e;
 		} catch (Exception e) {
 			throw new DataSourceException(
 					"Error while reading the ODS data source", e);
 		}
+		table = ods.getTableList().get(sheetIndex);
+		extractFieldNames();
+		calculateRowCount();
 	}
 
 	private void calculateRowCount() {

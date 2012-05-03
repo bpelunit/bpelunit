@@ -14,8 +14,8 @@ import net.bpelunit.framework.client.eclipse.dialog.field.DeployerOptionModifyLi
 import net.bpelunit.framework.client.eclipse.dialog.field.SelectionField;
 import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
 import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
+import net.bpelunit.framework.control.ext.ExtensionRegistry;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.util.ExtensionRegistry;
 import net.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLProperty;
 import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
