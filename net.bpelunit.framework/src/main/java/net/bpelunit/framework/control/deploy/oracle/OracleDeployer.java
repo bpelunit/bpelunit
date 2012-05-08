@@ -90,9 +90,10 @@ public class OracleDeployer implements IBPELDeployer {
 		check(fBPELFilePath, "BPEL JAR file");
 		check(fOracleDirectory, "Oracle Directory");
 
-		if (!new File(fOracleDirectory).exists())
+		if (!new File(fOracleDirectory).exists()) {
 			throw new DeploymentException(
 					"The specified Oracle Directory does not exist.");
+		}
 
 		fProcessName = processUnderTest.getName();
 		fBPELFilePath = FilenameUtils.concat(path, fBPELFilePath);
@@ -100,24 +101,27 @@ public class OracleDeployer implements IBPELDeployer {
 				.concat(ORACLE_BIN_DIRECTORY, BPELDEPLOY_SCRIPT_NAME));
 
 		fBinDir = fOracleDirectory;
-		if (fBinDir.endsWith("/") || fBinDir.endsWith("\\"))
+		if (fBinDir.endsWith("/") || fBinDir.endsWith("\\")) {
 			fBinDir = fBinDir.substring(0, fBinDir.length());
+		}
 		fBinDir = FilenameUtils.separatorsToSystem(fBinDir);
 
 		// XXX necessary? is checked before
 		check(fBPELFilePath, "BPEL JAR file");
 
-		if (!new File(fBPELFilePath).exists())
+		if (!new File(fBPELFilePath).exists()) {
 			throw new DeploymentException(
 					"The referenced BPEL JAR file for Oracle deployment does not exist: "
 							+ fBPELFilePath);
+		}
 
 		check(fScriptFilePath, "deployment script file path");
 
-		if (!new File(fScriptFilePath).exists())
+		if (!new File(fScriptFilePath).exists()) {
 			throw new DeploymentException(
 					"The referenced deployment script file for Oracle deployment does not exist: "
 							+ fScriptFilePath);
+		}
 
 		check(fProcessName, "BPEL Process Name");
 
@@ -173,11 +177,12 @@ public class OracleDeployer implements IBPELDeployer {
 				// Error. Get message...
 				String lastLine = errorReader.getAsString();
 				String errorMessage;
-				if (lastLine != null && !lastLine.equals(""))
+				if (lastLine != null && !lastLine.equals("")) {
 					errorMessage = lastLine;
-				else
+				} else {
 					errorMessage = "An unknown error occurred while deploying.";
-
+				}
+					
 				throw new DeploymentException(errorMessage);
 			}
 		} catch (IOException e) {
@@ -214,10 +219,11 @@ public class OracleDeployer implements IBPELDeployer {
 
 	private void check(String toCheck, String description)
 			throws DeploymentException {
-		if (toCheck == null)
+		if (toCheck == null) {
 			throw new DeploymentException(
 					"Oracle deployment configuration is missing the "
 							+ description + ".");
+		}
 	}
 
 	public IDeployment getDeployment(ProcessUnderTest processUnderTest)

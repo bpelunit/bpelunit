@@ -45,8 +45,9 @@ public class Statistic implements IStatistic {
 	 *      (net.bpelunit.framework.coverage.result.statistic.IStatistic)
 	 */
 	public void addSubStatistic(IStatistic statistic) {
-		if (subStatistics == null)
+		if (subStatistics == null) {
 			subStatistics = new ArrayList<IStatistic>();
+		}
 		subStatistics.add(statistic);
 	}
 
@@ -85,8 +86,9 @@ public class Statistic implements IStatistic {
 			for (Iterator<MarkerState> iter = statusListe.iterator(); iter
 					.hasNext();) {
 				MarkerState status = iter.next();
-				if (status.isTestedWithTestcase(testCase))
+				if (status.isTestedWithTestcase(testCase)) {
 					set.add(status);
+				}
 			}
 		} else {
 			for (Iterator<IStatistic> iterator = subStatistics.iterator(); iterator
@@ -124,8 +126,9 @@ public class Statistic implements IStatistic {
 		if (subStatistics == null && statusListe != null) {
 			for (Iterator<MarkerState> iter = statusListe.iterator(); iter
 					.hasNext();) {
-				if (iter.next().isTested())
+				if (iter.next().isTested()) {
 					number++;
+				}
 			}
 		} else {
 			for (Iterator<IStatistic> iter = subStatistics.iterator(); iter

@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.IDeploymentArchiveHandler;
@@ -143,8 +144,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			for (int i = 0; i < files.length; i++) {
 				searchChildrenBPEL((File) files[i]);
 			}
-		} else {
-			if (FilenameUtils.getExtension(file.getName()).equals("bpel"))
+		} else if (FilenameUtils.getExtension(file.getName()).equals("bpel")) {
 				bpelFiles.put(file.getInnerEntryName(), file);
 		}
 	}
@@ -317,9 +317,10 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	private Element getReferencesElement(Element process) {
 		Element references = null;
 		references = process.getChild("references", process.getNamespace());
-		if (references == null)
+		if (references == null) {
 			references = process.getChild("wsdlReferences", process
 					.getNamespace());
+		}
 		if (references == null) {
 			references = new Element("references", process.getNamespace());
 			process.addContent(references);
@@ -418,12 +419,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 					"An XML reading error occurred reading the BPEL file "
 							+ file.getName(), e);
 		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-				}
-			}
+			IOUtils.closeQuietly(is);
 		}
 		return doc;
 	}
@@ -438,17 +434,11 @@ public class ActiveBPELDeploymentArchiveHandler implements
 					.getPrettyFormat());
 			xmlOutputter.output(doc, writer);
 		} catch (IOException e) {
-
 			throw new ArchiveFileException(
 					"An I/O error occurred when writing the BPEL file: "
 							+ file.getName(), e);
 		} finally {
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (IOException e) {
-				}
-			}
+			IOUtils.closeQuietly(writer);
 		}
 	}
 

@@ -17,6 +17,7 @@ import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.Re
 import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.SequenceHandler;
 import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.SwitchHandler;
 import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.WhileHandler;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import net.bpelunit.framework.coverage.exceptions.BpelException;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
@@ -53,7 +54,7 @@ public class BranchMetricHandler implements IMetricHandler {
 	 */
 	private static String getNextMarker() {
 		String marker = BRANCH_LABEL
-				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + BpelXMLTools.incrementCounter();
 		return marker;
 	}
 

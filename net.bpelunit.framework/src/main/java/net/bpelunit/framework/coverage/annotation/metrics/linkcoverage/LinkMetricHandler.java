@@ -2,20 +2,21 @@ package net.bpelunit.framework.coverage.annotation.metrics.linkcoverage;
 
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
-import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.count;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createBPELElement;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createSequence;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseElementInFlow;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getProcessNamespace;
-import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.process_element;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.processElement;
 
 import java.util.Iterator;
 import java.util.List;
 
 import net.bpelunit.framework.coverage.annotation.Instrumenter;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.coverage.exceptions.BpelException;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+
 import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -67,7 +68,7 @@ public class LinkMetricHandler implements IMetricHandler {
 	 */
 	public static String getNextPositivLinkMarker() {
 		return POSITIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
-				+ (count++);
+				+ BpelXMLTools.incrementCounter();
 	}
 
 	/*
@@ -82,7 +83,7 @@ public class LinkMetricHandler implements IMetricHandler {
 	 */
 	public static String getNextNegativLinkMarker() {
 		return NEGATIV_LINK_LABEL + Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR
-				+ (count++);
+				+ BpelXMLTools.incrementCounter();
 	}
 
 	/*
@@ -109,7 +110,7 @@ public class LinkMetricHandler implements IMetricHandler {
 			throws BpelException {
 		for (Iterator<Element> iter = processElements.iterator(); iter
 				.hasNext();) {
-			loggingOfLinks2(iter.next(), process_element);
+			loggingOfLinks2(iter.next(), processElement);
 		}
 	}
 
@@ -147,13 +148,15 @@ public class LinkMetricHandler implements IMetricHandler {
 		Element transConElement;
 		if (ns.equals(NAMESPACE_BPEL_2_0)) {
 			transConElement = sourceElement.getChild(TRANSITION_CONDITION, ns);
-			if (transConElement != null)
+			if (transConElement != null) {
 				transitionCondition = transConElement.getText();
+			}
 		} else if (ns.equals(NAMESPACE_BPEL_1_1)) {
 			transitionCondition = sourceElement
 					.getAttributeValue(TRANSITION_CONDITION);
-			if (transitionCondition == null)
+			if (transitionCondition == null) {
 				transitionCondition = "";
+			}
 		}
 		return transitionCondition.trim();
 	}
@@ -167,17 +170,18 @@ public class LinkMetricHandler implements IMetricHandler {
 		while (iter.hasNext()) {
 			source = iter.next();
 			String attribut = source.getAttributeValue(ATTRIBUTE_LINKNAME);
-			if (attribut != null && attribut.equals(linkName))
+			if (attribut != null && attribut.equals(linkName)) {
 				break;
+			}
 		}
 		return source;
 	}
 
 	private Element insertPostivLink(Element flow, Element sourceElement,
 			Element link, String transitionCondition) {
-		Element link_copy = createLinkCopy(link, flow, COPY_LINK_POSTFIX);
+		Element linkCopy = createLinkCopy(link, flow, COPY_LINK_POSTFIX);
 		Element new_source_element = createBPELElement(SOURCE_TAG);
-		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
+		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, linkCopy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		if (getProcessNamespace().equals(NAMESPACE_BPEL_2_0)) {
 			Element transConditionElement = (Element) sourceElement.getChild(
@@ -189,12 +193,12 @@ public class LinkMetricHandler implements IMetricHandler {
 					transitionCondition);
 		}
 		sourceElement.getParentElement().addContent(0, new_source_element);
-		return link_copy;
+		return linkCopy;
 	}
 
 	private Element createLinkCopy(Element link, Element flow, String postfix) {
-		Element link_copy = (Element) link.clone();
-		link_copy.setAttribute(ATTRIBUTE_NAME, link
+		Element linkCopy = (Element) link.clone();
+		linkCopy.setAttribute(ATTRIBUTE_NAME, link
 				.getAttributeValue(ATTRIBUTE_NAME)
 				+ postfix);
 		Element links = flow.getChild(LINKS_TAG, getProcessNamespace());
@@ -202,8 +206,8 @@ public class LinkMetricHandler implements IMetricHandler {
 			links = createBPELElement(LINKS_TAG);
 			flow.addContent(0, links);
 		}
-		links.addContent(link_copy);
-		return link_copy;
+		links.addContent(linkCopy);
+		return linkCopy;
 	}
 
 	private void insertLoggingMarker(Element new_link, Element enclosedFlow,
@@ -238,23 +242,23 @@ public class LinkMetricHandler implements IMetricHandler {
 
 	private Element insertNegativLink(Element flow, Element sourceElement,
 			Element link, String transitionCondition) {
-		Element link_copy = createLinkCopy(link, flow,
+		Element linkCopy = createLinkCopy(link, flow,
 				COPY_LINK_NEGIERT_POSTFIX);
-		Element new_source_element = createBPELElement(SOURCE_TAG);
-		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, link_copy
+		Element newSourceElement = createBPELElement(SOURCE_TAG);
+		newSourceElement.setAttribute(ATTRIBUTE_LINKNAME, linkCopy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		if (getProcessNamespace().equals(NAMESPACE_BPEL_2_0)) {
 			Element transConditionElement = (Element) sourceElement.getChild(
 					TRANSITION_CONDITION, getProcessNamespace()).clone();
 			transConditionElement.setText("not("
 					+ transConditionElement.getText() + ")");
-			new_source_element.addContent(transConditionElement);
+			newSourceElement.addContent(transConditionElement);
 		} else if (getProcessNamespace().equals(NAMESPACE_BPEL_1_1)) {
-			new_source_element.setAttribute(TRANSITION_CONDITION, "not("
+			newSourceElement.setAttribute(TRANSITION_CONDITION, "not("
 					+ transitionCondition + ")");
 		}
-		sourceElement.getParentElement().addContent(0, new_source_element);
-		return link_copy;
+		sourceElement.getParentElement().addContent(0, newSourceElement);
+		return linkCopy;
 	}
 
 }

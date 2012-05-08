@@ -125,23 +125,26 @@ public abstract class BPELUnitRunner {
 
 		fSkipUnknownExtensions = false;
 		String skipUnknown = options.get(SKIP_UNKNOWN_EXTENSIONS);
-		if ((skipUnknown != null) && (skipUnknown.equalsIgnoreCase("true")))
+		if ((skipUnknown != null) && (skipUnknown.equalsIgnoreCase("true"))) {
 			fSkipUnknownExtensions = true;
+		}
 
 		fHaltOnError = false;
 		String haltOnErr = options.get(HALT_ON_ERROR);
-		if ((haltOnErr != null) && (haltOnErr.equalsIgnoreCase("true")))
+		if ((haltOnErr != null) && (haltOnErr.equalsIgnoreCase("true"))) {
 			fHaltOnError = true;
+		}
 
 		fHaltOnFailure = false;
 		String haltOnFail = options.get(HALT_ON_FAILURE);
-		if ((haltOnFail != null) && (haltOnFail.equalsIgnoreCase("true")))
+		if ((haltOnFail != null) && (haltOnFail.equalsIgnoreCase("true"))) {
 			fHaltOnFailure = true;
+		}
 
 		coverageMeasurmentTool = null;
 		fMeasureCoverage = false;
 		String measureCoverage = options.get(MEASURE_COVERAGE);
-		if ((measureCoverage != null)
+		if ((measureCoverage != null) 
 				&& (measureCoverage.equalsIgnoreCase("true"))) {
 			fMeasureCoverage = true;
 		}
@@ -154,7 +157,7 @@ public abstract class BPELUnitRunner {
 
 		fGlobalTimeout = BPELUnitConstants.TIMEOUT;
 		String timeout = options.get(GLOBAL_TIMEOUT);
-		if (timeout != null)
+		if (timeout != null) {
 			try {
 				fGlobalTimeout = Integer.parseInt(timeout);
 			} catch (NumberFormatException e) {
@@ -162,7 +165,8 @@ public abstract class BPELUnitRunner {
 						"Global timeout value in options is not an integer: "
 								+ timeout);
 			}
-
+		}
+		
 		configureInit();
 
 		configureLogging();
@@ -235,9 +239,10 @@ public abstract class BPELUnitRunner {
 			throws SpecificationException {
 
 		// Check setup
-		if (!fInitialized)
+		if (!fInitialized) {
 			throw new SpecificationException(
 					"BPELUnitCore was not properly initialized. Please call initialize() first.");
+		}
 
 		return new SpecificationLoader(this).loadTestSuite(suiteFile);
 	}

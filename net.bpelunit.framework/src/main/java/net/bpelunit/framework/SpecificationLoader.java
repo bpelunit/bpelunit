@@ -172,8 +172,9 @@ public class SpecificationLoader {
 
 	private void extractConditionGroups(XMLTestSuiteDocument doc) {
 		if (doc == null || doc.getTestSuite() == null
-				|| doc.getTestSuite().getConditionGroups() == null)
+				|| doc.getTestSuite().getConditionGroups() == null) {
 			return;
+		}
 
 		List<XMLConditionGroup> cgList = doc.getTestSuite()
 				.getConditionGroups().getConditionGroupList();
@@ -302,8 +303,9 @@ public class SpecificationLoader {
 		for (XMLTestCase xmlTestCase : xmlTestCaseList) {
 
 			String xmlTestCaseName = xmlTestCase.getName();
-			if (xmlTestCaseName == null)
+			if (xmlTestCaseName == null) {
 				xmlTestCaseName = "Test Case " + currentNumber;
+			}
 			currentNumber++;
 
 			boolean isVary = xmlTestCase.getVary();
@@ -409,8 +411,9 @@ public class SpecificationLoader {
 			// Use the local base URL, and if that doesn't work, try the default
 			// one
 			String xmlUrl = xmlTestSuite.getBaseURL();
-			if (xmlUrl == null)
+			if (xmlUrl == null) {
 				xmlUrl = BPELUnitConstants.DEFAULT_BASE_URL;
+			}
 			URL suiteBaseURL = new URL(xmlUrl);
 
 			// Normalize the URL: add port and trailing slash if missing
@@ -462,8 +465,9 @@ public class SpecificationLoader {
 						Attr attr = (Attr) set.item(i);
 						List<Integer> ints = getRoundInformation(attr
 								.getValue());
-						if (ints != null)
+						if (ints != null) {
 							currentMax = ints.size();
+						}
 					}
 				}
 				rounds = currentMax;
@@ -478,8 +482,9 @@ public class SpecificationLoader {
 
 	private void readTestSuiteSetUpBlock(TestSuite testSuite,
 			XMLTestSuite xmlTestSuite) throws Exception {
-		if (!xmlTestSuite.isSetSetUp())
+		if (!xmlTestSuite.isSetSetUp()) {
 			return;
+		}
 
 		XMLSetUp xmlSetUp = xmlTestSuite.getSetUp();
 		if (xmlSetUp.isSetScript()) {
@@ -576,11 +581,12 @@ public class SpecificationLoader {
 			TestCase test) throws SpecificationException {
 		List<XMLPartnerTrack> partnerTrackList = xmlTestCase
 				.getPartnerTrackList();
-		if (partnerTrackList != null)
+		if (partnerTrackList != null) {
 			for (XMLPartnerTrack xmlPartnerTrack : partnerTrackList) {
 				readPartner(suitePartners, xmlTestCase, round, testDirectory,
 						test, xmlPartnerTrack);
 			}
+		}
 	}
 
 	private void readPartner(Map<String, Partner> suitePartners,
@@ -619,8 +625,9 @@ public class SpecificationLoader {
 	}
 
 	private void readTestCaseSetUpBlock(TestCase test, XMLTestCase xmlTestCase) {
-		if (!xmlTestCase.isSetSetUp())
+		if (!xmlTestCase.isSetSetUp()) {
 			return;
+		}
 
 		XMLSetUp xmlSetUp = xmlTestCase.getSetUp();
 		if (xmlSetUp.isSetScript()) {
@@ -797,8 +804,9 @@ public class SpecificationLoader {
 
 		// Receive may expect a fault - or receive from an output element
 		SOAPOperationDirectionIdentifier receiveDirection = SOAPOperationDirectionIdentifier.OUTPUT;
-		if (xmlReceive.getFault())
+		if (xmlReceive.getFault()) {
 			receiveDirection = SOAPOperationDirectionIdentifier.FAULT;
+		}
 		ReceiveDataSpecification rSpec = createReceiveSpecificationFromParent(
 				activity, xmlSendReceiveSync, xmlReceive, receiveDirection);
 
@@ -826,9 +834,10 @@ public class SpecificationLoader {
 		XMLSendActivity xmlSend = xmlReceiveSendSync.getSend();
 		XMLReceiveActivity xmlReceive = xmlReceiveSendSync.getReceive();
 
-		if ((xmlSend == null) || (xmlReceive == null))
+		if ((xmlSend == null) || (xmlReceive == null)) {
 			throw new SpecificationException(
 					"A synchronous receive/send activity must have both receive and send children.");
+		}
 
 		XMLHeaderProcessor xmlHeaderProcessor = xmlReceiveSendSync
 				.getHeaderProcessor();
@@ -840,8 +849,9 @@ public class SpecificationLoader {
 
 		// The "send" part may send a fault here, or to an output element
 		SOAPOperationDirectionIdentifier sendDirection = SOAPOperationDirectionIdentifier.OUTPUT;
-		if (xmlSend.getFault())
+		if (xmlSend.getFault()) {
 			sendDirection = SOAPOperationDirectionIdentifier.FAULT;
+		}
 		SendDataSpecification sSpec = createSendSpecificationFromParent(
 				activity, xmlReceiveSendSync, xmlSend, sendDirection, round,
 				testDirectory);
@@ -872,10 +882,11 @@ public class SpecificationLoader {
 		XMLSendActivity xmlSend = xmlAsyncTwoWay.getSend();
 		XMLReceiveActivity xmlReceive = xmlAsyncTwoWay.getReceive();
 
-		if ((xmlSend == null) || (xmlReceive == null))
+		if ((xmlSend == null) || (xmlReceive == null)) {
 			throw new SpecificationException(
 					"An asynchronous receive/send or send/receive activity must have both receive and send children.");
-
+		}
+			
 		XMLHeaderProcessor xmlHeaderProcessor = xmlAsyncTwoWay
 				.getHeaderProcessor();
 		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
@@ -1012,8 +1023,9 @@ public class SpecificationLoader {
 		String delaySequence = xmlSend.getDelaySequence();
 		List<Integer> sequence = getRoundInformation(delaySequence);
 		int currentDelay = 0;
-		if (sequence != null && sequence.size() > round)
+		if (sequence != null && sequence.size() > round) {
 			currentDelay = sequence.get(round);
+		}
 
 		// If the user hasn't specified any fault code or string, use these
 		// default values
@@ -1215,7 +1227,7 @@ public class SpecificationLoader {
 		XMLMapping xmlMapping = xmlTwoWayType.getMapping();
 		if (xmlMapping != null) {
 			List<XMLCopy> xmlCopyList = xmlMapping.getCopyList();
-			if (xmlCopyList != null)
+			if (xmlCopyList != null) {
 				for (XMLCopy xmlCopy : xmlCopyList) {
 					String xmlCopyFrom = xmlCopy.getFrom();
 					String xmlCopyTo = xmlCopy.getTo();
@@ -1226,6 +1238,7 @@ public class SpecificationLoader {
 					copyDataOperations.add(new DataCopyOperation(activity,
 							xmlCopyFrom, xmlCopyTo));
 				}
+			}
 		}
 
 		return copyDataOperations;
@@ -1235,18 +1248,20 @@ public class SpecificationLoader {
 			XMLHeaderProcessor xmlHeaderProcessor)
 			throws SpecificationException {
 
-		if (xmlHeaderProcessor == null)
+		if (xmlHeaderProcessor == null) {
 			return null;
+		}
 
 		String xmlHeaderProcessorName = xmlHeaderProcessor.getName();
-		if (xmlHeaderProcessorName == null)
+		if (xmlHeaderProcessorName == null) {
 			throw new SpecificationException("Header Processor needs a name.");
+		}
 
 		List<XMLProperty> propertyList = xmlHeaderProcessor.getPropertyList();
 
 		IHeaderProcessor proc = fRunner
 				.createNewHeaderProcessor(xmlHeaderProcessorName);
-		if (propertyList != null)
+		if (propertyList != null) {
 			for (XMLProperty property : propertyList) {
 				String xmlPropertyName = property.getName();
 				String xmlPropertyData = property.getStringValue();
@@ -1258,6 +1273,7 @@ public class SpecificationLoader {
 
 				proc.setProperty(xmlPropertyName, xmlPropertyData);
 			}
+		}
 		return proc;
 	}
 
@@ -1268,22 +1284,25 @@ public class SpecificationLoader {
 
 		Partner partner = (Partner) activity.getPartner();
 
-		if (service == null)
+		if (service == null) {
 			throw new SpecificationException(
 					"Expected a service specification in activity "
 							+ activity.getName()
 							+ " (PartnerTrack for partner " + partner + ").");
-		if (port == null)
+		}
+		if (port == null) {
 			throw new SpecificationException(
 					"Expected a port specification in activity "
 							+ activity.getName()
 							+ " (PartnerTrack for partner " + partner + ").");
-		if (operation == null)
+		}
+		if (operation == null) {
 			throw new SpecificationException(
 					"Expected a operation specification in activity "
 							+ activity.getName()
 							+ " (PartnerTrack for partner " + partner + ").");
-
+		}
+		
 		return partner.getOperation(service, port, operation, direction);
 	}
 
@@ -1294,11 +1313,12 @@ public class SpecificationLoader {
 			service = xmlActivity.getService();
 		} catch (Exception e) {
 		}
-		if (service == null)
+		if (service == null) {
 			throw new SpecificationException(
 					"Could not find service for activity "
 							+ parentActivity.getName()
 							+ ": not specified or wrong prefix.");
+		}
 		return service;
 	}
 
@@ -1353,8 +1373,9 @@ public class SpecificationLoader {
 			String partnerTrackName) {
 
 		XMLTrack track = getPartnerTrack(xmlTestCase, partnerTrackName);
-		if (track != null)
+		if (track != null) {
 			return !ActivityUtil.getActivities(track).isEmpty();
+		}
 
 		return false;
 	}

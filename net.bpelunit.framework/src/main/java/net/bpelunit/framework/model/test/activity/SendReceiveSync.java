@@ -94,8 +94,9 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 					.createErrorStatus("Error: Answer from synchronous call had non-expected return code " + returnMsg.getReturnCode());
 
 			fWrongReturnBody= returnMsg.getBody();
-			if ("".equals(fWrongReturnBody))
+			if ("".equals(fWrongReturnBody)) {
 				fWrongReturnBody= "(empty)";
+			}
 		}
 	}
 
@@ -124,8 +125,9 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 	public List<StateData> getStateData() {
 		List<StateData> stateData= new ArrayList<StateData>();
 		stateData.addAll(fStatus.getAsStateData());
-		if (fWrongReturnBody != null)
+		if (fWrongReturnBody != null) {
 			stateData.add(new StateData("Return Body", fWrongReturnBody));
+		}
 		return stateData;
 	}
 

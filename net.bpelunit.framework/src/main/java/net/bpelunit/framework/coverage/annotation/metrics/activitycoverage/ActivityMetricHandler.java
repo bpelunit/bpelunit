@@ -6,7 +6,6 @@ import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCE_ELEMENT;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGETS_ELEMENT;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGET_ELEMENT;
-import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.count;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseInSequence;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ensureElementIsInSequence;
 
@@ -14,12 +13,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.coverage.annotation.Instrumenter;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+
+import org.apache.log4j.Logger;
 import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -71,8 +71,9 @@ public class ActivityMetricHandler implements IMetricHandler {
 	private void respectSourceActivities(Element element, Element sequence) {
 		List<Element> sourceElements = getSourceElements(element);
 		if (sourceElements.size() > 0) {
-			if (sequence == null)
+			if (sequence == null) {
 				sequence = encloseInSequence(element);
+			}
 			Element sourceElement;
 			for (Iterator<Element> iter = sourceElements.iterator(); iter
 					.hasNext();) {
@@ -109,8 +110,9 @@ public class ActivityMetricHandler implements IMetricHandler {
 		if (bpelVersion.equals(NAMESPACE_BPEL_2_0)) {
 			Element sourceElement = element.getChild(SOURCES_ELEMENT,
 					bpelVersion);
-			if (sourceElement != null)
+			if (sourceElement != null) {
 				sourceElements.add(sourceElement);
+			}
 		} else if (bpelVersion.equals(NAMESPACE_BPEL_1_1)) {
 			List<Element> list = element.getChildren(SOURCE_ELEMENT,
 					bpelVersion);
@@ -127,8 +129,9 @@ public class ActivityMetricHandler implements IMetricHandler {
 		if (bpelVersion.equals(NAMESPACE_BPEL_2_0)) {
 			Element targetElement = element.getChild(TARGETS_ELEMENT,
 					bpelVersion);
-			if (targetElement != null)
+			if (targetElement != null) {
 				targetElements.add(targetElement);
+			}
 		} else if (bpelVersion.equals(NAMESPACE_BPEL_1_1)) {
 			List<Element> list = element.getChildren(TARGET_ELEMENT,
 					bpelVersion);
@@ -151,16 +154,16 @@ public class ActivityMetricHandler implements IMetricHandler {
 		Element parent = element.getParentElement();
 		String element_name = element.getName();
 		String marker = element_name
-				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + BpelXMLTools.incrementCounter();
 		markersRegistry.registerMarker(marker);
 		Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
 				+ marker);
 		int index = parent.indexOf(element);
-		if (element_name.equals(BasicActivities.RECEIVE_ACTIVITY))
+		if (element_name.equals(BasicActivities.RECEIVE_ACTIVITY)) {
 			parent.addContent(index + 1, comment);
-		else
+		} else {
 			parent.addContent(index, comment);
-
+		}
 	}
 
 }

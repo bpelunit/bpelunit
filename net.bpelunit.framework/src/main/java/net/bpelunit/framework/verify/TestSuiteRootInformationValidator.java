@@ -36,13 +36,15 @@ public class TestSuiteRootInformationValidator implements ITestSuiteValidator {
 
 	private void validateTestCasesSection(XMLTestCasesSection xmlTestCases)
 			throws SpecificationException {
-		if (xmlTestCases == null)
+		if (xmlTestCases == null) {
 			throw new SpecificationException(
 					"No test case section found in test suite document.");
+		}
 
 		List<XMLTestCase> xmlTestCaseList = xmlTestCases.getTestCaseList();
-		if (xmlTestCaseList == null || xmlTestCaseList.size() == 0)
+		if (xmlTestCaseList == null || xmlTestCaseList.size() == 0) {
 			throw new SpecificationException("No test cases found.");
+		}
 
 		for (XMLTestCase tc : xmlTestCaseList) {
 			validateTestCase(tc);
@@ -80,10 +82,11 @@ public class TestSuiteRootInformationValidator implements ITestSuiteValidator {
 					.getPropertyList()) {
 				String xmlPropertyName = data.getName();
 				String xmlPropertyData = data.getStringValue();
-				if ((xmlPropertyName == null) || (xmlPropertyData == null))
+				if ((xmlPropertyName == null) || (xmlPropertyData == null)) {
 					throw new SpecificationException("Metadata in Test Case "
 							+ tc.getName()
 							+ " must have both property and value.");
+				}
 			}
 		}
 	}
@@ -91,10 +94,11 @@ public class TestSuiteRootInformationValidator implements ITestSuiteValidator {
 	private void validateTestCaseHasClientTrack(XMLTestCase tc)
 			throws SpecificationException {
 		XMLTrack xmlClientTrack = tc.getClientTrack();
-		if (xmlClientTrack == null)
+		if (xmlClientTrack == null) {
 			throw new SpecificationException(
 					"Could not find clientTrack in test case "
 							+ tc.getName());
+		}
 	}
 
 	private void validateDeploymentSection(XMLDeploymentSection deployment)
@@ -122,9 +126,10 @@ public class TestSuiteRootInformationValidator implements ITestSuiteValidator {
 			throws SpecificationException {
 		String name = xmlPDI.getName();
 		String wsdl = xmlPDI.getWsdl();
-		if ((name == null) || (wsdl == null))
+		if ((name == null) || (wsdl == null)) {
 			throw new SpecificationException(
 					"Name and WSDL attributes of a partner must not be empty.");
+		}
 	}
 
 	private void validateRequiredPUTFieldsSet(XMLDeploymentSection deployment)
@@ -134,44 +139,50 @@ public class TestSuiteRootInformationValidator implements ITestSuiteValidator {
 		String xmlPutWSDL = xmlPut.getWsdl();
 		String xmlPutType = xmlPut.getType();
 		if ((xmlPutName == null) || (xmlPutWSDL == null)
-				|| (xmlPutType == null))
+				|| (xmlPutType == null)) {
 			throw new SpecificationException(
 					"Process Under Test must have attributes name, type, wsdl, and a deployment section specified.");
+		}
 	}
 
 	private void validatePUTSet(XMLDeploymentSection deployment)
 			throws SpecificationException {
-		if (deployment.getPut() == null)
+		if (deployment.getPut() == null) {
 			throw new SpecificationException(
 					"Expected a Process Under Test (PUT) in the test suite.");
+		}
 	}
 
 	private void validateDeploymentSet(XMLDeploymentSection deployment)
 			throws SpecificationException {
-		if (deployment == null)
+		if (deployment == null) {
 			throw new SpecificationException(
 					"Could not find deployment section inside test suite document.");
+		}
 	}
 
 	private void validateRootElementSet(XMLTestSuite xmlTestSuite)
 			throws SpecificationException {
-		if (xmlTestSuite == null)
+		if (xmlTestSuite == null) {
 			throw new SpecificationException(
 					"Could not find testSuite root element in the test suite XML file.");
+		}
 	}
 
 	private void validateName(XMLTestSuite xmlTestSuite)
 			throws SpecificationException {
-		if (xmlTestSuite.getName() == null || xmlTestSuite.getName().equals(""))
+		if (xmlTestSuite.getName() == null || xmlTestSuite.getName().equals("")) {
 			throw new SpecificationException(
 					"No name found for the test suite.");
+		}
 	}
 
 	private void validateBaseURL(XMLTestSuite xmlTestSuite)
 			throws SpecificationException {
 		String xmlUrl = xmlTestSuite.getBaseURL();
-		if (xmlUrl == null)
+		if (xmlUrl == null) {
 			xmlUrl = BPELUnitConstants.DEFAULT_BASE_URL;
+		}
 		try {
 			new URL(xmlUrl);
 		} catch (MalformedURLException e) {
@@ -179,5 +190,4 @@ public class TestSuiteRootInformationValidator implements ITestSuiteValidator {
 					+ xmlUrl);
 		}
 	}
-
 }

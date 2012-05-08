@@ -159,7 +159,9 @@ public class SendDataSpecification extends DataSpecification {
 		if (fDataTemplate != null) {
 			generateLiteralDataFromTemplate(context);
 		}
-		if (hasProblems()) return;
+		if (hasProblems()) {
+			return;
+		}
 
 		// Insert mapping data from context (if any)
 		insertMappingData(context);
@@ -167,8 +169,9 @@ public class SendDataSpecification extends DataSpecification {
 		// Set up the send call
 		encodeMessage();
 
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
 		try {
 			context.processHeaders(this);
@@ -177,13 +180,15 @@ public class SendDataSpecification extends DataSpecification {
 			return;
 		}
 
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
 		createWireFormat();
 
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
 		fStatus= ArtefactStatus.createPassedStatus();
 	}

@@ -123,8 +123,9 @@ public class ReceiveDataSpecification extends DataSpecification {
 		// Check content
 		setInWireFormat(incomingMessage);
 
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
 		try {
 			context.processHeaders(this);
@@ -133,23 +134,27 @@ public class ReceiveDataSpecification extends DataSpecification {
 			return;
 		}
 
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
 		decodeMessage();
 
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
 		extractMappingData(context);
 
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
 		context.saveReceivedMessage(fLiteralData);
 		validateConditions(context);
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
 		// Receive completed.
 		fStatus= ArtefactStatus.createPassedStatus();
@@ -212,7 +217,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 				return;
 			}
 		}
-		else if (body.getFault() != null){
+		else if (body.getFault() != null) {
 			fStatus = ArtefactStatus.createFailedStatus(
 				"The operation "
 				+ this
@@ -272,8 +277,9 @@ public class ReceiveDataSpecification extends DataSpecification {
 	private String getWireFormatAsString() {
 		if (fPlainMessage != null) {
 			return fPlainMessage;
-		} else
+		} else {
 			return "(no data)";
+		}
 	}
 
 	private String getLiteralDataAsString() {
@@ -297,9 +303,10 @@ public class ReceiveDataSpecification extends DataSpecification {
 	}
 
 	public List<ITestArtefact> getChildren() {
-		List<ITestArtefact> returner= new ArrayList<ITestArtefact>();
-		for (ReceiveCondition c : fConditions)
+		List<ITestArtefact> returner = new ArrayList<ITestArtefact>();
+		for (ReceiveCondition c : fConditions) {
 			returner.add(c);
+		}
 		returner.add(new XMLData(this, "Plain incoming message", getWireFormatAsString()));
 		returner.add(new XMLData(this, "SOAP Message data", getSOAPMessageDataAsString()));
 		returner.add(new XMLData(this, "Literal XML data", getLiteralDataAsString()));
@@ -314,7 +321,5 @@ public class ReceiveDataSpecification extends DataSpecification {
 		stateData.add(new StateData("Direction", fOperation.getDirection().name()));
 		return stateData;
 	}
-
-
 
 }

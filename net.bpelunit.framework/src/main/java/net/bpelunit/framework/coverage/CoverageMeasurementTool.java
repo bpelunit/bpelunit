@@ -186,7 +186,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 			throws BpelException, ArchiveFileException {
 		Instrumenter instrumenter = new Instrumenter();
 		Document doc;
-		BpelXMLTools.count = 0;
+		BpelXMLTools.resetCounter();
 		int count = 0;
 		String bpelFile;
 		ActivityMetricHandler.targetscount = 0;

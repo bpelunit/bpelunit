@@ -103,28 +103,32 @@ public class SOAPOperationCallIdentifier {
 		fDefinition= fWSDLDefinition;
 
 		fService= fWSDLDefinition.getService(service);
-		if (fService == null)
+		if (fService == null) {
 			throw new SpecificationException("Specified service \"" + service + "\" was not found in partner WSDL " + fWSDLDefinition.getQName());
+		}
 
 		fPort= fService.getPort(port);
-		if (fPort == null)
+		if (fPort == null) {
 			throw new SpecificationException("Specified port \"" + port + "\" was not found in service " + service + " in partner WSDL "
 					+ fWSDLDefinition.getQName());
-
+		}
+		
 		fBinding= fPort.getBinding();
 
-		if (fBinding == null)
+		if (fBinding == null) {
 			throw new SpecificationException("Could not find a binding for service \"" + service + "\" and port \"" + port + "\" in partner WSDL "
 					+ fWSDLDefinition.getQName());
-
+		}
+		
 		// Do not use input and output names. This means no overloading is
 		// possible/allowed. This is acceptable as per WS-I Basic Profile.
 		fOperation= fBinding.getBindingOperation(operationName, null, null);
 
-		if (fOperation == null)
+		if (fOperation == null) {
 			throw new SpecificationException("Specified operation \"" + operationName + "\" was not found in binding \"" + fBinding.getQName()
 					+ "\" in partner WSDL " + "\"" + fWSDLDefinition.getQName() + "\"");
-
+		}
+			
 		fDirection= direction;
 	}
 
@@ -208,11 +212,13 @@ public class SOAPOperationCallIdentifier {
 		SOAPBinding sBinding= null;
 		List<?> extensibilityElements= fBinding.getExtensibilityElements();
 		for (Object supposedSOAPBinding : extensibilityElements) {
-			if (supposedSOAPBinding instanceof SOAPBinding)
+			if (supposedSOAPBinding instanceof SOAPBinding) {
 				sBinding= (SOAPBinding) supposedSOAPBinding;
+			}
 		}
-		if (sBinding == null)
+		if (sBinding == null) {
 			throw new SpecificationException("Could not find SOAP Binding element in binding " + fBinding);
+		}
 
 		String style= sBinding.getStyle();
 
@@ -223,14 +229,16 @@ public class SOAPOperationCallIdentifier {
 		if (style == null) {
 			style= getSOAPOperation().getStyle();
 		}
-		if (style == null)
+		if (style == null) {
 			style= "document"; // default as per WS-I basic profile.
-
+		}
+		
 		String encoding= getEncoding(fOperation);
 
-		if (encoding == null)
+		if (encoding == null) {
 			encoding= "literal"; // default as per WS-I basic profile.
-
+		}
+			
 		return style + "/" + encoding;
 	}
 
@@ -286,8 +294,9 @@ public class SOAPOperationCallIdentifier {
 	private SOAPOperation getSOAPOperation() {
 		List<?> extensibilityElements2= fOperation.getExtensibilityElements();
 		for (Object supposedSOAPOperation : extensibilityElements2) {
-			if (supposedSOAPOperation instanceof SOAPOperation)
+			if (supposedSOAPOperation instanceof SOAPOperation) {
 				return ((SOAPOperation) supposedSOAPOperation);
+			}
 		}
 		return null;
 	}
@@ -310,8 +319,9 @@ public class SOAPOperationCallIdentifier {
 		BindingOutput bindingOutput= wsdlOperation.getBindingOutput();
 		if (bindingOutput != null) {
 			use= getUse(bindingOutput);
-			if (use != null)
+			if (use != null) {
 				return use;
+			}
 		}
 
 		// May have faults, but not without input or output.
@@ -321,17 +331,19 @@ public class SOAPOperationCallIdentifier {
 
 	private String getUse(ElementExtensible bindingInput) {
 		SOAPBody body= getSoapBody(bindingInput);
-		if (body != null)
+		if (body != null) {
 			return body.getUse();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	private SOAPBody getSoapBody(ElementExtensible bindingInput) {
 		List<?> extensibilityElements= bindingInput.getExtensibilityElements();
 		for (Object supposedSOAPBody : extensibilityElements) {
-			if (supposedSOAPBody instanceof SOAPBody)
+			if (supposedSOAPBody instanceof SOAPBody) {
 				return ((SOAPBody) supposedSOAPBody);
+			}
 		}
 		return null;
 	}

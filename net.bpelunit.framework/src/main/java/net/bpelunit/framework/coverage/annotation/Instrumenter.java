@@ -106,16 +106,19 @@ public class Instrumenter {
 							Element invoke = (Element) o;
 							List<Element> children = JDomUtil.getChildren(
 									invoke, BpelXMLTools.CATCH_ELEMENT);
-							if (children.size() > 0)
+							if (children.size() > 0) {
 								return true;
+							}
 							children = JDomUtil.getChildren(invoke,
 									BpelXMLTools.CATCHALL_ELEMENT);
-							if (children.size() > 0)
+							if (children.size() > 0) {
 								return true;
+							}
 							children = JDomUtil.getChildren(invoke,
 									BpelXMLTools.COMPENSATION_HANDLER);
-							if (children.size() > 0)
+							if (children.size() > 0) {
 								return true;
+							}
 						}
 						return false;
 					}
@@ -150,9 +153,10 @@ public class Instrumenter {
 		inlineElements = JDomUtil.getChildren(element,
 				BpelXMLTools.COMPENSATION_HANDLER);
 		if (inlineElements.size() > 0) {
-			if (scope == null)
+			if (scope == null) {
 				scope = BpelXMLTools
 						.createBPELElement(StructuredActivities.SCOPE_ACTIVITY);
+			}
 			scope.addContent(inlineElements.get(0).detach());
 		}
 		if (scope != null) {
@@ -208,7 +212,7 @@ public class Instrumenter {
 	 */
 	private void initializeBPELTools(Element process_element)
 			throws BpelVersionException {
-		BpelXMLTools.process_element = process_element;
+		BpelXMLTools.processElement = process_element;
 		BasicActivities.initialize();
 		StructuredActivities.initialize();
 	}
@@ -251,11 +255,12 @@ public class Instrumenter {
 		boolean isFlow = element.getName().equals(
 				StructuredActivities.FLOW_ACTIVITY);
 		for (int i = 0; i < childElements.size(); i++) {
-			if (isFlow)
+			if (isFlow) {
 				handleCoverageLabelsInElement(childElements.get(i),
 						createVariableName());
-			else
+			} else {
 				handleCoverageLabelsInElement(childElements.get(i), null);
+			}
 		}
 	}
 

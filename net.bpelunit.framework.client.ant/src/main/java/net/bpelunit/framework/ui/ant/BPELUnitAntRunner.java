@@ -98,8 +98,9 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 			Logger.getRootLogger().setLevel(Level.toLevel(log.getLevel()));
 		}
 
-		if (fLoggers.isEmpty())
+		if (fLoggers.isEmpty()) {
 			Logger.getRootLogger().addAppender(new NullAppender());
+		}
 	}
 
 	// ************************* Running *************************
@@ -145,18 +146,21 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 	}
 
 	public void testCaseEnded(TestCase testCase) {
-		if (testCase.getStatus().isFailure())
+		if (testCase.getStatus().isFailure()) {
 			fFailures++;
-		if (testCase.getStatus().isError())
+		}
+		if (testCase.getStatus().isError()) {
 			fErrors++;
+		}
 		fRuns++;
 
 		outputPlain("END", testCase);
 	}
 
 	public void progress(ITestArtefact testArtefact) {
-		if (testArtefact instanceof PartnerTrack)
+		if (testArtefact instanceof PartnerTrack) {
 			outputPlain("PROGRESS", testArtefact);
+		}
 	}
 
 	private void outputPlain(String head, ITestArtefact testCase) {
@@ -170,8 +174,9 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 		for (Iterator<Output> i= fOutputs.iterator(); i.hasNext();) {
 			Output output= i.next();
 			try {
-				if (output.getStyle().equals(Output.STYLE_PLAIN))
+				if (output.getStyle().equals(Output.STYLE_PLAIN)) {
 					output.write(info);
+				}
 			} catch (IOException e) {
 				System.out.println("I/O Error writing to output stream - canceling output.");
 				output.dispose();

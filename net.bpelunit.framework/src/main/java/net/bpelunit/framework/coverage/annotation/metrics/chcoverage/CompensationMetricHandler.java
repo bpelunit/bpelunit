@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.bpelunit.framework.coverage.annotation.Instrumenter;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import net.bpelunit.framework.coverage.exceptions.BpelException;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
@@ -24,9 +25,9 @@ public class CompensationMetricHandler implements IMetricHandler {
 	 * 
 	 * @return eindeutige Markierung
 	 */
-	public static String getNexMarker() {
+	public static String getNextMarker() {
 		return COMPENS_HANDLER_LABEL
-				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + BpelXMLTools.incrementCounter();
 	}
 
 	private MarkersRegisterForArchive markersRegistry;
@@ -55,7 +56,7 @@ public class CompensationMetricHandler implements IMetricHandler {
 					StructuredActivities.SEQUENCE_ACTIVITY)) {
 				activity = encloseInSequence(activity);
 			}
-			String marker = getNexMarker();
+			String marker = getNextMarker();
 			markersRegistry.registerMarker(marker);
 			Comment comment = new Comment(
 					Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker);

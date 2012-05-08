@@ -34,21 +34,21 @@ public class IfHandler implements IStructuredActivityHandler {
 	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
 	 * um die Ausführung der Zweige zu erfassen.
 	 * 
-	 * @param structured_activity
+	 * @param structuredActivity
 	 * @throws BpelException
 	 */
-	public void insertBranchMarkers(Element structured_activity)
+	public void insertBranchMarkers(Element structuredActivity)
 			throws BpelException {
-		insertMarkerForIfBranch(getFirstEnclosedActivity(structured_activity));
-		List elseif_branches = structured_activity.getChildren(ELSE_IF_ELEMENT,
+		insertMarkerForIfBranch(getFirstEnclosedActivity(structuredActivity));
+		List elseIfBranches = structuredActivity.getChildren(ELSE_IF_ELEMENT,
 				getProcessNamespace());
-		for (int i = 0; i < elseif_branches.size(); i++) {
-			insertMarkerForElseIfBranches(getFirstEnclosedActivity((Element) elseif_branches
+		for (int i = 0; i < elseIfBranches.size(); i++) {
+			insertMarkerForElseIfBranches(getFirstEnclosedActivity((Element) elseIfBranches
 					.get(i)));
 		}
-		Element elseElement = structured_activity.getChild(ELSE_ELEMENT, getProcessNamespace());
+		Element elseElement = structuredActivity.getChild(ELSE_ELEMENT, getProcessNamespace());
 		if (elseElement == null) {
-			elseElement = insertElseBranch(structured_activity);
+			elseElement = insertElseBranch(structuredActivity);
 			elseElement.addContent(createSequence());
 		}
 		insertMarkerForElseBranch(getFirstEnclosedActivity(elseElement));
@@ -56,18 +56,18 @@ public class IfHandler implements IStructuredActivityHandler {
 
 	/**
 	 * 
-	 * @param branch_activity
+	 * @param branchActivity
 	 *            Aktivität aus dem Else-Zweig.
 	 * @throws BpelException
 	 *             Wenn keine Aktivität in dem Zweig vorhanden ist.
 	 */
-	private void insertMarkerForElseBranch(Element branch_activity)
+	private void insertMarkerForElseBranch(Element branchActivity)
 			throws BpelException {
-		if (branch_activity == null)
+		if (branchActivity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 		
-		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
-
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branchActivity));
 	}
 
 	/**
@@ -79,25 +79,27 @@ public class IfHandler implements IStructuredActivityHandler {
 	 */
 	private void insertMarkerForElseIfBranches(Element branch_activity)
 			throws BpelException {
-		if (branch_activity == null)
+		if (branch_activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 			
 		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
 	}
 
 	/**
 	 * 
-	 * @param branch_activity
+	 * @param branchActivity
 	 *            Aktivität aus dem If-Zweig.
 	 * @throws BpelException
 	 *             Wenn keine Aktivität in dem Zweig vorhanden ist.
 	 */
-	private void insertMarkerForIfBranch(Element branch_activity)
+	private void insertMarkerForIfBranch(Element branchActivity)
 			throws BpelException {
-		if (branch_activity == null)
+		if (branchActivity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 
-		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branchActivity));
 
 	}
 

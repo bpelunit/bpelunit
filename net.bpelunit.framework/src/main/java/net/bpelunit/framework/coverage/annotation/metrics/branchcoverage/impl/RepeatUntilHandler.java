@@ -50,8 +50,9 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	private void branchFromActivityToCondition(Element element)
 			throws BpelException {
 		Element activity = getFirstEnclosedActivity(element);
-		if (element == null)
+		if (element == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 		
 		markersRegistry.registerMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));
 	}
@@ -78,20 +79,21 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	private void insertIfConstruct(Element element, Element countVariable)
 			throws BpelException {
 		Element activity = getFirstEnclosedActivity(element);
-		if (activity == null)
+		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 		
-		if (!isSequence(activity))
+		if (!isSequence(activity)) {
 			activity = ensureElementIsInSequence(activity);
-
+		}
 		
-		Element if_element = createIfActivity(ExpressionLanguage.getInstance(
+		Element ifElement = createIfActivity(ExpressionLanguage.getInstance(
 				CoverageConstants.EXPRESSION_LANGUAGE).valueOf(
 				countVariable.getAttributeValue(NAME_ATTR))
 				+ "=1");
 		Element sequence = createSequence();
-		if_element.addContent(sequence);
-		activity.addContent(0, if_element);
+		ifElement.addContent(sequence);
+		activity.addContent(0, ifElement);
 		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(sequence));
 
 	}
@@ -101,20 +103,22 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	 * RepeatUntil-Konstrukts, das die Zaählvariable um eins erhöht und
 	 * registriert damit die Ausführung der Schleife.
 	 * 
-	 * @param increesAssign
+	 * @param increaseAssign
 	 * @param element
 	 *            RepeatUntil-Element
 	 * @throws BpelException
 	 */
-	private void insertIncreesAssign(Element increesAssign, Element element)
+	private void insertIncreesAssign(Element increaseAssign, Element element)
 			throws BpelException {
 		Element activity = getFirstEnclosedActivity(element);
-		if (activity == null)
+		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 	
-		if (!isSequence(activity))
-			activity = ensureElementIsInSequence(activity);	
-		activity.addContent(increesAssign);
+		if (!isSequence(activity)) {
+			activity = ensureElementIsInSequence(activity);
+		}
+		activity.addContent(increaseAssign);
 
 	}
 
