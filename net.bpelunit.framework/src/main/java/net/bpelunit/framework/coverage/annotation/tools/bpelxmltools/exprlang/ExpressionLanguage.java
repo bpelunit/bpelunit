@@ -21,14 +21,16 @@ public abstract class ExpressionLanguage {
 		ExpressionLanguage language = null;
 		switch (expressionLanguage) {
 		case 0:
-			if (instance == null)
+			if (instance == null) {
 				instance = new XpathLanguage();
+			}
 			language = instance;
 			break;
 			
 		case 1:
-			if (instance == null)
+			if (instance == null) {
 				instance = new XpathLanguage();
+			}
 			language = instance;
 			break;
 		}

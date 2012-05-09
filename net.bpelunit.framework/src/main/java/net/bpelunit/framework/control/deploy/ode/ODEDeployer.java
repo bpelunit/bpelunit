@@ -135,18 +135,12 @@ public class ODEDeployer implements IBPELDeployer {
 
 		// test coverage logic. Moved to ProcessUnderTest deploy() method.
 
-		/*
-		 * if (BPELUnitRunner.measureTestCoverage()) { ICoverageMeasurementTool
-		 * tool = BPELUnitRunner .getCoverageMeasurmentTool(); tool
-		 * .setErrorStatus
-		 * ("Test coverage for ODE Deployer is not implemented!"); }
-		 */
-
 		java.io.File uploadingFile = new java.io.File(archivePath);
 
-		if (!uploadingFile.exists())
+		if (!uploadingFile.exists()) {
 			throw new DeploymentException(
 					"ODE deployer could not find zip file " + fArchive);
+		}
 
 		HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
 		PostMethod method = new PostMethod(fDeploymentAdminServiceURL);
@@ -309,10 +303,11 @@ public class ODEDeployer implements IBPELDeployer {
 
 	private void check(String toCheck, String description)
 			throws DeploymentException {
-		if (toCheck == null)
+		if (toCheck == null) {
 			throw new DeploymentException(
 					"ODE deployment configuration is missing the "
 							+ description + ".");
+		}
 	}
 
 	@Override

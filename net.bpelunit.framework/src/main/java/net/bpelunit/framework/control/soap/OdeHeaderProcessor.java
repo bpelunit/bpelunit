@@ -129,13 +129,15 @@ public class OdeHeaderProcessor implements IHeaderProcessor {
 			String targetURL = context.getUserData(KEY_ODE_RECEIVED_ADDRESS);
 			String sessionId = context.getUserData(KEY_ODE_SESSION_ID);
 
-			if (targetURL == null)
+			if (targetURL == null) {
 				throw new HeaderProcessingException(
 						"Target URL from presumed receive was empty.");
+			}
 
-			if (sessionId == null)
+			if (sessionId == null) {
 				throw new HeaderProcessingException(
 						"Session ID from presumed receive was empty.");
+			}
 
 			SOAPMessage msg = message.getSoapMessage();
 			SOAPHeader header = null;

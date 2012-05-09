@@ -663,10 +663,11 @@ public class SpecificationLoader {
 
 				// Find name of track
 				String trackName = null;
-				if (xmlTrack instanceof XMLPartnerTrack)
+				if (xmlTrack instanceof XMLPartnerTrack) {
 					trackName = ((XMLPartnerTrack) xmlTrack).getName();
-				else
+				} else {
 					trackName = BPELUnitConstants.CLIENT_NAME;
+				}
 
 				// Find the first test case with has a non-empty track like ours
 				XMLTestCase basedOnTestCase = findInHierarchy(xmlTestCase,
@@ -790,9 +791,10 @@ public class SpecificationLoader {
 		XMLSendActivity xmlSend = xmlSendReceiveSync.getSend();
 		XMLReceiveActivity xmlReceive = xmlSendReceiveSync.getReceive();
 
-		if ((xmlSend == null) || (xmlReceive == null))
+		if ((xmlSend == null) || (xmlReceive == null)) {
 			throw new SpecificationException(
 					"A synchronous send/receive activity must have both receive and send children.");
+		}
 
 		XMLHeaderProcessor xmlHeaderProcessor = xmlSendReceiveSync
 				.getHeaderProcessor();
@@ -993,8 +995,7 @@ public class SpecificationLoader {
 		try {
 		if (xmlSend.isSetData()) {
 			rawDataRoot = getLiteralDataForSend(xmlSend.getData(), testDirectory);
-		}
-		else if (xmlSend.isSetTemplate()) {
+		} else if (xmlSend.isSetTemplate()) {
 			if (xmlSend.getTemplate().isSetSrc()) {
 				// 'src' attribute in <template> - load as raw text, *not* XML - much less escaping involved
 				// Cannot reuse namespaces in .bpts - user must set namespaces in the .vm (same as when loading an external XML file)
@@ -1265,11 +1266,12 @@ public class SpecificationLoader {
 			for (XMLProperty property : propertyList) {
 				String xmlPropertyName = property.getName();
 				String xmlPropertyData = property.getStringValue();
-				if ((xmlPropertyName == null) || (xmlPropertyData == null))
+				if ((xmlPropertyName == null) || (xmlPropertyData == null)) {
 					throw new SpecificationException(
 							"Properties in Header Processor "
 									+ xmlHeaderProcessorName
 									+ " need both property name and value.");
+				}
 
 				proc.setProperty(xmlPropertyName, xmlPropertyData);
 			}
@@ -1357,9 +1359,8 @@ public class SpecificationLoader {
 					if (hasNonEmptyPartnerTrack(xmlTestCaseFor,
 							partnerTrackName)) {
 						return xmlTestCaseFor;
-					} else {
-						if (xmlTestCaseFor.getBasedOn() != null
-								&& !"".equals(xmlTestCaseFor.getBasedOn()))
+					} else 	if (xmlTestCaseFor.getBasedOn() != null
+								&& !"".equals(xmlTestCaseFor.getBasedOn())) {
 							return findInHierarchy(xmlTestCaseFor,
 									partnerTrackName);
 					}

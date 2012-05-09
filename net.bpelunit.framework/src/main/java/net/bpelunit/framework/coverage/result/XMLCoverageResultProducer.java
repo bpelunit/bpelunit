@@ -164,9 +164,10 @@ public class XMLCoverageResultProducer {
 			total = total + statistic.getTotalNumber();
 			tested = tested + statistic.getTestedNumber();
 		}
-		if (total > 0)
+		if (total > 0) {
 			relativ = Float.toString((tested * 1000 / total) / (float) 10.0)
 					+ "%";
+		}
 		return new String[] { statisticName, Integer.toString(total),
 				Integer.toString(tested), relativ };
 	}
@@ -195,10 +196,11 @@ public class XMLCoverageResultProducer {
 					.toString(total));
 			statisticElement.setAttribute(TESTED_NUMBER_ATTRIBUT, Integer
 					.toString(tested));
-			if (total > 0)
+			if (total > 0) {
 				relativ = Float
 						.toString((tested * 1000 / total) / (float) 10.0)
 						+ "%";
+			}
 			statisticElement.setAttribute(PER_CENT_ATTRIBUT, relativ);
 			fileStatisticElement.addContent(statisticElement);
 		}
