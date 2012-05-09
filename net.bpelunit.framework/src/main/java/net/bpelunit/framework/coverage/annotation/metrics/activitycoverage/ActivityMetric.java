@@ -1,11 +1,10 @@
 package net.bpelunit.framework.coverage.annotation.metrics.activitycoverage;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.coverage.annotation.MetricsManager;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
@@ -14,6 +13,8 @@ import net.bpelunit.framework.coverage.receiver.MarkerState;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 import net.bpelunit.framework.coverage.result.statistic.impl.Statistic;
+
+import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
@@ -86,7 +87,7 @@ public class ActivityMetric implements IMetric {
 	 * @return statistic
 	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerState>> allMarkers) {
+			Map<String, Map<String, MarkerState>> allMarkers) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		IStatistic subStatistic;
 		String label;

@@ -1,9 +1,10 @@
 package net.bpelunit.framework.coverage.receiver;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import net.bpelunit.framework.coverage.annotation.Instrumenter;
@@ -25,7 +26,7 @@ import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
  */
 public class MarkersRegisterForArchive {
 
-	private Hashtable<String, MarkerState> allCoverageLabels;
+	private Map<String, MarkerState> allCoverageLabels;
 
 	private List<MarkersRegistryForBPELFile> bpelFiles;
 
@@ -37,7 +38,7 @@ public class MarkersRegisterForArchive {
 
 	public MarkersRegisterForArchive(MetricsManager metricManager) {
 		this.metricManager = metricManager;
-		allCoverageLabels = new Hashtable<String, MarkerState>();
+		allCoverageLabels = new HashMap<String, MarkerState>();
 		bpelFiles = new ArrayList<MarkersRegistryForBPELFile>();
 		infos = new ArrayList<String>();
 	}
@@ -81,8 +82,9 @@ public class MarkersRegisterForArchive {
 		String marke;
 		while (scanner.hasNext()) {
 			marke = scanner.next().trim();
-			if (marke.length() > 0)
+			if (marke.length() > 0) {
 				setCoverageStatusForMarker(marke, testCase);
+			}
 		}
 		notifyAll();
 	}
@@ -91,8 +93,9 @@ public class MarkersRegisterForArchive {
 			String testCase) {
 		if (testCase != null) {
 			MarkerState status = allCoverageLabels.get(coverageMarker);
-			if (status != null)
+			if (status != null) {
 				status.setState(true, testCase);
+			}
 		}
 	}
 

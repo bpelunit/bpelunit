@@ -32,10 +32,10 @@ public class SequenceHandler implements IStructuredActivityHandler {
 	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
 	 * um die Ausführung der Zweige zu erfassen.
 	 * 
-	 * @param structured_activity
+	 * @param structuredActivity
 	 */
-	public void insertBranchMarkers(Element structured_activity) {
-		List<Element> children = structured_activity.getContent(new ElementFilter(
+	public void insertBranchMarkers(Element structuredActivity) {
+		List<Element> children = structuredActivity.getContent(new ElementFilter(
 				getProcessNamespace()));
 		Element child;
 		List<Element> activities = new ArrayList<Element>();
@@ -47,10 +47,11 @@ public class SequenceHandler implements IStructuredActivityHandler {
 		for (int i = 0; i < activities.size(); i++) {
 			child = activities.get(i);
 			if (isActivity(child)) {
-				if (previousActivity != null)
+				if (previousActivity != null) {
 					markersRegistry.registerMarker(BranchMetricHandler
 							.insertLabelBevorActivity(child));
-
+				}
+					
 				previousActivity = child;
 			}
 		}

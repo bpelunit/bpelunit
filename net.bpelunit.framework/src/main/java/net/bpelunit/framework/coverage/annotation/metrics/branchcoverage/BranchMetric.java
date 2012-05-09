@@ -3,9 +3,9 @@ package net.bpelunit.framework.coverage.annotation.metrics.branchcoverage;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.isStructuredActivity;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.bpelunit.framework.coverage.annotation.MetricsManager;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
@@ -15,6 +15,7 @@ import net.bpelunit.framework.coverage.receiver.MarkerState;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 import net.bpelunit.framework.coverage.result.statistic.impl.Statistic;
+
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
@@ -62,7 +63,7 @@ public class BranchMetric implements IMetric {
 	 * @see net.bpelunit.framework.coverage.annotation.metrics.IMetric#createStatistic(java.util.Hashtable)
 	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerState>> allMarkers) {
+			Map<String, Map<String, MarkerState>> allMarkers) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		statistic.setStateList(MetricsManager.getStatus(
 				BranchMetricHandler.BRANCH_LABEL, allMarkers));

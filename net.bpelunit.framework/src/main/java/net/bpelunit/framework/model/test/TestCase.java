@@ -14,6 +14,7 @@ import java.util.Map;
 import net.bpelunit.framework.control.datasource.DataSourceUtil;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -217,8 +218,9 @@ public class TestCase implements ITestArtefact {
 	 *
 	 * @return VelocityContext with information about the test suite and test
 	 * case.
+	 * @throws DataSourceException 
 	 * */
-	public Context createVelocityContext() throws Exception {
+	public Context createVelocityContext() throws DataSourceException {
 		if (fTestSuiteVelocityContext == null) {
 			fTestSuiteVelocityContext = getSuite().createVelocityContext();
 		}

@@ -72,8 +72,9 @@ public class XMLResultProducer {
 			xmlActivityNew.setType(activity.getActivityCode());
 
 			List<ITestArtefact> children= activity.getChildren();
-			for (ITestArtefact innerArtefact : children)
+			for (ITestArtefact innerArtefact : children) {
 				handleLowLevel(xmlActivityNew, innerArtefact);
+			}
 
 		} else if (testArtefact instanceof DataSpecification) {
 			// Reached the end - data spec
@@ -132,8 +133,9 @@ public class XMLResultProducer {
 		result.setResult(artefact.getStatus().getCode().toString());
 		result.setMessage(artefact.getStatus().getMessage());
 		String exceptionMessage= artefact.getStatus().getExceptionMessage();
-		if (exceptionMessage != null)
+		if (exceptionMessage != null) {
 			result.setException(exceptionMessage);
+		}
 
 		List<StateData> stateData= artefact.getStateData();
 		for (StateData data : stateData) {

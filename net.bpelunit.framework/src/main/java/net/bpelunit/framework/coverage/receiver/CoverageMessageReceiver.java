@@ -8,17 +8,18 @@ import javax.wsdl.WSDLException;
 import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 import javax.xml.namespace.QName;
+import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
-import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.coverage.CoverageConstants;
 import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
+
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import com.ibm.wsdl.Constants;
@@ -69,7 +70,7 @@ public class CoverageMessageReceiver {
 			Element element = null;
 			SOAPMessage fSOAPMessage;
 			try {
-				fSOAPMessage = BPELUnitUtil.getMessageFactoryInstance()
+				fSOAPMessage = MessageFactory.newInstance()
 						.createMessage(null,
 								new ByteArrayInputStream(message.getBytes()));
 

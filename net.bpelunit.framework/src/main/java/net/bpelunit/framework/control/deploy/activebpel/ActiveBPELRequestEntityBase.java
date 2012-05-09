@@ -4,16 +4,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-import javax.xml.namespace.QName;
+
+import net.bpelunit.framework.control.util.BPELUnitConstants;
 
 import org.apache.commons.httpclient.methods.RequestEntity;
-import net.bpelunit.framework.control.util.BPELUnitConstants;
-import net.bpelunit.framework.control.util.BPELUnitUtil;
 import org.w3c.dom.DOMException;
 
 public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
@@ -49,7 +49,7 @@ public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
 
     private SOAPMessage createEmptyMessage()
             throws SOAPException {
-        MessageFactory mFactory = BPELUnitUtil.getMessageFactoryInstance();
+        MessageFactory mFactory = MessageFactory.newInstance();
         SOAPMessage message = mFactory.createMessage();
         return message;
     }

@@ -105,8 +105,9 @@ public class ReceiveCondition implements ITestArtefact {
 				String smartGuess= xpath.evaluate(fExpression, literalData);
 				if (smartGuess != null) {
 					fActualValue= smartGuess;
-					if ("".equals(fActualValue))
+					if ("".equals(fActualValue)) {
 						fActualValue= "(no data)";
+					}
 				}
 
 				// Get expected value
@@ -173,8 +174,9 @@ public class ReceiveCondition implements ITestArtefact {
 		stateData.addAll(fStatus.getAsStateData());
 		stateData.add(new StateData("Expression", fExpression));
 		stateData.add(new StateData("Value", fExpectedValue));
-		if (fActualValue != null)
+		if (fActualValue != null) {
 			stateData.add(new StateData("Actual Data", fActualValue));
+		}
 		return stateData;
 	}
 
@@ -189,7 +191,7 @@ public class ReceiveCondition implements ITestArtefact {
 	public String toString() {
 		StringBuffer r= new StringBuffer();
 		r.append(fExpression);
-		r.append(" => Evaluation: " + fStatus);
+		r.append(" => Evaluation: ").append(fStatus);
 		return r.toString();
 	}
 

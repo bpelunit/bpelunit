@@ -312,8 +312,9 @@ public class SOAPOperationCallIdentifier {
 		BindingInput bindingInput= wsdlOperation.getBindingInput();
 		if (bindingInput != null) {
 			use= getUse(bindingInput);
-			if (use != null)
+			if (use != null) {
 				return use;
+			}
 		}
 		// Has output?
 		BindingOutput bindingOutput= wsdlOperation.getBindingOutput();

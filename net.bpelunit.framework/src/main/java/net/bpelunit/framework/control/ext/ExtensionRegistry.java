@@ -52,8 +52,13 @@ import org.jdom.input.SAXBuilder;
  * @author Alex Salnikow, Antonio García-Domínguez
  * @version 1.1 (2010/03/06)
  */
-public class ExtensionRegistry {
+public final class ExtensionRegistry {
 
+	private static final String SETTER_PREFIX = "set";
+
+	private ExtensionRegistry() {
+	}
+	
 	private static Logger fsLogger = Logger
 			.getLogger("net.bpelunit.framework.ExtensionRegistry");
 
@@ -101,9 +106,10 @@ public class ExtensionRegistry {
 			XMLBPELUnitCoreExtensions testExtensions = document
 					.getExtensionRegistry();
 
-			for (XMLExtension deployer : testExtensions.getDeployerList())
+			for (XMLExtension deployer : testExtensions.getDeployerList()) {
 				load(deployer, IBPELDeployer.class, "Deployer",
 						fsDeployerRegistry);
+			}
 
 			for (XMLExtension encoder : testExtensions.getEncoderList()) {
 				load(encoder, ISOAPEncoder.class, "Encoder", fsEncoderRegistry);
@@ -227,11 +233,12 @@ public class ExtensionRegistry {
 			throws ConfigurationException {
 		try {
 			Class<?> theClazz = getClassFor(extension);
-			if (!requiredType.isAssignableFrom(theClazz))
+			if (!requiredType.isAssignableFrom(theClazz)) {
 				throw new ConfigurationException("The " + readableName
 						+ " class for type " + extension.getType()
 						+ " from the configuration does not implement "
 						+ requiredType.getSimpleName());
+			}
 
 			registry.put(extension.getType(), (Class<T>) theClazz);
 		} catch (ConfigurationException e) {
@@ -333,7 +340,7 @@ public class ExtensionRegistry {
 			Map<String, String> options) {
 		for (String key : options.keySet()) {
 			try {
-				Method m = deployer.getClass().getMethod("set" + key,
+				Method m = deployer.getClass().getMethod(setterName(key),
 						String.class);
 				if (m.getAnnotation(IBPELDeployerOption.class) != null) {
 					m.invoke(deployer, options.get(key));
@@ -341,6 +348,10 @@ public class ExtensionRegistry {
 			} catch (Exception e) {
 			}
 		}
+	}
+
+	private static String setterName(String key) {
+		return SETTER_PREFIX + key;
 	}
 
 	/**
@@ -361,7 +372,7 @@ public class ExtensionRegistry {
 			if (attribute != null) {
 				try {
 					int i = Integer.parseInt(attribute);
-					TestCaseRunner.wait_time_for_coverage_markers = i;
+					TestCaseRunner.setWaitTimeForCoverageMarkers(i);
 				} catch (Exception e) {
 					BPELUnitRunner.getCoverageMeasurmentTool().setErrorStatus(
 							"Configuration of wait time is not valid.");
@@ -420,11 +431,8 @@ public class ExtensionRegistry {
 		return map;
 	}
 
-	private static List<String> analyzeString(String activities) {
+	static List<String> analyzeString(String activities) {
 		List<String> basicActivities = new ArrayList<String>();
-		if (!activities.endsWith(",")) {
-			activities = activities + ",";
-		}
 		Scanner scanner = new Scanner(activities);
 		scanner.useDelimiter(",");
 		while (scanner.hasNext()) {
@@ -464,14 +472,14 @@ public class ExtensionRegistry {
 			Class<?>[] parameters = m.getParameterTypes();
 			Class<?> returnType = m.getReturnType();
 			
-			if (annotation != null && name.startsWith("set")
+			if (annotation != null && name.startsWith(SETTER_PREFIX)
 					&& parameters.length == 1
 					&& String.class.equals(parameters[0])
-					&& returnType.equals(void.class)) {
-				if (forSuite || !annotation.testSuiteSpecific()) {
-					name = name.substring(3); // subtract "set"
-					configurationOptions.put(name, annotation);
-				}
+					&& returnType.equals(void.class)
+					&& (forSuite || !annotation.testSuiteSpecific())
+			) {
+				String optionName = name.substring(SETTER_PREFIX.length()); // subtract "set"
+				configurationOptions.put(optionName, annotation);
 			}
 		}
 		
@@ -493,7 +501,7 @@ public class ExtensionRegistry {
 			Class<? extends IBPELDeployer> deployer,
 			String configurationParameter) {
 		try {
-			Method m = deployer.getMethod("set" + configurationParameter,
+			Method m = deployer.getMethod(setterName(configurationParameter),
 					String.class);
 			IBPELDeployerOption annotation = m
 					.getAnnotation(IBPELDeployerOption.class);
@@ -515,12 +523,12 @@ public class ExtensionRegistry {
 			Class<?>[] parameters = m.getParameterTypes();
 			Class<?> returnType = m.getReturnType();
 			
-			if (annotation != null && name.startsWith("set")
+			if (annotation != null && name.startsWith(SETTER_PREFIX)
 					&& parameters.length == 1
 					&& String.class.equals(parameters[0])
 					&& returnType.equals(void.class)) {
-					name = name.substring(3); // subtract "set"
-					configurationOptions.put(name, annotation);
+					String optionName = name.substring(SETTER_PREFIX.length()); // subtract "set"
+					configurationOptions.put(optionName, annotation);
 			}
 		}
 		

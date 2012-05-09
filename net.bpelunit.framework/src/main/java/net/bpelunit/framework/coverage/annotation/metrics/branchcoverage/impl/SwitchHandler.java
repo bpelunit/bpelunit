@@ -29,21 +29,21 @@ public class SwitchHandler implements IStructuredActivityHandler {
 	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
 	 * um die Ausführung der Zweige zu erfassen.
 	 * 
-	 * @param structured_activity
+	 * @param structuredActivity
 	 * @throws BpelException
 	 */
-	public void insertBranchMarkers(Element structured_activity)
+	public void insertBranchMarkers(Element structuredActivity)
 			throws BpelException {
-		List case_branches = structured_activity.getChildren(SWITCH_CASE_ELEMENT,
+		List<Element> caseBranches = structuredActivity.getChildren(SWITCH_CASE_ELEMENT,
 				getProcessNamespace());
-		for (int i = 0; i < case_branches.size(); i++) {
-			insertMarkerForCaseBranches(getFirstEnclosedActivity((Element) case_branches
+		for (int i = 0; i < caseBranches.size(); i++) {
+			insertMarkerForCaseBranches(getFirstEnclosedActivity(caseBranches
 					.get(i)));
 		}
-		Element otherwiseElement = structured_activity
+		Element otherwiseElement = structuredActivity
 				.getChild(SWITCH_OTHERWISE_ELEMENT, getProcessNamespace());
 		if (otherwiseElement == null) {
-			otherwiseElement = insertOtherwiseBranch(structured_activity);
+			otherwiseElement = insertOtherwiseBranch(structuredActivity);
 			otherwiseElement.addContent(createSequence());
 		}
 		insertMarkerForOtherwiseBranch(otherwiseElement);
@@ -51,34 +51,36 @@ public class SwitchHandler implements IStructuredActivityHandler {
 
 	/**
 	 * 
-	 * @param branch_activity
+	 * @param otherwiseElement
 	 *            Aktivität aus dem Else-Zweig.
 	 * @throws BpelException
 	 *             Wenn keine Aktivität in dem Zweig vorhanden ist.
 	 */
 	private void insertMarkerForOtherwiseBranch(Element otherwiseElement)
 			throws BpelException {
-		Element branch_activity = getFirstEnclosedActivity(otherwiseElement);
-		if (branch_activity == null)
+		Element branchActivity = getFirstEnclosedActivity(otherwiseElement);
+		if (branchActivity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 		
-		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branchActivity));
 
 	}
 
 	/**
 	 * 
-	 * @param branch_activity
+	 * @param branchActivity
 	 *            Aktivität aus dem ElseIf-Zweig.
 	 * @throws BpelException
 	 *             Wenn keine Aktivität in dem Zweig vorhanden ist.
 	 */
-	private void insertMarkerForCaseBranches(Element branch_activity)
+	private void insertMarkerForCaseBranches(Element branchActivity)
 			throws BpelException {
-		if (branch_activity == null)
+		if (branchActivity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 		
-		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branchActivity));
 	}
 
 }

@@ -221,8 +221,9 @@ public class TestSuite implements ITestArtefact {
 			}
 			if (testCase.getStatus().isError()) {
 				error = true;
-				if (BPELUnitRunner.isHaltOnError())
+				if (BPELUnitRunner.isHaltOnError()) {
 					break;
+				}
 			}
 			if (testCase.getStatus().isFailure()) {
 				failure = true;
@@ -293,8 +294,9 @@ public class TestSuite implements ITestArtefact {
 	public void abortTest() {
 		if (isRunning()) {
 			fAbortedByUser = true;
-			if (fCurrentTestCase != null)
+			if (fCurrentTestCase != null) {
 				fCurrentTestCase.abortTest();
+			}
 		}
 	}
 

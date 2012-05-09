@@ -3,6 +3,7 @@ package net.bpelunit.framework.coverage.receiver;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.bpelunit.framework.coverage.annotation.Instrumenter;
 import net.bpelunit.framework.coverage.annotation.MetricsManager;
@@ -27,7 +28,7 @@ public class MarkersRegistryForBPELFile {
 
 	private String fileName;
 
-	private Hashtable<String, Hashtable<String, MarkerState>> allMetricsTable;
+	private Map<String, Map<String, MarkerState>> allMetricsTable;
 
 	private MetricsManager metricManager;
 
@@ -74,7 +75,7 @@ public class MarkersRegistryForBPELFile {
 	 */
 	private void prepareStructur(MetricsManager metricsManager) {
 		List<IMetric> metrics = metricsManager.getMetrics();
-		allMetricsTable = new Hashtable<String, Hashtable<String, MarkerState>>();
+		allMetricsTable = new Hashtable<String, Map<String, MarkerState>>();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			IMetric metric = iter.next();
 			for (Iterator<String> iterator = metric.getMarkersId().iterator(); iterator

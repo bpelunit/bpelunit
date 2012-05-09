@@ -22,7 +22,6 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import net.bpelunit.framework.control.util.BPELUnitUtil;
 
 /**
  * ODERequestEntityFactory -creates RequestEntity objects required for deploy
@@ -76,7 +75,7 @@ public class ODERequestEntityFactory {
 	// ***** Private helper methods ********
 
 	private void prepareDeploySOAP(File file) throws IOException, SOAPException {
-		MessageFactory mFactory = BPELUnitUtil.getMessageFactoryInstance();
+		MessageFactory mFactory = MessageFactory.newInstance();
 		SOAPMessage message = mFactory.createMessage();
 		SOAPBody body = message.getSOAPBody();
 
@@ -110,7 +109,7 @@ public class ODERequestEntityFactory {
 
 	private void prepareUndeploySOAP(String packageId) throws SOAPException,
 			IOException {
-		MessageFactory mFactory = BPELUnitUtil.getMessageFactoryInstance();
+		MessageFactory mFactory = MessageFactory.newInstance();
 		SOAPMessage message = mFactory.createMessage();
 		SOAPBody body = message.getSOAPBody();
 

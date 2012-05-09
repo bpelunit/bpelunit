@@ -192,8 +192,8 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 			map.put(CompensationMetric.METRIC_NAME, null);
 		}
 
-		TestCaseRunner.wait_time_for_coverage_markers = preference
-				.getInt(PreferenceConstants.P_COVERAGE_WAIT_TIME);
+		TestCaseRunner.setWaitTimeForCoverageMarkers(preference
+				.getInt(PreferenceConstants.P_COVERAGE_WAIT_TIME));
 
 		ICoverageMeasurementTool coverageTool = new CoverageMeasurementTool();
 		BPELUnitRunner.setCoverageMeasurmentTool(coverageTool);

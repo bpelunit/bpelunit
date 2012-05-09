@@ -15,7 +15,6 @@ import javax.xml.soap.Detail;
 import javax.xml.soap.DetailEntry;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.transform.OutputKeys;
@@ -38,8 +37,13 @@ import org.w3c.dom.Node;
  * @author Philip Mayer, Antonio Garcia-Dominguez (changed serialization method)
  * 
  */
-public class BPELUnitUtil {
+public final class BPELUnitUtil {
 
+	private static final int INDENTION_SIZE = 4;
+
+	private BPELUnitUtil() {
+	}
+	
 	public static final String DUMMY_ELEMENT_NAME = "literalData";
 
 	/**
@@ -111,12 +115,14 @@ public class BPELUnitUtil {
 	 * @return
 	 */
 	public static String removeSpaceLineBreaks(String string) {
-		if (string == null)
+		if (string == null) {
 			return "";
-		String v= string.trim();
-		v= StringUtils.remove(v, '\n');
-		v= StringUtils.remove(v, '\r');
-		v= StringUtils.remove(v, '\t');
+		}
+		
+		String v = string.trim();
+		v = StringUtils.remove(v, '\n');
+		v = StringUtils.remove(v, '\r');
+		v = StringUtils.remove(v, '\t');
 		return v;
 	}
 
@@ -167,89 +173,8 @@ public class BPELUnitUtil {
 	public static XmlOptions getDefaultXMLOptions() {
 		XmlOptions opts= new XmlOptions();
 		opts.setSavePrettyPrint();
-		opts.setSavePrettyPrintIndent(4);
+		opts.setSavePrettyPrintIndent(INDENTION_SIZE);
 		return opts;
-	}
-
-//	private static class SOAPClassLoader extends ClassLoader {
-//		private HashSet<String> exceptionalClasses= new HashSet<String>();
-//
-//		public SOAPClassLoader(ClassLoader parentClassLoader) {
-//			super(parentClassLoader);
-//			exceptionalClasses.add("com.sun.xml.messaging.saaj.soap.SAAJMetaFactoryImpl");
-//		}
-//
-//		@Override
-//		public Class<?> loadClass(String name) throws ClassNotFoundException {
-//			if (exceptionalClasses.contains(name)) {
-//				return Class.forName(name);
-//			} else {
-//				return super.loadClass(name);
-//			}
-//		}
-//	}
-
-	/**
-	 * <p>Logic removed by Daniel Lübke because it causes conflicts with 
-	 * JAX-WS from JDK and seems not be necessary anymore.</p>
-	 * 
-	 * <p>
-	 * Returns a new message factory instance. The problem with a new factory instance is the code
-	 * inside {@link javax.xml.soap.MessageFactory#newInstance()}, or rather the method called by
-	 * newInstance(), namingly {@link javax.xml.soap.FactoryFinder#newInstance(String)}. The code
-	 * fragment
-	 * </p>
-	 * 
-	 * <pre>
-	 * private static Object newInstance(String factoryClassName) throws SOAPException {
-	 * 	ClassLoader classloader= null;
-	 * 	try {
-	 * 		classloader= Thread.currentThread().getContextClassLoader();
-	 * 	} catch (Exception exception) {
-	 * 		throw new SOAPException(exception.toString(), exception);
-	 * 	}
-	 * 
-	 * 	try {
-	 * 		Class factory= null;
-	 * 		if (classloader == null) {
-	 * 			factory= Class.forName(factoryClassName);
-	 * 		} else {
-	 * 			try {
-	 * 				factory= classloader.loadClass(factoryClassName);
-	 * 			} catch (ClassNotFoundException cnfe) {
-	 * 			}
-	 * 		}
-	 * 		if (factory == null) {
-	 * 			classloader= FactoryFinder.class.getClassLoader();
-	 * 			factory= classloader.loadClass(factoryClassName);
-	 * 		}
-	 * 		return factory.newInstance();
-	 * 	} catch (ClassNotFoundException classnotfoundexception) {
-	 * 		throw new SOAPException(&quot;Provider &quot; + factoryClassName + &quot; not found&quot;, classnotfoundexception);
-	 * 	} catch (Exception exception) {
-	 * 		throw new SOAPException(&quot;Provider &quot; + factoryClassName + &quot; could not be instantiated: &quot; + exception, exception);
-	 * 	}
-	 * }
-	 * </pre>
-	 * 
-	 * <p>
-	 * always uses the context class loader of the current thread if one is available. Sadly, in the
-	 * case of running BPELUnit from inside Eclipse or using ant, the context class loader does not
-	 * know about the classes required for BPELUnit, including the classes from the SAAJ jar.
-	 * Therefore, the context class loader must be replaced by a proxy classloader which loads the
-	 * needed classes using the actual current classloader instead of the context classloader.
-	 * </p>
-	 * 
-	 * @return factory instance.
-	 * @throws SOAPException
-	 */
-	public static MessageFactory getMessageFactoryInstance() throws SOAPException {
-
-//		ClassLoader classLoader= Thread.currentThread().getContextClassLoader();
-//		classLoader= new SOAPClassLoader(classLoader);
-//		Thread.currentThread().setContextClassLoader(classLoader);
-
-		return MessageFactory.newInstance();
 	}
 
 }

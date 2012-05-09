@@ -48,8 +48,9 @@ public class NamespaceContextImpl implements NamespaceContext {
 		for (String namespaceURI : fNamespaceMap.keySet()) {
 			Collection<String> prefixes= fNamespaceMap.get(namespaceURI);
 			for (String string : prefixes) {
-				if (string.equals(prefix))
+				if (string.equals(prefix)) {
 					return namespaceURI;
+				}
 			}
 		}
 		return null;
@@ -57,18 +58,19 @@ public class NamespaceContextImpl implements NamespaceContext {
 
 	public String getPrefix(String namespaceURI) {
 		Collection<String> name= fNamespaceMap.get(namespaceURI);
-		if (name != null && name.size() > 0)
+		if (name != null && name.size() > 0) {
 			return name.iterator().next();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public Iterator<String> getPrefixes(String namespaceURI) {
 		Collection<String> name= fNamespaceMap.get(namespaceURI);
-		if (name != null)
+		if (name != null) {
 			return name.iterator();
-		else
+		} else {
 			return null;
+		}
 	}
-
 }

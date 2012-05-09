@@ -75,21 +75,19 @@ public class FlowHandler implements IStructuredActivityHandler {
 	private List<Element> getCreateInstanceActivity(Element activity) {
 		List<Element> list=new ArrayList<Element>();
 		String name = activity.getName();
-		if (name.equals(StructuredActivities.PICK_ACTIVITY)
-				|| name.equals(BasicActivities.RECEIVE_ACTIVITY)) {
-			if (canCreateInstance(activity)) {
-				list.add(activity);
-				return list;
-			}
+		if ((name.equals(StructuredActivities.PICK_ACTIVITY)
+			|| name.equals(BasicActivities.RECEIVE_ACTIVITY)) && canCreateInstance(activity)) {
+			list.add(activity);
+			return list;
 		}
 		if (isStructuredActivity(activity)) {
-			Iterator<Element> iter=activity.getDescendants(new ContentFilter(ContentFilter.ELEMENT) {
+			Iterator<Element> iter = activity.getDescendants(new ContentFilter(ContentFilter.ELEMENT) {
 				
 				@Override
 				public boolean matches(Object obj) {
 					if (super.matches(obj)) {
 						Element el = (Element) obj;
-						if(canCreateInstance(el)){
+						if(canCreateInstance(el)) {
 							return true;
 						}
 					}
@@ -97,7 +95,7 @@ public class FlowHandler implements IStructuredActivityHandler {
 				}
 
 			});
-			while(iter.hasNext()){
+			while(iter.hasNext()) {
 				list.add(iter.next());
 			}
 		}
@@ -110,12 +108,14 @@ public class FlowHandler implements IStructuredActivityHandler {
 		Element target;
 		if (ns.equals(NAMESPACE_BPEL_1_1)) {
 			target = element.getChild(TARGET_ELEMENT, ns);
-			if (target != null)
+			if (target != null) {
 				isTarget = true;
+			}
 		} else if (ns.equals(NAMESPACE_BPEL_2_0)) {
 			target = element.getChild(TARGETS_ELEMENT, ns);
-			if (target != null)
+			if (target != null) {
 				isTarget = true;
+			}
 		}
 		return isTarget;
 	}

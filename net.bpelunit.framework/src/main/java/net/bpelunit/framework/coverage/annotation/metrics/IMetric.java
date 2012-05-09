@@ -2,6 +2,7 @@ package net.bpelunit.framework.coverage.annotation.metrics;
 
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import net.bpelunit.framework.coverage.exceptions.BpelException;
 import net.bpelunit.framework.coverage.receiver.MarkerState;
@@ -62,7 +63,7 @@ public interface IMetric {
 	 * @return all created statistics
 	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerState>> allMarkers);
+			Map<String, Map<String, MarkerState>> allMarkers);
 
 	/*
 	 * Erhält die noch nicht modifizierte Beschreibung des BPELProzesses als

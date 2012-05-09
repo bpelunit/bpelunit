@@ -213,10 +213,11 @@ public class DataCopyOperation implements ITestArtefact {
 	public String toString() {
 		StringBuffer r= new StringBuffer();
 		r.append("Expression from: \"" + fFrom + "\" to: \"" + fTo + "\"");
-		if (!fStatus.isInitial())
-			r.append(" => Copied value: \"" + getCopiedValue() + "\"");
+		if (!fStatus.isInitial()) {
+			r.append(" => Copied value: \"").append(getCopiedValue()).append("\"");
+		}
 
-		r.append(" => Evaluation: " + fStatus);
+		r.append(" => Evaluation: ").append(fStatus);
 		return r.toString();
 	}
 }

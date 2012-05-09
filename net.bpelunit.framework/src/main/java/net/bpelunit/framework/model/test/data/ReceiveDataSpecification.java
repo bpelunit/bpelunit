@@ -17,7 +17,6 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 
-import org.apache.velocity.context.Context;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.HeaderProcessingException;
@@ -29,6 +28,8 @@ import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+
+import org.apache.velocity.context.Context;
 import org.w3c.dom.Element;
 
 /**
@@ -169,7 +170,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 	private void setInWireFormat(String body) {
 		try {
 			fPlainMessage= body;
-			MessageFactory factory= BPELUnitUtil.getMessageFactoryInstance();
+			MessageFactory factory= MessageFactory.newInstance();
 			fSOAPMessage= factory.createMessage(null, new ByteArrayInputStream(body.getBytes()));
 		} catch (Exception e) {
 			fStatus= ArtefactStatus.createErrorStatus("Could not create SOAP message from incoming message: " + e.getMessage(), e);
