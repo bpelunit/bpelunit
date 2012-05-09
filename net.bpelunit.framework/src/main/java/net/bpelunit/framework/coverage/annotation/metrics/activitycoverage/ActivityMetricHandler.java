@@ -34,8 +34,6 @@ import org.jdom.Namespace;
  */
 public class ActivityMetricHandler implements IMetricHandler {
 
-	public static int targetscount;
-
 	private Logger logger = Logger.getLogger(getClass());
 
 	private MarkersRegisterForArchive markersRegistry;
@@ -68,22 +66,6 @@ public class ActivityMetricHandler implements IMetricHandler {
 		}
 	}
 
-	private void respectSourceActivities(Element element, Element sequence) {
-		List<Element> sourceElements = getSourceElements(element);
-		if (sourceElements.size() > 0) {
-			if (sequence == null) {
-				sequence = encloseInSequence(element);
-			}
-			Element sourceElement;
-			for (Iterator<Element> iter = sourceElements.iterator(); iter
-					.hasNext();) {
-				sourceElement = iter.next();
-				sequence.addContent(0, sourceElement.detach());
-			}
-
-		}
-	}
-
 	/**
 	 * Schliesst die Aktivit�t mit der Coverage Marke mit einer Sequence um,
 	 * wenn die Aktivit�t Ziel eines Synchronisationslinks ist.
@@ -94,12 +76,12 @@ public class ActivityMetricHandler implements IMetricHandler {
 	private void respectTargetActivities(Element element, Element sequence) {
 		List<Element> targetElements = getTargetElements(element);
 		if (targetElements.size() > 0) {
-			sequence = encloseInSequence(element);
+			Element realSequence = encloseInSequence(element);
 			Element targetElement;
 			for (Iterator<Element> iter = targetElements.iterator(); iter
 					.hasNext();) {
 				targetElement = iter.next();
-				sequence.addContent(0, targetElement.detach());
+				realSequence.addContent(0, targetElement.detach());
 			}
 		}
 	}
@@ -152,14 +134,14 @@ public class ActivityMetricHandler implements IMetricHandler {
 	 */
 	private void insertMarkerForActivity(Element element) {
 		Element parent = element.getParentElement();
-		String element_name = element.getName();
-		String marker = element_name
+		String elementName = element.getName();
+		String marker = elementName
 				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + BpelXMLTools.incrementCounter();
 		markersRegistry.registerMarker(marker);
 		Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
 				+ marker);
 		int index = parent.indexOf(element);
-		if (element_name.equals(BasicActivities.RECEIVE_ACTIVITY)) {
+		if (elementName.equals(BasicActivities.RECEIVE_ACTIVITY)) {
 			parent.addContent(index + 1, comment);
 		} else {
 			parent.addContent(index, comment);

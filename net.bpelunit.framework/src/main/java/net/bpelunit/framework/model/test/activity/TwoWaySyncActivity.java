@@ -6,6 +6,7 @@
 package net.bpelunit.framework.model.test.activity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.model.test.PartnerTrack;
@@ -43,7 +44,7 @@ public abstract class TwoWaySyncActivity extends Activity {
 	 * Registered Mapping (may be null). Note that this really only makes sense in case of
 	 * Receive/Send.
 	 */
-	protected ArrayList<DataCopyOperation> fMapping;
+	protected List<DataCopyOperation> fMapping;
 
 
 	// ********************************* Initialization ****************************
@@ -66,11 +67,11 @@ public abstract class TwoWaySyncActivity extends Activity {
 	 * @param mapping mapping data (may be null)
 	 */
 	public void initialize(SendDataSpecification sds, ReceiveDataSpecification rds, IHeaderProcessor headerProcessor,
-			ArrayList<DataCopyOperation> mapping) {
+			List<DataCopyOperation> mapping) {
 		fSendSpec= sds;
 		fReceiveSpec= rds;
 		fHeaderProcessor= headerProcessor;
-		fMapping= mapping;
+		fMapping= new ArrayList<DataCopyOperation>(mapping);
 	}
 
 	// ***************************** Activity **************************

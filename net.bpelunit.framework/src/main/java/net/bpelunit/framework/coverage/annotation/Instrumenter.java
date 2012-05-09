@@ -69,17 +69,17 @@ public class Instrumenter {
 	 */
 	public Document insertAnnotations(Document document,
 			MetricsManager metricManager) throws BpelException {
-		Element process_element = document.getRootElement();
-		checkVersion(process_element);
-		initializeBPELTools(process_element);
+		Element processElement = document.getRootElement();
+		checkVersion(processElement);
+		initializeBPELTools(processElement);
 		if (metricManager.hasMetric(FaultMetric.METRIC_NAME)
 				|| metricManager.hasMetric(CompensationMetric.METRIC_NAME)) {
-			replaceInlineHandler(process_element);
+			replaceInlineHandler(processElement);
 		}
 		List<IMetric> metrics = metricManager.getMetrics();
-		saveOriginalBPELElements(metrics, process_element);
+		saveOriginalBPELElements(metrics, processElement);
 		executeInstrumentation(metrics);
-		createReportInvokesFromCoverageLabels(process_element);
+		createReportInvokesFromCoverageLabels(processElement);
 		return document;
 	}
 
@@ -95,10 +95,10 @@ public class Instrumenter {
 	 *            element
 	 */
 	@SuppressWarnings("serial")
-	private void replaceInlineHandler(Element process_element) {
-		Iterator<Element> iter = JDomUtil.getDescendants(process_element,
+	private void replaceInlineHandler(Element processElement) {
+		Iterator<Element> iter = JDomUtil.getDescendants(processElement,
 				new ElementFilter(BasicActivities.INVOKE_ACTIVITY,
-						process_element.getNamespace()) {
+						processElement.getNamespace()) {
 
 					@Override
 					public boolean matches(Object o) {
@@ -175,11 +175,11 @@ public class Instrumenter {
 	 *            element
 	 */
 	private void saveOriginalBPELElements(List<IMetric> metrics,
-			Element process_element) {
+			Element processElement) {
 		IMetric metric;
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			metric = iter.next();
-			metric.setOriginalBPELProcess(process_element);
+			metric.setOriginalBPELProcess(processElement);
 		}
 	}
 
@@ -190,9 +190,9 @@ public class Instrumenter {
 	 *            element
 	 * @throws BpelVersionException
 	 */
-	private void checkVersion(Element process_element)
+	private void checkVersion(Element processElement)
 			throws BpelVersionException {
-		Namespace processNamespace = process_element.getNamespace();
+		Namespace processNamespace = processElement.getNamespace();
 		if (!processNamespace.equals(NAMESPACE_BPEL_1_1)
 				&& !processNamespace.equals(NAMESPACE_BPEL_2_0)) {
 			throw (new BpelVersionException(BpelVersionException.WRONG_VERSION
@@ -210,9 +210,9 @@ public class Instrumenter {
 	 *            element
 	 * @throws BpelVersionException
 	 */
-	private void initializeBPELTools(Element process_element)
+	private void initializeBPELTools(Element processElement)
 			throws BpelVersionException {
-		BpelXMLTools.processElement = process_element;
+		BpelXMLTools.setProcessElement(processElement);
 		BasicActivities.initialize();
 		StructuredActivities.initialize();
 	}
@@ -236,13 +236,13 @@ public class Instrumenter {
 	 * Inserts invoke and assign activities after annotating the process for
 	 * included markings
 	 * 
-	 * @param process_element
+	 * @param processElement
 	 *            BPEL process root element
 	 */
-	private void createReportInvokesFromCoverageLabels(Element process_element) {
+	private void createReportInvokesFromCoverageLabels(Element processElement) {
 		cmServiceFactory = CMServiceFactory.getInstance();
-		cmServiceFactory.prepareBPELFile(process_element);
-		handleCoverageLabelsInElement(process_element, null);
+		cmServiceFactory.prepareBPELFile(processElement);
+		handleCoverageLabelsInElement(processElement, null);
 	}
 
 	private void handleCoverageLabelsInElement(Element element, String variable) {
@@ -303,19 +303,16 @@ public class Instrumenter {
 	private void insertInvokeForLabels(String marker, int index,
 			Element element, String variable) {
 
-		try {
-			if (variable == null) {
-				variable = assignVariable;
+			String realVariable = variable;
+			if (realVariable == null) {
+				realVariable = assignVariable;
 			}
 			Element assign = cmServiceFactory.createAssignElement(marker,
-					variable);
+					realVariable);
 			Element invoke = cmServiceFactory
-					.createInvokeElementForLoggingService(variable);
+					.createInvokeElementForLoggingService(realVariable);
 			element.addContent(index, invoke);
 			element.addContent(index, assign);
-		} catch (Exception e) {
-			e.printStackTrace(System.out);
-		}
 	}
 
 	/**

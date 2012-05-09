@@ -247,7 +247,7 @@ public class SpecificationLoader {
 		createPartners(testDirectory, suiteBaseURL, xmlDeployment,
 				suitePartners);
 		Map<String, HumanPartner> humanPartners = createHumanPartners(
-				testDirectory, xmlDeployment, testDirectory, suiteBaseURL);
+				xmlDeployment, testDirectory, suiteBaseURL);
 
 		// Create the suite.
 		TestSuite suite = new TestSuite(xmlSuiteName, suiteBaseURL,
@@ -272,7 +272,7 @@ public class SpecificationLoader {
 		return suite;
 	}
 
-	private Map<String, HumanPartner> createHumanPartners(String testDirectory,
+	private Map<String, HumanPartner> createHumanPartners(
 			XMLDeploymentSection xmlDeployment, String basePath, URL baseURL)
 			throws SpecificationException {
 		Map<String, HumanPartner> humanPartners = new HashMap<String, HumanPartner>();
@@ -474,14 +474,14 @@ public class SpecificationLoader {
 			} catch (XPathExpressionException e) {
 				// This should not happen.
 				throw new SpecificationException(
-						"There was a problem finding delay sequences. This most likely indicates a bug in the framework.");
+						"There was a problem finding delay sequences. This most likely indicates a bug in the framework.", e);
 			}
 		}
 		return rounds;
 	}
 
 	private void readTestSuiteSetUpBlock(TestSuite testSuite,
-			XMLTestSuite xmlTestSuite) throws Exception {
+			XMLTestSuite xmlTestSuite) {
 		if (!xmlTestSuite.isSetSetUp()) {
 			return;
 		}
@@ -533,7 +533,7 @@ public class SpecificationLoader {
 		HumanPartner realPartner = suiteHumanPartners.get(xmlPartnerTrackName);
 
 		PartnerTrack pTrack = new PartnerTrack(test, realPartner);
-		readActivities(pTrack, xmlTestCase, xmlHumanPartnerTrack, round,
+		readActivities(pTrack, xmlTestCase, xmlHumanPartnerTrack,
 				testDirectory);
 		pTrack.setNamespaceContext(getNamespaceMap(xmlHumanPartnerTrack
 				.newCursor()));
@@ -541,7 +541,7 @@ public class SpecificationLoader {
 	}
 
 	private void readActivities(PartnerTrack pTrack, XMLTestCase xmlTestCase,
-			XMLHumanPartnerTrack xmlHumanPartnerTrack, int round,
+			XMLHumanPartnerTrack xmlHumanPartnerTrack,
 			String testDirectory) throws SpecificationException {
 		if (xmlHumanPartnerTrack.getCompleteHumanTaskList() != null) {
 			for (XMLCompleteHumanTaskActivity xmlActivity : xmlHumanPartnerTrack
@@ -813,7 +813,7 @@ public class SpecificationLoader {
 				activity, xmlSendReceiveSync, xmlReceive, receiveDirection);
 
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
-		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
+		List<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				activity, xmlSendReceiveSync);
 
 		activity.initialize(sSpec, rSpec, proc, mapping);
@@ -859,7 +859,7 @@ public class SpecificationLoader {
 				testDirectory);
 
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
-		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
+		List<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				activity, xmlReceiveSendSync);
 
 		activity.initialize(sSpec, rSpec, proc, mapping);
@@ -891,7 +891,7 @@ public class SpecificationLoader {
 			
 		XMLHeaderProcessor xmlHeaderProcessor = xmlAsyncTwoWay
 				.getHeaderProcessor();
-		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
+		List<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				twoWayActivity, xmlAsyncTwoWay);
 
 		SendAsync sendAct = new SendAsync(twoWayActivity);
@@ -1041,10 +1041,11 @@ public class SpecificationLoader {
 			spec.initialize(operation, currentDelay, delayExpression, null,
 					null, encodingStyle, encoder, rawDataRoot, templateText,
 					faultCode, faultString);
-		} else
+		} else {
 			spec.initialize(operation, currentDelay, delayExpression,
 					targetURL, soapAction, encodingStyle, encoder, rawDataRoot,
 					templateText, faultCode, faultString);
+		}
 
 		return spec;
 	}
@@ -1221,7 +1222,7 @@ public class SpecificationLoader {
 		return cgs;
 	}
 
-	private ArrayList<DataCopyOperation> getCopyOperations(Activity activity,
+	private List<DataCopyOperation> getCopyOperations(Activity activity,
 			XMLTwoWayActivity xmlTwoWayType) throws SpecificationException {
 
 		ArrayList<DataCopyOperation> copyDataOperations = new ArrayList<DataCopyOperation>();
@@ -1232,9 +1233,10 @@ public class SpecificationLoader {
 				for (XMLCopy xmlCopy : xmlCopyList) {
 					String xmlCopyFrom = xmlCopy.getFrom();
 					String xmlCopyTo = xmlCopy.getTo();
-					if ((xmlCopyFrom == null) || (xmlCopyTo == null))
+					if ((xmlCopyFrom == null) || (xmlCopyTo == null)) {
 						throw new SpecificationException(
 								"Copy operations need both copy-from and copy-to specifications.");
+					}
 
 					copyDataOperations.add(new DataCopyOperation(activity,
 							xmlCopyFrom, xmlCopyTo));

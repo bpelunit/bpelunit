@@ -22,7 +22,7 @@ import org.jdom.output.XMLOutputter;
  * 
  * @author Alex Salnikow
  */
-public class BpelXMLTools {
+public final class BpelXMLTools {
 
 	private BpelXMLTools() {
 	}
@@ -126,7 +126,7 @@ public class BpelXMLTools {
 	private static int count = 0;
 
 	// TODO XXX no public vars and especially not static!
-	public static Element processElement;
+	private static Element processElement;
 
 	public static synchronized int incrementCounter() {
 		count++;
@@ -139,7 +139,7 @@ public class BpelXMLTools {
 	}
 	
 	public static Namespace getProcessNamespace() {
-		return processElement.getNamespace();
+		return getProcessElement().getNamespace();
 	}
 
 	public static String createVariableName() {
@@ -165,11 +165,12 @@ public class BpelXMLTools {
 
 	public static Element insertNewStringVariable(String variableName,
 			Element scope) {
-		if (variableName == null) {
-			variableName = createVariableName();
+		String realVariableName = variableName;
+		if (realVariableName == null) {
+			realVariableName = createVariableName();
 		}
 		Element variable = new Element(VARIABLE_ELEMENT, getProcessNamespace());
-		variable.setAttribute(NAME_ATTR, variableName);
+		variable.setAttribute(NAME_ATTR, realVariableName);
 		variable.setAttribute(TYPE_ATTR, STRING_VARIABLE_TYPE);
 		insertVariable(variable, scope);
 		return variable;
@@ -186,11 +187,12 @@ public class BpelXMLTools {
 	 * @return variable-Element
 	 */
 	public static Element insertNewIntVariable(Element scope, String name) {
-		if (name == null) {
-			name = createVariableName();
+		String realName = name;
+		if (realName == null) {
+			realName = createVariableName();
 		}
 		Element variable = createBPELElement(VARIABLE_ELEMENT);
-		variable.setAttribute(NAME_ATTR, name);
+		variable.setAttribute(NAME_ATTR, realName);
 		variable.setAttribute(TYPE_ATTR, INT_VARIABLE_TYPE);
 		insertVariable(variable, scope);
 		return variable;
@@ -204,14 +206,15 @@ public class BpelXMLTools {
 	 * @param scope
 	 */
 	public static void insertVariable(Element variable, Element scope) {
-		if (scope == null) {
-			scope = processElement;
+		Element realScope = scope;
+		if (realScope == null) {
+			realScope = getProcessElement();
 		}
-		Element variables = scope.getChild(VARIABLES_ELEMENT,
+		Element variables = realScope.getChild(VARIABLES_ELEMENT,
 				getProcessNamespace());
 		if (variables == null) {
 			variables = new Element(VARIABLES_ELEMENT, getProcessNamespace());
-			scope.addContent(0, variables);
+			realScope.addContent(0, variables);
 		}
 		List<Element> allVariables = JDomUtil.getChildren(variables,
 				VARIABLE_ELEMENT, getProcessNamespace());
@@ -509,6 +512,14 @@ public class BpelXMLTools {
 		Element otherwiseElement = createBPELElement(SWITCH_OTHERWISE_ELEMENT);
 		element.addContent(otherwiseElement);
 		return otherwiseElement;
+	}
+
+	public static void setProcessElement(Element processElement) {
+		BpelXMLTools.processElement = processElement;
+	}
+
+	public static Element getProcessElement() {
+		return processElement;
 	}
 
 }

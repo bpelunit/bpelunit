@@ -34,7 +34,11 @@ import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 public class ReceiveSendSync extends TwoWaySyncActivity {
 
 
+	private static final int HTTP_OK = 200;
+	private static final int HTTP_INTERNAL_ERROR = 500;
+
 	// ********************************* Initialization ****************************
+
 
 	public ReceiveSendSync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
@@ -76,20 +80,21 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 			fSendSpec.handle(context);
 
 			if (!fSendSpec.hasProblems()) {
-				if (fSendSpec.isFault())
-					msg.setCode(500);
-				else
-					msg.setCode(200);
+				if (fSendSpec.isFault()) {
+					msg.setCode(HTTP_INTERNAL_ERROR);
+				} else {
+					msg.setCode(HTTP_OK);
+				}
 				msg.setBody(fSendSpec.getInWireFormat());
 			} else {
 				// Could not successfully generate a return value for
 				// whatever reason.
-				msg.setCode(500);
+				msg.setCode(HTTP_INTERNAL_ERROR);
 				msg.setBody(BPELUnitUtil.generateGenericSOAPFault());
 			}
 		} else {
 			// Receive was not successful
-			msg.setCode(500);
+			msg.setCode(HTTP_INTERNAL_ERROR);
 			msg.setBody(BPELUnitUtil.generateGenericSOAPFault());
 		}
 
@@ -97,13 +102,13 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 			fSendSpec.delay(context);
 			context.postAnswer(this.getPartnerTrack(), msg);
 
-			if (fReceiveSpec.hasProblems())
+			if (fReceiveSpec.hasProblems()) {
 				fStatus= fReceiveSpec.getStatus();
-			else if (fSendSpec.hasProblems())
+			} else if (fSendSpec.hasProblems()) {
 				fStatus= fSendSpec.getStatus();
-			else
+			} else {
 				fStatus= ArtefactStatus.createPassedStatus();
-
+			}
 		} catch (TimeoutException e) {
 			fStatus= ArtefactStatus.createErrorStatus("Timeout occurred while waiting for synchronous answer to be sent.", e);
 			return;
@@ -132,12 +137,14 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 	@Override
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
-		if (fMapping != null)
-			for (DataCopyOperation copy : fMapping)
+		if (fMapping != null) {
+			for (DataCopyOperation copy : fMapping) {
 				children.add(copy);
+			}
+		}
 		children.add(fReceiveSpec);
 		children.add(fSendSpec);
+
 		return children;
 	}
-
 }

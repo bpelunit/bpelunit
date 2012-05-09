@@ -5,8 +5,8 @@ import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createBPELElement;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.createSequence;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseElementInFlow;
+import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getProcessElement;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.getProcessNamespace;
-import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.processElement;
 
 import java.util.Iterator;
 import java.util.List;
@@ -110,7 +110,7 @@ public class LinkMetricHandler implements IMetricHandler {
 			throws BpelException {
 		for (Iterator<Element> iter = processElements.iterator(); iter
 				.hasNext();) {
-			loggingOfLinks2(iter.next(), processElement);
+			loggingOfLinks2(iter.next(), getProcessElement());
 		}
 	}
 

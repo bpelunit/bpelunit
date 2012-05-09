@@ -189,7 +189,6 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		BpelXMLTools.resetCounter();
 		int count = 0;
 		String bpelFile;
-		ActivityMetricHandler.targetscount = 0;
 		try {
 			for (Iterator<String> iter = ArchiveUtil.getBPELFileList(
 					deployment.getArchive()).iterator(); iter.hasNext();) {
