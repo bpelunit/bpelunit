@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
@@ -19,7 +17,9 @@ import net.bpelunit.framework.exception.PartnerNotFoundException;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
-import org.mortbay.http.HttpException;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.mortbay.http.HttpRequest;
 import org.mortbay.http.HttpResponse;
 import org.mortbay.http.handler.AbstractHttpHandler;
@@ -34,6 +34,8 @@ import org.mortbay.util.ByteArrayISO8859Writer;
  * 
  */
 public class WebServiceHandler extends AbstractHttpHandler {
+
+	private static final int HTTP_INTERNAL_ERROR = 500;
 
 	private Logger wsLogger = Logger.getLogger(this.getClass());
 
@@ -80,8 +82,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 	 * 
 	 */
 	public void handle(String pathInContext, String pathParams,
-			HttpRequest request, HttpResponse response) throws HttpException,
-			IOException {
+			HttpRequest request, HttpResponse response) throws IOException {
 
 		wsLogger.info("Incoming request for path " + pathInContext);
 
@@ -166,14 +167,14 @@ public class WebServiceHandler extends AbstractHttpHandler {
 			wsLogger
 					.error("This most likely indicates a bug in the framework.");
 			wsLogger.error("Sending fault.");
-			sendResponse(response, 500, BPELUnitUtil.generateGenericSOAPFault());
+			sendResponse(response, HTTP_INTERNAL_ERROR, BPELUnitUtil.generateGenericSOAPFault());
 		} catch (InterruptedException e) {
 			wsLogger
 					.error("Interrupted while waiting for framework for incoming message or answer.");
 			wsLogger
 					.error("This most likely indicates another error occurred.");
 			wsLogger.error("Sending fault.");
-			sendResponse(response, 500, BPELUnitUtil.generateGenericSOAPFault());
+			sendResponse(response, HTTP_INTERNAL_ERROR, BPELUnitUtil.generateGenericSOAPFault());
 		}
 	}
 

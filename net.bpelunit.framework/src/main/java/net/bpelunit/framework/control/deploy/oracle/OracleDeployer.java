@@ -194,27 +194,27 @@ public class OracleDeployer implements IBPELDeployer {
 
 	private String[] generateDeploy(String script, String processName,
 			String processUrl, String domain, String password) {
-		String[] cmd = new String[7];
-		cmd[0] = script;
-		cmd[1] = fBinDir;
-		cmd[2] = KEYWORD_DEPLOY;
-		cmd[3] = processName;
-		cmd[4] = processUrl;
-		cmd[5] = domain;
-		cmd[6] = password;
-		return cmd;
+		return new String[] {
+			script,
+			fBinDir,
+			KEYWORD_DEPLOY,
+			processName,
+			processUrl,
+			domain,
+			password
+		};
 	}
 
 	private String[] generateUndeploy(String script, String processName,
 			String domain, String password) {
-		String[] cmd = new String[6];
-		cmd[0] = script;
-		cmd[1] = fBinDir;
-		cmd[2] = KEYWORD_UNDEPLOY;
-		cmd[3] = processName;
-		cmd[4] = domain;
-		cmd[5] = password;
-		return cmd;
+		return new String[] {
+			script,
+			fBinDir,
+			KEYWORD_UNDEPLOY,
+			processName,
+			domain,
+			password
+		};
 	}
 
 	private void check(String toCheck, String description)

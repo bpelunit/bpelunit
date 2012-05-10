@@ -50,23 +50,23 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 
 	@Override
 	public void run(ActivityContext context) {
-		context.setHeaderProcessor(fHeaderProcessor);
+		context.setHeaderProcessor(getHeaderProcessor());
 
-		fSendSpec.handle(context);
+		getSendSpec().handle(context);
 
-		if (fSendSpec.hasProblems()) {
-			fStatus= fSendSpec.getStatus();
+		if (getSendSpec().hasProblems()) {
+			fStatus= getSendSpec().getStatus();
 			return;
 		}
 
 		OutgoingMessage msg= new OutgoingMessage();
-		msg.setTargetURL(fSendSpec.getTargetURL());
-		msg.setSOAPAction(fSendSpec.getSOAPHTTPAction());
-		msg.setBody(fSendSpec.getInWireFormat());
+		msg.setTargetURL(getSendSpec().getTargetURL());
+		msg.setSOAPAction(getSendSpec().getSOAPHTTPAction());
+		msg.setBody(getSendSpec().getInWireFormat());
 
 		IncomingMessage returnMsg;
 		try {
-			fSendSpec.delay(context);
+			getSendSpec().delay(context);
 			returnMsg= context.sendMessage(msg);
 		} catch (SynchronousSendException e) {
 			fStatus= ArtefactStatus.createErrorStatus("HTTP Error while sending out synchronous message: " + e.getMessage(), e);
@@ -82,12 +82,12 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 
 		if (returnMsg.getReturnCode() == 200) {
 			// Send is ok
-			fReceiveSpec.handle(context, returnMsg.getBody());
-			fStatus= fReceiveSpec.getStatus();
+			getReceiveSpec().handle(context, returnMsg.getBody());
+			fStatus= getReceiveSpec().getStatus();
 		} else if ( (returnMsg.getReturnCode() >= 500 && returnMsg.getReturnCode() < 600)) {
 			// could be SOAP fault. Let receive handle it.
-			fReceiveSpec.handle(context, returnMsg.getBody());
-			fStatus= fReceiveSpec.getStatus();
+			getReceiveSpec().handle(context, returnMsg.getBody());
+			fStatus= getReceiveSpec().getStatus();
 		} else {
 			// something went really wrong
 			fStatus= ArtefactStatus
@@ -116,8 +116,8 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 	@Override
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
-		children.add(fSendSpec);
-		children.add(fReceiveSpec);
+		children.add(getSendSpec());
+		children.add(getReceiveSpec());
 		return children;
 	}
 

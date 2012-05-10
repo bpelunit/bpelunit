@@ -17,12 +17,12 @@ import java.util.List;
  */
 public interface IFileStatistic {
 	
-	public String getBPELFilename();
+	String getBPELFilename();
 
-	public Collection<IStatistic> getStatistics();
+	Collection<IStatistic> getStatistics();
 
-	public void setStatistics(List<IStatistic> statistics);
+	void setStatistics(List<IStatistic> statistics);
 	
-	public IStatistic getStatistic(String name);
+	IStatistic getStatistic(String name);
 
 }

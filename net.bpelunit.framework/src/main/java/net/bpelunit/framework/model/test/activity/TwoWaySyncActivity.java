@@ -28,23 +28,23 @@ public abstract class TwoWaySyncActivity extends Activity {
 	/**
 	 * Send data part
 	 */
-	protected SendDataSpecification fSendSpec;
+	private SendDataSpecification fSendSpec;
 
 	/**
 	 * Receive data part
 	 */
-	protected ReceiveDataSpecification fReceiveSpec;
+	private ReceiveDataSpecification fReceiveSpec;
 
 	/**
 	 * Registered Header Processor (may be null).
 	 */
-	protected IHeaderProcessor fHeaderProcessor;
+	private IHeaderProcessor fHeaderProcessor;
 
 	/**
 	 * Registered Mapping (may be null). Note that this really only makes sense in case of
 	 * Receive/Send.
 	 */
-	protected List<DataCopyOperation> fMapping;
+	private List<DataCopyOperation> fMapping;
 
 
 	// ********************************* Initialization ****************************
@@ -68,10 +68,10 @@ public abstract class TwoWaySyncActivity extends Activity {
 	 */
 	public void initialize(SendDataSpecification sds, ReceiveDataSpecification rds, IHeaderProcessor headerProcessor,
 			List<DataCopyOperation> mapping) {
-		fSendSpec= sds;
-		fReceiveSpec= rds;
-		fHeaderProcessor= headerProcessor;
-		fMapping= new ArrayList<DataCopyOperation>(mapping);
+		fSendSpec = sds;
+		fReceiveSpec = rds;
+		fHeaderProcessor = headerProcessor;
+		fMapping = new ArrayList<DataCopyOperation>(mapping);
 	}
 
 	// ***************************** Activity **************************
@@ -89,6 +89,22 @@ public abstract class TwoWaySyncActivity extends Activity {
 	@Override
 	public ITestArtefact getParent() {
 		return getPartnerTrack();
+	}
+
+	public SendDataSpecification getSendSpec() {
+		return fSendSpec;
+	}
+
+	public ReceiveDataSpecification getReceiveSpec() {
+		return fReceiveSpec;
+	}
+
+	public IHeaderProcessor getHeaderProcessor() {
+		return fHeaderProcessor;
+	}
+
+	public List<DataCopyOperation> getMapping() {
+		return fMapping;
 	}
 
 }

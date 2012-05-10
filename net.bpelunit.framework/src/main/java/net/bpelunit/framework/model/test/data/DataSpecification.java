@@ -11,6 +11,7 @@ import javax.xml.namespace.NamespaceContext;
 
 import net.bpelunit.framework.control.util.XMLPrinterTool;
 import net.bpelunit.framework.control.util.XPathTool;
+import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
@@ -41,20 +42,20 @@ public abstract class DataSpecification implements ITestArtefact {
 	/**
 	 * Namespace Context
 	 */
-	protected NamespaceContext fNamespaceContext;
+	private NamespaceContext fNamespaceContext;
 
 	/**
 	 * Status of this object.
 	 */
-	protected ArtefactStatus fStatus;
+	private ArtefactStatus fStatus;
 
 
 	// ********************** Initialization ***************************
 
 	public DataSpecification(Activity parent, NamespaceContext nsContext) throws SpecificationException {
 		fActivity= parent;
-		fNamespaceContext= nsContext;
-		fStatus= ArtefactStatus.createInitialStatus();
+		fNamespaceContext = nsContext;
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
 	// ************************** ITestArtefact ************************
@@ -75,18 +76,25 @@ public abstract class DataSpecification implements ITestArtefact {
 	// ***************************** Other ******************************
 
 	public boolean hasProblems() {
-		return fStatus.hasProblems();
+		return getStatus().hasProblems();
 	}
 
-	protected String expandTemplateToString(VelocityContextProvider context, String template) throws Exception {
+	protected String expandTemplateToString(VelocityContextProvider context, String template) throws DataSourceException {
 		Context velocityCtx = CLONER.deepClone(context.createVelocityContext());
-		velocityCtx.put("xpath", new XPathTool(fNamespaceContext));
+		velocityCtx.put("xpath", new XPathTool(getNamespaceContext()));
 		velocityCtx.put("printer", new XMLPrinterTool());
 
 		// Expand the template as a regular string
 		StringWriter writer = new StringWriter();
 		Velocity.evaluate(velocityCtx, writer, "expandTemplate", template);
-		String expandedTemplate = writer.toString();
-		return expandedTemplate;
+		return writer.toString();
+	}
+
+	public NamespaceContext getNamespaceContext() {
+		return fNamespaceContext;
+	}
+
+	public void setStatus(ArtefactStatus fStatus) {
+		this.fStatus = fStatus;
 	}
 }

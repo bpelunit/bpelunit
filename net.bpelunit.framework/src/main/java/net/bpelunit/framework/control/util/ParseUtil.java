@@ -27,8 +27,11 @@ import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileInputStream;
 import de.schlichtherle.io.FileWriter;
 
-public class ParseUtil {
+public final class ParseUtil {
 
+	private ParseUtil() {
+	}
+	
 	private static Map<String, Document> fParsedDocuments = new HashMap<String, Document>();
 	private static Map<String, Definition> fParsedDefinitions = new HashMap<String, Definition>();
 
@@ -78,11 +81,11 @@ public class ParseUtil {
 	 */
 	public static Document getJDOMDocument(String filename,
 			boolean searchCache, boolean toCache) throws IOException {
-		Document document;
 		FileInputStream is = null;
 		File file = new File(filename);
+		Document document = fParsedDocuments.get(filename);
 
-		if (searchCache && (document = fParsedDocuments.get(filename)) != null) {
+		if (searchCache && document != null) {
 			return document;
 		}
 
@@ -121,9 +124,9 @@ public class ParseUtil {
 			boolean searchCache, boolean toCache) throws IOException {
 		File wsdl = new File(filename);
 
-		Definition definition;
+		Definition definition = fParsedDefinitions.get(filename);
 		if (searchCache
-				&& (definition = fParsedDefinitions.get(filename)) != null) {
+				&& definition != null) {
 			return definition;
 		}
 

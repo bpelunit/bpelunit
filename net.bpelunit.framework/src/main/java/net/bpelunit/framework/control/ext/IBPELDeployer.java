@@ -80,7 +80,7 @@ public interface IBPELDeployer {
 	 *            the PUT
 	 * @throws DeploymentException
 	 */
-	public void deploy(String pathToTest, ProcessUnderTest processUnderTest)
+	void deploy(String pathToTest, ProcessUnderTest processUnderTest)
 			throws DeploymentException;
 
 	/**
@@ -97,21 +97,9 @@ public interface IBPELDeployer {
 	 *            the PUT
 	 * @throws DeploymentException
 	 */
-	public void undeploy(String testPath, ProcessUnderTest processUnderTest)
+	void undeploy(String testPath, ProcessUnderTest processUnderTest)
 			throws DeploymentException;
 
-	/**
-	 * Adds configuration options for this deployment instance. The
-	 * configuration options are loaded from the test suite document.
-	 * 
-	 * This method is called before any of the other methods.
-	 * 
-	 * @see #getConfigurationParameters()
-	 * @param options
-	 *            the options
-	 */
-
-	// public void setConfiguration(Map<String, String> options);
 	/**
 	 * Gets the corresponding IDeployment implementation for this deployer.
 	 * 
@@ -121,12 +109,12 @@ public interface IBPELDeployer {
 	 *            process which are required for initializing the IDeployment
 	 *            implementation class.
 	 */
-	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
+	IDeployment getDeployment(ProcessUnderTest processUnderTest)
 			throws DeploymentException;
 	
-	public String getArchiveLocation(String pathToTest);
+	String getArchiveLocation(String pathToTest);
 	
-	public void setArchiveLocation(String archive);
+	void setArchiveLocation(String archive);
 
 	/**
 	 * Performs engine-specific test cleanup after each test. This may or
@@ -141,5 +129,5 @@ public interface IBPELDeployer {
 	 * @throws Exception There was a problem while cleaning up after the
 	 * test case.
 	 */
-	public void cleanUpAfterTestCase() throws DeploymentException;
+	void cleanUpAfterTestCase() throws DeploymentException;
 }

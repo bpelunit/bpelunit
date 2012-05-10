@@ -62,7 +62,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 	@Override
 	public List<StateData> getStateData() {
 		List<StateData> stateData= new ArrayList<StateData>();
-		stateData.addAll(fStatus.getAsStateData());
+		stateData.addAll(getStatus().getAsStateData());
 		return stateData;
 	}
 
@@ -88,27 +88,27 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 		try {
 			conditionContext = partnerTrack.createVelocityContext();
 		} catch (Exception e) {
-			fStatus = ArtefactStatus.createFailedStatus(String.format(
+			setStatus(ArtefactStatus.createFailedStatus(String.format(
 				"Could not create the Velocity context for this condition: %s",
-				e.getLocalizedMessage()));
+				e.getLocalizedMessage())));
 			return;
 		}
 		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);
 
 		for (ReceiveCondition c : conditions) {
-			c.evaluate(partnerTrack, (Element)inputXMLData.getDomNode(), fNamespaceContext, variableResolver);
+			c.evaluate(partnerTrack, (Element)inputXMLData.getDomNode(), getNamespaceContext(), variableResolver);
 
 			if (c.isFailure()) {
-				fStatus = ArtefactStatus.createFailedStatus(String.format(
+				setStatus(ArtefactStatus.createFailedStatus(String.format(
 						"Condition '%s=%s' did not hold: %s",
 						c.getExpression(), c.getExpectedValue(), c.getStatus()
-								.getMessage()));
+								.getMessage())));
 				break;
 			} else if (c.isError()) {
-				fStatus = ArtefactStatus.createErrorStatus(String.format(
+				setStatus(ArtefactStatus.createErrorStatus(String.format(
 						"Condition '%s=%s' had an error: %s.", c
 								.getExpression(), c.getExpectedValue(), c
-								.getStatus().getMessage()));
+								.getStatus().getMessage())));
 				break;
 			}
 		}

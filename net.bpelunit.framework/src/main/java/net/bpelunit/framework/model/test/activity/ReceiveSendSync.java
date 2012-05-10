@@ -51,8 +51,8 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 	@Override
 	public void run(ActivityContext context) {
 
-		context.setHeaderProcessor(fHeaderProcessor);
-		context.setMapping(fMapping);
+		context.setHeaderProcessor(getHeaderProcessor());
+		context.setMapping(getMapping());
 
 		IncomingMessage incoming;
 		try {
@@ -65,7 +65,7 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 			return;
 		}
 
-		fReceiveSpec.handle(context, incoming.getBody());
+		getReceiveSpec().handle(context, incoming.getBody());
 
 		/*
 		 * This is the only place in the testing framework where we can (and should actually return
@@ -74,18 +74,18 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 
 		OutgoingMessage msg= new OutgoingMessage();
 
-		if (!fReceiveSpec.hasProblems()) {
+		if (!getReceiveSpec().hasProblems()) {
 			// Receive was successful
 
-			fSendSpec.handle(context);
+			getSendSpec().handle(context);
 
-			if (!fSendSpec.hasProblems()) {
-				if (fSendSpec.isFault()) {
+			if (!getSendSpec().hasProblems()) {
+				if (getSendSpec().isFault()) {
 					msg.setCode(HTTP_INTERNAL_ERROR);
 				} else {
 					msg.setCode(HTTP_OK);
 				}
-				msg.setBody(fSendSpec.getInWireFormat());
+				msg.setBody(getSendSpec().getInWireFormat());
 			} else {
 				// Could not successfully generate a return value for
 				// whatever reason.
@@ -99,13 +99,13 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 		}
 
 		try {
-			fSendSpec.delay(context);
+			getSendSpec().delay(context);
 			context.postAnswer(this.getPartnerTrack(), msg);
 
-			if (fReceiveSpec.hasProblems()) {
-				fStatus= fReceiveSpec.getStatus();
-			} else if (fSendSpec.hasProblems()) {
-				fStatus= fSendSpec.getStatus();
+			if (getReceiveSpec().hasProblems()) {
+				fStatus= getReceiveSpec().getStatus();
+			} else if (getSendSpec().hasProblems()) {
+				fStatus= getSendSpec().getStatus();
 			} else {
 				fStatus= ArtefactStatus.createPassedStatus();
 			}
@@ -137,13 +137,13 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 	@Override
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
-		if (fMapping != null) {
-			for (DataCopyOperation copy : fMapping) {
+		if (getMapping() != null) {
+			for (DataCopyOperation copy : getMapping()) {
 				children.add(copy);
 			}
 		}
-		children.add(fReceiveSpec);
-		children.add(fSendSpec);
+		children.add(getReceiveSpec());
+		children.add(getSendSpec());
 
 		return children;
 	}

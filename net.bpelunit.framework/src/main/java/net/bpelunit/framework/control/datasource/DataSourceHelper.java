@@ -13,6 +13,7 @@ import java.util.Map;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
 import net.bpelunit.framework.control.ext.IDataSource.DataSource;
+import net.bpelunit.util.StringUtil;
 
 /**
  * This class offers static helper methods for extracting and dealing with meta
@@ -21,8 +22,14 @@ import net.bpelunit.framework.control.ext.IDataSource.DataSource;
  * 
  * @author Daniel Luebke <bpelunit@daniel-luebke.de>
  */
-public class DataSourceHelper {
+public final class DataSourceHelper {
 
+	private static final String SETTER_PREFIX = "set";
+
+	private DataSourceHelper() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	/**
 	 * Returns an immutable list of possible configuration options for a given
 	 * data source class
@@ -55,10 +62,10 @@ public class DataSourceHelper {
 			String propertyName) {
 		List<DataSourceConfigurationOption> properties = getConfigurationOptionsFor(dataSource);
 
-		propertyName = toFirstUpper(propertyName);
+		String realPropertyName = StringUtil.toFirstUpper(propertyName);
 
 		for (DataSourceConfigurationOption p : properties) {
-			if (p.name.equals(propertyName)) {
+			if (p.name.equals(realPropertyName)) {
 				return true;
 			}
 		}
@@ -82,10 +89,10 @@ public class DataSourceHelper {
 	 */
 	public static void setConfigurationOption(IDataSource dataSource,
 			String name, String value) {
-		name = toFirstUpper(name);
+		String realName = StringUtil.toFirstUpper(name);
 
 		try {
-			Method m = dataSource.getClass().getMethod("set" + name,
+			Method m = dataSource.getClass().getMethod(SETTER_PREFIX + realName,
 					String.class);
 			m.invoke(dataSource, value);
 		} catch (SecurityException e) {
@@ -95,14 +102,14 @@ public class DataSourceHelper {
 		} catch (NoSuchMethodException e) {
 			throw new IllegalArgumentException(
 					"Data Source does not have any configuration option "
-							+ name + "!");
+							+ name + "!", e);
 		} catch (IllegalAccessException e) {
 			throw new IllegalArgumentException("Cannot access set" + name
 					+ ". Setting configuration option for data source failed!",
 					e);
 		} catch (InvocationTargetException e) {
 			throw new IllegalArgumentException("Error while setting option "
-					+ name + " on data source: " + e.getMessage(), e.getCause());
+					+ name + " on data source: " + e.getMessage(), e);
 		}
 	}
 
@@ -130,8 +137,8 @@ public class DataSourceHelper {
 	private static String extractConfigurationOptionName(Method m) {
 		String name = m.getName();
 
-		if (name.startsWith("set")) {
-			return toFirstUpper(name.substring("set".length()));
+		if (name.startsWith(SETTER_PREFIX)) {
+			return StringUtil.toFirstUpper(name.substring(SETTER_PREFIX.length()));
 		}
 
 		return null;
@@ -151,19 +158,7 @@ public class DataSourceHelper {
 		return configurationOptions;
 	}
 
-	/**
-	 * Convenience method. Should be in some StringHelper
-	 * 
-	 * XXX Refactor out and move somewhere else
-	 */
-	private static String toFirstUpper(String optionName) {
-		if (optionName == null || optionName.length() == 0) {
-			return "";
-		}
-
-		return optionName.substring(0, 1).toUpperCase()
-				+ optionName.substring(1);
-	}
+	
 
 	/**
 	 * Convenience method for passing an InputStream to a data source when the
@@ -231,7 +226,7 @@ public class DataSourceHelper {
 		if (methodAnnotation != null) {
 			String name = m.getName();
 
-			if (!name.startsWith("set") | name.length() < 4) {
+			if (!name.startsWith(SETTER_PREFIX) | name.length() < 4) {
 				validationMessages
 						.add("Method "
 								+ name

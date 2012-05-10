@@ -42,6 +42,8 @@ import org.apache.log4j.Logger;
 @IBPELDeployerCapabilities(canDeploy = true, canMeasureTestCoverage = true)
 public class ActiveBPELDeployer implements IBPELDeployer {
 
+	private static final int HTTP_OK = 200;
+
 	/*
 	 * Encapsulates the results from an HTTP request: status code and response
 	 * body
@@ -271,11 +273,10 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	 * @param re SOAP request entity to be sent to ActiveBPEL.
 	 * @return Response from the ActiveBPEL administration service.
 	 * @throws IOException
-	 * @throws HttpException
 	 */
 	private static RequestResult sendRequestToActiveBPEL(
 			final String url, RequestEntity re)
-			throws IOException, HttpException {
+			throws IOException {
 		PostMethod method = null;
 		try {
 			HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
@@ -316,7 +317,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 				fAdminServiceURL,
 				new ProcessListRequestEntity(processName));
 
-			if (listResponse.getStatusCode() != 200) {
+			if (listResponse.getStatusCode() != HTTP_OK) {
 				throw new DeploymentException(
 					String.format(
 						"Could not obtain the running process list: "

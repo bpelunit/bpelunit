@@ -21,8 +21,8 @@ import org.apache.log4j.Logger;
  */
 public class StreamReader extends Thread {
 
-	InputStream fInputStream;
-	StringBuffer fResult;
+	private InputStream fInputStream;
+	private StringBuffer fResult;
 
 	public StreamReader(InputStream is) {
 		this.fInputStream= is;

@@ -518,7 +518,7 @@ public class SpecificationLoader {
 
 		if (humanPartnerTrackList != null) {
 			for (XMLHumanPartnerTrack xmlHumanPartnerTrack : humanPartnerTrackList) {
-				readHumanPartner(suiteHumanPartners, xmlTestCase, round,
+				readHumanPartner(suiteHumanPartners, xmlTestCase, 
 						testDirectory, test, xmlHumanPartnerTrack);
 			}
 		}
@@ -526,21 +526,21 @@ public class SpecificationLoader {
 	}
 
 	private void readHumanPartner(Map<String, HumanPartner> suiteHumanPartners,
-			XMLTestCase xmlTestCase, int round, String testDirectory,
+			XMLTestCase xmlTestCase, String testDirectory,
 			TestCase test, XMLHumanPartnerTrack xmlHumanPartnerTrack)
 			throws SpecificationException {
 		String xmlPartnerTrackName = xmlHumanPartnerTrack.getName();
 		HumanPartner realPartner = suiteHumanPartners.get(xmlPartnerTrackName);
 
 		PartnerTrack pTrack = new PartnerTrack(test, realPartner);
-		readActivities(pTrack, xmlTestCase, xmlHumanPartnerTrack,
+		readActivities(pTrack, xmlHumanPartnerTrack,
 				testDirectory);
 		pTrack.setNamespaceContext(getNamespaceMap(xmlHumanPartnerTrack
 				.newCursor()));
 		test.addPartnerTrack(pTrack);
 	}
 
-	private void readActivities(PartnerTrack pTrack, XMLTestCase xmlTestCase,
+	private void readActivities(PartnerTrack pTrack,
 			XMLHumanPartnerTrack xmlHumanPartnerTrack,
 			String testDirectory) throws SpecificationException {
 		if (xmlHumanPartnerTrack.getCompleteHumanTaskList() != null) {

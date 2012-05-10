@@ -84,8 +84,9 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 	public void configureInit() throws ConfigurationException {
 		setHomeDirectory(fBPELUnitHomeDirectory);
 
-		for (Output output : fOutputs)
+		for (Output output : fOutputs) {
 			output.initialize();
+		}
 	}
 
 	@Override
@@ -205,11 +206,13 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 	}
 
 	private void closeOutputs() {
-		for (Logging l : fLoggers)
+		for (Logging l : fLoggers) {
 			l.dispose();
+		}
 
-		for (Output o : fOutputs)
+		for (Output o : fOutputs) {
 			o.dispose();
+		}
 	}
 
 	@Override

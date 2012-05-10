@@ -14,6 +14,7 @@ import java.util.concurrent.TimeoutException;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.SendPackage;
 import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.HeaderProcessingException;
 import net.bpelunit.framework.exception.SynchronousSendException;
 import net.bpelunit.framework.model.test.PartnerTrack;
@@ -216,7 +217,7 @@ public class ActivityContext implements VelocityContextProvider {
 
 	// **************************** Velocity ********************************
 
-	public Context createVelocityContext() throws Exception {
+	public Context createVelocityContext() throws DataSourceException {
 		return fTrack.createVelocityContext();
 	}
 }

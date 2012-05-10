@@ -26,7 +26,7 @@ public interface ICoverageMeasurementTool {
 	 *            additional information or evaluates to null.
 	 * @throws ConfigurationException
 	 */
-	public abstract void configureMetrics(Map<String, List<String>> configMap)
+	void configureMetrics(Map<String, List<String>> configMap)
 			throws ConfigurationException;
 
 	/**
@@ -36,7 +36,7 @@ public interface ICoverageMeasurementTool {
 	 *            SOAP Encoder for decoding messages containing coverage
 	 *            markings
 	 */
-	public abstract void setSOAPEncoder(ISOAPEncoder encoder);
+	void setSOAPEncoder(ISOAPEncoder encoder);
 
 	/**
 	 * Set Path to WSDL
@@ -44,20 +44,20 @@ public interface ICoverageMeasurementTool {
 	 * @param wsdl
 	 *            WSDL-Description of the Coverage Logging Services
 	 */
-	public abstract void setPathToWSDL(String wsdl);
+	void setPathToWSDL(String wsdl);
 
 	/**
 	 * Get Encoding Style
 	 * 
 	 * @return Coverage Messages' Encoding Style
 	 */
-	public abstract String getEncodingStyle();
+	String getEncodingStyle();
 
-	public abstract String prepareArchiveForCoverageMeasurement(
+	String prepareArchiveForCoverageMeasurement(
 			String pathToArchive, ProcessUnderTest put, IBPELDeployer deployer)
 			throws CoverageMeasurementException;
 
-	public abstract void setErrorStatus(String message);
+	void setErrorStatus(String message);
 
 	/**
 	 * Sets the current test case.
@@ -67,7 +67,7 @@ public interface ICoverageMeasurementTool {
 	 * @param testCase
 	 *            Currently run test case
 	 */
-	public abstract void setCurrentTestCase(String testCase);
+	void setCurrentTestCase(String testCase);
 
 	/**
 	 * Receives SOAP messages (including coverage markings) while testing.
@@ -75,31 +75,20 @@ public interface ICoverageMeasurementTool {
 	 * @param message
 	 *            message with coverage markings
 	 */
-	public abstract void putMessage(String message);
+	void putMessage(String message);
 
-	/*
-	 * Generiert Statistiken (nach dem Testlauf) f�r alle BPEL-Dateien, die im
-	 * Archive sind.
-	 * 
-	 * @return Statistiken (nach dem Testlauf) f�r alle BPEL-Dateien, die im
-	 * Archive sind.
-	 */
 	/**
 	 * Generates post-run statistics for all bpel files in the archive
 	 * 
 	 * @return Statistics (post-run) for all bpel files
 	 */
-	public abstract List<IFileStatistic> getStatistics();
+	List<IFileStatistic> getStatistics();
 
-	/*
-	 * 
-	 * @return gibt Informationen in einem Fehlerfall
-	 */
 	/**
 	 * Gives feedback about errors
 	 * 
 	 * @return feedback about errors
 	 */
-	public abstract String getErrorStatus();
+	String getErrorStatus();
 
 }

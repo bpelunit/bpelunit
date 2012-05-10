@@ -176,7 +176,7 @@ public class SendDataSpecification extends DataSpecification {
 		try {
 			context.processHeaders(this);
 		} catch (HeaderProcessingException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Header Processing Fault.", e);
+			setStatus(ArtefactStatus.createErrorStatus("Header Processing Fault.", e));
 			return;
 		}
 
@@ -190,7 +190,7 @@ public class SendDataSpecification extends DataSpecification {
 			return;
 		}
 
-		fStatus= ArtefactStatus.createPassedStatus();
+		setStatus(ArtefactStatus.createPassedStatus());
 	}
 
 	private void generateLiteralDataFromTemplate(ActivityContext context) {
@@ -205,8 +205,8 @@ public class SendDataSpecification extends DataSpecification {
 			fLiteralData = docExpanded.getDocumentElement();
 			context.saveSentMessage(fLiteralData);
 		} catch (Exception ex) {
-			fStatus = ArtefactStatus.createErrorStatus("Template expansion fault: "
-					+ ex.getLocalizedMessage(), ex);
+			setStatus(ArtefactStatus.createErrorStatus("Template expansion fault: "
+					+ ex.getLocalizedMessage(), ex));
 		}
 	}
 
@@ -257,7 +257,7 @@ public class SendDataSpecification extends DataSpecification {
 			final ContextXPathVariableResolver xpathResolver = new ContextXPathVariableResolver(vtlContext);
 
 			final XPath xpath = XPathFactory.newInstance().newXPath();
-			xpath.setNamespaceContext(fNamespaceContext);
+			xpath.setNamespaceContext(getNamespaceContext());
 			xpath.setXPathVariableResolver(xpathResolver);
 
 			// We should only evaluate these expressions once per row and round
@@ -282,9 +282,9 @@ public class SendDataSpecification extends DataSpecification {
 		List<DataCopyOperation> mapping= context.getMapping();
 		if (mapping != null) {
 			for (DataCopyOperation copy : mapping) {
-				copy.setTextNodes(fLiteralData, fNamespaceContext);
+				copy.setTextNodes(fLiteralData, getNamespaceContext());
 				if (copy.isError()) {
-					fStatus= ArtefactStatus.createErrorStatus("An error occurred while evaluating Copy-To-XPath expression.");
+					setStatus(ArtefactStatus.createErrorStatus("An error occurred while evaluating Copy-To-XPath expression."));
 					return;
 				}
 			}
@@ -295,7 +295,7 @@ public class SendDataSpecification extends DataSpecification {
 		try {
 			fSOAPMessage= fEncoder.construct(fOperation, fLiteralData, fFaultCode, fFaultString);
 		} catch (SOAPEncodingException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Encoding the message failed: " + e.getMessage(), e);
+			setStatus(ArtefactStatus.createErrorStatus("Encoding the message failed: " + e.getMessage(), e));
 		}
 	}
 
@@ -305,7 +305,7 @@ public class SendDataSpecification extends DataSpecification {
 			fSOAPMessage.writeTo(b);
 			fPlainMessage= b.toString();
 		} catch (Exception e) {
-			fStatus= ArtefactStatus.createErrorStatus("Error serializing SOAP message: " + e.getMessage(), e);
+			setStatus(ArtefactStatus.createErrorStatus("Error serializing SOAP message: " + e.getMessage(), e));
 		}
 	}
 
@@ -347,7 +347,7 @@ public class SendDataSpecification extends DataSpecification {
 
 	public List<StateData> getStateData() {
 		List<StateData> stateData= new ArrayList<StateData>();
-		stateData.addAll(fStatus.getAsStateData());
+		stateData.addAll(getStatus().getAsStateData());
 		if (fTargetURL != null) {
 			stateData.add(new StateData("Target URL", fTargetURL));
 			stateData.add(new StateData("HTTP Action", fSOAPHTTPAction));

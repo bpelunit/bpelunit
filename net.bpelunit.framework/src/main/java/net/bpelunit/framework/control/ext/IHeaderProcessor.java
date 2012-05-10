@@ -39,10 +39,10 @@ public interface IHeaderProcessor {
 	 * basically, we should reject asynchronous incoming messages if
 	 * {@link #MSG_RECEIVED_ID} does not match {@link #MSG_SENT_ID}.
 	 */
-	public final static String MSG_RECEIVED_ID = "Message-ID-Receive";
+	final static String MSG_RECEIVED_ID = "Message-ID-Receive";
 
 	/** See {@link #MSG_RECEIVED_ID}. */
-	public final static String MSG_SENT_ID = "Message-ID-Sent";
+	final static String MSG_SENT_ID = "Message-ID-Sent";
 
 	/**
 	 * Sets a property given by the tester in the test specification.
@@ -50,7 +50,7 @@ public interface IHeaderProcessor {
 	 * @param name name of the property
 	 * @param value value of the property
 	 */
-	public void setProperty(String name, String value);
+	void setProperty(String name, String value);
 
 	/**
 	 * Process a SOAP Message which is intended to be sent to a web service.
@@ -59,7 +59,7 @@ public interface IHeaderProcessor {
 	 * @param sendPackage the data to be sent
 	 * @throws HeaderProcessingException
 	 */
-	public void processSend(ActivityContext context, SendPackage sendPackage) throws HeaderProcessingException;
+	void processSend(ActivityContext context, SendPackage sendPackage) throws HeaderProcessingException;
 
 	/**
 	 * Process a SOAP Message which has been received from a web service.
@@ -68,6 +68,6 @@ public interface IHeaderProcessor {
 	 * @param receivedPackage the received data
 	 * @throws HeaderProcessingException
 	 */
-	public void processReceive(ActivityContext context, SOAPMessage receivedPackage) throws HeaderProcessingException;
+	void processReceive(ActivityContext context, SOAPMessage receivedPackage) throws HeaderProcessingException;
 
 }

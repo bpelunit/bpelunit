@@ -131,7 +131,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		try {
 			context.processHeaders(this);
 		} catch (HeaderProcessingException e) {
-			fStatus = ArtefactStatus.createErrorStatus("Header Processing Fault.", e);
+			setStatus(ArtefactStatus.createErrorStatus("Header Processing Fault.", e));
 			return;
 		}
 
@@ -158,7 +158,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		}
 
 		// Receive completed.
-		fStatus= ArtefactStatus.createPassedStatus();
+		setStatus(ArtefactStatus.createPassedStatus());
 	}
 
 	public SOAPMessage getSOAPMessage() {
@@ -173,7 +173,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 			MessageFactory factory= MessageFactory.newInstance();
 			fSOAPMessage= factory.createMessage(null, new ByteArrayInputStream(body.getBytes()));
 		} catch (Exception e) {
-			fStatus= ArtefactStatus.createErrorStatus("Could not create SOAP message from incoming message: " + e.getMessage(), e);
+			setStatus(ArtefactStatus.createErrorStatus("Could not create SOAP message from incoming message: " + e.getMessage(), e));
 		}
 	}
 
@@ -181,7 +181,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		try {
 			fLiteralData= fDecoder.deconstruct(fOperation, fSOAPMessage);
 		} catch (SOAPEncodingException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Not able to deconstruct incoming message into SOAP Message: " + e.getMessage(), e);
+			setStatus(ArtefactStatus.createErrorStatus("Not able to deconstruct incoming message into SOAP Message: " + e.getMessage(), e));
 		}
 	}
 
@@ -192,37 +192,37 @@ public class ReceiveDataSpecification extends DataSpecification {
 		try {
 			body = fSOAPMessage.getSOAPBody();
 		} catch (SOAPException e) {
-			fStatus = ArtefactStatus.createErrorStatus(
-				"Exception during condition validation", e);
+			setStatus(ArtefactStatus.createErrorStatus(
+				"Exception during condition validation", e));
 			return;
 		}
 		if (fOperation.isFault()) {
 			SOAPFault fault = body.getFault();
 			if (fault == null) {
-				fStatus = ArtefactStatus.createFailedStatus(
+				setStatus(ArtefactStatus.createFailedStatus(
 					"A fault was expected in operation "
 					+ this
-					+ ", but none was found in input data.");
+					+ ", but none was found in input data."));
 				return;
 			}
 			if (fFaultCode != null && !fFaultCode.equals(fault.getFaultCodeAsQName())) {
-				fStatus = ArtefactStatus.createFailedStatus(String.format(
+				setStatus(ArtefactStatus.createFailedStatus(String.format(
 					"Expected the fault code %s, got %s instead",
-					fFaultCode, fault.getFaultCodeAsQName()));
+					fFaultCode, fault.getFaultCodeAsQName())));
 				return;
 			}
 			if (fFaultString != null && !fFaultString.equals(fault.getFaultString())) {
-				fStatus = ArtefactStatus.createFailedStatus(String.format(
+				setStatus(ArtefactStatus.createFailedStatus(String.format(
 					"Expected the fault string %s, got %s instead",
-					fFaultString, fault.getFaultString()));
+					fFaultString, fault.getFaultString())));
 				return;
 			}
 		}
 		else if (body.getFault() != null) {
-			fStatus = ArtefactStatus.createFailedStatus(
+			setStatus(ArtefactStatus.createFailedStatus(
 				"The operation "
 				+ this
-				+ " was expected to succeed, but replied with a SOAP fault.");
+				+ " was expected to succeed, but replied with a SOAP fault."));
 			return;
 		}
 
@@ -231,27 +231,27 @@ public class ReceiveDataSpecification extends DataSpecification {
 		try {
 			conditionContext = templateContext.createVelocityContext();
 		} catch (Exception e) {
-			fStatus = ArtefactStatus.createFailedStatus(String.format(
+			setStatus(ArtefactStatus.createFailedStatus(String.format(
 				"Could not create the Velocity context for this condition: %s",
-				e.getLocalizedMessage()));
+				e.getLocalizedMessage())));
 			return;
 		}
 		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);
 
 		for (ReceiveCondition c : fConditions) {
-			c.evaluate(templateContext, fLiteralData, fNamespaceContext, variableResolver);
+			c.evaluate(templateContext, fLiteralData, getNamespaceContext(), variableResolver);
 
 			if (c.isFailure()) {
-				fStatus = ArtefactStatus.createFailedStatus(String.format(
+				setStatus(ArtefactStatus.createFailedStatus(String.format(
 						"Condition '%s=%s' did not hold: %s",
 						c.getExpression(), c.getExpectedValue(), c.getStatus()
-								.getMessage()));
+								.getMessage())));
 				break;
 			} else if (c.isError()) {
-				fStatus = ArtefactStatus.createErrorStatus(String.format(
+				setStatus(ArtefactStatus.createErrorStatus(String.format(
 						"Condition '%s=%s' had an error: %s.", c
 								.getExpression(), c.getExpectedValue(), c
-								.getStatus().getMessage()));
+								.getStatus().getMessage())));
 				break;
 			}
 		}
@@ -266,9 +266,9 @@ public class ReceiveDataSpecification extends DataSpecification {
 		List<DataCopyOperation> mapping= context.getMapping();
 		if (mapping != null) {
 			for (DataCopyOperation copy : mapping) {
-				copy.retrieveTextNodes(fLiteralData, fNamespaceContext);
+				copy.retrieveTextNodes(fLiteralData, getNamespaceContext());
 				if (copy.isError()) {
-					fStatus= ArtefactStatus.createErrorStatus("An error occurred while evaluating Copy-From-XPath expression.");
+					setStatus(ArtefactStatus.createErrorStatus("An error occurred while evaluating Copy-From-XPath expression."));
 					return;
 				}
 			}
@@ -317,7 +317,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 
 	public List<StateData> getStateData() {
 		List<StateData> stateData= new ArrayList<StateData>();
-		stateData.addAll(fStatus.getAsStateData());
+		stateData.addAll(getStatus().getAsStateData());
 		stateData.add(new StateData("Style/Encoding", fEncodingStyle));
 		stateData.add(new StateData("Direction", fOperation.getDirection().name()));
 		return stateData;
