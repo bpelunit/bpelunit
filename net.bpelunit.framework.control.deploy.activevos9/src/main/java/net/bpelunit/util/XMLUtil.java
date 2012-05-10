@@ -47,6 +47,7 @@ public final class XMLUtil {
 	
 	public static Document parseXML(InputStream in) throws SAXException, IOException, ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		dbFactory.setNamespaceAware(true);
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		return dBuilder.parse(in);
 	}

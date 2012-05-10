@@ -4,6 +4,8 @@ import java.io.InputStream;
 
 import javax.xml.namespace.QName;
 
+import net.bpelunit.framework.exception.DeploymentException;
+
 import org.w3c.dom.Document;
 
 public interface IBPELProcess {
@@ -17,5 +19,5 @@ public interface IBPELProcess {
 	void addPartnerlink(String name, QName partnerlinkType, String processRole,
 			String partnerRole, QName service, String port, String endpointURL);
 	
-	void changePartnerEndpoint(String partnerLinkName, String newEndpoint);
+	void changePartnerEndpoint(String partnerLinkName, String newEndpoint) throws DeploymentException;
 }
