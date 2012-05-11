@@ -10,13 +10,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import net.bpelunit.framework.control.soap.NamespaceContextImpl;
 import net.bpelunit.framework.control.util.XPathTool;
@@ -49,19 +48,9 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 		private QName name;
 		private Document bpelXml;
 		private Document pddXml;
+		private boolean pddHasChanged = false;
+		private boolean bpelHasChanged = false;
 		
-		File getBpelFile() {
-			return bpelFile;
-		}
-
-		File getPddFile() {
-			return pddFile;
-		}
-
-		Document getXml() {
-			return bpelXml;
-		}
-
 		@Override
 		public QName getName() {
 			return name;
@@ -73,12 +62,13 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 		}
 		
 		@Override
-		public Document getXML() {
-			ActiveVOS9Deployment.this.checkedOutProcesses.add(this);
+		public Document getBpelXml() {
+			bpelHasChanged = true;
 			return bpelXml;
 		}
 
 		Document getPddXml() {
+			pddHasChanged = true;
 			return pddXml;
 		}
 		
@@ -86,6 +76,8 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 		public void addPartnerlink(String name, QName partnerlinkType,
 				String processRole, String partnerRole, QName service,
 				String port, String endpointURL) {
+			getPddXml(); // use this in order to set changed flags correctly
+			getBpelXml();
 			// TODO Auto-generated method stub
 			
 		}
@@ -108,13 +100,21 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 				throw new DeploymentException("Cannot change partner endpoint location for " + partnerLinkName, e);
 			}
 		}
+
+		public void writeOut() throws IOException, TransformerException {
+			if(bpelHasChanged) {
+				XMLUtil.writeXML(getBpelXml(), bpelFile);
+			}
+			if(pddHasChanged) {
+				XMLUtil.writeXML(getPddXml(), pddFile);
+			}
+		}
 	}
 
 	private File bpr; 
 	private File tempDirectory = null;
 	private File tempBPR = null;
 	
-	private Set<BPELInfo> checkedOutProcesses = new HashSet<BPELInfo>();
 	private List<BPELInfo> allProcesses = new ArrayList<BPELInfo>();
 	public static final String NAMESPACE_PDD = "http://schemas.active-endpoints.com/pdd/2006/08/pdd.xsd";
 	
@@ -148,8 +148,8 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 		if(tempDirectory != null) {
 			try {
 				// write out all files
-				for(BPELInfo bpel : checkedOutProcesses) {
-					XMLUtil.writeXML(bpel.getXml(), bpel.getBpelFile());
+				for(BPELInfo bpel : allProcesses) {
+					bpel.writeOut();
 				}
 				
 				// repackage

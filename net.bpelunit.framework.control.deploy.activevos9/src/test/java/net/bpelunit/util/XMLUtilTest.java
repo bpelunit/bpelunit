@@ -24,7 +24,14 @@ public class XMLUtilTest {
 		ByteArrayOutputStream reference = new ByteArrayOutputStream();
 		IOUtils.copy(getClass().getResourceAsStream("simple.xml"), reference);
 		
-		assertEquals(reference.toString().trim(), out.toString().trim());
+		String referenceString = normalize(reference.toString());
+		String actualString = normalize(out.toString());
+		
+		assertEquals(referenceString, actualString);
 	}
-	
+
+	private String normalize(String s) {
+		return s.trim().replaceAll("\r", "");
+	}
+
 }

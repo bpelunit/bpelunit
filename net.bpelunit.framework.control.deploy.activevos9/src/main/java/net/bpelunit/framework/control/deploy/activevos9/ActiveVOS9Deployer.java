@@ -25,9 +25,10 @@ import net.bpelunit.util.FileUtil;
  * 
  * TODOs:
  * - Coverage Support
- * - Logging
- * - Endpoint Replacement
  * - Scenario testing with mocked ActiveVOSAdministrativeFunctions
+ * - Logging
+ * Done:
+ * - Endpoint Replacement
  * 
  * @author Daniel Luebke
  */
