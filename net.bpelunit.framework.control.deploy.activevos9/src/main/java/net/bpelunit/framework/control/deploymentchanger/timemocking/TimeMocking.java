@@ -1,4 +1,4 @@
-package net.bpelunit.framework.control.deploymentchanger.waitmocking;
+package net.bpelunit.framework.control.deploymentchanger.timemocking;
 
 import java.util.List;
 
@@ -13,27 +13,26 @@ import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.util.QNameUtil;
 import net.bpelunit.util.XMLUtil;
+import net.bpelunit.util.bpel.BPELFacade;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.Text;
 
 /**
  * Locking for mocking wait activities in BPEL. Can be added as a deployment
  * component when BPELUnit deploys the PUT.
  * 
  * Options configurable from test:
- * - ActivityToMock: XPath expression selecting at least one wait which should be changed
+ * - ActivityToMock: XPath expression selecting at least one wait or onAlarm which should be changed
  * - NewDuration: The new duration given in seconds that will be set as a for-parameter to the wait activity - even if it was a deadline expression (until) before.
  * - BPELName: Necessary only if deployment contains more than one BPEL process. The local name or the QName (given as {namespace}local-name) to which this change should be applied
  * 
  * @author Daniel Luebke <bpelunit@daniel-luebke.de>
  */
-public class WaitMocking implements IDeploymentChanger {
+public class TimeMocking implements IDeploymentChanger {
 
 	private static final String DURATION_TEMPLATE = "'PT%dS'";
-	private static final String BPEL_WAIT_FOR = "for";
 	private String duration;
 	private String xpathToWait;
 	private String bpelName;
@@ -82,58 +81,35 @@ public class WaitMocking implements IDeploymentChanger {
 		checkIsSet("WaitToMock", xpathToWait);
 		
 		Element process = null;
-		if(processes.size() != 1) {
+		if(processes.size() > 1) {
 			checkIsSet("BPELName", bpelName);
 			process = getProcessForConfiguredName(processes).getDocumentElement();
 		} else {
-			process = processes.get(0).getBpelXml().getDocumentElement();
+			process = getFirstProcess(processes);
 		}
 		
 		XPathTool xpath = createBpelXPathTool(process.getNamespaceURI());
+		BPELFacade f = BPELFacade.getInstance(process.getNamespaceURI());
 		try {
-			List<Node> waitElements = xpath.evaluateAsList(xpathToWait, process);
+			List<Node> timeElements = xpath.evaluateAsList(xpathToWait, process);
 			
-			for(Node n : waitElements) {
-				Element e = validateWaitElement(n);
-				
-				setDurationForWait(e, duration);
+			for(Node n : timeElements) {
+				if(n instanceof Element) {
+					f.setFor((Element)n, duration);
+				} else {
+					throw new DeploymentException("XPath does not (only) reference BPEL Activities: " + XMLUtil.getQName(n));
+				}
 			}
-			
 		} catch (XPathExpressionException e) {
 			throw new DeploymentException("XPath is not valid: " + e.getMessage(), e);
 		}
 	}
 
-	/**
-	 * TODO Move to BPELUtil
-	 * 
-	 * Sets the new duration for a wait and thereby possibly replaces
-	 * the old until or waits
-	 * 
-	 * Caller needs to validate that this is really a BPEL wait activity.
-	 * 
-	 * @param waitActivity wait to modify
-	 * @param duration the new XPath statement for the new duration to wait for
-	 */
-	private static void setDurationForWait(Element waitActivity, String duration) {
-		String bpelNamespace = waitActivity.getNamespaceURI();
-		
-		XMLUtil.removeNodes(waitActivity, waitActivity.getElementsByTagNameNS(bpelNamespace, BPEL_WAIT_FOR));
-		XMLUtil.removeNodes(waitActivity, waitActivity.getElementsByTagNameNS(bpelNamespace, "until"));
-		
-		Document doc = waitActivity.getOwnerDocument();
-		Element newWaitFor = doc.createElementNS(bpelNamespace, BPEL_WAIT_FOR);
-		Text value = doc.createTextNode(duration);
-		newWaitFor.appendChild(value);
-		
-		waitActivity.appendChild(newWaitFor);
-	}
-
-	private Element validateWaitElement(Node n) throws DeploymentException {
-		if(n instanceof Element && n.getLocalName().equals("wait") ) {
-			return (Element) n;
+	private Element getFirstProcess(List<? extends IBPELProcess> processes) throws DeploymentException {
+		if(processes != null && processes.size() > 0) {
+			return processes.get(0).getBpelXml().getDocumentElement();
 		} else {
-			throw new DeploymentException("XPath has selected a non-wait activity: {" + n.getNamespaceURI() + "}" + n.getLocalName());
+			throw new DeploymentException("There no processes in the deployment!");
 		}
 	}
 

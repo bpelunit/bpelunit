@@ -67,7 +67,9 @@
             </bpmndi:BPMNLabel>
          </bpmndi:BPMNShape>
          <bpmndi:BPMNShape aei:absoluteLocation="LOC {10,155}" aei:absoluteSize="DIM {183,148}"
-                           aei:alarmDurationValue="&#34;P1D&#34;"
+                           aei:alarmExpression="'P1D'"
+                           aei:alarmExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:alarmType="1"
                            aei:collapedImageLocation="icons/bpmn/activity/CollapsedHandlerBlock.png"
                            aei:expanded="true"
                            aei:expandedSize="DIM {-1,-1}"
@@ -168,11 +170,14 @@
             <dc:Bounds height="60" width="70" x="0" y="0"/>
          </bpmndi:BPMNShape>
          <bpmndi:BPMNShape aei:absoluteLocation="LOC {187,68}" aei:absoluteSize="DIM {180,168}"
-                           aei:alarmDurationValue="&#34;P1D&#34;"
+                           aei:alarmDurationValue=""
+                           aei:alarmExpression="'P1D'"
+                           aei:alarmExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
                            aei:alarmNuberOfDays="1"
                            aei:alarmRepeatEvery=""
                            aei:alarmRepeatEveryLang=""
                            aei:alarmTime=""
+                           aei:alarmType="1"
                            aei:expanded="true"
                            aei:expandedSize="DIM {-1,-1}"
                            aei:objectId="133683268258508639"
@@ -354,7 +359,7 @@
                <dc:Bounds height="-1" width="-1" x="0" y="0"/>
             </bpmndi:BPMNLabel>
          </bpmndi:BPMNShape>
-         <bpmndi:BPMNShape aei:absoluteLocation="LOC {247,225}" aei:absoluteSize="DIM {125,68}"
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {10,10}" aei:absoluteSize="DIM {100,261}"
                            aei:expanded="false"
                            aei:expandedSize="DIM {100,261}"
                            aei:name="Waits"
@@ -387,7 +392,9 @@
                            aei:name="WaitToLeave"
                            aei:objectId="133682436540206393"
                            aei:type="WAIT"
-                           aei:waitDurationValue="&#34;P1D&#34;"
+                           aei:waitExpression="'P1D'"
+                           aei:waitExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:waitType="1"
                            bpmnElement="133682436540206393">
             <dc:Bounds height="-1" width="-1" x="0" y="0"/>
             <bpmndi:BPMNLabel aei:absoluteLocation="LOC {59,82}" aei:absoluteSize="DIM {63,13}"
@@ -406,7 +413,9 @@
                            aei:name="WaitToMock"
                            aei:objectId="133682345694105797"
                            aei:type="WAIT"
-                           aei:waitDurationValue="&#34;PT5S&#34;"
+                           aei:waitExpression="'P1D'"
+                           aei:waitExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:waitType="1"
                            bpmnElement="133682345694105797">
             <dc:Bounds height="-1" width="-1" x="0" y="0"/>
             <bpmndi:BPMNLabel aei:absoluteLocation="LOC {59,167}" aei:absoluteSize="DIM {58,13}"
@@ -425,7 +434,7 @@
                            aei:name="WaitToMock2"
                            aei:objectId="133682439524006977"
                            aei:type="WAIT"
-                           aei:waitExpression="'2012-01-01T00:00:00Z'"
+                           aei:waitExpression="'2012-01-01'"
                            aei:waitExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
                            aei:waitType="0"
                            bpmnElement="133682439524006977">
@@ -537,11 +546,11 @@
             <bpel:empty aei:id="133683282035509463" aei:implicit="yes"/>
          </bpel:onMessage>
          <bpel:onAlarm aei:id="133683251516208095">
-            <bpel:for>"P1D"</bpel:for>
+            <bpel:for>'P1D'</bpel:for>
             <bpel:scope aei:id="133683255549708169" name="Event_Handlers">
                <bpel:eventHandlers>
                   <bpel:onAlarm aei:id="133683268258508639">
-                     <bpel:for>"P1D"</bpel:for>
+                     <bpel:for>'P1D'</bpel:for>
                      <bpel:scope aei:id="133683268258608643">
                         <bpel:empty aei:id="133683270704708699"/>
                      </bpel:scope>
@@ -564,13 +573,13 @@
             <bpel:scope aei:id="133683275695808729" name="Waits">
                <bpel:sequence aei:id="133683275696108749">
                   <bpel:wait aei:id="133682436540206393" name="WaitToLeave">
-                     <bpel:for>"P1D"</bpel:for>
+                     <bpel:for>'P1D'</bpel:for>
                   </bpel:wait>
                   <bpel:wait aei:id="133682345694105797" name="WaitToMock">
-                     <bpel:for>"PT5S"</bpel:for>
+                     <bpel:for>'P1D'</bpel:for>
                   </bpel:wait>
                   <bpel:wait aei:id="133682439524006977" name="WaitToMock2">
-                     <bpel:until>'2012-01-01T00:00:00Z'</bpel:until>
+                     <bpel:until>'2012-01-01'</bpel:until>
                   </bpel:wait>
                </bpel:sequence>
             </bpel:scope>
