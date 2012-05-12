@@ -135,7 +135,7 @@ public class ActiveVOS9DeploymentTest {
 		ZipUtil.unzipFile(tempDeploymentFile, tempDeploymentDir);
 
 		byte[] actualPddContents = FileUtil.readFile(new File(
-				tempDeploymentDir, "META-INF\\pdd\\bpelunit-tc1\\deploy\\tc1.pdd"));
+				tempDeploymentDir, "META-INF/pdd/bpelunit-tc1/deploy/tc1.pdd"));
 		ByteArrayOutputStream filePddContents = new ByteArrayOutputStream();
 		XMLUtil.writeXML(bpelProcess.getPddXml(), filePddContents);
 

@@ -63,6 +63,5 @@ public class WaitMockingTest {
 		
 		waitMocking.changeDeployment(new DeploymentMock());
 	}
-
 	
 }
