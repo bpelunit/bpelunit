@@ -4,9 +4,12 @@ import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
 
-public class QNameUtil {
+public final class QNameUtil {
 	
-	private static final Pattern p = Pattern.compile("^\\{[^\\}]*\\}(.+)");
+	private QNameUtil() {
+	}
+	
+	private static final Pattern QNAME_PATTERN = Pattern.compile("^\\{[^\\}]*\\}(.+)");
 
 	/**
 	 * Checks on whether the string conforms to a String representation of a QName.
@@ -16,7 +19,7 @@ public class QNameUtil {
 	 * @return true if the string represents a QName, false if not
 	 */
 	public static boolean isQName(String name) {
-		return (name != null) && p.matcher(name).matches();
+		return (name != null) && QNAME_PATTERN.matcher(name).matches();
 	}
 
 	/**

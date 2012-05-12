@@ -28,7 +28,7 @@ import org.w3c.dom.Text;
  * - NewDuration: The new duration given in seconds that will be set as a for-parameter to the wait activity - even if it was a deadline expression (until) before.
  * - BPELName: Necessary only if deployment contains more than one BPEL process. The local name or the QName (given as {namespace}local-name) to which this change should be applied
  * 
- * @author dluebke
+ * @author Daniel Luebke <bpelunit@daniel-luebke.de>
  */
 public class WaitMocking implements IDeploymentChanger {
 
@@ -155,9 +155,7 @@ public class WaitMocking implements IDeploymentChanger {
 		throw new DeploymentException("No BPEL Process with local-name '" + bpelName + "' found in deployment.");
 	}
 
-	private Document getProcessForConfiguredQName(List<? extends IBPELProcess> processes, QName parseUtil) throws DeploymentException {
-		QName qname = QNameUtil.parseQName(bpelName);
-		
+	private Document getProcessForConfiguredQName(List<? extends IBPELProcess> processes, QName qname) throws DeploymentException {
 		for (IBPELProcess p : processes) {
 			if(qname.equals(p.getName())) {
 				return p.getBpelXml();
@@ -176,7 +174,6 @@ public class WaitMocking implements IDeploymentChanger {
 	XPathTool createBpelXPathTool(String bpelNamespace) {
 		NamespaceContextImpl ns = new NamespaceContextImpl();
 		ns.setNamespace("bpel", bpelNamespace);
-		XPathTool xpath = new XPathTool(ns);
-		return xpath;
+		return new XPathTool(ns);
 	}
 }
