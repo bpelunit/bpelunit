@@ -22,6 +22,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public final class XMLUtil {
@@ -71,6 +74,17 @@ public final class XMLUtil {
 			IOUtils.closeQuietly(outputStream);
 		}
 
+	}
+
+	public static void removeNodes(Element parent,
+			NodeList elements) {
+		for(int i = 0; i < elements.getLength(); i++) {
+			Node item = elements.item(i);
+			
+			if(item.getParentNode() == parent) {
+				parent.removeChild(item);
+			}
+		}
 	}
 
 }

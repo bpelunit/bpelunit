@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import net.bpelunit.framework.control.deploy.IBPELProcess;
 import net.bpelunit.framework.control.deploy.activevos9.ActiveVOS9Deployment.BPELInfo;
 import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;

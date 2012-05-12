@@ -1,6 +1,5 @@
 package net.bpelunit.util;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
@@ -27,7 +26,7 @@ public class QNameUtil {
 	 * @return QName with namespace and local-name parts
 	 * @see #isQName(String)
 	 */
-	public static QName parseUtil(String name) {
+	public static QName parseQName(String name) {
 		// TODO Switch to Pattern and groups 
 		int indexOfClosingBrace = name.indexOf('}');
 		

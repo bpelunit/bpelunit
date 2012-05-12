@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+              xmlns:helloworld="http://test.bpelunit.net/activevos9"
+              xmlns:ext1="http://www.activebpel.org/2009/06/bpel/extension/links"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+              xmlns:ext="http://www.activebpel.org/2006/09/bpel/extension/query_handling"
+              xmlns:aei="http://www.activebpel.org/2009/02/bpel/extension/ignorable"
+              aei:editStyle="BPMN"
+              ext1:linksAreTransitions="yes"
+              ext:createTargetXPath="yes"
+              ext:disableSelectionFailure="yes"
+              name="waitprocess"
+              suppressJoinFailure="yes"
+              targetNamespace="http://waitprocess">
+   <bpmndi:BPMNDiagram xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                       xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                       aei:bpelDigest=""
+                       aei:editStyle="BPMN"
+                       aei:layoutNeeded="false"
+                       aei:modelVersion="4"
+                       aei:objectId="133682336748605291"
+                       aei:processInitiatorSim=""
+                       isHorizontal="false">
+      <bpmndi:BPMNPlane>
+         <bpmndi:BPMNShape aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:objectId="133682344320005547"
+                           aei:type="PARTNER_LINK"
+                           aei:visible="false,false,false,false,false,"
+                           bpmnElement="133682344320005547"/>
+         <bpmndi:BPMNShape aei:absoluteSize="DIM {90,420}" aei:objectId="133682344729205789"
+                           aei:type="SEQUENCE"
+                           bpmnElement="133682344729205789"
+                           isHorizontal="false">
+            <dc:Bounds height="-1" width="-1" x="-10" y="-10"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {10,10}" aei:absoluteSize="DIM {70,60}"
+                           aei:attachments=""
+                           aei:objectId="133682344329505563"
+                           aei:principal=""
+                           aei:type="RECEIVE"
+                           bpmnElement="133682344329505563">
+            <dc:Bounds height="60" width="70" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {36,67}" aei:absoluteSize="DIM {38,13}"
+                              aei:anchor.location="1"
+                              aei:anchor.objectId="133682344329505563"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133682344330105573"
+                              aei:relative.location="LOC {-19,47}"
+                              aei:text="Receive"
+                              bpmnElement="133682344329505563label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {10,95}" aei:absoluteSize="DIM {70,60}"
+                           aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:name="WaitToLeave"
+                           aei:objectId="133682436540206393"
+                           aei:type="WAIT"
+                           aei:waitDurationValue="&#34;P1D&#34;"
+                           bpmnElement="133682436540206393">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {44,152}" aei:absoluteSize="DIM {63,13}"
+                              aei:anchor.location="1"
+                              aei:anchor.objectId="133682436540206393"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133682436540306395"
+                              aei:relative.location="LOC {-11,47}"
+                              aei:text="WaitToLeave"
+                              bpmnElement="133682436540206393label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {10,180}" aei:absoluteSize="DIM {70,60}"
+                           aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:name="WaitToMock"
+                           aei:objectId="133682345694105797"
+                           aei:type="WAIT"
+                           aei:waitDurationValue="&#34;PT5S&#34;"
+                           bpmnElement="133682345694105797">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {44,237}" aei:absoluteSize="DIM {58,13}"
+                              aei:anchor.location="1"
+                              aei:anchor.objectId="133682345694105797"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133682345694205799"
+                              aei:relative.location="LOC {-11,47}"
+                              aei:text="WaitToMock"
+                              bpmnElement="133682345694105797label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {10,265}" aei:absoluteSize="DIM {70,60}"
+                           aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:name="WaitToMock2"
+                           aei:objectId="133682439524006977"
+                           aei:type="WAIT"
+                           aei:waitExpression="'2012-01-01T00:00:00Z'"
+                           aei:waitExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:waitType="0"
+                           bpmnElement="133682439524006977">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {44,322}" aei:absoluteSize="DIM {64,13}"
+                              aei:anchor.location="1"
+                              aei:anchor.objectId="133682439524006977"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133682439524106979"
+                              aei:relative.location="LOC {-11,47}"
+                              aei:text="WaitToMock2"
+                              bpmnElement="133682439524006977label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {10,350}" aei:absoluteSize="DIM {70,60}"
+                           aei:name="helloWorld-Reply"
+                           aei:objectId="133682344329705565"
+                           aei:text="helloWorld-Reply"
+                           aei:type="REPLY"
+                           bpmnElement="133682344329705565">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {15,322}" aei:absoluteSize="DIM {81,13}"
+                              aei:anchor.location="1"
+                              aei:anchor.objectId="133682344329705565"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133682344330105575"
+                              aei:relative.location="LOC {-40,47}"
+                              aei:text="helloWorld-Reply"
+                              bpmnElement="133682344329705565label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:backgroundColor="RGB {226,226,226}" aei:borderColor="RGB {0,0,255}"
+                           aei:implicitScopeIO="INPUT"
+                           aei:objectId="133682346804905809"
+                           aei:type="ASSIGN"
+                           bpmnElement="133682346804905809">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:fromExpression="&lt;helloworld:helloWorldResponse xmlns:helloworld=&#34;http://test.bpelunit.net/activevos9&#34;&gt;&#xA;   &lt;out&gt;{ $helloWorld/in/text() }&lt;/out&gt;&#xA;&lt;/helloworld:helloWorldResponse&gt;"
+                           aei:fromLanguage="urn:active-endpoints:expression-language:xquery1.0"
+                           aei:fromType="3"
+                           aei:objectId="133682346805005811"
+                           aei:toPart="parameters"
+                           aei:toVariable="parameters"
+                           aei:type="ASSIGN_COPY"
+                           bpmnElement="133682346805005811"/>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+   <bpel:extensions>
+      <bpel:extension mustUnderstand="no"
+                      namespace="http://www.activebpel.org/2009/02/bpel/extension/ignorable"/>
+      <bpel:extension mustUnderstand="no" namespace="http://www.omg.org/spec/BPMN/20100524/DI"/>
+      <bpel:extension mustUnderstand="yes"
+                      namespace="http://www.activebpel.org/2006/09/bpel/extension/query_handling"/>
+      <bpel:extension mustUnderstand="yes"
+                      namespace="http://www.activebpel.org/2009/06/bpel/extension/links"/>
+   </bpel:extensions>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/"
+                location="../wsdl/helloworld.wsdl"
+                namespace="http://test.bpelunit.net/activevos9"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink aei:id="133682344320005547" myRole="helloWorld" name="helloWorld"
+                        partnerLinkType="helloworld:helloWorld"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable element="helloworld:helloWorld" name="helloWorld"/>
+   </bpel:variables>
+   <bpel:sequence aei:id="133682344729205789">
+      <bpel:receive aei:id="133682344329505563" createInstance="yes" operation="helloWorld"
+                    partnerLink="helloWorld"
+                    variable="helloWorld"/>
+      <bpel:wait aei:id="133682436540206393" name="WaitToLeave">
+         <bpel:for>"P1D"</bpel:for>
+      </bpel:wait>
+      <bpel:wait aei:id="133682345694105797" name="WaitToMock">
+         <bpel:for>"PT5S"</bpel:for>
+      </bpel:wait>
+      <bpel:wait aei:id="133682439524006977" name="WaitToMock2">
+         <bpel:until>'2012-01-01T00:00:00Z'</bpel:until>
+      </bpel:wait>
+      <bpel:scope aei:implicit="true" name="helloWorld-Reply">
+         <bpel:variables>
+            <bpel:variable messageType="helloworld:helloWorldResponse" name="parameters"/>
+         </bpel:variables>
+         <bpel:sequence>
+            <bpel:assign aei:id="133682346804905809">
+               <bpel:copy aei:id="133682346805005811">
+                  <bpel:from expressionLanguage="urn:active-endpoints:expression-language:xquery1.0">&lt;helloworld:helloWorldResponse xmlns:helloworld="http://test.bpelunit.net/activevos9"&gt;
+   &lt;out&gt;{ $helloWorld/in/text() }&lt;/out&gt;
+&lt;/helloworld:helloWorldResponse&gt;</bpel:from>
+                  <bpel:to part="parameters" variable="parameters"/>
+               </bpel:copy>
+            </bpel:assign>
+            <bpel:reply aei:id="133682344329705565" name="helloWorld-Reply" operation="helloWorld"
+                        partnerLink="helloWorld"
+                        variable="parameters"/>
+         </bpel:sequence>
+      </bpel:scope>
+   </bpel:sequence>
+</bpel:process>

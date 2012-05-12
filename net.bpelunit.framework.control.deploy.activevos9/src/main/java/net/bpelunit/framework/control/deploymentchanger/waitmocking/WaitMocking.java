@@ -19,6 +19,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
+/**
+ * Locking for mocking wait activities in BPEL. Can be added as a deployment
+ * component when BPELUnit deploys the PUT.
+ * 
+ * Options configurable from test:
+ * - WaitToMock: XPath expression selecting at least one wait which should be changed
+ * - NewDuration: The new duration given in seconds that will be set as a for-parameter to the wait activity - even if it was a deadline expression (until) before.
+ * - BPELName: Necessary only if deployment contains more than one BPEL process. The local name or the QName (given as {namespace}local-name) to which this change should be applied
+ * 
+ * @author dluebke
+ */
 public class WaitMocking implements IDeploymentChanger {
 
 	private static final String DURATION_TEMPLATE = "'PT%dS'";
@@ -27,21 +38,42 @@ public class WaitMocking implements IDeploymentChanger {
 	private String xpathToWait;
 	private String bpelName;
 
-	@DeploymentChangerOption(description="XPath expression that selects exactly one wait activity. You need to use the 'bpel' namespace prefix (e.g. //bpel:wait[@name='myWait']) that will be bound to the correct version of the BPEL namespace.")
+	/**
+	 * See annotation for description
+	 * 
+	 * @param xpath see annotation for description
+	 */
+	@DeploymentChangerOption(description="XPath expression that selects at least one wait activity. You need to use the 'bpel' namespace prefix (e.g. //bpel:wait[@name='myWait']) that will be bound to the correct version of the BPEL namespace.")
 	public void setWaitToMock(String xpath) {
 		this.xpathToWait = xpath;
 	}
 
+	/**
+	 * See annotation for description
+	 * 
+	 * @param xpath see annotation for description
+	 */
 	@DeploymentChangerOption(description="The new duration in seconds")
 	public void setNewDuration(String newDurationInSeconds) {
 		this.duration = String.format(DURATION_TEMPLATE, Integer.valueOf(newDurationInSeconds));
 	}
 	
+	/**
+	 * See annotation for description
+	 * 
+	 * @param xpath see annotation for description
+	 */
 	@DeploymentChangerOption
 	public void setBPELName(String bpelToChange) {
 		this.bpelName = bpelToChange;
 	}
 	
+	/**
+	 * Executes the change to the deployment. The option values have to be set
+	 * before.
+	 * 
+	 * @param d the deployment that is to be changed
+	 */
 	@Override
 	public void changeDeployment(IDeployment d) throws DeploymentException {
 		List<? extends IBPELProcess> processes = d.getBPELProcesses();
