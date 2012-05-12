@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 import net.bpelunit.framework.control.deploy.IBPELProcess;
 import net.bpelunit.framework.control.deploy.IDeployment;
@@ -26,18 +27,33 @@ import org.xml.sax.SAXException;
 
 public class WaitMockingTest {
 
+	private static final String BPEL_PROCESS_LOCALNAME = "waitprocess";
+
+	private static final String RESOURCE_BPEL = "waitprocess.bpel";
+
+	private static final String BPEL_PROCESS_QNAME = "{http://test.bpelunit.net/waitprocess}waitprocess";
+	private static final String NONEXISTING_BPEL_PROCESS_QNAME = "{http://test.bpelunit.net/waitprocess}Non-existent-process";
+
+	private static final String NEW_DURATION_EXPRESSION = "'PT1S'";
+	private static final String NEW_DURATION_IN_SECONDS = "1";
+
+	private static final String XPATH_TO_WAIT1 = "//bpel:wait[@name='WaitToMock']";
+	private static final String XPATH_ALL_WAITS_TO_MOCK = "//bpel:wait[@name != 'WaitToLeave']";
+
 	static class BPELProcessMock implements IBPELProcess {
-		
+
 		private QName name;
 		private Document bpel;
 
 		public BPELProcessMock(Document bpelXml) {
 			this.bpel = bpelXml;
-			
+
 			Element processElement = bpelXml.getDocumentElement();
-			this.name = new QName(processElement.getAttribute("targetNamespace"), processElement.getAttribute("name"));
+			this.name = new QName(
+					processElement.getAttribute("targetNamespace"),
+					processElement.getAttribute("name"));
 		}
-		
+
 		@Override
 		public void addPartnerlink(String name, QName partnerlinkType,
 				String processRole, String partnerRole, QName service,
@@ -109,36 +125,39 @@ public class WaitMockingTest {
 	@Test(expected = DeploymentException.class)
 	public void testWrongConfigMissingBpelNameWithMultipleProcesses()
 			throws Exception {
-		waitMocking.setNewDuration("1");
-		waitMocking.setWaitToMock("//some/xpath");
+		waitMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
+		waitMocking.setActivityToMock(XPATH_TO_WAIT1);
 
-		waitMocking.changeDeployment(new DeploymentMock("waitprocess.bpel", "waitprocess.bpel"));
+		waitMocking.changeDeployment(new DeploymentMock(RESOURCE_BPEL,
+				RESOURCE_BPEL));
 	}
-	
+
 	@Test(expected = DeploymentException.class)
 	public void testWrongConfigNonExistingBpelNameWithMultipleProcessesLocalName()
-	throws Exception {
+			throws Exception {
 		waitMocking.setBPELName("Non-existent-process");
-		waitMocking.setNewDuration("1");
-		waitMocking.setWaitToMock("//some/xpath");
-		
-		waitMocking.changeDeployment(new DeploymentMock("waitprocess.bpel", "waitprocess.bpel"));
+		waitMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
+		waitMocking.setActivityToMock(XPATH_TO_WAIT1);
+
+		waitMocking.changeDeployment(new DeploymentMock(RESOURCE_BPEL,
+				RESOURCE_BPEL));
 	}
 
 	@Test(expected = DeploymentException.class)
 	public void testWrongConfigNonExistingBpelNameWithMultipleProcessesQName()
-	throws Exception {
-		waitMocking.setBPELName("{http://waitprocess}Non-existent-process");
-		waitMocking.setNewDuration("1");
-		waitMocking.setWaitToMock("//some/xpath");
-		
-		waitMocking.changeDeployment(new DeploymentMock("waitprocess.bpel", "waitprocess.bpel"));
+			throws Exception {
+		waitMocking.setBPELName(NONEXISTING_BPEL_PROCESS_QNAME);
+		waitMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
+		waitMocking.setActivityToMock(XPATH_TO_WAIT1);
+
+		waitMocking.changeDeployment(new DeploymentMock(RESOURCE_BPEL,
+				RESOURCE_BPEL));
 	}
 
 	@Test(expected = DeploymentException.class)
 	public void testWrongConfigMissingNewDuration() throws Exception {
 		waitMocking.setBPELName("MyBPEL");
-		waitMocking.setWaitToMock("//some/xpath");
+		waitMocking.setActivityToMock(XPATH_TO_WAIT1);
 
 		waitMocking.changeDeployment(new DeploymentMock());
 	}
@@ -146,7 +165,7 @@ public class WaitMockingTest {
 	@Test(expected = DeploymentException.class)
 	public void testWrongConfigMissingWaitToMock() throws Exception {
 		waitMocking.setBPELName("MyBPEL");
-		waitMocking.setNewDuration("1");
+		waitMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
 
 		waitMocking.changeDeployment(new DeploymentMock());
 	}
@@ -154,120 +173,118 @@ public class WaitMockingTest {
 	@Test
 	public void testSuccessfulWaitWithForMockingSingleProcess()
 			throws Exception {
-		waitMocking.setNewDuration("1");
-		waitMocking.setWaitToMock("//bpel:wait[@name='WaitToMock']");
+		waitMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
+		waitMocking.setActivityToMock(XPATH_TO_WAIT1);
 
-		DeploymentMock d = new DeploymentMock("waitprocess.bpel");
+		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
 		waitMocking.changeDeployment(d);
 
 		IBPELProcess process = d.getBPELProcesses().get(0);
-		assertEquals("'PT1S'", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToMock']/bpel:for/text()", process
-						.getBpelXml().getDocumentElement()));
+		assertWaitOneChanged(process);
 
-		assertEquals("\"P1D\"", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToLeave']/bpel:for/text()", process
-						.getBpelXml().getDocumentElement()));
-		assertEquals("'2012-01-01T00:00:00Z'", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToMock2']/bpel:until/text()", process
-						.getBpelXml().getDocumentElement()));
+		assertNotToChangeWaitUnchanged(process);
+		assertWait2Unchanged(process);
 	}
 
 	@Test
 	public void testSuccessfulWaitWithForMockingFromMultipleProcessesLocalName()
-	throws Exception {
-		waitMocking.setBPELName("waitprocess");
-		waitMocking.setNewDuration("1");
-		waitMocking.setWaitToMock("//bpel:wait[@name='WaitToMock']");
-		
-		DeploymentMock d = new DeploymentMock("waitprocess.bpel", "waitprocess.bpel");
+			throws Exception {
+		waitMocking.setBPELName(BPEL_PROCESS_LOCALNAME);
+		waitMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
+		waitMocking.setActivityToMock(XPATH_TO_WAIT1);
+
+		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL, RESOURCE_BPEL);
 		waitMocking.changeDeployment(d);
-		
+
 		IBPELProcess process = d.getBPELProcesses().get(0);
-		assertEquals("'PT1S'", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToMock']/bpel:for/text()", process
-				.getBpelXml().getDocumentElement()));
-		
-		assertEquals("\"P1D\"", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToLeave']/bpel:for/text()", process
-				.getBpelXml().getDocumentElement()));
-		assertEquals("'2012-01-01T00:00:00Z'", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToMock2']/bpel:until/text()", process
-				.getBpelXml().getDocumentElement()));
+		assertWaitOneChanged(process);
+		assertWait2Unchanged(process);
+		assertNotToChangeWaitUnchanged(process);
 	}
 
 	@Test
 	public void testSuccessfulWaitWithForMockingFromMultipleProcessesQName()
-	throws Exception {
-		waitMocking.setBPELName("{http://waitprocess}waitprocess");
-		waitMocking.setNewDuration("1");
-		waitMocking.setWaitToMock("//bpel:wait[@name='WaitToMock']");
-		
-		DeploymentMock d = new DeploymentMock("waitprocess.bpel", "waitprocess.bpel");
+			throws Exception {
+		waitMocking.setBPELName(BPEL_PROCESS_QNAME);
+		waitMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
+		waitMocking.setActivityToMock(XPATH_TO_WAIT1);
+
+		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL, RESOURCE_BPEL);
 		waitMocking.changeDeployment(d);
-		
+
 		IBPELProcess process = d.getBPELProcesses().get(0);
-		assertEquals("'PT1S'", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToMock']/bpel:for/text()", process
-				.getBpelXml().getDocumentElement()));
-		
-		assertEquals("\"P1D\"", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToLeave']/bpel:for/text()", process
-				.getBpelXml().getDocumentElement()));
-		assertEquals("'2012-01-01T00:00:00Z'", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToMock2']/bpel:until/text()", process
-				.getBpelXml().getDocumentElement()));
+		assertWaitOneChanged(process);
+
+		assertNotToChangeWaitUnchanged(process);
+		assertWait2Unchanged(process);
 	}
-	
+
 	@Test
 	public void testSuccessfulWaitWithUntilMockingSingleProcess()
-	throws Exception {
-		waitMocking.setNewDuration("1");
-		waitMocking.setWaitToMock("//bpel:wait[@name='WaitToMock2']");
-		
-		DeploymentMock d = new DeploymentMock("waitprocess.bpel");
+			throws Exception {
+		waitMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
+		waitMocking.setActivityToMock("//bpel:wait[@name='WaitToMock2']");
+
+		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
 		waitMocking.changeDeployment(d);
-		
+
 		IBPELProcess process = d.getBPELProcesses().get(0);
-		assertEquals("'PT1S'", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToMock2']/bpel:for/text()", process
-				.getBpelXml().getDocumentElement()));
-		assertEquals("0", xpath.evaluateAsString(
-				"count(//bpel:wait[@name='WaitToMock2']/bpel:until)", process
-				.getBpelXml().getDocumentElement()));
-		
-		assertEquals("\"P1D\"", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToLeave']/bpel:for/text()", process
-				.getBpelXml().getDocumentElement()));
-		assertEquals("\"PT5S\"", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToMock']/bpel:for/text()", process
-				.getBpelXml().getDocumentElement()));
+		assertNotToChangeWaitUnchanged(process);
+		assertWait2Changed(process);
+		assertWait1Unchanged(process);
 	}
-	
+
 	@Test
 	public void testSuccessfulMultipleWaitMockingSingleProcess()
-	throws Exception {
-		waitMocking.setNewDuration("1");
-		waitMocking.setWaitToMock("//bpel:wait[@name != 'WaitToLeave']");
-		
-		DeploymentMock d = new DeploymentMock("waitprocess.bpel");
+			throws Exception {
+		waitMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
+		waitMocking.setActivityToMock(XPATH_ALL_WAITS_TO_MOCK);
+
+		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
 		waitMocking.changeDeployment(d);
-		
+
 		IBPELProcess process = d.getBPELProcesses().get(0);
-		assertEquals("'PT1S'", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToMock']/bpel:for/text()", process
-				.getBpelXml().getDocumentElement()));
-		
-		assertEquals("'PT1S'", xpath.evaluateAsString(
-				"//bpel:wait[@name='WaitToMock2']/bpel:for/text()", process
-				.getBpelXml().getDocumentElement()));
-		assertEquals("0", xpath.evaluateAsString(
-				"count(//bpel:wait[@name='WaitToMock2']/bpel:until)", process
-				.getBpelXml().getDocumentElement()));
-		
+		assertWaitOneChanged(process);
+		assertWait2Changed(process);
+		assertNotToChangeWaitUnchanged(process);
+	}
+
+	private void assertWait2Unchanged(IBPELProcess process)
+			throws XPathExpressionException {
+		assertEquals("'2012-01-01T00:00:00Z'", xpath.evaluateAsString(
+				"//bpel:wait[@name='WaitToMock2']/bpel:until/text()", process
+						.getBpelXml().getDocumentElement()));
+	}
+
+	private void assertNotToChangeWaitUnchanged(IBPELProcess process)
+			throws XPathExpressionException {
 		assertEquals("\"P1D\"", xpath.evaluateAsString(
 				"//bpel:wait[@name='WaitToLeave']/bpel:for/text()", process
-				.getBpelXml().getDocumentElement()));
+						.getBpelXml().getDocumentElement()));
+	}
+
+	private void assertWaitOneChanged(IBPELProcess process)
+			throws XPathExpressionException {
+		assertEquals(NEW_DURATION_EXPRESSION, xpath.evaluateAsString(
+				"//bpel:wait[@name='WaitToMock']/bpel:for/text()", process
+						.getBpelXml().getDocumentElement()));
+	}
+
+	private void assertWait1Unchanged(IBPELProcess process)
+			throws XPathExpressionException {
+		assertEquals("\"PT5S\"", xpath.evaluateAsString(
+				"//bpel:wait[@name='WaitToMock']/bpel:for/text()", process
+						.getBpelXml().getDocumentElement()));
+	}
+
+	private void assertWait2Changed(IBPELProcess process)
+			throws XPathExpressionException {
+		assertEquals(NEW_DURATION_EXPRESSION, xpath.evaluateAsString(
+				"//bpel:wait[@name='WaitToMock2']/bpel:for/text()", process
+						.getBpelXml().getDocumentElement()));
+		assertEquals("0", xpath.evaluateAsString(
+				"count(//bpel:wait[@name='WaitToMock2']/bpel:until)", process
+						.getBpelXml().getDocumentElement()));
 	}
 
 }
