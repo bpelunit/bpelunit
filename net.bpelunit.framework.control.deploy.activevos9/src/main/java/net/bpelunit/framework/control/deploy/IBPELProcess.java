@@ -1,4 +1,4 @@
-package net.bpelunit.framework.control.deploy.activevos9;
+package net.bpelunit.framework.control.deploy;
 
 import java.io.InputStream;
 

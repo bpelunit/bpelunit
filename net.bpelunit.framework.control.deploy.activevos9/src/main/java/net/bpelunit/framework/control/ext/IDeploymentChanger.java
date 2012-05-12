@@ -8,6 +8,6 @@ public interface IDeploymentChanger {
 		String description() default "";
 	}
 
-	public void changeDeployment(net.bpelunit.framework.control.deploy.activevos9.IDeployment d) throws DeploymentException;
+	public void changeDeployment(net.bpelunit.framework.control.deploy.IDeployment d) throws DeploymentException;
 	
 }

@@ -17,6 +17,8 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import net.bpelunit.framework.control.deploy.AbstractDeployment;
+import net.bpelunit.framework.control.deploy.IBPELProcess;
 import net.bpelunit.framework.control.soap.NamespaceContextImpl;
 import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.exception.DeploymentException;
@@ -30,7 +32,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-public abstract class ActiveVOS9Deployment implements IDeployment {
+public abstract class ActiveVOS9Deployment extends AbstractDeployment {
 	
 	final class BPELInfo implements IBPELProcess {
 		
