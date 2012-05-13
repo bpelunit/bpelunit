@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.wsdl.Definition;
+
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.ext.DeploymentOption;
 import net.bpelunit.framework.control.ext.ExtensionRegistry;
@@ -47,6 +49,11 @@ public class ProcessUnderTest extends Partner {
 	private IBPELDeployer fDeployer;
 
 	/**
+	 * Base path of the test suite (location of .bpts file)
+	 */
+	private String basePath;
+	
+	/**
 	 * The deployment options taken from the test suite which will be passed on
 	 * to the deployer. May be null.
 	 */
@@ -74,10 +81,11 @@ public class ProcessUnderTest extends Partner {
 	 */
 	private String fDeploymentURL;
 
-	public ProcessUnderTest(String name, String testBasePath, String wsdlFile, String partnerWSDLFile, 
+	public ProcessUnderTest(String name, String testBasePath, Definition wsdlFile, Definition partnerWSDLFile, 
 			String baseURL) throws SpecificationException {
-		super(name, testBasePath, wsdlFile, partnerWSDLFile, baseURL);
+		super(name, wsdlFile, partnerWSDLFile, baseURL);
 		fXMLDeploymentOptions = new ArrayList<DeploymentOption>();
+		this.basePath = testBasePath;
 	}
 
 	public void setDeployer(IBPELDeployer deployer) {
@@ -123,7 +131,7 @@ public class ProcessUnderTest extends Partner {
 
 			} catch (Exception e) {
 				coverageTool
-						.setErrorStatus("Coverage measurmetn is failed. An error occurred when annotation for coverage: "
+						.setErrorStatus("Coverage measurment has failed. An error occurred when annotation for coverage: "
 								+ e.getMessage());
 				// e.printStackTrace();
 			}
@@ -242,5 +250,10 @@ public class ProcessUnderTest extends Partner {
 
 	public void cleanUpAfterTestCase() throws Exception {
 		fDeployer.cleanUpAfterTestCase();
+	}
+	
+
+	public String getBasePath() {
+		return basePath;
 	}
 }

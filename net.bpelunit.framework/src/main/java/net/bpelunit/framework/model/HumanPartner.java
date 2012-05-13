@@ -55,7 +55,7 @@ public class HumanPartner extends AbstractPartner {
 	public HumanPartner(String name, String basePath, URL baseURL, String endPoint, String username,
 			String password) throws SpecificationException {
 		
-		super(name, basePath, baseURL.toString());
+		super(name, baseURL.toString());
 		
 		try {
 			this.endPoint = new URL(endPoint);

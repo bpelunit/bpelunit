@@ -14,6 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.wsdl.Definition;
+import javax.wsdl.WSDLException;
+import javax.wsdl.factory.WSDLFactory;
+import javax.wsdl.xml.WSDLReader;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
@@ -104,6 +108,8 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.ibm.wsdl.Constants;
 
 /**
  * The specificaton loader reads test suite documents and creates the in-memory
@@ -234,8 +240,10 @@ public class SpecificationLoader {
 
 		String xmlPutWSDL = xmlPut.getWsdl();
 		String xmlPutPartnerWSDL = xmlPut.getPartnerWSDL();
+		
 		Partner suiteClient = new Partner(BPELUnitConstants.CLIENT_NAME,
-				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL,
+				loadWsdlDefinition(testDirectory, xmlPutWSDL, BPELUnitConstants.CLIENT_NAME), 
+				loadWsdlDefinition(testDirectory, xmlPutPartnerWSDL, BPELUnitConstants.CLIENT_NAME),
 				suiteBaseURL.toString());
 
 		/*
@@ -364,14 +372,53 @@ public class SpecificationLoader {
 		for (XMLPartnerDeploymentInformation xmlPDI : xmlDeployment
 				.getPartnerList()) {
 			String name = xmlPDI.getName();
-			String wsdl = xmlPDI.getWsdl();
-			String partnerWsdl = xmlPDI.getPartnerWsdl();
-			Partner p = new Partner(name, testDirectory, wsdl, partnerWsdl,
+			Partner p = new Partner(name, 
+					loadWsdlDefinition(testDirectory, xmlPDI.getWsdl(), name), 
+					loadWsdlDefinition(testDirectory, xmlPDI.getPartnerWsdl(), name),
 					suiteBaseURL.toString());
 			suitePartners.put(p.getName(), p);
 		}
 	}
 
+	public static Definition loadWsdlDefinition(String baseDir, String wsdlFileName,
+			String partnerName) throws SpecificationException {
+		if(wsdlFileName == null || wsdlFileName.equals("")) {
+			return null;
+		}
+		
+		return loadWsdlDefinition(new File(baseDir, wsdlFileName).getPath(), partnerName);
+	}
+	
+	/**
+	 * TODO FIXME Used in tests as well but this is not clean...
+	 * 
+	 * @param wsdlFileName
+	 * @param partnerName
+	 * @return
+	 * @throws SpecificationException
+	 */
+	public static Definition loadWsdlDefinition(String wsdlFileName,
+			String partnerName) throws SpecificationException {
+		
+		// Check file exists
+		if (!new File(wsdlFileName).exists())
+			throw new SpecificationException(
+					"Cannot read WSDL file for partner " + partnerName
+							+ ": File \"" + wsdlFileName + "\" not found.");
+
+		// load WSDL
+		try {
+			WSDLFactory factory = WSDLFactory.newInstance();
+			WSDLReader reader = factory.newWSDLReader();
+			reader.setFeature(Constants.FEATURE_VERBOSE, false);
+			return reader.readWSDL(wsdlFileName);
+		} catch (WSDLException e) {
+			throw new SpecificationException(
+					"Error while reading WSDL for partner " + partnerName
+							+ " from file \"" + wsdlFileName + "\".", e);
+		}
+	}
+	
 	private ProcessUnderTest createProcessUnderTest(String testDirectory,
 			URL suiteBaseURL, Map<String, Partner> suitePartners,
 			XMLPUTDeploymentInformation xmlPut) throws SpecificationException {
@@ -381,7 +428,9 @@ public class SpecificationLoader {
 		String xmlPutType = xmlPut.getType();
 
 		ProcessUnderTest processUnderTest = new ProcessUnderTest(xmlPutName,
-				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL,
+				testDirectory, 
+				loadWsdlDefinition(testDirectory, xmlPutWSDL, xmlPutName), 
+				loadWsdlDefinition(testDirectory, xmlPutPartnerWSDL, xmlPutName),
 				suiteBaseURL.toString());
 
 		for (XMLProperty property : xmlPut.getPropertyList()) {
