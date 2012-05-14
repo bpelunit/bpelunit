@@ -11,6 +11,7 @@ import net.bpelunit.framework.control.ext.IDeploymentChanger;
 import net.bpelunit.framework.control.soap.NamespaceContextImpl;
 import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.util.QNameUtil;
 import net.bpelunit.util.XMLUtil;
 import net.bpelunit.util.bpel.BPELFacade;
@@ -74,7 +75,7 @@ public class TimeMocking implements IDeploymentChanger {
 	 * @param d the deployment that is to be changed
 	 */
 	@Override
-	public void changeDeployment(IDeployment d) throws DeploymentException {
+	public void changeDeployment(IDeployment d, TestSuite testSuite) throws DeploymentException {
 		List<? extends IBPELProcess> processes = d.getBPELProcesses();
 		
 		checkIsSet("Duration", duration);

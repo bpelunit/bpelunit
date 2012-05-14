@@ -1,5 +1,6 @@
 package net.bpelunit.util.bpel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import net.bpelunit.util.XMLUtil;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 public final class BPELFacade {
@@ -113,5 +115,17 @@ public final class BPELFacade {
 		if(!bpel.getNamespace().equals(activity.getNamespaceURI())) {
 			throw new WrongBPELVersionException();
 		}
+	}
+
+	public List<PartnerLink> getPartnerLinks(Element processElement) {
+		List<PartnerLink> partnerLinks = new ArrayList<PartnerLink>();
+		
+		NodeList partnerLinkElements = processElement.getElementsByTagNameNS(processElement.getNamespaceURI(), "partnerLink");
+		
+		for(int i = 0; i < partnerLinkElements.getLength(); i++) {
+			partnerLinks.add(new PartnerLink((Element)partnerLinkElements.item(i)));
+		}
+		
+		return partnerLinks;
 	}
 }

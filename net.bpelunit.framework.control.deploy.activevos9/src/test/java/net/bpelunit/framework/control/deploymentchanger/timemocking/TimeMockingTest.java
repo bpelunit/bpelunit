@@ -2,28 +2,17 @@ package net.bpelunit.framework.control.deploymentchanger.timemocking;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.namespace.QName;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
-import net.bpelunit.framework.control.deploy.IBPELProcess;
-import net.bpelunit.framework.control.deploy.IDeployment;
+import net.bpelunit.framework.control.deploy.DeploymentMock;
 import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.exception.DeploymentException;
-import net.bpelunit.util.XMLUtil;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 public class TimeMockingTest {
 	private static final String RESOURCE_BPEL = "waitprocess.bpel";
@@ -54,73 +43,6 @@ public class TimeMockingTest {
 	private static final String XPATH_TO_ONALARM_WITH_FOR_IN_HANDLER = "//bpel:eventHandlers/bpel:onAlarm[1]";
 	private static final String XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER = "//bpel:eventHandlers/bpel:onAlarm[2]";
 
-	static class BPELProcessMock implements IBPELProcess {
-
-		private QName name;
-		private Document bpel;
-
-		public BPELProcessMock(Document bpelXml) {
-			this.bpel = bpelXml;
-
-			Element processElement = bpelXml.getDocumentElement();
-			this.name = new QName(
-					processElement.getAttribute("targetNamespace"),
-					processElement.getAttribute("name"));
-		}
-
-		@Override
-		public void addPartnerlink(String name, QName partnerlinkType,
-				String processRole, String partnerRole, QName service,
-				String port, String endpointURL) {
-		}
-
-		@Override
-		public void addWSDLImport(String wsdlFileName, InputStream contents) {
-			// not used in test
-		}
-
-		@Override
-		public QName getName() {
-			return this.name;
-		}
-
-		@Override
-		public Document getBpelXml() {
-			return this.bpel;
-		}
-
-		@Override
-		public void changePartnerEndpoint(String partnerLinkName,
-				String newEndpoint) throws DeploymentException {
-			// not used in test
-		}
-	}
-
-	static class DeploymentMock implements IDeployment {
-
-		private List<IBPELProcess> processes = new ArrayList<IBPELProcess>();
-
-		public DeploymentMock(String... resourceNames) throws SAXException,
-				IOException, ParserConfigurationException {
-			if (resourceNames == null) {
-				return;
-			}
-
-			for (String resourceName : resourceNames) {
-				InputStream r = getClass().getResourceAsStream(resourceName);
-				Document bpelXml = XMLUtil.parseXML(r);
-
-				processes.add(new BPELProcessMock(bpelXml));
-			}
-		}
-
-		@Override
-		public List<? extends IBPELProcess> getBPELProcesses()
-				throws DeploymentException {
-			return processes;
-		}
-	}
-
 	private TimeMocking timeMocking;
 	private XPathTool xpath;
 
@@ -143,7 +65,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_WAIT_WITH_FOR);
 
 		timeMocking.changeDeployment(new DeploymentMock(RESOURCE_BPEL,
-				RESOURCE_BPEL));
+				RESOURCE_BPEL), null);
 	}
 
 	@Test(expected = DeploymentException.class)
@@ -154,7 +76,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_WAIT_WITH_FOR);
 
 		timeMocking.changeDeployment(new DeploymentMock(RESOURCE_BPEL,
-				RESOURCE_BPEL));
+				RESOURCE_BPEL), null);
 	}
 
 	@Test(expected = DeploymentException.class)
@@ -165,7 +87,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_WAIT_WITH_FOR);
 
 		timeMocking.changeDeployment(new DeploymentMock(RESOURCE_BPEL,
-				RESOURCE_BPEL));
+				RESOURCE_BPEL), null);
 	}
 
 	@Test(expected = DeploymentException.class)
@@ -174,7 +96,7 @@ public class TimeMockingTest {
 		timeMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
 		timeMocking.setActivityToMock(XPATH_TO_WAIT_WITH_FOR);
 
-		timeMocking.changeDeployment(new DeploymentMock());
+		timeMocking.changeDeployment(new DeploymentMock(), null);
 	}
 
 	@Test(expected = DeploymentException.class)
@@ -182,7 +104,7 @@ public class TimeMockingTest {
 		timeMocking.setBPELName(BPEL_PROCESS_LOCALNAME);
 		timeMocking.setActivityToMock(XPATH_TO_WAIT_WITH_FOR);
 
-		timeMocking.changeDeployment(new DeploymentMock());
+		timeMocking.changeDeployment(new DeploymentMock(), null);
 	}
 
 	@Test(expected = DeploymentException.class)
@@ -190,7 +112,7 @@ public class TimeMockingTest {
 		timeMocking.setBPELName(BPEL_PROCESS_LOCALNAME);
 		timeMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
 
-		timeMocking.changeDeployment(new DeploymentMock());
+		timeMocking.changeDeployment(new DeploymentMock(), null);
 	}
 
 	@Test
@@ -200,7 +122,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_WAIT_WITH_FOR);
 
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
-		timeMocking.changeDeployment(d);
+		timeMocking.changeDeployment(d, null);
 
 		Element process = d.getBPELProcesses().get(0).getBpelXml()
 				.getDocumentElement();
@@ -219,7 +141,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_WAIT_WITH_FOR);
 
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL, RESOURCE_BPEL);
-		timeMocking.changeDeployment(d);
+		timeMocking.changeDeployment(d, null);
 
 		Element process = d.getBPELProcesses().get(0).getBpelXml()
 				.getDocumentElement();
@@ -238,7 +160,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_WAIT_WITH_FOR);
 
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL, RESOURCE_BPEL);
-		timeMocking.changeDeployment(d);
+		timeMocking.changeDeployment(d, null);
 
 		Element process = d.getBPELProcesses().get(0).getBpelXml()
 				.getDocumentElement();
@@ -256,7 +178,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_WAIT_WITH_UNTIL);
 
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
-		timeMocking.changeDeployment(d);
+		timeMocking.changeDeployment(d, null);
 
 		Element process = d.getBPELProcesses().get(0).getBpelXml()
 				.getDocumentElement();
@@ -274,7 +196,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_ALL_WAITS_TO_MOCK);
 
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
-		timeMocking.changeDeployment(d);
+		timeMocking.changeDeployment(d, null);
 
 		Element process = d.getBPELProcesses().get(0).getBpelXml()
 				.getDocumentElement();
@@ -291,7 +213,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_ONALARM_WITH_FOR_IN_PICK);
 
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
-		timeMocking.changeDeployment(d);
+		timeMocking.changeDeployment(d, null);
 
 		Element process = d.getBPELProcesses().get(0).getBpelXml()
 				.getDocumentElement();
@@ -307,7 +229,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_ONALARM_WITH_UNTIL_IN_PICK);
 
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
-		timeMocking.changeDeployment(d);
+		timeMocking.changeDeployment(d, null);
 
 		Element process = d.getBPELProcesses().get(0).getBpelXml()
 				.getDocumentElement();
@@ -323,7 +245,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_ONALARM_WITH_FOR_IN_HANDLER);
 
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
-		timeMocking.changeDeployment(d);
+		timeMocking.changeDeployment(d, null);
 
 		Element process = d.getBPELProcesses().get(0).getBpelXml()
 				.getDocumentElement();
@@ -339,7 +261,7 @@ public class TimeMockingTest {
 		timeMocking.setActivityToMock(XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER);
 		
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
-		timeMocking.changeDeployment(d);
+		timeMocking.changeDeployment(d, null);
 		
 		Element process = d.getBPELProcesses().get(0).getBpelXml()
 		.getDocumentElement();
