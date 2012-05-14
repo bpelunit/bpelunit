@@ -469,6 +469,7 @@
     <module>net.bpelunit.framework.control.deploy.activevos9</module>
     <module>net.bpelunit.utils.datasourceinliner</module>
     <module>net.bpelunit.utils.testsuitesplitter</module>
+    <module>net.bpelunit.utils.testsuitestats</module>
   </modules>
 
   <profiles>
