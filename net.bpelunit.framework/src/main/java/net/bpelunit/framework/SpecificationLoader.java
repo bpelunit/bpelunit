@@ -126,12 +126,12 @@ public class SpecificationLoader {
 
 	private Map<String, XMLConditionGroup> conditionGroups = new HashMap<String, XMLConditionGroup>();
 
-	protected SpecificationLoader(BPELUnitRunner runner) {
+	public SpecificationLoader(BPELUnitRunner runner) {
 		fRunner = runner;
 		fLogger = Logger.getLogger(getClass());
 	}
 
-	protected TestSuite loadTestSuite(File suite) throws SpecificationException {
+	public TestSuite loadTestSuite(File suite) throws SpecificationException {
 		try {
 			fLogger.info("Loading test suite from file " + suite);
 

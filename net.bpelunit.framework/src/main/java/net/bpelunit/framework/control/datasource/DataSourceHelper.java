@@ -65,7 +65,7 @@ public final class DataSourceHelper {
 		String realPropertyName = StringUtil.toFirstUpper(propertyName);
 
 		for (DataSourceConfigurationOption p : properties) {
-			if (p.name.equals(realPropertyName)) {
+			if (p.getName().equals(realPropertyName)) {
 				return true;
 			}
 		}

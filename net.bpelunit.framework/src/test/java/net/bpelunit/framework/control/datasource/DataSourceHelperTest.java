@@ -44,14 +44,14 @@ public class DataSourceHelperTest {
 		assertEquals(2, options.size());
 
 		DataSourceConfigurationOption a = options.get(0);
-		assertEquals("A", a.name);
-		assertEquals("a", a.defaultValue);
-		assertEquals("A description", a.description);
+		assertEquals("A", a.getName());
+		assertEquals("a", a.getDefaultValue());
+		assertEquals("A description", a.getDescription());
 
 		DataSourceConfigurationOption b = options.get(1);
-		assertEquals("B", b.name);
-		assertEquals("b", b.defaultValue);
-		assertEquals("Another description", b.description);
+		assertEquals("B", b.getName());
+		assertEquals("b", b.getDefaultValue());
+		assertEquals("Another description", b.getDescription());
 	}
 
 	@Test
