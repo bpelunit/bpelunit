@@ -13,6 +13,7 @@ import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.ProcessUnderTest;
 import net.bpelunit.framework.model.test.TestSuite;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -27,6 +28,7 @@ public class EndpointReplacerTest {
 	}
 	
 	@Test
+	@Ignore("Not yet implemented")
 	public void testReplacementNotAllPartnersAreMockedSingleProcess() throws Exception {
 		TestSuite ts = createTestSuite();
 		addPartnerTrack(ts, "Provider");
