@@ -15,12 +15,6 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-/*
- * Die Klasse schreibt die Testabdeckungsmetriken im XML-Format in Outputstream.
- * 
- * @author Alex
- * 
- */
 /**
  * This class sends coverage metrics to the output stream.
  * 
@@ -29,8 +23,11 @@ import org.jdom.output.XMLOutputter;
  * @author Alex Salnikow, Ronald Becher
  * 
  */
-public class XMLCoverageResultProducer {
+public final class XMLCoverageResultProducer {
 
+	private XMLCoverageResultProducer() {
+	}
+	
 	private static final String STATISTIC_ELEMENT = "statistic";
 
 	private static final String COVERAGE_STATISTIC_ELEMENT = "testingCoverage";

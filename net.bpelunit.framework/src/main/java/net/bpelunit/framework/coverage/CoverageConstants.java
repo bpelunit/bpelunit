@@ -6,8 +6,11 @@ import org.jdom.Namespace;
 /**
  * Holds the Constants for Coverage behaviour
  */
-public class CoverageConstants {
+public final class CoverageConstants {
 
+	private CoverageConstants() {
+	}
+	
 	/**
 	 * Default delay after each test.
 	 * 

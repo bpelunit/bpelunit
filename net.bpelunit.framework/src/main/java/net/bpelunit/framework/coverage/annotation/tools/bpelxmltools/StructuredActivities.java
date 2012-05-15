@@ -14,8 +14,11 @@ import org.jdom.Namespace;
  * @author Alex Salnikow
  *
  */
-public class StructuredActivities {
+public final class StructuredActivities {
 
+	private StructuredActivities() {
+	}
+	
 	public static final String SEQUENCE_ACTIVITY = "sequence";
 
 	public static final String IF_ACTIVITY = "if";

@@ -16,8 +16,11 @@ import javax.xml.namespace.QName;
  * @author Philip Mayer
  * 
  */
-public class BPELUnitConstants {
+public final class BPELUnitConstants {
 
+	private BPELUnitConstants() {
+	}
+	
 	/**
 	 * The default base URL of the HTTP Server included in BPELUnit. BPELUnit uses this server to
 	 * receive calls for partners and/or callbacks to the client. The name of each partner must be

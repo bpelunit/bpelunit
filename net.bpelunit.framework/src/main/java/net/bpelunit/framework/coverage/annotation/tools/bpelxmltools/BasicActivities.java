@@ -14,8 +14,11 @@ import org.jdom.Namespace;
  * @author Alex Salnikow
  *
  */
-public class BasicActivities {
+public final class BasicActivities {
 
+	private BasicActivities() {
+	}
+	
 	public static final String INVOKE_ACTIVITY = "invoke";
 
 	public static final String RECEIVE_ACTIVITY = "receive";

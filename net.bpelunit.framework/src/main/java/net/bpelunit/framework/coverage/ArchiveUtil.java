@@ -11,8 +11,11 @@ import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
 import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;
 
-public class ArchiveUtil {
+public final class ArchiveUtil {
 
+	private ArchiveUtil() {
+	}
+	
 	public static String createArchivecopy(String archive)
 			throws ArchiveFileException {
 		String fileName = FilenameUtils.getName(archive);

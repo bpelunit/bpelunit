@@ -14,8 +14,11 @@ import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
  * 
  * @author Antonio García-Domínguez
  */
-public class CLIRunner {
+public final class CLIRunner {
 
+	private CLIRunner() {
+	}
+	
     /**
      * Runs the inliner from the command line.
      * 

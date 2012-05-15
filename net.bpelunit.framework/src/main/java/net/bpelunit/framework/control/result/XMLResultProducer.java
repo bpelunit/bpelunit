@@ -41,8 +41,11 @@ import net.bpelunit.framework.xml.result.XMLReceiveCondition.Condition;
  * @author Philip Mayer
  * 
  */
-public class XMLResultProducer {
+public final class XMLResultProducer {
 
+	private XMLResultProducer() {
+	}
+	
 	/**
 	 * Writes a complete trace of a test suite to the output stream in form of an XML document.
 	 * 
