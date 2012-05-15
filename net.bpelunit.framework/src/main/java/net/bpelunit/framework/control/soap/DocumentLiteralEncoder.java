@@ -124,7 +124,7 @@ public class DocumentLiteralEncoder implements ISOAPEncoder {
 		} catch (SOAPException e) {
 			throw new SOAPEncodingException(
 					"A SOAPException occurred in the DocumentLiteralEncoder while decoding for operation "
-							+ operation);
+							+ operation, e);
 		}
 	}
 

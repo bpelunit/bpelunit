@@ -163,7 +163,7 @@ public abstract class BPELUnitRunner {
 			} catch (NumberFormatException e) {
 				throw new ConfigurationException(
 						"Global timeout value in options is not an integer: "
-								+ timeout);
+								+ timeout, e);
 			}
 		}
 		

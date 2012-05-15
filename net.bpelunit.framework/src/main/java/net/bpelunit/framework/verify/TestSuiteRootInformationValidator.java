@@ -187,7 +187,7 @@ public class TestSuiteRootInformationValidator implements ITestSuiteValidator {
 			new URL(xmlUrl);
 		} catch (MalformedURLException e) {
 			throw new SpecificationException("Base URL is not a valid URL: "
-					+ xmlUrl);
+					+ xmlUrl, e);
 		}
 	}
 }

@@ -62,7 +62,7 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 			try {
 				ExtensionRegistry.loadRegistry(new File(extensionsFile).toURI().toURL(), isSkipUnknownExtensions());
 			} catch (MalformedURLException e) {
-				throw new ConfigurationException("BPELUnit could not locate the extension file: " + extensionsFile);
+				throw new ConfigurationException("BPELUnit could not locate the extension file: " + extensionsFile, e);
 			}
 		} else {
 			// if file could not be loaded, default to embedded settings
@@ -78,7 +78,7 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 			try {
 				ExtensionRegistry.loadDeploymentConfiguration(new File(deploymentConfigFile).toURI().toURL());
 			} catch (MalformedURLException e) {
-				throw new ConfigurationException("BPELUnit could not locate the deployer config file: " + deploymentConfigFile);
+				throw new ConfigurationException("BPELUnit could not locate the deployer config file: " + deploymentConfigFile, e);
 			}
 		} else {
 			// if file could not be loaded, default to embedded settings
