@@ -30,12 +30,12 @@ public class ForEachHandler implements IStructuredActivityHandler {
 	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
 	 * um die Ausführung der Zweige zu erfassen.
 	 * 
-	 * @param forEach_activity
+	 * @param forEachActivity
 	 * @throws BpelException
 	 */
-	public void insertBranchMarkers(Element forEach_activity)
+	public void insertBranchMarkers(Element forEachActivity)
 			throws BpelException {
-			insertMarkerForSequenceBranches(forEach_activity);
+			insertMarkerForSequenceBranches(forEachActivity);
 	}
 
 	/**

@@ -72,18 +72,18 @@ public class IfHandler implements IStructuredActivityHandler {
 
 	/**
 	 * 
-	 * @param branch_activity
+	 * @param branchActivity
 	 *            Aktivität aus dem ElseIf-Zweig.
 	 * @throws BpelException
 	 *             Wenn keine Aktivität in dem Zweig vorhanden ist.
 	 */
-	private void insertMarkerForElseIfBranches(Element branch_activity)
+	private void insertMarkerForElseIfBranches(Element branchActivity)
 			throws BpelException {
-		if (branch_activity == null) {
+		if (branchActivity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
 		}
 			
-		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branch_activity));
+		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(branchActivity));
 	}
 
 	/**

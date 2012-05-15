@@ -43,13 +43,13 @@ public class CompensationMetricHandler implements IMetricHandler {
 	 * danach entsprechende Invoke aufrufe generiert und dadurch die Ausführung
 	 * bestimmter Aktivitäten geloggt.
 	 * 
-	 * @param process_elements
+	 * @param processElements
 	 * @throws BpelException 
 	 */
-	public void insertMarkersForMetric(List<Element> process_elements)
+	public void insertMarkersForMetric(List<Element> processElements)
 			throws BpelException {
 		Element handler;
-		for (Iterator<Element> iter = process_elements.iterator(); iter.hasNext();) {
+		for (Iterator<Element> iter = processElements.iterator(); iter.hasNext();) {
 			handler = iter.next();
 			Element activity = getFirstEnclosedActivity(handler);
 			if (!activity.getName().equals(

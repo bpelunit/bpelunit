@@ -134,12 +134,12 @@ public class LinkMetricHandler implements IMetricHandler {
 			sourceActivity = sourceElement.getParentElement();
 		}
 		Element enclosedFlow = encloseElementInFlow(sourceActivity);
-		Element new_link = insertPostivLink(enclosedFlow, sourceElement, link,
+		Element newLink = insertPostivLink(enclosedFlow, sourceElement, link,
 				transitionCondition);
-		insertLoggingMarker(new_link, enclosedFlow, true);
-		new_link = insertNegativLink(enclosedFlow, sourceElement, link,
+		insertLoggingMarker(newLink, enclosedFlow, true);
+		newLink = insertNegativLink(enclosedFlow, sourceElement, link,
 				transitionCondition);
-		insertLoggingMarker(new_link, enclosedFlow, false);
+		insertLoggingMarker(newLink, enclosedFlow, false);
 	}
 
 	private String checkTransitionCondition(Element sourceElement) {
@@ -180,19 +180,19 @@ public class LinkMetricHandler implements IMetricHandler {
 	private Element insertPostivLink(Element flow, Element sourceElement,
 			Element link, String transitionCondition) {
 		Element linkCopy = createLinkCopy(link, flow, COPY_LINK_POSTFIX);
-		Element new_source_element = createBPELElement(SOURCE_TAG);
-		new_source_element.setAttribute(ATTRIBUTE_LINKNAME, linkCopy
+		Element newSourceElement = createBPELElement(SOURCE_TAG);
+		newSourceElement.setAttribute(ATTRIBUTE_LINKNAME, linkCopy
 				.getAttributeValue(ATTRIBUTE_NAME));
 		if (getProcessNamespace().equals(NAMESPACE_BPEL_2_0)) {
 			Element transConditionElement = (Element) sourceElement.getChild(
 					TRANSITION_CONDITION, getProcessNamespace()).clone();
-			new_source_element.addContent((Element) transConditionElement
+			newSourceElement.addContent((Element) transConditionElement
 					.clone());
 		} else if (getProcessNamespace().equals(NAMESPACE_BPEL_1_1)) {
-			new_source_element.setAttribute(TRANSITION_CONDITION,
+			newSourceElement.setAttribute(TRANSITION_CONDITION,
 					transitionCondition);
 		}
-		sourceElement.getParentElement().addContent(0, new_source_element);
+		sourceElement.getParentElement().addContent(0, newSourceElement);
 		return linkCopy;
 	}
 
@@ -210,7 +210,7 @@ public class LinkMetricHandler implements IMetricHandler {
 		return linkCopy;
 	}
 
-	private void insertLoggingMarker(Element new_link, Element enclosedFlow,
+	private void insertLoggingMarker(Element newLink, Element enclosedFlow,
 			boolean isPositivValueOfLink) {
 		Comment logging;
 
@@ -228,7 +228,7 @@ public class LinkMetricHandler implements IMetricHandler {
 
 		Element sequence = createSequence();
 		Element targetElement = createBPELElement(TARGET_TAG);
-		targetElement.setAttribute(ATTRIBUTE_LINKNAME, new_link
+		targetElement.setAttribute(ATTRIBUTE_LINKNAME, newLink
 				.getAttributeValue(ATTRIBUTE_NAME));
 		if (getProcessNamespace().equals(NAMESPACE_BPEL_2_0)) {
 			Element targets = createBPELElement(TARGETS_TAG);

@@ -38,13 +38,13 @@ public class RepeatUntilHandler implements IStructuredActivityHandler {
 	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
 	 * um die Ausführung der Zweige zu erfassen.
 	 * 
-	 * @param structured_activity
+	 * @param structuredActivity
 	 * @throws BpelException
 	 */
-	public void insertBranchMarkers(Element structured_activity)
+	public void insertBranchMarkers(Element structuredActivity)
 			throws BpelException {
-		branchFromConditionToActivity(structured_activity);
-		branchFromActivityToCondition(structured_activity);
+		branchFromConditionToActivity(structuredActivity);
+		branchFromActivityToCondition(structuredActivity);
 	}
 
 	private void branchFromActivityToCondition(Element element)

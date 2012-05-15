@@ -55,16 +55,16 @@ public class CMServiceFactory {
 	/**
 	 * F�gt Namespace und Partner Link f�r Coverage Logging Service.
 	 * 
-	 * @param process_element
+	 * @param processElement
 	 *            Wurzelelement des BPEL-Prozesses.
 	 */
-	public void prepareBPELFile(Element process_element) {
-		process_element.addNamespaceDeclaration(COVERAGETOOL_NAMESPACE);
-		insertPartnerLink(process_element);
+	public void prepareBPELFile(Element processElement) {
+		processElement.addNamespaceDeclaration(COVERAGETOOL_NAMESPACE);
+		insertPartnerLink(processElement);
 	}
 
-	private void insertPartnerLink(Element process_element) {
-		Element partnerLinks = process_element.getChild(PARTNERLINKS_ELEMENT,
+	private void insertPartnerLink(Element processElement) {
+		Element partnerLinks = processElement.getChild(PARTNERLINKS_ELEMENT,
 				getProcessNamespace());
 		Element partnerLink = createBPELElement(PARTNERLINK_ELEMENT);
 		partnerLink.setAttribute(NAME_ATTR, PARTNERLINK_NAME);
