@@ -8,7 +8,7 @@ import net.bpelunit.framework.xml.suite.XMLTrack;
 
 public class StatisticsGatherer {
 
-	public static IStatisticEntry gatherStatistics(XMLTestSuite ts) {
+	public IStatisticEntry gatherStatistics(XMLTestSuite ts) {
 		StatisticGroup testSuiteStats = new StatisticGroup(ts.getName());
 
 		for (XMLTestCase tc : ts.getTestCases().getTestCaseList()) {
@@ -18,7 +18,7 @@ public class StatisticsGatherer {
 		return testSuiteStats;
 	}
 
-	private static IStatisticEntry gatherStatistics(XMLTestCase tc) {
+	private IStatisticEntry gatherStatistics(XMLTestCase tc) {
 		StatisticGroup testCaseStats = new StatisticGroup(tc.getName());
 
 		for (XMLHumanPartnerTrack h : tc.getHumanPartnerTrackList()) {
@@ -34,7 +34,7 @@ public class StatisticsGatherer {
 		return testCaseStats;
 	}
 
-	private static IStatisticEntry gatherStatistics(XMLTrack c,
+	private IStatisticEntry gatherStatistics(XMLTrack c,
 			String testCaseName) {
 		int countReceiveOnly = c.getReceiveOnlyList().size();
 		int countReceiveSend = c.getReceiveSendList().size();
@@ -54,7 +54,7 @@ public class StatisticsGatherer {
 		return partnerStats;
 	}
 
-	private static IStatisticEntry gatherStatistics(XMLHumanPartnerTrack h,
+	private IStatisticEntry gatherStatistics(XMLHumanPartnerTrack h,
 			String testCaseName) {
 		int countCompleteHumanTask = h.getCompleteHumanTaskList().size();
 		AbstractStatisticEntry partnerStats = new StatisticLeaf(testCaseName + "."
@@ -64,7 +64,7 @@ public class StatisticsGatherer {
 		return partnerStats;
 	}
 
-	private static IStatisticEntry gatherStatistics(XMLPartnerTrack p,
+	private IStatisticEntry gatherStatistics(XMLPartnerTrack p,
 			String testCaseName) {
 		int countReceiveOnly = p.getReceiveOnlyList().size();
 		int countReceiveSend = p.getReceiveSendList().size();

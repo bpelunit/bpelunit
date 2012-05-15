@@ -23,15 +23,15 @@ public class StatisticsGathererTest {
 		createClientTrack(tc);
 		createPartnerTrack(tc);
 		
-		IStatisticEntry stats = StatisticsGatherer.gatherStatistics(bptsDoc.getTestSuite());
+		IStatisticEntry stats = new StatisticsGatherer().gatherStatistics(bptsDoc.getTestSuite());
 		
 		assertEquals("One Test Case", 1, stats.getSubStatistics().size());
 		assertEquals("Two Tracks", 2, stats.getSubStatistics().get(0).getSubStatistics().size());
 		
 		assertEquals(0, stats.getCountCompleteHumanTask());
 		assertTrue(stats.isClientTrackUsed());
-		assertEquals(16, stats.getCountAllReceives());
-		assertEquals(16, stats.getCountAllSends());
+		assertEquals(40, stats.getCountAllReceives());
+		assertEquals(40, stats.getCountAllSends());
 		assertEquals(8, stats.getCountReceiveOnly());
 		assertEquals(8, stats.getCountReceiveSend());
 		assertEquals(8, stats.getCountReceiveSendAsync());
@@ -54,7 +54,7 @@ public class StatisticsGathererTest {
 		h.addNewCompleteHumanTask();
 		h.addNewCompleteHumanTask();
 		
-		IStatisticEntry stats = StatisticsGatherer.gatherStatistics(bptsDoc.getTestSuite());
+		IStatisticEntry stats = new StatisticsGatherer().gatherStatistics(bptsDoc.getTestSuite());
 		
 		assertEquals("One Test Case", 1, stats.getSubStatistics().size());
 		assertEquals("Two Tracks", 2, stats.getSubStatistics().get(0).getSubStatistics().size());

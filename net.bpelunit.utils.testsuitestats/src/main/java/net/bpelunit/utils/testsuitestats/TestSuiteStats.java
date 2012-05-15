@@ -20,10 +20,12 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.IOUtils;
 import org.apache.xmlbeans.XmlException;
 
-public class TestSuiteStats {
+public final class TestSuiteStats {
 
+	private TestSuiteStats() {
+	}
+	
 	public static void main(String[] args) {
-		String fileName = null;
 		PrintStream out = System.out;
 		
 		Options options = createOptions();
@@ -34,20 +36,32 @@ public class TestSuiteStats {
 			@SuppressWarnings("unchecked")
 			List<String> bptsFileList = cmd.getArgList();
 			
-			if(bptsFileList.size() != 1) {
+			if(bptsFileList.size() == 0) {
+				System.err.println("No test suite specified");
 				showHelpAndExit(options);
-			} else {
-				fileName = bptsFileList.get(0);
 			}
 
 			if(cmd.hasOption('c')) {
 				out = new PrintStream(new FileOutputStream(cmd.getOptionValue('c')));
 			}
 		
-			IStatisticEntry stats = calculateStatisticsForTestSuite(fileName);
+			IStatisticEntry stats = null;
+			if(bptsFileList.size() == 1) {
+				stats = calculateStatisticsForTestSuite(bptsFileList.get(0));
+			} else {
+				StatisticGroup g = new StatisticGroup("Overall");
+				
+				for(String bptsFile : bptsFileList) {
+					g.add(calculateStatisticsForTestSuite(bptsFile));
+				}
+				
+				stats = g;
+			}
+			
 			writeStatistics(out, stats);
 			
 		} catch (ParseException e) {
+			System.err.println(e.getLocalizedMessage());
 			showHelpAndExit(options);
 		} catch (FileNotFoundException e) {
 			System.err.println("Problem while writing file: " + e.getMessage());
@@ -85,14 +99,14 @@ public class TestSuiteStats {
 		File bptsFile = new File(fileName);
 		XMLTestSuite testSuite = XMLTestSuiteDocument.Factory.parse(bptsFile).getTestSuite();
 		
-		IStatisticEntry stats = StatisticsGatherer.gatherStatistics(testSuite);
+		IStatisticEntry stats = new StatisticsGatherer().gatherStatistics(testSuite);
 		return stats;
 	}
 
 	private static void showHelpAndExit(Options options) {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp(
-			"TestSuiteStats file.bpts [options]",  
+			"TestSuiteStats file.bpts... [options]",  
 			options
 		);
 		System.exit(1);

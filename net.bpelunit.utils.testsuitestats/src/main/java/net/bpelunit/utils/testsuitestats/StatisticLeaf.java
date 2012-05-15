@@ -51,7 +51,7 @@ public class StatisticLeaf extends AbstractStatisticEntry {
 	 */
 	@Override
 	public int getCountAllReceives() {
-		return countReceiveOnly + countReceiveSend;
+		return countReceiveOnly + countSendReceive + countReceiveSend + countSendReceiveAsync + countReceiveSendAsync;
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class StatisticLeaf extends AbstractStatisticEntry {
 	 */
 	@Override
 	public int getCountAllSends() {
-		return countSendOnly + countSendReceive;
+		return countSendOnly + countSendReceive + countReceiveSend + countSendReceiveAsync + countReceiveSendAsync;
 	}
 
 	/**
