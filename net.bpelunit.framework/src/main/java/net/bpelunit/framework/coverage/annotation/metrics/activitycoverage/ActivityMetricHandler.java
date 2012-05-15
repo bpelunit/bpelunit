@@ -2,8 +2,6 @@ package net.bpelunit.framework.coverage.annotation.metrics.activitycoverage;
 
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
-import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCES_ELEMENT;
-import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCE_ELEMENT;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGETS_ELEMENT;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGET_ELEMENT;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseInSequence;
@@ -34,13 +32,11 @@ import org.jdom.Namespace;
  */
 public class ActivityMetricHandler implements IMetricHandler {
 
-	private Logger logger = Logger.getLogger(getClass());
-
 	private MarkersRegisterForArchive markersRegistry;
 
 	public ActivityMetricHandler(MarkersRegisterForArchive markersRegistry) {
 		this.markersRegistry = markersRegistry;
-		logger = Logger.getLogger(getClass());
+		Logger.getLogger(getClass());
 	}
 
 	/**
@@ -86,25 +82,6 @@ public class ActivityMetricHandler implements IMetricHandler {
 		}
 	}
 
-	private List<Element> getSourceElements(Element element) {
-		List<Element> sourceElements = new ArrayList<Element>();
-		Namespace bpelVersion = BpelXMLTools.getProcessNamespace();
-		if (bpelVersion.equals(NAMESPACE_BPEL_2_0)) {
-			Element sourceElement = element.getChild(SOURCES_ELEMENT,
-					bpelVersion);
-			if (sourceElement != null) {
-				sourceElements.add(sourceElement);
-			}
-		} else if (bpelVersion.equals(NAMESPACE_BPEL_1_1)) {
-			List<Element> list = element.getChildren(SOURCE_ELEMENT,
-					bpelVersion);
-			for (Iterator<Element> iter = list.iterator(); iter.hasNext();) {
-				sourceElements.add(iter.next());
-			}
-		}
-		return sourceElements;
-	}
-
 	private List<Element> getTargetElements(Element element) {
 		List<Element> targetElements = new ArrayList<Element>();
 		Namespace bpelVersion = BpelXMLTools.getProcessNamespace();
@@ -115,6 +92,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 				targetElements.add(targetElement);
 			}
 		} else if (bpelVersion.equals(NAMESPACE_BPEL_1_1)) {
+			@SuppressWarnings("unchecked")
 			List<Element> list = element.getChildren(TARGET_ELEMENT,
 					bpelVersion);
 			for (Iterator<Element> iter = list.iterator(); iter.hasNext();) {
