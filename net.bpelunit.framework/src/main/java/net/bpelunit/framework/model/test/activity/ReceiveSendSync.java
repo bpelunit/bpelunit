@@ -42,7 +42,7 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 
 	public ReceiveSendSync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		fStatus= ArtefactStatus.createInitialStatus();
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
 
@@ -58,10 +58,10 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 		try {
 			incoming= context.receiveMessage(this.getPartnerTrack());
 		} catch (TimeoutException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Timeout while waiting for incoming synchronous message", e);
+			setStatus(ArtefactStatus.createErrorStatus("Timeout while waiting for incoming synchronous message", e));
 			return;
 		} catch (InterruptedException e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming synchronous message", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming synchronous message", e));
 			return;
 		}
 
@@ -103,20 +103,20 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 			context.postAnswer(this.getPartnerTrack(), msg);
 
 			if (getReceiveSpec().hasProblems()) {
-				fStatus= getReceiveSpec().getStatus();
+				setStatus(getReceiveSpec().getStatus());
 			} else if (getSendSpec().hasProblems()) {
-				fStatus= getSendSpec().getStatus();
+				setStatus(getSendSpec().getStatus());
 			} else {
-				fStatus= ArtefactStatus.createPassedStatus();
+				setStatus(ArtefactStatus.createPassedStatus());
 			}
 		} catch (TimeoutException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Timeout occurred while waiting for synchronous answer to be sent.", e);
+			setStatus(ArtefactStatus.createErrorStatus("Timeout occurred while waiting for synchronous answer to be sent.", e));
 			return;
 		} catch (InterruptedException e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while waiting for synchronous answer to be sent.", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for synchronous answer to be sent.", e));
 			return;
 		} catch (Exception e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e));
 			return;
 		}
 	}

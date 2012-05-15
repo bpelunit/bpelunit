@@ -28,7 +28,7 @@ public class CompleteHumanTask extends Activity {
 
 	public void initialize(CompleteHumanTaskSpecification spec) {
 		dataSpec = spec;
-		fStatus = ArtefactStatus.createInitialStatus();
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 	
 	public void setTaskName(String taskName) {
@@ -57,7 +57,7 @@ public class CompleteHumanTask extends Activity {
 					}
 					
 					if(timeout >= maxTimeOut ) {
-						fStatus = ArtefactStatus.createErrorStatus("Timeout while waiting for task " + taskName);
+						setStatus(ArtefactStatus.createErrorStatus("Timeout while waiting for task " + taskName));
 						return;
 					}
 				} while (taskList.size() == 0);
@@ -76,12 +76,12 @@ public class CompleteHumanTask extends Activity {
 			}
 
 			if (dataSpec.hasProblems()) {
-				fStatus= dataSpec.getStatus();
+				setStatus(dataSpec.getStatus());
 			} else {
-				fStatus= ArtefactStatus.createPassedStatus();
+				setStatus(ArtefactStatus.createPassedStatus());
 			}
 		} catch (Exception e) {
-			fStatus= ArtefactStatus.createErrorStatus("Error while completing human task: " + e.getMessage(), e);
+			setStatus(ArtefactStatus.createErrorStatus("Error while completing human task: " + e.getMessage(), e));
 			e.printStackTrace();
 		}
 

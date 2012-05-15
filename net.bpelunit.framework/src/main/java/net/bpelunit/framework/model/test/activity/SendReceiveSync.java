@@ -42,7 +42,7 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 
 	public SendReceiveSync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		fStatus= ArtefactStatus.createInitialStatus();
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
 
@@ -55,7 +55,7 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 		getSendSpec().handle(context);
 
 		if (getSendSpec().hasProblems()) {
-			fStatus= getSendSpec().getStatus();
+			setStatus(getSendSpec().getStatus());
 			return;
 		}
 
@@ -69,29 +69,29 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 			getSendSpec().delay(context);
 			returnMsg= context.sendMessage(msg);
 		} catch (SynchronousSendException e) {
-			fStatus= ArtefactStatus.createErrorStatus("HTTP Error while sending out synchronous message: " + e.getMessage(), e);
+			setStatus(ArtefactStatus.createErrorStatus("HTTP Error while sending out synchronous message: " + e.getMessage(), e));
 			return;
 		} catch (InterruptedException e) {
 			// Interruption by another thread. Abort.
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted due to error in other partner track", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted due to error in other partner track", e));
 			return;
 		} catch (Exception e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e));
 			return;
 		}
 
 		if (returnMsg.getReturnCode() == 200) {
 			// Send is ok
 			getReceiveSpec().handle(context, returnMsg.getBody());
-			fStatus= getReceiveSpec().getStatus();
+			setStatus(getReceiveSpec().getStatus());
 		} else if ( (returnMsg.getReturnCode() >= 500 && returnMsg.getReturnCode() < 600)) {
 			// could be SOAP fault. Let receive handle it.
 			getReceiveSpec().handle(context, returnMsg.getBody());
-			fStatus= getReceiveSpec().getStatus();
+			setStatus(getReceiveSpec().getStatus());
 		} else {
 			// something went really wrong
-			fStatus= ArtefactStatus
-					.createErrorStatus("Error: Answer from synchronous call had non-expected return code " + returnMsg.getReturnCode());
+			setStatus(ArtefactStatus
+					.createErrorStatus("Error: Answer from synchronous call had non-expected return code " + returnMsg.getReturnCode()));
 
 			fWrongReturnBody= returnMsg.getBody();
 			if ("".equals(fWrongReturnBody)) {
@@ -124,7 +124,7 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 	@Override
 	public List<StateData> getStateData() {
 		List<StateData> stateData= new ArrayList<StateData>();
-		stateData.addAll(fStatus.getAsStateData());
+		stateData.addAll(getStatus().getAsStateData());
 		if (fWrongReturnBody != null) {
 			stateData.add(new StateData("Return Body", fWrongReturnBody));
 		}

@@ -59,7 +59,7 @@ public class ReceiveAsync extends Activity {
 
 	public void initialize(ReceiveDataSpecification spec) {
 		fReceiveSpec= spec;
-		fStatus= ArtefactStatus.createInitialStatus();
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
 	// ***************************** Activity **************************
@@ -71,10 +71,10 @@ public class ReceiveAsync extends Activity {
 		try {
 			incoming= context.receiveMessage(this.getPartnerTrack());
 		} catch (TimeoutException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Timeout while waiting for incoming asynchronous message", e);
+			setStatus(ArtefactStatus.createErrorStatus("Timeout while waiting for incoming asynchronous message", e));
 			return;
 		} catch (InterruptedException e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming asynchronous messsage", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming asynchronous messsage", e));
 			return;
 		}
 
@@ -116,14 +116,14 @@ public class ReceiveAsync extends Activity {
 			context.postAnswer(this.getPartnerTrack(), outgoing);
 
 			if (fReceiveSpec.hasProblems()) {
-				fStatus = fReceiveSpec.getStatus();
+				setStatus(fReceiveSpec.getStatus());
 			} else {
-				fStatus = ArtefactStatus.createPassedStatus();
+				setStatus(ArtefactStatus.createPassedStatus());
 			}
 		} catch (TimeoutException e) {
-			fStatus = ArtefactStatus.createErrorStatus("Timeout occurred while waiting for ACK for asynchronous receive.", e);
+			setStatus(ArtefactStatus.createErrorStatus("Timeout occurred while waiting for ACK for asynchronous receive.", e));
 		} catch (InterruptedException e) {
-			fStatus = ArtefactStatus.createAbortedStatus("Aborted while waiting for ACK for asynchronous receive to be sent.", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for ACK for asynchronous receive to be sent.", e));
 		}
 	}
 

@@ -220,8 +220,8 @@ public class BPELUnitMojo extends AbstractMojo {
 		private long testStart = 0;
 		private long testStop = 0;
 
-		NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
-		Xpp3Dom xmlSuite;
+		private NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+		private Xpp3Dom xmlSuite;
 
 		private Log logger;
 
