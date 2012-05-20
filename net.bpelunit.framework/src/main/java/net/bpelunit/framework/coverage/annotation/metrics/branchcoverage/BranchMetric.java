@@ -70,27 +70,25 @@ public class BranchMetric implements IMetric {
 		return statistic;
 	}
 
-	/*
+	/**
 	 * Erhält die noch nicht modifizierte Beschreibung des BPELProzesses als
 	 * XML-Element. Alle für die Instrumentierung benötigten Elemente der
 	 * Prozessbeschreibung werden gespeichert
 	 * 
 	 * @param process
 	 *            noch nicht modifiziertes BPEL-Prozess
-	 */
-	/* (non-Javadoc)
 	 * @see net.bpelunit.framework.coverage.annotation.metrics.IMetric#setOriginalBPELProcess(org.jdom.Element)
 	 */
 	public void setOriginalBPELProcess(Element process) {
-		Element next_element;
+		Element nextElement;
 		Iterator<Element> iter = process
 				.getDescendants(new ElementFilter(process
 						.getNamespace()));
 		elementsOfBPEL = new ArrayList<Element>();
 		while (iter.hasNext()) {
-			next_element = iter.next();
-			if (isStructuredActivity(next_element)) {
-				elementsOfBPEL.add(next_element);
+			nextElement = iter.next();
+			if (isStructuredActivity(nextElement)) {
+				elementsOfBPEL.add(nextElement);
 			}
 		}
 
