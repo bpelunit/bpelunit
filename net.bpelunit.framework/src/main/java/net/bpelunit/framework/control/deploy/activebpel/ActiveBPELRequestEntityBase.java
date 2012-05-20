@@ -50,8 +50,7 @@ public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
     private SOAPMessage createEmptyMessage()
             throws SOAPException {
         MessageFactory mFactory = MessageFactory.newInstance();
-        SOAPMessage message = mFactory.createMessage();
-        return message;
+        return mFactory.createMessage();
     }
 
     /**
