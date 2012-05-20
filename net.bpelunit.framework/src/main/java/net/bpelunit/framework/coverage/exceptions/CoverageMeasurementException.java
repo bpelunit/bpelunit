@@ -22,8 +22,9 @@ public class CoverageMeasurementException extends Exception {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(super.getMessage() + "\n");
 		if (fOriginalException != null) {
-			buffer.append("Original Exception Message: "
-					+ fOriginalException.getMessage());
+			buffer
+				.append("Original Exception Message: ")
+				.append(fOriginalException.getMessage());
 		}
 		return buffer.toString();
 	}
