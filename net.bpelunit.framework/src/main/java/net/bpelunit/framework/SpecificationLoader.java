@@ -290,7 +290,7 @@ public class SpecificationLoader {
 					.getHumanPartnerList()) {
 				humanPartners.put(
 						hp.getName(),
-						new HumanPartner(hp.getName(), basePath, baseURL, hp
+						new HumanPartner(hp.getName(), baseURL, hp
 								.getWshtEndpoint(), hp.getUsername(), hp
 								.getPassword()));
 			}
@@ -554,21 +554,21 @@ public class SpecificationLoader {
 
 		// Partners Partner Track
 		readPartners(suitePartners, xmlTestCase, round, testDirectory, test);
-		readHumanPartners(suiteHumanPartners, xmlTestCase, round,
+		readHumanPartners(suiteHumanPartners, xmlTestCase, 
 				testDirectory, test);
 		return test;
 	}
 
 	private void readHumanPartners(
 			Map<String, HumanPartner> suiteHumanPartners,
-			XMLTestCase xmlTestCase, int round, String testDirectory,
+			XMLTestCase xmlTestCase, String testDirectory,
 			TestCase test) throws SpecificationException {
 		List<XMLHumanPartnerTrack> humanPartnerTrackList = xmlTestCase
 				.getHumanPartnerTrackList();
 
 		if (humanPartnerTrackList != null) {
 			for (XMLHumanPartnerTrack xmlHumanPartnerTrack : humanPartnerTrackList) {
-				readHumanPartner(suiteHumanPartners, xmlTestCase, 
+				readHumanPartner(suiteHumanPartners,  
 						testDirectory, test, xmlHumanPartnerTrack);
 			}
 		}
@@ -576,7 +576,7 @@ public class SpecificationLoader {
 	}
 
 	private void readHumanPartner(Map<String, HumanPartner> suiteHumanPartners,
-			XMLTestCase xmlTestCase, String testDirectory,
+			String testDirectory,
 			TestCase test, XMLHumanPartnerTrack xmlHumanPartnerTrack)
 			throws SpecificationException {
 		String xmlPartnerTrackName = xmlHumanPartnerTrack.getName();

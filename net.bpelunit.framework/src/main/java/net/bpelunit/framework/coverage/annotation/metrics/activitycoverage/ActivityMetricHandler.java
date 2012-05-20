@@ -54,8 +54,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 	// NOT
 	public void insertMarkersForMetric(List<Element> activities) {
 		for (Element activity : activities) {
-			Element sequence = null;
-			respectTargetActivities(activity, sequence);
+			respectTargetActivities(activity);
 			// respectSourceActivities(element, sequence);
 			ensureElementIsInSequence(activity);
 			insertMarkerForActivity(activity);
@@ -69,7 +68,7 @@ public class ActivityMetricHandler implements IMetricHandler {
 	 * @param element
 	 * @param sequence
 	 */
-	private void respectTargetActivities(Element element, Element sequence) {
+	private void respectTargetActivities(Element element) {
 		List<Element> targetElements = getTargetElements(element);
 		if (targetElements.size() > 0) {
 			Element realSequence = encloseInSequence(element);
