@@ -29,19 +29,19 @@ public class ActivityMetric implements IMetric {
 	
 	public static final String METRIC_NAME = "ActivityCoverage";
 
-	private List<String> activities_to_respekt;
+	private List<String> activitiesToRespect;
 
 	private IMetricHandler metricHandler;
 
 	private List<Element> elementsOfBPEL = null;
 
 	public ActivityMetric(List<String> activitesToRespect, MarkersRegisterForArchive markersRegistry) {
-		activities_to_respekt = new ArrayList<String>();
+		activitiesToRespect = new ArrayList<String>();
 		if (activitesToRespect != null) {
 			for (Iterator<String> iter = activitesToRespect.iterator(); iter
 					.hasNext();) {
 				String basicActivity = iter.next();
-				activities_to_respekt.add(basicActivity);
+				activitiesToRespect.add(basicActivity);
 			}
 		}
 		metricHandler = new ActivityMetricHandler(markersRegistry);
@@ -68,7 +68,7 @@ public class ActivityMetric implements IMetric {
 	 * @return prefixes
 	 */
 	public List<String> getMarkersId() {
-		return activities_to_respekt;
+		return activitiesToRespect;
 	}
 
 
@@ -91,7 +91,7 @@ public class ActivityMetric implements IMetric {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		IStatistic subStatistic;
 		String label;
-		for (Iterator<String> iter = activities_to_respekt.iterator(); iter
+		for (Iterator<String> iter = activitiesToRespect.iterator(); iter
 				.hasNext();) {
 			label = iter.next();
 			subStatistic = new Statistic(METRIC_NAME + ": " + label);
@@ -125,7 +125,7 @@ public class ActivityMetric implements IMetric {
 		for (Iterator<Element> iter = process.getDescendants(filter); iter
 				.hasNext();) {
 			Element basicActivity = iter.next();
-			if (activities_to_respekt.contains(basicActivity.getName())) {
+			if (activitiesToRespect.contains(basicActivity.getName())) {
 				elementsOfBPEL.add(basicActivity);
 			}
 		}	
