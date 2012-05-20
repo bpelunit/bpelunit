@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDeployment;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
@@ -13,7 +12,6 @@ import net.bpelunit.framework.control.util.ParseUtil;
 import net.bpelunit.framework.coverage.annotation.Instrumenter;
 import net.bpelunit.framework.coverage.annotation.MetricsManager;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
-import net.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetricHandler;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
 import net.bpelunit.framework.coverage.exceptions.BpelException;
@@ -24,6 +22,8 @@ import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
+
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
@@ -187,7 +187,6 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		Instrumenter instrumenter = new Instrumenter();
 		Document doc;
 		BpelXMLTools.resetCounter();
-		int count = 0;
 		String bpelFile;
 		try {
 			for (Iterator<String> iter = ArchiveUtil.getBPELFileList(
@@ -201,7 +200,6 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 						doc.getRootElement().getNamespace()));
 				while (iter2.hasNext()) {
 					iter2.next();
-					count++;
 				}
 				doc = instrumenter.insertAnnotations(doc, metricManager);
 				ParseUtil.writeDocument(doc, bpelFile);
