@@ -99,8 +99,7 @@ public final class TestSuiteStats {
 		File bptsFile = new File(fileName);
 		XMLTestSuite testSuite = XMLTestSuiteDocument.Factory.parse(bptsFile).getTestSuite();
 		
-		IStatisticEntry stats = new StatisticsGatherer().gatherStatistics(testSuite);
-		return stats;
+		return new StatisticsGatherer().gatherStatistics(testSuite);
 	}
 
 	private static void showHelpAndExit(Options options) {
