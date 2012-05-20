@@ -37,8 +37,9 @@ public class StreamReader extends Thread {
 			String line= null;
 			while ( (line= br.readLine()) != null) {
 				Logger.getLogger(getClass()).debug(line);
-				if (!"".equals(line))
+				if (!"".equals(line)) {
 					fResult.append(line + "\n");
+				}
 			}
 		} catch (IOException ioe) {
 			Logger.getLogger(getClass()).debug("Failed to read from Stream.");

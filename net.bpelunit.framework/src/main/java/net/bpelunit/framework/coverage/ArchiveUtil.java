@@ -49,8 +49,9 @@ public final class ArchiveUtil {
 				searchChildrenBPEL((File) files[i], bpelFiles);
 			}
 		} else {
-			if (FilenameUtils.getExtension(file.getName()).equals("bpel"))
+			if (FilenameUtils.getExtension(file.getName()).equals("bpel")) {
 				bpelFiles.add(file.getAbsolutePath());
+			}
 		}
 	}
 

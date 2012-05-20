@@ -89,9 +89,11 @@ public class ReceiveSendAsync extends TwoWayAsyncActivity {
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
 		// Add copy information
-		if (getMapping() != null)
-			for (DataCopyOperation copy : getMapping())
+		if (getMapping() != null) {
+			for (DataCopyOperation copy : getMapping()) {
 				children.add(copy);
+			}
+		}
 		// Add activities
 		children.add(getReceiveAsync());
 		children.add(getSendAsync());

@@ -57,8 +57,9 @@ public class FaultMetricHandler implements IMetricHandler {
 
 	private void insertCoverageLabelsForCatchBlock(Element catchBlock) {
 		Element child = getFirstEnclosedActivity(catchBlock);
-		if (!isSequence(child))
+		if (!isSequence(child)) {
 			child = ensureElementIsInSequence(child);
+		}
 
 		String marker = getNextMarker();
 		markersRegistry.registerMarker(marker);

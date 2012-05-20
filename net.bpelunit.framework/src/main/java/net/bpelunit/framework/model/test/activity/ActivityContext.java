@@ -115,8 +115,9 @@ public class ActivityContext implements VelocityContextProvider {
 	}
 
 	public void processHeaders(ReceiveDataSpecification spec) throws HeaderProcessingException {
-		if (fHeaderProcessor != null)
+		if (fHeaderProcessor != null) {
 			fHeaderProcessor.processReceive(this, spec.getSOAPMessage());
+		}
 	}
 
 	public void processHeaders(SendDataSpecification spec) throws HeaderProcessingException {

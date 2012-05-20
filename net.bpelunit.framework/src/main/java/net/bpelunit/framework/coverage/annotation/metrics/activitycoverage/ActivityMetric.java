@@ -125,8 +125,9 @@ public class ActivityMetric implements IMetric {
 		for (Iterator<Element> iter = process.getDescendants(filter); iter
 				.hasNext();) {
 			Element basicActivity = iter.next();
-			if (activities_to_respekt.contains(basicActivity.getName()))
+			if (activities_to_respekt.contains(basicActivity.getName())) {
 				elementsOfBPEL.add(basicActivity);
+			}
 		}	
 	}
 

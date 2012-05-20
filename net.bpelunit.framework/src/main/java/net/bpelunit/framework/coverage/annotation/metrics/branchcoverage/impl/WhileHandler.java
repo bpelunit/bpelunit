@@ -34,8 +34,9 @@ public class WhileHandler implements IStructuredActivityHandler {
 	public void insertBranchMarkers(Element structuredActivity)
 			throws BpelException {
 		Element activity = getFirstEnclosedActivity(structuredActivity);
-		if (activity == null)
+		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY);
+		}
 		
 		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(activity));
 		markersRegistry.registerMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));

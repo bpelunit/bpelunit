@@ -6,8 +6,9 @@ public class AbstractPartner {
 		this.name = name;
 		
 		simulatedURL= baseURL;
-		if (!simulatedURL.endsWith("/"))
+		if (!simulatedURL.endsWith("/")) {
 			simulatedURL+= "/";
+		}
 		simulatedURL+= getName();
 	}
 

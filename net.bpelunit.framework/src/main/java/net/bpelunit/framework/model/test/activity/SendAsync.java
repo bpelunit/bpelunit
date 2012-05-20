@@ -152,8 +152,9 @@ public class SendAsync extends Activity {
 	public List<StateData> getStateData() {
 		List<StateData> stateData= new ArrayList<StateData>();
 		stateData.addAll(getStatus().getAsStateData());
-		if (fWrongBody != null)
+		if (fWrongBody != null) {
 			stateData.add(new StateData("Return Body", fWrongBody));
+		}
 		return stateData;
 	}
 }

@@ -401,11 +401,12 @@ public class SpecificationLoader {
 			String partnerName) throws SpecificationException {
 		
 		// Check file exists
-		if (!new File(wsdlFileName).exists())
+		if (!new File(wsdlFileName).exists()) {
 			throw new SpecificationException(
 					"Cannot read WSDL file for partner " + partnerName
 							+ ": File \"" + wsdlFileName + "\" not found.");
-
+		}
+			
 		// load WSDL
 		try {
 			WSDLFactory factory = WSDLFactory.newInstance();
