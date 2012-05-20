@@ -23,13 +23,11 @@ import org.jdom.filter.ElementFilter;
 
 public class FaultMetric implements IMetric {
 
-
-
 	public static final String METRIC_NAME = "FaultHandlerCoverage";
 
 	private IMetricHandler metricHandler;
 
-	private ArrayList<Element> elementsOfBPEL = null;
+	private List<Element> elementsOfBPEL = null;
 
 	public FaultMetric(MarkersRegisterForArchive markersRegistry) {
 		metricHandler = new FaultMetricHandler(markersRegistry);
@@ -40,7 +38,7 @@ public class FaultMetric implements IMetric {
 	}
 	
 	
-	/* (non-Javadoc)
+	/**
 	 * @see net.bpelunit.framework.coverage.annotation.metrics.IMetric#getMarkersId()
 	 */
 	public List<String> getMarkersId() {

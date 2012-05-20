@@ -19,11 +19,6 @@ public class FaultMetricHandler implements IMetricHandler {
 
 	public static final String FAULT_HANDLER_LABEL = "catchBlock";
 
-	/*
-	 * Generiert eine eindeutige Markierung.
-	 * 
-	 * @return eindeutige Markierung
-	 */
 	/**
 	 * Generates unique marker
 	 * 
@@ -42,7 +37,7 @@ public class FaultMetricHandler implements IMetricHandler {
 	}
 
 
-	/* (non-Javadoc)
+	/**
 	 * @see net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler#insertMarkersForMetric(java.util.List)
 	 */
 	public void insertMarkersForMetric(List<Element> processElements)

@@ -3,6 +3,7 @@ package net.bpelunit.framework.coverage.result.statistic.impl;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
@@ -18,7 +19,7 @@ public class FileStatistic implements IFileStatistic {
 
 	private String bpelFileName;
 
-	private TreeMap<String, IStatistic> statistics;
+	private Map<String, IStatistic> statistics;
 
 	public FileStatistic(String bpelFileName) {
 		this.bpelFileName = bpelFileName;

@@ -6,6 +6,7 @@ package net.bpelunit.framework.model.test.data;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -18,7 +19,7 @@ import org.w3c.dom.NodeList;
  */
 public class ArrayNodeList implements NodeList, Iterable<Node> {
 
-    private ArrayList<Node> store = new ArrayList<Node>();
+    private List<Node> store = new ArrayList<Node>();
 
     public int getLength() {
         return store.size();

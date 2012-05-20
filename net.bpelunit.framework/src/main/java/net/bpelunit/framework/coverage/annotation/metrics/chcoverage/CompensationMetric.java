@@ -25,7 +25,7 @@ public class CompensationMetric implements IMetric {
 
 	private IMetricHandler metricHandler;
 
-	private ArrayList<Element> elementsOfBPEL = null;
+	private List<Element> elementsOfBPEL = null;
 
 	public CompensationMetric(MarkersRegisterForArchive markersRegistry) {
 		metricHandler = new CompensationMetricHandler(markersRegistry);
