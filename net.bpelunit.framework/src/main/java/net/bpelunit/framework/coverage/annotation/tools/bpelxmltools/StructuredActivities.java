@@ -4,6 +4,7 @@ import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -37,7 +38,7 @@ public final class StructuredActivities {
 
 	public static final String SWITCH_ACTIVITY = "switch";
 
-	private static Hashtable<String, String> structuredActivities;
+	private static Map<String, String> structuredActivities;
 
 	/**
 	 * Überprüft, ob das Element eine BPEL-StructuredActivität repräsentiert.

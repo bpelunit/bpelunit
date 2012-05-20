@@ -4,6 +4,7 @@ import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -45,7 +46,7 @@ public final class BasicActivities {
 
 	public static final String VALIDATE_ACTIVITY = "validate";
 
-	private static Hashtable<String, String> basisActivities;
+	private static Map<String, String> basisActivities;
 
 
 	/**
