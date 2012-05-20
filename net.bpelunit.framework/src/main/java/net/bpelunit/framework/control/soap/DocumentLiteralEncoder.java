@@ -78,8 +78,9 @@ public class DocumentLiteralEncoder implements ISOAPEncoder {
 			if (operation.isFault()) {
 				SOAPFault fault = body.addFault(faultCode, faultString);
 				data = fault.addDetail();
-			} else
+			} else {
 				data = body;
+			}
 
 			NodeList nodes = literalElement.getChildNodes();
 			for (int i = 0; i < nodes.getLength(); i++) {

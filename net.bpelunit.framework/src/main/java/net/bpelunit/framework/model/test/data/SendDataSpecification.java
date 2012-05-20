@@ -312,8 +312,9 @@ public class SendDataSpecification extends DataSpecification {
 	private String getWireFormatAsString() {
 		if (fPlainMessage != null) {
 			return fPlainMessage;
-		} else
+		} else {
 			return "(no data)";
+		}
 	}
 
 	private String getLiteralDataAsString() {

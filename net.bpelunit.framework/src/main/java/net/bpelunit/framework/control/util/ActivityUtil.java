@@ -372,12 +372,14 @@ public class ActivityUtil {
 		XmlCursor cursor = parent.newCursor();
 		if (cursor.toParent()) {
 			XmlObject newParent = cursor.getObject();
-			if (newParent instanceof XMLActivity)
+			if (newParent instanceof XMLActivity) {
 				return (XMLActivity) newParent;
-			else
+			} else {
 				return getParentActivityForActivity(newParent);
-		} else
+			}
+		} else {
 			return null;
+		}
 	}
 
 	/**

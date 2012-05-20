@@ -135,10 +135,11 @@ public class SendAsync extends Activity {
 
 	@Override
 	public ITestArtefact getParent() {
-		if (fParentActivity != null)
+		if (fParentActivity != null) {
 			return fParentActivity;
-		else
+		} else {
 			return getPartnerTrack();
+		}
 	}
 
 	@Override
