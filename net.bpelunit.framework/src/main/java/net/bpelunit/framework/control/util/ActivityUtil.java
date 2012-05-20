@@ -35,7 +35,7 @@ import org.w3c.dom.Node;
  * @author Philip Mayer
  * 
  */
-public class ActivityUtil {
+public final class ActivityUtil {
 
 	/**
 	 * The ActivityConstant enum is a type-safe collection of all possible

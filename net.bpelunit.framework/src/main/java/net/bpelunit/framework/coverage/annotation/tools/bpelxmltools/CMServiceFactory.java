@@ -38,8 +38,8 @@ import org.jdom.Element;
  * @author Alex
  */
 
-public class CMServiceFactory {
-
+public final class CMServiceFactory {
+	
 	private static CMServiceFactory instance = null;
 
 	public static CMServiceFactory getInstance() {

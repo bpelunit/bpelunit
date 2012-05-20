@@ -30,7 +30,7 @@ import org.apache.commons.io.FilenameUtils;
  * @author Buddhika Chamith
  */
 
-public class ODERequestEntityFactory {
+public final class ODERequestEntityFactory {
 	private static ODERequestEntityFactory factory = null;
 	private static final String ODE_ELEMENT_DEPLOY = "deploy";
 	private static final String ODE_ELEMENT_ZIPNAME = "name";
