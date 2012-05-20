@@ -166,14 +166,7 @@ public class ODEDeployment extends GenericDeployment {
 					"Could not add WSDL file for coverage measurement tool ("
 							+ wsdl.getName() + ") in deployment archive ", e);
 		} finally {
-
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			IOUtils.closeQuietly(out);
 		}
 	}
 

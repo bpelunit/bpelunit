@@ -82,7 +82,6 @@ public class CompleteHumanTask extends Activity {
 			}
 		} catch (Exception e) {
 			setStatus(ArtefactStatus.createErrorStatus("Error while completing human task: " + e.getMessage(), e));
-			e.printStackTrace();
 		}
 
 	}

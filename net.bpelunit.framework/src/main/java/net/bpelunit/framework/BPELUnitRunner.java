@@ -176,11 +176,7 @@ public abstract class BPELUnitRunner {
 		configureDeployers();
 
 		if (fMeasureCoverage) {
-			try {
-				configureCoverageTool();
-			} catch (ConfigurationException e) {
-				e.printStackTrace();
-			}
+			configureCoverageTool();
 		}
 
 		// Okay

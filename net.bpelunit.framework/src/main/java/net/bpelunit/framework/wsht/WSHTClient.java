@@ -67,7 +67,6 @@ public class WSHTClient {
 		try {
 			this.soapCreator = new SOAPCreator();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new WSHTException("Build problem: Resource not found", e);
 		}
 		
