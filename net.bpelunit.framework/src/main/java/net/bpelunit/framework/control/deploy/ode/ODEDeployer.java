@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.xml.soap.SOAPException;
-
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
 import net.bpelunit.framework.control.ext.IDeployment;
@@ -25,7 +23,6 @@ import net.bpelunit.util.JDomUtil;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -88,10 +85,6 @@ public class ODEDeployer implements IBPELDeployer {
 
 		boolean archiveCreated = false;
 
-		/*
-		 * String pathToArchive = FilenameUtils.concat(archivePath,
-		 * FilenameUtils .getFullPath(fArchive));
-		 */
 		String archivePath = getArchiveLocation(pathToTest);
 
 		if (!FilenameUtils.getName(archivePath).endsWith(".zip")) {
@@ -121,9 +114,6 @@ public class ODEDeployer implements IBPELDeployer {
 			}
 		}
 
-		// fArchive = pathToTest;
-		// boolean fileReplaced = false;
-
 		// process the bundle for replacing wsdl eprs here. requires base url
 		// string from specification loader.
 		// should be done via the ODEDeploymentArchiveHandler. hard coded ode
@@ -145,16 +135,7 @@ public class ODEDeployer implements IBPELDeployer {
 		HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
 		PostMethod method = new PostMethod(fDeploymentAdminServiceURL);
 
-		RequestEntity re;
-		try {
-			re = fFactory.getDeployRequestEntity(uploadingFile);
-		} catch (IOException e) {
-			throw new DeploymentException(
-					"Problem while creating SOAP request: " + e.getMessage(), e);
-		} catch (SOAPException e) {
-			throw new DeploymentException(
-					"Problem while creating SOAP request: " + e.getMessage(), e);
-		}
+		RequestEntity re = fFactory.getDeployRequestEntity(uploadingFile);
 
 		method.setRequestEntity(re);
 
@@ -168,19 +149,11 @@ public class ODEDeployer implements IBPELDeployer {
 		method.addRequestHeader("SOAPAction", "");
 
 		String responseBody;
+		int statusCode = 0;
 		try {
-			int statusCode = client.executeMethod(method);
+			statusCode = client.executeMethod(method);
 			responseBody = method.getResponseBodyAsString();
-
-			if (statusCode < 200 || statusCode > 299) {
-				throw new DeploymentException(
-						"ODE Server reported a Deployment Error: "
-								+ responseBody);
-			}
-		} catch (HttpException e) {
-			throw new DeploymentException("Problem contacting the ODE Server: "
-					+ e.getMessage(), e);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new DeploymentException("Problem contacting the ODE Server: "
 					+ e.getMessage(), e);
 		} finally {
@@ -189,6 +162,12 @@ public class ODEDeployer implements IBPELDeployer {
 			if (uploadingFile.exists() && archiveCreated) {
 				uploadingFile.delete();
 			}
+		}
+		
+		if (isHttpOkayCode(statusCode)) {
+			throw new DeploymentException(
+					"ODE Server reported a Deployment Error: "
+							+ responseBody);
 		}
 
 		try {
@@ -200,22 +179,17 @@ public class ODEDeployer implements IBPELDeployer {
 		}
 	}
 
+	private boolean isHttpOkayCode(int statusCode) {
+		return statusCode < 200 || statusCode > 299;
+	}
+
 	public void undeploy(String testPath, ProcessUnderTest put)
 			throws DeploymentException {
 
 		HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
 		PostMethod method = new PostMethod(fDeploymentAdminServiceURL);
 
-		RequestEntity re;
-		try {
-			re = fFactory.getUndeployRequestEntity(fProcessId);
-		} catch (IOException e) {
-			throw new DeploymentException(
-					"Problem while creating SOAP request: " + e.getMessage(), e);
-		} catch (SOAPException e) {
-			throw new DeploymentException(
-					"Problem while creating SOAP request: " + e.getMessage(), e);
-		}
+		RequestEntity re = fFactory.getUndeployRequestEntity(fProcessId);
 		method.setRequestEntity(re);
 
 		fLogger.info("ODE deployer about to send SOAP request to undeploy "
@@ -226,25 +200,22 @@ public class ODEDeployer implements IBPELDeployer {
 				new DefaultHttpMethodRetryHandler(1, false));
 		method.addRequestHeader("SOAPAction", "");
 
+		int statusCode = 0;
+		String responseBody = null;
 		try {
-			int statusCode = client.executeMethod(method);
-			String responseBody = method.getResponseBodyAsString();
-
-			if (statusCode < 200 || statusCode > 299) {
-
-				throw new DeploymentException(
-						"ODE Server reported a undeployment Error: "
-								+ responseBody);
-			}
-
-		} catch (HttpException e) {
-			throw new DeploymentException("Problem contacting the ODE Server: "
-					+ e.getMessage(), e);
-		} catch (IOException e) {
+			statusCode = client.executeMethod(method);
+			responseBody = method.getResponseBodyAsString();
+		} catch (Exception e) {
 			throw new DeploymentException("Problem contacting the ODE Server: "
 					+ e.getMessage(), e);
 		} finally {
 			method.releaseConnection();
+		}
+		
+		if(isHttpOkayCode(statusCode)) {
+			throw new DeploymentException(
+					"ODE Server reported a undeployment Error: "
+							+ responseBody);
 		}
 	}
 

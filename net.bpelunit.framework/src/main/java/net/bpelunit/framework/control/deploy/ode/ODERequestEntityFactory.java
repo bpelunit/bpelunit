@@ -17,6 +17,8 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import net.bpelunit.framework.exception.DeploymentException;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
@@ -60,16 +62,25 @@ public final class ODERequestEntityFactory {
 		return factory;
 	}
 
-	public RequestEntity getDeployRequestEntity(File file) throws IOException,
-			SOAPException {
-		prepareDeploySOAP(file);
-		return new StringRequestEntity(fContent);
+	public RequestEntity getDeployRequestEntity(File file) throws DeploymentException {
+		try {
+			prepareDeploySOAP(file);
+			return new StringRequestEntity(fContent);
+		} catch (Exception e) {
+			throw new DeploymentException(
+					"Problem while creating SOAP request: " + e.getMessage(), e);
+		}
 	}
 
 	public RequestEntity getUndeployRequestEntity(String processId)
-			throws IOException, SOAPException {
-		prepareUndeploySOAP(processId);
-		return new StringRequestEntity(fContent);
+			throws DeploymentException {
+		try {
+			prepareUndeploySOAP(processId);
+			return new StringRequestEntity(fContent);
+		} catch (Exception e) {
+			throw new DeploymentException(
+					"Problem while creating SOAP request: " + e.getMessage(), e);
+		}
 	}
 
 	// ***** Private helper methods ********
