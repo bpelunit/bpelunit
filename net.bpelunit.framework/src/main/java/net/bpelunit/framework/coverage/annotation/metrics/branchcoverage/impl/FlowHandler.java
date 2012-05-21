@@ -47,7 +47,7 @@ public class FlowHandler implements IStructuredActivityHandler {
 	}
 
 	private void loggingOfBranches(Element element) {
-		List children = element.getChildren();
+		List<?> children = element.getChildren();
 		Element child;
 			for (int i = 0; i < children.size(); i++) {
 				child = (Element) children.get(i);

@@ -18,10 +18,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.HeaderProcessingException;
 import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.exception.SpecificationException;
@@ -214,9 +216,12 @@ public class SendDataSpecification extends DataSpecification {
 	 * Delays execution for a specified delay. Should be executed inside a block with other
 	 * interruptable methods
 	 * @param context Activity context for the running specification.
+	 * @throws InterruptedException 
+	 * @throws XPathExpressionException 
+	 * @throws DataSourceException 
 	 * @throws Exception Could not compute the delay from the XPath expression inside the delay attribute.
 	 */
-	public void delay(ActivityContext context) throws Exception {
+	public void delay(ActivityContext context) throws DataSourceException, XPathExpressionException, InterruptedException {
 		if (getDelay(context) > 0) {
 			Logger.getLogger(getClass()).info("Delaying send for " + getDelay(context) + " seconds...");
 			Thread.sleep(getDelay(context) * 1000);
@@ -251,7 +256,7 @@ public class SendDataSpecification extends DataSpecification {
 		this.fDelay = fDelay;
 	}
 
-	public int getDelay(ActivityContext activityContext) throws Exception {
+	public int getDelay(ActivityContext activityContext) throws DataSourceException, XPathExpressionException {
 		if (getDelayExpression() != null) {
 			final Context vtlContext = activityContext.createVelocityContext();
 			final ContextXPathVariableResolver xpathResolver = new ContextXPathVariableResolver(vtlContext);

@@ -14,7 +14,6 @@ import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 import net.bpelunit.framework.coverage.result.statistic.impl.Statistic;
 
-import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
@@ -25,8 +24,6 @@ import org.jdom.filter.ElementFilter;
  */
 public class ActivityMetric implements IMetric {
 
-	private Logger logger=Logger.getLogger(getClass());
-	
 	public static final String METRIC_NAME = "ActivityCoverage";
 
 	private List<String> activitiesToRespect;
@@ -122,7 +119,8 @@ public class ActivityMetric implements IMetric {
 	public void setOriginalBPELProcess(Element process) {
 		ElementFilter filter = new ElementFilter(process.getNamespace());
 		elementsOfBPEL = new ArrayList<Element>();
-		for (Iterator<Element> iter = process.getDescendants(filter); iter
+		for (@SuppressWarnings("unchecked")
+		Iterator<Element> iter = process.getDescendants(filter); iter
 				.hasNext();) {
 			Element basicActivity = iter.next();
 			if (activitiesToRespect.contains(basicActivity.getName())) {

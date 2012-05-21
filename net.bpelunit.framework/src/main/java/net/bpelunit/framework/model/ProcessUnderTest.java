@@ -248,7 +248,7 @@ public class ProcessUnderTest extends Partner {
 		return linkMap;
 	}
 
-	public void cleanUpAfterTestCase() throws Exception {
+	public void cleanUpAfterTestCase() throws DeploymentException {
 		fDeployer.cleanUpAfterTestCase();
 	}
 	
