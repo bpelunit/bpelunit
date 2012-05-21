@@ -181,14 +181,13 @@ public class WSHTClient {
 	}
 
 	private Node makeWSHTSOAPRequest(XmlTokenSource request)
-			throws IOException, UnsupportedEncodingException,
-			ParserConfigurationException, SAXException {
+			throws IOException,	ParserConfigurationException, 
+			SAXException {
 		return makeWSHTSOAPRequest(request.xmlText());
 	}
 
 	private Node makeWSHTSOAPRequest(String request) throws IOException,
-			UnsupportedEncodingException, ParserConfigurationException,
-			SAXException {
+			ParserConfigurationException, SAXException {
 		HttpURLConnection con = (HttpURLConnection) wsHtEndpoint
 				.openConnection();
 		con.setRequestMethod("POST");

@@ -6,12 +6,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.coverage.CoverageConstants;
-import org.mortbay.http.HttpException;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.mortbay.http.HttpRequest;
 import org.mortbay.http.HttpResponse;
 import org.mortbay.http.handler.AbstractHttpHandler;
@@ -30,9 +30,6 @@ public class MarkersServiceHandler extends AbstractHttpHandler {
 
 	private static final long serialVersionUID = -2402788148972993151L;
 
-
-
-
 	/**
 	 * 
 	 * <p>
@@ -49,8 +46,7 @@ public class MarkersServiceHandler extends AbstractHttpHandler {
 	 * 
 	 */
 	public void handle(String pathInContext, String pathParams,
-			HttpRequest request, HttpResponse response) throws HttpException,
-			IOException {
+			HttpRequest request, HttpResponse response) throws IOException {
 
 		if (!request.getMethod().equals(HttpRequest.__POST)) {
 			logger.error("Got a non-POST request - rejecting message "

@@ -7,8 +7,6 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import org.w3c.dom.DOMException;
-
 /**
  * Request entity for terminating a WS-BPEL process using the ActiveBPEL 4.1
  * administration WS.
@@ -27,7 +25,7 @@ public class TerminateProcessRequestEntity extends ActiveBPELRequestEntityBase {
 
     @Override
     protected void populateMessage(SOAPMessage message)
-            throws SOAPException, DOMException {
+            throws SOAPException {
         SOAPElement rootElement = addRootElement(
             message, new QName(ActiveBPELRequestEntityBase.NS_ACTIVEBPEL_ADMIN,
                                "terminateProcessInput"));

@@ -1119,7 +1119,7 @@ public class SpecificationLoader {
 	}
 
 	private Element copyAsRootWithNamespaces(XmlObject xmlData)
-			throws DOMException, SpecificationException
+			throws SpecificationException
 	{
 		try {
 		Element rawDataRoot;

@@ -54,8 +54,7 @@ public class ContextXPathVariableResolver implements XPathVariableResolver {
 		return varValue;
 	}
 
-	private NodeList convertIterableToTree(final Object varValue)
-			throws DOMException {
+	private NodeList convertIterableToTree(final Object varValue) {
 		Document doc;
 		try {
 			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();

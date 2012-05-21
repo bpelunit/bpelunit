@@ -14,7 +14,6 @@ import javax.xml.soap.SOAPMessage;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 
 import org.apache.commons.httpclient.methods.RequestEntity;
-import org.w3c.dom.DOMException;
 
 public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
 
@@ -88,6 +87,6 @@ public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
      * Populate the empty SOAP message in <code>message</code>.
      */
     protected abstract void populateMessage(SOAPMessage message)
-            throws SOAPException, DOMException, IOException;
+            throws SOAPException, IOException;
 
 }
