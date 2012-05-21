@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.bpelunit.framework.model.bpel.PartnerLink;
 import net.bpelunit.util.XMLUtil;
 
 import org.w3c.dom.Document;
@@ -15,10 +16,10 @@ import org.w3c.dom.Text;
 
 public final class BPELFacade {
 
+	private static final String ACTIVITY_OPTION_FOR = "for";
 	private static final String ACTIVITY_OPTION_UNTIL = "until";
 	private static final String EVENT_ONALARM = "onAlarm";
 	private static final String ACTIVITY_WAIT = "wait";
-	private static final String ACTIVITY_OPTION_FOR = "for";
 	public static final String NAMESPACE_BPEL_1_1 = "http://schemas.xmlsoap.org/ws/2003/03/business-process/";
 	public static final String NAMESPACE_BPEL_2_0 = "http://docs.oasis-open.org/wsbpel/2.0/process/executable";
 

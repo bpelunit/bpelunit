@@ -7,9 +7,9 @@ import net.bpelunit.framework.control.deploy.IBPELProcess;
 import net.bpelunit.framework.control.deploy.IDeployment;
 import net.bpelunit.framework.control.ext.IDeploymentChanger;
 import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.model.bpel.PartnerLink;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.util.bpel.BPELFacade;
-import net.bpelunit.util.bpel.PartnerLink;
 
 import org.w3c.dom.Element;
 

@@ -1,4 +1,4 @@
-package net.bpelunit.util.bpel;
+package net.bpelunit.framework.model.bpel;
 
 import org.w3c.dom.Element;
 
