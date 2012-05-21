@@ -43,7 +43,6 @@ public final class ODERequestEntityFactory {
 
 	private static final String NS_DEPLOY_SERVICE = "http://www.apache.org/ode/deployapi";
 	private static final String NS_XML_MIME = "http://www.w3.org/2005/05/xmlmime";
-	// private static final String NS_PMAPI = "http://www.apache.org/ode/pmapi";
 
 	private static final String CONTENT_TYPE_STRING = "contentType";
 	private static final String ZIP_CONTENT_TYPE = "application/zip";
