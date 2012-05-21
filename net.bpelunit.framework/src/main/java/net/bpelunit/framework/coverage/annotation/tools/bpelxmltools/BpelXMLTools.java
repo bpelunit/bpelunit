@@ -32,10 +32,6 @@ public final class BpelXMLTools {
 	public static final Namespace NAMESPACE_BPEL_2_0 = Namespace
 			.getNamespace("http://docs.oasis-open.org/wsbpel/2.0/process/executable");
 
-	private static int sequenceCount = 0;
-	private static int flowCount = 0;
-	private static int invokeCount = 0;
-
 	/* Elements from namespace of BPEL */
 	public static final String PROCESS_ELEMENT = "process";
 
@@ -347,7 +343,6 @@ public final class BpelXMLTools {
 	 * @return sequence-Element
 	 */
 	public static Element createSequence() {
-		sequenceCount++;
 		return new Element(StructuredActivities.SEQUENCE_ACTIVITY,
 				getProcessNamespace());
 	}
@@ -473,14 +468,6 @@ public final class BpelXMLTools {
 	}
 
 	public static Element createBPELElement(String name) {
-		if (name.equals(StructuredActivities.FLOW_ACTIVITY)) {
-			flowCount++;
-		}
-
-		if (name.equals(BasicActivities.INVOKE_ACTIVITY)) {
-			invokeCount++;
-		}
-		
 		return new Element(name, getProcessNamespace());
 	}
 
