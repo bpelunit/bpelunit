@@ -26,7 +26,6 @@ public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
     public static final String NS_SOAP_ENCODING
         = "http://schemas.xmlsoap.org/soap/encoding/";
 
-    private SOAPMessage         message;
     private byte[]              bytesMessage;
 
     public long getContentLength() {
@@ -76,7 +75,7 @@ public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
      */
     protected void createMessage()
             throws IOException, SOAPException {
-        message = createEmptyMessage();
+        SOAPMessage message = createEmptyMessage();
         populateMessage(message);
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         message.writeTo(b);
