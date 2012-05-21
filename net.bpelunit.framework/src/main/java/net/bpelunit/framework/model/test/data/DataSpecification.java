@@ -94,7 +94,7 @@ public abstract class DataSpecification implements ITestArtefact {
 		return fNamespaceContext;
 	}
 
-	public void setStatus(ArtefactStatus fStatus) {
+	public final void setStatus(ArtefactStatus fStatus) {
 		this.fStatus = fStatus;
 	}
 }

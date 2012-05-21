@@ -9,7 +9,7 @@ public class AbstractPartner {
 		if (!simulatedURL.endsWith("/")) {
 			simulatedURL+= "/";
 		}
-		simulatedURL+= getName();
+		simulatedURL+= name;
 	}
 
 	/**
