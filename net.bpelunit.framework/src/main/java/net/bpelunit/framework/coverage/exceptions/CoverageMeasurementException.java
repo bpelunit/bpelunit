@@ -20,7 +20,7 @@ public class CoverageMeasurementException extends Exception {
 	@Override
 	public String getMessage() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(super.getMessage() + "\n");
+		buffer.append(super.getMessage()).append("\n");
 		if (fOriginalException != null) {
 			buffer
 				.append("Original Exception Message: ")
