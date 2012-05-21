@@ -254,7 +254,7 @@ public class SpecificationLoader {
 		createPartners(testDirectory, suiteBaseURL, xmlDeployment,
 				suitePartners);
 		Map<String, HumanPartner> humanPartners = createHumanPartners(
-				xmlDeployment, testDirectory, suiteBaseURL);
+				xmlDeployment, suiteBaseURL);
 
 		// Create the suite.
 		TestSuite suite = new TestSuite(xmlSuiteName, suiteBaseURL,
@@ -280,7 +280,7 @@ public class SpecificationLoader {
 	}
 
 	private Map<String, HumanPartner> createHumanPartners(
-			XMLDeploymentSection xmlDeployment, String basePath, URL baseURL)
+			XMLDeploymentSection xmlDeployment, URL baseURL)
 			throws SpecificationException {
 		Map<String, HumanPartner> humanPartners = new HashMap<String, HumanPartner>();
 
