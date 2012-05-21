@@ -68,9 +68,7 @@ public class ODEDeployment extends GenericDeployment {
 	}
 
 	// ************* IDeployment Implementation method ********************
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see
 	 * net.bpelunit.framework.control.deploy.ode.IDeployment#addLoggingService()
 	 */
@@ -189,7 +187,6 @@ public class ODEDeployment extends GenericDeployment {
 
 					Element invoke = constructInvokeElement();
 					process.addContent(invoke);
-					// addPartnerLinkEndpoint(process);
 					writer = new FileWriter(fDescriptorPath);
 					XMLOutputter xmlOutputter = new XMLOutputter(Format
 							.getPrettyFormat());

@@ -141,47 +141,6 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		return newArchiveFile;
 	}
 
-	/*
-	 * Startet die Instrumentierung aller BPEL-Dateien, die im Archive sind.
-	 * 
-	 * @param archiveHandler
-	 * 
-	 * @throws BpelException
-	 * 
-	 * @throws ArchiveFileException
-	 */
-	/**
-	 * Starts instrumenting all BPEL files in archive
-	 * 
-	 * @param archiveHandler
-	 * @throws BpelException
-	 * @throws ArchiveFileException
-	 */
-	/*
-	 * private void executeInstrumentationOfBPEL( IDeploymentArchiveHandler
-	 * archiveHandler) throws BpelException, ArchiveFileException {
-	 * 
-	 * Instrumenter instrumenter = new Instrumenter(); Document doc;
-	 * BpelXMLTools.count = 0; int count = 0; String bpelFile;
-	 * ActivityMetricHandler.targetscount = 0; for (Iterator<String> iter =
-	 * archiveHandler.getAllBPELFileNames() .iterator(); iter.hasNext();) {
-	 * bpelFile = iter.next(); markersRegistry.addRegistryForFile(bpelFile); doc
-	 * = archiveHandler.getDocument(bpelFile); Iterator iter2 =
-	 * doc.getDescendants(new ElementFilter("link", doc
-	 * .getRootElement().getNamespace())); while (iter2.hasNext()) {
-	 * iter2.next(); count++;
-	 * 
-	 * } doc = instrumenter.insertAnnotations(doc, metricManager);
-	 * archiveHandler.writeDocument(doc, bpelFile);
-	 * 
-	 * logger.info("Instrumentation of BPEL-File " + bpelFile +
-	 * " is copmplete.");
-	 * 
-	 * }
-	 * 
-	 * }
-	 */
-
 	private void executeInstrumentationOfBPEL(IDeployment deployment)
 			throws BpelException, ArchiveFileException {
 		Instrumenter instrumenter = new Instrumenter();
@@ -226,32 +185,6 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		process.addContent(importElem);
 	}
 
-	/*
-	 * F�gt die WSDL-Datei f�r Service, der die Log-Eintr�ge empf�ngt. Diese
-	 * Log-Eintr�ge dokumentieren die Ausf�hrung bestimmter Codeteile.
-	 * 
-	 * @param archiveHandler
-	 * 
-	 * @param simulatedUrl
-	 * 
-	 * @throws ArchiveFileException
-	 */
-	/**
-	 * Registers WSDL file with the service receiving the log entries.
-	 * 
-	 * <br />Those log entries document execution of certain code parts
-	 * 
-	 * @param archiveHandler
-	 * @param simulatedUrl
-	 * @throws ArchiveFileException
-	 * @throws ArchiveFileException
-	 */
-	/*
-	 * private void prepareLoggingService(IDeploymentArchiveHandler
-	 * archiveHandler) throws ArchiveFileException {
-	 * archiveHandler.addWSDLFile(new File(pathToWSDL)); }
-	 */
-
 	private void prepareLoggingService(IDeployment deployment)
 			throws ArchiveFileException {
 		deployment.addLoggingService(pathToWSDL);
@@ -259,9 +192,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 
 	// **********************Testlauf*********************************
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see
 	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#setErrorStatus
 	 * (java.lang.String)
@@ -272,9 +203,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		error = true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see
 	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#setCurrentTestCase
 	 * (java.lang.String)
@@ -283,9 +212,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		messageReceiver.setCurrentTestcase(testCase);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see
 	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#putMessage(java
 	 * .lang.String)
@@ -297,9 +224,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 
 	// **********************Ergebnisse*********************************
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see
 	 * net.bpelunit.framework.coverage.ICoverageMeasurementTool#getStatistics()
 	 */
@@ -310,9 +235,7 @@ public class CoverageMeasurementTool implements ICoverageMeasurementTool {
 		return markersRegistry.getStatistics();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see net.bpelunit.framework.coverage.ICoverageMeasurementTool#getStatus()
 	 */
 	public String getErrorStatus() {

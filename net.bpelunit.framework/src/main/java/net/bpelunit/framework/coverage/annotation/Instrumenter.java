@@ -44,20 +44,8 @@ public class Instrumenter {
 	private String assignVariable = createVariableName();
 
 	public Instrumenter() {
-		// logger = Logger.getLogger(getClass());
 	}
 
-	/*
-	 * F�hrt die Instrumentierung der BPEL-Datei durch.
-	 * 
-	 * @param document BPEL-Prozess
-	 * 
-	 * @param metricManager
-	 * 
-	 * @return instrumentierter BPEL-Prozess
-	 * 
-	 * @throws BpelException
-	 */
 	/**
 	 * Executes instrumentation of the BPEL file
 	 * 
@@ -83,11 +71,6 @@ public class Instrumenter {
 		return document;
 	}
 
-	/*
-	 * Ersetzt die inline-Handler durch explizite Scopes
-	 * 
-	 * @param process_element
-	 */
 	/**
 	 * Replaces inline header with explicit scopes
 	 * 

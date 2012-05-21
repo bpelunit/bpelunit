@@ -121,7 +121,6 @@ public final class BpelXMLTools {
 
 	private static int count = 0;
 
-	// TODO XXX no public vars and especially not static!
 	private static Element processElement;
 
 	public static synchronized int incrementCounter() {
@@ -413,7 +412,6 @@ public final class BpelXMLTools {
 	 */
 	public static Element insertElseBranch(Element element) {
 		Element elseElement = createBPELElement(ELSE_ELEMENT);
-		// elseElement.addContent(BpelXMLTools.createSequence());
 		element.addContent(elseElement);
 		return elseElement;
 	}

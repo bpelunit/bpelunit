@@ -71,10 +71,6 @@ public abstract class GenericDeployment implements IDeployment {
 	public void replaceEndpoints(PartnerLink pl, Partner p)
 			throws EndPointException {
 
-		/*
-		 * if(p instanceof ProcessUnderTest){ String simulatedURL=p. }
-		 */
-
 		// get the simulated URL from the Partner
 		String simulatedURL = p.getSimulatedURL();
 

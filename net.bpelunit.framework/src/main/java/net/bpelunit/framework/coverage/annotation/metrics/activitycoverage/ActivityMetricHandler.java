@@ -55,7 +55,6 @@ public class ActivityMetricHandler implements IMetricHandler {
 	public void insertMarkersForMetric(List<Element> activities) {
 		for (Element activity : activities) {
 			respectTargetActivities(activity);
-			// respectSourceActivities(element, sequence);
 			ensureElementIsInSequence(activity);
 			insertMarkerForActivity(activity);
 		}

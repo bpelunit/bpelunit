@@ -54,13 +54,11 @@ public final class BPELUnitConstants {
 	 * Default timeout value for all send and receive activities (25 seconds)
 	 */
 	public static final int TIMEOUT= 50000;
-//	public static final int TIMEOUT= 25000;
 
 	/**
 	 * Default sleep time for threads waiting for something (200 ms).
 	 */
 	public static final int TIMEOUT_SLEEP_TIME= 150;
-//	public static final int TIMEOUT_SLEEP_TIME= 300;
 
 	/**
 	 * Default charset for HTTP requests

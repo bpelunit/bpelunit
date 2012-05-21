@@ -24,13 +24,6 @@ import org.w3c.dom.Element;
 
 import com.ibm.wsdl.Constants;
 
-/*
- * Die Klasse ist für die Verarbeitung von SOAP-Nachrichten an Coverage Logging
- * Service zuständig.
- * 
- * @author Alex Salnikow
- * 
- */
 /**
  * This class holds accountable for processing SOAP messages in the coverage
  * logging service
@@ -54,11 +47,6 @@ public class CoverageMessageReceiver {
 		this.markersRegistry = markersRegistry;
 	}
 
-	/*
-	 * Empfängt SOAP-Nachrichten mit Coverage Marken während der Testausführung
-	 * 
-	 * @param body Nachricht mit Coverage-Marken
-	 */
 	/**
 	 * Receives SOAP messages with coverage markers while testing
 	 * 
@@ -95,11 +83,6 @@ public class CoverageMessageReceiver {
 
 	}
 
-	/*
-	 * 
-	 * @param encoder sSOAPEncoder für die Dekodierung der Nachrichten mit
-	 * Coverage-Marken
-	 */
 	/**
 	 * Sets SOAP encoder for decoding messages with markers
 	 * 
@@ -109,10 +92,6 @@ public class CoverageMessageReceiver {
 		this.encoder = encoder;
 	}
 
-	/*
-	 * 
-	 * @param wsdl WSDL-Beschreibung des Coverage Logging Services
-	 */
 	/**
 	 * Sets path to WDL
 	 * 
@@ -144,10 +123,6 @@ public class CoverageMessageReceiver {
 		}
 	}
 
-	/*
-	 * 
-	 * @return Encoding Style der Coverage-Nachrichten
-	 */
 	/**
 	 * Gets coverage messages encoding style
 	 * 
@@ -160,19 +135,11 @@ public class CoverageMessageReceiver {
 				style = operation.getEncodingStyle();
 			} catch (SpecificationException e) {
 				logger.debug("Encoding style problem:" + e.getMessage());
-				// markersRegistry.addInfo(e.getMessage());
-
 			}
 		}
 		return style;
 	}
 
-	/*
-	 * Setzt den Testfall, der gerade ausgeführt wird. Dadurch ist es möglich,
-	 * die Testabdeckung von jedem Testfalls zu bestimmen.
-	 * 
-	 * @param testCase Testfall, der gerade ausgeführt wird.
-	 */
 	/**
 	 * Sets the currently processed test case.
 	 * 

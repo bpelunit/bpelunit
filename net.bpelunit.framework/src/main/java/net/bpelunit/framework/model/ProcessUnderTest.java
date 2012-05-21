@@ -119,10 +119,6 @@ public class ProcessUnderTest extends Partner {
 					.getCoverageMeasurmentTool();
 			try {
 
-				/*
-				 * newFile = coverageTool.prepareArchiveForCoverageMeasurement(
-				 * pathToArchive, FilenameUtils.getName(fBPRFile), this);
-				 */
 				newFile = coverageTool.prepareArchiveForCoverageMeasurement(
 						fDeployer.getArchiveLocation(getBasePath()), this,
 						fDeployer);
@@ -133,7 +129,6 @@ public class ProcessUnderTest extends Partner {
 				coverageTool
 						.setErrorStatus("Coverage measurment has failed. An error occurred when annotation for coverage: "
 								+ e.getMessage());
-				// e.printStackTrace();
 			}
 		}
 
