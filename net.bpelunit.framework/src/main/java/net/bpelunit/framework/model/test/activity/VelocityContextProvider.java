@@ -6,5 +6,5 @@ import org.apache.velocity.context.Context;
 
 public interface VelocityContextProvider {
 
-	public Context createVelocityContext() throws DataSourceException;
+	Context createVelocityContext() throws DataSourceException;
 }

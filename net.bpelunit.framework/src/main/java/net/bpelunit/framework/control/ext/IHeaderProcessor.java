@@ -39,10 +39,10 @@ public interface IHeaderProcessor {
 	 * basically, we should reject asynchronous incoming messages if
 	 * {@link #MSG_RECEIVED_ID} does not match {@link #MSG_SENT_ID}.
 	 */
-	final static String MSG_RECEIVED_ID = "Message-ID-Receive";
+	String MSG_RECEIVED_ID = "Message-ID-Receive";
 
 	/** See {@link #MSG_RECEIVED_ID}. */
-	final static String MSG_SENT_ID = "Message-ID-Sent";
+	String MSG_SENT_ID = "Message-ID-Sent";
 
 	/**
 	 * Sets a property given by the tester in the test specification.

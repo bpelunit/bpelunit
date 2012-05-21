@@ -5,11 +5,6 @@ import java.util.List;
 import net.bpelunit.framework.coverage.exceptions.BpelException;
 import org.jdom.Element;
 
-/*
- * Die Schnittstelle ist für Handler vorgesehen, die die Instrumentierung für die Metriken übernehmen.
- * @author Alex
- *
- */
 /**
  * This interface is for handlers instrumenting the metrics
  * 
@@ -17,16 +12,6 @@ import org.jdom.Element;
  */
 public interface IMetricHandler {
 
-	/*
-	 * Fügt die Marker an den richtigen Stellen in BPEL-Process-Element ein
-	 * (Instrumentierung). Anhand dieser Marker werden danach entsprechende
-	 * Invoke aufrufe generiert und dadurch die Ausführung bestimmter
-	 * Aktivitäten geloggt.
-	 * 
-	 * @param process_elements
-	 * 
-	 * @throws BpelException
-	 */
 	/**
 	 * Inserts the markers at the correct place in a bpel process element.
 	 * 
@@ -36,7 +21,7 @@ public interface IMetricHandler {
 	 * @param processElements
 	 * @throws BpelException
 	 */
-	public void insertMarkersForMetric(List<Element> processElements)
+	void insertMarkersForMetric(List<Element> processElements)
 			throws BpelException;
 
 }
