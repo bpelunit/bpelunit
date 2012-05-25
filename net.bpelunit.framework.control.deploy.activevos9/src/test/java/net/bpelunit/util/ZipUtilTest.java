@@ -4,20 +4,31 @@
  */
 package net.bpelunit.util;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 
 public class ZipUtilTest {
 
+	private static final Set<String> FILES_IN_ZIP = new HashSet<String>(); 
+	
+	@BeforeClass
+	public static void setUpClass() {
+		FILES_IN_ZIP.add("a.txt");
+		FILES_IN_ZIP.add("b.txt");
+		FILES_IN_ZIP.add("subdir/a.txt");
+	}
+	
 	@Test
 	public void testZipDirectory() throws Exception {
 		File zipFile = createZipForTesting();
@@ -27,13 +38,13 @@ public class ZipUtilTest {
 			Enumeration<? extends ZipEntry> entries = f.entries();
 			
 			ZipEntry entry = entries.nextElement();
-			assertEquals("a.txt", entry.getName());
+			assertTrue(entry.getName(), FILES_IN_ZIP.contains(entry.getName()));
 			
 			entry = entries.nextElement();
-			assertEquals("b.txt", entry.getName());
+			assertTrue(entry.getName(), FILES_IN_ZIP.contains(entry.getName()));
 			
 			entry = entries.nextElement();
-			assertEquals("subdir/a.txt", entry.getName());
+			assertTrue(entry.getName(), FILES_IN_ZIP.contains(entry.getName()));
 		
 		} finally {
 			f.close();
