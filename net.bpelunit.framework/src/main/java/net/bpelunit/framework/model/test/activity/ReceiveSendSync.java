@@ -34,11 +34,15 @@ import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 public class ReceiveSendSync extends TwoWaySyncActivity {
 
 
+	private static final int HTTP_OK = 200;
+	private static final int HTTP_INTERNAL_ERROR = 500;
+
 	// ********************************* Initialization ****************************
+
 
 	public ReceiveSendSync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		fStatus= ArtefactStatus.createInitialStatus();
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
 
@@ -47,21 +51,21 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 	@Override
 	public void run(ActivityContext context) {
 
-		context.setHeaderProcessor(fHeaderProcessor);
-		context.setMapping(fMapping);
+		context.setHeaderProcessor(getHeaderProcessor());
+		context.setMapping(getMapping());
 
 		IncomingMessage incoming;
 		try {
 			incoming= context.receiveMessage(this.getPartnerTrack());
 		} catch (TimeoutException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Timeout while waiting for incoming synchronous message", e);
+			setStatus(ArtefactStatus.createErrorStatus("Timeout while waiting for incoming synchronous message", e));
 			return;
 		} catch (InterruptedException e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming synchronous message", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming synchronous message", e));
 			return;
 		}
 
-		fReceiveSpec.handle(context, incoming.getBody());
+		getReceiveSpec().handle(context, incoming.getBody());
 
 		/*
 		 * This is the only place in the testing framework where we can (and should actually return
@@ -70,48 +74,49 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 
 		OutgoingMessage msg= new OutgoingMessage();
 
-		if (!fReceiveSpec.hasProblems()) {
+		if (!getReceiveSpec().hasProblems()) {
 			// Receive was successful
 
-			fSendSpec.handle(context);
+			getSendSpec().handle(context);
 
-			if (!fSendSpec.hasProblems()) {
-				if (fSendSpec.isFault())
-					msg.setCode(500);
-				else
-					msg.setCode(200);
-				msg.setBody(fSendSpec.getInWireFormat());
+			if (!getSendSpec().hasProblems()) {
+				if (getSendSpec().isFault()) {
+					msg.setCode(HTTP_INTERNAL_ERROR);
+				} else {
+					msg.setCode(HTTP_OK);
+				}
+				msg.setBody(getSendSpec().getInWireFormat());
 			} else {
 				// Could not successfully generate a return value for
 				// whatever reason.
-				msg.setCode(500);
+				msg.setCode(HTTP_INTERNAL_ERROR);
 				msg.setBody(BPELUnitUtil.generateGenericSOAPFault());
 			}
 		} else {
 			// Receive was not successful
-			msg.setCode(500);
+			msg.setCode(HTTP_INTERNAL_ERROR);
 			msg.setBody(BPELUnitUtil.generateGenericSOAPFault());
 		}
 
 		try {
-			fSendSpec.delay(context);
+			getSendSpec().delay(context);
 			context.postAnswer(this.getPartnerTrack(), msg);
 
-			if (fReceiveSpec.hasProblems())
-				fStatus= fReceiveSpec.getStatus();
-			else if (fSendSpec.hasProblems())
-				fStatus= fSendSpec.getStatus();
-			else
-				fStatus= ArtefactStatus.createPassedStatus();
-
+			if (getReceiveSpec().hasProblems()) {
+				setStatus(getReceiveSpec().getStatus());
+			} else if (getSendSpec().hasProblems()) {
+				setStatus(getSendSpec().getStatus());
+			} else {
+				setStatus(ArtefactStatus.createPassedStatus());
+			}
 		} catch (TimeoutException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Timeout occurred while waiting for synchronous answer to be sent.", e);
+			setStatus(ArtefactStatus.createErrorStatus("Timeout occurred while waiting for synchronous answer to be sent.", e));
 			return;
 		} catch (InterruptedException e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while waiting for synchronous answer to be sent.", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for synchronous answer to be sent.", e));
 			return;
 		} catch (Exception e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e));
 			return;
 		}
 	}
@@ -132,12 +137,14 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 	@Override
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
-		if (fMapping != null)
-			for (DataCopyOperation copy : fMapping)
+		if (getMapping() != null) {
+			for (DataCopyOperation copy : getMapping()) {
 				children.add(copy);
-		children.add(fReceiveSpec);
-		children.add(fSendSpec);
+			}
+		}
+		children.add(getReceiveSpec());
+		children.add(getSendSpec());
+
 		return children;
 	}
-
 }

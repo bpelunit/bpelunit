@@ -24,21 +24,21 @@ public interface ITestArtefact {
 	 * 
 	 * @return the name
 	 */
-	public String getName();
+	String getName();
 
 	/**
 	 * Returns the current status of this artefact.
 	 * 
 	 * @return current status
 	 */
-	public ArtefactStatus getStatus();
+	ArtefactStatus getStatus();
 
 	/**
 	 * Returns the parent of this artefact
 	 * 
 	 * @return the parent
 	 */
-	public ITestArtefact getParent();
+	ITestArtefact getParent();
 
 	/**
 	 * Returns the children of this artefact. Must return the empty list if the artefact has no
@@ -46,7 +46,7 @@ public interface ITestArtefact {
 	 * 
 	 * @return list of children
 	 */
-	public List<ITestArtefact> getChildren();
+	List<ITestArtefact> getChildren();
 
 	/**
 	 * Returns a list of state data of interest. Must return the empty list if there is no state
@@ -54,13 +54,13 @@ public interface ITestArtefact {
 	 * 
 	 * @return list of state data
 	 */
-	public List<StateData> getStateData();
+	List<StateData> getStateData();
 
 	/**
 	 * Reports progress in the given artefact.
 	 * 
 	 * @param the artefact which has progressed
 	 */
-	public void reportProgress(ITestArtefact artefact);
+	void reportProgress(ITestArtefact artefact);
 
 }

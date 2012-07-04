@@ -8,12 +8,15 @@ package net.bpelunit.test.unit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import javax.wsdl.Definition;
 import javax.xml.namespace.QName;
 
-import org.apache.commons.io.FileUtils;
+import net.bpelunit.framework.SpecificationLoader;
 import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
+
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 /**
@@ -32,7 +35,9 @@ public class TestWSDLReader extends SimpleTest {
 
 	private String getEncoding(String name) throws Exception {
 		
-		Partner p= new Partner("MyPartner", ABS_PATH, name, null, "");
+		Definition d = SpecificationLoader.loadWsdlDefinition(ABS_PATH, name, "TEST");
+		
+		Partner p= new Partner("MyPartner", d, null, "");
 
 		// get a document/literal operation
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
@@ -44,7 +49,9 @@ public class TestWSDLReader extends SimpleTest {
 
 	private SOAPOperationCallIdentifier getOp(String name) throws Exception {
 		
-		Partner p= new Partner("MyPartner", ABS_PATH, name, null, "");
+		Definition d = SpecificationLoader.loadWsdlDefinition(ABS_PATH, name, "TEST");
+		
+		Partner p= new Partner("MyPartner", d, null, "");
 
 		// get a document/literal operation
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
@@ -114,7 +121,11 @@ public class TestWSDLReader extends SimpleTest {
 
 	@Test
 	public void testTwoWSDLsSpecified() throws Exception {
-		Partner p = new Partner("Partner", ABS_PATH + "", "MyPartner1.wsdl", "Callback.wsdl", "");
+		
+		Definition d1 = SpecificationLoader.loadWsdlDefinition(ABS_PATH, "MyPartner1.wsdl", "TEST");
+		Definition d2 = SpecificationLoader.loadWsdlDefinition(ABS_PATH, "Callback.wsdl", "TEST");
+		
+		Partner p = new Partner("Partner", d1, d2, "");
 		
 		// Fetch service in WSDL 1
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");

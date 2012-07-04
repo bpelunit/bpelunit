@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.StringReader;
 
+import javax.wsdl.Definition;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,6 +20,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import net.bpelunit.framework.SpecificationLoader;
 import net.bpelunit.framework.control.result.XMLResultProducer;
 import net.bpelunit.framework.control.soap.NamespaceContextImpl;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
@@ -89,7 +91,10 @@ public class TestUtil {
 
 	public static SOAPOperationCallIdentifier getCall(String path, String wsdl, String operationName) throws SpecificationException {
 		String abspath = FileUtils.toFile(TestUtil.class.getResource(path)).getAbsolutePath() + File.separator;
-		Partner p= new Partner("MyPartner", abspath, wsdl, "", "");
+		
+		Definition d = SpecificationLoader.loadWsdlDefinition(abspath, wsdl, "TEST");
+		
+		Partner p= new Partner("MyPartner", d, null, "");
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
 		SOAPOperationCallIdentifier operation= p.getOperation(service, "MyPartnerSOAP", operationName, SOAPOperationDirectionIdentifier.INPUT);
 		return operation;

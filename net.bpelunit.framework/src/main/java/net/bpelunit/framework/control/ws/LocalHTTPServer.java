@@ -25,6 +25,15 @@ import org.mortbay.http.handler.NotFoundHandler;
  */
 public class LocalHTTPServer {
 
+	@SuppressWarnings("serial")
+	public static class HttpServerException extends Exception {
+
+		public HttpServerException(String msg, Exception e) {
+			super(msg, e);
+		}
+
+	}
+
 	private HttpServer fServer;
 
 	private WebServiceHandler fHandler;
@@ -78,16 +87,19 @@ public class LocalHTTPServer {
 			context2.addHandler(new NotFoundHandler());
 			fServer.addContext(context2);
 		}
-
 	}
 
 	public void startTest(TestCaseRunner runner) {
 		fHandler.initialize(runner);
 	}
 
-	public void startServer() throws Exception {
+	public void startServer() throws HttpServerException {
 		Logger.getLogger(getClass()).info("Starting local HTTP Server...");
-		fServer.start();
+		try {
+			fServer.start();
+		} catch (Exception e) {
+			throw new HttpServerException("Error while starting HTTP Server: " + e.getMessage(), e);
+		}
 		Logger.getLogger(getClass()).info("Local HTTP server was started.");
 	}
 

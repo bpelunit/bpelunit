@@ -32,7 +32,9 @@ public class XPathTool {
 	public List<Node> evaluateAsList(String query, Object item) throws XPathExpressionException {
 		NodeList nodes = (NodeList)fXPath.evaluate(query, item, XPathConstants.NODESET);
 		List<Node> list = new ArrayList<Node>();
-		for (int i = 0; i < nodes.getLength(); ++i) list.add(nodes.item(i));
+		for (int i = 0; i < nodes.getLength(); ++i) {
+			list.add(nodes.item(i));
+		}
 		return list;
 	}
 

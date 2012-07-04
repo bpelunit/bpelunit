@@ -10,23 +10,24 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.WriterAppender;
-import org.apache.log4j.varia.NullAppender;
 import net.bpelunit.framework.base.BPELUnitBaseRunner;
-import net.bpelunit.framework.control.result.ITestResultListener;
 import net.bpelunit.framework.control.result.XMLResultProducer;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.ITestResultListener;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.ui.ant.BPELUnit.Logging;
 import net.bpelunit.framework.ui.ant.BPELUnit.Output;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.WriterAppender;
+import org.apache.log4j.varia.NullAppender;
 
 /**
  * The ant implementation of the BPELUnit runner. Offers support for outputting logging and test
@@ -83,8 +84,9 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 	public void configureInit() throws ConfigurationException {
 		setHomeDirectory(fBPELUnitHomeDirectory);
 
-		for (Output output : fOutputs)
+		for (Output output : fOutputs) {
 			output.initialize();
+		}
 	}
 
 	@Override
@@ -97,8 +99,9 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 			Logger.getRootLogger().setLevel(Level.toLevel(log.getLevel()));
 		}
 
-		if (fLoggers.isEmpty())
+		if (fLoggers.isEmpty()) {
 			Logger.getRootLogger().addAppender(new NullAppender());
+		}
 	}
 
 	// ************************* Running *************************
@@ -144,18 +147,21 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 	}
 
 	public void testCaseEnded(TestCase testCase) {
-		if (testCase.getStatus().isFailure())
+		if (testCase.getStatus().isFailure()) {
 			fFailures++;
-		if (testCase.getStatus().isError())
+		}
+		if (testCase.getStatus().isError()) {
 			fErrors++;
+		}
 		fRuns++;
 
 		outputPlain("END", testCase);
 	}
 
 	public void progress(ITestArtefact testArtefact) {
-		if (testArtefact instanceof PartnerTrack)
+		if (testArtefact instanceof PartnerTrack) {
 			outputPlain("PROGRESS", testArtefact);
+		}
 	}
 
 	private void outputPlain(String head, ITestArtefact testCase) {
@@ -169,8 +175,9 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 		for (Iterator<Output> i= fOutputs.iterator(); i.hasNext();) {
 			Output output= i.next();
 			try {
-				if (output.getStyle().equals(Output.STYLE_PLAIN))
+				if (output.getStyle().equals(Output.STYLE_PLAIN)) {
 					output.write(info);
+				}
 			} catch (IOException e) {
 				System.out.println("I/O Error writing to output stream - canceling output.");
 				output.dispose();
@@ -199,11 +206,13 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 	}
 
 	private void closeOutputs() {
-		for (Logging l : fLoggers)
+		for (Logging l : fLoggers) {
 			l.dispose();
+		}
 
-		for (Output o : fOutputs)
+		for (Output o : fOutputs) {
 			o.dispose();
+		}
 	}
 
 	@Override

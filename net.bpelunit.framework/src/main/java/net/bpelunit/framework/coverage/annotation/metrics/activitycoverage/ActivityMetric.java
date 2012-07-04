@@ -1,11 +1,10 @@
 package net.bpelunit.framework.coverage.annotation.metrics.activitycoverage;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.coverage.annotation.MetricsManager;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
@@ -14,6 +13,7 @@ import net.bpelunit.framework.coverage.receiver.MarkerState;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 import net.bpelunit.framework.coverage.result.statistic.impl.Statistic;
+
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 
@@ -24,23 +24,21 @@ import org.jdom.filter.ElementFilter;
  */
 public class ActivityMetric implements IMetric {
 
-	private Logger logger=Logger.getLogger(getClass());
-	
 	public static final String METRIC_NAME = "ActivityCoverage";
 
-	private List<String> activities_to_respekt;
+	private List<String> activitiesToRespect;
 
 	private IMetricHandler metricHandler;
 
 	private List<Element> elementsOfBPEL = null;
 
 	public ActivityMetric(List<String> activitesToRespect, MarkersRegisterForArchive markersRegistry) {
-		activities_to_respekt = new ArrayList<String>();
+		activitiesToRespect = new ArrayList<String>();
 		if (activitesToRespect != null) {
 			for (Iterator<String> iter = activitesToRespect.iterator(); iter
 					.hasNext();) {
 				String basicActivity = iter.next();
-				activities_to_respekt.add(basicActivity);
+				activitiesToRespect.add(basicActivity);
 			}
 		}
 		metricHandler = new ActivityMetricHandler(markersRegistry);
@@ -67,7 +65,7 @@ public class ActivityMetric implements IMetric {
 	 * @return prefixes
 	 */
 	public List<String> getMarkersId() {
-		return activities_to_respekt;
+		return activitiesToRespect;
 	}
 
 
@@ -86,11 +84,11 @@ public class ActivityMetric implements IMetric {
 	 * @return statistic
 	 */
 	public IStatistic createStatistic(
-			Hashtable<String, Hashtable<String, MarkerState>> allMarkers) {
+			Map<String, Map<String, MarkerState>> allMarkers) {
 		IStatistic statistic = new Statistic(METRIC_NAME);
 		IStatistic subStatistic;
 		String label;
-		for (Iterator<String> iter = activities_to_respekt.iterator(); iter
+		for (Iterator<String> iter = activitiesToRespect.iterator(); iter
 				.hasNext();) {
 			label = iter.next();
 			subStatistic = new Statistic(METRIC_NAME + ": " + label);
@@ -121,11 +119,13 @@ public class ActivityMetric implements IMetric {
 	public void setOriginalBPELProcess(Element process) {
 		ElementFilter filter = new ElementFilter(process.getNamespace());
 		elementsOfBPEL = new ArrayList<Element>();
-		for (Iterator<Element> iter = process.getDescendants(filter); iter
+		for (@SuppressWarnings("unchecked")
+		Iterator<Element> iter = process.getDescendants(filter); iter
 				.hasNext();) {
 			Element basicActivity = iter.next();
-			if (activities_to_respekt.contains(basicActivity.getName()))
+			if (activitiesToRespect.contains(basicActivity.getName())) {
 				elementsOfBPEL.add(basicActivity);
+			}
 		}	
 	}
 

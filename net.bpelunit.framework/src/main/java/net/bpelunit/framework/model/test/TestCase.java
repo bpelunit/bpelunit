@@ -14,6 +14,7 @@ import java.util.Map;
 import net.bpelunit.framework.control.datasource.DataSourceUtil;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -109,17 +110,20 @@ public class TestCase implements ITestArtefact {
 		fRunner.run();
 
 		for (PartnerTrack partnerTrack : fPartnerTracks) {
-			if (partnerTrack.getStatus().isError())
+			if (partnerTrack.getStatus().isError()) {
 				fStatus= partnerTrack.getStatus();
-			else if (partnerTrack.getStatus().isFailure())
+			} else if (partnerTrack.getStatus().isFailure()) {
 				fStatus= partnerTrack.getStatus();
+			}
 		}
 
-		if (fAbortedByUser)
+		if (fAbortedByUser) {
 			fStatus= ArtefactStatus.createAbortedStatus("Aborted by user.");
+		}
 
-		if (!fStatus.hasProblems())
+		if (!fStatus.hasProblems()) {
 			fStatus= ArtefactStatus.createPassedStatus();
+		}
 
 		fSuite.endTestCase(this);
 	}
@@ -158,8 +162,9 @@ public class TestCase implements ITestArtefact {
 	public List<StateData> getStateData() {
 		List<StateData> stateData= new ArrayList<StateData>();
 		stateData.addAll(fStatus.getAsStateData());
-		for (String key : fMetaDataMap.keySet())
+		for (String key : fMetaDataMap.keySet()) {
 			stateData.add(new StateData(key, fMetaDataMap.get(key)));
+		}
 		return stateData;
 	}
 
@@ -190,9 +195,10 @@ public class TestCase implements ITestArtefact {
 	}
 
 	public int getActivityCount() {
-		int no= 0;
-		for (PartnerTrack partnerTrack : fPartnerTracks)
-			no+= partnerTrack.getActivityCount();
+		int no = 0;
+		for (PartnerTrack partnerTrack : fPartnerTracks) {
+			no += partnerTrack.getActivityCount();
+		}
 		return no;
 	}
 
@@ -212,8 +218,9 @@ public class TestCase implements ITestArtefact {
 	 *
 	 * @return VelocityContext with information about the test suite and test
 	 * case.
+	 * @throws DataSourceException 
 	 * */
-	public Context createVelocityContext() throws Exception {
+	public Context createVelocityContext() throws DataSourceException {
 		if (fTestSuiteVelocityContext == null) {
 			fTestSuiteVelocityContext = getSuite().createVelocityContext();
 		}

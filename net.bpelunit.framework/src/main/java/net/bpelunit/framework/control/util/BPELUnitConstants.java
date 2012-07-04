@@ -16,8 +16,11 @@ import javax.xml.namespace.QName;
  * @author Philip Mayer
  * 
  */
-public class BPELUnitConstants {
+public final class BPELUnitConstants {
 
+	private BPELUnitConstants() {
+	}
+	
 	/**
 	 * The default base URL of the HTTP Server included in BPELUnit. BPELUnit uses this server to
 	 * receive calls for partners and/or callbacks to the client. The name of each partner must be
@@ -51,13 +54,11 @@ public class BPELUnitConstants {
 	 * Default timeout value for all send and receive activities (25 seconds)
 	 */
 	public static final int TIMEOUT= 50000;
-//	public static final int TIMEOUT= 25000;
 
 	/**
 	 * Default sleep time for threads waiting for something (200 ms).
 	 */
 	public static final int TIMEOUT_SLEEP_TIME= 150;
-//	public static final int TIMEOUT_SLEEP_TIME= 300;
 
 	/**
 	 * Default charset for HTTP requests

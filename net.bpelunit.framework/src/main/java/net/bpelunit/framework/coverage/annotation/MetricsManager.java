@@ -1,10 +1,10 @@
 package net.bpelunit.framework.coverage.annotation;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.bpelunit.framework.coverage.annotation.metrics.IMetric;
 import net.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
@@ -25,13 +25,13 @@ import net.bpelunit.framework.coverage.result.statistic.IStatistic;
 public class MetricsManager {
 
 	public static List<MarkerState> getStatus(String label,
-			Hashtable<String, Hashtable<String, MarkerState>> allLabels) {
+			Map<String, Map<String, MarkerState>> allLabels) {
 		List<MarkerState> list = new ArrayList<MarkerState>();
 		if (allLabels.get(label) != null) {
-			Hashtable<String, MarkerState> activityTable = allLabels.get(label);
-			Enumeration<MarkerState> e = activityTable.elements();
-			while (e.hasMoreElements()) {
-				list.add(e.nextElement());
+			Map<String, MarkerState> activityTable = allLabels.get(label);
+			Collection<MarkerState> e = activityTable.values();
+			for (MarkerState ms : e) {
+				list.add(ms);
 			}
 		}
 		return list;
@@ -81,9 +81,11 @@ public class MetricsManager {
 
 	public boolean hasMetric(String metricname) {
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
-			if (iter.next().getName().equals(metricname))
+			if (iter.next().getName().equals(metricname)) {
 				return true;
+			}
 		}
+		
 		return false;
 	}
 
@@ -95,7 +97,7 @@ public class MetricsManager {
 	 * @return all created statistics
 	 */
 	public List<IStatistic> createStatistics(
-			Hashtable<String, Hashtable<String, MarkerState>> allMarkers) {
+			Map<String, Map<String, MarkerState>> allMarkers) {
 		List<IStatistic> statistics = new ArrayList<IStatistic>();
 		for (Iterator<IMetric> iter = metrics.iterator(); iter.hasNext();) {
 			statistics.add(iter.next().createStatistic(allMarkers));

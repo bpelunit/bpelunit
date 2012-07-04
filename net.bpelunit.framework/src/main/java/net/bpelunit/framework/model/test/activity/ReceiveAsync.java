@@ -16,8 +16,6 @@ import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
-import org.apache.log4j.Logger;
-
 /**
  * A receive asynchronous activity is intended to receive a single incoming transmission which
  * contains a SOAP body (a normal message, or a SOAP fault).
@@ -36,8 +34,6 @@ import org.apache.log4j.Logger;
  * 
  */
 public class ReceiveAsync extends Activity {
-
-	private static final Logger LOGGER = Logger.getLogger(ReceiveAsync.class);
 
 	/**
 	 * The parent activity, if there is one.
@@ -63,7 +59,7 @@ public class ReceiveAsync extends Activity {
 
 	public void initialize(ReceiveDataSpecification spec) {
 		fReceiveSpec= spec;
-		fStatus= ArtefactStatus.createInitialStatus();
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
 	// ***************************** Activity **************************
@@ -75,10 +71,10 @@ public class ReceiveAsync extends Activity {
 		try {
 			incoming= context.receiveMessage(this.getPartnerTrack());
 		} catch (TimeoutException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Timeout while waiting for incoming asynchronous message", e);
+			setStatus(ArtefactStatus.createErrorStatus("Timeout while waiting for incoming asynchronous message", e));
 			return;
 		} catch (InterruptedException e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming asynchronous messsage", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming asynchronous messsage", e));
 			return;
 		}
 
@@ -119,15 +115,15 @@ public class ReceiveAsync extends Activity {
 			outgoing.setBody("");
 			context.postAnswer(this.getPartnerTrack(), outgoing);
 
-			if (fReceiveSpec.hasProblems())
-				fStatus = fReceiveSpec.getStatus();
-			else
-				fStatus = ArtefactStatus.createPassedStatus();
-
+			if (fReceiveSpec.hasProblems()) {
+				setStatus(fReceiveSpec.getStatus());
+			} else {
+				setStatus(ArtefactStatus.createPassedStatus());
+			}
 		} catch (TimeoutException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Timeout occurred while waiting for ACK for asynchronous receive.", e);
+			setStatus(ArtefactStatus.createErrorStatus("Timeout occurred while waiting for ACK for asynchronous receive.", e));
 		} catch (InterruptedException e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while waiting for ACK for asynchronous receive to be sent.", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for ACK for asynchronous receive to be sent.", e));
 		}
 	}
 
@@ -150,10 +146,11 @@ public class ReceiveAsync extends Activity {
 
 	@Override
 	public ITestArtefact getParent() {
-		if (fParentActivity != null)
+		if (fParentActivity != null) {
 			return fParentActivity;
-		else
+		} else {
 			return getPartnerTrack();
+		}
 	}
 
 	@Override

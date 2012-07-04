@@ -4,17 +4,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-import javax.xml.namespace.QName;
+
+import net.bpelunit.framework.control.util.BPELUnitConstants;
 
 import org.apache.commons.httpclient.methods.RequestEntity;
-import net.bpelunit.framework.control.util.BPELUnitConstants;
-import net.bpelunit.framework.control.util.BPELUnitUtil;
-import org.w3c.dom.DOMException;
 
 public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
 
@@ -27,7 +26,6 @@ public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
     public static final String NS_SOAP_ENCODING
         = "http://schemas.xmlsoap.org/soap/encoding/";
 
-    private SOAPMessage         message;
     private byte[]              bytesMessage;
 
     public long getContentLength() {
@@ -49,9 +47,8 @@ public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
 
     private SOAPMessage createEmptyMessage()
             throws SOAPException {
-        MessageFactory mFactory = BPELUnitUtil.getMessageFactoryInstance();
-        SOAPMessage message = mFactory.createMessage();
-        return message;
+        MessageFactory mFactory = MessageFactory.newInstance();
+        return mFactory.createMessage();
     }
 
     /**
@@ -78,7 +75,7 @@ public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
      */
     protected void createMessage()
             throws IOException, SOAPException {
-        message = createEmptyMessage();
+        SOAPMessage message = createEmptyMessage();
         populateMessage(message);
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         message.writeTo(b);
@@ -89,6 +86,6 @@ public abstract class ActiveBPELRequestEntityBase implements RequestEntity {
      * Populate the empty SOAP message in <code>message</code>.
      */
     protected abstract void populateMessage(SOAPMessage message)
-            throws SOAPException, DOMException, IOException;
+            throws SOAPException, IOException;
 
 }

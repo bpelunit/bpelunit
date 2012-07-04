@@ -41,10 +41,10 @@ public interface IDeployment {
 	 *            simulated URL of this partner.
 	 * @throws EndPointException
 	 */
-	public void replaceEndpoints(PartnerLink pl, Partner p)
+	void replaceEndpoints(PartnerLink pl, Partner p)
 			throws EndPointException;
 
-	public void addLoggingService(String wsdl) throws ArchiveFileException;
+	void addLoggingService(String wsdl) throws ArchiveFileException;
 
 	/**
 	 * This method returns a the details about the partnerlinks that process
@@ -56,10 +56,10 @@ public interface IDeployment {
 	 * @return created PartnerLinks
 	 * @throws DeploymentException 
 	 */
-	public PartnerLink[] getPartnerLinks() throws DeploymentException;
+	PartnerLink[] getPartnerLinks() throws DeploymentException;
 
-	public String getArchive();
+	String getArchive();
 
-	public Partner[] getPartners();
+	Partner[] getPartners();
 
 }

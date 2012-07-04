@@ -70,7 +70,7 @@ public class SendAsync extends Activity {
 
 	public void initialize(SendDataSpecification spec) {
 		fSendSpec= spec;
-		fStatus= ArtefactStatus.createInitialStatus();
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
 	// ***************************** Activity **************************
@@ -81,7 +81,7 @@ public class SendAsync extends Activity {
 		fSendSpec.handle(context);
 
 		if (fSendSpec.hasProblems()) {
-			fStatus= fSendSpec.getStatus();
+			setStatus(fSendSpec.getStatus());
 			return;
 		}
 
@@ -95,23 +95,23 @@ public class SendAsync extends Activity {
 			fSendSpec.delay(context);
 			incoming= context.sendMessage(msg);
 		} catch (SynchronousSendException e) {
-			fStatus= ArtefactStatus.createErrorStatus("HTTP Error while sending out synchronous message!", e);
+			setStatus(ArtefactStatus.createErrorStatus("HTTP Error while sending out synchronous message!", e));
 			return;
 		} catch (InterruptedException e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborting due to error in another partner track.", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborting due to error in another partner track.", e));
 			return;
 		} catch (Exception e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e));
 			return;
 		}
 
 		if (incoming.getReturnCode() > 200 && incoming.getReturnCode() < 300) {
-			fStatus= ArtefactStatus.createPassedStatus();
+			setStatus(ArtefactStatus.createPassedStatus());
 		} else {
 			// This is not possible unless there was a really grave error at the
 			// server side.
 			// Asynchronous receives may not throw a SOAP error.
-			fStatus= ArtefactStatus.createErrorStatus("Asynchronous send got a non-2XX error code: " + incoming.getReturnCode(), null);
+			setStatus(ArtefactStatus.createErrorStatus("Asynchronous send got a non-2XX error code: " + incoming.getReturnCode(), null));
 			fWrongBody= incoming.getBody();
 		}
 	}
@@ -135,10 +135,11 @@ public class SendAsync extends Activity {
 
 	@Override
 	public ITestArtefact getParent() {
-		if (fParentActivity != null)
+		if (fParentActivity != null) {
 			return fParentActivity;
-		else
+		} else {
 			return getPartnerTrack();
+		}
 	}
 
 	@Override
@@ -151,9 +152,10 @@ public class SendAsync extends Activity {
 	@Override
 	public List<StateData> getStateData() {
 		List<StateData> stateData= new ArrayList<StateData>();
-		stateData.addAll(fStatus.getAsStateData());
-		if (fWrongBody != null)
+		stateData.addAll(getStatus().getAsStateData());
+		if (fWrongBody != null) {
 			stateData.add(new StateData("Return Body", fWrongBody));
+		}
 		return stateData;
 	}
 }

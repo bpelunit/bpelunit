@@ -15,12 +15,6 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-/*
- * Die Klasse schreibt die Testabdeckungsmetriken im XML-Format in Outputstream.
- * 
- * @author Alex
- * 
- */
 /**
  * This class sends coverage metrics to the output stream.
  * 
@@ -29,8 +23,11 @@ import org.jdom.output.XMLOutputter;
  * @author Alex Salnikow, Ronald Becher
  * 
  */
-public class XMLCoverageResultProducer {
+public final class XMLCoverageResultProducer {
 
+	private XMLCoverageResultProducer() {
+	}
+	
 	private static final String STATISTIC_ELEMENT = "statistic";
 
 	private static final String COVERAGE_STATISTIC_ELEMENT = "testingCoverage";
@@ -164,9 +161,10 @@ public class XMLCoverageResultProducer {
 			total = total + statistic.getTotalNumber();
 			tested = tested + statistic.getTestedNumber();
 		}
-		if (total > 0)
+		if (total > 0) {
 			relativ = Float.toString((tested * 1000 / total) / (float) 10.0)
 					+ "%";
+		}
 		return new String[] { statisticName, Integer.toString(total),
 				Integer.toString(tested), relativ };
 	}
@@ -195,10 +193,11 @@ public class XMLCoverageResultProducer {
 					.toString(total));
 			statisticElement.setAttribute(TESTED_NUMBER_ATTRIBUT, Integer
 					.toString(tested));
-			if (total > 0)
+			if (total > 0) {
 				relativ = Float
 						.toString((tested * 1000 / total) / (float) 10.0)
 						+ "%";
+			}
 			statisticElement.setAttribute(PER_CENT_ATTRIBUT, relativ);
 			fileStatisticElement.addContent(statisticElement);
 		}

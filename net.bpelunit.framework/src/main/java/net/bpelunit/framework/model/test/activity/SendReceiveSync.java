@@ -42,7 +42,7 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 
 	public SendReceiveSync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		fStatus= ArtefactStatus.createInitialStatus();
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
 
@@ -50,52 +50,53 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 
 	@Override
 	public void run(ActivityContext context) {
-		context.setHeaderProcessor(fHeaderProcessor);
+		context.setHeaderProcessor(getHeaderProcessor());
 
-		fSendSpec.handle(context);
+		getSendSpec().handle(context);
 
-		if (fSendSpec.hasProblems()) {
-			fStatus= fSendSpec.getStatus();
+		if (getSendSpec().hasProblems()) {
+			setStatus(getSendSpec().getStatus());
 			return;
 		}
 
 		OutgoingMessage msg= new OutgoingMessage();
-		msg.setTargetURL(fSendSpec.getTargetURL());
-		msg.setSOAPAction(fSendSpec.getSOAPHTTPAction());
-		msg.setBody(fSendSpec.getInWireFormat());
+		msg.setTargetURL(getSendSpec().getTargetURL());
+		msg.setSOAPAction(getSendSpec().getSOAPHTTPAction());
+		msg.setBody(getSendSpec().getInWireFormat());
 
 		IncomingMessage returnMsg;
 		try {
-			fSendSpec.delay(context);
+			getSendSpec().delay(context);
 			returnMsg= context.sendMessage(msg);
 		} catch (SynchronousSendException e) {
-			fStatus= ArtefactStatus.createErrorStatus("HTTP Error while sending out synchronous message: " + e.getMessage(), e);
+			setStatus(ArtefactStatus.createErrorStatus("HTTP Error while sending out synchronous message: " + e.getMessage(), e));
 			return;
 		} catch (InterruptedException e) {
 			// Interruption by another thread. Abort.
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted due to error in other partner track", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted due to error in other partner track", e));
 			return;
 		} catch (Exception e) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e);
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while computing the delay for the send.", e));
 			return;
 		}
 
 		if (returnMsg.getReturnCode() == 200) {
 			// Send is ok
-			fReceiveSpec.handle(context, returnMsg.getBody());
-			fStatus= fReceiveSpec.getStatus();
+			getReceiveSpec().handle(context, returnMsg.getBody());
+			setStatus(getReceiveSpec().getStatus());
 		} else if ( (returnMsg.getReturnCode() >= 500 && returnMsg.getReturnCode() < 600)) {
 			// could be SOAP fault. Let receive handle it.
-			fReceiveSpec.handle(context, returnMsg.getBody());
-			fStatus= fReceiveSpec.getStatus();
+			getReceiveSpec().handle(context, returnMsg.getBody());
+			setStatus(getReceiveSpec().getStatus());
 		} else {
 			// something went really wrong
-			fStatus= ArtefactStatus
-					.createErrorStatus("Error: Answer from synchronous call had non-expected return code " + returnMsg.getReturnCode());
+			setStatus(ArtefactStatus
+					.createErrorStatus("Error: Answer from synchronous call had non-expected return code " + returnMsg.getReturnCode()));
 
 			fWrongReturnBody= returnMsg.getBody();
-			if ("".equals(fWrongReturnBody))
+			if ("".equals(fWrongReturnBody)) {
 				fWrongReturnBody= "(empty)";
+			}
 		}
 	}
 
@@ -115,17 +116,18 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 	@Override
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
-		children.add(fSendSpec);
-		children.add(fReceiveSpec);
+		children.add(getSendSpec());
+		children.add(getReceiveSpec());
 		return children;
 	}
 
 	@Override
 	public List<StateData> getStateData() {
 		List<StateData> stateData= new ArrayList<StateData>();
-		stateData.addAll(fStatus.getAsStateData());
-		if (fWrongReturnBody != null)
+		stateData.addAll(getStatus().getAsStateData());
+		if (fWrongReturnBody != null) {
 			stateData.add(new StateData("Return Body", fWrongReturnBody));
+		}
 		return stateData;
 	}
 

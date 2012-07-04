@@ -10,14 +10,15 @@ import java.util.Map;
 
 import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
 import net.bpelunit.framework.client.model.TestRunSession;
-import net.bpelunit.framework.control.result.ITestResultListener;
+import net.bpelunit.framework.model.test.ITestResultListener;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
-import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.ArtefactStatus.StatusCode;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;

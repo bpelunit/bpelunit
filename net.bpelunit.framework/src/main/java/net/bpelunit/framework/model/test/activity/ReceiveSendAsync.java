@@ -31,7 +31,7 @@ public class ReceiveSendAsync extends TwoWayAsyncActivity {
 
 	public ReceiveSendAsync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		fStatus= ArtefactStatus.createInitialStatus();
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
 
@@ -40,11 +40,11 @@ public class ReceiveSendAsync extends TwoWayAsyncActivity {
 	@Override
 	public void run(ActivityContext context) {
 
-		context.setHeaderProcessor(fHeaderProcessor);
-		context.setMapping(fMapping);
+		context.setHeaderProcessor(getHeaderProcessor());
+		context.setMapping(getMapping());
 
-		fReceiveAsync.run(context);
-		reportProgress(fReceiveAsync);
+		getReceiveAsync().run(context);
+		reportProgress(getReceiveAsync());
 
 		/*
 		 * Note that there is no way of indicating an error during processing of an asynchronous
@@ -54,23 +54,23 @@ public class ReceiveSendAsync extends TwoWayAsyncActivity {
 		 * 
 		 */
 
-		if (fReceiveAsync.hasProblems()) {
+		if (getReceiveAsync().hasProblems()) {
 			// The receive failed (either never received anything, or wrong
 			// message)
 			// Abort
-			fStatus= fReceiveAsync.getStatus();
+			setStatus(getReceiveAsync().getStatus());
 			return;
 		}
 
-		fSendAsync.run(context);
-		reportProgress(fSendAsync);
+		getSendAsync().run(context);
+		reportProgress(getSendAsync());
 
-		if (fSendAsync.hasProblems()) {
-			fStatus= fSendAsync.getStatus();
+		if (getSendAsync().hasProblems()) {
+			setStatus(getSendAsync().getStatus());
 			return;
 		}
 
-		fStatus= ArtefactStatus.createPassedStatus();
+		setStatus(ArtefactStatus.createPassedStatus());
 	}
 
 	@Override
@@ -89,12 +89,14 @@ public class ReceiveSendAsync extends TwoWayAsyncActivity {
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
 		// Add copy information
-		if (fMapping != null)
-			for (DataCopyOperation copy : fMapping)
+		if (getMapping() != null) {
+			for (DataCopyOperation copy : getMapping()) {
 				children.add(copy);
+			}
+		}
 		// Add activities
-		children.add(fReceiveAsync);
-		children.add(fSendAsync);
+		children.add(getReceiveAsync());
+		children.add(getSendAsync());
 		return children;
 	}
 

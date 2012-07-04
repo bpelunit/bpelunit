@@ -4,6 +4,7 @@ import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -14,8 +15,11 @@ import org.jdom.Namespace;
  * @author Alex Salnikow
  *
  */
-public class BasicActivities {
+public final class BasicActivities {
 
+	private BasicActivities() {
+	}
+	
 	public static final String INVOKE_ACTIVITY = "invoke";
 
 	public static final String RECEIVE_ACTIVITY = "receive";
@@ -42,7 +46,7 @@ public class BasicActivities {
 
 	public static final String VALIDATE_ACTIVITY = "validate";
 
-	private static Hashtable<String, String> basis_activities;
+	private static Map<String, String> basisActivities;
 
 
 	/**
@@ -56,7 +60,7 @@ public class BasicActivities {
 	}
 
 	public static boolean isBasisActivity(String name) {
-		return basis_activities.containsKey(name) ? true : false;
+		return basisActivities.containsKey(name);
 	}
 
 	/**
@@ -66,31 +70,31 @@ public class BasicActivities {
 	public static void initialize() {
 		Namespace bpelNamespace = BpelXMLTools.getProcessNamespace();
 		if (bpelNamespace.equals(NAMESPACE_BPEL_2_0)) {
-			basis_activities = new Hashtable<String, String>();
-			basis_activities.put(INVOKE_ACTIVITY, INVOKE_ACTIVITY);
-			basis_activities.put(EXIT_ACTIVITY, EXIT_ACTIVITY);
-			basis_activities.put(RECEIVE_ACTIVITY, RECEIVE_ACTIVITY);
-			basis_activities.put(REPLY_ACTIVITY, REPLY_ACTIVITY);
-			basis_activities.put(THROW_ACTIVITY, THROW_ACTIVITY);
-			basis_activities.put(RETHROW_ACTIVITY, RETHROW_ACTIVITY);
-			basis_activities.put(WAIT_ACTIVITY, WAIT_ACTIVITY);
-			basis_activities.put(ASSIGN_ACTIVITY, ASSIGN_ACTIVITY);
-			basis_activities.put(EMPTY_ACTIVITY, EMPTY_ACTIVITY);
-			basis_activities.put(COMPENSATE_ACTIVITY, COMPENSATE_ACTIVITY);
-			basis_activities.put(VALIDATE_ACTIVITY, VALIDATE_ACTIVITY);
-			basis_activities.put(COMPENSATESCOPE_ACTIVITY,
+			basisActivities = new Hashtable<String, String>();
+			basisActivities.put(INVOKE_ACTIVITY, INVOKE_ACTIVITY);
+			basisActivities.put(EXIT_ACTIVITY, EXIT_ACTIVITY);
+			basisActivities.put(RECEIVE_ACTIVITY, RECEIVE_ACTIVITY);
+			basisActivities.put(REPLY_ACTIVITY, REPLY_ACTIVITY);
+			basisActivities.put(THROW_ACTIVITY, THROW_ACTIVITY);
+			basisActivities.put(RETHROW_ACTIVITY, RETHROW_ACTIVITY);
+			basisActivities.put(WAIT_ACTIVITY, WAIT_ACTIVITY);
+			basisActivities.put(ASSIGN_ACTIVITY, ASSIGN_ACTIVITY);
+			basisActivities.put(EMPTY_ACTIVITY, EMPTY_ACTIVITY);
+			basisActivities.put(COMPENSATE_ACTIVITY, COMPENSATE_ACTIVITY);
+			basisActivities.put(VALIDATE_ACTIVITY, VALIDATE_ACTIVITY);
+			basisActivities.put(COMPENSATESCOPE_ACTIVITY,
 					COMPENSATESCOPE_ACTIVITY);
 		} else if (bpelNamespace.equals(NAMESPACE_BPEL_1_1)) {
-			basis_activities = new Hashtable<String, String>();
-			basis_activities.put(INVOKE_ACTIVITY, INVOKE_ACTIVITY);
-			basis_activities.put(RECEIVE_ACTIVITY, RECEIVE_ACTIVITY);
-			basis_activities.put(REPLY_ACTIVITY, REPLY_ACTIVITY);
-			basis_activities.put(THROW_ACTIVITY, THROW_ACTIVITY);
-			basis_activities.put(WAIT_ACTIVITY, WAIT_ACTIVITY);
-			basis_activities.put(ASSIGN_ACTIVITY, ASSIGN_ACTIVITY);
-			basis_activities.put(EMPTY_ACTIVITY, EMPTY_ACTIVITY);
-			basis_activities.put(COMPENSATE_ACTIVITY, COMPENSATE_ACTIVITY);
-			basis_activities.put(TERMINATE_ACTIVITY, TERMINATE_ACTIVITY);
+			basisActivities = new Hashtable<String, String>();
+			basisActivities.put(INVOKE_ACTIVITY, INVOKE_ACTIVITY);
+			basisActivities.put(RECEIVE_ACTIVITY, RECEIVE_ACTIVITY);
+			basisActivities.put(REPLY_ACTIVITY, REPLY_ACTIVITY);
+			basisActivities.put(THROW_ACTIVITY, THROW_ACTIVITY);
+			basisActivities.put(WAIT_ACTIVITY, WAIT_ACTIVITY);
+			basisActivities.put(ASSIGN_ACTIVITY, ASSIGN_ACTIVITY);
+			basisActivities.put(EMPTY_ACTIVITY, EMPTY_ACTIVITY);
+			basisActivities.put(COMPENSATE_ACTIVITY, COMPENSATE_ACTIVITY);
+			basisActivities.put(TERMINATE_ACTIVITY, TERMINATE_ACTIVITY);
 		}
 
 	}

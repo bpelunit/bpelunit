@@ -2,14 +2,14 @@ package net.bpelunit.framework.model;
 
 public class AbstractPartner {
 
-	public AbstractPartner(String name, String testBasePath, String baseURL) {
+	public AbstractPartner(String name, String baseURL) {
 		this.name = name;
-		this.basePath = testBasePath;
 		
 		simulatedURL= baseURL;
-		if (!simulatedURL.endsWith("/"))
+		if (!simulatedURL.endsWith("/")) {
 			simulatedURL+= "/";
-		simulatedURL+= getName();
+		}
+		simulatedURL+= name;
 	}
 
 	/**
@@ -19,10 +19,7 @@ public class AbstractPartner {
 	 */
 	private String name;
 	
-	/**
-	 * Base path of the test suite (location of .bpts file)
-	 */
-	private String basePath;
+	
 
 	/**
 	 * The URL which this partner simulates (base url plus partner name)
@@ -33,10 +30,7 @@ public class AbstractPartner {
 	public String getName() {
 		return name;
 	}
-	
-	public String getBasePath() {
-		return basePath;
-	}
+
 
 	public String getSimulatedURL() {
 		return simulatedURL;

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process xmlns:aei="http://www.activebpel.org/2009/02/bpel/extension/ignorable" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:ext="http://www.activebpel.org/2006/09/bpel/extension/query_handling" xmlns:ext1="http://www.activebpel.org/2009/06/bpel/extension/links" xmlns:helloworld="http://test.bpelunit.net/activevos9" xmlns:xsd="http://www.w3.org/2001/XMLSchema" aei:editStyle="BPMN" ext1:linksAreTransitions="yes" ext:createTargetXPath="yes" ext:disableSelectionFailure="yes" name="tc1" suppressJoinFailure="yes" targetNamespace="http://test.bpelunit.net/activevos9">
+   <bpmndi:BPMNDiagram xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" aei:bpelDigest="" aei:editStyle="BPMN" aei:layoutNeeded="false" aei:modelVersion="4" aei:objectId="133666606825703453" aei:processInitiatorSim="" isHorizontal="false" xmlns:aei="http://www.activebpel.org/2009/02/bpel/extension/ignorable" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI">
+      <bpmndi:BPMNPlane>
+         <bpmndi:BPMNShape aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png" aei:objectId="133666625988203921" aei:type="PARTNER_LINK" aei:visible="false,false,false,false,false," bpmnElement="133666625988203921"/>
+         <bpmndi:BPMNShape aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png" aei:objectId="133666639217604555" aei:type="PARTNER_LINK" aei:visible="false,false,false,false,false," bpmnElement="133666639217604555"/>
+         <bpmndi:BPMNShape aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png" aei:objectId="133701327014300341" aei:type="PARTNER_LINK" aei:visible="false,false,false,false,false," bpmnElement="133701327014300341"/>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {15,15}" aei:absoluteSize="DIM {145,243}" aei:objectId="133666626011803941" aei:type="SEQUENCE" bpmnElement="133666626011803941" isHorizontal="false">
+            <dc:Bounds height="170" width="95" x="5" y="5"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {52,25}" aei:absoluteSize="DIM {70,60}" aei:attachments="" aei:objectId="133666626009203937" aei:principal="" aei:type="RECEIVE" bpmnElement="133666626009203937">
+            <dc:Bounds height="60" width="70" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {78,82}" aei:absoluteSize="DIM {38,13}" aei:anchor.location="1" aei:anchor.objectId="133666626009203937" aei:backgroundColor="RGB {255,255,255}" aei:objectId="133666626026303947" aei:relative.location="LOC {-19,47}" aei:text="Receive" bpmnElement="133666626009203937label">
+               <dc:Bounds height="13" width="38" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {25,110}" aei:absoluteSize="DIM {125,53}" aei:attachments="" aei:objectId="133666635621604549" aei:subprocessPath="" aei:type="INVOKE" bpmnElement="133666635621604549">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {52,188}" aei:absoluteSize="DIM {70,60}" aei:name="helloWorld-Reply" aei:objectId="133666626011703939" aei:text="helloWorld-Reply" aei:type="REPLY" bpmnElement="133666626011703939">
+            <dc:Bounds height="60" width="70" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {57,245}" aei:absoluteSize="DIM {81,13}" aei:anchor.location="1" aei:anchor.objectId="133666626011703939" aei:backgroundColor="RGB {255,255,255}" aei:objectId="133666626026403949" aei:relative.location="LOC {-40,47}" aei:text="helloWorld-Reply" bpmnElement="133666626011703939label">
+               <dc:Bounds height="13" width="81" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+   <bpel:extensions>
+      <bpel:extension mustUnderstand="no" namespace="http://www.activebpel.org/2009/02/bpel/extension/ignorable"/>
+      <bpel:extension mustUnderstand="no" namespace="http://www.omg.org/spec/BPMN/20100524/DI"/>
+      <bpel:extension mustUnderstand="yes" namespace="http://www.activebpel.org/2006/09/bpel/extension/query_handling"/>
+      <bpel:extension mustUnderstand="yes" namespace="http://www.activebpel.org/2009/06/bpel/extension/links"/>
+   </bpel:extensions>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/helloworld.wsdl" namespace="http://test.bpelunit.net/activevos9"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink aei:id="133666625988203921" myRole="helloWorld" name="helloWorld" partnerLinkType="helloworld:helloWorld"/>
+      <bpel:partnerLink aei:id="133666639217604555" name="Provider" partnerLinkType="helloworld:helloWorld" partnerRole="helloWorld"/>
+      <bpel:partnerLink aei:id="133701327014300341" name="Provider2" partnerLinkType="helloworld:helloWorld" partnerRole="helloWorld"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable element="helloworld:helloWorld" name="helloWorld"/>
+      <bpel:variable element="helloworld:helloWorldResponse" name="helloWorldResponse"/>
+   </bpel:variables>
+   <bpel:sequence aei:id="133666626011803941">
+      <bpel:receive aei:id="133666626009203937" createInstance="yes" operation="helloWorld" partnerLink="helloWorld" variable="helloWorld"/>
+      <bpel:invoke aei:id="133666635621604549" inputVariable="helloWorld" operation="helloWorld" outputVariable="helloWorldResponse" partnerLink="Provider"/>
+      <bpel:reply aei:id="133666626011703939" name="helloWorld-Reply" operation="helloWorld" partnerLink="helloWorld" variable="helloWorldResponse"/>
+   </bpel:sequence>
+</bpel:process>

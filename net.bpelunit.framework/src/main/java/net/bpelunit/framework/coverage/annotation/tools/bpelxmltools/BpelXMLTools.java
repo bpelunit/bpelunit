@@ -22,19 +22,17 @@ import org.jdom.output.XMLOutputter;
  * 
  * @author Alex Salnikow
  */
-public class BpelXMLTools {
+public final class BpelXMLTools {
 
+	private BpelXMLTools() {
+	}
+	
 	public static final Namespace NAMESPACE_BPEL_1_1 = Namespace
 			.getNamespace("http://schemas.xmlsoap.org/ws/2003/03/business-process/");
 	public static final Namespace NAMESPACE_BPEL_2_0 = Namespace
 			.getNamespace("http://docs.oasis-open.org/wsbpel/2.0/process/executable");
 
 	/* Elements from namespace of BPEL */
-
-	public static int sequence_count = 0;
-	public static int flow_count = 0;
-	public static int invoke_count = 0;
-
 	public static final String PROCESS_ELEMENT = "process";
 
 	public static final String VARIABLE_ELEMENT = "variable";
@@ -121,13 +119,22 @@ public class BpelXMLTools {
 
 	private static final String PREFIX_FOR_NEW_VARIABLE = "_zyx";
 
-	public static int count = 0;
+	private static int count = 0;
 
-	// TODO XXX no public vars and especially not static!
-	public static Element process_element;
+	private static Element processElement;
 
+	public static synchronized int incrementCounter() {
+		count++;
+		
+		return count;
+	}
+	
+	public static synchronized void resetCounter() {
+		count = 0;
+	}
+	
 	public static Namespace getProcessNamespace() {
-		return process_element.getNamespace();
+		return getProcessElement().getNamespace();
 	}
 
 	public static String createVariableName() {
@@ -136,25 +143,29 @@ public class BpelXMLTools {
 
 	public static Element createVariable(String name, String messageType,
 			String type) {
-		if (name == null) {
-			name = createVariableName();
+		String newName = name;
+		if (newName == null) {
+			newName = createVariableName();
 		}
 		Element variable = createBPELElement(BpelXMLTools.VARIABLE_ELEMENT);
-		if (type != null)
+		if (type != null) {
 			variable.setAttribute(TYPE_ATTR, type);
-		if (messageType != null)
+		}
+		if (messageType != null) {
 			variable.setAttribute(MESSAGETYPE_ATTR, messageType);
-		variable.setAttribute(BpelXMLTools.NAME_ATTR, name);
+		}
+		variable.setAttribute(BpelXMLTools.NAME_ATTR, newName);
 		return variable;
 	}
 
 	public static Element insertNewStringVariable(String variableName,
 			Element scope) {
-		if (variableName == null) {
-			variableName = createVariableName();
+		String realVariableName = variableName;
+		if (realVariableName == null) {
+			realVariableName = createVariableName();
 		}
 		Element variable = new Element(VARIABLE_ELEMENT, getProcessNamespace());
-		variable.setAttribute(NAME_ATTR, variableName);
+		variable.setAttribute(NAME_ATTR, realVariableName);
 		variable.setAttribute(TYPE_ATTR, STRING_VARIABLE_TYPE);
 		insertVariable(variable, scope);
 		return variable;
@@ -171,11 +182,12 @@ public class BpelXMLTools {
 	 * @return variable-Element
 	 */
 	public static Element insertNewIntVariable(Element scope, String name) {
-		if (name == null) {
-			name = createVariableName();
+		String realName = name;
+		if (realName == null) {
+			realName = createVariableName();
 		}
 		Element variable = createBPELElement(VARIABLE_ELEMENT);
-		variable.setAttribute(NAME_ATTR, name);
+		variable.setAttribute(NAME_ATTR, realName);
 		variable.setAttribute(TYPE_ATTR, INT_VARIABLE_TYPE);
 		insertVariable(variable, scope);
 		return variable;
@@ -189,14 +201,15 @@ public class BpelXMLTools {
 	 * @param scope
 	 */
 	public static void insertVariable(Element variable, Element scope) {
-		if (scope == null) {
-			scope = process_element;
+		Element realScope = scope;
+		if (realScope == null) {
+			realScope = getProcessElement();
 		}
-		Element variables = scope.getChild(VARIABLES_ELEMENT,
+		Element variables = realScope.getChild(VARIABLES_ELEMENT,
 				getProcessNamespace());
 		if (variables == null) {
 			variables = new Element(VARIABLES_ELEMENT, getProcessNamespace());
-			scope.addContent(0, variables);
+			realScope.addContent(0, variables);
 		}
 		List<Element> allVariables = JDomUtil.getChildren(variables,
 				VARIABLE_ELEMENT, getProcessNamespace());
@@ -209,8 +222,9 @@ public class BpelXMLTools {
 				break;
 			}
 		}
-		if (!exist)
+		if (!exist) {
 			variables.addContent(variable);
+		}
 	}
 
 	/**
@@ -226,8 +240,7 @@ public class BpelXMLTools {
 		Element sequence = createSequence();
 		sequence.addContent(activity.detach());
 		parent.addContent(index, sequence);
-		activity = sequence;
-		return activity;
+		return sequence;
 	}
 
 	/**
@@ -241,11 +254,10 @@ public class BpelXMLTools {
 		Element parent = activity.getParentElement();
 		// TODO Check for equal namespace
 		if (parent.getName().equals(StructuredActivities.SEQUENCE_ACTIVITY)) {
-			activity = parent;
+			return parent;
 		} else {
-			activity = encloseInSequence(activity);
+			return encloseInSequence(activity);
 		}
-		return activity;
 	}
 
 	/**
@@ -315,7 +327,7 @@ public class BpelXMLTools {
 
 		Element parent = activity.getParentElement();
 		if (!parent.getName().equals(StructuredActivities.FLOW_ACTIVITY)) {
-			activity = encloseElementInFlow(activity);
+			return encloseElementInFlow(activity);
 		}
 		return activity;
 	}
@@ -330,7 +342,6 @@ public class BpelXMLTools {
 	 * @return sequence-Element
 	 */
 	public static Element createSequence() {
-		sequence_count++;
 		return new Element(StructuredActivities.SEQUENCE_ACTIVITY,
 				getProcessNamespace());
 	}
@@ -401,19 +412,18 @@ public class BpelXMLTools {
 	 */
 	public static Element insertElseBranch(Element element) {
 		Element elseElement = createBPELElement(ELSE_ELEMENT);
-		// elseElement.addContent(BpelXMLTools.createSequence());
 		element.addContent(elseElement);
 		return elseElement;
 	}
 
 	public static Element createIfActivity(String conditionContent) {
-		Element if_element = createBPELElement(IF_ELEMENT);
+		Element ifElement = createBPELElement(IF_ELEMENT);
 		Element condition = createBPELElement(CONDITION_ELEMENT);
 		condition.setAttribute("expressionLanguage",
 				XpathLanguage.LANGUAGE_SPEZIFIKATION);
 		condition.setText(conditionContent);
-		if_element.addContent(condition);
-		return if_element;
+		ifElement.addContent(condition);
+		return ifElement;
 	}
 
 	public static Element createAssign(Element from, Element to) {
@@ -434,8 +444,7 @@ public class BpelXMLTools {
 		try {
 			xmlOutputter.output(element, System.out);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO How to handle?
 		}
 	}
 
@@ -457,11 +466,6 @@ public class BpelXMLTools {
 	}
 
 	public static Element createBPELElement(String name) {
-		if (name.equals(StructuredActivities.FLOW_ACTIVITY))
-			flow_count++;
-
-		if (name.equals(BasicActivities.INVOKE_ACTIVITY))
-			invoke_count++;
 		return new Element(name, getProcessNamespace());
 	}
 
@@ -493,6 +497,14 @@ public class BpelXMLTools {
 		Element otherwiseElement = createBPELElement(SWITCH_OTHERWISE_ELEMENT);
 		element.addContent(otherwiseElement);
 		return otherwiseElement;
+	}
+
+	public static void setProcessElement(Element processElement) {
+		BpelXMLTools.processElement = processElement;
+	}
+
+	public static Element getProcessElement() {
+		return processElement;
 	}
 
 }

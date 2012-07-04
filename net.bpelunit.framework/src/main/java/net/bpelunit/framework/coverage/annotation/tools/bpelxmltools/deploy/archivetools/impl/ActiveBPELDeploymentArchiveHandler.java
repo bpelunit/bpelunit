@@ -13,15 +13,18 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.deploy.archivetools.IDeploymentArchiveHandler;
 import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
 import net.bpelunit.framework.coverage.exceptions.BpelException;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -70,9 +73,9 @@ public class ActiveBPELDeploymentArchiveHandler implements
 
 	private static final String SERVICENAME_ELEMENT = "ServiceName";
 
-	private static String WSDL_FILE_IN_ARCHIVE;
+	private static String wsdlFileInArchive;
 
-	private Hashtable<String, File> bpelFiles;
+	private Map<String, File> bpelFiles;
 
 	private File archiveFile;
 
@@ -90,7 +93,8 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	 * @throws ArchiveFileException
 	 */
 	public String createArchivecopy(String archive) throws ArchiveFileException {
-		File copyFile = this.archiveFile = createCopy(archive);
+		this.archiveFile = createCopy(archive);
+		File copyFile = archiveFile;
 		searchBPELFiles();
 		return copyFile.getName();
 	}
@@ -122,8 +126,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	 * @return file: BPEL-Datei
 	 */
 	public File getBPELFile(int i) {
-		File bpelFile = bpelFiles.get(i);
-		return bpelFile;
+		return bpelFiles.get(i);
 	}
 
 	private void searchBPELFiles() {
@@ -143,8 +146,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			for (int i = 0; i < files.length; i++) {
 				searchChildrenBPEL((File) files[i]);
 			}
-		} else {
-			if (FilenameUtils.getExtension(file.getName()).equals("bpel"))
+		} else if (FilenameUtils.getExtension(file.getName()).equals("bpel")) {
 				bpelFiles.put(file.getInnerEntryName(), file);
 		}
 	}
@@ -158,14 +160,14 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	 * @param wsdlFile
 	 */
 	public void addWSDLFile(java.io.File wsdlFile) throws ArchiveFileException {
-		WSDL_FILE_IN_ARCHIVE = WSDL_DIRECTORY_IN_ARCHIVE + wsdlFile.getName();
+		wsdlFileInArchive = WSDL_DIRECTORY_IN_ARCHIVE + wsdlFile.getName();
 		fLogger.info("CoverageTool: Adding WSDL-file " + wsdlFile.getPath()
 				+ " for CoverageLogging in bpr-archive");
 		FileOutputStream out = null;
 		try {
 			adaptWsdlCatalog();
 			out = new FileOutputStream(archiveFile.getPath() + "/"
-					+ WSDL_FILE_IN_ARCHIVE);
+					+ wsdlFileInArchive);
 			out.write(FileUtils.readFileToByteArray(wsdlFile));
 			fLogger.info("CoverageTool: WSDL-file sucessfull added.");
 
@@ -175,14 +177,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 							+ wsdlFile.getName() + ") in deployment archive ",
 					e);
 		} finally {
-
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			IOUtils.closeQuietly(out);
 		}
 		prepareDeploymentDescriptor();
 	}
@@ -207,8 +202,8 @@ public class ActiveBPELDeploymentArchiveHandler implements
 			Element wsdlCatalog = doc.getRootElement();
 			Element wsdlEntry = new Element(WSDLENTRY_ELEMENT, wsdlCatalog
 					.getNamespace());
-			wsdlEntry.setAttribute(LOCATION_ATTR, WSDL_FILE_IN_ARCHIVE);
-			wsdlEntry.setAttribute(CLASSPATH_ATTR, WSDL_FILE_IN_ARCHIVE);
+			wsdlEntry.setAttribute(LOCATION_ATTR, wsdlFileInArchive);
+			wsdlEntry.setAttribute(CLASSPATH_ATTR, wsdlFileInArchive);
 			wsdlCatalog.addContent(wsdlEntry);
 		} catch (JDOMException e) {
 			throw new ArchiveFileException(
@@ -247,8 +242,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	private File getWSDLCatalog() {
 		String pfad = FilenameUtils.concat(FilenameUtils.concat(archiveFile
 				.getPath(), "META-INF"), "wsdlCatalog.xml");
-		File wsdlCatalog = new File(pfad);
-		return wsdlCatalog;
+		return new File(pfad);
 	}
 
 	/**
@@ -288,25 +282,15 @@ public class ActiveBPELDeploymentArchiveHandler implements
 						"An XML reading error occurred when reading the deployment descriptor: "
 								+ descriptor.getName(), e);
 			} finally {
-				if (is != null) {
-					try {
-						is.close();
-					} catch (IOException e) {
-					}
-				}
-				if (writer != null) {
-					try {
-						writer.close();
-					} catch (IOException e) {
-					}
-				}
+				IOUtils.closeQuietly(is);
+				IOUtils.closeQuietly(writer);
 			}
 		}
 	}
 
 	private void addWSDLEntry(Element process) {
 		Element wsdl = new Element(WSDL_ELEMENT, process.getNamespace());
-		wsdl.setAttribute(LOCATION_OF_WSDL_ATTR, WSDL_FILE_IN_ARCHIVE);
+		wsdl.setAttribute(LOCATION_OF_WSDL_ATTR, wsdlFileInArchive);
 		wsdl.setAttribute(NAMESPACE_ATTR, COVERAGETOOL_NAMESPACE.getURI());
 		Element references = getReferencesElement(process);
 		references.addContent(wsdl);
@@ -317,9 +301,10 @@ public class ActiveBPELDeploymentArchiveHandler implements
 	private Element getReferencesElement(Element process) {
 		Element references = null;
 		references = process.getChild("references", process.getNamespace());
-		if (references == null)
+		if (references == null) {
 			references = process.getChild("wsdlReferences", process
 					.getNamespace());
+		}
 		if (references == null) {
 			references = new Element("references", process.getNamespace());
 			process.addContent(references);
@@ -333,16 +318,18 @@ public class ActiveBPELDeploymentArchiveHandler implements
 		String name = null;
 		for (int i = 0; i < content.length; i++) {
 			name = content[i];
-			if (FilenameUtils.getExtension(name).equals("pdd"))
+			if (FilenameUtils.getExtension(name).equals("pdd")) {
 				pddFiles.add(name);
+			}
 		}
+		
 		if (pddFiles.size() == 0) {
 			throw new ArchiveFileException(
 					"Process deployment descriptor in bpr-archive not found");
 		}
 		fLogger.info("CoverageTool: gefunden " + name + " pdd-Datei");
+		
 		return pddFiles;
-
 	}
 
 	private void addPartnerLinkEndpoint(Element process) {
@@ -418,12 +405,7 @@ public class ActiveBPELDeploymentArchiveHandler implements
 					"An XML reading error occurred reading the BPEL file "
 							+ file.getName(), e);
 		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-				}
-			}
+			IOUtils.closeQuietly(is);
 		}
 		return doc;
 	}
@@ -438,17 +420,11 @@ public class ActiveBPELDeploymentArchiveHandler implements
 					.getPrettyFormat());
 			xmlOutputter.output(doc, writer);
 		} catch (IOException e) {
-
 			throw new ArchiveFileException(
 					"An I/O error occurred when writing the BPEL file: "
 							+ file.getName(), e);
 		} finally {
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (IOException e) {
-				}
-			}
+			IOUtils.closeQuietly(writer);
 		}
 	}
 

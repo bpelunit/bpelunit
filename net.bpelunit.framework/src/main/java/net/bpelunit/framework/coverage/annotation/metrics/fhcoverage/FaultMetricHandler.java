@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.bpelunit.framework.coverage.annotation.Instrumenter;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.coverage.exceptions.BpelException;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
 import org.jdom.Comment;
@@ -18,11 +19,6 @@ public class FaultMetricHandler implements IMetricHandler {
 
 	public static final String FAULT_HANDLER_LABEL = "catchBlock";
 
-	/*
-	 * Generiert eine eindeutige Markierung.
-	 * 
-	 * @return eindeutige Markierung
-	 */
 	/**
 	 * Generates unique marker
 	 * 
@@ -30,7 +26,7 @@ public class FaultMetricHandler implements IMetricHandler {
 	 */
 	public static String getNextMarker() {
 		return FAULT_HANDLER_LABEL
-				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + BpelXMLTools.incrementCounter();
 	}
 
 	private MarkersRegisterForArchive markersRegistry;
@@ -41,7 +37,7 @@ public class FaultMetricHandler implements IMetricHandler {
 	}
 
 
-	/* (non-Javadoc)
+	/**
 	 * @see net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler#insertMarkersForMetric(java.util.List)
 	 */
 	public void insertMarkersForMetric(List<Element> processElements)
@@ -56,8 +52,9 @@ public class FaultMetricHandler implements IMetricHandler {
 
 	private void insertCoverageLabelsForCatchBlock(Element catchBlock) {
 		Element child = getFirstEnclosedActivity(catchBlock);
-		if (!isSequence(child))
+		if (!isSequence(child)) {
 			child = ensureElementIsInSequence(child);
+		}
 
 		String marker = getNextMarker();
 		markersRegistry.registerMarker(marker);

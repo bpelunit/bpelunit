@@ -25,13 +25,13 @@ public interface IDeploymentArchiveHandler {
 	 * @return ArchivCopy
 	 * @throws ArchiveFileException
 	 */
-	public String createArchivecopy(String archiv) throws ArchiveFileException;
+	String createArchivecopy(String archiv) throws ArchiveFileException;
 
 	/**
 	 * 
 	 * @return die Namen aller BPEL-Dateien, die im Archiv enthalten sind.
 	 */
-	public Set<String> getAllBPELFileNames();
+	Set<String> getAllBPELFileNames();
 
 	/**
 	 * 
@@ -39,7 +39,7 @@ public interface IDeploymentArchiveHandler {
 	 * @return BPEL-Prozessbeschreibung als XML-Dokumnet
 	 * @throws BpelException
 	 */
-	public Document getDocument(String fileName) throws BpelException;
+	Document getDocument(String fileName) throws BpelException;
 
 	/**
 	 * Schreibt den BPEL-Prozess in Form eines XML-Dokumentes in den Archiv
@@ -47,19 +47,19 @@ public interface IDeploymentArchiveHandler {
 	 * @param fileName Name der BPEL-Datei
 	 * @throws ArchiveFileException
 	 */
-	public void writeDocument(Document doc, String fileName) throws ArchiveFileException;
+	void writeDocument(Document doc, String fileName) throws ArchiveFileException;
 
 	/**
 	 * Fügt in den Archive WSDL-Datei und registriert sie, falls nötig
 	 * @param wsdlFile
 	 * @throws ArchiveFileException
 	 */
-	public void addWSDLFile(File wsdlFile) throws ArchiveFileException;
+	void addWSDLFile(File wsdlFile) throws ArchiveFileException;
 
 	/**
 	 * Gibt die reservierten Ressourcen (Streams) frei. 
 	 *
 	 */
-	public void closeArchive();
+	void closeArchive();
 
 }

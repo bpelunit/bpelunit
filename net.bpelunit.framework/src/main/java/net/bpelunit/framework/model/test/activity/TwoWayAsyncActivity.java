@@ -25,26 +25,42 @@ public abstract class TwoWayAsyncActivity extends Activity {
 	/**
 	 * Send part
 	 */
-	protected SendAsync fSendAsync;
+	private SendAsync fSendAsync;
 
 	/**
 	 * Receive part
 	 */
-	protected ReceiveAsync fReceiveAsync;
+	private ReceiveAsync fReceiveAsync;
 
 	/**
 	 * Registered Header Processor, if any (may be null)
 	 */
-	protected IHeaderProcessor fHeaderProcessor;
+	private IHeaderProcessor fHeaderProcessor;
 
 	/**
 	 * Registered Mappings, if any (may be null). Note that this really only makes sense in the case
 	 * of Receive/Send
 	 */
-	protected List<DataCopyOperation> fMapping;
+	private List<DataCopyOperation> fMapping;
 
 
 	// ********************************* Initialization ****************************
+
+	protected SendAsync getSendAsync() {
+		return fSendAsync;
+	}
+
+	protected ReceiveAsync getReceiveAsync() {
+		return fReceiveAsync;
+	}
+
+	protected IHeaderProcessor getHeaderProcessor() {
+		return fHeaderProcessor;
+	}
+
+	protected List<DataCopyOperation> getMapping() {
+		return fMapping;
+	}
 
 	public TwoWayAsyncActivity(PartnerTrack partnerTrack) {
 		super(partnerTrack);

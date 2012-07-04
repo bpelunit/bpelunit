@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  * @author Philip Mayer
  * 
  */
-public class ArtefactStatus {
+public final class ArtefactStatus {
 
 	private static final Logger LOGGER = Logger.getLogger(ArtefactStatus.class);
 
@@ -148,8 +148,9 @@ public class ArtefactStatus {
 		List<StateData> stateData= new ArrayList<StateData>();
 		stateData.add(new StateData("Status Code", fCode.name()));
 		stateData.add(new StateData("Status Message", fMessage));
-		if (fException != null)
+		if (fException != null) {
 			stateData.add(new StateData("Exception", fException.getMessage()));
+		}
 		return stateData;
 	}
 
@@ -158,8 +159,9 @@ public class ArtefactStatus {
 		StringBuffer toString= new StringBuffer();
 		toString.append("Status { Code => \"" + fCode.name() + "\", ");
 		toString.append("Message => \"" + fMessage + "\"");
-		if (fException != null)
+		if (fException != null) {
 			toString.append(", Exception => \"" + fException.getMessage() + "\"");
+		}
 		toString.append(" }");
 		return toString.toString();
 	}

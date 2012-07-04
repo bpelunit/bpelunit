@@ -15,7 +15,6 @@ import javax.xml.soap.SOAPMessage;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.w3c.dom.DOMException;
 
 /**
  * An entity which takes care of passing a BPR file as a base64-encoded file in
@@ -41,7 +40,7 @@ public class BPRDeployRequestEntity extends ActiveBPELRequestEntityBase {
 
     @Override
     protected void populateMessage(SOAPMessage message)
-            throws SOAPException, DOMException, IOException {
+            throws SOAPException, IOException {
         SOAPElement xmlDeployBpr = addRootElement(
             message, new QName(ACTIVEBPEL_ELEMENT_DEPLOYBPR));
 

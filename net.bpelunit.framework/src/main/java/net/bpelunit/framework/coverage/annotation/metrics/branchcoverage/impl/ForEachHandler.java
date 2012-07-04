@@ -30,12 +30,12 @@ public class ForEachHandler implements IStructuredActivityHandler {
 	 * Fügt Markierungen, die später durch Invoke-Aufrufe protokolliert werden,
 	 * um die Ausführung der Zweige zu erfassen.
 	 * 
-	 * @param forEach_activity
+	 * @param forEachActivity
 	 * @throws BpelException
 	 */
-	public void insertBranchMarkers(Element forEach_activity)
+	public void insertBranchMarkers(Element forEachActivity)
 			throws BpelException {
-			insertMarkerForSequenceBranches(forEach_activity);
+			insertMarkerForSequenceBranches(forEachActivity);
 	}
 
 	/**
@@ -47,15 +47,17 @@ public class ForEachHandler implements IStructuredActivityHandler {
 			throws BpelException {
 		Element activity = element.getChild(StructuredActivities.SCOPE_ACTIVITY,
 				BpelXMLTools.getProcessNamespace());
-		if (activity == null)
+		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ELEMENT
 					+ "(Scope) in ForEach activity.");
+		}
 		
 		activity = getFirstEnclosedActivity(activity);
 		
-		if (activity == null)
+		if (activity == null) {
 			throw new BpelException(BpelException.MISSING_REQUIRED_ACTIVITY
 					+ " in ForEach activity.");
+		}
 
 		markersRegistry.registerMarker(BranchMetricHandler.insertLabelBevorAllActivities(activity));
 		markersRegistry.registerMarker(BranchMetricHandler.insertLabelAfterAllActivities(activity));

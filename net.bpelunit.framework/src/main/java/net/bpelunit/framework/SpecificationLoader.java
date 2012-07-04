@@ -14,6 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.wsdl.Definition;
+import javax.wsdl.WSDLException;
+import javax.wsdl.factory.WSDLFactory;
+import javax.wsdl.xml.WSDLReader;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
@@ -100,10 +104,11 @@ import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.w3c.dom.Attr;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.ibm.wsdl.Constants;
 
 /**
  * The specificaton loader reads test suite documents and creates the in-memory
@@ -120,12 +125,12 @@ public class SpecificationLoader {
 
 	private Map<String, XMLConditionGroup> conditionGroups = new HashMap<String, XMLConditionGroup>();
 
-	protected SpecificationLoader(BPELUnitRunner runner) {
+	public SpecificationLoader(BPELUnitRunner runner) {
 		fRunner = runner;
 		fLogger = Logger.getLogger(getClass());
 	}
 
-	protected TestSuite loadTestSuite(File suite) throws SpecificationException {
+	public TestSuite loadTestSuite(File suite) throws SpecificationException {
 		try {
 			fLogger.info("Loading test suite from file " + suite);
 
@@ -172,8 +177,9 @@ public class SpecificationLoader {
 
 	private void extractConditionGroups(XMLTestSuiteDocument doc) {
 		if (doc == null || doc.getTestSuite() == null
-				|| doc.getTestSuite().getConditionGroups() == null)
+				|| doc.getTestSuite().getConditionGroups() == null) {
 			return;
+		}
 
 		List<XMLConditionGroup> cgList = doc.getTestSuite()
 				.getConditionGroups().getConditionGroupList();
@@ -233,8 +239,10 @@ public class SpecificationLoader {
 
 		String xmlPutWSDL = xmlPut.getWsdl();
 		String xmlPutPartnerWSDL = xmlPut.getPartnerWSDL();
+		
 		Partner suiteClient = new Partner(BPELUnitConstants.CLIENT_NAME,
-				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL,
+				loadWsdlDefinition(testDirectory, xmlPutWSDL, BPELUnitConstants.CLIENT_NAME), 
+				loadWsdlDefinition(testDirectory, xmlPutPartnerWSDL, BPELUnitConstants.CLIENT_NAME),
 				suiteBaseURL.toString());
 
 		/*
@@ -246,7 +254,7 @@ public class SpecificationLoader {
 		createPartners(testDirectory, suiteBaseURL, xmlDeployment,
 				suitePartners);
 		Map<String, HumanPartner> humanPartners = createHumanPartners(
-				testDirectory, xmlDeployment, testDirectory, suiteBaseURL);
+				xmlDeployment, suiteBaseURL);
 
 		// Create the suite.
 		TestSuite suite = new TestSuite(xmlSuiteName, suiteBaseURL,
@@ -271,8 +279,8 @@ public class SpecificationLoader {
 		return suite;
 	}
 
-	private Map<String, HumanPartner> createHumanPartners(String testDirectory,
-			XMLDeploymentSection xmlDeployment, String basePath, URL baseURL)
+	private Map<String, HumanPartner> createHumanPartners(
+			XMLDeploymentSection xmlDeployment, URL baseURL)
 			throws SpecificationException {
 		Map<String, HumanPartner> humanPartners = new HashMap<String, HumanPartner>();
 
@@ -281,7 +289,7 @@ public class SpecificationLoader {
 					.getHumanPartnerList()) {
 				humanPartners.put(
 						hp.getName(),
-						new HumanPartner(hp.getName(), basePath, baseURL, hp
+						new HumanPartner(hp.getName(), baseURL, hp
 								.getWshtEndpoint(), hp.getUsername(), hp
 								.getPassword()));
 			}
@@ -302,8 +310,9 @@ public class SpecificationLoader {
 		for (XMLTestCase xmlTestCase : xmlTestCaseList) {
 
 			String xmlTestCaseName = xmlTestCase.getName();
-			if (xmlTestCaseName == null)
+			if (xmlTestCaseName == null) {
 				xmlTestCaseName = "Test Case " + currentNumber;
+			}
 			currentNumber++;
 
 			boolean isVary = xmlTestCase.getVary();
@@ -362,14 +371,54 @@ public class SpecificationLoader {
 		for (XMLPartnerDeploymentInformation xmlPDI : xmlDeployment
 				.getPartnerList()) {
 			String name = xmlPDI.getName();
-			String wsdl = xmlPDI.getWsdl();
-			String partnerWsdl = xmlPDI.getPartnerWsdl();
-			Partner p = new Partner(name, testDirectory, wsdl, partnerWsdl,
+			Partner p = new Partner(name, 
+					loadWsdlDefinition(testDirectory, xmlPDI.getWsdl(), name), 
+					loadWsdlDefinition(testDirectory, xmlPDI.getPartnerWsdl(), name),
 					suiteBaseURL.toString());
 			suitePartners.put(p.getName(), p);
 		}
 	}
 
+	public static Definition loadWsdlDefinition(String baseDir, String wsdlFileName,
+			String partnerName) throws SpecificationException {
+		if(wsdlFileName == null || wsdlFileName.equals("")) {
+			return null;
+		}
+		
+		return loadWsdlDefinition(new File(baseDir, wsdlFileName).getPath(), partnerName);
+	}
+	
+	/**
+	 * TODO FIXME Used in tests as well but this is not clean...
+	 * 
+	 * @param wsdlFileName
+	 * @param partnerName
+	 * @return
+	 * @throws SpecificationException
+	 */
+	public static Definition loadWsdlDefinition(String wsdlFileName,
+			String partnerName) throws SpecificationException {
+		
+		// Check file exists
+		if (!new File(wsdlFileName).exists()) {
+			throw new SpecificationException(
+					"Cannot read WSDL file for partner " + partnerName
+							+ ": File \"" + wsdlFileName + "\" not found.");
+		}
+			
+		// load WSDL
+		try {
+			WSDLFactory factory = WSDLFactory.newInstance();
+			WSDLReader reader = factory.newWSDLReader();
+			reader.setFeature(Constants.FEATURE_VERBOSE, false);
+			return reader.readWSDL(wsdlFileName);
+		} catch (WSDLException e) {
+			throw new SpecificationException(
+					"Error while reading WSDL for partner " + partnerName
+							+ " from file \"" + wsdlFileName + "\".", e);
+		}
+	}
+	
 	private ProcessUnderTest createProcessUnderTest(String testDirectory,
 			URL suiteBaseURL, Map<String, Partner> suitePartners,
 			XMLPUTDeploymentInformation xmlPut) throws SpecificationException {
@@ -379,7 +428,9 @@ public class SpecificationLoader {
 		String xmlPutType = xmlPut.getType();
 
 		ProcessUnderTest processUnderTest = new ProcessUnderTest(xmlPutName,
-				testDirectory, xmlPutWSDL, xmlPutPartnerWSDL,
+				testDirectory, 
+				loadWsdlDefinition(testDirectory, xmlPutWSDL, xmlPutName), 
+				loadWsdlDefinition(testDirectory, xmlPutPartnerWSDL, xmlPutName),
 				suiteBaseURL.toString());
 
 		for (XMLProperty property : xmlPut.getPropertyList()) {
@@ -409,8 +460,9 @@ public class SpecificationLoader {
 			// Use the local base URL, and if that doesn't work, try the default
 			// one
 			String xmlUrl = xmlTestSuite.getBaseURL();
-			if (xmlUrl == null)
+			if (xmlUrl == null) {
 				xmlUrl = BPELUnitConstants.DEFAULT_BASE_URL;
+			}
 			URL suiteBaseURL = new URL(xmlUrl);
 
 			// Normalize the URL: add port and trailing slash if missing
@@ -462,24 +514,26 @@ public class SpecificationLoader {
 						Attr attr = (Attr) set.item(i);
 						List<Integer> ints = getRoundInformation(attr
 								.getValue());
-						if (ints != null)
+						if (ints != null) {
 							currentMax = ints.size();
+						}
 					}
 				}
 				rounds = currentMax;
 			} catch (XPathExpressionException e) {
 				// This should not happen.
 				throw new SpecificationException(
-						"There was a problem finding delay sequences. This most likely indicates a bug in the framework.");
+						"There was a problem finding delay sequences. This most likely indicates a bug in the framework.", e);
 			}
 		}
 		return rounds;
 	}
 
 	private void readTestSuiteSetUpBlock(TestSuite testSuite,
-			XMLTestSuite xmlTestSuite) throws Exception {
-		if (!xmlTestSuite.isSetSetUp())
+			XMLTestSuite xmlTestSuite) {
+		if (!xmlTestSuite.isSetSetUp()) {
 			return;
+		}
 
 		XMLSetUp xmlSetUp = xmlTestSuite.getSetUp();
 		if (xmlSetUp.isSetScript()) {
@@ -499,21 +553,21 @@ public class SpecificationLoader {
 
 		// Partners Partner Track
 		readPartners(suitePartners, xmlTestCase, round, testDirectory, test);
-		readHumanPartners(suiteHumanPartners, xmlTestCase, round,
+		readHumanPartners(suiteHumanPartners, xmlTestCase, 
 				testDirectory, test);
 		return test;
 	}
 
 	private void readHumanPartners(
 			Map<String, HumanPartner> suiteHumanPartners,
-			XMLTestCase xmlTestCase, int round, String testDirectory,
+			XMLTestCase xmlTestCase, String testDirectory,
 			TestCase test) throws SpecificationException {
 		List<XMLHumanPartnerTrack> humanPartnerTrackList = xmlTestCase
 				.getHumanPartnerTrackList();
 
 		if (humanPartnerTrackList != null) {
 			for (XMLHumanPartnerTrack xmlHumanPartnerTrack : humanPartnerTrackList) {
-				readHumanPartner(suiteHumanPartners, xmlTestCase, round,
+				readHumanPartner(suiteHumanPartners,  
 						testDirectory, test, xmlHumanPartnerTrack);
 			}
 		}
@@ -521,22 +575,22 @@ public class SpecificationLoader {
 	}
 
 	private void readHumanPartner(Map<String, HumanPartner> suiteHumanPartners,
-			XMLTestCase xmlTestCase, int round, String testDirectory,
+			String testDirectory,
 			TestCase test, XMLHumanPartnerTrack xmlHumanPartnerTrack)
 			throws SpecificationException {
 		String xmlPartnerTrackName = xmlHumanPartnerTrack.getName();
 		HumanPartner realPartner = suiteHumanPartners.get(xmlPartnerTrackName);
 
 		PartnerTrack pTrack = new PartnerTrack(test, realPartner);
-		readActivities(pTrack, xmlTestCase, xmlHumanPartnerTrack, round,
+		readActivities(pTrack, xmlHumanPartnerTrack,
 				testDirectory);
 		pTrack.setNamespaceContext(getNamespaceMap(xmlHumanPartnerTrack
 				.newCursor()));
 		test.addPartnerTrack(pTrack);
 	}
 
-	private void readActivities(PartnerTrack pTrack, XMLTestCase xmlTestCase,
-			XMLHumanPartnerTrack xmlHumanPartnerTrack, int round,
+	private void readActivities(PartnerTrack pTrack,
+			XMLHumanPartnerTrack xmlHumanPartnerTrack,
 			String testDirectory) throws SpecificationException {
 		if (xmlHumanPartnerTrack.getCompleteHumanTaskList() != null) {
 			for (XMLCompleteHumanTaskActivity xmlActivity : xmlHumanPartnerTrack
@@ -576,11 +630,12 @@ public class SpecificationLoader {
 			TestCase test) throws SpecificationException {
 		List<XMLPartnerTrack> partnerTrackList = xmlTestCase
 				.getPartnerTrackList();
-		if (partnerTrackList != null)
+		if (partnerTrackList != null) {
 			for (XMLPartnerTrack xmlPartnerTrack : partnerTrackList) {
 				readPartner(suitePartners, xmlTestCase, round, testDirectory,
 						test, xmlPartnerTrack);
 			}
+		}
 	}
 
 	private void readPartner(Map<String, Partner> suitePartners,
@@ -619,8 +674,9 @@ public class SpecificationLoader {
 	}
 
 	private void readTestCaseSetUpBlock(TestCase test, XMLTestCase xmlTestCase) {
-		if (!xmlTestCase.isSetSetUp())
+		if (!xmlTestCase.isSetSetUp()) {
 			return;
+		}
 
 		XMLSetUp xmlSetUp = xmlTestCase.getSetUp();
 		if (xmlSetUp.isSetScript()) {
@@ -656,10 +712,11 @@ public class SpecificationLoader {
 
 				// Find name of track
 				String trackName = null;
-				if (xmlTrack instanceof XMLPartnerTrack)
+				if (xmlTrack instanceof XMLPartnerTrack) {
 					trackName = ((XMLPartnerTrack) xmlTrack).getName();
-				else
+				} else {
 					trackName = BPELUnitConstants.CLIENT_NAME;
+				}
 
 				// Find the first test case with has a non-empty track like ours
 				XMLTestCase basedOnTestCase = findInHierarchy(xmlTestCase,
@@ -783,9 +840,10 @@ public class SpecificationLoader {
 		XMLSendActivity xmlSend = xmlSendReceiveSync.getSend();
 		XMLReceiveActivity xmlReceive = xmlSendReceiveSync.getReceive();
 
-		if ((xmlSend == null) || (xmlReceive == null))
+		if ((xmlSend == null) || (xmlReceive == null)) {
 			throw new SpecificationException(
 					"A synchronous send/receive activity must have both receive and send children.");
+		}
 
 		XMLHeaderProcessor xmlHeaderProcessor = xmlSendReceiveSync
 				.getHeaderProcessor();
@@ -797,13 +855,14 @@ public class SpecificationLoader {
 
 		// Receive may expect a fault - or receive from an output element
 		SOAPOperationDirectionIdentifier receiveDirection = SOAPOperationDirectionIdentifier.OUTPUT;
-		if (xmlReceive.getFault())
+		if (xmlReceive.getFault()) {
 			receiveDirection = SOAPOperationDirectionIdentifier.FAULT;
+		}
 		ReceiveDataSpecification rSpec = createReceiveSpecificationFromParent(
 				activity, xmlSendReceiveSync, xmlReceive, receiveDirection);
 
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
-		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
+		List<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				activity, xmlSendReceiveSync);
 
 		activity.initialize(sSpec, rSpec, proc, mapping);
@@ -826,9 +885,10 @@ public class SpecificationLoader {
 		XMLSendActivity xmlSend = xmlReceiveSendSync.getSend();
 		XMLReceiveActivity xmlReceive = xmlReceiveSendSync.getReceive();
 
-		if ((xmlSend == null) || (xmlReceive == null))
+		if ((xmlSend == null) || (xmlReceive == null)) {
 			throw new SpecificationException(
 					"A synchronous receive/send activity must have both receive and send children.");
+		}
 
 		XMLHeaderProcessor xmlHeaderProcessor = xmlReceiveSendSync
 				.getHeaderProcessor();
@@ -840,14 +900,15 @@ public class SpecificationLoader {
 
 		// The "send" part may send a fault here, or to an output element
 		SOAPOperationDirectionIdentifier sendDirection = SOAPOperationDirectionIdentifier.OUTPUT;
-		if (xmlSend.getFault())
+		if (xmlSend.getFault()) {
 			sendDirection = SOAPOperationDirectionIdentifier.FAULT;
+		}
 		SendDataSpecification sSpec = createSendSpecificationFromParent(
 				activity, xmlReceiveSendSync, xmlSend, sendDirection, round,
 				testDirectory);
 
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
-		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
+		List<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				activity, xmlReceiveSendSync);
 
 		activity.initialize(sSpec, rSpec, proc, mapping);
@@ -872,13 +933,14 @@ public class SpecificationLoader {
 		XMLSendActivity xmlSend = xmlAsyncTwoWay.getSend();
 		XMLReceiveActivity xmlReceive = xmlAsyncTwoWay.getReceive();
 
-		if ((xmlSend == null) || (xmlReceive == null))
+		if ((xmlSend == null) || (xmlReceive == null)) {
 			throw new SpecificationException(
 					"An asynchronous receive/send or send/receive activity must have both receive and send children.");
-
+		}
+			
 		XMLHeaderProcessor xmlHeaderProcessor = xmlAsyncTwoWay
 				.getHeaderProcessor();
-		ArrayList<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
+		List<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				twoWayActivity, xmlAsyncTwoWay);
 
 		SendAsync sendAct = new SendAsync(twoWayActivity);
@@ -982,8 +1044,7 @@ public class SpecificationLoader {
 		try {
 		if (xmlSend.isSetData()) {
 			rawDataRoot = getLiteralDataForSend(xmlSend.getData(), testDirectory);
-		}
-		else if (xmlSend.isSetTemplate()) {
+		} else if (xmlSend.isSetTemplate()) {
 			if (xmlSend.getTemplate().isSetSrc()) {
 				// 'src' attribute in <template> - load as raw text, *not* XML - much less escaping involved
 				// Cannot reuse namespaces in .bpts - user must set namespaces in the .vm (same as when loading an external XML file)
@@ -1012,8 +1073,9 @@ public class SpecificationLoader {
 		String delaySequence = xmlSend.getDelaySequence();
 		List<Integer> sequence = getRoundInformation(delaySequence);
 		int currentDelay = 0;
-		if (sequence != null && sequence.size() > round)
+		if (sequence != null && sequence.size() > round) {
 			currentDelay = sequence.get(round);
+		}
 
 		// If the user hasn't specified any fault code or string, use these
 		// default values
@@ -1028,10 +1090,11 @@ public class SpecificationLoader {
 			spec.initialize(operation, currentDelay, delayExpression, null,
 					null, encodingStyle, encoder, rawDataRoot, templateText,
 					faultCode, faultString);
-		} else
+		} else {
 			spec.initialize(operation, currentDelay, delayExpression,
 					targetURL, soapAction, encodingStyle, encoder, rawDataRoot,
 					templateText, faultCode, faultString);
+		}
 
 		return spec;
 	}
@@ -1055,7 +1118,7 @@ public class SpecificationLoader {
 	}
 
 	private Element copyAsRootWithNamespaces(XmlObject xmlData)
-			throws DOMException, SpecificationException
+			throws SpecificationException
 	{
 		try {
 		Element rawDataRoot;
@@ -1208,24 +1271,26 @@ public class SpecificationLoader {
 		return cgs;
 	}
 
-	private ArrayList<DataCopyOperation> getCopyOperations(Activity activity,
+	private List<DataCopyOperation> getCopyOperations(Activity activity,
 			XMLTwoWayActivity xmlTwoWayType) throws SpecificationException {
 
 		ArrayList<DataCopyOperation> copyDataOperations = new ArrayList<DataCopyOperation>();
 		XMLMapping xmlMapping = xmlTwoWayType.getMapping();
 		if (xmlMapping != null) {
 			List<XMLCopy> xmlCopyList = xmlMapping.getCopyList();
-			if (xmlCopyList != null)
+			if (xmlCopyList != null) {
 				for (XMLCopy xmlCopy : xmlCopyList) {
 					String xmlCopyFrom = xmlCopy.getFrom();
 					String xmlCopyTo = xmlCopy.getTo();
-					if ((xmlCopyFrom == null) || (xmlCopyTo == null))
+					if ((xmlCopyFrom == null) || (xmlCopyTo == null)) {
 						throw new SpecificationException(
 								"Copy operations need both copy-from and copy-to specifications.");
+					}
 
 					copyDataOperations.add(new DataCopyOperation(activity,
 							xmlCopyFrom, xmlCopyTo));
 				}
+			}
 		}
 
 		return copyDataOperations;
@@ -1235,29 +1300,33 @@ public class SpecificationLoader {
 			XMLHeaderProcessor xmlHeaderProcessor)
 			throws SpecificationException {
 
-		if (xmlHeaderProcessor == null)
+		if (xmlHeaderProcessor == null) {
 			return null;
+		}
 
 		String xmlHeaderProcessorName = xmlHeaderProcessor.getName();
-		if (xmlHeaderProcessorName == null)
+		if (xmlHeaderProcessorName == null) {
 			throw new SpecificationException("Header Processor needs a name.");
+		}
 
 		List<XMLProperty> propertyList = xmlHeaderProcessor.getPropertyList();
 
 		IHeaderProcessor proc = fRunner
 				.createNewHeaderProcessor(xmlHeaderProcessorName);
-		if (propertyList != null)
+		if (propertyList != null) {
 			for (XMLProperty property : propertyList) {
 				String xmlPropertyName = property.getName();
 				String xmlPropertyData = property.getStringValue();
-				if ((xmlPropertyName == null) || (xmlPropertyData == null))
+				if ((xmlPropertyName == null) || (xmlPropertyData == null)) {
 					throw new SpecificationException(
 							"Properties in Header Processor "
 									+ xmlHeaderProcessorName
 									+ " need both property name and value.");
+				}
 
 				proc.setProperty(xmlPropertyName, xmlPropertyData);
 			}
+		}
 		return proc;
 	}
 
@@ -1268,22 +1337,25 @@ public class SpecificationLoader {
 
 		Partner partner = (Partner) activity.getPartner();
 
-		if (service == null)
+		if (service == null) {
 			throw new SpecificationException(
 					"Expected a service specification in activity "
 							+ activity.getName()
 							+ " (PartnerTrack for partner " + partner + ").");
-		if (port == null)
+		}
+		if (port == null) {
 			throw new SpecificationException(
 					"Expected a port specification in activity "
 							+ activity.getName()
 							+ " (PartnerTrack for partner " + partner + ").");
-		if (operation == null)
+		}
+		if (operation == null) {
 			throw new SpecificationException(
 					"Expected a operation specification in activity "
 							+ activity.getName()
 							+ " (PartnerTrack for partner " + partner + ").");
-
+		}
+		
 		return partner.getOperation(service, port, operation, direction);
 	}
 
@@ -1294,11 +1366,12 @@ public class SpecificationLoader {
 			service = xmlActivity.getService();
 		} catch (Exception e) {
 		}
-		if (service == null)
+		if (service == null) {
 			throw new SpecificationException(
 					"Could not find service for activity "
 							+ parentActivity.getName()
 							+ ": not specified or wrong prefix.");
+		}
 		return service;
 	}
 
@@ -1337,9 +1410,8 @@ public class SpecificationLoader {
 					if (hasNonEmptyPartnerTrack(xmlTestCaseFor,
 							partnerTrackName)) {
 						return xmlTestCaseFor;
-					} else {
-						if (xmlTestCaseFor.getBasedOn() != null
-								&& !"".equals(xmlTestCaseFor.getBasedOn()))
+					} else 	if (xmlTestCaseFor.getBasedOn() != null
+								&& !"".equals(xmlTestCaseFor.getBasedOn())) {
 							return findInHierarchy(xmlTestCaseFor,
 									partnerTrackName);
 					}
@@ -1353,8 +1425,9 @@ public class SpecificationLoader {
 			String partnerTrackName) {
 
 		XMLTrack track = getPartnerTrack(xmlTestCase, partnerTrackName);
-		if (track != null)
+		if (track != null) {
 			return !ActivityUtil.getActivities(track).isEmpty();
+		}
 
 		return false;
 	}

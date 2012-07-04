@@ -52,10 +52,10 @@ public class HumanPartner extends AbstractPartner {
 		return this.wshtClient;
 	}
 	
-	public HumanPartner(String name, String basePath, URL baseURL, String endPoint, String username,
+	public HumanPartner(String name, URL baseURL, String endPoint, String username,
 			String password) throws SpecificationException {
 		
-		super(name, basePath, baseURL.toString());
+		super(name, baseURL.toString());
 		
 		try {
 			this.endPoint = new URL(endPoint);

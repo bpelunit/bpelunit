@@ -17,12 +17,13 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import net.bpelunit.framework.exception.DeploymentException;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import net.bpelunit.framework.control.util.BPELUnitUtil;
 
 /**
  * ODERequestEntityFactory -creates RequestEntity objects required for deploy
@@ -31,7 +32,7 @@ import net.bpelunit.framework.control.util.BPELUnitUtil;
  * @author Buddhika Chamith
  */
 
-public class ODERequestEntityFactory {
+public final class ODERequestEntityFactory {
 	private static ODERequestEntityFactory factory = null;
 	private static final String ODE_ELEMENT_DEPLOY = "deploy";
 	private static final String ODE_ELEMENT_ZIPNAME = "name";
@@ -42,7 +43,6 @@ public class ODERequestEntityFactory {
 
 	private static final String NS_DEPLOY_SERVICE = "http://www.apache.org/ode/deployapi";
 	private static final String NS_XML_MIME = "http://www.w3.org/2005/05/xmlmime";
-	// private static final String NS_PMAPI = "http://www.apache.org/ode/pmapi";
 
 	private static final String CONTENT_TYPE_STRING = "contentType";
 	private static final String ZIP_CONTENT_TYPE = "application/zip";
@@ -61,22 +61,31 @@ public class ODERequestEntityFactory {
 		return factory;
 	}
 
-	public RequestEntity getDeployRequestEntity(File file) throws IOException,
-			SOAPException {
-		prepareDeploySOAP(file);
-		return new StringRequestEntity(fContent);
+	public RequestEntity getDeployRequestEntity(File file) throws DeploymentException {
+		try {
+			prepareDeploySOAP(file);
+			return new StringRequestEntity(fContent);
+		} catch (Exception e) {
+			throw new DeploymentException(
+					"Problem while creating SOAP request: " + e.getMessage(), e);
+		}
 	}
 
 	public RequestEntity getUndeployRequestEntity(String processId)
-			throws IOException, SOAPException {
-		prepareUndeploySOAP(processId);
-		return new StringRequestEntity(fContent);
+			throws DeploymentException {
+		try {
+			prepareUndeploySOAP(processId);
+			return new StringRequestEntity(fContent);
+		} catch (Exception e) {
+			throw new DeploymentException(
+					"Problem while creating SOAP request: " + e.getMessage(), e);
+		}
 	}
 
 	// ***** Private helper methods ********
 
 	private void prepareDeploySOAP(File file) throws IOException, SOAPException {
-		MessageFactory mFactory = BPELUnitUtil.getMessageFactoryInstance();
+		MessageFactory mFactory = MessageFactory.newInstance();
 		SOAPMessage message = mFactory.createMessage();
 		SOAPBody body = message.getSOAPBody();
 
@@ -110,7 +119,7 @@ public class ODERequestEntityFactory {
 
 	private void prepareUndeploySOAP(String packageId) throws SOAPException,
 			IOException {
-		MessageFactory mFactory = BPELUnitUtil.getMessageFactoryInstance();
+		MessageFactory mFactory = MessageFactory.newInstance();
 		SOAPMessage message = mFactory.createMessage();
 		SOAPBody body = message.getSOAPBody();
 

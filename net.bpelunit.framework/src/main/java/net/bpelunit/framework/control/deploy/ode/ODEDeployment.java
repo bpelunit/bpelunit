@@ -53,6 +53,9 @@ public class ODEDeployment extends GenericDeployment {
 	private static final String SERVICE_ATTR = "service";
 	private static final String PORT_ATTR = "port";
 
+	private static final int TOKEN_NS_URI = 0;
+	private static final int TOKEN_LOCALNAME = 1;
+	
 	private Document fDescriptorDocument;
 	private Logger fLogger;
 	private String fDescriptorPath;
@@ -65,9 +68,7 @@ public class ODEDeployment extends GenericDeployment {
 	}
 
 	// ************* IDeployment Implementation method ********************
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see
 	 * net.bpelunit.framework.control.deploy.ode.IDeployment#addLoggingService()
 	 */
@@ -163,14 +164,7 @@ public class ODEDeployment extends GenericDeployment {
 					"Could not add WSDL file for coverage measurement tool ("
 							+ wsdl.getName() + ") in deployment archive ", e);
 		} finally {
-
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			IOUtils.closeQuietly(out);
 		}
 	}
 
@@ -193,7 +187,6 @@ public class ODEDeployment extends GenericDeployment {
 
 					Element invoke = constructInvokeElement();
 					process.addContent(invoke);
-					// addPartnerLinkEndpoint(process);
 					writer = new FileWriter(fDescriptorPath);
 					XMLOutputter xmlOutputter = new XMLOutputter(Format
 							.getPrettyFormat());
@@ -227,19 +220,14 @@ public class ODEDeployment extends GenericDeployment {
 	}
 
 	private QName extractQName(String serviceName, Element service) {
-		final int NS_URI = 0;
-		final int LOCALNAME = 1;
-
-		String tokens[];
-
 		if (serviceName.contains(":")) {
-			tokens = serviceName.split(":");
+			String tokens[] = serviceName.split(":");
 
-			if (isUri(tokens[NS_URI]) && !isPrefix(tokens[NS_URI], service)) {
-				return new QName(tokens[NS_URI], tokens[LOCALNAME]);
+			if (isUri(tokens[TOKEN_NS_URI]) && !isPrefix(tokens[TOKEN_NS_URI], service)) {
+				return new QName(tokens[TOKEN_NS_URI], tokens[TOKEN_LOCALNAME]);
 			} else {
-				String namespace = getPrefixValue(tokens[NS_URI], service);
-				return new QName(namespace, tokens[LOCALNAME]);
+				String namespace = getPrefixValue(tokens[TOKEN_NS_URI], service);
+				return new QName(namespace, tokens[TOKEN_LOCALNAME]);
 			}
 		}
 

@@ -34,7 +34,7 @@ public interface ISOAPEncoder {
 	 * @return
 	 * @throws SOAPEncodingException
 	 */
-	public SOAPMessage construct(SOAPOperationCallIdentifier operation, Element literalData, QName faultCode, String faultString) throws SOAPEncodingException;
+	SOAPMessage construct(SOAPOperationCallIdentifier operation, Element literalData, QName faultCode, String faultString) throws SOAPEncodingException;
 
 	/**
 	 * Deconstructs a complete SOAP message into literal elements according to the instruction in
@@ -48,6 +48,6 @@ public interface ISOAPEncoder {
 	 * @return
 	 * @throws SOAPEncodingException
 	 */
-	public Element deconstruct(SOAPOperationCallIdentifier operation, SOAPMessage message) throws SOAPEncodingException;
+	Element deconstruct(SOAPOperationCallIdentifier operation, SOAPMessage message) throws SOAPEncodingException;
 
 }

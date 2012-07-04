@@ -2,11 +2,8 @@ package net.bpelunit.framework.coverage.annotation.metrics.activitycoverage;
 
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_1_1;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
-import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCES_ELEMENT;
-import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.SOURCE_ELEMENT;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGETS_ELEMENT;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.TARGET_ELEMENT;
-import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.count;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.encloseInSequence;
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.ensureElementIsInSequence;
 
@@ -14,12 +11,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.coverage.annotation.Instrumenter;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
+
+import org.apache.log4j.Logger;
 import org.jdom.Comment;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -34,15 +32,11 @@ import org.jdom.Namespace;
  */
 public class ActivityMetricHandler implements IMetricHandler {
 
-	public static int targetscount;
-
-	private Logger logger = Logger.getLogger(getClass());
-
 	private MarkersRegisterForArchive markersRegistry;
 
 	public ActivityMetricHandler(MarkersRegisterForArchive markersRegistry) {
 		this.markersRegistry = markersRegistry;
-		logger = Logger.getLogger(getClass());
+		Logger.getLogger(getClass());
 	}
 
 	/**
@@ -60,26 +54,9 @@ public class ActivityMetricHandler implements IMetricHandler {
 	// NOT
 	public void insertMarkersForMetric(List<Element> activities) {
 		for (Element activity : activities) {
-			Element sequence = null;
-			respectTargetActivities(activity, sequence);
-			// respectSourceActivities(element, sequence);
+			respectTargetActivities(activity);
 			ensureElementIsInSequence(activity);
 			insertMarkerForActivity(activity);
-		}
-	}
-
-	private void respectSourceActivities(Element element, Element sequence) {
-		List<Element> sourceElements = getSourceElements(element);
-		if (sourceElements.size() > 0) {
-			if (sequence == null)
-				sequence = encloseInSequence(element);
-			Element sourceElement;
-			for (Iterator<Element> iter = sourceElements.iterator(); iter
-					.hasNext();) {
-				sourceElement = iter.next();
-				sequence.addContent(0, sourceElement.detach());
-			}
-
 		}
 	}
 
@@ -90,35 +67,17 @@ public class ActivityMetricHandler implements IMetricHandler {
 	 * @param element
 	 * @param sequence
 	 */
-	private void respectTargetActivities(Element element, Element sequence) {
+	private void respectTargetActivities(Element element) {
 		List<Element> targetElements = getTargetElements(element);
 		if (targetElements.size() > 0) {
-			sequence = encloseInSequence(element);
+			Element realSequence = encloseInSequence(element);
 			Element targetElement;
 			for (Iterator<Element> iter = targetElements.iterator(); iter
 					.hasNext();) {
 				targetElement = iter.next();
-				sequence.addContent(0, targetElement.detach());
+				realSequence.addContent(0, targetElement.detach());
 			}
 		}
-	}
-
-	private List<Element> getSourceElements(Element element) {
-		List<Element> sourceElements = new ArrayList<Element>();
-		Namespace bpelVersion = BpelXMLTools.getProcessNamespace();
-		if (bpelVersion.equals(NAMESPACE_BPEL_2_0)) {
-			Element sourceElement = element.getChild(SOURCES_ELEMENT,
-					bpelVersion);
-			if (sourceElement != null)
-				sourceElements.add(sourceElement);
-		} else if (bpelVersion.equals(NAMESPACE_BPEL_1_1)) {
-			List<Element> list = element.getChildren(SOURCE_ELEMENT,
-					bpelVersion);
-			for (Iterator<Element> iter = list.iterator(); iter.hasNext();) {
-				sourceElements.add(iter.next());
-			}
-		}
-		return sourceElements;
 	}
 
 	private List<Element> getTargetElements(Element element) {
@@ -127,9 +86,11 @@ public class ActivityMetricHandler implements IMetricHandler {
 		if (bpelVersion.equals(NAMESPACE_BPEL_2_0)) {
 			Element targetElement = element.getChild(TARGETS_ELEMENT,
 					bpelVersion);
-			if (targetElement != null)
+			if (targetElement != null) {
 				targetElements.add(targetElement);
+			}
 		} else if (bpelVersion.equals(NAMESPACE_BPEL_1_1)) {
+			@SuppressWarnings("unchecked")
 			List<Element> list = element.getChildren(TARGET_ELEMENT,
 					bpelVersion);
 			for (Iterator<Element> iter = list.iterator(); iter.hasNext();) {
@@ -149,18 +110,18 @@ public class ActivityMetricHandler implements IMetricHandler {
 	 */
 	private void insertMarkerForActivity(Element element) {
 		Element parent = element.getParentElement();
-		String element_name = element.getName();
-		String marker = element_name
-				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+		String elementName = element.getName();
+		String marker = elementName
+				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + BpelXMLTools.incrementCounter();
 		markersRegistry.registerMarker(marker);
 		Comment comment = new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
 				+ marker);
 		int index = parent.indexOf(element);
-		if (element_name.equals(BasicActivities.RECEIVE_ACTIVITY))
+		if (elementName.equals(BasicActivities.RECEIVE_ACTIVITY)) {
 			parent.addContent(index + 1, comment);
-		else
+		} else {
 			parent.addContent(index, comment);
-
+		}
 	}
 
 }

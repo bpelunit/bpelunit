@@ -19,6 +19,7 @@ import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -26,48 +27,51 @@ import org.w3c.dom.NodeList;
 /**
  * 
  * <p>
- * This class implements an Encoder for SOAP messages in rpc/literal style. The WSDL specifying the
- * target web service must be structured as specified in the WS-I Basic Profile, which has the
- * following implications for this encoder:
+ * This class implements an Encoder for SOAP messages in rpc/literal style. The
+ * WSDL specifying the target web service must be structured as specified in the
+ * WS-I Basic Profile, which has the following implications for this encoder:
  * </p>
  * <p>
- * The operation which defines the message must be a document/literal operation, as defined in
- * section 5.3 of WS-I BP.
+ * The operation which defines the message must be a document/literal operation,
+ * as defined in section 5.3 of WS-I BP.
  * </p>
  * <p>
  * <ul>
- * <li>The style attribute must be "rpc", and the use attributes must be "literal".</li>
- * <li>The soap:body elements must have at most one part specified, or none, in which case the
- * corresponding message must only have one part specified (this is not strictly required by this
- * encoder - more parts are allowed).</li>
- * <li>The referenced parts in the messages MUST(!) be specified with the "type" attribute: <i>An
- * rpc-literal binding in a DESCRIPTION MUST refer, in its soapbind:body element(s), only to
- * wsdl:part element(s) that have been defined using the type attribute.</i></li>
+ * <li>The style attribute must be "rpc", and the use attributes must be
+ * "literal".</li>
+ * <li>The soap:body elements must have at most one part specified, or none, in
+ * which case the corresponding message must only have one part specified (this
+ * is not strictly required by this encoder - more parts are allowed).</li>
+ * <li>The referenced parts in the messages MUST(!) be specified with the "type"
+ * attribute: <i>An rpc-literal binding in a DESCRIPTION MUST refer, in its
+ * soapbind:body element(s), only to wsdl:part element(s) that have been defined
+ * using the type attribute.</i></li>
  * </ul>
  * </p>
  * 
  * <p>
- * The last point is most relevant. It means that the literal data is already specified with the
- * part names as top-level elements (there is simply no other way of referencing the elements in any
- * other case).
+ * The last point is most relevant. It means that the literal data is already
+ * specified with the part names as top-level elements (there is simply no other
+ * way of referencing the elements in any other case).
  * </p>
  * <p>
  * A SOAP RPC/Literal message looks like this:
  * </p>
  * <p>
  * <ul>
- * <li> In RPC/Literal SOAP messages, there may only be one child to the SOAP BODY, and it must be
- * the WSDL-Target-Namespace-Qualified name of the invoked WSDL operation, for example:
- * <q0:NewOperation xmlns:q0="http://www.example.org/TestWSDL/"></li>
- * <li>The children of this element are the completely unqualified part names of the WSDL message,
- * containing inside the actual content.</li>
+ * <li>In RPC/Literal SOAP messages, there may only be one child to the SOAP
+ * BODY, and it must be the WSDL-Target-Namespace-Qualified name of the invoked
+ * WSDL operation, for example: <q0:NewOperation
+ * xmlns:q0="http://www.example.org/TestWSDL/"></li>
+ * <li>The children of this element are the completely unqualified part names of
+ * the WSDL message, containing inside the actual content.</li>
  * </ul>
  * </p>
  * 
  * <p>
- * Thus, this encoder generates an RPC parent with a namespace taken from the WSDL definition. The
- * literal children - being already specified in part-format - are then simply added as children to
- * the RPC parent.
+ * Thus, this encoder generates an RPC parent with a namespace taken from the
+ * WSDL definition. The literal children - being already specified in
+ * part-format - are then simply added as children to the RPC parent.
  * </p>
  * 
  * @version $Id$
@@ -76,19 +80,22 @@ import org.w3c.dom.NodeList;
  */
 public class RPCLiteralEncoder implements ISOAPEncoder {
 
-	private static final String RPC_WRAPPER_NAMESPACE_PREFIX= "rpcwrappernsprefix";
+	private static final String RPC_WRAPPER_NAMESPACE_PREFIX = "rpcwrappernsprefix";
 
-	public SOAPMessage construct(SOAPOperationCallIdentifier operation, Element literalData, QName faultCode, String faultString) throws SOAPEncodingException {
+	public SOAPMessage construct(SOAPOperationCallIdentifier operation,
+			Element literalData, QName faultCode, String faultString)
+			throws SOAPEncodingException {
 		try {
-		        if (operation.isFault()) {
-                            throw new SOAPEncodingException("RPC style cannot be used with SOAP faults: check section 3.6 of the WSDL 1.1 standard");
-                        }
+			if (operation.isFault()) {
+				throw new SOAPEncodingException(
+						"RPC style cannot be used with SOAP faults: check section 3.6 of the WSDL 1.1 standard");
+			}
 
-			MessageFactory mFactory= BPELUnitUtil.getMessageFactoryInstance();
-			SOAPFactory sFactory= SOAPFactory.newInstance();
+			MessageFactory mFactory = MessageFactory.newInstance();
+			SOAPFactory sFactory = SOAPFactory.newInstance();
 
-			SOAPMessage message= mFactory.createMessage();
-			SOAPBody body= message.getSOAPBody();
+			SOAPMessage message = mFactory.createMessage();
+			SOAPBody body = message.getSOAPBody();
 
 			// The RPC wrapper element name must match the error code if this
 			// is a fault, and the operation name otherwise.
@@ -100,10 +107,11 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 			// properly wrapped, but that'd break backwards compatibility.
 			//
 			// TODO deprecate old unwrapped style?
-			String bodyNamespace= operation.getBodyNamespace();
+			String bodyNamespace = operation.getBodyNamespace();
 			Element firstElement = getFirstElementChild(literalData);
-			SOAPElement newWrapper = sFactory.createElement(operation.getName(),
-						RPC_WRAPPER_NAMESPACE_PREFIX, bodyNamespace);
+			SOAPElement newWrapper = sFactory.createElement(
+					operation.getName(), RPC_WRAPPER_NAMESPACE_PREFIX,
+					bodyNamespace);
 			NodeList list;
 			if (firstElement != null
 					&& bodyNamespace.equals(firstElement.getNamespaceURI())
@@ -115,10 +123,10 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 				list = literalData.getChildNodes();
 			}
 
-			for (int i= 0; i < list.getLength(); i++) {
-				Node node= list.item(i);
+			for (int i = 0; i < list.getLength(); i++) {
+				Node node = list.item(i);
 				if (node instanceof Element) {
-					Element actual= (Element) list.item(i);
+					Element actual = (Element) list.item(i);
 					newWrapper.addChildElement(sFactory.createElement(actual));
 				}
 			}
@@ -126,57 +134,69 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 			return message;
 
 		} catch (SOAPException e) {
-			throw new SOAPEncodingException("A SOAPException occurred in the DocumentLiteralEncoder while encoding to operation " + operation, e);
+			throw new SOAPEncodingException(
+					"A SOAPException occurred in the DocumentLiteralEncoder while encoding to operation "
+							+ operation, e);
 		}
 	}
 
-	public Element deconstruct(SOAPOperationCallIdentifier operation, SOAPMessage message) throws SOAPEncodingException {
+	public Element deconstruct(SOAPOperationCallIdentifier operation,
+			SOAPMessage message) throws SOAPEncodingException {
 
 		try {
-			SOAPBody body= message.getSOAPBody();
+			SOAPBody body = message.getSOAPBody();
 
-                        if (operation.isFault()) {
-                            throw new SOAPEncodingException("rpc style cannot be used with SOAP faults: check section 3.6 of the WSDL 1.1 standard");
-                        }
+			if (operation.isFault()) {
+				throw new SOAPEncodingException(
+						"rpc style cannot be used with SOAP faults: check section 3.6 of the WSDL 1.1 standard");
+			}
 
 			SOAPElement data = body;
-			SOAPElement rpcWrapper= null;
+			SOAPElement rpcWrapper = null;
 
 			// Find element node child
-			for (Iterator<?> childElements= data.getChildElements(); childElements.hasNext();) {
-				Object current= childElements.next();
+			for (Iterator<?> childElements = data.getChildElements(); childElements
+					.hasNext();) {
+				Object current = childElements.next();
 				if (current instanceof SOAPElement) {
-					rpcWrapper= (SOAPElement) current;
+					rpcWrapper = (SOAPElement) current;
 					break;
 				}
 			}
 
-			if (rpcWrapper == null)
-				throw new SOAPEncodingException("Incoming SOAP message for operation " + operation + " does not have a RPC Wrapper element.");
+			if (rpcWrapper == null) {
+				throw new SOAPEncodingException(
+						"Incoming SOAP message for operation " + operation
+								+ " does not have a RPC Wrapper element.");
+			}
 
 			// Generate a raw root
-			Element rawRoot= BPELUnitUtil.generateDummyElementNode();
+			Element rawRoot = BPELUnitUtil.generateDummyElementNode();
 
 			// Iterate through the children and add them
-			for (Iterator<?> i= rpcWrapper.getChildElements(); i.hasNext();) {
-				Object current= i.next();
+			for (Iterator<?> i = rpcWrapper.getChildElements(); i.hasNext();) {
+				Object current = i.next();
 				if (current instanceof SOAPElement) {
-					SOAPElement element= (SOAPElement) current;
-					rawRoot.appendChild(rawRoot.getOwnerDocument().importNode(element, true));
+					SOAPElement element = (SOAPElement) current;
+					rawRoot.appendChild(rawRoot.getOwnerDocument().importNode(
+							element, true));
 				}
 			}
 
 			return rawRoot;
 		} catch (SOAPException e) {
-			throw new SOAPEncodingException("A SOAPException occurred in the RPCLiteralEncoder while decoding for operation " + operation);
+			throw new SOAPEncodingException(
+					"A SOAPException occurred in the RPCLiteralEncoder while decoding for operation "
+							+ operation, e);
 		}
 	}
 
 	private Element getFirstElementChild(Node literalData) {
 		Node firstElement = literalData.getFirstChild();
 		while (firstElement != null) {
-			if (firstElement instanceof Element)
-				return (Element)firstElement;
+			if (firstElement instanceof Element) {
+				return (Element) firstElement;
+			}
 			firstElement = firstElement.getNextSibling();
 		}
 		return null;

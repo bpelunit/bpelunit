@@ -29,7 +29,7 @@ public class SendReceiveAsync extends TwoWayAsyncActivity {
 
 	public SendReceiveAsync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		fStatus= ArtefactStatus.createInitialStatus();
+		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
 	// ***************************** Activity **************************
@@ -37,27 +37,27 @@ public class SendReceiveAsync extends TwoWayAsyncActivity {
 	@Override
 	public void run(ActivityContext context) {
 
-		context.setHeaderProcessor(fHeaderProcessor);
+		context.setHeaderProcessor(getHeaderProcessor());
 
-		fSendAsync.run(context);
-		reportProgress(fSendAsync);
+		getSendAsync().run(context);
+		reportProgress(getSendAsync());
 
-		if (fSendAsync.hasProblems()) {
+		if (getSendAsync().hasProblems()) {
 			// The send failed
 			// Abort
-			fStatus= fSendAsync.getStatus();
+			setStatus(getSendAsync().getStatus());
 			return;
 		}
 
-		fReceiveAsync.run(context);
-		reportProgress(fReceiveAsync);
+		getReceiveAsync().run(context);
+		reportProgress(getReceiveAsync());
 
-		if (fReceiveAsync.hasProblems()) {
-			fStatus= fReceiveAsync.getStatus();
+		if (getReceiveAsync().hasProblems()) {
+			setStatus(getReceiveAsync().getStatus());
 			return;
 		}
 
-		fStatus= ArtefactStatus.createPassedStatus();
+		setStatus(ArtefactStatus.createPassedStatus());
 	}
 
 	@Override
@@ -75,8 +75,8 @@ public class SendReceiveAsync extends TwoWayAsyncActivity {
 	@Override
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
-		children.add(fSendAsync);
-		children.add(fReceiveAsync);
+		children.add(getSendAsync());
+		children.add(getReceiveAsync());
 		return children;
 	}
 

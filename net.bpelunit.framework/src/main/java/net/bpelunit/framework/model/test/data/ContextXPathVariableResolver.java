@@ -13,7 +13,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathVariableResolver;
 
 import org.apache.velocity.context.Context;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -54,8 +53,7 @@ public class ContextXPathVariableResolver implements XPathVariableResolver {
 		return varValue;
 	}
 
-	private NodeList convertIterableToTree(final Object varValue)
-			throws DOMException {
+	private NodeList convertIterableToTree(final Object varValue) {
 		Document doc;
 		try {
 			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();

@@ -28,24 +28,26 @@ public final class ZipUtil {
 	public static void unzipFile(File zip, File dir) throws IOException {
 		InputStream in = null;
 		OutputStream out = null;
-		try {
-			ZipFile zipFile = new ZipFile(zip);
-			Enumeration<? extends ZipEntry> entries = zipFile.entries();
-				
-			while(entries.hasMoreElements()) {
-				ZipEntry entry = entries.nextElement();
-				in = zipFile.getInputStream(entry);
+		ZipFile zipFile = new ZipFile(zip);
+		Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+		while (entries.hasMoreElements()) {
+			ZipEntry entry = entries.nextElement();
+			if (!entry.getName().endsWith("/")) {
 				File unzippedFile = new File(dir, entry.getName());
-				unzippedFile.getParentFile().mkdirs();
-				
-				out = new FileOutputStream(unzippedFile);
-				
-				IOUtils.copy(in, out);
+				try {
+					in = zipFile.getInputStream(entry);
+					unzippedFile.getParentFile().mkdirs();
+
+					out = new FileOutputStream(unzippedFile);
+
+					IOUtils.copy(in, out);
+				} finally {
+					IOUtils.closeQuietly(in);
+					IOUtils.closeQuietly(out);
+				}
 			}
-		} finally {
-			IOUtils.closeQuietly(in);
-			IOUtils.closeQuietly(out);
-		}			
+		}
 	}
 
 	public static void zipDirectory(File directory, File zipFile) throws IOException {

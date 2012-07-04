@@ -78,7 +78,7 @@ public class ActiveBPELEndToEndTest {
 		assertEquals("Only the case with empty input passed",
 				1, runner.getPassed());
 		assertTrue("Some processes were terminated",
-				ActiveBPELDeployer._terminatedProcessCount >= 1);
+				ActiveBPELDeployer.getTerminatedProcessCount() >= 1);
 	}
 
 	@Test

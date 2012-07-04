@@ -34,7 +34,11 @@ import org.apache.velocity.context.Context;
  * @author Antonio García Domínguez
  * @version 1.1
  */
-public class DataSourceUtil {
+public final class DataSourceUtil {
+	
+	private DataSourceUtil() {
+	}
+	
 	private static final Logger LOGGER = Logger.getLogger(DataSourceUtil.class);
 
 	/**

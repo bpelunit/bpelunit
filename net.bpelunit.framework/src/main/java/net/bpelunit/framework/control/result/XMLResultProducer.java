@@ -41,8 +41,11 @@ import net.bpelunit.framework.xml.result.XMLReceiveCondition.Condition;
  * @author Philip Mayer
  * 
  */
-public class XMLResultProducer {
+public final class XMLResultProducer {
 
+	private XMLResultProducer() {
+	}
+	
 	/**
 	 * Writes a complete trace of a test suite to the output stream in form of an XML document.
 	 * 
@@ -72,8 +75,9 @@ public class XMLResultProducer {
 			xmlActivityNew.setType(activity.getActivityCode());
 
 			List<ITestArtefact> children= activity.getChildren();
-			for (ITestArtefact innerArtefact : children)
+			for (ITestArtefact innerArtefact : children) {
 				handleLowLevel(xmlActivityNew, innerArtefact);
+			}
 
 		} else if (testArtefact instanceof DataSpecification) {
 			// Reached the end - data spec
@@ -132,8 +136,9 @@ public class XMLResultProducer {
 		result.setResult(artefact.getStatus().getCode().toString());
 		result.setMessage(artefact.getStatus().getMessage());
 		String exceptionMessage= artefact.getStatus().getExceptionMessage();
-		if (exceptionMessage != null)
+		if (exceptionMessage != null) {
 			result.setException(exceptionMessage);
+		}
 
 		List<StateData> stateData= artefact.getStateData();
 		for (StateData data : stateData) {

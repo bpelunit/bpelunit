@@ -32,19 +32,20 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.base.BPELUnitBaseRunner;
+import net.bpelunit.framework.exception.ConfigurationException;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.ITestResultListener;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
-import net.bpelunit.framework.BPELUnitRunner;
-import net.bpelunit.framework.base.BPELUnitBaseRunner;
-import net.bpelunit.framework.control.result.ITestResultListener;
-import net.bpelunit.framework.exception.ConfigurationException;
-import net.bpelunit.framework.exception.DeploymentException;
-import net.bpelunit.framework.exception.SpecificationException;
-import net.bpelunit.framework.model.test.TestCase;
-import net.bpelunit.framework.model.test.TestSuite;
-import net.bpelunit.framework.model.test.report.ITestArtefact;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.xml.PrettyPrintXMLWriter;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -219,8 +220,8 @@ public class BPELUnitMojo extends AbstractMojo {
 		private long testStart = 0;
 		private long testStop = 0;
 
-		NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
-		Xpp3Dom xmlSuite;
+		private NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+		private Xpp3Dom xmlSuite;
 
 		private Log logger;
 

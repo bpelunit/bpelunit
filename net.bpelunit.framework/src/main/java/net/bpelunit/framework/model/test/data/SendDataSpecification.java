@@ -18,10 +18,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.HeaderProcessingException;
 import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.exception.SpecificationException;
@@ -159,7 +161,9 @@ public class SendDataSpecification extends DataSpecification {
 		if (fDataTemplate != null) {
 			generateLiteralDataFromTemplate(context);
 		}
-		if (hasProblems()) return;
+		if (hasProblems()) {
+			return;
+		}
 
 		// Insert mapping data from context (if any)
 		insertMappingData(context);
@@ -167,25 +171,28 @@ public class SendDataSpecification extends DataSpecification {
 		// Set up the send call
 		encodeMessage();
 
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
 		try {
 			context.processHeaders(this);
 		} catch (HeaderProcessingException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Header Processing Fault.", e);
+			setStatus(ArtefactStatus.createErrorStatus("Header Processing Fault.", e));
 			return;
 		}
 
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
 		createWireFormat();
 
-		if (hasProblems())
+		if (hasProblems()) {
 			return;
+		}
 
-		fStatus= ArtefactStatus.createPassedStatus();
+		setStatus(ArtefactStatus.createPassedStatus());
 	}
 
 	private void generateLiteralDataFromTemplate(ActivityContext context) {
@@ -200,8 +207,8 @@ public class SendDataSpecification extends DataSpecification {
 			fLiteralData = docExpanded.getDocumentElement();
 			context.saveSentMessage(fLiteralData);
 		} catch (Exception ex) {
-			fStatus = ArtefactStatus.createErrorStatus("Template expansion fault: "
-					+ ex.getLocalizedMessage(), ex);
+			setStatus(ArtefactStatus.createErrorStatus("Template expansion fault: "
+					+ ex.getLocalizedMessage(), ex));
 		}
 	}
 
@@ -209,9 +216,12 @@ public class SendDataSpecification extends DataSpecification {
 	 * Delays execution for a specified delay. Should be executed inside a block with other
 	 * interruptable methods
 	 * @param context Activity context for the running specification.
+	 * @throws InterruptedException 
+	 * @throws XPathExpressionException 
+	 * @throws DataSourceException 
 	 * @throws Exception Could not compute the delay from the XPath expression inside the delay attribute.
 	 */
-	public void delay(ActivityContext context) throws Exception {
+	public void delay(ActivityContext context) throws DataSourceException, XPathExpressionException, InterruptedException {
 		if (getDelay(context) > 0) {
 			Logger.getLogger(getClass()).info("Delaying send for " + getDelay(context) + " seconds...");
 			Thread.sleep(getDelay(context) * 1000);
@@ -246,13 +256,13 @@ public class SendDataSpecification extends DataSpecification {
 		this.fDelay = fDelay;
 	}
 
-	public int getDelay(ActivityContext activityContext) throws Exception {
+	public int getDelay(ActivityContext activityContext) throws DataSourceException, XPathExpressionException {
 		if (getDelayExpression() != null) {
 			final Context vtlContext = activityContext.createVelocityContext();
 			final ContextXPathVariableResolver xpathResolver = new ContextXPathVariableResolver(vtlContext);
 
 			final XPath xpath = XPathFactory.newInstance().newXPath();
-			xpath.setNamespaceContext(fNamespaceContext);
+			xpath.setNamespaceContext(getNamespaceContext());
 			xpath.setXPathVariableResolver(xpathResolver);
 
 			// We should only evaluate these expressions once per row and round
@@ -277,9 +287,9 @@ public class SendDataSpecification extends DataSpecification {
 		List<DataCopyOperation> mapping= context.getMapping();
 		if (mapping != null) {
 			for (DataCopyOperation copy : mapping) {
-				copy.setTextNodes(fLiteralData, fNamespaceContext);
+				copy.setTextNodes(fLiteralData, getNamespaceContext());
 				if (copy.isError()) {
-					fStatus= ArtefactStatus.createErrorStatus("An error occurred while evaluating Copy-To-XPath expression.");
+					setStatus(ArtefactStatus.createErrorStatus("An error occurred while evaluating Copy-To-XPath expression."));
 					return;
 				}
 			}
@@ -290,7 +300,7 @@ public class SendDataSpecification extends DataSpecification {
 		try {
 			fSOAPMessage= fEncoder.construct(fOperation, fLiteralData, fFaultCode, fFaultString);
 		} catch (SOAPEncodingException e) {
-			fStatus= ArtefactStatus.createErrorStatus("Encoding the message failed: " + e.getMessage(), e);
+			setStatus(ArtefactStatus.createErrorStatus("Encoding the message failed: " + e.getMessage(), e));
 		}
 	}
 
@@ -300,15 +310,16 @@ public class SendDataSpecification extends DataSpecification {
 			fSOAPMessage.writeTo(b);
 			fPlainMessage= b.toString();
 		} catch (Exception e) {
-			fStatus= ArtefactStatus.createErrorStatus("Error serializing SOAP message: " + e.getMessage(), e);
+			setStatus(ArtefactStatus.createErrorStatus("Error serializing SOAP message: " + e.getMessage(), e));
 		}
 	}
 
 	private String getWireFormatAsString() {
 		if (fPlainMessage != null) {
 			return fPlainMessage;
-		} else
+		} else {
 			return "(no data)";
+		}
 	}
 
 	private String getLiteralDataAsString() {
@@ -342,7 +353,7 @@ public class SendDataSpecification extends DataSpecification {
 
 	public List<StateData> getStateData() {
 		List<StateData> stateData= new ArrayList<StateData>();
-		stateData.addAll(fStatus.getAsStateData());
+		stateData.addAll(getStatus().getAsStateData());
 		if (fTargetURL != null) {
 			stateData.add(new StateData("Target URL", fTargetURL));
 			stateData.add(new StateData("HTTP Action", fSOAPHTTPAction));

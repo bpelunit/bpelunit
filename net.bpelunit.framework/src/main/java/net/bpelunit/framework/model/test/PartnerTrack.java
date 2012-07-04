@@ -16,6 +16,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
 import net.bpelunit.framework.control.run.TestCaseRunner;
+import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.model.AbstractPartner;
 import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.test.activity.Activity;
@@ -42,6 +43,8 @@ import com.rits.cloning.Cloner;
  * 
  */
 public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextProvider {
+
+	private static final int DELAY_AT_START = 10;
 
 	/**
 	 * The parent test case
@@ -118,7 +121,7 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 		// wait till all partners are active
 		// XXX make this better
 		try {
-			Thread.sleep(10);
+			Thread.sleep(DELAY_AT_START);
 		} catch (InterruptedException e) {
 			// ignore because we are just waiting for some time
 			return;
@@ -149,18 +152,20 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 		}
 
 		// Ensure set status before notification
-		if (!hasProblems())
+		if (!hasProblems()) {
 			fStatus = ArtefactStatus.createPassedStatus();
+		}
 
 		// Notify
 		fLogger.info(getName() + " finished.");
 		reportProgress(this);
 
 		// Return
-		if (hasProblems())
+		if (hasProblems()) {
 			fRunner.doneWithFault(this);
-		else
+		} else {
 			fRunner.done(this);
+		}
 
 	}
 
@@ -244,8 +249,9 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 	 * it only needs to be produced once for every partner track.
 	 * 
 	 * @return Base VelocityContext for the partner track.
+	 * @throws DataSourceException 
 	 */
-	public Context createVelocityContext() throws Exception {
+	public Context createVelocityContext() throws DataSourceException   {
 		if (fTestCaseVelocityContext == null) {
 			fTestCaseVelocityContext = fRunner.createVelocityContext();
 		}
@@ -264,10 +270,10 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 	}
 
 	/* PRIVATE METHODS */
-
 	private boolean assumptionHolds(final String assumption) {
-		if (assumption == null)
+		if (assumption == null) {
 			return true;
+		}
 
 		Context context;
 		try {

@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IDataSource.DataSource;
 import net.bpelunit.framework.exception.DataSourceException;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 
 @DataSource(name="Velocity Data Source", shortName="velocity", contentTypes={})
 public class VelocityDataSource implements IDataSource {
@@ -146,7 +147,6 @@ public class VelocityDataSource implements IDataSource {
 		return script;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void validateIteratedVars() throws DataSourceException {
 		if (fIteratedVars == null) {
 			throw new DataSourceException(PROPERTY_ITERATED_VARS
@@ -173,7 +173,7 @@ public class VelocityDataSource implements IDataSource {
 						+ " does not contain a list literal.");
 			}
 
-			List arrList = (List) value;
+			List<?> arrList = (List<?>) value;
 			if (fRowCount != -1) {
 				if (arrList.size() != fRowCount) {
 					throw new DataSourceException("Iterated variable " + var

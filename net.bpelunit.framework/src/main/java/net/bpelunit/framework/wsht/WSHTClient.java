@@ -2,7 +2,6 @@ package net.bpelunit.framework.wsht;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -42,6 +41,13 @@ public class WSHTClient {
 	private SOAPCreator soapCreator;
 	private String authorizationRealm;
 
+	@SuppressWarnings("serial")
+	public class WSHTException extends RuntimeException {
+		public WSHTException(String msg, Throwable t) {
+			super(msg, t);
+		}
+	}
+	
 	private static class SOAPCreator {
 
 		private String soapMessage;
@@ -60,14 +66,13 @@ public class WSHTClient {
 		try {
 			this.soapCreator = new SOAPCreator();
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Build problem: Resource not found", e);
+			throw new WSHTException("Build problem: Resource not found", e);
 		}
 		
 		setAuthorizationRealm(username, password);
 	}
 
-	void setAuthorizationRealm(String username, String password) {
+	final void setAuthorizationRealm(String username, String password) {
 		String effectivePassword = password;
 		if(effectivePassword == null) {
 			effectivePassword = "";
@@ -120,7 +125,7 @@ public class WSHTClient {
 			XMLGetInputResponseDocument getInputResponseDoc = XMLGetInputResponseDocument.Factory.parse(response);
 			return getInputResponseDoc.getGetInputResponse();
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			throw new WSHTException(e.getMessage(), e);
 		}
 	}
 	
@@ -134,7 +139,7 @@ public class WSHTClient {
 			
 			makeWSHTSOAPRequest(setOutputDoc);
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			throw new WSHTException(e.getMessage(), e);
 		}
 	}
 	
@@ -146,7 +151,7 @@ public class WSHTClient {
 			
 			makeWSHTSOAPRequest(completeDoc);
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			throw new WSHTException(e.getMessage(), e);
 		}
 	}
 
@@ -158,7 +163,7 @@ public class WSHTClient {
 
 			makeWSHTSOAPRequest(startDoc);
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			throw new WSHTException(e.getMessage(), e);
 		}
 	}
 
@@ -170,19 +175,18 @@ public class WSHTClient {
 
 			makeWSHTSOAPRequest(claimDoc);
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			throw new WSHTException(e.getMessage(), e);
 		}
 	}
 
 	private Node makeWSHTSOAPRequest(XmlTokenSource request)
-			throws IOException, UnsupportedEncodingException,
-			ParserConfigurationException, SAXException {
+			throws IOException,	ParserConfigurationException, 
+			SAXException {
 		return makeWSHTSOAPRequest(request.xmlText());
 	}
 
 	private Node makeWSHTSOAPRequest(String request) throws IOException,
-			UnsupportedEncodingException, ParserConfigurationException,
-			SAXException {
+			ParserConfigurationException, SAXException {
 		HttpURLConnection con = (HttpURLConnection) wsHtEndpoint
 				.openConnection();
 		con.setRequestMethod("POST");

@@ -17,8 +17,11 @@ import org.jdom.filter.ElementFilter;
  * @author Daniel Luebke <bpelunit@daniel-luebke.de>
  * 
  */
-public class JDomUtil {
+public final class JDomUtil {
 
+	private JDomUtil() {
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static Iterator<Element> getDescendants(Element parent, ElementFilter filter) {
 		return parent.getDescendants(filter);

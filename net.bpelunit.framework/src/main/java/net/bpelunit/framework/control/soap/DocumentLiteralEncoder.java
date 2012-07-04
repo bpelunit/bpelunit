@@ -21,6 +21,7 @@ import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -68,7 +69,7 @@ public class DocumentLiteralEncoder implements ISOAPEncoder {
 
 		try {
 
-			MessageFactory mFactory = BPELUnitUtil.getMessageFactoryInstance();
+			MessageFactory mFactory = MessageFactory.newInstance();
 			SOAPFactory sFactory = SOAPFactory.newInstance();
 
 			SOAPMessage message = mFactory.createMessage();
@@ -77,8 +78,9 @@ public class DocumentLiteralEncoder implements ISOAPEncoder {
 			if (operation.isFault()) {
 				SOAPFault fault = body.addFault(faultCode, faultString);
 				data = fault.addDetail();
-			} else
+			} else {
 				data = body;
+			}
 
 			NodeList nodes = literalElement.getChildNodes();
 			for (int i = 0; i < nodes.getLength(); i++) {
@@ -123,7 +125,7 @@ public class DocumentLiteralEncoder implements ISOAPEncoder {
 		} catch (SOAPException e) {
 			throw new SOAPEncodingException(
 					"A SOAPException occurred in the DocumentLiteralEncoder while decoding for operation "
-							+ operation);
+							+ operation, e);
 		}
 	}
 

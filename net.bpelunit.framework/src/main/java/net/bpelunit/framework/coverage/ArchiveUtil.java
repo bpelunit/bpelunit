@@ -11,8 +11,11 @@ import net.bpelunit.framework.coverage.exceptions.ArchiveFileException;
 import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;
 
-public class ArchiveUtil {
+public final class ArchiveUtil {
 
+	private ArchiveUtil() {
+	}
+	
 	public static String createArchivecopy(String archive)
 			throws ArchiveFileException {
 		String fileName = FilenameUtils.getName(archive);
@@ -46,8 +49,9 @@ public class ArchiveUtil {
 				searchChildrenBPEL((File) files[i], bpelFiles);
 			}
 		} else {
-			if (FilenameUtils.getExtension(file.getName()).equals("bpel"))
+			if (FilenameUtils.getExtension(file.getName()).equals("bpel")) {
 				bpelFiles.add(file.getAbsolutePath());
+			}
 		}
 	}
 

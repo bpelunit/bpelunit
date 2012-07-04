@@ -4,6 +4,7 @@ import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.Bpel
 import static net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools.NAMESPACE_BPEL_2_0;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -14,8 +15,11 @@ import org.jdom.Namespace;
  * @author Alex Salnikow
  *
  */
-public class StructuredActivities {
+public final class StructuredActivities {
 
+	private StructuredActivities() {
+	}
+	
 	public static final String SEQUENCE_ACTIVITY = "sequence";
 
 	public static final String IF_ACTIVITY = "if";
@@ -34,7 +38,7 @@ public class StructuredActivities {
 
 	public static final String SWITCH_ACTIVITY = "switch";
 
-	private static Hashtable<String, String> structured_activities;
+	private static Map<String, String> structuredActivities;
 
 	/**
 	 * Überprüft, ob das Element eine BPEL-StructuredActivität repräsentiert.
@@ -43,8 +47,7 @@ public class StructuredActivities {
 	 * @return
 	 */
 	static boolean isStructuredActivity(Element activity) {
-		return structured_activities.containsKey(activity.getName()) ? true
-				: false;
+		return structuredActivities.containsKey(activity.getName());
 	}
 
 	/**
@@ -54,24 +57,24 @@ public class StructuredActivities {
 	public static void initialize() {
 		Namespace bpelNamespace = BpelXMLTools.getProcessNamespace();
 		if (bpelNamespace.equals(NAMESPACE_BPEL_2_0)) {
-			structured_activities = new Hashtable<String, String>();
-			structured_activities.put(SEQUENCE_ACTIVITY, SEQUENCE_ACTIVITY);
-			structured_activities.put(IF_ACTIVITY, IF_ACTIVITY);
-			structured_activities.put(WHILE_ACTIVITY, WHILE_ACTIVITY);
-			structured_activities.put(REPEATUNTIL_ACTIVITY,
+			structuredActivities = new Hashtable<String, String>();
+			structuredActivities.put(SEQUENCE_ACTIVITY, SEQUENCE_ACTIVITY);
+			structuredActivities.put(IF_ACTIVITY, IF_ACTIVITY);
+			structuredActivities.put(WHILE_ACTIVITY, WHILE_ACTIVITY);
+			structuredActivities.put(REPEATUNTIL_ACTIVITY,
 					REPEATUNTIL_ACTIVITY);
-			structured_activities.put(FOREACH_ACTIVITY, FOREACH_ACTIVITY);
-			structured_activities.put(PICK_ACTIVITY, PICK_ACTIVITY);
-			structured_activities.put(FLOW_ACTIVITY, FLOW_ACTIVITY);
-			structured_activities.put(SCOPE_ACTIVITY,SCOPE_ACTIVITY);
+			structuredActivities.put(FOREACH_ACTIVITY, FOREACH_ACTIVITY);
+			structuredActivities.put(PICK_ACTIVITY, PICK_ACTIVITY);
+			structuredActivities.put(FLOW_ACTIVITY, FLOW_ACTIVITY);
+			structuredActivities.put(SCOPE_ACTIVITY,SCOPE_ACTIVITY);
 		} else if (bpelNamespace.equals(NAMESPACE_BPEL_1_1)) {
-			structured_activities = new Hashtable<String, String>();
-			structured_activities.put(SEQUENCE_ACTIVITY, SEQUENCE_ACTIVITY);
-			structured_activities.put(WHILE_ACTIVITY, WHILE_ACTIVITY);
-			structured_activities.put(PICK_ACTIVITY, PICK_ACTIVITY);
-			structured_activities.put(FLOW_ACTIVITY, FLOW_ACTIVITY);
-			structured_activities.put(SWITCH_ACTIVITY, SWITCH_ACTIVITY);
-			structured_activities.put(SCOPE_ACTIVITY,SCOPE_ACTIVITY);
+			structuredActivities = new Hashtable<String, String>();
+			structuredActivities.put(SEQUENCE_ACTIVITY, SEQUENCE_ACTIVITY);
+			structuredActivities.put(WHILE_ACTIVITY, WHILE_ACTIVITY);
+			structuredActivities.put(PICK_ACTIVITY, PICK_ACTIVITY);
+			structuredActivities.put(FLOW_ACTIVITY, FLOW_ACTIVITY);
+			structuredActivities.put(SWITCH_ACTIVITY, SWITCH_ACTIVITY);
+			structuredActivities.put(SCOPE_ACTIVITY,SCOPE_ACTIVITY);
 		}
 
 	}

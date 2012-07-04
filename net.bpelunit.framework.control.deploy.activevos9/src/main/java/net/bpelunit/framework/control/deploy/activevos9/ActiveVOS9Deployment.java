@@ -10,14 +10,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
+import net.bpelunit.framework.control.deploy.AbstractDeployment;
+import net.bpelunit.framework.control.deploy.IBPELProcess;
+import net.bpelunit.framework.control.soap.NamespaceContextImpl;
+import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.util.FileUtil;
 import net.bpelunit.util.XMLUtil;
@@ -26,37 +29,30 @@ import net.bpelunit.util.ZipUtil;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-public abstract class ActiveVOS9Deployment implements IDeployment {
+public abstract class ActiveVOS9Deployment extends AbstractDeployment {
 	
-	private final class BPELInfo implements IBPELProcess {
+	final class BPELInfo implements IBPELProcess {
 		
-		BPELInfo(File bpelFile, File pddFile, QName name, Document xml) {
+		BPELInfo(File bpelFile, File pddFile, QName name, Document bpel, Document pdd) {
 			super();
 			this.bpelFile = bpelFile;
 			this.pddFile = pddFile;
 			this.name = name;
-			this.xml = xml;
+			this.bpelXml = bpel;
+			this.pddXml = pdd;
 		}
 		
 		private File bpelFile;
 		private File pddFile;
 		private QName name;
-		private Document xml;
+		private Document bpelXml;
+		private Document pddXml;
+		private boolean pddHasChanged = false;
+		private boolean bpelHasChanged = false;
 		
-		File getBpelFile() {
-			return bpelFile;
-		}
-
-		File getPddFile() {
-			return pddFile;
-		}
-
-		Document getXml() {
-			return xml;
-		}
-
 		@Override
 		public QName getName() {
 			return name;
@@ -66,24 +62,54 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 		public void addWSDLImport(String wsdlFileName, InputStream contents) {
 			// TODO Auto-generated method stub
 		}
+		
 		@Override
-		public void addPartnerlink(String name, QName partnerlinkType,
-				String processRole, String partnerRole) {
-			// TODO Auto-generated method stub
-			
+		public Document getBpelXml() {
+			bpelHasChanged = true;
+			return bpelXml;
+		}
+
+		Document getPddXml() {
+			pddHasChanged = true;
+			return pddXml;
 		}
 		
 		@Override
-		public Document getXML() {
-			ActiveVOS9Deployment.this.checkedOutProcesses.add(this);
-			return xml;
+		public void addPartnerlink(String name, QName partnerlinkType,
+				String processRole, String partnerRole, QName service,
+				String port, String endpointURL) {
+			getPddXml(); // use this in order to set changed flags correctly
+			getBpelXml();
+			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
-		public void addPartnerlinkBinding(String partnerlinkName,
-				QName service, String port, String endpointURL) {
-			// TODO Auto-generated method stub
+		public void changePartnerEndpoint(String partnerLinkName,
+				String newEndpoint) throws DeploymentException {
+			XPathTool xpathPdd = createXPathToolForPdd();
 			
+			Element pddRoot = getPddXml().getDocumentElement();
+			try {
+				List<Node> address = xpathPdd.evaluateAsList("//pdd:partnerLinks/pdd:partnerLink[@name='" + partnerLinkName +  "']/pdd:partnerRole/wsa:EndpointReference/wsa:Address", pddRoot);
+				address.get(0).setTextContent(newEndpoint);
+				
+				List<Node> endpointReference = xpathPdd.evaluateAsList("//pdd:partnerLinks/pdd:partnerLink[@name='" + partnerLinkName +  "']/pdd:partnerRole/@endpointReference", pddRoot);
+				endpointReference.get(0).setNodeValue("static");
+				List<Node> invokeHandler = xpathPdd.evaluateAsList("//pdd:partnerLinks/pdd:partnerLink[@name='" + partnerLinkName +  "']/pdd:partnerRole/@invokeHandler", pddRoot);
+				invokeHandler.get(0).setNodeValue("default:Address");
+			} catch (Exception e) {
+				throw new DeploymentException("Cannot change partner endpoint location for " + partnerLinkName, e);
+			}
+		}
+
+		public void writeOut() throws IOException, TransformerException {
+			if(bpelHasChanged) {
+				XMLUtil.writeXML(getBpelXml(), bpelFile);
+			}
+			if(pddHasChanged) {
+				XMLUtil.writeXML(getPddXml(), pddFile);
+			}
 		}
 	}
 
@@ -91,8 +117,8 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 	private File tempDirectory = null;
 	private File tempBPR = null;
 	
-	private Set<BPELInfo> checkedOutProcesses = new HashSet<BPELInfo>();
 	private List<BPELInfo> allProcesses = new ArrayList<BPELInfo>();
+	public static final String NAMESPACE_PDD = "http://schemas.active-endpoints.com/pdd/2006/08/pdd.xsd";
 	
 	public ActiveVOS9Deployment(File bpr) throws DeploymentException {
 		if(!bpr.isFile() || !bpr.canRead()) {
@@ -124,8 +150,8 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 		if(tempDirectory != null) {
 			try {
 				// write out all files
-				for(BPELInfo bpel : checkedOutProcesses) {
-					XMLUtil.writeXML(bpel.getXml(), bpel.getBpelFile());
+				for(BPELInfo bpel : allProcesses) {
+					bpel.writeOut();
 				}
 				
 				// repackage
@@ -162,16 +188,20 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 			}
 		}
 	}
-	
 
+	/**
+	 * This method will extract the BPR file if it isn't already and
+	 * will initialize the state of this deployment
+	 * 
+	 * @throws DeploymentException
+	 */
 	private synchronized void extractBPRIfNecessary() throws DeploymentException {
-		if(tempDirectory != null) {
+		if(tempDirectory == null) {
 			try {
 				tempDirectory = FileUtil.createTempDirectory();
 				ZipUtil.unzipFile(bpr, tempDirectory);
 
 				scanForBPELFiles();
-				
 			} catch (IOException e) {
 				throw new DeploymentException("Error while temporarily extracting the BPR: " + e.getMessage(), e);
 			}
@@ -180,30 +210,47 @@ public abstract class ActiveVOS9Deployment implements IDeployment {
 
 	private void scanForBPELFiles() throws DeploymentException {
 		@SuppressWarnings("unchecked")
-		Iterator<File> bpelFiles = FileUtils.iterateFiles(tempDirectory, new String[]{"bpel"}, true);
+		Iterator<File> pddFiles = FileUtils.iterateFiles(
+				tempDirectory, new String[]{"pdd"}, true);
 		
-		while(bpelFiles.hasNext()) {
-			File bpelFile = bpelFiles.next();
+		while(pddFiles.hasNext()) {
+			File pddFile = pddFiles.next();
 			
 			try {
-				Document d = XMLUtil.parseXML(new FileInputStream(bpelFile));
-				Element root = d.getDocumentElement();
+				Document pddXml = XMLUtil.parseXML(new FileInputStream(pddFile));
+				Element pddRoot = pddXml.getDocumentElement();
+				
+				String locationInBPR = pddRoot.getAttribute("location");
+				
+				File bpelFile = new File(tempDirectory, locationInBPR);
+				Document bpelXml = XMLUtil.parseXML(new FileInputStream(bpelFile));
+				Element bpelRoot = bpelXml.getDocumentElement();
 				QName name = new QName(
-							root.getAttribute("targetNamespace"),
-							root.getAttribute("name")
+							bpelRoot.getAttribute("targetNamespace"),
+							bpelRoot.getAttribute("name")
 						);
 				
-				allProcesses.add(new BPELInfo(bpelFile, null, name, d));
+				allProcesses.add(new BPELInfo(bpelFile, pddFile, name, bpelXml, pddXml));
 			} catch (FileNotFoundException e) {
-				throw new DeploymentException("File could not be read: " + bpelFile.getAbsolutePath(), e);
+				throw new DeploymentException("File could not be read: " + e.getMessage(), e);
 			} catch (SAXException e) {
-				throw new DeploymentException("BPEL file could not be parsed: " + bpelFile.getAbsolutePath(), e);
+				throw new DeploymentException("XML file could not be parsed: " + e.getMessage(), e);
 			} catch (IOException e) {
-				throw new DeploymentException("BPEL file could not be parsed: " + bpelFile.getAbsolutePath(), e);
+				throw new DeploymentException("XML file could not be read: " + e.getMessage(), e);
 			} catch (ParserConfigurationException e) {
-				throw new DeploymentException("BPEL file could not be parsed: " + bpelFile.getAbsolutePath(), e);
+				throw new DeploymentException("XML file could not be parsed: " + e.getMessage(), e);
 			}
 		}
+	}
+	
+	XPathTool createXPathToolForPdd() {
+		NamespaceContextImpl nsc = new NamespaceContextImpl();
+		nsc.setNamespace("pdd", ActiveVOS9Deployment.NAMESPACE_PDD);
+		nsc.setNamespace("wsa", "http://www.w3.org/2005/08/addressing");
+		
+		XPathTool xpath = new XPathTool(nsc);
+		
+		return xpath;
 	}
 
 }

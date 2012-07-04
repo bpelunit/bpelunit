@@ -20,8 +20,9 @@ public class XpathLanguage extends ExpressionLanguage {
 	public  String concat(String[] strings) {
 		StringBuffer concat = new StringBuffer("concat(");
 		for (int i = 0; i < strings.length; i++) {
-			if (i > 0)
+			if (i > 0) {
 				concat.append(',');
+			}
 			concat.append(strings[i]);
 		}
 		concat.append(")");

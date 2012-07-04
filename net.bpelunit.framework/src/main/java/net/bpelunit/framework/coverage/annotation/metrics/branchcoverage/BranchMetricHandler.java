@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.bpelunit.framework.coverage.annotation.Instrumenter;
 import net.bpelunit.framework.coverage.annotation.metrics.IMetricHandler;
@@ -17,6 +18,7 @@ import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.Re
 import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.SequenceHandler;
 import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.SwitchHandler;
 import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.impl.WhileHandler;
+import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.StructuredActivities;
 import net.bpelunit.framework.coverage.exceptions.BpelException;
 import net.bpelunit.framework.coverage.receiver.MarkersRegisterForArchive;
@@ -53,7 +55,7 @@ public class BranchMetricHandler implements IMetricHandler {
 	 */
 	private static String getNextMarker() {
 		String marker = BRANCH_LABEL
-				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + (count++);
+				+ Instrumenter.COVERAGE_LABEL_INNER_SEPARATOR + BpelXMLTools.incrementCounter();
 		return marker;
 	}
 
@@ -65,12 +67,12 @@ public class BranchMetricHandler implements IMetricHandler {
 	 * @param activity
 	 */
 	public static String insertLabelBevorAllActivities(Element activity) {
-		activity = respectTargetsOfLinks(activity);
-		if (!isSequence(activity)) {
-			activity = ensureElementIsInSequence(activity);
+		Element realTarget = respectTargetsOfLinks(activity);
+		if (!isSequence(realTarget)) {
+			realTarget = ensureElementIsInSequence(realTarget);
 		}
 		String marker = getNextMarker();
-		activity.addContent(0, new Comment(
+		realTarget.addContent(0, new Comment(
 				Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker));
 		return marker;
 	}
@@ -86,8 +88,9 @@ public class BranchMetricHandler implements IMetricHandler {
 			int index = parent.indexOf(activity);
 			parent.addContent(index, sequence);
 			sequence.addContent(activity.detach());
-			activity = sequence;
+			return sequence;
 		}
+		
 		return activity;
 	}
 
@@ -99,11 +102,13 @@ public class BranchMetricHandler implements IMetricHandler {
 	 * @param activity
 	 */
 	public static String insertLabelAfterAllActivities(Element activity) {
-		if (!isSequence(activity)) {
-			activity = ensureElementIsInSequence(activity);
+		Element realActivity = activity;
+		
+		if (!isSequence(realActivity)) {
+			realActivity = ensureElementIsInSequence(realActivity);
 		}
 		String marker = getNextMarker();
-		activity.addContent(new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
+		realActivity.addContent(new Comment(Instrumenter.COVERAGE_LABEL_IDENTIFIER
 				+ marker));
 		return marker;
 	}
@@ -127,10 +132,10 @@ public class BranchMetricHandler implements IMetricHandler {
 	 *            muss innerhalb Sequence sein
 	 */
 	public static String insertLabelBevorActivity(Element activity) {
-		activity = respectTargetsOfLinks(activity);
-		Element parent = activity.getParentElement();
+		Element realTarget = respectTargetsOfLinks(activity);
+		Element parent = realTarget.getParentElement();
 		String marker = getNextMarker();
-		parent.addContent(parent.indexOf(activity), new Comment(
+		parent.addContent(parent.indexOf(realTarget), new Comment(
 				Instrumenter.COVERAGE_LABEL_IDENTIFIER + marker));
 		return marker;
 	}
@@ -142,31 +147,32 @@ public class BranchMetricHandler implements IMetricHandler {
 			targets.addAll(child.getChildren(TARGET_ELEMENT, ns));
 		} else if (ns.equals(NAMESPACE_BPEL_2_0)) {
 			Element target = child.getChild(TARGETS_ELEMENT, ns);
-			if (target != null)
+			if (target != null) {
 				targets.add(target);
+			}
 		}
 		return targets;
 	}
 
-	private HashMap<String, IStructuredActivityHandler> structured_activity_handler = new HashMap<String, IStructuredActivityHandler>();
+	private Map<String, IStructuredActivityHandler> structuredActivityHandler = new HashMap<String, IStructuredActivityHandler>();
 
 	public BranchMetricHandler(MarkersRegisterForArchive markersRegistry) {
-		structured_activity_handler.put(StructuredActivities.FLOW_ACTIVITY,
+		structuredActivityHandler.put(StructuredActivities.FLOW_ACTIVITY,
 				new FlowHandler(markersRegistry));
-		structured_activity_handler.put(StructuredActivities.SEQUENCE_ACTIVITY,
+		structuredActivityHandler.put(StructuredActivities.SEQUENCE_ACTIVITY,
 				new SequenceHandler(markersRegistry));
-		structured_activity_handler.put(StructuredActivities.IF_ACTIVITY,
+		structuredActivityHandler.put(StructuredActivities.IF_ACTIVITY,
 				new IfHandler(markersRegistry));
-		structured_activity_handler.put(StructuredActivities.WHILE_ACTIVITY,
+		structuredActivityHandler.put(StructuredActivities.WHILE_ACTIVITY,
 				new WhileHandler(markersRegistry));
-		structured_activity_handler.put(
+		structuredActivityHandler.put(
 				StructuredActivities.REPEATUNTIL_ACTIVITY,
 				new RepeatUntilHandler(markersRegistry));
-		structured_activity_handler.put(StructuredActivities.FOREACH_ACTIVITY,
+		structuredActivityHandler.put(StructuredActivities.FOREACH_ACTIVITY,
 				new ForEachHandler(markersRegistry));
-		structured_activity_handler.put(StructuredActivities.PICK_ACTIVITY,
+		structuredActivityHandler.put(StructuredActivities.PICK_ACTIVITY,
 				new PickHandler(markersRegistry));
-		structured_activity_handler.put(StructuredActivities.SWITCH_ACTIVITY,
+		structuredActivityHandler.put(StructuredActivities.SWITCH_ACTIVITY,
 				new SwitchHandler(markersRegistry));
 	}
 
@@ -180,14 +186,14 @@ public class BranchMetricHandler implements IMetricHandler {
 	 */
 	public void insertMarkersForMetric(List<Element> activities)
 			throws BpelException {
-		Element next_element;
+		Element nextElement;
 		for (Iterator<Element> iter = activities.iterator(); iter.hasNext();) {
-			next_element = iter.next();
-			String next_element_name = next_element.getName();
-			if (structured_activity_handler.containsKey(next_element_name)) {
+			nextElement = iter.next();
+			String nextElementName = nextElement.getName();
+			if (structuredActivityHandler.containsKey(nextElementName)) {
 				// Delegiert die Instrumentierung
-				structured_activity_handler.get(next_element_name)
-						.insertBranchMarkers(next_element);
+				structuredActivityHandler.get(nextElementName)
+						.insertBranchMarkers(nextElement);
 			}
 		}
 	}

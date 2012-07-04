@@ -42,7 +42,7 @@ public class Wait extends Activity {
 
 	@Override
 	public void run(ActivityContext context) {
-		fStatus = ArtefactStatus.createInProgressStatus();
+		setStatus(ArtefactStatus.createInProgressStatus());
 
 		long waitTill = System.currentTimeMillis() + this.waitDuration;
 		
@@ -54,7 +54,7 @@ public class Wait extends Activity {
 			}
 		}
 		
-		fStatus = ArtefactStatus.createPassedStatus();
+		setStatus(ArtefactStatus.createPassedStatus());
 	}
 
 	public void setWaitDuration(long waitForMilliseconds) {

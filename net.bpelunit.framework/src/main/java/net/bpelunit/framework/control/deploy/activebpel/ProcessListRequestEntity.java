@@ -7,8 +7,6 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import org.w3c.dom.DOMException;
-
 /**
  * Request entity for getting the list of all running WS-BPEL processes from the
  * ActiveBPEL 4.1 administration WS. Optionally, we can select only those from
@@ -52,7 +50,7 @@ public class ProcessListRequestEntity extends ActiveBPELRequestEntityBase {
 
     @Override
     protected void populateMessage(SOAPMessage message)
-            throws SOAPException, DOMException {
+            throws SOAPException {
         SOAPElement rootElement = addRootElement(
             message, new QName(ActiveBPELRequestEntityBase.NS_ACTIVEBPEL_ADMIN,
                                ACTIVEBPEL_PLISTINPUT));

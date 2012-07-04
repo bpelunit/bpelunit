@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package net.bpelunit.framework.control.result;
+package net.bpelunit.framework.model.test;
 
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
@@ -25,20 +25,20 @@ public interface ITestResultListener {
 	 * 
 	 * @param testCase the test case
 	 */
-	public void testCaseStarted(TestCase testCase);
+	void testCaseStarted(TestCase testCase);
 
 	/**
 	 * A test case ended.
 	 * 
 	 * @param testCase the test case
 	 */
-	public void testCaseEnded(TestCase testCase);
+	void testCaseEnded(TestCase testCase);
 
 	/**
 	 * There was progress in a test artefact.
 	 * 
 	 * @param testArtefact the test artefact
 	 */
-	public void progress(ITestArtefact testArtefact);
+	void progress(ITestArtefact testArtefact);
 
 }

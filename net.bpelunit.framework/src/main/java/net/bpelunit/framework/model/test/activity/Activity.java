@@ -42,7 +42,11 @@ public abstract class Activity implements ITestArtefact {
 	/**
 	 * The status of this object
 	 */
-	protected ArtefactStatus fStatus;
+	private ArtefactStatus fStatus;
+
+	protected void setStatus(ArtefactStatus status) {
+		this.fStatus = status;
+	}
 
 	private String fAssumption;
 

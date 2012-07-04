@@ -5,20 +5,13 @@
  */
 package net.bpelunit.framework.model;
 
-import java.io.File;
-
 import javax.wsdl.Definition;
 import javax.wsdl.Service;
-import javax.wsdl.WSDLException;
-import javax.wsdl.factory.WSDLFactory;
-import javax.wsdl.xml.WSDLReader;
 import javax.xml.namespace.QName;
 
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
-
-import com.ibm.wsdl.Constants;
 
 /**
  * The definition of a partner web service of the PUT. Note that this can also be the client.
@@ -32,51 +25,16 @@ import com.ibm.wsdl.Constants;
  */
 public class Partner extends AbstractPartner {
 
-	/**
-	 * Path to the WSDL file (including file name) of this partner, relative to the test base path,
-	 * which denotes the location of the .bpts file.
-	 */
-	private String fPathToWSDL;
-
-	private String fPathToPartnerWSDL;
-
 	private Definition fWSDLDefinition;
 
 	private Definition fPartnerWSDLDefinition;
 
-	public Partner(String name, String testBasePath, String wsdlName, String partnerWSDLName, String baseURL) throws SpecificationException {
-		super(name, testBasePath, baseURL);
+	public Partner(String name, Definition processWSDL, Definition partnerWSDL, String baseURL) throws SpecificationException {
+		super(name, baseURL);
 
-		fPathToWSDL= testBasePath + wsdlName;
-		fWSDLDefinition = loadWsdlDefinition(fPathToWSDL);
-		
-		if(partnerWSDLName != null && !"".equals(partnerWSDLName)) {
-			fPathToPartnerWSDL = testBasePath + partnerWSDLName;
-			fPartnerWSDLDefinition = loadWsdlDefinition(fPathToPartnerWSDL);
-		}
+		fWSDLDefinition = processWSDL;
+		fPartnerWSDLDefinition = partnerWSDL;
 	}
-
-	private Definition loadWsdlDefinition(String wsdlFileName)
-			throws SpecificationException {
-		// Check file exists
-		if (!new File(wsdlFileName).exists())
-			throw new SpecificationException(
-					"Cannot read WSDL file for partner " + getName()
-							+ ": File \"" + wsdlFileName + "\" not found.");
-
-		// load WSDL
-		try {
-			WSDLFactory factory = WSDLFactory.newInstance();
-			WSDLReader reader = factory.newWSDLReader();
-			reader.setFeature(Constants.FEATURE_VERBOSE, false);
-			return reader.readWSDL(wsdlFileName);
-		} catch (WSDLException e) {
-			throw new SpecificationException(
-					"Error while reading WSDL for partner " + getName()
-							+ " from file \"" + wsdlFileName + "\".", e);
-		}
-	}
-
 
 	public SOAPOperationCallIdentifier getOperation(QName service, String port, String operationName, SOAPOperationDirectionIdentifier direction)
 			throws SpecificationException {

@@ -17,6 +17,7 @@ import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.control.ws.LocalHTTPServer;
 import net.bpelunit.framework.coverage.CoverageConstants;
+import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.PartnerNotFoundException;
 import net.bpelunit.framework.exception.SynchronousSendException;
 import net.bpelunit.framework.model.test.PartnerTrack;
@@ -50,7 +51,7 @@ public class TestCaseRunner {
 		RUNNING, COMPLETED
 	};
 	
-	public static int wait_time_for_coverage_markers=CoverageConstants.DEFAULT_WAITTIME;
+	private static int waitTimeForCoverageMarkers = CoverageConstants.DEFAULT_WAITTIME;
 
 	// Data
 	private TestCase fTestCase;
@@ -147,10 +148,9 @@ public class TestCaseRunner {
 				@Override
 				public void run() {
 					try {
-						sleep(wait_time_for_coverage_markers);
+						sleep(getWaitTimeForCoverageMarkers());
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						// nothing to do
 					}
 					instance.setAllMarkersReceived(true);
 				}
@@ -177,8 +177,9 @@ public class TestCaseRunner {
 
 			// Interrupt all threads
 			for (Thread t : threads) {
-				if (t.isAlive())
+				if (t.isAlive()) {
 					t.interrupt();
+				}
 			}
 
 			fLogger.debug("All threads interrupted. Waiting for threads...");
@@ -220,12 +221,13 @@ public class TestCaseRunner {
 		for (PartnerTrack partnerTrack : fPartnerTracks.keySet()) {
 			if (partnerTrack.getPartnerName().equalsIgnoreCase(name)) {
 				// found the partner track - but does she have activities?
-				if (partnerTrack.getActivityCount() != 0)
+				if (partnerTrack.getActivityCount() != 0) {
 					return partnerTrack;
-				else
+				} else {
 					throw new PartnerNotFoundException(
 							"Partner found, but zero activities for name "
 									+ name);
+				}
 			}
 		}
 		throw new PartnerNotFoundException("No partner found for name " + name);
@@ -298,7 +300,7 @@ public class TestCaseRunner {
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
 				new DefaultHttpMethodRetryHandler(1, false));
 		method.getParams().setParameter(HttpMethodParams.SO_TIMEOUT,
-				new Integer(BPELUnitRunner.getTimeout()));
+				Integer.valueOf(BPELUnitRunner.getTimeout()));
 
 		method.addRequestHeader("SOAPAction", "\""
 				+ message.getSOAPHTTPAction() + "\"");
@@ -334,8 +336,9 @@ public class TestCaseRunner {
 		} catch (Exception e) {
 			if (isAborting()) {
 				throw new InterruptedException();
-			} else
+			} else {
 				throw new SynchronousSendException(e);
+			}
 		} finally {
 			// Release the connection.
 			method.releaseConnection();
@@ -432,7 +435,16 @@ public class TestCaseRunner {
 
 	// ********************* Velocity contexts *********************
 
-	public Context createVelocityContext() throws Exception {
+	public Context createVelocityContext() throws DataSourceException  {
 		return fTestCase.createVelocityContext();
+	}
+
+	public static void setWaitTimeForCoverageMarkers(
+			int waitTimeForCoverageMarkers) {
+		TestCaseRunner.waitTimeForCoverageMarkers = waitTimeForCoverageMarkers;
+	}
+
+	public static int getWaitTimeForCoverageMarkers() {
+		return waitTimeForCoverageMarkers;
 	}
 }
