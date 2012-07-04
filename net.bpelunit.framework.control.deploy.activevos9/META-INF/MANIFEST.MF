@@ -32,7 +32,7 @@ Import-Package: javax.jws,javax.jws.soap,javax.xml.bind,javax.xml.bind
  sform.dom,javax.xml.transform.stream,javax.xml.ws,net.bpelunit.framew
  ork.control.deploy.activevos9,net.bpelunit.framework.control.ext,net.
  bpelunit.framework.exception,net.bpelunit.framework.model,org.apache.
- commons.io,org.w3c.dom,org.xml.sax
+ commons.io,org.jdom,org.jdom.filter,org.w3c.dom,org.xml.sax
 Bundle-SymbolicName: net.bpelunit.framework.control.deployer.activevos
  9;singleton:=true
 
