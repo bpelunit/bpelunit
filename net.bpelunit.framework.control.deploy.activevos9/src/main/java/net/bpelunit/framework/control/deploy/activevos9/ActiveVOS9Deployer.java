@@ -35,7 +35,7 @@ import net.bpelunit.util.FileUtil;
 @IBPELDeployerCapabilities(canDeploy=true, canIntroduceMocks=false, canMeasureTestCoverage=false)
 public class ActiveVOS9Deployer implements IBPELDeployer {
 
-	private String deploymentLocation;
+	private String deploymentLocation = "";
 	private String deploymentServiceEndpoint = "http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR";
 	private String deployerUserName = "bpelunit";
 	private String deployerPassword = "";
@@ -112,6 +112,8 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	@Override
 	public void deploy(String pathToTest, ProcessUnderTest processUnderTest)
 			throws DeploymentException {
+
+		checkThatSpecified(this.deploymentLocation, "Location for Deployment Archive (BPR) was not configured.");
 		
 		ActiveVOSAdministrativeFunctions activevos = getAdministrativeFunctions();
 		
@@ -119,7 +121,9 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			activevos.terminateAllProcessInstances();
 		}
 		
-		previouslyDeployedContributions = activevos.getAllContributions();
+		if(doUndeploy) {
+			previouslyDeployedContributions = activevos.getAllContributions();
+		}
 		
 		try {
 			File bprFile = new File(getArchiveLocation(pathToTest));
@@ -137,6 +141,12 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			throw new DeploymentException("Error while deploying: " + e.getMessage(), e);
 		} catch (DeployException e) {
 			throw new DeploymentException("Error while deploying: " + e.getMessage(), e);
+		}
+	}
+
+	private void checkThatSpecified(String value, String msg) throws DeploymentException {
+		if(value == null || "".equals(value)) {
+			throw new DeploymentException(msg);
 		}
 	}
 
@@ -192,6 +202,17 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 		}
 		
 		return administrativeFunctions;
+	}
+
+	/**
+	 * For testing only
+	 * 
+	 * @param mock
+	 */
+	protected void setAdministrativeFunctions(
+			ActiveVOSAdministrativeFunctions mock) {
+		this.administrativeFunctions = mock;
+		
 	}
 
 }

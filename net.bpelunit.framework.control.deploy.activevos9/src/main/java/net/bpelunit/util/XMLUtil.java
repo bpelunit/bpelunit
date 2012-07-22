@@ -62,12 +62,12 @@ public final class XMLUtil {
 		return dBuilder.parse(in);
 	}
 
-	public static void writeXML(Document xml, File file) throws IOException,
+	public static void writeXML(Node xml, File file) throws IOException,
 			TransformerException {
 		writeXML(xml, new FileOutputStream(file));
 	}
 
-	public static void writeXML(Document xml, OutputStream outputStream)
+	public static void writeXML(Node xml, OutputStream outputStream)
 			throws TransformerException {
 		try {
 			TransformerFactory tf = TransformerFactory.newInstance();
