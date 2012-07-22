@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 import net.bpelunit.util.Console;
@@ -31,7 +32,7 @@ public class TestDataExternalizerMain {
 
 	private String dataFileDirectory;
 	private boolean makeBackup = true;
-	private File testSuiteFile;
+	private List<File> testSuiteFiles = new ArrayList<File>();
 
 	public TestDataExternalizerMain(String[] args) {
 		this(new Console(), args);
@@ -73,20 +74,23 @@ public class TestDataExternalizerMain {
 
 			ArrayList<String> remainingOptions = new ArrayList<String>(
 					cmd.getArgList());
-			setAndValidateTestSuiteFileName(remainingOptions.remove(0));
+			for (String fileName : remainingOptions) {
+				addAndValidateTestSuiteFileName(fileName);
+			}
 		} catch (ParseException e) {
 			showHelpAndExit();
 		}
 	}
 
-	private void setAndValidateTestSuiteFileName(String testSuiteFileName) {
-		testSuiteFile = new File(testSuiteFileName);
+	private void addAndValidateTestSuiteFileName(String testSuiteFileName) {
+		File testSuiteFile = new File(testSuiteFileName);
 		if (!testSuiteFile.exists()) {
 			abort(String
 					.format(Messages
 							.getString("TestDataExternalizerMain.MSG_ERR_TESTSUITE_FILE_NOT_EXISTING"),
 							testSuiteFile)); //$NON-NLS-1$
 		}
+		testSuiteFiles.add(testSuiteFile);
 	}
 
 	private void abort(String message) {
@@ -113,60 +117,78 @@ public class TestDataExternalizerMain {
 	void run() {
 		String bpelUnitRunner = Messages
 				.getString("TestDataExternalizerMain.MSG_TITLE_BPELUNIT_DATAEXTERNALIZER"); //$NON-NLS-1$
-		screen.println(bpelUnitRunner); 
+		screen.println(bpelUnitRunner);
 		screen.println(StringUtils.repeat("-", bpelUnitRunner.length())); //$NON-NLS-1$
 		screen.println();
 
-		makeBackupOfTestSuiteIfNecessary();
+		makeBackupOfTestSuitesIfNecessary();
 		TestDataExternalizer tde = new TestDataExternalizer(
 				this.dataFileDirectory);
-		
-		XMLTestSuiteDocument testSuiteDocument = processTestSuite(tde);
+
+		List<XMLTestSuiteDocument> testSuiteDocuments = processTestSuites(tde);
 		writeMessageData(tde);
-		saveUpdatedTestSuite(testSuiteDocument);
+		saveUpdatedTestSuites(testSuiteDocuments, testSuiteFiles);
 		screen.println("Done.");
 	}
 
-	private void saveUpdatedTestSuite(XMLTestSuiteDocument testSuiteDocument) {
-		screen.println("Updating test suite...");
-		try {
-			testSuiteDocument.save(testSuiteFile);
-		} catch (IOException e) {
-			abort("Error writing test suite file: " + e.getMessage(), e);
+	private void saveUpdatedTestSuites(
+			List<XMLTestSuiteDocument> testSuiteDocuments,
+			List<File> testSuiteFiles) {
+		for (int i = 0; i < testSuiteDocuments.size(); i++) {
+			XMLTestSuiteDocument testSuiteDocument = testSuiteDocuments.get(i);
+			File testSuiteFile = testSuiteFiles.get(i);
+			screen.println(String.format("Updating test suite %s...",
+					testSuiteFile.getName()));
+			try {
+				testSuiteDocument.save(testSuiteFile);
+			} catch (IOException e) {
+				abort("Error writing test suite file: " + e.getMessage(), e);
+			}
 		}
 	}
 
 	private void writeMessageData(TestDataExternalizer tde) {
 		screen.println("Extracting XML send messages...");
 		try {
-			tde.externalize(new FileSystemFileWriter(testSuiteFile.getParentFile()));
+			tde.externalize(new FileSystemFileWriter(testSuiteFiles.get(0)
+					.getParentFile()));
 		} catch (FileAlreadyExistsException e) {
-			abort("Error extracting XML messages because a file already exists: " + e.getMessage(), e);
+			abort("Error extracting XML messages because a file already exists: "
+					+ e.getMessage(), e);
 		}
 	}
 
-	private XMLTestSuiteDocument processTestSuite(TestDataExternalizer tde) {
-		screen.println(String.format("Reading %s...", testSuiteFile.getName()));
-		XMLTestSuiteDocument testSuiteDocument = null;
-		try {
-			testSuiteDocument = XMLTestSuiteDocument.Factory
-					.parse(testSuiteFile);
-			tde.replaceContentsWithSrc(testSuiteDocument);
-		} catch (Exception e) {
-			abort("Error while reading test suite file: " + e.getMessage(), e);
-		}
-		return testSuiteDocument;
-	}
-
-	private void makeBackupOfTestSuiteIfNecessary() {
-		if (makeBackup) {
-			String backupFileName = testSuiteFile.getAbsolutePath() + ".old";
-			screen.println(String.format(
-					"Making backup of testsuite file (%s)...", backupFileName));
+	private List<XMLTestSuiteDocument> processTestSuites(
+			TestDataExternalizer tde) {
+		List<XMLTestSuiteDocument> testSuiteDocuments = new ArrayList<XMLTestSuiteDocument>();
+		for (File f : testSuiteFiles) {
+			screen.println(String.format("Reading %s...", f.getName()));
+			XMLTestSuiteDocument testSuiteDocument = null;
 			try {
-				FileUtils.copyFile(testSuiteFile, new File(backupFileName));
-			} catch (IOException e) {
-				abort("Error making backup copy", e);
+				testSuiteDocument = XMLTestSuiteDocument.Factory.parse(f);
+				tde.replaceContentsWithSrc(testSuiteDocument);
+				testSuiteDocuments.add(testSuiteDocument);
+			} catch (Exception e) {
+				abort("Error while reading test suite file: " + e.getMessage(),
+						e);
+			}
+		}
+		return testSuiteDocuments;
+	}
+
+	private void makeBackupOfTestSuitesIfNecessary() {
+		if (makeBackup) {
+			for (File testSuiteFile : testSuiteFiles) {
+				String backupFileName = testSuiteFile.getAbsolutePath()
+						+ ".old";
+				screen.println(String.format(
+						"Making backup of testsuite file (%s)...",
+						backupFileName));
+				try {
+					FileUtils.copyFile(testSuiteFile, new File(backupFileName));
+				} catch (IOException e) {
+					abort("Error making backup copy", e);
+				}
 			}
 		}
 	}
