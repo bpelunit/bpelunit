@@ -13,6 +13,8 @@ import java.util.List;
 import net.bpelunit.framework.xml.suite.XMLAnyElement;
 import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 import net.bpelunit.util.FileUtil;
+import net.bpelunit.utils.testdataexternalizer.io.FileSystemFileWriter;
+import net.bpelunit.utils.testdataexternalizer.io.IFileWriter.FileAlreadyExistsException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -61,7 +63,7 @@ public class TestDataExternalizerTest {
 	}
 	
 	@Test
-	public void testExternalize() throws XmlException, IOException {
+	public void testExternalize() throws XmlException, IOException, FileAlreadyExistsException {
 		XMLTestSuiteDocument testSuite = XMLTestSuiteDocument.Factory.parse(getClass().getResourceAsStream("suite-to-externalize.bpts"));
 		
 		XMLAnyElement anyElement = testSuite.getTestSuite().getTestCases().getTestCaseArray(0).getClientTrack().getSendReceiveArray(0).getSend().getData();		
@@ -70,7 +72,7 @@ public class TestDataExternalizerTest {
 		XMLAnyElement anyElement2 = testSuite.getTestSuite().getTestCases().getTestCaseArray(0).getClientTrack().getSendReceiveArray(2).getSend().getData();
 		tde.register(anyElement2);
 
-		tde.externalize(tmpDir);
+		tde.externalize(new FileSystemFileWriter(tmpDir));
 		
 		List<String> fileNames = Arrays.asList(tmpDir.list());
 		assertEquals(2, fileNames.size());
@@ -98,12 +100,12 @@ public class TestDataExternalizerTest {
 	}
 	
 	@Test
-	public void testExternalizeTestSuite() throws XmlException, IOException {
+	public void testExternalizeTestSuite() throws XmlException, IOException, FileAlreadyExistsException {
 		XMLTestSuiteDocument testSuite = XMLTestSuiteDocument.Factory.parse(getClass().getResourceAsStream("suite-to-externalize.bpts"));
 		
 		tde.replaceContentsWithSrc(testSuite);
 		
-		tde.externalize(tmpDir);
+		tde.externalize(new FileSystemFileWriter(tmpDir));
 		
 		List<String> fileNames = Arrays.asList(tmpDir.list());
 		assertEquals(2, fileNames.size());
@@ -122,13 +124,13 @@ public class TestDataExternalizerTest {
 	}
 	
 	@Test
-	public void testExternalizeTestSuiteWithRelativePath() throws XmlException, IOException {
+	public void testExternalizeTestSuiteWithRelativePath() throws XmlException, IOException, FileAlreadyExistsException {
 		tde = new TestDataExternalizer("myBPTS");
 		XMLTestSuiteDocument testSuite = XMLTestSuiteDocument.Factory.parse(getClass().getResourceAsStream("suite-to-externalize.bpts"));
 		
 		tde.replaceContentsWithSrc(testSuite);
 		
-		tde.externalize(tmpDir);
+		tde.externalize(new FileSystemFileWriter(tmpDir));
 		
 		File[] files = tmpDir.listFiles();
 		assertEquals(1, files.length);

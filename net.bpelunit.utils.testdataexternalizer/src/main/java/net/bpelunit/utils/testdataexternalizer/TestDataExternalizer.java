@@ -1,8 +1,7 @@
 package net.bpelunit.utils.testdataexternalizer;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +17,9 @@ import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 import net.bpelunit.framework.xml.suite.XMLTrack;
 import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import net.bpelunit.util.XMLUtil;
+import net.bpelunit.utils.testdataexternalizer.io.IFileWriter;
+import net.bpelunit.utils.testdataexternalizer.io.IFileWriter.FileAlreadyExistsException;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Node;
 
@@ -95,16 +95,11 @@ public class TestDataExternalizer {
 		}
 	}
 
-	public void externalize(File dir) throws IOException {
-		File targetDir = dir;
-		if(!StringUtils.isEmpty(relPath)) {
-			targetDir = new File(dir, relPath);
-			targetDir.mkdirs();
-		}
-		
+	public void externalize(IFileWriter fw) throws FileAlreadyExistsException {
 		for (String fileName : fileNameToXmlMap.keySet()) {
-			FileUtils.writeStringToFile(new File(targetDir, fileName),
-					fileNameToXmlMap.get(fileName));
+			String xmlContent = fileNameToXmlMap.get(fileName);
+			
+			fw.write(new ByteArrayInputStream(xmlContent.getBytes()), this.relPath + fileName);
 		}
 	}
 

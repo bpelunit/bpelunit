@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 import net.bpelunit.util.Console;
+import net.bpelunit.utils.testdataexternalizer.io.FileSystemFileWriter;
+import net.bpelunit.utils.testdataexternalizer.io.IFileWriter.FileAlreadyExistsException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -137,9 +139,9 @@ public class TestDataExternalizerMain {
 	private void writeMessageData(TestDataExternalizer tde) {
 		screen.println("Extracting XML send messages...");
 		try {
-			tde.externalize(testSuiteFile.getParentFile());
-		} catch (IOException e) {
-			abort("Error extracting XML messages: " + e.getMessage(), e);
+			tde.externalize(new FileSystemFileWriter(testSuiteFile.getParentFile()));
+		} catch (FileAlreadyExistsException e) {
+			abort("Error extracting XML messages because a file already exists: " + e.getMessage(), e);
 		}
 	}
 
