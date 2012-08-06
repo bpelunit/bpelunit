@@ -30,12 +30,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/**
- * TODO Externalize util files into own project from ActiveVOS9. 
- * Remove this class.
- * 
- * @author dluebke
- */
 public final class XMLUtil {
 
 	private XMLUtil() {

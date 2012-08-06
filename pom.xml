@@ -459,6 +459,7 @@
 
   <modules>
     <module>net.bpelunit.framework</module>
+    <module>net.bpelunit.util</module>
     <module>net.bpelunit.framework.client.ant</module>
     <module>net.bpelunit.framework.client.command</module>
     <module>net.bpelunit.framework.client.maven</module>

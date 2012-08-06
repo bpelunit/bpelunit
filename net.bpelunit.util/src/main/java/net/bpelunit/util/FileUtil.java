@@ -11,12 +11,6 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 
-/**
- * TODO Externalize util files into own project from ActiveVOS9. 
- * Remove this class.
- * 
- * @author dluebke
- */
 public final class FileUtil {
 
 	private FileUtil() {
