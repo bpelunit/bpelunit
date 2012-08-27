@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable" targetNamespace="ProcessNamespace" name="MyProcess">
+    <import importType="http://schemas.xmlsoap.org/wsdl/" location="testSimpleProcessSequence.wsdl" namespace="http://www.example.org/service"/>
+    <partnerLinks>
+        <partnerLink xmlns:ns2="http://www.example.org/service" myRole="process" partnerLinkType="ns2:processPLT" name="processPL"/>
+    </partnerLinks>
+    <variables>
+        <variable xmlns:ns2="http://www.example.org/service" messageType="ns2:Request" name="request"/>
+        <variable xmlns:ns2="http://www.example.org/service" messageType="ns2:Response" name="response"/>
+    </variables>
+    <sequence name="mainSequence">
+        <receive xmlns:ns2="http://www.example.org/service" createInstance="yes" variable="request" operation="operation" portType="ns2:Porttype" partnerLink="processPL" name="receive"/>
+        <assign name="assign"/>
+        <reply xmlns:ns2="http://www.example.org/service" variable="response" operation="operation" portType="ns2:Porttype" partnerLink="processPL" name="reply"/>
+    </sequence>
+</process>
