@@ -15,7 +15,7 @@ Require-Bundle: net.bpelunit.framework.client.eclipse,net.bpelunit.fra
 Bundle-Vendor: Leibniz Universität Hannover
 Build-Jdk: 1.6.0_24
 Bundle-Version: 1.6.1.SNAPSHOT
-Bnd-LastModified: 1342981005444
+Bnd-LastModified: 1346514134500
 Bundle-ManifestVersion: 2
 Bundle-License: http://www.eclipse.org/legal/epl-v10.html
 Bundle-Description: BPEL has become the defacto standard language for 
