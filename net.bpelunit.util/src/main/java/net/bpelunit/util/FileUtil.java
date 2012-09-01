@@ -36,4 +36,13 @@ public final class FileUtil {
 			IOUtils.closeQuietly(bprInputStream);
 		}
 	}
+	
+	public static String getFileNameWithoutSuffix(String fileName) {
+		int lastIndexOf = fileName.lastIndexOf(".");
+		if(lastIndexOf >= 0) {
+			return fileName.substring(0, lastIndexOf);
+		} else {
+			return fileName;
+		}
+	}
 }

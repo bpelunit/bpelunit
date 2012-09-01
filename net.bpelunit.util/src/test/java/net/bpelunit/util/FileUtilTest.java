@@ -36,4 +36,12 @@ public class FileUtilTest {
 		assertEquals(3, contents.length);
 		assertArrayEquals(new byte[] { 'a', 'b', 'c' }, contents);
 	}
+	
+	@Test
+	public void testGetFileNameWithoutSuffix() throws Exception {
+		assertEquals("test", FileUtil.getFileNameWithoutSuffix("test.txt"));
+		assertEquals("test", FileUtil.getFileNameWithoutSuffix("test.bpel"));
+		assertEquals("test.txt", FileUtil.getFileNameWithoutSuffix("test.txt.bpel"));
+		assertEquals("test", FileUtil.getFileNameWithoutSuffix("test.txt"));
+	}
 }
