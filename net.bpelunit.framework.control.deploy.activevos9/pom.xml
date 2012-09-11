@@ -92,5 +92,10 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>net.bpelunit</groupId>
+			<artifactId>net.bpelunit.util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

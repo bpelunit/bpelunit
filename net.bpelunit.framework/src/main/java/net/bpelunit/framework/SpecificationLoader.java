@@ -308,47 +308,76 @@ public class SpecificationLoader {
 
 		int currentNumber = 0;
 		for (XMLTestCase xmlTestCase : xmlTestCaseList) {
-
-			String xmlTestCaseName = xmlTestCase.getName();
-			if (xmlTestCaseName == null) {
-				xmlTestCaseName = "Test Case " + currentNumber;
-			}
 			currentNumber++;
+			createTestCase(testDirectory, xmlTestSuiteDocument, xmlTestSuite,
+					suitePartners, suiteHumanPartners, suiteClient, suite,
+					currentNumber, xmlTestCase);
+		}
+	}
 
-			boolean isVary = xmlTestCase.getVary();
-			int rounds = computeNumberOfRounds(xmlTestSuiteDocument, isVary);
-			fLogger.info("Varying: " + isVary + " (Rounds: " + rounds + ")");
+	private void createTestCase(String testDirectory,
+			XMLTestSuiteDocument xmlTestSuiteDocument,
+			XMLTestSuite xmlTestSuite, Map<String, Partner> suitePartners,
+			Map<String, HumanPartner> suiteHumanPartners, Partner suiteClient,
+			TestSuite suite, int currentNumber, XMLTestCase xmlTestCase)
+			throws SpecificationException {
+		String xmlTestCaseName = getTestCaseName(currentNumber, xmlTestCase);
 
-			IDataSource dataSource = readDataSource(testDirectory,
-					xmlTestSuite, xmlTestCase);
+		boolean isVary = xmlTestCase.getVary();
+		int rounds = computeNumberOfRounds(xmlTestSuiteDocument, isVary);
+		fLogger.info("Varying: " + isVary + " (Rounds: " + rounds + ")");
 
-			final int nRows = dataSource != null ? dataSource.getNumberOfRows()
-					: 1;
-			final int nRounds = isVary && rounds > 0 ? rounds : 1;
-			for (int iRow = 0; iRow < nRows; ++iRow) {
-				for (int iRound = 0; iRound < nRounds; iRound++) {
-					String currentTestCaseName = xmlTestCaseName;
-					if (dataSource != null) {
-						currentTestCaseName = currentTestCaseName + " (Row "
-								+ (iRow + 1) + ")";
-					}
-					if (isVary && rounds > 0) {
-						// Create a non-computer-science name ;)
-						currentTestCaseName = currentTestCaseName + " (Round "
-								+ (iRound + 1) + ")";
-					}
-					if (!xmlTestCase.getAbstract()) {
-						TestCase test = createTestCase(suitePartners,
-								suiteHumanPartners, suiteClient, suite,
-								xmlTestCase, currentTestCaseName, iRound,
-								testDirectory);
-						test.setDataSource(dataSource);
-						test.setRowIndex(iRow);
-						suite.addTestCase(test);
-					}
+		IDataSource dataSource = readDataSource(testDirectory,
+				xmlTestSuite, xmlTestCase);
+
+		final int nRows = getNumberOfRows(dataSource);
+		final int nRounds = getNumberOfRounds(isVary, rounds);
+		for (int iRow = 0; iRow < nRows; ++iRow) {
+			for (int iRound = 0; iRound < nRounds; iRound++) {
+				String currentTestCaseName = getHumanReadableTestCaseName(
+						xmlTestCaseName, rounds, dataSource, iRow, iRound);
+				if (!xmlTestCase.getAbstract()) {
+					TestCase test = createTestCase(suitePartners,
+							suiteHumanPartners, suiteClient, suite,
+							xmlTestCase, currentTestCaseName, iRound,
+							testDirectory);
+					test.setDataSource(dataSource);
+					test.setRowIndex(iRow);
+					suite.addTestCase(test);
 				}
 			}
 		}
+	}
+
+	private String getHumanReadableTestCaseName(String xmlTestCaseName,
+			int rounds, IDataSource dataSource, int iRow, int iRound) {
+		String currentTestCaseName = xmlTestCaseName;
+		if (dataSource != null) {
+			currentTestCaseName += " (Row " + (iRow + 1) + ")";
+		}
+		if (rounds > 1) {
+			// Create a non-computer-science name ;)
+			currentTestCaseName += " (Round " + (iRound + 1) + ")";
+		}
+		return currentTestCaseName;
+	}
+
+	private int getNumberOfRounds(boolean isVary, int rounds) {
+		return isVary && rounds > 0 ? rounds : 1;
+	}
+
+	private int getNumberOfRows(IDataSource dataSource) {
+		final int nRows = dataSource != null ? dataSource.getNumberOfRows()
+				: 1;
+		return nRows;
+	}
+
+	private String getTestCaseName(int currentNumber, XMLTestCase xmlTestCase) {
+		String xmlTestCaseName = xmlTestCase.getName();
+		if (xmlTestCaseName == null) {
+			xmlTestCaseName = "Test Case " + currentNumber;
+		}
+		return xmlTestCaseName;
 	}
 
 	private IDataSource readDataSource(String testDirectory,
@@ -712,11 +741,7 @@ public class SpecificationLoader {
 
 				// Find name of track
 				String trackName = null;
-				if (xmlTrack instanceof XMLPartnerTrack) {
-					trackName = ((XMLPartnerTrack) xmlTrack).getName();
-				} else {
-					trackName = BPELUnitConstants.CLIENT_NAME;
-				}
+				trackName = getPartnerTrackName(xmlTrack);
 
 				// Find the first test case with has a non-empty track like ours
 				XMLTestCase basedOnTestCase = findInHierarchy(xmlTestCase,
@@ -745,83 +770,100 @@ public class SpecificationLoader {
 				 */
 
 				if (event instanceof XMLWaitActivity) {
-					XMLWaitActivity xmlWait = (XMLWaitActivity) event;
-					Wait activity = new Wait(partnerTrack);
-					activity.setWaitDuration(xmlWait.getWaitForMilliseconds());
-					activity.setAssumption(event.getAssume());
-					activities.add(activity);
-					continue;
-				}
-
-				if (event instanceof XMLReceiveActivity) {
-					XMLReceiveActivity xmlReceive = (XMLReceiveActivity) event;
-					ReceiveAsync activity = new ReceiveAsync(partnerTrack);
-					ReceiveDataSpecification spec = createReceiveSpecificationStandalone(
-							activity, xmlReceive,
-							SOAPOperationDirectionIdentifier.INPUT);
-					activity.initialize(spec);
-					activity.setAssumption(event.getAssume());
-
-					activities.add(activity);
-					continue;
-				}
-
-				if (event instanceof XMLSendActivity) {
-					XMLSendActivity xmlSend = (XMLSendActivity) event;
-					SendAsync activity = new SendAsync(partnerTrack);
-					SendDataSpecification spec = createSendSpecificationFromStandalone(
-							activity, xmlSend,
-							SOAPOperationDirectionIdentifier.INPUT, round,
-							testDirectory);
-					activity.initialize(spec);
-					activity.setAssumption(event.getAssume());
-
-					activities.add(activity);
-					continue;
-				}
-
-				if (event instanceof XMLTwoWayActivity) {
+					readWait(partnerTrack, activities, event, (XMLWaitActivity) event);
+				} else if (event instanceof XMLReceiveActivity) {
+					readReceive(partnerTrack, activities, event, (XMLReceiveActivity) event);
+				} else if (event instanceof XMLSendActivity) {
+					readSend(partnerTrack, round, testDirectory, activities,
+							event, (XMLSendActivity) event);
+				} else if (event instanceof XMLTwoWayActivity) {
 					XMLTwoWayActivity op = (XMLTwoWayActivity) event;
-					if (ActivityUtil.isActivity(op,
-							ActivityConstant.RECEIVE_SEND_SYNC)) {
-						Activity activity = createReceiveSendSynchronous(op,
-								partnerTrack, round, testDirectory);
-						activity.setAssumption(event.getAssume());
-						activities.add(activity);
-					}
-					if (ActivityUtil.isActivity(op,
-							ActivityConstant.SEND_RECEIVE_SYNC)) {
-						Activity activity = createSendReceiveSynchronous(op,
-								partnerTrack, round, testDirectory);
-						activity.setAssumption(event.getAssume());
-						activities.add(activity);
-					}
-					if (ActivityUtil.isActivity(op,
-							ActivityConstant.RECEIVE_SEND_ASYNC)) {
-						ReceiveSendAsync activity = new ReceiveSendAsync(
-								partnerTrack);
-						fillAsyncTwoWay(activity, op, round, testDirectory);
-						activity.setAssumption(event.getAssume());
-						activities.add(activity);
-					}
-					if (ActivityUtil.isActivity(op,
-							ActivityConstant.SEND_RECEIVE_ASYNC)) {
-						SendReceiveAsync activity = new SendReceiveAsync(
-								partnerTrack);
-						fillAsyncTwoWay(activity, op, round, testDirectory);
-						activity.setAssumption(event.getAssume());
-						activities.add(activity);
-					}
-					continue;
+					readTwoWayActivity(partnerTrack, round, testDirectory,
+							activities, event, op);
+				} else {
+					throw new SpecificationException(
+							"No activity found when reading event list for "
+									+ partnerTrack);
 				}
-
-				throw new SpecificationException(
-						"No activity found when reading event list for "
-								+ partnerTrack);
 			}
 
 			partnerTrack.setActivities(activities);
 		}
+	}
+
+	private void readTwoWayActivity(PartnerTrack partnerTrack, int round,
+			String testDirectory, List<Activity> activities, XMLActivity event,
+			XMLTwoWayActivity op) throws SpecificationException {
+		Activity activity = null;
+		if (ActivityUtil.isActivity(op,
+				ActivityConstant.RECEIVE_SEND_SYNC)) {
+			activity = createReceiveSendSynchronous(op,
+					partnerTrack, round, testDirectory);
+		} else if (ActivityUtil.isActivity(op,
+				ActivityConstant.SEND_RECEIVE_SYNC)) {
+			activity = createSendReceiveSynchronous(op,
+					partnerTrack, round, testDirectory);
+		} else if (ActivityUtil.isActivity(op,
+				ActivityConstant.RECEIVE_SEND_ASYNC)) {
+			ReceiveSendAsync a = new ReceiveSendAsync(
+					partnerTrack);
+			fillAsyncTwoWay(a, op, round, testDirectory);
+			activity = a;
+		} else if (ActivityUtil.isActivity(op,
+				ActivityConstant.SEND_RECEIVE_ASYNC)) {
+			SendReceiveAsync a = new SendReceiveAsync(
+					partnerTrack);
+			fillAsyncTwoWay(a, op, round, testDirectory);
+			activity = a;
+		}
+		
+		activity.setAssumption(event.getAssume());
+		activities.add(activity);
+	}
+
+	private void readSend(PartnerTrack partnerTrack, int round,
+			String testDirectory, List<Activity> activities, XMLActivity event,
+			XMLSendActivity xmlSend) throws SpecificationException {
+		SendAsync activity = new SendAsync(partnerTrack);
+		SendDataSpecification spec = createSendSpecificationFromStandalone(
+				activity, xmlSend,
+				SOAPOperationDirectionIdentifier.INPUT, round,
+				testDirectory);
+		activity.initialize(spec);
+		activity.setAssumption(event.getAssume());
+
+		activities.add(activity);
+	}
+
+	private void readReceive(PartnerTrack partnerTrack,
+			List<Activity> activities, XMLActivity event,
+			XMLReceiveActivity xmlReceive) throws SpecificationException {
+		ReceiveAsync activity = new ReceiveAsync(partnerTrack);
+		ReceiveDataSpecification spec = createReceiveSpecificationStandalone(
+				activity, xmlReceive,
+				SOAPOperationDirectionIdentifier.INPUT);
+		activity.initialize(spec);
+		activity.setAssumption(event.getAssume());
+
+		activities.add(activity);
+	}
+
+	private void readWait(PartnerTrack partnerTrack, List<Activity> activities,
+			XMLActivity event, XMLWaitActivity xmlWait) {
+		Wait activity = new Wait(partnerTrack);
+		activity.setWaitDuration(xmlWait.getWaitForMilliseconds());
+		activity.setAssumption(event.getAssume());
+		activities.add(activity);
+	}
+
+	private String getPartnerTrackName(XMLTrack xmlTrack) {
+		String trackName;
+		if (xmlTrack instanceof XMLPartnerTrack) {
+			trackName = ((XMLPartnerTrack) xmlTrack).getName();
+		} else {
+			trackName = BPELUnitConstants.CLIENT_NAME;
+		}
+		return trackName;
 	}
 
 	/**

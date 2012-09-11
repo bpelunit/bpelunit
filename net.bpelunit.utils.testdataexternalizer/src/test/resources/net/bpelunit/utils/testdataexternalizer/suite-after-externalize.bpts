@@ -1,0 +1,56 @@
+<tes:testSuite xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:suit="http://www.example.org/suite-to-externalize/">
+    <tes:name>suite-to-externalize.bpts</tes:name>
+    <tes:baseURL>http://localhost:7777/ws</tes:baseURL>
+    <tes:deployment>
+        <tes:put type="fixed" name="None">
+            <tes:wsdl>suite-to-externalize.wsdl</tes:wsdl>
+        </tes:put>
+        <tes:partner name="a" wsdl="suite-to-externalize.wsdl"/>
+    </tes:deployment>
+    <tes:testCases>
+        <tes:testCase name="TC1" basedOn="" abstract="false" vary="false">
+            <tes:clientTrack>
+                <tes:sendReceive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation">
+                    <tes:send service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false">
+                        <tes:data src="NewOperation.xml"/>
+                    </tes:send>
+                    <tes:receive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false"/>
+                </tes:sendReceive>
+                <tes:sendReceive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation">
+                    <tes:send service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false">
+                        <tes:data src="NewOperation.xml"/>
+                    </tes:send>
+                    <tes:receive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false"/>
+                </tes:sendReceive>
+                <tes:sendReceive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation">
+                    <tes:send service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false">
+                        <tes:data src="NewOperation-1.xml"/>
+                    </tes:send>
+                    <tes:receive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false"/>
+                </tes:sendReceive>
+            </tes:clientTrack>
+        </tes:testCase>
+        <tes:testCase name="TC2" basedOn="" abstract="false" vary="false">
+            <tes:partnerTrack name="a">
+                <tes:sendReceive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation">
+                    <tes:send service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false">
+                        <tes:data src="NewOperation.xml"/>
+                    </tes:send>
+                    <tes:receive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false"/>
+                </tes:sendReceive>
+                <tes:sendReceive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation">
+                    <tes:send service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false">
+                        <tes:data src="NewOperation.xml"/>
+                    </tes:send>
+                    <tes:receive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false"/>
+                </tes:sendReceive>
+                <tes:sendReceive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation">
+                    <tes:send service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false">
+                        <tes:data src="NewOperation-1.xml"/>
+                    </tes:send>
+                    <tes:receive service="suit:suite-to-externalize" port="suite-to-externalizeSOAP" operation="NewOperation" fault="false"/>
+                </tes:sendReceive>
+            </tes:partnerTrack>
+        </tes:testCase>
+    </tes:testCases>
+</tes:testSuite>

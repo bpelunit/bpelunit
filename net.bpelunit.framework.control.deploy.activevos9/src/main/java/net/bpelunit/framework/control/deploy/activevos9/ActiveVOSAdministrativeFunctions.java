@@ -4,7 +4,6 @@
  */
 package net.bpelunit.framework.control.deploy.activevos9;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -12,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.BindingProvider;
+
+import net.bpelunit.util.XMLUtil;
 
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
@@ -127,7 +126,7 @@ class ActiveVOSAdministrativeFunctions {
 
 	public List<AesContribution> getAllContributions() {
 		AesContributionSearchFilter input = new AesContributionSearchFilter();
-		AesContributionListResult searchContributions = contributionManagementPort.searchContributions(input);
+		AesContributionListResult searchContributions = getContributionManagementPort().searchContributions(input);
 				
 		return searchContributions.getContributionItem();
 	}
@@ -166,11 +165,11 @@ class ActiveVOSAdministrativeFunctions {
 		
 		deployBprInput.setBprFilename(bprFileName);
 		deployBprInput.setBase64File(contents);
-		deployBpr = activeBpelAdminPort.deployBpr(deployBprInput);
+		deployBpr = getActiveBpelAdminPort().deployBpr(deployBprInput);
 
 		String responseMessage = deployBpr.getResponse();
 		try {
-			Document xml = parseXMLFromString(responseMessage);
+			Document xml = XMLUtil.parseXML(responseMessage);
 			Node item = xml.getFirstChild().getAttributes()
 			.getNamedItem(ATTRIBUTE_ERROR_COUNT);
 			if (Integer.parseInt(item.getTextContent()) != 0) {
@@ -184,14 +183,6 @@ class ActiveVOSAdministrativeFunctions {
 		} catch (IOException e) {
 			throw new DeployException(e.getMessage(), e);
 		} 
-	}
-
-	private Document parseXMLFromString(String responseMessage)
-			throws ParserConfigurationException, SAXException, IOException {
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		return dBuilder.parse(new ByteArrayInputStream(responseMessage
-				.getBytes("UTF-8")));
 	}
 
 	public void terminateAllProcessInstances() {
@@ -212,22 +203,7 @@ class ActiveVOSAdministrativeFunctions {
 	/**
 	 * For testing only
 	 */
-	void setActiveBpelAdminPort(IAeAxisActiveBpelAdmin activeBpelAdminPort) {
-		this.activeBpelAdminPort = activeBpelAdminPort;
-	}
-
-	/**
-	 * For testing only
-	 */
 	IAeContributionManagement getContributionManagementPort() {
 		return contributionManagementPort;
-	}
-
-	/**
-	 * For testing only
-	 */
-	void setContributionManagementPort(
-			IAeContributionManagement contributionManagementPort) {
-		this.contributionManagementPort = contributionManagementPort;
 	}
 }

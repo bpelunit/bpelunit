@@ -155,5 +155,10 @@
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
     </dependency>
+    <dependency>
+      <groupId>net.bpelunit</groupId>
+      <artifactId>net.bpelunit.util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

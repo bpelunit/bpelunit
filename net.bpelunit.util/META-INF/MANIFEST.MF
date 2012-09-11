@@ -1,0 +1,37 @@
+Manifest-Version: 1.0
+Export-Package: net.bpelunit.util
+Embed-Directory: target/dependency
+Ignore-Package: oracle.xml.parser.v2,org.jaxen.jdom,java.util,java.net
+ ,javax.xml.transform.dom,javax.xml.namespace,org.xml.sax,org.xml.sax.
+ ext,java.io,org.jaxen,java.util.zip,oracle.xml.parser,java.lang.ref,j
+ ava.util.regex,java.lang,javax.xml.transform.sax,org.apache.xerces.pa
+ rsers,javax.xml.parsers,org.w3c.dom,java.lang.reflect,javax.xml.trans
+ form,java.rmi,net.bpelunit.util,javax.xml.transform.stream,org.apache
+ .xerces.dom,java.sql,org.xml.sax.helpers
+Bundle-ClassPath: .,target/dependency/commons-io-1.3.2.jar,target/depe
+ ndency/jdom-1.1.jar
+Built-By: dluebke
+Tool: Bnd-0.0.357
+Bundle-Name: BPELUnit :: Utilities
+Created-By: Apache Maven Bundle Plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: Leibniz Universität Hannover
+Build-Jdk: 1.6.0_24
+Bundle-Version: 1.6.1.SNAPSHOT
+Bnd-LastModified: 1344266148603
+Embed-Transitive: true
+Bundle-ManifestVersion: 2
+Bundle-Description: BPEL has become the defacto standard language for 
+ composing Web services. However, as every other programming language 
+ developers can introduce defects into the code that can lead to undes
+ ired consequences when the software is rolled out at the client-side.
+  Therefore, all software development methodologies include testing as
+  one of the important activities. For nearly every programming langua
+ ge, a unit testing framework exists, for example JUnit for Java. Thes
+ e testing frameworks allow developers to easily test small chunks of 
+ the code that they have written. Until recently, BPEL lacked such sup
+ port. However, BPELUnit was developed for closing this gap.
+Bundle-License: http://www.eclipse.org/legal/epl-v10.html
+Embed-Dependency: *;scope=compile;artifactId=!stax-api
+Bundle-SymbolicName: net.bpelunit.framework;symbolic:=true
+
