@@ -55,6 +55,32 @@ public class ActiveVOSDeploymentDescriptorTest {
 		assertEquals(expected, actual);
 	}
 
+	@Test
+	public void testAddWsdlImport() throws Exception {
+		String testName = "testAddWsdlImport";
+		File f = copyPddToTestCaseFile(testName);
+		ActiveVOSDeploymentDescriptor pdd = new ActiveVOSDeploymentDescriptor(f);
+		pdd.addWsdlImport("mylocation", "ns");
+		pdd.save();
+
+		String actual = normalize(FileUtil.readFile(f));
+		String expected = normalize(getExpected(testName));
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testAddXsdImport() throws Exception {
+		String testName = "testAddXsdImport";
+		File f = copyPddToTestCaseFile(testName);
+		ActiveVOSDeploymentDescriptor pdd = new ActiveVOSDeploymentDescriptor(f);
+		pdd.addXsdImport("mylocation.xsd", "ns");
+		pdd.save();
+
+		String actual = normalize(FileUtil.readFile(f));
+		String expected = normalize(getExpected(testName));
+		assertEquals(expected, actual);
+	}
+	
 	private byte[] getExpected(String testCaseName) throws IOException {
 		InputStream stream = getClass().getResourceAsStream(
 				getClass().getSimpleName() + "." + testCaseName + ".pdd");
