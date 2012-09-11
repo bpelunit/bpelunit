@@ -30,6 +30,22 @@
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xmlbeans-maven-plugin</artifactId>
+				<!-- version>2.3.3</version-->
+				<executions>
+					<execution>
+						<goals>
+							<goal>xmlbeans</goal>
+						</goals>
+					</execution>
+				</executions>
+				<inherited>true</inherited>
+				<configuration>
+					<schemaDirectory>src/main/xsd</schemaDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
 				<configuration>
 					<wsdlDirectory>src/main/resources</wsdlDirectory>
@@ -55,10 +71,10 @@
 						<Private-Package>net.bpelunit.util,active_endpoints.*,com.active_endpoints.*</Private-Package>
 						<Bundle-SymbolicName>
 							net.bpelunit.framework.control.deployer.activevos9;singleton:=true
-            </Bundle-SymbolicName>
+						</Bundle-SymbolicName>
 						<Require-Bundle>
 							net.bpelunit.framework.client.eclipse,net.bpelunit.framework
-            </Require-Bundle>
+						</Require-Bundle>
 						<Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
 						<Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
 					</instructions>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2005/08/addressing" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="EndpointReference" type="add:EndpointReferenceType" xmlns:add="http://www.w3.org/2005/08/addressing"/>
+  <xs:complexType name="ServiceNameType">
+    <xs:simpleContent>
+      <xs:extension base="xs:QName">
+        <xs:attribute type="xs:string" name="PortName" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="MetadataType">
+    <xs:sequence>
+      <xs:element type="add:ServiceNameType" name="ServiceName" xmlns:add="http://www.w3.org/2005/08/addressing"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="EndpointReferenceType">
+    <xs:sequence>
+      <xs:element name="Address">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="add:MetadataType" name="Metadata" xmlns:add="http://www.w3.org/2005/08/addressing"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,9 +1,12 @@
 Manifest-Version: 1.0
 Export-Package: net.bpelunit.framework.control.deploy.activevos9;uses:
  ="net.bpelunit.framework.control.ext,net.bpelunit.framework.model,net
- .bpelunit.framework.exception,org.w3c.dom,javax.xml.namespace,javax.x
- ml.parsers,org.apache.commons.io,org.xml.sax,javax.xml.ws"
-Built-By: antonio
+ .bpelunit.framework.exception,net.bpelunit.framework.control.deploy,n
+ et.bpelunit.framework.control.util,javax.xml.transform,org.w3c.dom,ja
+ vax.xml.namespace,javax.xml.parsers,org.xml.sax,net.bpelunit.framewor
+ k.control.soap,org.apache.commons.io,javax.xml.ws,org.apache.xmlbeans
+ "
+Built-By: daniell
 Tool: Bnd-0.0.357
 Bundle-Name: BPELUnit :: ActiveVOS 9 Deployer
 Created-By: Apache Maven Bundle Plugin
@@ -11,9 +14,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: net.bpelunit.framework.client.eclipse,net.bpelunit.fra
  mework
 Bundle-Vendor: Leibniz Universität Hannover
-Build-Jdk: 1.6.0_24
-Bundle-Version: 1.6.1.qualifier
-Bnd-LastModified: 1336029079294
+Build-Jdk: 1.7.0_03
+Bundle-Version: 1.6.1.SNAPSHOT
+Bnd-LastModified: 1347361855129
 Bundle-ManifestVersion: 2
 Bundle-License: http://www.eclipse.org/legal/epl-v10.html
 Bundle-Description: BPEL has become the defacto standard language for 
@@ -28,11 +31,14 @@ Bundle-Description: BPEL has become the defacto standard language for
  port. However, BPELUnit was developed for closing this gap.
 Import-Package: javax.jws,javax.jws.soap,javax.xml.bind,javax.xml.bind
  .annotation,javax.xml.bind.annotation.adapters,javax.xml.datatype,jav
- ax.xml.namespace,javax.xml.parsers,javax.xml.transform,javax.xml.tran
- sform.dom,javax.xml.transform.stream,javax.xml.ws,net.bpelunit.framew
- ork.control.deploy.activevos9,net.bpelunit.framework.control.ext,net.
- bpelunit.framework.exception,net.bpelunit.framework.model,org.apache.
- commons.io,org.jdom,org.jdom.filter,org.w3c.dom,org.xml.sax
+ ax.xml.namespace,javax.xml.parsers,javax.xml.stream,javax.xml.transfo
+ rm,javax.xml.transform.dom,javax.xml.transform.stream,javax.xml.ws,ne
+ t.bpelunit.framework.control.deploy,net.bpelunit.framework.control.de
+ ploy.activevos9,net.bpelunit.framework.control.ext,net.bpelunit.frame
+ work.control.soap,net.bpelunit.framework.control.util,net.bpelunit.fr
+ amework.exception,net.bpelunit.framework.model,org.apache.commons.io,
+ org.apache.xmlbeans,org.apache.xmlbeans.impl.values,org.apache.xmlbea
+ ns.xml.stream,org.jdom,org.jdom.filter,org.w3c.dom,org.xml.sax
 Bundle-SymbolicName: net.bpelunit.framework.control.deployer.activevos
  9;singleton:=true
 

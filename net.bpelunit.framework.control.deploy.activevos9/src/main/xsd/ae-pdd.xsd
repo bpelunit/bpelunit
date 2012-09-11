@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema attributeFormDefault="unqualified"
+	elementFormDefault="qualified"
+	targetNamespace="http://schemas.active-endpoints.com/pdd/2006/08/pdd.xsd"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsa="http://www.w3.org/2005/08/addressing"
+	xmlns:pdd="http://schemas.active-endpoints.com/pdd/2006/08/pdd.xsd"
+	xmlns:dep="http://www.activebpel.org/logging/2008/06/logging/deployments"
+	>
+	<xsd:import namespace="http://www.w3.org/2005/08/addressing" schemaLocation="ae-wsa.xsd" />
+	<xsd:import namespace="http://www.activebpel.org/logging/2008/06/logging/deployments" schemaLocation="activebpel-deployments.xsd" />
+
+	<xsd:element name="process" type="pdd:processType" />
+	<xsd:complexType name="partnerRoleType">
+		<xsd:sequence>
+			<xsd:element ref="wsa:EndpointReference" />
+		</xsd:sequence>
+		<xsd:attribute type="xsd:string" name="endpointReference" use="optional" />
+		<xsd:attribute type="xsd:string" name="invokeHandler" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="myRoleType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute type="xsd:string" name="binding" use="optional" />
+				<xsd:attribute type="xsd:string" name="service" use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="partnerLinkType">
+		<xsd:sequence>
+			<xsd:element type="pdd:partnerRoleType" name="partnerRole" />
+			<xsd:element type="pdd:myRoleType" name="myRole" minOccurs="0" />
+		</xsd:sequence>
+		<xsd:attribute type="xsd:string" name="name" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="partnerLinksType">
+		<xsd:sequence>
+			<xsd:element type="pdd:partnerLinkType" name="partnerLink" maxOccurs="unbounded" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="variableType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute type="xsd:string" name="path" use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="indexedPropertyType">
+		<xsd:sequence>
+			<xsd:element type="pdd:variableType" name="variable" />
+		</xsd:sequence>
+		<xsd:attribute type="xsd:string" name="name" use="optional" />
+		<xsd:attribute type="xsd:string" name="type" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="indexedPropertiesType">
+		<xsd:sequence>
+			<xsd:element type="pdd:indexedPropertyType" name="indexedProperty" maxOccurs="unbounded" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="wsdlType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute type="xsd:string" name="location" use="optional" />
+				<xsd:attribute type="xsd:anyURI" name="namespace" use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="schemaType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute type="xsd:string" name="location" use="optional" />
+				<xsd:attribute type="xsd:anyURI" name="namespace" use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="otherType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute type="xsd:string" name="location" use="optional" />
+				<xsd:attribute type="xsd:string" name="namespace" use="optional" />
+				<xsd:attribute type="xsd:anyURI" name="typeURI" use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="referencesType">
+		<xsd:choice maxOccurs="unbounded" minOccurs="0">
+			<xsd:element type="pdd:wsdlType" name="wsdl" maxOccurs="unbounded" minOccurs="0" />
+			<xsd:element type="pdd:schemaType" name="schema" maxOccurs="unbounded" minOccurs="0" />
+			<xsd:element type="pdd:otherType" name="other" maxOccurs="unbounded" minOccurs="0" />
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="extensionsType">
+		<xsd:sequence>
+			<xsd:element ref="dep:processLogging"  />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="processStatesType">
+		<xsd:sequence>
+			<xsd:element name="state" maxOccurs="unbounded" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="READY_TO_EXECUTE" />
+						<xsd:enumeration value="EXECUTE_COMPLETE" />
+						<xsd:enumeration value="TERMINATED" />
+						<xsd:enumeration value="EXECUTE_FAULT" />
+						<xsd:enumeration value="SUSPENDED" />
+						<xsd:enumeration value="FAULTING" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="businessPropertyType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute type="xsd:string" name="indexedPropertyRef" use="optional" />
+				<xsd:attribute type="xsd:string" name="name" use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="businessPropertiesType">
+		<xsd:sequence>
+			<xsd:element type="pdd:businessPropertyType" name="businessProperty" maxOccurs="unbounded" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="eventType">
+		<xsd:sequence>
+			<xsd:element type="pdd:processStatesType" name="processStates" />
+			<xsd:element type="pdd:businessPropertiesType" name="businessProperties" />
+		</xsd:sequence>
+		<xsd:attribute type="xsd:string" name="locationPath" use="optional" />
+		<xsd:attribute type="xsd:string" name="name" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="eventingType">
+		<xsd:sequence>
+			<xsd:element type="pdd:eventType" name="event" maxOccurs="unbounded" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="processType">
+		<xsd:sequence>
+			<xsd:element type="pdd:partnerLinksType" name="partnerLinks" />
+			<xsd:element type="pdd:indexedPropertiesType" name="indexedProperties" />
+			<xsd:element type="pdd:referencesType" name="references" />
+			<xsd:element type="pdd:extensionsType" name="extensions" />
+			<xsd:element type="pdd:eventingType" name="eventing" />
+		</xsd:sequence>
+		<xsd:attribute type="xsd:string" name="location" />
+		<xsd:attribute type="xsd:QName" name="name" />
+		<xsd:attribute type="xsd:string" name="platform" />
+		<xsd:attribute type="xsd:string" name="processGroup" />
+		<xsd:attribute type="xsd:string" name="suspendProcessOnInvokeRecovery" />
+		<xsd:attribute type="xsd:string" name="suspendProcessOnUncaughtFault" />
+	</xsd:complexType>
+</xsd:schema>
