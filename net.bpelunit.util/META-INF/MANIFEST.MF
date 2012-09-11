@@ -10,15 +10,15 @@ Ignore-Package: oracle.xml.parser.v2,org.jaxen.jdom,java.util,java.net
  .xerces.dom,java.sql,org.xml.sax.helpers
 Bundle-ClassPath: .,target/dependency/commons-io-1.3.2.jar,target/depe
  ndency/jdom-1.1.jar
-Built-By: dluebke
+Built-By: daniell
 Tool: Bnd-0.0.357
 Bundle-Name: BPELUnit :: Utilities
 Created-By: Apache Maven Bundle Plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Leibniz Universität Hannover
-Build-Jdk: 1.6.0_24
+Build-Jdk: 1.7.0_03
 Bundle-Version: 1.6.1.SNAPSHOT
-Bnd-LastModified: 1344266148603
+Bnd-LastModified: 1347363192062
 Embed-Transitive: true
 Bundle-ManifestVersion: 2
 Bundle-Description: BPEL has become the defacto standard language for 
