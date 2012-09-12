@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.bpelunit.net/services/marker" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bpelunit.net/services/marker">
+ <element name="mark">
+        <complexType>
+          <sequence>
+          	<element name="Marker" type="string" minOccurs="0" maxOccurs="unbounded"></element>
+          </sequence>
+        </complexType>
+      </element>
+</schema>

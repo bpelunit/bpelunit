@@ -1,0 +1,24 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	color: black;
+	background-color: white;
+	font-size: 10pt;
+}
+
+.body {
+	background-color: red;
+}
+
+#body {
+	background-color: green;
+}
+
+h1 {
+	font-size: 14pt;
+	font-weight: bold;
+}
+
+h2 {
+	font-size: 12pt;
+	font-weight: bold;
+}
