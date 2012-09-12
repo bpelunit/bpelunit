@@ -458,8 +458,8 @@
   </build>
 
   <modules>
+    <module>net.bpelunit.model.bpel</module>
     <module>net.bpelunit.framework</module>
-    <module>net.bpelunit.util</module>
     <module>net.bpelunit.framework.client.ant</module>
     <module>net.bpelunit.framework.client.command</module>
     <module>net.bpelunit.framework.client.maven</module>
@@ -468,6 +468,8 @@
     <module>net.bpelunit.framework.control.datasource.html</module>
     <module>net.bpelunit.framework.control.datasource.ods</module>
     <module>net.bpelunit.framework.control.deploy.activevos9</module>
+    <module>net.bpelunit.util</module>
+    <module>net.bpelunit.utils.bptstool</module>
     <module>net.bpelunit.utils.datasourceinliner</module>
     <module>net.bpelunit.utils.testdataexternalizer</module>
     <module>net.bpelunit.utils.testsuitesplitter</module>
