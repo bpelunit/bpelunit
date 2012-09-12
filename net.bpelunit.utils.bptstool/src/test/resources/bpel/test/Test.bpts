@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:tes="http://www.bpelunit.org/schema/testSuite"><tes:name>Test.bpts</tes:name><tes:baseURL>http://localhost:7777/ws</tes:baseURL><tes:deployment><tes:put name="Test" type="fixed"/><tes:partner name="client"/></tes:deployment></tes:testSuite>
