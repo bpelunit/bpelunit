@@ -8,7 +8,7 @@
     <version>1.6.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>eclipse-feature</artifactId>
+  <artifactId>net.bpelunit.eclipse.feature</artifactId>
   <version>1.6.1-SNAPSHOT</version>
   <packaging>eclipse-feature</packaging>
   <name>BPELUnit :: Eclipse Feature</name>

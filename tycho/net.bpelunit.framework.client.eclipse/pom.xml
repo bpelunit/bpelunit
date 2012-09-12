@@ -8,7 +8,7 @@
     <version>1.6.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>eclipse-client</artifactId>
+  <artifactId>net.bpelunit.framework.client.eclipse</artifactId>
   <version>1.6.1-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
   <name>BPELUnit :: Eclipse Plugin</name>
