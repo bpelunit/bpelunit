@@ -35,4 +35,3 @@ Bundle-Description: BPEL has become the defacto standard language for
 Bundle-License: http://www.eclipse.org/legal/epl-v10.html
 Embed-Dependency: *;scope=compile;artifactId=!stax-api
 Bundle-SymbolicName: net.bpelunit.framework;symbolic:=true
-
