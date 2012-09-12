@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Tasks" topic="doc/invocation.html">
+
+	<topic label="Creating a new test suite" href="doc/new.html" />
+	<topic label="Editing a test suite">
+		<link toc="doc/editor.xml" />
+	</topic>
+
+</toc>  

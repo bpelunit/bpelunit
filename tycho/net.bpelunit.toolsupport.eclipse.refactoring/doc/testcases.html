@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Adding test cases</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="main.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>&nbsp;</h3>
+<h3>Adding test cases</h3>
+<p>This section covers managing the test cases of the test suite. A test suite 
+  may contain an arbitrary number of test cases. One test case represents one 
+  complete interaction with the PUT, from the initial message sent into the PUT 
+  to the last message received from the PUT.</p>
+<p>BPELUnit test cases consist of specifications of interactions with the PUT. 
+  Each test case contains several partner tracks (at most one for each specified 
+  partner of the PUT). The partner tracks each contain a sequence of activities 
+  which describe the frameworks actions on behalf of the partner in the given 
+  test case. Besides the actual partners which are specified in the Partners section 
+  of the editor, one additional partner, the client of the PUT, must be specified.</p>
+<p>The Test Cases and Tracks section looks like this:</p>
+<p><img src="images/editor_section_testcases.gif" width="395" height="257"></p>
+<p>Each test case is identified by a human-readable name. These names are displayed 
+  as root nodes in the test case and tracks tree view. A test case may have any 
+  number of partners, selected from the partners in the Partners section, and 
+  one client, which are displayed as children of the test cases in the tree.</p>
+<p>The following screen shot shows an example of editing a test case. The selected 
+  test case is not based on another test case and is non-abstract, and non-varying 
+  (see below for an explanation).</p>
+<p><img src="images/wizard_testcase.gif" width="405" height="193"></p>
+<p>For the users convenience, anew test case is generated with all available partners 
+  and the client as partner tracks. Mostly, you will not need to change this, 
+  however by right-clicking on a test case, you may add new partner tracks; by 
+  selecting a partner track, you can edit or remove it. Note that it is not possible 
+  to remove the client track, as each test case needs a client.</p>
+<p>The following screenshot shows an example of adding a new partner track.</p>
+<p><img src="images/wizard_partnertrack.gif" width="405" height="151"><br>
+</p>
+<p>The following two sections contain more in-depth information about the test 
+  case concept of BPELUnit.</p>
+<h4>The test case inheritance concept</h4>
+<p>BPELUnit employs an inheritance concept for test cases. A test case may be 
+  <em>based on</em> another test case - creating an inheritance link between the 
+  two test cases. A test case which is based on another test case <em>inherits</em> 
+  activities of <em>empty partner tracks</em> from its parent.</p>
+<p>A test case may also be declared <em>abstract</em>. In this case, the test 
+  case is not run itself, but may be used as a parent by other test cases.</p>
+<h4>The test case variation concept</h4>
+<p>One of the most basic concepts in the BPEL is a language is the FLOW, i.e., 
+  executing several sequences of activities in parallel. Testing such flows involves 
+  varying the arrival times of messages received inside the FLOW block. BPELUnit 
+  supports this with the concept of a varied test case.</p>
+<p>A varied test case is executed multiple times. Each send activity within a 
+  varied test case may have a delay sequence, which is a list of delay times. 
+  Upon execution of the test case, the specified delay time is introduced by the 
+  BPELUnit framework. </p>
+<p>&nbsp;</p>
+</body>
+</html>

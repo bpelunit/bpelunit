@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: BPELUnit Eclipse Standalone Refactoring Tools
+Bundle-SymbolicName: net.bpelunit.toolsupport.eclipse.refactoring; singleton:=true
+Bundle-Version: 1.6.1.qualifier
+Bundle-Activator: net.bpelunit.toolsupport.RefactoringToolSupportActivator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ net.bpelunit.framework,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime;bundle-version="3.6.0"
+Eclipse-LazyStart: true
+Bundle-Vendor: Leibniz Universität Hannover
+Bundle-ClassPath: .,
+ target/dependency/net.bpelunit.utils.testdataexternalizer-1.6.1-SNAPSHOT.jar,
+ target/dependency/commons-io-1.3.2.jar
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

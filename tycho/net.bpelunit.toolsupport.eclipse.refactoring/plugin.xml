@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            extradir="doc"
+            file="doc/main.xml"
+            primary="true"/>
+      <toc
+            extradir="doc"
+            file="doc/tasks.xml"
+            primary="false"/>
+      <toc
+            extradir="doc"
+            file="doc/editor.xml"
+            primary="false"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="net.bpelunit.toolsupport.refactoring.extractXmlSamples"
+            objectClass="org.eclipse.core.resources.IFile"
+             nameFilter="*.bpts">
+         <menu
+               id="net.bpelunit.toolsupport.menu.refactoring"
+               label="Refactoring"
+               path="additions">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               class="net.bpelunit.toolsupport.popup.actions.ExtractXmlSamplesAction"
+               enablesFor="1"
+               id="net.bpelunit.toolsupport.newAction"
+               label="Extract XML Samples"
+               menubarPath="net.bpelunit.toolsupport.menu.refactoring/group1">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

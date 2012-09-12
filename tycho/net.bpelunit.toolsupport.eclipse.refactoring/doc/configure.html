@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Configuring the test suite</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="main.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>&nbsp;</h3>
+<h3>Configuring the test suite</h3>
+<p>This section covers the basic test suite configuration - creating and changing 
+  the options of the test suite itself, the PUT, and the partners of the PUT.</p>
+<h4>The Test Suite section</h4>
+<p>Let's first take a look at the test suite section:</p>
+<p><img src="images/editor_section_testsuite.gif" width="396" height="110"></p>
+<p>There are two text fields:</p>
+<ul>
+  <li><strong>Suite name</strong>. The suite name is an arbitrary, human-readable 
+    name of this suite, used to identify the suite in the test result outputs.</li>
+  <li><strong>Base URL</strong>. This field is optional, if not specified, the 
+    URL defaults to http://localhost:7777/ws. BPELUnit includes a HTTP server, 
+    which listens for incoming transmissions targeted at partners being sent from 
+    the process under test (PUT). When configuring the PUT for testing, the SOAP 
+    URL location of the partner must be changed in the partners WSDL from the 
+    actual location to the test location. This test location is a concatenation 
+    of the base URL and the partner name, which will be specified in the <em>Partner 
+    Section</em> (see below). An example of a full test location would be http://localhost:7777/ws/airline.</li>
+</ul>
+<p>Additionally, there is a link to the namespace prefix editor. Namespaces are 
+  very important in the test suite document, as the literal data to be sent to 
+  the PUT, and the XPath conditions used for verifying incoming transmissions 
+  and copying values must be formulated with the right namespace URIs. When adding 
+  WSDL files to the test suites, their target namespaces will automatically be 
+  added and a prefix will be generated. To change these prefixes or add new namespaces, 
+  click on the <em>Configure Namespace Prefixes... </em>hyperlink to open the 
+  following editor: </p>
+<p><img src="images/wizard_namespace.gif" width="438" height="415"></p>
+<p>Click <em>Add</em> to add a namespace declaration, <em>Edit</em> to change 
+  an existing namespace (either prefix or URL) and <em>Remove</em> to remove a 
+  namespace declaration. Note that editing a prefix will change the prefix in 
+  the complete document. Removing a namespace, however, may leave unresolvable 
+  prefixes in the document.</p>
+<h4>The Process Under Test Section</h4>
+<p>The Process Under Test (PUT) section allows specification of the BPEL process 
+  which will be tested in this test suite:</p>
+<p><img src="images/editor_section_put.gif" width="398" height="144"></p>
+<p>There are three text fields:</p>
+<ul>
+  <li><strong>PUT Name</strong>. This is the name of the BPEL process, and must 
+    match the process name as specified in the BPEL process description. It is 
+    used by BPELUnit to reference the PUT inside the test suite document, and 
+    may be used by deployers for deploying the PUT.</li>
+  <li><strong>PUT Type</strong>. This is the deployment type of the PUT. You may 
+    select any of the deployers currently registered in BPELUnit. See the &quot;Extending 
+    BPELUnit&quot; section for information about adding your own deployers.</li>
+  <li><strong>WSDL</strong>. This is the WSDL process description of the BPEL 
+    process. The path is relative to the .bpts file. It is good practise to assemble 
+    all relevant files for the test suite in either the same or a subdirectory 
+    of the .bpts file. If you click on <em>Browse...</em>, you will be presented 
+    with a dialog for selecting a WSDL file. Selecting a WSDL file this way also 
+    adds a prefix for the target namespace of the WSDL file.</li>
+</ul>
+<p>Additionally, there is a link which opens the deployment options wizard. This 
+  wizard allows adding deployment options for the selected deployer. The deployment 
+  format is different for each BPEL engine and deployer, and so are the options. 
+  The following screenshot shows an example configuration for the Oracle deployer:</p>
+<p><img src="images/wizard_deployment_options.gif" width="425" height="342"></p>
+<p>Click <em>Add</em> to add a deyploment option, <em>Edit</em> to change an existing 
+  deployment option, and <em>Remove</em> to remove a deployment option. Depending 
+  on the selected deployer, the available keys will be presented to you when adding 
+  and editing options.</p>
+<h3>The Partners section</h3>
+<p>In the Partners section, you may add, edit, or remove the partners to be simulated 
+  in this test suite. A BPEL process can have an arbitrary number of partners, 
+  and it is up to you to decide which partners should be simulated. </p>
+<p><img src="images/editor_section_partners.gif" width="396" height="150"></p>
+<p>Click Add, Edit, or Remove to change the simulated partners of the PUT. Each 
+  partner has a name which identifies the partner in the test suite document, 
+  and also forms the second part of the simulated partner URL (the partner name 
+  must be appended to the Base URL when configuring the partner WSDL for the test). 
+  Besides the name, the partner WSDL must also be specified. The WSDL service 
+  definition will be used by the framework to extract encoding and style options 
+  for the SOAP operations.</p>
+<p>The following screen shot shows an example of editing a partner:</p>
+<p><img src="images/wizard_partner.gif" width="405" height="177"></p>
+<p>The given WSDL file will be validated and a prefix for the target namespace 
+  will be added when selecting OK.</p>
+<p>&nbsp; </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>

@@ -48,6 +48,7 @@
   <modules>
     <module>net.bpelunit.framework.client.eclipse</module>
     <module>net.bpelunit.toolsupport</module>
+    <module>net.bpelunit.toolsupport.eclipse.refactoring</module>
     <module>net.bpelunit.eclipse.feature</module>
     <module>net.bpelunit.eclipse.updatesite</module>
   </modules>

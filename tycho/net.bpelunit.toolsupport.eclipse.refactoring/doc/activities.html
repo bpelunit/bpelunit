@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Adding activities</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="main.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h3>&nbsp;</h3>
+<h3>Adding activities</h3>
+<p>This section covers managing of activities of a partner track. To enable the 
+  <em>Activities</em> section at the bottom right of the editor, select a partner 
+  track in the <em>Test Cases and Tracks</em> section (lower left).</p>
+<p><img src="images/editor_section_activities.gif" width="395" height="211"></p>
+<p>The <em>Activities</em> section contains a tree view. The root nodes in the 
+  tree represent activities. Their children are <em>subactivites</em> and/or special 
+  nodes like <em>Conditions</em>, <em>Copy Operations</em>, or <em>Header Processors</em>. 
+</p>
+<p>BPELUnit supports six types of activities, which may be added by right-clicking 
+  in the tree and selecting <em>New...</em>, or by clicking the <em>Add..</em> 
+  button:</p>
+<ul>
+  <li><strong>Send Only</strong>: A Send Only activity sends an asynchronous message.</li>
+  <li><strong>Receive Only</strong>: A Receive Only activity waits for and receives 
+    an asynchronous message.</li>
+  <li><strong>Send/Receive Synchronous</strong>: This activity sends a message 
+    and waits for an answer in the same HTTP connection.</li>
+  <li><strong>Receive/Send Synchronous</strong>: This activity waits for and receives 
+    a message and sends an answer in the same HTTP connection.</li>
+  <li><strong>Send/Receive Asynchronous</strong>: This activity sends an asynchronous 
+    message and then waits for an asynchronous answer. This activity needs a header 
+    processor to handle the callback addressing.</li>
+  <li><strong>Receive/Send Asynchronous</strong>: This activity waits for and 
+    receives an asynchronous message, and then creates and sends a callback asynchronous 
+    message. This activity needs a header processor to handle the callback addressing.</li>
+</ul>
+<p>Each unique Send or Receive requires a WSDL operation. In case of Send Only 
+  and Receive Only, exactly one operation must be specified. In case of the synchronous 
+  activities, one operation is also sufficient. The asynchronous activities Send/Receive 
+  and Receive/Send require two operations.</p>
+<p>The tool support contains a customized wizard for each activity. Besides a 
+  send and/or receive specification, each activity may contain the following components:</p>
+<ul>
+  <li><strong>Copy Operations</strong>, which copy data from in- to output. These 
+    operations are most useful in Receive/Send operations.</li>
+  <li><strong>A header processor</strong>, which handles callback addressing. 
+    A header processor is required in case of asynchonous callback messaging.</li>
+</ul>
+<p>The <em>Send</em> and <em>Receive</em>, <em>Copy Operations</em>, and <em>Header 
+  Processor</em> input fields are the same in all wizards. </p>
+<h4>Send Specification</h4>
+<p>Let's have a look at the <em>Send</em> specficiation of a <em>Send Only</em> 
+  activity:</p>
+<p><img src="images/wizard_activity_send.gif" width="438" height="505"></p>
+<p>The Send specification requires a <em>Service</em>, <em>Port</em>, and <em>Operation</em> 
+  to be specified. By selecting the <em>Choose...</em> buttons, you may select 
+  a service, port and operation from the WSDL file.</p>
+<p>If you wish to send a SOAP fault, check the <em>Use fault element for send</em> 
+  operation button.</p>
+<p>The data to be sent can be entered in the <em>Literal XML</em> field. The XML 
+  will be validated as you type, informing you of any syntactical error. You don't 
+  need to define namespaces in the XML, as BPELUnit handles namespaces for you. 
+  For this to work, however, you must use the prefixes defined in the <em>Namespaces 
+  Prefixes</em> wizard. You can click on the <em>Configure Namespace Prefixes</em> 
+  link at any time to review or change the prefixes and namespaces.</p>
+<p>As already mentioned in the description of the <em>Test Cases and Tracks</em> 
+  section, each send operation may contain a send delay sequence - a comma-separated 
+  list of delay times in seconds.</p>
+<h4>Receive Specification</h4>
+<p>The following screenshot shows a <em>Receive </em>specification inside of a 
+  Receive/Send Synchronous activity wizard:</p>
+<p><img src="images/wizard_activity_receive.gif" width="438" height="498"></p>
+<p>Being a synchronous activity, the Receive and Send specification share one 
+  WSDL operation (at the top) - therefore, the operation block allows fault specification 
+  for both send and receive.</p>
+<p>A receive specification consists of <em>Conditions</em> with are checked against 
+  the incoming XML data. You may select <em>Add</em>, <em>Edit</em>, and <em>Remove</em> 
+  to manage the conditions. The following screenshot shows an example of a condition:</p>
+<p><img src="images/wizard_activitiy_receive_co.gif" width="405" height="217"></p>
+<h4>Data Copy Operations</h4>
+<p>The following screenshot shows a data copy operation inside of a Receive/Send 
+  Asynchronous activity:</p>
+<p><img src="images/wizard_activity_datacopy.gif" width="430" height="422"></p>
+<p>You may add any number of data copy operations. Data copy operations copy a 
+  text value from an element specified by the <em>From</em> XPath to the element 
+  identified by the <em>To</em> XPath. When adding a new condition, the XPath 
+  expressions will be validated as-you-type:</p>
+<p><img src="images/wizard_activity_datacopy_edit.gif" width="405" height="261"></p>
+<h4>Header Processors</h4>
+<p>Header Processors may be added to any activity. A header processor has access 
+  to a SOAP message before it is sent (in a Send activity) and/or before it is 
+  processed (in a Receive activity). The main purpose of header processors is 
+  to enable Asynchronous Callback Messaging, but other processors may be added 
+  to BPELUnit as required. Initially, BPELUnit ships with a header processor implementing 
+  the WS-Adressing protocol.</p>
+<p>A header processor may be parameterized with any number of options. The default 
+  WS-A header processor, however, does not require parameterization. It is therefore 
+  sufficient to just select it in the combo box.</p>
+<p>The following screenshot shows the header processor page inside a Receive/Send 
+  Asynchronous wizard:</p>
+<p><img src="images/wizard_activity_headerproc.gif" width="434" height="397"></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>
