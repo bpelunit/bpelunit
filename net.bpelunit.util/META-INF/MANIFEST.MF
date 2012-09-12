@@ -18,7 +18,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Leibniz Universität Hannover
 Build-Jdk: 1.7.0_03
 Bundle-Version: 1.6.1.SNAPSHOT
-Bnd-LastModified: 1347363192062
+Bnd-LastModified: 1347455189353
 Embed-Transitive: true
 Bundle-ManifestVersion: 2
 Bundle-Description: BPEL has become the defacto standard language for 
@@ -33,5 +33,5 @@ Bundle-Description: BPEL has become the defacto standard language for
  port. However, BPELUnit was developed for closing this gap.
 Bundle-License: http://www.eclipse.org/legal/epl-v10.html
 Embed-Dependency: *;scope=compile;artifactId=!stax-api
-Bundle-SymbolicName: net.bpelunit.framework;symbolic:=true
+Bundle-SymbolicName: net.bpelunit.framework.util;symbolic:=true
 
