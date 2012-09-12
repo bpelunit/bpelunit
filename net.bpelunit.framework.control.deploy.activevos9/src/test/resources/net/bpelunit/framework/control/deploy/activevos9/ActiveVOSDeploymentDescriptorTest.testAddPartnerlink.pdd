@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pdd:process location="bpel/egvt-1.bpel" name="bpelns:egvt-1" platform="enterprise" processGroup="egvt" suspendProcessOnInvokeRecovery="true" suspendProcessOnUncaughtFault="true" xmlns:bpelns="http://processes.some.ch/egvt/1a" xmlns:pdd="http://schemas.active-endpoints.com/pdd/2006/08/pdd.xsd">
+  <pdd:partnerLinks>
+    <pdd:partnerLink name="Bank">
+      <pdd:partnerRole endpointReference="static" invokeHandler="default:Address">
+        <wsa:EndpointReference xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns5="http://schemas.some.ch/internal/some-endpoints/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+               <wsa:Address>urn:some:endpoint:bank:Bank</wsa:Address>
+               <wsa:Metadata>
+                  <wsa:ServiceName PortName="BankPort">ns5:BankCallback</wsa:ServiceName>
+               </wsa:Metadata>
+            </wsa:EndpointReference>
+      </pdd:partnerRole>
+      <pdd:myRole binding="MSG" service="Bank"/>
+    </pdd:partnerLink>
+  <pdd:partnerLink name="NewPL"><pdd:partnerRole invokeHandler="default:Address" endpointReference="static"><add:EndpointReference xmlns:add="http://www.w3.org/2005/08/addressing"><add:Address>http://www.example.org/partner</add:Address><add:Metadata><add:ServiceName PortName="partnerPort" xmlns:ns="ns">ns:partnerService</add:ServiceName></add:Metadata></add:EndpointReference></pdd:partnerRole></pdd:partnerLink></pdd:partnerLinks>
+  <pdd:indexedProperties>
+    <pdd:indexedProperty name="CaseId" type="string">
+      <pdd:variable path="/process/variables/variable[@name='CaseId']"/>
+    </pdd:indexedProperty>
+  </pdd:indexedProperties>
+  <pdd:references>
+    <pdd:wsdl location="project:/net.bpelunit.some.process/target/wsdl/some/partnerlinks.wsdl" namespace="http://bpel.some.ch/partnerlinks"/>
+    <pdd:other location="project:/net.bpelunit.some.process/target/xsl/createHeader.xsl" namespace="" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+    <pdd:schema location="project:/net.bpelunit.some.process/target/wsdl/some/auxilliary-types.xsd" namespace="http://schemas.some.ch/internal/aux-types"/>
+  </pdd:references>
+  <pdd:extensions>
+    <processLogging level="urn:ae:full" xmlns="http://www.activebpel.org/logging/2008/06/logging/deployments"/>
+  </pdd:extensions>
+  <pdd:eventing>
+  </pdd:eventing>
+</pdd:process>
