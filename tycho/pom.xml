@@ -14,27 +14,27 @@
   <name>BPELUnit :: Tycho Parent</name>
 
   <properties>
-    <tycho-version>0.10.0</tycho-version>
+    <tycho-version>0.15.0</tycho-version>
   </properties>
 
   <repositories>
     <repository>
-      <id>galileo</id>
+      <id>eclipse-indigo</id>
       <layout>p2</layout>
-      <url>http://download.eclipse.org/releases/galileo</url>
+      <url>http://download.eclipse.org/releases/indigo</url>
     </repository>
   </repositories>
 
   <build>
     <plugins>
       <plugin>
-        <groupId>org.sonatype.tycho</groupId>
+        <groupId>org.eclipse.tycho</groupId>
         <artifactId>tycho-maven-plugin</artifactId>
         <version>${tycho-version}</version>
         <extensions>true</extensions>
       </plugin>
       <plugin>
-        <groupId>org.sonatype.tycho</groupId>
+        <groupId>org.eclipse.tycho</groupId>
         <artifactId>target-platform-configuration</artifactId>
         <version>${tycho-version}</version>
         <configuration>
@@ -52,5 +52,4 @@
     <module>net.bpelunit.eclipse.feature</module>
     <module>net.bpelunit.eclipse.updatesite</module>
   </modules>
-
 </project>
