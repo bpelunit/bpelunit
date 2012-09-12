@@ -124,6 +124,9 @@
             </bpel:copy>
         </bpel:assign>
         <bpel:flow name="Flow"><bpel:reply name="ReplyLeft" partnerLink="client" operation="left" variable="leftResponse"></bpel:reply><bpel:reply name="ReplyRight" partnerLink="client" operation="right" portType="ns:EchoFirstPort" variable="rightResponse"></bpel:reply></bpel:flow>
+        <bpel:wait name="Wait">
+            <bpel:for><![CDATA['PT1H']]></bpel:for>
+        </bpel:wait>
     </bpel:sequence>
 </bpel:process>
 

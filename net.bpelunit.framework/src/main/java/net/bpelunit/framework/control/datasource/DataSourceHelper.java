@@ -41,8 +41,9 @@ public final class DataSourceHelper {
 
 		if (configurationOptions == null) {
 			configurationOptions = extractConfigurationOptionsForClass(dataSource);
+			Collections.sort(configurationOptions, new DataSourceConfigurationOptionComparator());
 
-			optionsForDataSource.put(dataSource, configurationOptions);
+			optionsForDataSource.put(dataSource, Collections.unmodifiableList(configurationOptions));
 		}
 
 		return configurationOptions;
@@ -151,9 +152,6 @@ public final class DataSourceHelper {
 		for (Method m : clazz.getMethods()) {
 			extractConfigurationOptionForMethod(m, configurationOptions);
 		}
-
-		configurationOptions = Collections
-				.unmodifiableList(configurationOptions);
 
 		return configurationOptions;
 	}

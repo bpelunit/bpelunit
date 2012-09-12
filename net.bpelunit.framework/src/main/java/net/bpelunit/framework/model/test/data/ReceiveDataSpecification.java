@@ -242,17 +242,17 @@ public class ReceiveDataSpecification extends DataSpecification {
 			c.evaluate(templateContext, fLiteralData, getNamespaceContext(), variableResolver);
 
 			if (c.isFailure()) {
+				if(! getStatus().isError()) {
 				setStatus(ArtefactStatus.createFailedStatus(String.format(
 						"Condition '%s=%s' did not hold: %s",
 						c.getExpression(), c.getExpectedValue(), c.getStatus()
 								.getMessage())));
-				break;
+				}
 			} else if (c.isError()) {
 				setStatus(ArtefactStatus.createErrorStatus(String.format(
 						"Condition '%s=%s' had an error: %s.", c
 								.getExpression(), c.getExpectedValue(), c
 								.getStatus().getMessage())));
-				break;
 			}
 		}
 	}
