@@ -331,7 +331,6 @@ public abstract class StructuredSection extends BPELUnitSection {
 	}
 	
 	protected void setSelection(Object o) {
-		System.out.println("Selecting: " + o);
 		getViewer().setSelection(new StructuredSelection(o), true);
 	}
 
