@@ -58,11 +58,12 @@ import org.w3c.dom.Node;
  */
 public class TestCaseAndTrackSection extends TreeSection {
 
+	private XMLTestSuite testSuite;
+
 	private class TestCaseLabelProvider implements ILabelProvider {
 
 		public Image getImage(Object element) {
-			return ToolSupportActivator
-					.getImage(ToolSupportActivator.IMAGE_TESTCASE);
+			return ToolSupportActivator.getImage(ToolSupportActivator.IMAGE_TESTCASE);
 		}
 
 		public String getText(Object element) {
@@ -70,10 +71,9 @@ public class TestCaseAndTrackSection extends TreeSection {
 				return ((XMLTestCase) element).getName();
 			else if (element instanceof XMLPartnerTrack)
 				return ((XMLPartnerTrack) element).getName();
-			else if(element instanceof XMLHumanPartnerTrack) {
-				return ((XMLHumanPartnerTrack)element).getName();
-			}
-			else
+			else if (element instanceof XMLHumanPartnerTrack) {
+				return ((XMLHumanPartnerTrack) element).getName();
+			} else
 				return BPELUnitConstants.CLIENT_NAME;
 		}
 
@@ -135,8 +135,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 				XMLTrack track = (XMLTrack) element;
 				List<XMLTestCase> testCaseList = fSection.getTestCaseList();
 				for (XMLTestCase case1 : testCaseList) {
-					List<XMLPartnerTrack> partnerTrackList = case1
-							.getPartnerTrackList();
+					List<XMLPartnerTrack> partnerTrackList = case1.getPartnerTrackList();
 					for (XMLPartnerTrack track2 : partnerTrackList) {
 						if (track2.equals(track))
 							return case1;
@@ -145,28 +144,27 @@ public class TestCaseAndTrackSection extends TreeSection {
 						return case1;
 				}
 			}
-			
-			if(element instanceof XMLHumanPartnerTrack) {
+
+			if (element instanceof XMLHumanPartnerTrack) {
 				XMLHumanPartnerTrack track = (XMLHumanPartnerTrack) element;
 				List<XMLTestCase> testCaseList = fSection.getTestCaseList();
 				for (XMLTestCase case1 : testCaseList) {
-					List<XMLHumanPartnerTrack> partnerTrackList = case1
-							.getHumanPartnerTrackList();
+					List<XMLHumanPartnerTrack> partnerTrackList = case1.getHumanPartnerTrackList();
 					for (XMLHumanPartnerTrack track2 : partnerTrackList) {
 						if (track2.equals(track))
 							return case1;
 					}
 				}
 			}
-			
+
 			return null;
 		}
 
 		public boolean hasChildren(Object element) {
 			if (element instanceof XMLTestCase) {
 				XMLTestCase testCase = (XMLTestCase) element;
-				return testCase.getPartnerTrackList().size() > 0 ||
-						testCase.getHumanPartnerTrackList().size() > 0
+				return testCase.getPartnerTrackList().size() > 0
+						|| testCase.getHumanPartnerTrackList().size() > 0
 						|| testCase.getClientTrack() != null;
 			} else
 				return false;
@@ -174,9 +172,9 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 	}
 
-	public TestCaseAndTrackSection(Composite parent, TestSuitePage page,
-			FormToolkit toolkit) {
+	public TestCaseAndTrackSection(Composite parent, TestSuitePage page, FormToolkit toolkit) {
 		super(parent, toolkit, page, true, true, null);
+		testSuite = page.getSuiteEditor().getTestSuite();
 		init();
 	}
 
@@ -221,10 +219,10 @@ public class TestCaseAndTrackSection extends TreeSection {
 			adjust();
 		}
 	}
-	
+
 	protected void addHumanPartnerTrack(XMLTestCase to) {
 		String name = editHumanPartnerTrack("Add a new WS-HT Track", null);
-		
+
 		if (name != null && name.length() > 0) {
 			XMLHumanPartnerTrack track = to.addNewHumanPartnerTrack();
 			track.setName(name);
@@ -238,8 +236,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 	}
 
 	private void addTestCase() {
-		String[] results = editTestCase("Add a new test case", null, null,
-				false, false);
+		String[] results = editTestCase("Add a new test case", null, null, false, false);
 
 		if (results != null) {
 			XMLTestCase testCase = getTestCasesXMLPart().addNewTestCase();
@@ -257,16 +254,14 @@ public class TestCaseAndTrackSection extends TreeSection {
 				track.setName(information.getName());
 			}
 			adjust();
-			getTreeViewer().expandToLevel(testCase,
-					AbstractTreeViewer.ALL_LEVELS);
+			getTreeViewer().expandToLevel(testCase, AbstractTreeViewer.ALL_LEVELS);
 			getTreeViewer().setSelection(new StructuredSelection(testCase));
 		}
 	}
 
 	private List<XMLPartnerDeploymentInformation> getAllDeployers() {
 		XMLTestSuite model = getEditor().getTestSuite();
-		List<XMLPartnerDeploymentInformation> partnerList = model.getDeployment()
-				.getPartnerList();
+		List<XMLPartnerDeploymentInformation> partnerList = model.getDeployment().getPartnerList();
 
 		return partnerList;
 	}
@@ -279,9 +274,8 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 			XMLTestCase testCase = (XMLTestCase) current;
 
-			String[] results = editTestCase("Edit a test case", testCase
-					.getName(), testCase.getBasedOn(), testCase.getAbstract(),
-					testCase.getVary());
+			String[] results = editTestCase("Edit a test case", testCase.getName(),
+					testCase.getBasedOn(), testCase.getAbstract(), testCase.getVary());
 			if (results != null) {
 				testCase.setName(results[0]);
 				testCase.setBasedOn(results[1]);
@@ -306,7 +300,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 			adjust();
 		}
 	}
-	
+
 	private void editHumanPartnerTrack(XMLHumanPartnerTrack track) {
 		String name = editPartnerTrack("Edit a WS-HT Track", track.getName());
 		if (name != null) {
@@ -322,9 +316,9 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 		if (current instanceof XMLTestCase) {
 			removeTestCase(current);
-		} else if(current instanceof XMLTrack) {
+		} else if (current instanceof XMLTrack) {
 			removeTrack((XMLTrack) current);
-		} else if(current instanceof XMLHumanPartnerTrack) {
+		} else if (current instanceof XMLHumanPartnerTrack) {
 			removeTrack((XMLHumanPartnerTrack) current);
 		}
 	}
@@ -333,9 +327,9 @@ public class TestCaseAndTrackSection extends TreeSection {
 		XMLTestCase current = getTestCase(track);
 		List<XMLHumanPartnerTrack> partnerTrackList = current.getHumanPartnerTrackList();
 		int index = partnerTrackList.indexOf(track);
-		if(index >= 0) {
+		if (index >= 0) {
 			current.removeHumanPartnerTrack(index);
-			getPage().postTrackSelected((XMLHumanPartnerTrack)null);
+			getPage().postTrackSelected((XMLHumanPartnerTrack) null);
 		}
 
 		getViewer().refresh();
@@ -361,25 +355,25 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 	private XMLTestCase getTestCase(XmlObject o) {
 		XmlCursor c = o.newCursor();
-		if(!c.toParent()) {
+		if (!c.toParent()) {
 			return null;
 		}
-		
+
 		XmlObject object = c.getObject();
-		if(object instanceof XMLTestCase) {
-			return (XMLTestCase)object;
+		if (object instanceof XMLTestCase) {
+			return (XMLTestCase) object;
 		} else {
 			return null;
 		}
 	}
-	
+
 	private void removeTrack(XMLTrack track) {
 		XMLTestCase current = getTestCase(track);
 		List<XMLPartnerTrack> partnerTrackList = current.getPartnerTrackList();
 		int index = partnerTrackList.indexOf(track);
-		if(index >= 0) {
+		if (index >= 0) {
 			current.removePartnerTrack(index);
-			getPage().postTrackSelected((XMLTrack)null);
+			getPage().postTrackSelected((XMLTrack) null);
 		}
 
 		getViewer().refresh();
@@ -393,6 +387,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 		if (viewerSelection instanceof XMLTestCase) {
 			// move the current activity to the one before
 			XMLTestCase xmlTestCase = (XMLTestCase) viewerSelection;
+			int currentPosition = testSuite.getTestCases().getTestCaseList().indexOf(xmlTestCase);
 			XmlCursor currentCursor = xmlTestCase.newCursor();
 			// Does this activity even have a previous sibling?
 			if (currentCursor.toPrevSibling()) {
@@ -400,6 +395,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 				// previous sibling, i.e. one up.
 				xmlTestCase.newCursor().moveXml(currentCursor);
 				adjust();
+				setSelection(testSuite.getTestCases().getTestCaseList().get(currentPosition -1));
 			}
 		}
 	}
@@ -410,6 +406,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 		if (viewerSelection instanceof XMLTestCase) {
 			// move the current activity to the one before
 			XMLTestCase xmlTestCase = (XMLTestCase) viewerSelection;
+			int currentPosition = testSuite.getTestCases().getTestCaseList().indexOf(xmlTestCase);
 			XmlCursor currentCursor = xmlTestCase.newCursor();
 			// Does this activity even have a next sibling?
 			if (currentCursor.toNextSibling()) {
@@ -417,6 +414,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 				// position
 				currentCursor.moveXml(xmlTestCase.newCursor());
 				adjust();
+				setSelection(testSuite.getTestCases().getTestCaseList().get(currentPosition + 1));
 			}
 		}
 	}
@@ -427,14 +425,16 @@ public class TestCaseAndTrackSection extends TreeSection {
 		if (viewerSelection instanceof XMLTestCase) {
 			// move the current activity to the one before
 			XMLTestCase testCase = (XMLTestCase) viewerSelection;
-			
+
 			Node node = testCase.getDomNode();
 			node.getParentNode().appendChild(node.cloneNode(true));
-			
+
 			adjust();
+			List<XMLTestCase> testCases = testSuite.getTestCases().getTestCaseList();
+			setSelection(testCases.get(testCases.size() - 1));
 		}
 	}
-	
+
 	private void adjust() {
 		// Don't call this.refresh(); changes dirty/stale states
 		getViewer().refresh();
@@ -443,8 +443,8 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 	private String editPartnerTrack(String title, String current) {
 
-		List<XMLPartnerDeploymentInformation> partnerList = getEditor()
-				.getTestSuite().getDeployment().getPartnerList();
+		List<XMLPartnerDeploymentInformation> partnerList = getEditor().getTestSuite()
+				.getDeployment().getPartnerList();
 		String[] partnerNames = new String[partnerList.size()];
 
 		int i = 0;
@@ -461,10 +461,8 @@ public class TestCaseAndTrackSection extends TreeSection {
 			current = null;
 		}
 
-		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
-				title);
-		ComboField combo = new ComboField(dialog, "Name:", current,
-				partnerNames);
+		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(), title);
+		ComboField combo = new ComboField(dialog, "Name:", current, partnerNames);
 		combo.setValidator(new NotEmptyValidator("Name"));
 		dialog.addField(combo);
 
@@ -473,13 +471,13 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 		return combo.getSelection();
 	}
-	
+
 	private String editHumanPartnerTrack(String title, String current) {
-		
-		List<XMLHumanPartnerDeploymentInformation> partnerList = getEditor()
-		.getTestSuite().getDeployment().getHumanPartnerList();
+
+		List<XMLHumanPartnerDeploymentInformation> partnerList = getEditor().getTestSuite()
+				.getDeployment().getHumanPartnerList();
 		String[] partnerNames = new String[partnerList.size()];
-		
+
 		int i = 0;
 		boolean found = false;
 		for (XMLHumanPartnerDeploymentInformation information : partnerList) {
@@ -493,53 +491,46 @@ public class TestCaseAndTrackSection extends TreeSection {
 			// it...
 			current = null;
 		}
-		
-		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
-				title);
-		ComboField combo = new ComboField(dialog, "Name:", current,
-				partnerNames);
+
+		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(), title);
+		ComboField combo = new ComboField(dialog, "Name:", current, partnerNames);
 		combo.setValidator(new NotEmptyValidator("Name"));
 		dialog.addField(combo);
-		
+
 		if (dialog.open() != Window.OK)
 			return null;
-		
+
 		return combo.getSelection();
 	}
 
-	private String[] editTestCase(String title, String currentName,
-			String currentBasedOn, boolean currentAbstractSetting,
-			boolean currentVarySetting) {
+	private String[] editTestCase(String title, String currentName, String currentBasedOn,
+			boolean currentAbstractSetting, boolean currentVarySetting) {
 
-		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(),
-				title);
+		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(), title);
 
-		TextField nameField = new TextField(dialog, "Name:", currentName,
-				TextField.Style.SINGLE);
+		TextField nameField = new TextField(dialog, "Name:", currentName, TextField.Style.SINGLE);
 		nameField.setValidator(new NotEmptyValidator("Name"));
 		dialog.addField(nameField);
 
-		TextField basedOnField = new TextField(dialog, "Based On:",
-				currentBasedOn, TextField.Style.SINGLE);
+		TextField basedOnField = new TextField(dialog, "Based On:", currentBasedOn,
+				TextField.Style.SINGLE);
 		basedOnField.setValidator(new NullValidator());
 		dialog.addField(basedOnField);
 
-		CheckBoxField abstractField = new CheckBoxField(dialog, "Abstract",
-				currentAbstractSetting);
+		CheckBoxField abstractField = new CheckBoxField(dialog, "Abstract", currentAbstractSetting);
 		abstractField.setValidator(new NotEmptyValidator("Abstract"));
 		dialog.addField(abstractField);
 
-		CheckBoxField varyField = new CheckBoxField(dialog,
-				"Vary send delay times", currentVarySetting);
+		CheckBoxField varyField = new CheckBoxField(dialog, "Vary send delay times",
+				currentVarySetting);
 		varyField.setValidator(new NotEmptyValidator("Vary"));
 		dialog.addField(varyField);
 
 		if (dialog.open() != Window.OK)
 			return null;
 
-		return new String[] { nameField.getSelection(),
-				basedOnField.getSelection(), abstractField.getSelection(),
-				varyField.getSelection() };
+		return new String[] { nameField.getSelection(), basedOnField.getSelection(),
+				abstractField.getSelection(), varyField.getSelection() };
 	}
 
 	@Override
@@ -547,17 +538,19 @@ public class TestCaseAndTrackSection extends TreeSection {
 		if (firstElement instanceof XMLTrack) {
 			XMLTrack selection = (XMLTrack) firstElement;
 			getPage().postTrackSelected(selection);
-		} else if(firstElement instanceof XMLHumanPartnerTrack) {
+		} else if (firstElement instanceof XMLHumanPartnerTrack) {
 			XMLHumanPartnerTrack selection = (XMLHumanPartnerTrack) firstElement;
 			getPage().postTrackSelected(selection);
 		}
 		setEnabled(BUTTON_REMOVE, getIsDeleteEnabled(firstElement));
 		setEnabled(BUTTON_EDIT, getIsEditEnabled(firstElement));
 		setEnabled(BUTTON_DUPLICATE, getIsDuplicateEnabled(firstElement));
-		setEnabled(BUTTON_UP, getIsMoveEnabled(firstElement)
-				&& ActivityUtil.hasPrevious((XmlObject) firstElement));
-		setEnabled(BUTTON_DOWN, getIsMoveEnabled(firstElement)
-				&& ActivityUtil.hasNext((XmlObject) firstElement));
+		setEnabled(
+				BUTTON_UP,
+				getIsMoveEnabled(firstElement)
+						&& ActivityUtil.hasPrevious((XmlObject) firstElement));
+		setEnabled(BUTTON_DOWN,
+				getIsMoveEnabled(firstElement) && ActivityUtil.hasNext((XmlObject) firstElement));
 	}
 
 	@Override
@@ -569,8 +562,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 		// Enable adding test cases if no selection, or current selection is a
 		// test case
-		if (ssel.size() == 0
-				|| (ssel.size() == 1 && ssel.getFirstElement() instanceof XMLTestCase)) {
+		if (ssel.size() == 0 || (ssel.size() == 1 && ssel.getFirstElement() instanceof XMLTestCase)) {
 
 			createAction(newMenu, "Test Case", new Action() {
 				@Override
@@ -602,15 +594,13 @@ public class TestCaseAndTrackSection extends TreeSection {
 					}
 				});
 
-				Action newClientTrackAction = createAction(newMenu,
-						"Client Track", new Action() {
-							@Override
-							public void run() {
-								addClientTrack(testCase);
-							}
-						});
-				newClientTrackAction
-						.setEnabled(testCase.getClientTrack() == null);
+				Action newClientTrackAction = createAction(newMenu, "Client Track", new Action() {
+					@Override
+					public void run() {
+						addClientTrack(testCase);
+					}
+				});
+				newClientTrackAction.setEnabled(testCase.getClientTrack() == null);
 			}
 
 			manager.add(newMenu);
@@ -626,24 +616,22 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 			manager.add(new Separator());
 
-			Action removeAction = createAction(manager, "&Delete",
-					new Action() {
-						@Override
-						public void run() {
-							removePressed();
-						}
-					});
+			Action removeAction = createAction(manager, "&Delete", new Action() {
+				@Override
+				public void run() {
+					removePressed();
+				}
+			});
 			removeAction.setEnabled(getIsDeleteEnabled(object));
-			
+
 			manager.add(new Separator());
 
-			Action duplicateAction = createAction(manager, "D&uplicate",
-					new Action() {
-						@Override
-						public void run() {
-							removePressed();
-						}
-					});
+			Action duplicateAction = createAction(manager, "D&uplicate", new Action() {
+				@Override
+				public void run() {
+					removePressed();
+				}
+			});
 			duplicateAction.setEnabled(getIsDeleteEnabled(object));
 		}
 	}
@@ -659,10 +647,10 @@ public class TestCaseAndTrackSection extends TreeSection {
 	private boolean getIsDuplicateEnabled(Object object) {
 		return (object instanceof XMLTestCase);
 	}
-	
+
 	private boolean getIsDeleteEnabled(Object object) {
 		return object != null;
-		//(object instanceof XMLTestCase);
+		// (object instanceof XMLTestCase);
 	}
 
 }

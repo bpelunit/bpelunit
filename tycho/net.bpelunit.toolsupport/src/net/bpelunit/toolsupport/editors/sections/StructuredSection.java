@@ -15,6 +15,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -327,6 +328,11 @@ public abstract class StructuredSection extends BPELUnitSection {
 		if (selection instanceof IStructuredSelection)
 			return ((IStructuredSelection) selection).getFirstElement();
 		return null;
+	}
+	
+	protected void setSelection(Object o) {
+		System.out.println("Selecting: " + o);
+		getViewer().setSelection(new StructuredSelection(o), true);
 	}
 
 	protected void hookMenu() {
