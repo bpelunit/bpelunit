@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="target/dependency/poi-3.6.jar"/>
 	<classpathentry kind="lib" path="target/dependency/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="target/dependency/poi-ooxml-schemas-3.6.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.framework"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
