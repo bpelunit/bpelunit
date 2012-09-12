@@ -16,7 +16,7 @@ Require-Bundle: net.bpelunit.framework.client.eclipse,net.bpelunit.fra
 Bundle-Vendor: Leibniz Universität Hannover
 Build-Jdk: 1.7.0_03
 Bundle-Version: 1.6.1.SNAPSHOT
-Bnd-LastModified: 1347365932874
+Bnd-LastModified: 1347455403292
 Bundle-ManifestVersion: 2
 Bundle-License: http://www.eclipse.org/legal/epl-v10.html
 Bundle-Description: BPEL has become the defacto standard language for 
@@ -29,16 +29,27 @@ Bundle-Description: BPEL has become the defacto standard language for
  e testing frameworks allow developers to easily test small chunks of 
  the code that they have written. Until recently, BPEL lacked such sup
  port. However, BPELUnit was developed for closing this gap.
-Import-Package: javax.jws,javax.jws.soap,javax.xml.bind,javax.xml.bind
- .annotation,javax.xml.bind.annotation.adapters,javax.xml.datatype,jav
- ax.xml.namespace,javax.xml.parsers,javax.xml.stream,javax.xml.transfo
- rm,javax.xml.transform.dom,javax.xml.transform.stream,javax.xml.ws,ne
- t.bpelunit.framework.control.deploy,net.bpelunit.framework.control.de
- ploy.activevos9,net.bpelunit.framework.control.ext,net.bpelunit.frame
- work.control.soap,net.bpelunit.framework.control.util,net.bpelunit.fr
- amework.exception,net.bpelunit.framework.model,org.apache.commons.io,
- org.apache.xmlbeans,org.apache.xmlbeans.impl.values,org.apache.xmlbea
- ns.xml.stream,org.jdom,org.jdom.filter,org.w3c.dom,org.xml.sax
+Import-Package: javax.jws,
+ javax.jws.soap,
+ javax.xml.bind,
+ javax.xml.bind.annotation,
+ javax.xml.bind.annotation.adapters,
+ javax.xml.datatype,
+ javax.xml.namespace,
+ javax.xml.parsers,
+ javax.xml.stream,
+ javax.xml.transform,
+ javax.xml.transform.dom,
+ javax.xml.transform.stream,
+ javax.xml.ws,
+ org.apache.commons.io,
+ org.apache.xmlbeans,
+ org.apache.xmlbeans.impl.values,
+ org.apache.xmlbeans.xml.stream,
+ org.jdom,
+ org.jdom.filter,
+ org.w3c.dom,
+ org.xml.sax
 Bundle-SymbolicName: net.bpelunit.framework.control.deployer.activevos
  9;singleton:=true
 
