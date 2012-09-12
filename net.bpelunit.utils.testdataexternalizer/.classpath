@@ -8,5 +8,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.framework"/>
 	<classpathentry kind="lib" path="target/dependency/commons-cli-1.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.util"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
