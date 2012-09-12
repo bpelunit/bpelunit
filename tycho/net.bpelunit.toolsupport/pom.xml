@@ -8,7 +8,7 @@
     <version>1.6.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>eclipse-toolsupport</artifactId>
+  <artifactId>net.bpelunit.toolsupport</artifactId>
   <version>1.6.1-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
   <name>BPELUnit :: Eclipse GUI</name>
