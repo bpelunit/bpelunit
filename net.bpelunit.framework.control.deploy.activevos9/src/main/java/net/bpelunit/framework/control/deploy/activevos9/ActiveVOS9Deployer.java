@@ -41,6 +41,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	private String deployerPassword = "";
 	private boolean doUndeploy = false;	
 	private boolean terminatePendingProcessesBeforeTestSuiteIsRun = false; 
+	private boolean terminatePendingProcessesAfterEveryTestCase = false;
 	
 	private ActiveVOSAdministrativeFunctions administrativeFunctions = null;
 	private List<AesContribution> previouslyDeployedContributions;
@@ -91,6 +92,14 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	)
 	public void setTerminatePendingProcessesBeforeTestSuiteIsRun(String terminatePendingProcessesBeforeTestSuiteIsRun) {
 		this.terminatePendingProcessesBeforeTestSuiteIsRun = Boolean.valueOf(terminatePendingProcessesBeforeTestSuiteIsRun);
+	}
+
+	@IBPELDeployerOption(
+			defaultValue="false",
+			description="If set to true, all running process instances will be terminated before every test case. DO USE WITH CARE!"
+	)
+	public void setTerminatePendingProcessesAfterTestCaseIsRun(String terminatePendingProcessesAfterEveryTestCase) {
+		this.terminatePendingProcessesAfterEveryTestCase = Boolean.valueOf(terminatePendingProcessesAfterEveryTestCase);
 	}
 	
 	protected String getDeployerUserName() {
@@ -193,7 +202,9 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 
 	@Override
 	public void cleanUpAfterTestCase() {
-		// TODO Auto-generated method stub
+		if(terminatePendingProcessesAfterEveryTestCase) {
+			getAdministrativeFunctions().terminateAllProcessInstances();
+		}
 	}
 
 	public synchronized ActiveVOSAdministrativeFunctions getAdministrativeFunctions() {

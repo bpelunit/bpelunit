@@ -9,5 +9,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.framework"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.model.bpel"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

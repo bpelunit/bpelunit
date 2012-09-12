@@ -7,11 +7,9 @@ import net.bpelunit.framework.control.deploy.IBPELProcess;
 import net.bpelunit.framework.control.deploy.IDeployment;
 import net.bpelunit.framework.control.ext.IDeploymentChanger;
 import net.bpelunit.framework.exception.DeploymentException;
-import net.bpelunit.framework.model.bpel.PartnerLink;
 import net.bpelunit.framework.model.test.TestSuite;
-import net.bpelunit.util.bpel.BPELFacade;
-
-import org.w3c.dom.Element;
+import net.bpelunit.model.bpel.IPartnerLink;
+import net.bpelunit.model.bpel.IProcess;
 
 public class EndpointReplacer implements IDeploymentChanger {
 
@@ -20,7 +18,7 @@ public class EndpointReplacer implements IDeploymentChanger {
 		List<String> partnerTrackNames = getPartnerTrackNames(testSuite);
 		
 		for(IBPELProcess p : d.getBPELProcesses()) {
-			List<String> partnerLinkNames = getPartnerLinkNamesWithPartnerRole(p.getBpelXml().getDocumentElement());
+			List<String> partnerLinkNames = getPartnerLinkNamesWithPartnerRole(p.getProcessModel());
 		
 			partnerLinkNames.retainAll(partnerTrackNames);
 			
@@ -35,13 +33,10 @@ public class EndpointReplacer implements IDeploymentChanger {
 		return testSuite.getProcessUnderTest().getPartners().get(partnerLinkName).getSimulatedURL();
 	} 
 
-	private List<String> getPartnerLinkNamesWithPartnerRole(Element processElement) {
+	private List<String> getPartnerLinkNamesWithPartnerRole(IProcess iProcess) {
 		List<String> names = new ArrayList<String>();
-		
-		BPELFacade bpel = BPELFacade.getInstance(processElement.getNamespaceURI());
-		List<PartnerLink> partnerLinks =  bpel.getPartnerLinks(processElement);
-		
-		for(PartnerLink pl : partnerLinks) {
+
+		for(IPartnerLink pl : iProcess.getPartnerLinks()) {
 			if(pl.getPartnerRole() != null && !pl.getPartnerRole().equals("")) {
 				names.add(pl.getName());
 			}

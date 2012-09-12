@@ -18,7 +18,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Leibniz Universität Hannover
 Build-Jdk: 1.6.0_24
 Bundle-Version: 1.6.1.SNAPSHOT
-Bnd-LastModified: 1344266148603
+Bnd-LastModified: 1346514085078
 Embed-Transitive: true
 Bundle-ManifestVersion: 2
 Bundle-Description: BPEL has become the defacto standard language for 

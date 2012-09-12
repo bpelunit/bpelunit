@@ -1,18 +1,15 @@
 package net.bpelunit.framework.control.deploymentchanger.timemocking;
 
 import static org.junit.Assert.assertEquals;
-
-import javax.xml.xpath.XPathExpressionException;
-
+import static org.junit.Assert.assertNull;
 import net.bpelunit.framework.control.deploy.DeploymentMock;
-import net.bpelunit.framework.control.util.XPathTool;
-import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.model.bpel.IProcess;
+import net.bpelunit.model.bpel.IWaitingActivity;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Element;
 
 public class TimeMockingTest {
 	private static final String RESOURCE_BPEL = "waitprocess.bpel";
@@ -32,25 +29,19 @@ public class TimeMockingTest {
 	private static final String XPATH_TO_WAIT_WITH_FOR = "//bpel:wait[@name='WaitToMock']";
 	private static final String XPATH_TO_WAIT_WITH_UNTIL = "//bpel:wait[@name='WaitToMock2']";
 	private static final String XPATH_ALL_WAITS_TO_MOCK = "//bpel:wait[@name != 'WaitToLeave']";
-	private static final String XPATH_TO_FOR_IN_WAIT_TO_LEAVE_UNCHANGED = "//bpel:wait[@name='WaitToLeave']/bpel:for/text()";
+	private static final String XPATH_TO_WAIT_TO_LEAVE_UNCHANGED = "//bpel:wait[@name='WaitToLeave']";
 
 	private static final String XPATH_TO_ONALARM_WITH_FOR_IN_PICK = "//bpel:pick/bpel:onAlarm[1]";
 	private static final String XPATH_TO_ONALARM_WITH_UNTIL_IN_PICK = "//bpel:pick/bpel:onAlarm[2]";
-
-	private static final String XPATH_TO_FOR = "/bpel:for/text()";
-	private static final String XPATH_TO_UNTIL = "/bpel:until/text()";
 
 	private static final String XPATH_TO_ONALARM_WITH_FOR_IN_HANDLER = "//bpel:eventHandlers/bpel:onAlarm[1]";
 	private static final String XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER = "//bpel:eventHandlers/bpel:onAlarm[2]";
 
 	private TimeMocking timeMocking;
-	private XPathTool xpath;
 
 	@Before
 	public void setUp() {
 		this.timeMocking = new TimeMocking();
-		this.xpath = timeMocking
-				.createBpelXPathTool(BpelXMLTools.NAMESPACE_BPEL_2_0.getURI());
 	}
 
 	@After
@@ -124,8 +115,7 @@ public class TimeMockingTest {
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
 		timeMocking.changeDeployment(d, null);
 
-		Element process = d.getBPELProcesses().get(0).getBpelXml()
-				.getDocumentElement();
+		IProcess process = d.getBPELProcesses().get(0).getProcessModel();
 		assertWaitWithForChanged(process);
 		assertWaitWithUntilUnchanged(process);
 		assertNotToChangeWaitUnchanged(process);
@@ -143,8 +133,7 @@ public class TimeMockingTest {
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL, RESOURCE_BPEL);
 		timeMocking.changeDeployment(d, null);
 
-		Element process = d.getBPELProcesses().get(0).getBpelXml()
-				.getDocumentElement();
+		IProcess process = d.getBPELProcesses().get(0).getProcessModel();
 		assertWaitWithForChanged(process);
 		assertWaitWithUntilUnchanged(process);
 		assertNotToChangeWaitUnchanged(process);
@@ -162,8 +151,7 @@ public class TimeMockingTest {
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL, RESOURCE_BPEL);
 		timeMocking.changeDeployment(d, null);
 
-		Element process = d.getBPELProcesses().get(0).getBpelXml()
-				.getDocumentElement();
+		IProcess process = d.getBPELProcesses().get(0).getProcessModel();
 		assertWaitWithForChanged(process);
 		assertNotToChangeWaitUnchanged(process);
 		assertWaitWithUntilUnchanged(process);
@@ -180,8 +168,7 @@ public class TimeMockingTest {
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
 		timeMocking.changeDeployment(d, null);
 
-		Element process = d.getBPELProcesses().get(0).getBpelXml()
-				.getDocumentElement();
+		IProcess process = d.getBPELProcesses().get(0).getProcessModel();
 		assertNotToChangeWaitUnchanged(process);
 		assertWaitWithUntilChanged(process);
 		assertWaitWithForUnchanged(process);
@@ -198,8 +185,7 @@ public class TimeMockingTest {
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
 		timeMocking.changeDeployment(d, null);
 
-		Element process = d.getBPELProcesses().get(0).getBpelXml()
-				.getDocumentElement();
+		IProcess process = d.getBPELProcesses().get(0).getProcessModel();
 		assertWaitWithForChanged(process);
 		assertWaitWithUntilChanged(process);
 		assertNotToChangeWaitUnchanged(process);
@@ -215,8 +201,7 @@ public class TimeMockingTest {
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
 		timeMocking.changeDeployment(d, null);
 
-		Element process = d.getBPELProcesses().get(0).getBpelXml()
-				.getDocumentElement();
+		IProcess process = d.getBPELProcesses().get(0).getProcessModel();
 		assertPickWithForChanged(process);
 		assertPickWithUntilUnchanged(process);
 		assertWaitsUnchanged(process);
@@ -231,8 +216,7 @@ public class TimeMockingTest {
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
 		timeMocking.changeDeployment(d, null);
 
-		Element process = d.getBPELProcesses().get(0).getBpelXml()
-				.getDocumentElement();
+		IProcess process = d.getBPELProcesses().get(0).getProcessModel();
 		assertPickWithUntilChanged(process);
 		assertPickWithForUnchanged(process);
 		assertWaitsUnchanged(process);
@@ -247,145 +231,121 @@ public class TimeMockingTest {
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
 		timeMocking.changeDeployment(d, null);
 
-		Element process = d.getBPELProcesses().get(0).getBpelXml()
-				.getDocumentElement();
+		IProcess process = d.getBPELProcesses().get(0).getProcessModel();
 		assertHandlerWithForChanged(process);
 		assertHandlerWithUntilUnchanged(process);
 		assertPicksUnchanged(process);
 		assertWaitsUnchanged(process);
 	}
-	
+
 	@Test
 	public void testSuccessfulOnAlarmWithUntilHandler() throws Exception {
 		timeMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
 		timeMocking.setActivityToMock(XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER);
-		
+
 		DeploymentMock d = new DeploymentMock(RESOURCE_BPEL);
 		timeMocking.changeDeployment(d, null);
-		
-		Element process = d.getBPELProcesses().get(0).getBpelXml()
-		.getDocumentElement();
+
+		IProcess process = d.getBPELProcesses().get(0).getProcessModel();
 		assertHandlerWithUntilChanged(process);
 		assertHandlerWithForUnchanged(process);
 		assertPicksUnchanged(process);
 		assertWaitsUnchanged(process);
 	}
-	
-	private void assertHandlerWithUntilUnchanged(Element process) throws XPathExpressionException {
+
+	private void assertHandlerWithUntilUnchanged(IProcess process) {
+		assertEquals(
+				OLD_UNTIL_EXPRESSION, getUntilFromTimedActivity(XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER, process));
+	}
+
+	private void assertHandlerWithForChanged(IProcess process) {
+		assertEquals(NEW_FOR_EXPRESSION, getForFromTimedActivity(XPATH_TO_ONALARM_WITH_FOR_IN_HANDLER, process));
+	}
+
+	private void assertHandlerWithUntilChanged(IProcess process) {
+		assertEquals(NEW_FOR_EXPRESSION,getForFromTimedActivity(XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER, process));
+		assertNull("0", getForFromTimedActivity(XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER, process));
+	}
+
+	private void assertHandlerWithForUnchanged(IProcess process) {
+		assertEquals(OLD_FOR_EXPRESSION, getForFromTimedActivity(XPATH_TO_ONALARM_WITH_FOR_IN_HANDLER, process));
+	}
+
+	private void assertPickWithForUnchanged(IProcess process) {
+		assertEquals(OLD_FOR_EXPRESSION, getForFromTimedActivity(XPATH_TO_ONALARM_WITH_FOR_IN_PICK, process));
+	}
+
+	private void assertPickWithUntilChanged(IProcess process) {
+		assertEquals(NEW_FOR_EXPRESSION, getForFromTimedActivity(XPATH_TO_ONALARM_WITH_UNTIL_IN_PICK, process));
+		assertNull(getForFromTimedActivity(XPATH_TO_ONALARM_WITH_UNTIL_IN_PICK, process));
+	}
+
+	private void assertPickWithUntilUnchanged(IProcess process) {
 		assertEquals(
 				OLD_UNTIL_EXPRESSION,
-				xpath.evaluateAsString(XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER
-						+ XPATH_TO_UNTIL, process));
+				getUntilFromTimedActivity(XPATH_TO_ONALARM_WITH_UNTIL_IN_PICK
+						, process));
 	}
 
-	private void assertHandlerWithForChanged(Element process) throws XPathExpressionException {
-		String exp = XPATH_TO_ONALARM_WITH_FOR_IN_HANDLER + XPATH_TO_FOR;
-		assertEquals(NEW_FOR_EXPRESSION,
-				xpath.evaluateAsString(exp, process));
-	}
-	
-	private void assertHandlerWithUntilChanged(Element process) throws XPathExpressionException {
-		String exp = XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER + XPATH_TO_FOR;
-		assertEquals(NEW_FOR_EXPRESSION,
-				xpath.evaluateAsString(exp, process));
-
-		exp = "count(" + XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER + XPATH_TO_UNTIL
-				+ ")";
-		assertEquals("0", xpath.evaluateAsString(exp, process));
-	}
-	
-	private void assertHandlerWithForUnchanged(Element process) throws XPathExpressionException {
-		String exp = XPATH_TO_ONALARM_WITH_FOR_IN_HANDLER + XPATH_TO_FOR;
-		assertEquals(OLD_FOR_EXPRESSION,
-				xpath.evaluateAsString(exp, process));
-	}
-
-	private void assertPickWithForUnchanged(Element process) throws XPathExpressionException {
-		String exp = XPATH_TO_ONALARM_WITH_FOR_IN_PICK + XPATH_TO_FOR;
-		assertEquals(OLD_FOR_EXPRESSION,
-				xpath.evaluateAsString(exp, process));
-	}
-
-	private void assertPickWithUntilChanged(Element process)
-			throws XPathExpressionException {
-		String exp = XPATH_TO_ONALARM_WITH_UNTIL_IN_PICK + XPATH_TO_FOR;
-		assertEquals(NEW_FOR_EXPRESSION,
-				xpath.evaluateAsString(exp, process));
-
-		exp = "count(" + XPATH_TO_ONALARM_WITH_UNTIL_IN_PICK + XPATH_TO_UNTIL
-				+ ")";
-		assertEquals("0", xpath.evaluateAsString(exp, process));
-	}
-
-	private void assertPickWithUntilUnchanged(Element process)
-			throws XPathExpressionException {
-		assertEquals(
-				OLD_UNTIL_EXPRESSION,
-				xpath.evaluateAsString(XPATH_TO_ONALARM_WITH_UNTIL_IN_PICK
-						+ XPATH_TO_UNTIL, process));
-	}
-
-	private void assertPickWithForChanged(Element process)
-			throws XPathExpressionException {
+	private void assertPickWithForChanged(IProcess process) {
 		assertEquals(
 				NEW_FOR_EXPRESSION,
-				xpath.evaluateAsString(XPATH_TO_ONALARM_WITH_FOR_IN_PICK
-						+ XPATH_TO_FOR, process));
+				getForFromTimedActivity(XPATH_TO_ONALARM_WITH_FOR_IN_PICK, process));
 	}
 
-	private void assertWaitsUnchanged(Element process)
-			throws XPathExpressionException {
+	private void assertWaitsUnchanged(IProcess process) {
 		assertWaitWithForUnchanged(process);
 		assertWaitWithUntilUnchanged(process);
 		assertNotToChangeWaitUnchanged(process);
 	}
 
-	private void assertWaitWithUntilUnchanged(Element process)
-			throws XPathExpressionException {
-		assertEquals(OLD_UNTIL_EXPRESSION, xpath.evaluateAsString(
-				XPATH_TO_WAIT_WITH_UNTIL + XPATH_TO_UNTIL, process));
+	private void assertWaitWithUntilUnchanged(IProcess process) {
+		assertEquals(
+				OLD_UNTIL_EXPRESSION,
+				getUntilFromTimedActivity(XPATH_TO_WAIT_WITH_UNTIL, process));
 	}
 
-	private void assertNotToChangeWaitUnchanged(Element process)
-			throws XPathExpressionException {
-		assertEquals(OLD_FOR_EXPRESSION, xpath.evaluateAsString(
-				XPATH_TO_FOR_IN_WAIT_TO_LEAVE_UNCHANGED, process));
+	private void assertNotToChangeWaitUnchanged(IProcess process) {
+		assertEquals(OLD_FOR_EXPRESSION, getForFromTimedActivity(
+				XPATH_TO_WAIT_TO_LEAVE_UNCHANGED, process));
 	}
 
-	private void assertWaitWithForChanged(Element process)
-			throws XPathExpressionException {
-		String exp = XPATH_TO_WAIT_WITH_FOR + XPATH_TO_FOR;
+	private void assertWaitWithForChanged(IProcess process) {		
+		assertEquals(NEW_FOR_EXPRESSION, getForFromTimedActivity(XPATH_TO_WAIT_WITH_FOR, process));
+	}
+
+	private void assertWaitWithForUnchanged(IProcess process) {
+		assertEquals(OLD_FOR_EXPRESSION, getForFromTimedActivity(XPATH_TO_WAIT_WITH_FOR, process));
+	}
+
+	private void assertWaitWithUntilChanged(IProcess process) {
 		assertEquals(NEW_FOR_EXPRESSION,
-				xpath.evaluateAsString(exp, process));
+				getForFromTimedActivity(XPATH_TO_WAIT_WITH_UNTIL, process));
+		assertEquals(null,
+				getUntilFromTimedActivity(XPATH_TO_WAIT_WITH_UNTIL, process));
 	}
 
-	private void assertWaitWithForUnchanged(Element process)
-			throws XPathExpressionException {
-		assertEquals(OLD_FOR_EXPRESSION, xpath.evaluateAsString(
-				XPATH_TO_WAIT_WITH_FOR + XPATH_TO_FOR, process));
-	}
-
-	private void assertWaitWithUntilChanged(Element process)
-			throws XPathExpressionException {
-		String exp = XPATH_TO_WAIT_WITH_UNTIL + XPATH_TO_FOR;
-		assertEquals(NEW_FOR_EXPRESSION,
-				xpath.evaluateAsString(exp, process));
-		exp = count(XPATH_TO_WAIT_WITH_UNTIL + XPATH_TO_UNTIL);
-		assertEquals("0", xpath.evaluateAsString(exp, process));
-	}
-
-	private void assertPicksUnchanged(Element process) throws XPathExpressionException {
+	private void assertPicksUnchanged(IProcess process) {
 		assertPickWithForUnchanged(process);
 		assertPickWithUntilUnchanged(process);
 	}
-	
-	private void assertHandlerUnchanged(Element process) throws XPathExpressionException {
+
+	private void assertHandlerUnchanged(IProcess process) {
 		assertHandlerWithForUnchanged(process);
 		assertHandlerWithUntilUnchanged(process);
 	}
-	
-	private String count(String xpath) {
-		return String.format("count(%s)", xpath);
+
+	private String getUntilFromTimedActivity(String xpathToActivity, IProcess p) {
+		IWaitingActivity elementsByXPath = (IWaitingActivity) p
+				.getElementsByXPath(xpathToActivity).get(0);
+
+		return elementsByXPath.getDeadline();
 	}
 
+	private String getForFromTimedActivity(String xpathToActivity, IProcess p) {
+		IWaitingActivity elementsByXPath = (IWaitingActivity) p
+				.getElementsByXPath(xpathToActivity).get(0);
+
+		return elementsByXPath.getDuration();
+	}
 }

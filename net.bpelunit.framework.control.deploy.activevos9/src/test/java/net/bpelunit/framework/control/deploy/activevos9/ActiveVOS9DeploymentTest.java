@@ -16,8 +16,8 @@ import javax.xml.namespace.QName;
 import net.bpelunit.framework.control.deploy.IBPELProcess;
 import net.bpelunit.framework.control.deploy.activevos9.ActiveVOS9Deployment.BPELInfo;
 import net.bpelunit.framework.control.util.XPathTool;
-import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BpelXMLTools;
 import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.util.FileUtil;
 import net.bpelunit.util.XMLUtil;
 import net.bpelunit.util.ZipUtil;
@@ -82,13 +82,10 @@ public class ActiveVOS9DeploymentTest {
 		BPELInfo bpelProcess = (BPELInfo) bpelProcesses.get(0);
 		assertEquals(new QName(NS_TEST, "tc1"), bpelProcess.getName());
 
-		Element bpelXml = bpelProcess.getBpelXml().getDocumentElement();
+		IProcess process = bpelProcess.getProcessModel();
 		Element pddXml = bpelProcess.getPddXml().getDocumentElement();
 
-		assertNotNull(bpelXml);
-		assertEquals(BpelXMLTools.NAMESPACE_BPEL_2_0.getURI(),
-				bpelXml.getNamespaceURI());
-		assertEquals("process", bpelXml.getLocalName());
+		assertNotNull(process);
 
 		assertNotNull(pddXml);
 		assertEquals(ActiveVOS9Deployment.NAMESPACE_PDD,
