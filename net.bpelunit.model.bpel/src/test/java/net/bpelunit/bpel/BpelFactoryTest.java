@@ -1,15 +1,13 @@
 package net.bpelunit.bpel;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 
-import net.bpelunit.bpel.BpelFactory;
+import net.bpelunit.model.bpel.BpelFactory;
+import net.bpelunit.model.bpel.IProcess;
 
 import org.junit.Test;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TProcess;
 
 
 public class BpelFactoryTest {

@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+              xmlns:helloworld="http://test.bpelunit.net/waitprocess"
+              xmlns:ext1="http://www.activebpel.org/2009/06/bpel/extension/links"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+              xmlns:ext="http://www.activebpel.org/2006/09/bpel/extension/query_handling"
+              xmlns:aei="http://www.activebpel.org/2009/02/bpel/extension/ignorable"
+              aei:editStyle="BPMN"
+              name="waitprocess"
+              suppressJoinFailure="yes"
+              targetNamespace="http://test.bpelunit.net/waitprocess">
+   <bpmndi:BPMNDiagram xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                       xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                       aei:bpelDigest=""
+                       aei:editStyle="BPMN"
+                       aei:layoutNeeded="false"
+                       aei:modelVersion="4"
+                       aei:objectId="133682336748605291"
+                       aei:processInitiatorSim=""
+                       isHorizontal="false">
+      <bpmndi:BPMNPlane>
+         <bpmndi:BPMNShape aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:objectId="133682344320005547"
+                           aei:type="PARTNER_LINK"
+                           aei:visible="false,false,false,false,false,"
+                           bpmnElement="133682344320005547"/>
+         <bpmndi:BPMNShape aei:absoluteSize="DIM {506,458}" aei:objectId="133682344729205789"
+                           aei:type="SEQUENCE"
+                           bpmnElement="133682344729205789"
+                           isHorizontal="false">
+            <dc:Bounds height="-1" width="-1" x="-10" y="-10"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {218,10}" aei:absoluteSize="DIM {70,60}"
+                           aei:attachments=""
+                           aei:objectId="133682344329505563"
+                           aei:principal=""
+                           aei:type="RECEIVE"
+                           bpmnElement="133682344329505563">
+            <dc:Bounds height="60" width="70" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {244,67}" aei:absoluteSize="DIM {38,13}"
+                              aei:anchor.location="1"
+                              aei:anchor.objectId="133682344329505563"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133682344330105573"
+                              aei:relative.location="LOC {-19,47}"
+                              aei:text="Receive"
+                              bpmnElement="133682344329505563label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {10,95}" aei:absoluteSize="DIM {486,268}"
+                           aei:objectId="133683251515908085"
+                           aei:type="PICK"
+                           bpmnElement="133683251515908085"
+                           isHorizontal="false">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {280,112}" aei:absoluteSize="DIM {18,13}"
+                              aei:anchor.location="7"
+                              aei:anchor.objectId="133683251515908085"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133683251516008087"
+                              aei:relative.location="LOC {1,-23}"
+                              aei:text="Pick"
+                              bpmnElement="133683251515908085label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {10,155}" aei:absoluteSize="DIM {183,148}"
+                           aei:alarmExpression="'P1D'"
+                           aei:alarmExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:alarmType="1"
+                           aei:collapedImageLocation="icons/bpmn/activity/CollapsedHandlerBlock.png"
+                           aei:expanded="true"
+                           aei:expandedSize="DIM {-1,-1}"
+                           aei:objectId="133683251516208095"
+                           aei:type="ON_ALARM"
+                           bpmnElement="133683251516208095">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {89,152}" aei:absoluteSize="DIM {44,13}"
+                              aei:anchor.location="0"
+                              aei:anchor.objectId="133683251516208095"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133683251516308097"
+                              aei:relative.location="LOC {-22,-13}"
+                              aei:text="On Alarm"
+                              bpmnElement="133683251516208095label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {39,225}" aei:absoluteSize="DIM {125,68}"
+                           aei:drilldownLocation="LOC {5,5}"
+                           aei:expanded="false"
+                           aei:expandedSize="DIM {170,236}"
+                           aei:name="Event Handlers"
+                           aei:objectId="133683255549708169"
+                           aei:showTerminationHandler="false"
+                           aei:type="SCOPE"
+                           bpmnElement="133683255549708169"
+                           isHorizontal="false">
+            <dc:Bounds height="236" width="170" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {306,30}" aei:absoluteSize="DIM {7,169}"
+                              aei:anchor.location="11"
+                              aei:anchor.objectId="133683255549708169"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133683255550008187"
+                              aei:relative.location="LOC {0,5}"
+                              aei:text="Event Handlers"
+                              bpmnElement="133683255549708169label">
+               <dc:Bounds height="13" width="0" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {25,25}" aei:absoluteSize="DIM {90,165}"
+                           aei:objectId="133683255550108189"
+                           aei:type="SEQUENCE"
+                           bpmnElement="133683255550108189"
+                           isHorizontal="false">
+            <dc:Bounds height="170" width="95" x="5" y="5"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {35,35}" aei:absoluteSize="DIM {70,60}"
+                           aei:backgroundColor="RGB {226,226,226}"
+                           aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:borderColor="RGB {0,0,255}"
+                           aei:bpmNotation="NoneEvent"
+                           aei:collapsed="false"
+                           aei:drawBorder="false"
+                           aei:font="${system.default}"
+                           aei:fontColor="RGB {0,0,0}"
+                           aei:imageDisplay="true"
+                           aei:imageTextGap="4"
+                           aei:joinCondition=""
+                           aei:joinConditionLang=""
+                           aei:name=""
+                           aei:objectId="133683255550108191"
+                           aei:scaleImage="false"
+                           aei:sizeToFit="true"
+                           aei:text=""
+                           aei:textAlignment="1"
+                           aei:textFormat="1"
+                           aei:textPlacement="16"
+                           aei:transparent="true"
+                           aei:type="NONE_EVENT"
+                           bpmnElement="133683255550108191">
+            <dc:Bounds height="60" width="70" x="0" y="0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {35,120}" aei:absoluteSize="DIM {70,60}"
+                           aei:backgroundColor="RGB {226,226,226}"
+                           aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:borderColor="RGB {0,0,255}"
+                           aei:bpmNotation="NoneEvent"
+                           aei:collapsed="false"
+                           aei:drawBorder="false"
+                           aei:font="${system.default}"
+                           aei:fontColor="RGB {0,0,0}"
+                           aei:imageDisplay="true"
+                           aei:imageTextGap="4"
+                           aei:joinCondition=""
+                           aei:joinConditionLang=""
+                           aei:name=""
+                           aei:objectId="133683255550208193"
+                           aei:scaleImage="false"
+                           aei:sizeToFit="true"
+                           aei:text=""
+                           aei:textAlignment="1"
+                           aei:textFormat="1"
+                           aei:textPlacement="16"
+                           aei:transparent="true"
+                           aei:type="NONE_EVENT"
+                           bpmnElement="133683255550208193">
+            <dc:Bounds height="60" width="70" x="0" y="0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {187,68}" aei:absoluteSize="DIM {180,168}"
+                           aei:alarmDurationValue=""
+                           aei:alarmExpression="'P1D'"
+                           aei:alarmExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:alarmNuberOfDays="1"
+                           aei:alarmRepeatEvery=""
+                           aei:alarmRepeatEveryLang=""
+                           aei:alarmTime=""
+                           aei:alarmType="1"
+                           aei:expanded="true"
+                           aei:expandedSize="DIM {-1,-1}"
+                           aei:objectId="133683268258508639"
+                           aei:type="ON_ALARM_HANDLER"
+                           bpmnElement="133683268258508639"
+                           isHorizontal="false">
+            <dc:Bounds height="168" width="180" x="167" y="48"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {265,78}" aei:absoluteSize="DIM {44,13}"
+                              aei:anchor.location="0"
+                              aei:anchor.objectId="133683268258508639"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133683268258608641"
+                              aei:relative.location="LOC {-22,0}"
+                              aei:text="On Alarm"
+                              bpmnElement="133683268258508639label">
+               <dc:Bounds height="13" width="44" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {197,128}" aei:absoluteSize="DIM {160,88}"
+                           aei:objectId="133683268258608643"
+                           aei:showTerminationHandler="false"
+                           aei:type="SCOPE"
+                           bpmnElement="133683268258608643"
+                           isHorizontal="false">
+            <dc:Bounds height="88" width="160" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteSize="DIM {0,0}" aei:anchor.location="11"
+                              aei:anchor.objectId="133683268258608643"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133683268365408661"
+                              aei:relative.location="LOC {0,5}"
+                              bpmnElement="133683268258608643label">
+               <dc:Bounds height="13" width="0" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {212,143}" aei:absoluteSize="DIM {125,53}"
+                           aei:backgroundColor="RGB {226,226,226}"
+                           aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:borderColor="RGB {0,0,255}"
+                           aei:bpmNotation="EmptyTask"
+                           aei:collapsed="false"
+                           aei:drawBorder="false"
+                           aei:font="${system.default}"
+                           aei:fontColor="RGB {0,0,0}"
+                           aei:imageDisplay="true"
+                           aei:imageTextGap="4"
+                           aei:joinCondition=""
+                           aei:joinConditionLang=""
+                           aei:name=""
+                           aei:objectId="133683270704708699"
+                           aei:scaleImage="false"
+                           aei:sizeToFit="true"
+                           aei:text=""
+                           aei:textAlignment="1"
+                           aei:textFormat="1"
+                           aei:textPlacement="16"
+                           aei:transparent="true"
+                           aei:type="NONE_EVENT"
+                           bpmnElement="133683270704708699">
+            <dc:Bounds height="53" width="125" x="14" y="16"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {202,133}" aei:absoluteSize="DIM {145,73}"
+                           aei:actySimState="0"
+                           aei:bpelName=""
+                           aei:joinConditionComp=""
+                           aei:objectId="133683270784608701"
+                           aei:type="Sequence"
+                           bpmnElement="133683270704708699wrappingSequence"
+                           isHorizontal="false">
+            <dc:Bounds height="78" width="150" x="5" y="5"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {392,81}" aei:absoluteSize="DIM {180,168}"
+                           aei:alarmDurationValue=""
+                           aei:alarmExpression="'2012-01-01'"
+                           aei:alarmExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:alarmNuberOfDays="1"
+                           aei:alarmRepeatEvery=""
+                           aei:alarmRepeatEveryLang=""
+                           aei:alarmTime=""
+                           aei:alarmType="0"
+                           aei:expanded="true"
+                           aei:expandedSize="DIM {-1,-1}"
+                           aei:objectId="133683268560708663"
+                           aei:type="ON_ALARM_HANDLER"
+                           bpmnElement="133683268560708663"
+                           isHorizontal="false">
+            <dc:Bounds height="168" width="180" x="372" y="61"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {470,91}" aei:absoluteSize="DIM {44,13}"
+                              aei:anchor.location="0"
+                              aei:anchor.objectId="133683268560708663"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133683268560808665"
+                              aei:relative.location="LOC {-22,0}"
+                              aei:text="On Alarm"
+                              bpmnElement="133683268560708663label">
+               <dc:Bounds height="13" width="44" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {402,141}" aei:absoluteSize="DIM {160,88}"
+                           aei:objectId="133683268560808667"
+                           aei:showTerminationHandler="false"
+                           aei:type="SCOPE"
+                           bpmnElement="133683268560808667"
+                           isHorizontal="false">
+            <dc:Bounds height="88" width="160" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteSize="DIM {0,0}" aei:anchor.location="11"
+                              aei:anchor.objectId="133683268560808667"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133683268654908685"
+                              aei:relative.location="LOC {0,5}"
+                              bpmnElement="133683268560808667label">
+               <dc:Bounds height="13" width="0" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {417,156}" aei:absoluteSize="DIM {125,53}"
+                           aei:backgroundColor="RGB {226,226,226}"
+                           aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:borderColor="RGB {0,0,255}"
+                           aei:bpmNotation="EmptyTask"
+                           aei:collapsed="false"
+                           aei:drawBorder="false"
+                           aei:font="${system.default}"
+                           aei:fontColor="RGB {0,0,0}"
+                           aei:imageDisplay="true"
+                           aei:imageTextGap="4"
+                           aei:joinCondition=""
+                           aei:joinConditionLang=""
+                           aei:name=""
+                           aei:objectId="133683271474708713"
+                           aei:scaleImage="false"
+                           aei:sizeToFit="true"
+                           aei:text=""
+                           aei:textAlignment="1"
+                           aei:textFormat="1"
+                           aei:textPlacement="16"
+                           aei:transparent="true"
+                           aei:type="NONE_EVENT"
+                           bpmnElement="133683271474708713">
+            <dc:Bounds height="53" width="125" x="18" y="14"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {407,146}" aei:absoluteSize="DIM {145,73}"
+                           aei:actySimState="0"
+                           aei:bpelName=""
+                           aei:joinConditionComp=""
+                           aei:objectId="133683271547508715"
+                           aei:type="Sequence"
+                           bpmnElement="133683271474708713wrappingSequence"
+                           isHorizontal="false">
+            <dc:Bounds height="78" width="150" x="5" y="5"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {29,215}" aei:absoluteSize="DIM {145,88}"
+                           aei:actySimState="0"
+                           aei:bpelName=""
+                           aei:joinConditionComp=""
+                           aei:objectId="133683251516308099"
+                           aei:type="Sequence"
+                           bpmnElement="133683255549708169wrappingSequence"
+                           isHorizontal="false">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {218,155}" aei:absoluteSize="DIM {183,148}"
+                           aei:alarmExpression="'2012-01-01'"
+                           aei:alarmExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:alarmType="0"
+                           aei:collapedImageLocation="icons/bpmn/activity/CollapsedHandlerBlock.png"
+                           aei:expanded="true"
+                           aei:expandedSize="DIM {-1,-1}"
+                           aei:objectId="133683252674108157"
+                           aei:type="ON_ALARM"
+                           bpmnElement="133683252674108157">
+            <dc:Bounds height="-1" width="-1" x="39" y="-34"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {297,152}" aei:absoluteSize="DIM {44,13}"
+                              aei:anchor.location="0"
+                              aei:anchor.objectId="133683252674108157"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133683252674208159"
+                              aei:relative.location="LOC {-22,-13}"
+                              aei:text="On Alarm"
+                              bpmnElement="133683252674108157label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {10,10}" aei:absoluteSize="DIM {100,261}"
+                           aei:expanded="false"
+                           aei:expandedSize="DIM {100,261}"
+                           aei:name="Waits"
+                           aei:objectId="133683275695808729"
+                           aei:showTerminationHandler="false"
+                           aei:type="SCOPE"
+                           bpmnElement="133683275695808729"
+                           isHorizontal="false">
+            <dc:Bounds height="261" width="100" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {70,25}" aei:absoluteSize="DIM {27,13}"
+                              aei:anchor.location="11"
+                              aei:anchor.objectId="133683275695808729"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133683275696108747"
+                              aei:relative.location="LOC {0,5}"
+                              aei:text="Waits"
+                              bpmnElement="133683275695808729label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {15,15}" aei:absoluteSize="DIM {90,250}"
+                           aei:objectId="133683275696108749"
+                           aei:type="SEQUENCE"
+                           bpmnElement="133683275696108749"
+                           isHorizontal="false">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {25,25}" aei:absoluteSize="DIM {70,60}"
+                           aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:name="WaitToLeave"
+                           aei:objectId="133682436540206393"
+                           aei:type="WAIT"
+                           aei:waitExpression="'P1D'"
+                           aei:waitExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:waitType="1"
+                           bpmnElement="133682436540206393">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {59,82}" aei:absoluteSize="DIM {63,13}"
+                              aei:anchor.location="1"
+                              aei:anchor.objectId="133682436540206393"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133682436540306395"
+                              aei:relative.location="LOC {-11,47}"
+                              aei:text="WaitToLeave"
+                              bpmnElement="133682436540206393label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {25,110}" aei:absoluteSize="DIM {70,60}"
+                           aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:name="WaitToMock"
+                           aei:objectId="133682345694105797"
+                           aei:type="WAIT"
+                           aei:waitExpression="'P1D'"
+                           aei:waitExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:waitType="1"
+                           bpmnElement="133682345694105797">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {59,167}" aei:absoluteSize="DIM {58,13}"
+                              aei:anchor.location="1"
+                              aei:anchor.objectId="133682345694105797"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133682345694205799"
+                              aei:relative.location="LOC {-11,47}"
+                              aei:text="WaitToMock"
+                              bpmnElement="133682345694105797label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {25,195}" aei:absoluteSize="DIM {70,60}"
+                           aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png"
+                           aei:name="WaitToMock2"
+                           aei:objectId="133682439524006977"
+                           aei:type="WAIT"
+                           aei:waitExpression="'2012-01-01'"
+                           aei:waitExpressionLang="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"
+                           aei:waitType="0"
+                           bpmnElement="133682439524006977">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {59,252}" aei:absoluteSize="DIM {64,13}"
+                              aei:anchor.location="1"
+                              aei:anchor.objectId="133682439524006977"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133682439524106979"
+                              aei:relative.location="LOC {-11,47}"
+                              aei:text="WaitToMock2"
+                              bpmnElement="133682439524006977label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {237,215}" aei:absoluteSize="DIM {145,88}"
+                           aei:actySimState="0"
+                           aei:bpelName=""
+                           aei:joinConditionComp=""
+                           aei:objectId="133683252674208161"
+                           aei:type="Sequence"
+                           bpmnElement="133683275695808729wrappingSequence"
+                           isHorizontal="false">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {426,155}" aei:absoluteSize="DIM {70,148}"
+                           aei:attachments=""
+                           aei:objectId="133683282035509459"
+                           aei:principal=""
+                           aei:type="ON_MESSAGE"
+                           bpmnElement="133683282035509459">
+            <dc:Bounds height="-1" width="-1" x="203" y="-20"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {442,152}" aei:absoluteSize="DIM {59,13}"
+                              aei:anchor.location="0"
+                              aei:anchor.objectId="133683282035509459"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133683282035509461"
+                              aei:relative.location="LOC {-29,-13}"
+                              aei:text="On Message"
+                              bpmnElement="133683282035509459label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {451,215}" aei:absoluteSize="DIM {21,33}"
+                           aei:objectId="133683282035509463"
+                           aei:type="SEQUENCE"
+                           bpmnElement="133683282035509463"
+                           isHorizontal="false">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {218,388}" aei:absoluteSize="DIM {70,60}"
+                           aei:name="helloWorld-Reply"
+                           aei:objectId="133682344329705565"
+                           aei:text="helloWorld-Reply"
+                           aei:type="REPLY"
+                           bpmnElement="133682344329705565">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {223,445}" aei:absoluteSize="DIM {81,13}"
+                              aei:anchor.location="1"
+                              aei:anchor.objectId="133682344329705565"
+                              aei:backgroundColor="RGB {255,255,255}"
+                              aei:objectId="133682344330105575"
+                              aei:relative.location="LOC {-40,47}"
+                              aei:text="helloWorld-Reply"
+                              bpmnElement="133682344329705565label">
+               <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:backgroundColor="RGB {226,226,226}" aei:borderColor="RGB {0,0,255}"
+                           aei:implicitScopeIO="INPUT"
+                           aei:objectId="133682346804905809"
+                           aei:type="ASSIGN"
+                           bpmnElement="133682346804905809">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:fromExpression="&lt;helloworld:helloWorldResponse xmlns:helloworld=&#34;http://test.bpelunit.net/waitprocess&#34;&gt;&#xA;   &lt;out&gt;{ $helloWorld/in/text() }&lt;/out&gt;&#xA;&lt;/helloworld:helloWorldResponse&gt;"
+                           aei:fromLanguage="urn:active-endpoints:expression-language:xquery1.0"
+                           aei:fromType="3"
+                           aei:objectId="133682346805005811"
+                           aei:toPart="parameters"
+                           aei:toVariable="parameters"
+                           aei:type="ASSIGN_COPY"
+                           bpmnElement="133682346805005811"/>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+   <bpel:extensions>
+      <bpel:extension mustUnderstand="no"
+                      namespace="http://www.activebpel.org/2009/02/bpel/extension/ignorable"/>
+      <bpel:extension mustUnderstand="no" namespace="http://www.omg.org/spec/BPMN/20100524/DI"/>
+   </bpel:extensions>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/"
+                location="../wsdl/helloworld.wsdl"
+                namespace="http://test.bpelunit.net/waitprocess"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink aei:id="133682344320005547" myRole="helloWorld" name="helloWorld"
+                        partnerLinkType="helloworld:helloWorld"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable element="helloworld:helloWorld" name="helloWorld"/>
+      <bpel:variable element="helloworld:event" name="event"/>
+   </bpel:variables>
+   <bpel:sequence aei:id="133682344729205789">
+      <bpel:receive aei:id="133682344329505563" createInstance="yes" operation="helloWorld"
+                    partnerLink="helloWorld"
+                    variable="helloWorld"/>
+      <bpel:pick aei:id="133683251515908085">
+         <bpel:onMessage aei:id="133683282035509459" operation="event" partnerLink="helloWorld"
+                         variable="event">
+            <bpel:empty aei:id="133683282035509463" aei:implicit="yes"/>
+         </bpel:onMessage>
+         <bpel:onAlarm aei:id="133683251516208095">
+            <bpel:for>'P1D'</bpel:for>
+            <bpel:scope aei:id="133683255549708169" name="Event_Handlers">
+               <bpel:eventHandlers>
+                  <bpel:onAlarm aei:id="133683268258508639">
+                     <bpel:for>'P1D'</bpel:for>
+                     <bpel:scope aei:id="133683268258608643">
+                        <bpel:empty aei:id="133683270704708699"/>
+                     </bpel:scope>
+                  </bpel:onAlarm>
+                  <bpel:onAlarm aei:id="133683268560708663">
+                     <bpel:until>'2012-01-01'</bpel:until>
+                     <bpel:scope aei:id="133683268560808667">
+                        <bpel:empty aei:id="133683271474708713"/>
+                     </bpel:scope>
+                  </bpel:onAlarm>
+               </bpel:eventHandlers>
+               <bpel:sequence aei:id="133683255550108189">
+                  <bpel:empty aei:id="133683255550108191"/>
+                  <bpel:empty aei:id="133683255550208193"/>
+               </bpel:sequence>
+            </bpel:scope>
+         </bpel:onAlarm>
+         <bpel:onAlarm aei:id="133683252674108157">
+            <bpel:until>'2012-01-01'</bpel:until>
+            <bpel:scope aei:id="133683275695808729" name="Waits">
+               <bpel:sequence aei:id="133683275696108749">
+                  <bpel:wait aei:id="133682436540206393" name="WaitToLeave">
+                     <bpel:for>'P1D'</bpel:for>
+                  </bpel:wait>
+                  <bpel:wait aei:id="133682345694105797" name="WaitToMock">
+                     <bpel:for>'P1D'</bpel:for>
+                  </bpel:wait>
+                  <bpel:wait aei:id="133682439524006977" name="WaitToMock2">
+                     <bpel:until>'2012-01-01'</bpel:until>
+                  </bpel:wait>
+               </bpel:sequence>
+            </bpel:scope>
+         </bpel:onAlarm>
+      </bpel:pick>
+      <bpel:scope aei:implicit="true" name="helloWorld-Reply">
+         <bpel:variables>
+            <bpel:variable messageType="helloworld:helloWorldResponse" name="parameters"/>
+         </bpel:variables>
+         <bpel:sequence>
+            <bpel:assign aei:id="133682346804905809">
+               <bpel:copy aei:id="133682346805005811">
+                  <bpel:from expressionLanguage="urn:active-endpoints:expression-language:xquery1.0">&lt;helloworld:helloWorldResponse xmlns:helloworld="http://test.bpelunit.net/waitprocess"&gt;
+   &lt;out&gt;{ $helloWorld/in/text() }&lt;/out&gt;
+&lt;/helloworld:helloWorldResponse&gt;</bpel:from>
+                  <bpel:to part="parameters" variable="parameters"/>
+               </bpel:copy>
+            </bpel:assign>
+            <bpel:reply aei:id="133682344329705565" name="helloWorld-Reply" operation="helloWorld"
+                        partnerLink="helloWorld"
+                        variable="parameters"/>
+         </bpel:sequence>
+      </bpel:scope>
+   </bpel:sequence>
+</bpel:process>

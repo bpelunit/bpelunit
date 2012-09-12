@@ -7,17 +7,17 @@ import java.io.FileOutputStream;
 
 import javax.xml.namespace.QName;
 
-import net.bpelunit.bpel.BpelFactory;
-import net.bpelunit.bpel.IAssign;
-import net.bpelunit.bpel.IBpelFactory;
-import net.bpelunit.bpel.ICopy;
-import net.bpelunit.bpel.IImport;
-import net.bpelunit.bpel.IPartnerLink;
-import net.bpelunit.bpel.IProcess;
-import net.bpelunit.bpel.IReceive;
-import net.bpelunit.bpel.IReply;
-import net.bpelunit.bpel.ISequence;
-import net.bpelunit.bpel.IVariable;
+import net.bpelunit.model.bpel.BpelFactory;
+import net.bpelunit.model.bpel.IAssign;
+import net.bpelunit.model.bpel.IBpelFactory;
+import net.bpelunit.model.bpel.ICopy;
+import net.bpelunit.model.bpel.IImport;
+import net.bpelunit.model.bpel.IPartnerLink;
+import net.bpelunit.model.bpel.IProcess;
+import net.bpelunit.model.bpel.IReceive;
+import net.bpelunit.model.bpel.IReply;
+import net.bpelunit.model.bpel.ISequence;
+import net.bpelunit.model.bpel.IVariable;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
