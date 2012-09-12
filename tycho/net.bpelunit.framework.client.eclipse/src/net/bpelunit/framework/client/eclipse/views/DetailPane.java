@@ -76,7 +76,7 @@ public class DetailPane {
 	class StateDataContentProvider implements IStructuredContentProvider {
 
 		public Object[] getElements(Object inputElement) {
-			return ((List) inputElement).toArray();
+			return ((List<?>) inputElement).toArray();
 		}
 
 		public void dispose() {
