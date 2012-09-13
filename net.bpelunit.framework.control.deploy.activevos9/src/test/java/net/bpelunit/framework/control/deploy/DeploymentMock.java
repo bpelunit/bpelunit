@@ -59,6 +59,11 @@ public class DeploymentMock implements IDeployment {
 		public Map<String, String> getChangedEndpoints() {
 			return changedEndpoints;
 		}
+
+		@Override
+		public void addXSDImport(String wsdlFileName, InputStream contents) {
+			// not used in test
+		}
 	}
 
 	private List<BPELProcessMock> processes = new ArrayList<BPELProcessMock>();
