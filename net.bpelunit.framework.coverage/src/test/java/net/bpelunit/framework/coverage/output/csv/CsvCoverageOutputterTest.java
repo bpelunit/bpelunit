@@ -1,4 +1,4 @@
-package net.bpelunit.framework.coverage.output.html;
+package net.bpelunit.framework.coverage.output.csv;
 
 import static org.junit.Assert.*;
 
@@ -14,11 +14,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class HtmlCoverageOutputterTest {
+public class CsvCoverageOutputterTest {
 
 	private CoverageDocument doc;
 	private File outputDirectory;
-	private HtmlCoverageOutputter outputter = new HtmlCoverageOutputter();
+	private CsvCoverageOutputter outputter = new CsvCoverageOutputter();
 	
 	@Before
 	public void setUp() {
@@ -33,12 +33,16 @@ public class HtmlCoverageOutputterTest {
 		outputter.exportCoverageInformation(doc);
 		
 		File[] files = outputDirectory.listFiles();
-		assertEquals(1, files.length);
-		assertEquals("testOutput.html", files[0].getName());
+		assertEquals(2, files.length);
+		assertEquals("testOutput.Metric1.csv", files[0].getName());
+		assertEquals("testOutput.Metric2.csv", files[1].getName());
 		
 		String actualContents = new String(FileUtil.readFile(files[0]));
-		String expectedContents = new String(FileUtil.readFile(new File("src/test/resources/htmloutputter/testOutput.html")));
+		String expectedContents = new String(FileUtil.readFile(new File("src/test/resources/csvoutputter/testOutput.Metric1.csv")));
+		assertEquals(expectedContents, actualContents);
 		
+		actualContents = new String(FileUtil.readFile(files[1]));
+		expectedContents = new String(FileUtil.readFile(new File("src/test/resources/csvoutputter/testOutput.Metric2.csv")));
 		assertEquals(expectedContents, actualContents);
 	}
 	
@@ -53,21 +57,25 @@ public class HtmlCoverageOutputterTest {
 	}
 
 	@Test
-	public void testOutputWithStylesheet() throws IOException {
-		initializeOutputDirectory("testOutputWithStylesheet");
-		DummyCoverage coverage = DummyCoverage.createDummyCoverage("testOutputWithStylesheet");
+	public void testOutputWithSeparator() throws IOException {
+		initializeOutputDirectory("testOutputWithSeparator");
+		DummyCoverage coverage = DummyCoverage.createDummyCoverage("testOutputWithSeparator");
 		doc.getCoverageInformationForProcesses().add(coverage);
 		
-		outputter.setStylesheet("../../../src/main/resources/bpelunit-report.css");
+		outputter.setSeperator("|");
 		outputter.exportCoverageInformation(doc);
 		
 		File[] files = outputDirectory.listFiles();
-		assertEquals(1, files.length);
-		assertEquals("testOutputWithStylesheet.html", files[0].getName());
+		assertEquals(2, files.length);
+		assertEquals("testOutputWithSeparator.Metric1.csv", files[0].getName());
+		assertEquals("testOutputWithSeparator.Metric2.csv", files[1].getName());
 		
 		String actualContents = new String(FileUtil.readFile(files[0]));
-		String expectedContents = new String(FileUtil.readFile(new File("src/test/resources/htmloutputter/testOutputWithStylesheet.html")));
+		String expectedContents = new String(FileUtil.readFile(new File("src/test/resources/csvoutputter/testOutputWithSeparator-Metric1.csv")));
+		assertEquals(expectedContents, actualContents);
 		
+		actualContents = new String(FileUtil.readFile(files[1]));
+		expectedContents = new String(FileUtil.readFile(new File("src/test/resources/csvoutputter/testOutputWithSeparator-Metric2.csv")));
 		assertEquals(expectedContents, actualContents);
 	}
 	

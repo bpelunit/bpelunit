@@ -1,4 +1,4 @@
-package net.bpelunit.framework.coverage.output.html;
+package net.bpelunit.framework.coverage.output;
 
 import net.bpelunit.framework.coverage.result.ICoverageResult;
 
@@ -20,27 +20,22 @@ public class DummyCoverageResult implements ICoverageResult {
 		this.avg = avg;
 	}
 
-	@Override
 	public double avg() {
 		return avg;
 	}
 
-	@Override
 	public String getBPELElementReference() {
 		return elementReference;
 	}
 
-	@Override
 	public int getExecutionCount() {
 		return executionCount;
 	}
 
-	@Override
 	public double max() {
 		return max;
 	}
 
-	@Override
 	public double min() {
 		return min;
 	}

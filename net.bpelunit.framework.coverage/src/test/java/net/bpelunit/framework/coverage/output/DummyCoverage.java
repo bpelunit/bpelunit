@@ -1,4 +1,4 @@
-package net.bpelunit.framework.coverage.output.html;
+package net.bpelunit.framework.coverage.output;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +33,10 @@ public class DummyCoverage implements IBPELCoverage {
 		this.processName = new QName("http://www.example.org", processLocalName);
 	}
 	
-	@Override
 	public QName getProcessName() {
 		return this.processName;
 	}
 
-	@Override
 	public List<IMetricCoverage> getMetricCoverages() {
 		return this.metricCoverages;
 	}

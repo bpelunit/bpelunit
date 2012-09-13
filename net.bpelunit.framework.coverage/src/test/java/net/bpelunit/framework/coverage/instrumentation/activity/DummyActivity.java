@@ -18,46 +18,37 @@ class DummyActivity implements IActivity {
 		this.activityType = activityType;
 	}
 	
-	@Override
 	public IBpelFactory getFactory() {
 		return null;
 	}
 
-	@Override
 	public List<? extends IDocumentation> getDocumentation() {
 		return null;
 	}
 
-	@Override
 	public IDocumentation addDocumentation() {
 		return null;
 	}
 
-	@Override
 	public void visit(IVisitor v) {
 	}
 
-	@Override
 	public boolean isBasicActivity() {
 		return true;
 	}
 
-	@Override
 	public String getActivityName() {
 		return activityType;
 	}
 
-	@Override
 	public String getName() {
 		return activityName;
 	}
 
-	@Override
 	public String getXPathInDocument() {
 		return "//" + activityType + "['" + activityName + "']";
 	}
 
-	@Override
 	public void setName(String newName) {
 		throw new UnsupportedOperationException("Test Mock");
 	}

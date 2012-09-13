@@ -20,27 +20,22 @@ public class ActivityCoverageResult implements ICoverageResult {
 	private double avg;
 	private int executionCount;
 
-	@Override
 	public String getBPELElementReference() {
 		return bpelElementReference;
 	}
 
-	@Override
 	public double min() {
 		return min;
 	}
 
-	@Override
 	public double max() {
 		return max;
 	}
 
-	@Override
 	public double avg() {
 		return avg;
 	}
 
-	@Override
 	public int getExecutionCount() {
 		return executionCount;
 	}

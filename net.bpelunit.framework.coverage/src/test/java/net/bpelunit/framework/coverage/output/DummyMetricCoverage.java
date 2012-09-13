@@ -1,4 +1,4 @@
-package net.bpelunit.framework.coverage.output.html;
+package net.bpelunit.framework.coverage.output;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +15,14 @@ public class DummyMetricCoverage implements IMetricCoverage {
 		this.metricId = metricName;
 	}
 	
-	@Override
 	public String getMetricName() {
 		return this.metricId;
 	}
 
-	@Override
 	public String getMetricId() {
 		return this.metricId;
 	}
 
-	@Override
 	public List<ICoverageResult> getCoverageResult() {
 		return coverageResults;
 	}

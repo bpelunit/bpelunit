@@ -69,118 +69,94 @@ public class ActivityCoverageInstrumenter extends AbstractInstrumenter {
 	
 	/*---- Visitor Functions ----*/
 	
-	@Override
 	public void visit(IAssign a) {
 		instrumentActivity(a);
 	}
 
-	@Override
 	public void visit(ICompensate a) {
 		instrumentActivity(a);
 	}
 
-
-	@Override
 	public void visit(ICompensateScope a) {
 		instrumentActivity(a);
 	}
 
-	@Override
 	public void visit(IEmpty a) {
 		instrumentActivity(a);		
 	}
 
-	@Override
 	public void visit(IExit a) {
 		instrumentActivity(a);		
 	}
 
-	@Override
 	public void visit(IFlow a) {
 		// Structured Activity
 	}
 
-	@Override
 	public void visit(IForEach a) {
 		// Structured Activity		
 	}
 
-	@Override
 	public void visit(IIf a) {
 		// Structured Activity		
 	}
 
-	@Override
 	public void visit(IInvoke a) {
 		instrumentActivity(a);		
 	}
 
-	@Override
 	public void visit(IPick a) {
 		// Structured Activity		
 	}
 
-	@Override
 	public void visit(IProcess a) {
 		// Structured Activity		
 	}
 
-	@Override
 	public void visit(IReceive a) {
 		instrumentActivity(a);		
 	}
 
-	@Override
 	public void visit(IRepeatUntil a) {
 		// Structured Activity		
 	}
 
-	@Override
 	public void visit(IReply a) {
 		instrumentActivity(a);		
 	}
 
-	@Override
 	public void visit(IRethrow a) {
 		instrumentActivity(a);		
 	}
 
-	@Override
 	public void visit(IScope a) {
 		// Structured Activity		
 	}
 
-	@Override
 	public void visit(ISequence a) {
 		// Structured Activity		
 	}
 
-	@Override
 	public void visit(IThrow a) {
 		instrumentActivity(a);		
 	}
 
-	@Override
 	public void visit(IValidate a) {
 		instrumentActivity(a);		
 	}
 
-	@Override
 	public void visit(IWait a) {
 		instrumentActivity(a);		
 	}
 
-	@Override
 	public void visit(IWhile a) {
 		// Structured Activity		
 	}
 
-	@Override
 	public void visit(IOnAlarm a) {
 		// Structured Activity	
 	}
 
-	@Override
 	public void visit(IOnMessage a) {
 		// Structured Activity	
 	}

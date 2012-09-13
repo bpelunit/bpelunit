@@ -76,17 +76,14 @@ public class ActivityMetricCoverage implements IMetricCoverage {
 		results.add(new ActivityCoverageResult("Overall", min, max, (double)total / (double)activityCount, total));
 	}
 
-	@Override
 	public String getMetricName() {
 		return "Activity Coverage";
 	}
 
-	@Override
 	public String getMetricId() {
 		return "ACTIVITY";
 	}
 
-	@Override
 	public List<ICoverageResult> getCoverageResult() {
 		return new ArrayList<ICoverageResult>(results);
 	}

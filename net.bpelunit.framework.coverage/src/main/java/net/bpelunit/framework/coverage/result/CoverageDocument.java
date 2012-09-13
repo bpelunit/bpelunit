@@ -14,12 +14,10 @@ public class CoverageDocument implements ICoverageDocument {
 		this.suite = suite;
 	}
 
-	@Override
 	public File getExecutedSuite() {
 		return this.suite;
 	}
 
-	@Override
 	public List<IBPELCoverage> getCoverageInformationForProcesses() {
 		return this.coverageInformation;
 	}
