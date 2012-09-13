@@ -20,7 +20,6 @@ public abstract class AbstractCoverageOutputter implements ICoverageOutputter {
 		outputDirectory = new File(directory);
 	}
 	
-	@Override
 	public final void exportCoverageInformation(ICoverageDocument doc) throws IOException {
 		if(getOutputDirectory() == null) {
 			outputDirectory = doc.getExecutedSuite().getParentFile();
