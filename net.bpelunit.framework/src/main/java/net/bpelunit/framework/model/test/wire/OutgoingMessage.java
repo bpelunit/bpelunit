@@ -8,6 +8,9 @@ package net.bpelunit.framework.model.test.wire;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.bpelunit.framework.control.run.BlackBoard;
+import net.bpelunit.framework.control.run.BlackBoardKey;
+
 /**
  * An OutgoingMessage object is a plain, on-the-wire representation of an
  * "outgoing message" from the frameworks point of view, be it a response to a
@@ -19,7 +22,7 @@ import java.util.Map;
  * @author Philip Mayer, Daniel Luebke
  * 
  */
-public class OutgoingMessage {
+public class OutgoingMessage implements BlackBoardKey {
 
 	public OutgoingMessage() {
 	}
@@ -91,5 +94,10 @@ public class OutgoingMessage {
 	
 	public String[] getProtocolOptionNames() {
 		return protocolOptions.keySet().toArray(new String[protocolOptions.size()]);
+	}
+
+	@Override
+	public boolean canStillProvideValue(BlackBoard<?, ?> blackboard) {
+		return true;
 	}
 }
