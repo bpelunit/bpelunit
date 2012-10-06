@@ -14,7 +14,7 @@
   <name>BPELUnit :: Tycho Parent</name>
 
   <properties>
-    <tycho-version>0.15.0</tycho-version>
+    <tycho.version>0.15.0</tycho.version>
   </properties>
 
   <repositories>
@@ -30,16 +30,43 @@
       <plugin>
         <groupId>org.eclipse.tycho</groupId>
         <artifactId>tycho-maven-plugin</artifactId>
-        <version>${tycho-version}</version>
+        <version>${tycho.version}</version>
         <extensions>true</extensions>
       </plugin>
       <plugin>
         <groupId>org.eclipse.tycho</groupId>
         <artifactId>target-platform-configuration</artifactId>
-        <version>${tycho-version}</version>
+        <version>${tycho.version}</version>
         <configuration>
           <resolver>p2</resolver>
           <pomDependencies>consider</pomDependencies>
+          <environments>
+              <environment>
+                  <os>win32</os>
+                  <ws>win32</ws>
+                  <arch>x86</arch>
+              </environment>
+              <environment>
+                  <os>win32</os>
+                  <ws>win32</ws>
+                  <arch>x86_64</arch>
+              </environment>
+              <environment>
+                  <os>linux</os>
+                  <ws>gtk</ws>
+                  <arch>x86</arch>
+              </environment>
+              <environment>
+                  <os>linux</os>
+                  <ws>gtk</ws>
+                  <arch>x86_64</arch>
+              </environment>
+              <environment>
+                  <os>macosx</os>
+                  <ws>cocoa</ws>
+                  <arch>x86_64</arch>
+              </environment>
+          </environments>
         </configuration>
       </plugin>
     </plugins>
@@ -52,4 +79,62 @@
     <module>net.bpelunit.eclipse.feature</module>
     <module>net.bpelunit.eclipse.updatesite</module>
   </modules>
+
+  <dependencies>
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>framework</artifactId>
+          <version>${project.version}</version>
+          <classifier>bundle</classifier>
+      </dependency>
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>datasource-csv</artifactId>
+          <version>${project.version}</version>
+          <classifier>bundle</classifier>
+      </dependency>
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>datasource-excel</artifactId>
+          <version>${project.version}</version>
+          <classifier>bundle</classifier>
+      </dependency>
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>datasource-html</artifactId>
+          <version>${project.version}</version>
+          <classifier>bundle</classifier>
+      </dependency>
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>datasource-ods</artifactId>
+          <version>${project.version}</version>
+          <classifier>bundle</classifier>
+      </dependency>
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>deployer-activevos9</artifactId>
+          <version>${project.version}</version>
+          <classifier>bundle</classifier>
+      </dependency>
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>model-bpel</artifactId>
+          <version>${project.version}</version>
+          <classifier>bundle</classifier>
+      </dependency>
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>util</artifactId>
+          <version>${project.version}</version>
+          <classifier>bundle</classifier>
+      </dependency>
+      <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>testdataexternalizer</artifactId>
+          <version>${project.version}</version>
+          <classifier>bundle</classifier>
+      </dependency>
+  </dependencies>
+
 </project>

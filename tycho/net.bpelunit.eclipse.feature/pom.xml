@@ -13,37 +13,4 @@
   <packaging>eclipse-feature</packaging>
   <name>BPELUnit :: Eclipse Feature</name>
 
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>framework</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>datasource-csv</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>datasource-excel</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>datasource-html</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>datasource-ods</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-  </dependencies>
-
 </project>

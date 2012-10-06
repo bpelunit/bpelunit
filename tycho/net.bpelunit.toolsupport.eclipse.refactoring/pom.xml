@@ -12,19 +12,4 @@
   <version>1.6.1-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
   <name>BPELUnit :: Eclipse Standalone Refactoring Tools</name>
-
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>framework</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>testdata-externalizer</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
-
 </project>
