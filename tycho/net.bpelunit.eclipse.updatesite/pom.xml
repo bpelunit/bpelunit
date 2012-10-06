@@ -18,45 +18,12 @@
       <plugin>
         <groupId>org.eclipse.tycho</groupId>
         <artifactId>tycho-packaging-plugin</artifactId>
-        <version>${tycho-version}</version>
+        <version>${tycho.version}</version>
         <configuration>
           <archiveSite>true</archiveSite>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>framework</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>datasource-csv</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>datasource-excel</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>datasource-html</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>datasource-ods</artifactId>
-      <version>${project.version}</version>
-      <classifier>bundle</classifier>
-    </dependency>
-  </dependencies>
 
 </project>

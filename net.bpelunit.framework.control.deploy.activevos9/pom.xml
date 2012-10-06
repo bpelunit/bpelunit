@@ -73,7 +73,7 @@
 							net.bpelunit.framework.control.deployer.activevos9;singleton:=true
 						</Bundle-SymbolicName>
 						<Require-Bundle>
-							net.bpelunit.framework.client.eclipse,net.bpelunit.framework
+							net.bpelunit.framework.client.eclipse,net.bpelunit.framework,net.bpelunit.util
 						</Require-Bundle>
 						<Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
 						<Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
@@ -90,7 +90,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.bpelunit</groupId>
-			<artifactId>net.bpelunit.util</artifactId>
+			<artifactId>util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -100,7 +100,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.bpelunit</groupId>
-			<artifactId>net.bpelunit.model.bpel</artifactId>
+			<artifactId>model-bpel</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

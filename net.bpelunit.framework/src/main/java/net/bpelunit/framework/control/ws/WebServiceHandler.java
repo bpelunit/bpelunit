@@ -15,6 +15,7 @@ import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.PartnerNotFoundException;
 import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.report.ArtefactStatus.StatusCode;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
@@ -110,6 +111,10 @@ public class WebServiceHandler extends AbstractHttpHandler {
 		PartnerTrack key;
 		try {
 			key = fRunner.findPartnerTrackForName(partnerName);
+			if (key.isDone()) {
+				wsLogger.info("Partner track " + partnerName + " has already finished its execution: replying with 404");
+				return;
+			}
 		} catch (PartnerNotFoundException e1) {
 			// Let default 404 handler handle this situation
 			wsLogger.info(e1.getMessage());
@@ -140,10 +145,8 @@ public class WebServiceHandler extends AbstractHttpHandler {
 			wsLogger.debug("Posting incoming message to blackboard...");
 			fRunner.putWSIncomingMessage(key, iMessage);
 
-			OutgoingMessage m2;
-
 			wsLogger.debug("Waiting for framework to supply answer...");
-			m2 = fRunner.getWSOutgoingMessage(key);
+			final OutgoingMessage m2 = fRunner.getWSOutgoingMessage(key);
 
 			wsLogger.debug("Got answer from framework, now sending...");
 

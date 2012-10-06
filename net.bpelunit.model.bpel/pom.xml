@@ -7,7 +7,7 @@
 		<version>1.6.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>net.bpelunit.model.bpel</artifactId>
+	<artifactId>model-bpel</artifactId>
 	<version>1.6.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>BPELUnit :: BPEL Model</name>
@@ -60,17 +60,15 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- In addition to the regular .jar, generate an OSGi bundle Tycho can 
-				reuse -->
+			<!-- In addition to the regular .jar, generate an OSGi bundle Tycho can reuse -->
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<configuration>
 					<instructions>
-						<Export-Package>net.bpelunit.*;schemaorg_apache_xmlbeans.system.*</Export-Package>
-						<_exportcontents>com.ibm.wsdl.*;javax.wsdl.*;org.apache.xmlbeans.*;org.apache.commons.lang;org.apache.log4j.*</_exportcontents>
+						<Export-Package>net.bpelunit.model.bpel</Export-Package>
 						<Import-Package>!*</Import-Package>
-						<Bundle-SymbolicName>net.bpelunit.framework;symbolic:=true</Bundle-SymbolicName>
+						<Bundle-SymbolicName>net.bpelunit.model.bpel;symbolic:=true</Bundle-SymbolicName>
 						<Embed-Transitive>true</Embed-Transitive>
 						<Embed-Directory>target/dependency</Embed-Directory>
 						<Embed-Dependency>*;scope=compile;artifactId=!stax-api</Embed-Dependency>
