@@ -9,15 +9,17 @@ public class DummyCoverageResult implements ICoverageResult {
 	private int executionCount;
 	private double max;
 	private double min;
+	private double coverage;
 	
 	public DummyCoverageResult(String elementReference, int executionCount,
-			double min, double max, double avg) {
+			double min, double max, double avg, double coverage) {
 		super();
 		this.elementReference = elementReference;
 		this.executionCount = executionCount;
 		this.min = min;
 		this.max = max;
 		this.avg = avg;
+		this.coverage = coverage;
 	}
 
 	public double avg() {
@@ -40,4 +42,7 @@ public class DummyCoverageResult implements ICoverageResult {
 		return min;
 	}
 
+	public double coverage() {
+		return coverage;
+	}
 }

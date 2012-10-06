@@ -78,6 +78,7 @@ public class ActivityMetricCoverageTest {
 		assertEquals(10.0, currentResult.avg(), 0.001);
 		assertEquals(10.0, currentResult.min(), 0.001);
 		assertEquals(10.0, currentResult.max(), 0.001);
+		assertEquals(1.0, currentResult.coverage(), 0.001);
 		
 		currentResult = result.get(1);
 		assertEquals("//assign['A2']", currentResult.getBPELElementReference());
@@ -85,6 +86,7 @@ public class ActivityMetricCoverageTest {
 		assertEquals(1.0, currentResult.avg(), 0.001);
 		assertEquals(1.0, currentResult.min(), 0.001);
 		assertEquals(1.0, currentResult.max(), 0.001);
+		assertEquals(1.0, currentResult.coverage(), 0.001);
 		
 		currentResult = result.get(2);
 		assertEquals("//assign", currentResult.getBPELElementReference());
@@ -92,6 +94,7 @@ public class ActivityMetricCoverageTest {
 		assertEquals(5.5, currentResult.avg(), 0.001);
 		assertEquals(1.0, currentResult.min(), 0.001);
 		assertEquals(10.0, currentResult.max(), 0.001);
+		assertEquals(1.0, currentResult.coverage(), 0.001);
 		
 		currentResult = result.get(3);
 		assertEquals("Overall", currentResult.getBPELElementReference());
@@ -99,6 +102,7 @@ public class ActivityMetricCoverageTest {
 		assertEquals(5.5, currentResult.avg(), 0.001);
 		assertEquals(1.0, currentResult.min(), 0.001);
 		assertEquals(10.0, currentResult.max(), 0.001);
+		assertEquals(1.0, currentResult.coverage(), 0.001);
 	}
 	
 	@Test
@@ -160,6 +164,45 @@ public class ActivityMetricCoverageTest {
 		assertEquals(8.25, currentResult.avg(), 0.001);
 		assertEquals(1.0, currentResult.min(), 0.001);
 		assertEquals(20.0, currentResult.max(), 0.001);
+	}
+	@Test
+	public void testTwoActivityTypesTwoActivitiesEachNot100Percent() throws Exception {
+		addActivityEntry("E1", "empty", 20);
+		addActivityEntry("A1", "assign", 10);
+		addActivityEntry("A2", "assign", 0);
+		addActivityEntry("E2", "empty", 0);
+		ActivityMetricCoverage amc = new ActivityMetricCoverage(markers, markerMapping, markerCounter);
+		
+		List<ICoverageResult> result = amc.getCoverageResult();
+		assertEquals(7, result.size());
+		
+		ICoverageResult currentResult = result.get(1);
+		assertEquals("//assign['A1']", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.get(2);
+		assertEquals("//assign['A2']", currentResult.getBPELElementReference());
+		assertEquals(0.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.get(0);
+		assertEquals("//empty['E1']", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.get(3);
+		assertEquals("//empty['E2']", currentResult.getBPELElementReference());
+		assertEquals(0.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.get(4);
+		assertEquals("//assign", currentResult.getBPELElementReference());
+		assertEquals(0.5, currentResult.coverage(), 0.001);
+		
+		currentResult = result.get(5);
+		assertEquals("//empty", currentResult.getBPELElementReference());
+		assertEquals(0.5, currentResult.coverage(), 0.001);
+		
+		currentResult = result.get(6);
+		assertEquals("Overall", currentResult.getBPELElementReference());
+		assertEquals(0.5, currentResult.coverage(), 0.001);
 	}
 	
 	private void addActivityEntry(String activityName, String activityType, int counter) {

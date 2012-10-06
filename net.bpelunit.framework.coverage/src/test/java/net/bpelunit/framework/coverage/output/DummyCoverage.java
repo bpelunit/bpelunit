@@ -18,7 +18,7 @@ public class DummyCoverage implements IBPELCoverage {
 			dc.getMetricCoverages().add(dmc);
 			
 			for(int j = 1; j <= 10; j++) {
-				DummyCoverageResult dcr = new DummyCoverageResult("//A[" + j + "]", j, 0.0, (double)j, (double)j / 2.0);
+				DummyCoverageResult dcr = new DummyCoverageResult("//A[" + j + "]", j, 0.0, (double)j, (double)j / 2.0, 1.0);
 				dmc.getCoverageResult().add(dcr);
 			}
 		}
