@@ -27,11 +27,11 @@ public class CsvCoverageOutputter extends AbstractCoverageOutputter {
 			Writer writer = new FileWriter(csvFile);
 
 			try {
-				writer.write(String.format("Element%sMin%sMax%sTotal%sAvg\n", separator, separator, separator, separator));
+				writer.write(String.format("Element%sMin%sMax%sTotal%sAvg%sCoverage\n", separator, separator, separator, separator, separator));
 
 				for (ICoverageResult result : metricCoverage
 						.getCoverageResult()) {
-					writer.write(String.format("%s%s%s%s%s%s%s%s%s\n", 
+					writer.write(String.format("%s%s%s%s%s%s%s%s%s%s%s\n", 
 							result.getBPELElementReference(),
 							separator,
 							result.min(),
@@ -40,7 +40,9 @@ public class CsvCoverageOutputter extends AbstractCoverageOutputter {
 							separator,
 							result.getExecutionCount(),
 							separator,
-							result.avg()
+							result.avg(),
+							separator,
+							result.coverage()
 						));
 				}
 
