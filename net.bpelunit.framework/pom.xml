@@ -160,7 +160,12 @@
     </dependency>
     <dependency>
       <groupId>net.bpelunit</groupId>
-      <artifactId>net.bpelunit.util</artifactId>
+      <artifactId>model-bpel</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.bpelunit</groupId>
+      <artifactId>util</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

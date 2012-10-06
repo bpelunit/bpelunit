@@ -7,7 +7,7 @@
     <version>1.6.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>net.bpelunit.util</artifactId>
+  <artifactId>util</artifactId>
   <version>1.6.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>BPELUnit :: Utilities</name>

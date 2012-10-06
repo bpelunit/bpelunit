@@ -87,7 +87,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.bpelunit</groupId>
-			<artifactId>net.bpelunit.util</artifactId>
+			<artifactId>util</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
