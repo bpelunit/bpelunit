@@ -24,25 +24,27 @@ public interface IBPELProcess {
 	 * @param wsdlFileName
 	 *            File name of the WSDL, can be changed in order to avoid naming
 	 *            conflicts in the deployment
+	 * @param namespace 
 	 * @param contents
 	 *            Contents of the WSDL file that will be included in the
 	 *            deployment archive and will be referenced by the BPEL Process
+	 * @throws DeploymentException 
 	 */
-	void addWSDLImport(String wsdlFileName, InputStream contents);
+	void addWSDLImport(String wsdlFileName, String namespace, InputStream contents) throws DeploymentException;
 
 	/**
 	 * Adds a new import to BPEL and updates the deployment accordingly. Changes
 	 * will immediately reflect on the BPEL DOM Tree that can be retrieved by
 	 * getBpelXml().
 	 * 
-	 * @param wsdlFileName
+	 * @param xsdFileName
 	 *            File name of the WSDL, can be changed in order to avoid naming
 	 *            conflicts in the deployment
 	 * @param contents
 	 *            Contents of the WSDL file that will be included in the
 	 *            deployment archive and will be referenced by the BPEL Process
 	 */
-	void addXSDImport(String wsdlFileName, InputStream contents);
+	void addXSDImport(String xsdFileName, String namespace, InputStream contents);
 
 	/**
 	 * Returns an instance of the BPEL XML code that will be deployed. Changes
