@@ -68,9 +68,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Export-Package>net.bpelunit.*;schemaorg_apache_xmlbeans.system.*</Export-Package>
-            <_exportcontents>com.ibm.wsdl.*;javax.wsdl.*;org.apache.xmlbeans.*;org.apache.commons.lang;org.apache.log4j.*</_exportcontents>
+            <Export-Package>!net.bpelunit.util;!net.bpelunit.bpel;!net.bpelunit.model.*;net.bpelunit.control.deploy;net.bpelunit.*;schemaorg_apache_xmlbeans.system.*</Export-Package>
+            <_exportcontents>com.ibm.wsdl.*;javax.wsdl.*;org.apache.xmlbeans.*;org.apache.commons.lang;org.apache.log4j.*;de.schlichtherle.io.*</_exportcontents>
             <Import-Package>!*</Import-Package>
+            <Require-Bundle>net.bpelunit.util,net.bpelunit.model.bpel</Require-Bundle>
             <Bundle-SymbolicName>net.bpelunit.framework;symbolic:=true</Bundle-SymbolicName>
             <Embed-Transitive>true</Embed-Transitive>
             <Embed-Directory>target/dependency</Embed-Directory>
@@ -130,10 +131,6 @@
       <groupId>xmlunit</groupId>
       <artifactId>xmlunit</artifactId>
     </dependency>
-    <!-- dependency>
-      <groupId>com.sun.xml.messaging.saaj</groupId>
-      <artifactId>saaj-impl</artifactId>
-    </dependency-->
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
