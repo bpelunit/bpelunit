@@ -4,7 +4,7 @@ Changelog
 Staged for next version
 -----------------------
 
-* None yet: please check back soon!
+* _Fix_: BPELUnit previously produced test timeouts by waiting for skipped activities or partner tracks (using the `assume` attribute) to provide replies to requests from the composition. This has now been fixed.
 
 Version 1.6.0
 -----------------------
