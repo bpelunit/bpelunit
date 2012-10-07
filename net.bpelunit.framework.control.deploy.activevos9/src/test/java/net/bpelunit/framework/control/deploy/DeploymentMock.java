@@ -36,7 +36,7 @@ public class DeploymentMock implements IDeployment {
 		}
 
 		@Override
-		public void addWSDLImport(String wsdlFileName, InputStream contents) {
+		public void addWSDLImport(String wsdlFileName, String namespace, InputStream contents) {
 			// not used in test
 		}
 
@@ -61,7 +61,7 @@ public class DeploymentMock implements IDeployment {
 		}
 
 		@Override
-		public void addXSDImport(String wsdlFileName, InputStream contents) {
+		public void addXSDImport(String wsdlFileName, String namespace, InputStream contents) {
 			// not used in test
 		}
 	}

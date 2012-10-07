@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://schemas.active-endpoints.com/catalog/2006/07/catalog.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="catalog" type="cat:catalogType" xmlns:cat="http://schemas.active-endpoints.com/catalog/2006/07/catalog.xsd"/>
+  <xs:complexType name="wsdlEntryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="location"/>
+        <xs:attribute type="xs:string" name="classpath"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="schemaEntryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="location"/>
+        <xs:attribute type="xs:string" name="classpath"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="catalogType">
+    <xs:sequence>
+      <xs:element type="cat:wsdlEntryType" name="wsdlEntry" xmlns:cat="http://schemas.active-endpoints.com/catalog/2006/07/catalog.xsd" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element type="cat:schemaEntryType" name="schemaEntry" xmlns:cat="http://schemas.active-endpoints.com/catalog/2006/07/catalog.xsd" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="URI"/>
+  </xs:complexType>
+</xs:schema>

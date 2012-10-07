@@ -2,10 +2,13 @@ package net.bpelunit.framework.control.deploy.activevos9;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,6 +20,7 @@ import net.bpelunit.framework.control.deploy.IBPELProcess;
 import net.bpelunit.framework.control.deploy.activevos9.ActiveVOS9Deployment.BPELInfo;
 import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.model.bpel.IImport;
 import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.util.FileUtil;
 import net.bpelunit.util.XMLUtil;
@@ -26,10 +30,11 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
-import de.schlichtherle.io.FileOutputStream;
+import com.activeEndpoints.schemas.catalog.x2006.x07.catalog.WsdlEntryType;
 
 public class ActiveVOS9DeploymentTest {
 
@@ -71,8 +76,7 @@ public class ActiveVOS9DeploymentTest {
 	@Test
 	public void testDeploymentWithOneProcess() throws Exception {
 		deployment = new ActiveVOS9Deployment(new File(TEST_RESOURCE_DIR
-				+ "bpelunit-tc1.bpr")) {
-		};
+				+ "bpelunit-tc1.bpr"));
 
 		XPathTool xpath = deployment.createXPathToolForPdd();
 
@@ -142,6 +146,43 @@ public class ActiveVOS9DeploymentTest {
 		assertEquals(actualPddString, filePddString);
 	}
 
+	@Test
+	@Ignore
+	public void testAddFilesToProcess() throws Exception {
+		deployment = new ActiveVOS9Deployment(new File("src/test/resources/simplebpel.bpr"));
+		
+		List<IBPELProcess> processes = deployment.getBPELProcesses();
+		assertEquals(1, processes.size());
+		BPELInfo firstProcess = (BPELInfo)processes.get(0);
+		
+		assertEquals("../../../wsdl/bpelunit/coverage.wsdl", firstProcess.calculateRelativePathTo("coverage.wsdl"));
+
+		File newBPR = saveNewDeployment();
+		FileInputStream in = null;
+		FileOutputStream out = null;
+		try {
+			in = new FileInputStream(newBPR);
+			out = new FileOutputStream(new File("target/simplebpel_updated.bpr"));
+			IOUtils.copy(in, out);
+		} finally {
+			IOUtils.closeQuietly(in);
+			IOUtils.closeQuietly(out);
+		}
+		
+		firstProcess.addWSDLImport("coverage.wsdl", "http://www.example.org/coverage/", getClass().getResourceAsStream("coverage.wsdl"));
+		
+		IProcess bpelModel = firstProcess.getProcessModel();
+		IImport lastImport = bpelModel.getImports().get(bpelModel.getImports().size()-1);
+		assertEquals("http://www.example.org/coverage/", lastImport.getNamespace());
+		assertTrue(lastImport.getLocation().endsWith("coverage.wsdl"));
+		assertEquals(IImport.IMPORTTYPE_WSDL, lastImport.getImportType());
+		
+		WsdlEntryType[] wsdlsInCatalog = deployment.catalogDoc.getCatalog().getWsdlEntryArray();
+		WsdlEntryType lastWsdl = wsdlsInCatalog[wsdlsInCatalog.length - 1];
+		assertEquals("project:/com.innoq.simplebpel/wsdl/bpelunit/coverage.wsdl", lastWsdl.getLocation());
+		assertTrue(lastWsdl.getClasspath().endsWith("coverage.wsdl"));
+	}
+	
 	private File saveNewDeployment() throws IOException, DeploymentException,
 			FileNotFoundException {
 		File tempDeploymentFile = File.createTempFile("bpelunit-test", ".zip");

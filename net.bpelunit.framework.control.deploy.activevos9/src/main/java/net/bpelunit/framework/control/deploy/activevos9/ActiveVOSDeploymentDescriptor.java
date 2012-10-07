@@ -22,8 +22,8 @@ import com.activeEndpoints.schemas.pdd.x2006.x08.pdd.WsdlType;
 public class ActiveVOSDeploymentDescriptor {
 
 	private ProcessDocument pddDoc;
-	ProcessType pdd;
 	private File pddFile;
+	ProcessType pdd;
 
 	public ActiveVOSDeploymentDescriptor(File file) throws DeploymentException {
 		try {
