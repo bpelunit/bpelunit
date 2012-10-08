@@ -45,6 +45,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	
 	private ActiveVOSAdministrativeFunctions administrativeFunctions = null;
 	private List<AesContribution> previouslyDeployedContributions;
+	private ActiveVOS9Deployment deployment;
 	
 	@IBPELDeployerOption(
 			testSuiteSpecific=true,
@@ -186,7 +187,11 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	@Override
 	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
 			throws DeploymentException {
-		// TODO Auto-generated method stub
+		if(this.deployment == null) {
+			this.deployment = new ActiveVOS9Deployment(new File(deploymentLocation));
+		}
+//		return this.deployment;
+		// TODO Change
 		return null;
 	}
 

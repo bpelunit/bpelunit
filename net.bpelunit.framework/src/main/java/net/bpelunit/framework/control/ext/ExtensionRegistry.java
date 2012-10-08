@@ -467,15 +467,9 @@ public final class ExtensionRegistry {
 		
 		for (Method m : deployerClass.getMethods()) {
 			String name = m.getName();
-			IBPELDeployerOption annotation = m
-			.getAnnotation(IBPELDeployerOption.class);
-			Class<?>[] parameters = m.getParameterTypes();
-			Class<?> returnType = m.getReturnType();
+			IBPELDeployerOption annotation = m.getAnnotation(IBPELDeployerOption.class);
 			
-			if (annotation != null && name.startsWith(SETTER_PREFIX)
-					&& parameters.length == 1
-					&& String.class.equals(parameters[0])
-					&& returnType.equals(void.class)
+			if (annotation != null && isStringSetter(m)
 					&& (forSuite || !annotation.testSuiteSpecific())
 			) {
 				String optionName = name.substring(SETTER_PREFIX.length()); // subtract "set"
@@ -517,21 +511,27 @@ public final class ExtensionRegistry {
 		Map<String, ConfigurationOption> configurationOptions = new HashMap<String, ConfigurationOption>();
 		
 		for (Method m : dsClass.getMethods()) {
-			String name = m.getName();
 			ConfigurationOption annotation = m
 			.getAnnotation(ConfigurationOption.class);
-			Class<?>[] parameters = m.getParameterTypes();
-			Class<?> returnType = m.getReturnType();
 			
-			if (annotation != null && name.startsWith(SETTER_PREFIX)
-					&& parameters.length == 1
-					&& String.class.equals(parameters[0])
-					&& returnType.equals(void.class)) {
+			if (annotation != null && isStringSetter(m)) {
+					String name = m.getName();
 					String optionName = name.substring(SETTER_PREFIX.length()); // subtract "set"
 					configurationOptions.put(optionName, annotation);
 			}
 		}
 		
 		return configurationOptions;
+	}
+	
+	static boolean isStringSetter(Method m) {
+		Class<?>[] parameters = m.getParameterTypes();
+		Class<?> returnType = m.getReturnType();
+		String name = m.getName();
+		
+		return name.startsWith(SETTER_PREFIX)
+			&& parameters.length == 1
+			&& String.class.equals(parameters[0])
+			&& returnType.equals(void.class);		
 	}
 }

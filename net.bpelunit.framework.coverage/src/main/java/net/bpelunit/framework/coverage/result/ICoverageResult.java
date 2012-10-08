@@ -16,4 +16,6 @@ public interface ICoverageResult {
 	double avg();
 	
 	int getExecutionCount();
+
+	double coverage();
 }

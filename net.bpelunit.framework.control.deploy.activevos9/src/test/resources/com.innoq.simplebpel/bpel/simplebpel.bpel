@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process xmlns:aei="http://www.activebpel.org/2009/02/bpel/extension/ignorable" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:echo="http://www.innoq.com/echo" xmlns:ext="http://www.activebpel.org/2006/09/bpel/extension/query_handling" xmlns:ext1="http://www.activebpel.org/2009/06/bpel/extension/links" xmlns:xsd="http://www.w3.org/2001/XMLSchema" aei:editStyle="BPMN" ext1:linksAreTransitions="yes" ext:createTargetXPath="yes" ext:disableSelectionFailure="yes" name="simplebpel" suppressJoinFailure="yes" targetNamespace="http://simplebpel">
+   <bpmndi:BPMNDiagram xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" aei:bpelDigest="" aei:editStyle="BPMN" aei:layoutNeeded="false" aei:modelVersion="4" aei:objectId="134735427685700029" aei:processInitiatorSim="" isHorizontal="false" xmlns:aei="http://www.activebpel.org/2009/02/bpel/extension/ignorable" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI">
+      <bpmndi:BPMNPlane>
+         <bpmndi:BPMNShape aei:backgroundImageLocation="icons/bpmn/activity/ActivityBlock.png" aei:objectId="134735450869900283" aei:type="PARTNER_LINK" aei:visible="false,false,false,false,false," bpmnElement="134735450869900283"/>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {15,15}" aei:absoluteSize="DIM {90,165}" aei:objectId="134735450879100303" aei:type="SEQUENCE" bpmnElement="134735450879100303" isHorizontal="false">
+            <dc:Bounds height="170" width="95" x="5" y="5"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {25,25}" aei:absoluteSize="DIM {70,60}" aei:attachments="" aei:objectId="134735450874800299" aei:principal="" aei:type="RECEIVE" bpmnElement="134735450874800299">
+            <dc:Bounds height="60" width="70" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {323,187}" aei:absoluteSize="DIM {42,13}" aei:anchor.location="1" aei:anchor.objectId="134735450874800299" aei:backgroundColor="RGB {255,255,255}" aei:objectId="134735450935200311" aei:relative.location="LOC {-21,47}" aei:text="Message" bpmnElement="134735450874800299label">
+               <dc:Bounds height="13" width="42" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:absoluteLocation="LOC {25,110}" aei:absoluteSize="DIM {70,60}" aei:name="echo-Reply" aei:objectId="134735450878100301" aei:text="echo-Reply" aei:type="REPLY" bpmnElement="134735450878100301">
+            <dc:Bounds height="60" width="70" x="0" y="0"/>
+            <bpmndi:BPMNLabel aei:absoluteLocation="LOC {317,272}" aei:absoluteSize="DIM {54,13}" aei:anchor.location="1" aei:anchor.objectId="134735450878100301" aei:backgroundColor="RGB {255,255,255}" aei:objectId="134735450946000313" aei:relative.location="LOC {-27,47}" aei:text="echo-Reply" bpmnElement="134735450878100301label">
+               <dc:Bounds height="13" width="54" x="0" y="0"/>
+            </bpmndi:BPMNLabel>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:backgroundColor="RGB {226,226,226}" aei:borderColor="RGB {0,0,255}" aei:implicitScopeIO="INPUT" aei:objectId="134735563105100537" aei:type="ASSIGN" bpmnElement="134735563105100537">
+            <dc:Bounds height="-1" width="-1" x="0" y="0"/>
+         </bpmndi:BPMNShape>
+         <bpmndi:BPMNShape aei:fromExpression="&lt;echo:echoResponse xmlns:echo=&quot;http://www.innoq.com/echo&quot;&gt;&#13;&#10;   &lt;echo:out&gt;{ $echo/echo:in/text() }&lt;/echo:out&gt;&#13;&#10;&lt;/echo:echoResponse&gt;" aei:fromLanguage="urn:active-endpoints:expression-language:xquery1.0" aei:fromType="3" aei:objectId="134735563106500539" aei:toPart="parameters" aei:toVariable="parameters" aei:type="ASSIGN_COPY" bpmnElement="134735563106500539"/>
+      </bpmndi:BPMNPlane>
+   </bpmndi:BPMNDiagram>
+   <bpel:extensions>
+      <bpel:extension mustUnderstand="no" namespace="http://www.activebpel.org/2009/02/bpel/extension/ignorable"/>
+      <bpel:extension mustUnderstand="no" namespace="http://www.omg.org/spec/BPMN/20100524/DI"/>
+      <bpel:extension mustUnderstand="yes" namespace="http://www.activebpel.org/2006/09/bpel/extension/query_handling"/>
+      <bpel:extension mustUnderstand="yes" namespace="http://www.activebpel.org/2009/06/bpel/extension/links"/>
+   </bpel:extensions>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/echo.wsdl" namespace="http://www.innoq.com/echo"/>
+   <bpel:import importType="http://www.w3.org/2001/XMLSchema" location="../wsdl/echo.xsd" namespace="http://www.innoq.com/echo"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink aei:id="134735450869900283" myRole="echoer" name="EchoPLT" partnerLinkType="echo:EchoPLT"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable element="echo:echo" name="echo"/>
+   </bpel:variables>
+   <bpel:sequence aei:id="134735450879100303">
+      <bpel:receive aei:id="134735450874800299" createInstance="yes" operation="echo" partnerLink="EchoPLT" variable="echo"/>
+      <bpel:scope aei:implicit="true" name="echo-Reply">
+         <bpel:variables>
+            <bpel:variable messageType="echo:echoResponse" name="parameters"/>
+         </bpel:variables>
+         <bpel:sequence>
+            <bpel:assign aei:id="134735563105100537">
+               <bpel:copy aei:id="134735563106500539">
+                  <bpel:from expressionLanguage="urn:active-endpoints:expression-language:xquery1.0"><![CDATA[<echo:echoResponse xmlns:echo="http://www.innoq.com/echo">
+   <echo:out>{ $echo/echo:in/text() }</echo:out>
+</echo:echoResponse>]]></bpel:from>
+                  <bpel:to part="parameters" variable="parameters"/>
+               </bpel:copy>
+            </bpel:assign>
+            <bpel:reply aei:id="134735450878100301" name="echo-Reply" operation="echo" partnerLink="EchoPLT" variable="parameters"/>
+         </bpel:sequence>
+      </bpel:scope>
+   </bpel:sequence>
+</bpel:process>

@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name="Service Archive" default='runDeploy' basedir=".">
+
+   <!-- Taskdefs required when running this script from the command line. -->
+   <taskdef name="deploybpr" classname="com.activee.ant.bpr.tasks.AeDeployBPRTask" />
+   <taskdef name="createcatalog" classname="com.activee.ant.bpr.tasks.AeCreateCatalogTask" />
+   <taskdef name="createcontribution" classname="com.activee.ant.bpr.tasks.AeCreateContributionTask" />
+
+   <!-- The project root location. -->
+   <property name="project_loc" value="${basedir}/.." />
+
+   <!-- Some properties used by the script. -->
+   <property name="archive.filename" value="${project_loc}/deploy/simplebpel.bpr" />
+
+   <!-- The deployment location.  Typically a server/container deployment directory. -->
+   <property name="archive.deploypath" value="http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR" />
+
+   <!-- A temp directory location. -->
+   <property name="archive.temppath" value="${java.io.tmpdir}" />
+
+   <!-- Build the BPR file from the following (generated) file set. -->
+   <target name="build" depends="">
+      <delete file="${archive.filename}" />
+      <jar destfile="${archive.filename}">
+         <!-- PDD Files. -->
+         <zipfileset file="${project_loc}/deploy/simplebpel.pdd" fullpath="META-INF/pdd/com.innoq.simplebpel/deploy/simplebpel.pdd" />
+         <!-- BPEL Files. -->
+         <zipfileset file="${project_loc}/bpel/simplebpel.bpel" fullpath="bpel/com.innoq.simplebpel/bpel/simplebpel.bpel" />
+         <!-- WSDL Files. -->
+         <zipfileset file="${project_loc}/wsdl/echo.wsdl" fullpath="wsdl/Daten/workspaces/privatecloud/com.innoq.simplebpel/wsdl/echo.wsdl" />
+         <!-- XSD Files -->
+         <zipfileset file="${project_loc}/wsdl/echo.xsd" fullpath="wsdl/Daten/workspaces/privatecloud/com.innoq.simplebpel/wsdl/echo.xsd" />
+         <!-- Process Image Files. -->
+         <zipfileset file="${project_loc}/.image/bpel/simplebpel/*" prefix=".image/com.innoq.simplebpel/bpel/simplebpel" />
+      </jar>
+      <createcatalog file="${archive.filename}" contributionURI="project:/com.innoq.simplebpel">
+         <wsdlentry location="project:/com.innoq.simplebpel/wsdl/echo.wsdl" classpath="wsdl/Daten/workspaces/privatecloud/com.innoq.simplebpel/wsdl/echo.wsdl" />
+         <schemaentry location="project:/com.innoq.simplebpel/wsdl/echo.xsd" classpath="wsdl/Daten/workspaces/privatecloud/com.innoq.simplebpel/wsdl/echo.xsd" />
+      </createcatalog>
+      <!-- The contribution task sets up a contribution file which documents the exported and imported namespaces for this contribution -->
+      <createcontribution file="${archive.filename}">
+         <!-- Namespaces exported by this contribution for use by other contributions  -->
+         <export namespace="http://www.innoq.com/echo"/>
+         <!-- Namespaces from other contributions (location) that this contribution is dependent on if any -->
+         <!-- Namespaces for system services used in this contribution on if any -->
+      </createcontribution>
+   </target>
+
+   <!-- Deploy the built BPR file to some kind of container/server. -->
+   <target name="deploy" depends="">
+      <echo message="Deploying Business Process Archive." />
+      <deploybpr type="webservice" file="${archive.filename}" tourl="${archive.deploypath}" />
+      <echo message="Business Process Archive deployed." />
+   </target>
+
+   <!-- The main entry point into this script, the run target calls various other targets in turn. -->
+   <target name="run" depends="build"/>
+
+   <target name="runDeploy" depends="run,deploy"/>
+
+</project>

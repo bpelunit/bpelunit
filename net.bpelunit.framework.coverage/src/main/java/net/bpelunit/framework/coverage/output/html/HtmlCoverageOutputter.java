@@ -44,13 +44,14 @@ public class HtmlCoverageOutputter extends AbstractCoverageOutputter {
 						.th("Max")
 						.th("Total")
 						.th("Avg")
+						.th("Coverage")
 					.endTr();
 				for (ICoverageResult result : metricCoverage
 						.getCoverageResult()) {
 					writer.startTr()
 							.td(result.getBPELElementReference())
 							.td(result.min()).td(result.max())
-							.td(result.getExecutionCount()).td(result.avg())
+							.td(result.getExecutionCount()).td(result.avg()).td(result.coverage())
 						.endTr();
 				}
 				writer.endTable();

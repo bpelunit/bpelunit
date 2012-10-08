@@ -25,6 +25,7 @@ import net.bpelunit.framework.control.soap.NamespaceContextImpl;
 import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.model.bpel.BpelFactory;
+import net.bpelunit.model.bpel.IImport;
 import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.util.FileUtil;
 import net.bpelunit.util.XMLUtil;
@@ -32,23 +33,32 @@ import net.bpelunit.util.ZipUtil;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.xmlbeans.XmlException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-public abstract class ActiveVOS9Deployment extends AbstractDeployment {
+import com.activeEndpoints.schemas.catalog.x2006.x07.catalog.CatalogDocument;
+import com.activeEndpoints.schemas.catalog.x2006.x07.catalog.WsdlEntryType;
+
+public class ActiveVOS9Deployment extends AbstractDeployment {
+
+	private static final String CATALOG_FILENAME = "META-INF/catalog.xml";
 
 	final class BPELInfo implements IBPELProcess {
 
-		BPELInfo(File bpelFile, File pddFile, Document pdd) throws FileNotFoundException, JAXBException {
+		private static final String PATH_TO_BPELUNIT_ADDED_FILES = "wsdl/bpelunit/";
+
+		BPELInfo(File bpelFile, File pddFile, Document pdd)
+				throws FileNotFoundException, JAXBException {
 			super();
 			this.bpelFile = bpelFile;
 			this.pddFile = pddFile;
 			FileInputStream in = null;
 			try {
-				in = new FileInputStream(
-						bpelFile);
+				in = new FileInputStream(bpelFile);
 				this.bpelModel = BpelFactory.loadProcess(in);
 			} finally {
 				IOUtils.closeQuietly(in);
@@ -72,15 +82,78 @@ public abstract class ActiveVOS9Deployment extends AbstractDeployment {
 		}
 
 		@Override
-		public void addWSDLImport(String wsdlFileName, InputStream contents) {
-			// TODO Auto-generated method stub
+		public void addWSDLImport(String wsdlFileName, String namespace, InputStream contents) throws DeploymentException {
+			String classpath = PATH_TO_BPELUNIT_ADDED_FILES + wsdlFileName;
+			
+//			IImport newImport = bpelModel.addImport();
+//			newImport.setImportType(IImport.IMPORTTYPE_WSDL);
+//			newImport.setLocation(calculateRelativePathTo(wsdlFileName));
+//			newImport.setNamespace(namespace);
+			
+			String catalogLocation = catalogDoc.getCatalog().getURI() + "/" + PATH_TO_BPELUNIT_ADDED_FILES + wsdlFileName;
+			addFileToExplodedBPR(wsdlFileName, contents);
+			addCatalogEntryIfNecessary(catalogLocation, classpath);
+		}
+
+		String calculateRelativePathTo(String wsdlFileName) {
+			int pathElementsInTempDirectory = StringUtils.countMatches(
+					tempDirectory.getAbsolutePath().replaceAll("\\\\", "/"), "/");
+			int pathElementsInBPELFile = StringUtils.countMatches(
+					bpelFile.getAbsolutePath().replaceAll("\\\\", "/"), "/");
+
+			StringBuilder relativePath = new StringBuilder();
+			for (int i = 0; i < pathElementsInBPELFile
+					- pathElementsInTempDirectory - 1; i++) {
+				relativePath.append("../");
+			}
+			relativePath.append(PATH_TO_BPELUNIT_ADDED_FILES);
+			relativePath.append(wsdlFileName);
+			
+			return relativePath.toString();
+		}
+
+		private void addFileToExplodedBPR(String wsdlFileName,
+				InputStream contents) throws DeploymentException {
+			File bpelUnitOutputDir = new File(tempDirectory,
+					PATH_TO_BPELUNIT_ADDED_FILES);
+			bpelUnitOutputDir.mkdirs();
+			File outputFile = new File(bpelUnitOutputDir, wsdlFileName);
+			FileOutputStream out = null;
+			try {
+				out = new FileOutputStream(outputFile);
+			} catch (FileNotFoundException e) {
+				throw new DeploymentException("Could not write WSDL: "
+						+ e.getMessage(), e);
+			} finally {
+				IOUtils.closeQuietly(contents);
+				IOUtils.closeQuietly(out);
+			}
+		}
+
+		private void addCatalogEntryIfNecessary(String location,
+				String classpath) {
+			boolean found = false;
+			for (WsdlEntryType w : catalogDoc.getCatalog().getWsdlEntryArray()) {
+				if (location.equals(w.getLocation())) {
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				WsdlEntryType wsdlEntry = catalogDoc.getCatalog()
+						.addNewWsdlEntry();
+				wsdlEntry.setClasspath(classpath);
+				wsdlEntry.setLocation(location);
+			}
 		}
 
 		@Override
-		public void addXSDImport(String xsdFileName, InputStream contents) {
+		public void addXSDImport(String xsdFileName, String namespace,
+				InputStream contents) {
 			// TODO Auto-generated method stub
 		}
-		
+
 		@Override
 		public IProcess getProcessModel() {
 			bpelHasChanged = true;
@@ -154,6 +227,7 @@ public abstract class ActiveVOS9Deployment extends AbstractDeployment {
 	private File bpr;
 	private File tempDirectory = null;
 	private File tempBPR = null;
+	CatalogDocument catalogDoc = null;
 
 	private List<BPELInfo> allProcesses = new ArrayList<BPELInfo>();
 	public static final String NAMESPACE_PDD = "http://schemas.active-endpoints.com/pdd/2006/08/pdd.xsd";
@@ -193,6 +267,8 @@ public abstract class ActiveVOS9Deployment extends AbstractDeployment {
 				for (BPELInfo bpel : allProcesses) {
 					bpel.writeOut();
 				}
+
+				catalogDoc.save(new File(tempDirectory, CATALOG_FILENAME));
 
 				// repackage
 				tempBPR = File.createTempFile(bpr.getName(), ".bpr");
@@ -243,11 +319,17 @@ public abstract class ActiveVOS9Deployment extends AbstractDeployment {
 			try {
 				tempDirectory = FileUtil.createTempDirectory();
 				ZipUtil.unzipFile(bpr, tempDirectory);
+				catalogDoc = CatalogDocument.Factory.parse(new File(
+						tempDirectory, CATALOG_FILENAME));
 
 				scanForBPELFiles();
 			} catch (IOException e) {
 				throw new DeploymentException(
 						"Error while temporarily extracting the BPR: "
+								+ e.getMessage(), e);
+			} catch (XmlException e) {
+				throw new DeploymentException(
+						"Error while parsing XML (catalog.xml): "
 								+ e.getMessage(), e);
 			}
 		}
@@ -270,8 +352,7 @@ public abstract class ActiveVOS9Deployment extends AbstractDeployment {
 
 				File bpelFile = new File(tempDirectory, locationInBPR);
 
-				allProcesses.add(new BPELInfo(bpelFile, pddFile, 
-						pddXml));
+				allProcesses.add(new BPELInfo(bpelFile, pddFile, pddXml));
 			} catch (FileNotFoundException e) {
 				throw new DeploymentException("File could not be read: "
 						+ e.getMessage(), e);

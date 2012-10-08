@@ -21,7 +21,7 @@ import net.bpelunit.framework.control.util.BPELUnitConstants;
  * @param <KEY>
  * @param <OBJECT>
  */
-public class BlackBoard<KEY, OBJECT> {
+public class BlackBoard<KEY extends BlackBoardKey, OBJECT> {
 
 	private Map<KEY, OBJECT> map;
 
@@ -40,22 +40,24 @@ public class BlackBoard<KEY, OBJECT> {
 
 	public synchronized OBJECT getObject(KEY key) throws TimeoutException, InterruptedException {
 		// XXX Synchronization is not right
-		int timeout= 0;
+		int timeout = 0;
 
-		while ( (!map.containsKey(key) && (timeout < BPELUnitRunner.getTimeout()))) {
+		while (!map.containsKey(key) && timeout < BPELUnitRunner.getTimeout() && key.canStillProvideValue(this)) {
 			timeout+= BPELUnitConstants.TIMEOUT_SLEEP_TIME;
 			wait(BPELUnitConstants.TIMEOUT_SLEEP_TIME);
 		}
 
-		if (timeout >= BPELUnitRunner.getTimeout()) {
+		if (map.containsKey(key)) {
+			OBJECT object= map.get(key);
+			map.remove(key);
+			return object;
+		}
+		else if (timeout >= BPELUnitRunner.getTimeout()) {
 			throw new TimeoutException("Waiting for object for key " + key + " took too long.");
 		}
-
-		OBJECT object= map.get(key);
-		map.remove(key);
-
-		notifyAll();
-		return object;
+		else {
+			throw new TimeoutException("Key " + key + " cannot provide the requested value anymore");
+		}
 	}
 
 }

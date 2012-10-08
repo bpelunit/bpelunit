@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pdd:process xmlns:bpelns="http://simplebpel" xmlns:pdd="http://schemas.active-endpoints.com/pdd/2006/08/pdd.xsd" location="bpel/com.innoq.simplebpel/bpel/simplebpel.bpel" name="bpelns:simplebpel" platform="enterprise">
+  <pdd:partnerLinks>
+    <pdd:partnerLink name="EchoPLT">
+      <pdd:myRole allowedRoles="" binding="MSG" service="SimpleBPEL"/>
+    </pdd:partnerLink>
+  </pdd:partnerLinks>
+  <pdd:references>
+    <pdd:wsdl location="project:/com.innoq.simplebpel/wsdl/echo.wsdl" namespace="http://www.innoq.com/echo"/>
+    <pdd:schema location="project:/com.innoq.simplebpel/wsdl/echo.xsd" namespace="http://www.innoq.com/echo"/>
+  </pdd:references>
+</pdd:process>

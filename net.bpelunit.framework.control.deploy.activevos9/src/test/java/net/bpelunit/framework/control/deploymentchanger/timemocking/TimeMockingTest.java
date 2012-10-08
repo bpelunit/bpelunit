@@ -9,6 +9,7 @@ import net.bpelunit.model.bpel.IWaitingActivity;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TimeMockingTest {
@@ -107,6 +108,7 @@ public class TimeMockingTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSuccessfulWaitWithForMockingSingleProcess()
 			throws Exception {
 		timeMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
@@ -124,6 +126,7 @@ public class TimeMockingTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSuccessfulWaitWithForMockingFromMultipleProcessesLocalName()
 			throws Exception {
 		timeMocking.setBPELName(BPEL_PROCESS_LOCALNAME);
@@ -142,6 +145,7 @@ public class TimeMockingTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSuccessfulWaitWithForMockingFromMultipleProcessesQName()
 			throws Exception {
 		timeMocking.setBPELName(BPEL_PROCESS_QNAME);
@@ -160,6 +164,7 @@ public class TimeMockingTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSuccessfulWaitWithUntilMockingSingleProcess()
 			throws Exception {
 		timeMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
@@ -177,6 +182,7 @@ public class TimeMockingTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSuccessfulMultipleWaitMockingSingleProcess()
 			throws Exception {
 		timeMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
@@ -194,6 +200,7 @@ public class TimeMockingTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSuccessfulOnAlarmWithForInPick() throws Exception {
 		timeMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
 		timeMocking.setActivityToMock(XPATH_TO_ONALARM_WITH_FOR_IN_PICK);
@@ -209,6 +216,7 @@ public class TimeMockingTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSuccessfulOnAlarmWithUntilInPick() throws Exception {
 		timeMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
 		timeMocking.setActivityToMock(XPATH_TO_ONALARM_WITH_UNTIL_IN_PICK);
@@ -224,6 +232,7 @@ public class TimeMockingTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSuccessfulOnAlarmWithForHandler() throws Exception {
 		timeMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
 		timeMocking.setActivityToMock(XPATH_TO_ONALARM_WITH_FOR_IN_HANDLER);
@@ -239,6 +248,7 @@ public class TimeMockingTest {
 	}
 
 	@Test
+	@Ignore
 	public void testSuccessfulOnAlarmWithUntilHandler() throws Exception {
 		timeMocking.setNewDuration(NEW_DURATION_IN_SECONDS);
 		timeMocking.setActivityToMock(XPATH_TO_ONALARM_WITH_UNTIL_IN_HANDLER);

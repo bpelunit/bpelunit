@@ -15,6 +15,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import net.bpelunit.framework.control.run.BlackBoard;
+import net.bpelunit.framework.control.run.BlackBoardKey;
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.model.AbstractPartner;
@@ -24,6 +26,7 @@ import net.bpelunit.framework.model.test.activity.ActivityContext;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.data.ContextXPathVariableResolver;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.framework.model.test.report.ArtefactStatus.StatusCode;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
 
@@ -42,7 +45,7 @@ import com.rits.cloning.Cloner;
  * @author Philip Mayer
  * 
  */
-public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextProvider {
+public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextProvider, BlackBoardKey {
 
 	private static final int DELAY_AT_START = 10;
 
@@ -200,6 +203,18 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 
 	public void setNamespaceContext(NamespaceContext context) {
 		fNamespaceContext = context;
+	}
+
+	public boolean isDone() {
+		final StatusCode code = fStatus.getCode();
+		return code != StatusCode.INPROGRESS && code != StatusCode.NOTYETSPECIFIED;
+	}
+
+	// ************* BlackBoardKey **********
+
+	@Override
+	public boolean canStillProvideValue(BlackBoard<?, ?> blackboard) {
+		return !isDone();
 	}
 
 	// ************* ITestArtefact **********

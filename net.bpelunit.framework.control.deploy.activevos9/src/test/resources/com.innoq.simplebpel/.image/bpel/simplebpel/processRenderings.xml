@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<processRenderings modified="1347355645917">
+   <layout-segments>
+      <segment height="244" id="process_0" tiled="false" width="169">
+         <image height="244" name="process_0_R1C1.jpg" width="169"/>
+      </segment>
+   </layout-segments>
+   <process>
+      <bpel locationId="1" name="simplebpel" path="/process" segment="process_0" sheight="244" swidth="169" sx="0" sy="0" type="process">
+         <bpel locationId="10" path="/process/partnerLinks" type="partnerLinks">
+            <bpel locationId="11" name="EchoPLT" path="/process/partnerLinks/partnerLink[@name='EchoPLT']" type="partnerLink"/>
+         </bpel>
+         <bpel locationId="13" path="/process/variables" type="variables">
+            <bpel locationId="14" name="echo" path="/process/variables/variable[@name='echo']" type="variable"/>
+         </bpel>
+         <bpel height="10" locationId="15" name="" path="/process/sequence" type="sequence" width="1" x="60" y="15">
+            <bpel height="60" locationId="16" name="" path="/process/sequence/receive" type="receive" width="70" x="25" y="25"/>
+            <bpel locationId="17" name="echo-Reply" path="/process/sequence/scope[@name='echo-Reply']" type="scope">
+               <bpel locationId="18" path="/process/sequence/scope[@name='echo-Reply']/variables" type="variables">
+                  <bpel locationId="19" name="parameters" path="/process/sequence/scope[@name='echo-Reply']/variables/variable[@name='parameters']" type="variable"/>
+               </bpel>
+               <bpel height="60" locationId="20" name="" path="/process/sequence/scope[@name='echo-Reply']/sequence" type="sequence" width="70" x="25" y="110">
+                  <bpel locationId="21" name="" path="/process/sequence/scope[@name='echo-Reply']/sequence/assign" type="assign"/>
+                  <bpel locationId="25" name="echo-Reply" path="/process/sequence/scope[@name='echo-Reply']/sequence/reply[@name='echo-Reply']" type="reply"/>
+               </bpel>
+            </bpel>
+         </bpel>
+      </bpel>
+   </process>
+</processRenderings>
