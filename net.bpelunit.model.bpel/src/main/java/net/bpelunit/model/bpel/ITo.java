@@ -1,7 +1,5 @@
 package net.bpelunit.model.bpel;
 
-import java.util.List;
-
 import javax.xml.namespace.QName;
 
 public interface ITo {
@@ -23,10 +21,6 @@ public interface ITo {
 	void setExpressionLanguage(String value);
 
 	String getExpressionLanguage();
-
-	void setContent(List<Object> content);
-
-	List<Object> getContent();
 
 	void setVariable(IVariable response);
 

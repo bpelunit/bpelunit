@@ -2,9 +2,9 @@ package net.bpelunit.model.bpel._2_0;
 
 import net.bpelunit.model.bpel.IWait;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TDeadlineExpr;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TDurationExpr;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TWait;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TDeadlineExpr;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TDurationExpr;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TWait;
 
 public class Wait extends AbstractBasicActivity<TWait> implements IWait {
 
@@ -12,40 +12,34 @@ public class Wait extends AbstractBasicActivity<TWait> implements IWait {
 		super(wrappedWait, f, IWait.class);
 	}
 
-	@Override
 	public void setDuration(String durationExpression) {
-		this.getNativeActivity().setUntil(null);
+		this.getNativeActivity().unsetUntil();
+		this.getNativeActivity().unsetFor();
 
-		TDurationExpr newFor = new TDurationExpr();
-		newFor.getContent().clear();
-		newFor.getContent().add(durationExpression);
+		TDurationExpr newFor = getNativeActivity().addNewFor();
 		this.getNativeActivity().setFor(newFor);
+		newFor.getDomNode().setTextContent(durationExpression);
 	}
 
-	@Override
 	public void setDeadline(String deadlineExpression) {
-		this.getNativeActivity().setFor(null);
+		this.getNativeActivity().unsetFor();
+		this.getNativeActivity().unsetUntil();
 
-		TDeadlineExpr newUntil = new TDeadlineExpr();
-		newUntil.getContent().clear();
-		newUntil.getContent().add(deadlineExpression);
-		this.getNativeActivity().setUntil(newUntil);
+		TDeadlineExpr newUntil = getNativeActivity().addNewUntil();
+		newUntil.getDomNode().setTextContent(deadlineExpression);
 	}
 
-	@Override
 	public String getDeadline() {
 		try {
-			return getNativeActivity().getUntil().getContent().get(0)
-					.toString();
+			return getNativeActivity().getUntil().getDomNode().getTextContent();
 		} catch (NullPointerException e) {
 			return null;
 		}
 	}
 
-	@Override
 	public String getDuration() {
 		try {
-			return getNativeActivity().getFor().getContent().get(0).toString();
+			return getNativeActivity().getFor().getDomNode().getTextContent();
 		} catch (NullPointerException e) {
 			return null;
 		}

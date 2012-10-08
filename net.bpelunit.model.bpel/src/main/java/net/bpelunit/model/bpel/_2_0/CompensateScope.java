@@ -3,7 +3,8 @@ package net.bpelunit.model.bpel._2_0;
 import net.bpelunit.model.bpel.ICompensateScope;
 import net.bpelunit.model.bpel.IScope;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TCompensateScope;
+import org.apache.xmlbeans.XmlObject;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TCompensateScope;
 
 class CompensateScope extends AbstractBasicActivity<TCompensateScope> implements
 		ICompensateScope {
@@ -25,5 +26,11 @@ class CompensateScope extends AbstractBasicActivity<TCompensateScope> implements
 
 	public String getTarget() {
 		return compensateScope.getTarget();
+	}
+	
+	@Override
+	protected void setNativeActivity(XmlObject newNativeActivity) {
+		super.setNativeActivity(newNativeActivity);
+		this.compensateScope = (TCompensateScope)newNativeActivity;
 	}
 }

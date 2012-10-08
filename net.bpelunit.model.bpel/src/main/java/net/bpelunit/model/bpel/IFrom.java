@@ -1,6 +1,7 @@
 package net.bpelunit.model.bpel;
 
-import java.util.List;
+import org.w3c.dom.Element;
+
 
 
 public interface IFrom {
@@ -29,14 +30,10 @@ public interface IFrom {
 
 	String getExpressionLanguage();
 
-	void setContent(List<Object> content);
-
-	List<Object> getContent();
-
 	void setVariable(IVariable v);
 
 	void setExpression(String string);
 
-	void setLiteral(Object content);
+	void setLiteral(Element content);
 	
 }

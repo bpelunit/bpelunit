@@ -4,8 +4,8 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TEmpty;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TOnAlarmPick;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TEmpty;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnAlarmPick;
 
 
 public class OnAlarmTest {
@@ -18,10 +18,10 @@ public class OnAlarmTest {
 	@Before
 	public void setUp() {
 		BpelFactory f = new BpelFactory();
-		nativeOnAlarm = new TOnAlarmPick();
+		nativeOnAlarm = TOnAlarmPick.Factory.newInstance();
 		onAlarm = new OnAlarm(nativeOnAlarm, f);
 		
-		nativeMainActivity = new TEmpty();
+		nativeMainActivity = TEmpty.Factory.newInstance();
 		mainActivity = new Empty(nativeMainActivity, f);
 		
 		onAlarm.setMainActivity(mainActivity);

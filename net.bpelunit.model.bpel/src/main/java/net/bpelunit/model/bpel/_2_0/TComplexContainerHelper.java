@@ -4,11 +4,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TActivity;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TProcess;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TRepeatUntil;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TScope;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TWhile;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TProcess;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TRepeatUntil;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TScope;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TWhile;
 
 final class TComplexContainerHelper {
 
@@ -46,98 +46,224 @@ final class TComplexContainerHelper {
 	}
 
 	static void removeMainActivity(TProcess process) {
-		process.setAssign(null);
-		process.setCompensate(null);
-		process.setCompensateScope(null);
-		process.setEmpty(null);
-		process.setExit(null);
-		process.setExtensionActivity(null);
-		process.setFlow(null);
-		process.setForEach(null);
-		process.setIf(null);
-		process.setInvoke(null);
-		process.setPick(null);
-		process.setReceive(null);
-		process.setRepeatUntil(null);
-		process.setReply(null);
-		process.setRethrow(null);
-		process.setScope(null);
-		process.setSequence(null);
-		process.setThrow(null);
-		process.setValidate(null);
-		process.setWait(null);
-		process.setWhile(null);
+		if(process.getAssign() != null) {
+			process.unsetAssign();
+		}
+		if(process.getCompensate() != null) {
+			process.unsetCompensate();
+		}
+		if(process.getCompensateScope() != null) {
+			process.unsetCompensateScope();
+		}
+		if(process.getEmpty() != null) {
+			process.unsetEmpty();
+		}
+		if(process.getExit() != null) {
+			process.unsetExit();
+		}
+		if(process.getExtensionActivity() != null) {
+			process.unsetExtensionActivity();
+		}
+		if(process.getFlow() != null) {
+			process.unsetFlow();
+		}
+		if(process.getForEach() != null) {
+			process.unsetForEach();
+		}
+		if(process.getIf() != null) {
+			process.unsetIf();
+		}
+		if(process.getInvoke() != null) {
+			process.unsetInvoke();
+		}
+		if(process.getPick() != null) {
+			process.unsetPick();
+		}
+		if(process.getReceive() != null) {
+			process.unsetReceive();
+		}
+		if(process.getRepeatUntil() != null) {
+			process.unsetRepeatUntil();
+		}
+		if(process.getReply() != null) {
+			process.unsetReply();
+		}
+		if(process.getRethrow() != null) {
+			process.unsetRethrow();
+		}
+		if(process.getScope() != null ) {
+			process.unsetScope();
+		}
+		if(process.getSequence() != null) {
+			process.unsetSequence();
+		}
+		if(process.getThrow() != null) {
+			process.unsetThrow();
+		}
+		if(process.getValidate() != null) {
+			process.unsetValidate();
+		}
+		if(process.getWait() != null) {
+			process.unsetWait();
+		}
+		if(process.getWhile() != null) {
+			process.unsetWhile();
+		}
 	}
 	static void removeMainActivity(TWhile w) {
-		w.setAssign(null);
-		w.setCompensate(null);
-		w.setCompensateScope(null);
-		w.setEmpty(null);
-		w.setExit(null);
-		w.setExtensionActivity(null);
-		w.setFlow(null);
-		w.setForEach(null);
-		w.setIf(null);
-		w.setInvoke(null);
-		w.setPick(null);
-		w.setReceive(null);
-		w.setRepeatUntil(null);
-		w.setReply(null);
-		w.setRethrow(null);
-		w.setScope(null);
-		w.setSequence(null);
-		w.setThrow(null);
-		w.setValidate(null);
-		w.setWait(null);
-		w.setWhile(null);
+		if(w.getAssign() != null) {
+			w.unsetAssign();
+		}
+		if(w.getCompensate() != null) {
+			w.unsetCompensate();
+		}
+		if(w.getCompensateScope() != null) {
+			w.unsetCompensateScope();
+		}
+		if(w.getEmpty() != null) {
+			w.unsetEmpty();
+		}
+		if(w.getExit() != null) {
+			w.unsetExit();
+		}
+		if(w.getExtensionActivity() != null) {
+			w.unsetExtensionActivity();
+		}
+		if(w.getFlow() != null) {
+			w.unsetFlow();
+		}
+		if(w.getForEach() != null) {
+			w.unsetForEach();
+		}
+		if(w.getIf() != null) {
+			w.unsetIf();
+		}
+		if(w.getInvoke() != null) {
+			w.unsetInvoke();
+		}
+		if(w.getPick() != null) {
+			w.unsetPick();
+		}
+		if(w.getReceive() != null) {
+			w.unsetReceive();
+		}
+		if(w.getRepeatUntil() != null) {
+			w.unsetRepeatUntil();
+		}
+		if(w.getReply() != null) {
+			w.unsetReply();
+		}
+		if(w.getRethrow() != null) {
+			w.unsetRethrow();
+		}
+		if(w.getScope() != null ) {
+			w.unsetScope();
+		}
+		if(w.getSequence() != null) {
+			w.unsetSequence();
+		}
+		if(w.getThrow() != null) {
+			w.unsetThrow();
+		}
+		if(w.getValidate() != null) {
+			w.unsetValidate();
+		}
+		if(w.getWait() != null) {
+			w.unsetWait();
+		}
+		if(w.getWhile() != null) {
+			w.unsetWhile();
+		}
 	}
 	
 	static void removeMainActivity(TRepeatUntil repeatUntil) {
-		repeatUntil.setAssign(null);
-		repeatUntil.setCompensate(null);
-		repeatUntil.setCompensateScope(null);
-		repeatUntil.setEmpty(null);
-		repeatUntil.setExit(null);
-		repeatUntil.setExtensionActivity(null);
-		repeatUntil.setFlow(null);
-		repeatUntil.setForEach(null);
-		repeatUntil.setIf(null);
-		repeatUntil.setInvoke(null);
-		repeatUntil.setPick(null);
-		repeatUntil.setReceive(null);
-		repeatUntil.setRepeatUntil(null);
-		repeatUntil.setReply(null);
-		repeatUntil.setRethrow(null);
-		repeatUntil.setScope(null);
-		repeatUntil.setSequence(null);
-		repeatUntil.setThrow(null);
-		repeatUntil.setValidate(null);
-		repeatUntil.setWait(null);
-		repeatUntil.setWhile(null);
+		if(repeatUntil.getAssign() != null) {
+			repeatUntil.unsetAssign();
+		}
+		if(repeatUntil.getCompensate() != null) {
+			repeatUntil.unsetCompensate();
+		}
+		if(repeatUntil.getCompensateScope() != null) {
+			repeatUntil.unsetCompensateScope();
+		}
+		if(repeatUntil.getEmpty() != null) {
+			repeatUntil.unsetEmpty();
+		}
+		if(repeatUntil.getExit() != null) {
+			repeatUntil.unsetExit();
+		}
+		if(repeatUntil.getExtensionActivity() != null) {
+			repeatUntil.unsetExtensionActivity();
+		}
+		if(repeatUntil.getFlow() != null) {
+			repeatUntil.unsetFlow();
+		}
+		if(repeatUntil.getForEach() != null) {
+			repeatUntil.unsetForEach();
+		}
+		if(repeatUntil.getIf() != null) {
+			repeatUntil.unsetIf();
+		}
+		if(repeatUntil.getInvoke() != null) {
+			repeatUntil.unsetInvoke();
+		}
+		if(repeatUntil.getPick() != null) {
+			repeatUntil.unsetPick();
+		}
+		if(repeatUntil.getReceive() != null) {
+			repeatUntil.unsetReceive();
+		}
+		if(repeatUntil.getRepeatUntil() != null) {
+			repeatUntil.unsetRepeatUntil();
+		}
+		if(repeatUntil.getReply() != null) {
+			repeatUntil.unsetReply();
+		}
+		if(repeatUntil.getRethrow() != null) {
+			repeatUntil.unsetRethrow();
+		}
+		if(repeatUntil.getScope() != null ) {
+			repeatUntil.unsetScope();
+		}
+		if(repeatUntil.getSequence() != null) {
+			repeatUntil.unsetSequence();
+		}
+		if(repeatUntil.getThrow() != null) {
+			repeatUntil.unsetThrow();
+		}
+		if(repeatUntil.getValidate() != null) {
+			repeatUntil.unsetValidate();
+		}
+		if(repeatUntil.getWait() != null) {
+			repeatUntil.unsetWait();
+		}
+		if(repeatUntil.getWhile() != null) {
+			repeatUntil.unsetWhile();
+		}
 	}
 
 	static void removeMainActivity(TScope scope) {
-		scope.setAssign(null);
-		scope.setCompensate(null);
-		scope.setCompensateScope(null);
-		scope.setEmpty(null);
-		scope.setExit(null);
-		scope.setExtensionActivity(null);
-		scope.setFlow(null);
-		scope.setForEach(null);
-		scope.setIf(null);
-		scope.setInvoke(null);
-		scope.setPick(null);
-		scope.setReceive(null);
-		scope.setRepeatUntil(null);
-		scope.setReply(null);
-		scope.setRethrow(null);
-		scope.setScope(null);
-		scope.setSequence(null);
-		scope.setThrow(null);
-		scope.setValidate(null);
-		scope.setWait(null);
-		scope.setWhile(null);
+		scope.unsetAssign();
+		scope.unsetCompensate();
+		scope.unsetCompensateScope();
+		scope.unsetEmpty();
+		scope.unsetExit();
+		scope.unsetExtensionActivity();
+		scope.unsetFlow();
+		scope.unsetForEach();
+		scope.unsetIf();
+		scope.unsetInvoke();
+		scope.unsetPick();
+		scope.unsetReceive();
+		scope.unsetRepeatUntil();
+		scope.unsetReply();
+		scope.unsetRethrow();
+		scope.unsetScope();
+		scope.unsetSequence();
+		scope.unsetThrow();
+		scope.unsetValidate();
+		scope.unsetWait();
+		scope.unsetWhile();
 	}
 
 	static void setActivity(Object container, TActivity bpelActivity) {

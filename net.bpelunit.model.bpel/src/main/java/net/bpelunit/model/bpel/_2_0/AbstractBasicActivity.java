@@ -2,11 +2,11 @@ package net.bpelunit.model.bpel._2_0;
 
 import java.lang.reflect.Method;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TActivity;
-
 import net.bpelunit.model.bpel.IVisitor;
 
-public class AbstractBasicActivity<T extends TActivity> extends AbstractActivity<T> {
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
+
+public abstract class AbstractBasicActivity<T extends TActivity> extends AbstractActivity<T> {
 
 	private Class<?> visitorClass;
 
@@ -15,7 +15,6 @@ public class AbstractBasicActivity<T extends TActivity> extends AbstractActivity
 		this.visitorClass = interfaceForVisit;
 	}
 
-	@Override
 	public final boolean isBasicActivity() {
 		return true;
 	}

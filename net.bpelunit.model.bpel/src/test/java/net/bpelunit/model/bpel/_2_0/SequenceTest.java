@@ -5,8 +5,8 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TEmpty;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TSequence;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TEmpty;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TSequence;
 
 
 public class SequenceTest {
@@ -21,14 +21,14 @@ public class SequenceTest {
 	@Before
 	public void setUp() {
 		BpelFactory f = new BpelFactory();
-		nativeSequence = new TSequence();
+		nativeSequence = TSequence.Factory.newInstance();
 		sequence = new Sequence(nativeSequence, f);
 		
-		nativeActivity1 = new TEmpty();
+		nativeActivity1 = TEmpty.Factory.newInstance();
 		activity1 = new Empty(nativeActivity1, f);
 		sequence.addActivity(activity1);
 		
-		nativeActivity2 = new TEmpty();
+		nativeActivity2 = TEmpty.Factory.newInstance();
 		activity2 = new Empty(nativeActivity2, f);
 		sequence.addActivity(activity2);
 	}

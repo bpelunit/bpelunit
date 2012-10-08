@@ -1,33 +1,38 @@
 package net.bpelunit.model.bpel._2_0;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.bpelunit.model.bpel.IFrom;
 import net.bpelunit.model.bpel.IVariable;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.ObjectFactory;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TFrom;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TLiteral;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TQuery;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TRoles;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TFrom;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TLiteral;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TQuery;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TRoles;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 public class From implements IFrom {
 
-	private BpelFactory factory;
 	private TFrom from;
 
 	From(TFrom wrappedFrom, BpelFactory f) {
 		this.from = wrappedFrom;
-		this.factory = f;
 	}
 
-	@Override
-	public List<Object> getContent() {
-		return Collections.unmodifiableList(from.getContent());
+	public List<Node> getContent() {
+		NodeList children = from.getDomNode().getChildNodes();
+		List<Node> result = new ArrayList<Node>();
+		for(int i = 0; i < children.getLength(); i++) {
+			result.add(children.item(i));
+		}
+		return result;
 	}
 
-	@Override
 	public Roles getEndpointReference() {
 		if (from.getEndpointReference() == TRoles.MY_ROLE) {
 			return Roles.MY_ROLE;
@@ -38,7 +43,6 @@ public class From implements IFrom {
 		}
 	}
 
-	@Override
 	public String getExpressionLanguage() {
 		return from.getExpressionLanguage();
 	}
@@ -47,30 +51,18 @@ public class From implements IFrom {
 		return from;
 	}
 
-	@Override
 	public String getPart() {
 		return from.getPart();
 	}
 
-	@Override
 	public String getPartnerLink() {
 		return from.getPartnerLink();
 	}
 
-	@Override
 	public String getVariable() {
 		return from.getVariable();
 	}
 
-	@Override
-	public void setContent(List<Object> content) {
-		from.getContent().clear();
-		if (content != null) {
-			from.getContent().addAll(content);
-		}
-	}
-
-	@Override
 	public void setEndpointReference(Roles value) {
 		if (value == Roles.MY_ROLE) {
 			from.setEndpointReference(TRoles.MY_ROLE);
@@ -81,47 +73,47 @@ public class From implements IFrom {
 		}
 	}
 
-	@Override
 	public void setExpression(String expr) {
-		TQuery tq = new TQuery();
-		tq.getContent().add(expr);
-		
-		this.from.getContent().clear();
-		this.from.getContent().add(new ObjectFactory().createQuery(tq));
+		if(from.getLiteral() != null) {
+			from.unsetLiteral();
+		}
+		if(from.getQuery() != null) {
+			from.unsetQuery();
+		}
+		TQuery tq = from.addNewQuery();
+		Document doc = tq.getDomNode().getOwnerDocument();
+		Text exprNode = doc.createTextNode(expr);
+		tq.getDomNode().appendChild(exprNode);
 	}
 
-	@Override
 	public void setExpressionLanguage(String value) {
 		from.setExpressionLanguage(value);
 	}
 
-	@Override
-	public void setLiteral(Object c) {
-		List<Object> content = from.getContent();
-		content.clear();
-		TLiteral literal = new TLiteral();
-		literal.getContent().add(c);
-		content.add(new ObjectFactory().createLiteral(literal));
+	public void setLiteral(Element e) {
+		if(from.getLiteral() != null) {
+			from.unsetLiteral();
+		}
+		if(from.getQuery() != null) {
+			from.unsetQuery();
+		}
 		
-		factory.registerClass(c.getClass());
+		TLiteral literal = from.addNewLiteral();
+		literal.getDomNode().appendChild(e);
 	}
 
-	@Override
 	public void setPart(String value) {
 		from.setPart(value);
 	}
 
-	@Override
 	public void setPartnerLink(String value) {
 		from.setPartnerLink(value);
 	}
 
-	@Override
 	public void setVariable(IVariable v) {
 		this.setVariable(v.getName());
 	}
 	
-	@Override
 	public void setVariable(String value) {
 		from.setVariable(value);
 	}

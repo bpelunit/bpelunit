@@ -8,29 +8,36 @@ import net.bpelunit.model.bpel.IActivity;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IMultiContainer;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TActivity;
+import org.apache.xmlbeans.XmlCursor;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
 
 abstract class AbstractMultiContainer<T extends TActivity> extends AbstractActivity<T> implements IMultiContainer {
 
 	private List<AbstractActivity<?>> wrappedActivities = new ArrayList<AbstractActivity<?>>();
 	private List<Object> activities = new ArrayList<Object>();
 	
-	AbstractMultiContainer(T wrappedActivity, List<Object> children, BpelFactory f) {
+	AbstractMultiContainer(T wrappedActivity, BpelFactory f) {
 		super(wrappedActivity, f);
-		this.activities = children;
 		
-		for(Object child : children) {
+		this.activities = new ArrayList<Object>();
+		XmlCursor cursor = wrappedActivity.newCursor();
+		while(cursor.hasNextToken()) {
+			cursor.toNextToken();
+			if(cursor.getObject() instanceof TActivity) {
+				activities.add((TActivity)cursor.getObject());
+			}
+		}
+		
+		for(Object child : activities) {
 			wrappedActivities.add(getFactory().createActivity(child));
 		}
 	}
 	
-	@Override
 	public List<AbstractActivity<?>> getActivities() {
 		return Collections.unmodifiableList(wrappedActivities);
 	}
 	
 
-	@Override
 	public void addActivity(IActivity a) {
 		AbstractActivity<?> activity = checkForCorrectModel(a);
 
@@ -38,7 +45,6 @@ abstract class AbstractMultiContainer<T extends TActivity> extends AbstractActiv
 		activities.add(activity.getNativeActivity());
 	}
 
-	@Override
 	public void removeActivity(IActivity a) {
 		AbstractActivity<?> activity = checkForCorrectModel(a);
 
@@ -48,7 +54,6 @@ abstract class AbstractMultiContainer<T extends TActivity> extends AbstractActiv
 		activities.remove(i);
 	}
 	
-	@Override
 	public boolean isBasicActivity() {
 		return false;
 	}

@@ -2,7 +2,7 @@ package net.bpelunit.model.bpel._2_0;
 
 import net.bpelunit.model.bpel.IEmpty;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TEmpty;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TEmpty;
 
 class Empty extends AbstractBasicActivity<TEmpty> implements IEmpty {
 

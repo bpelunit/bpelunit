@@ -6,9 +6,7 @@ import net.bpelunit.model.bpel.IFrom;
 import net.bpelunit.model.bpel.ITo;
 import net.bpelunit.model.bpel.IVisitor;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TCopy;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TFrom;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TTo;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TCopy;
 
 public class Copy extends AbstractBpelObject implements ICopy {
 
@@ -20,18 +18,17 @@ public class Copy extends AbstractBpelObject implements ICopy {
 		super(c, f);
 		copy = c;
 		if(c.getTo() == null) {
-			c.setTo(new TTo());
+			c.addNewTo();
 		}
 		
 		if(c.getFrom() == null) {
-			c.setFrom(new TFrom());
+			c.addNewFrom();
 		}
 		
 		to = getFactory().createTo(c.getTo());
 		from = getFactory().createFrom(c.getFrom());
 	}
 
-	@Override
 	public From getFrom() {
 		return from;
 	}
@@ -45,12 +42,10 @@ public class Copy extends AbstractBpelObject implements ICopy {
 		}
 	}
 
-	@Override
 	public To getTo() {
 		return to;
 	}
 	
-	@Override
 	public void setFrom(IFrom value) {
 		if(! (value instanceof From)) {
 			throw new IllegalArgumentException("Illegal model element");
@@ -59,7 +54,6 @@ public class Copy extends AbstractBpelObject implements ICopy {
 		this.copy.setFrom(((From)value).getNativeFrom());
 	}
 
-	@Override
 	public void setTo(ITo value) {
 		if(! (value instanceof To)) {
 			throw new IllegalArgumentException("Illegal model element");

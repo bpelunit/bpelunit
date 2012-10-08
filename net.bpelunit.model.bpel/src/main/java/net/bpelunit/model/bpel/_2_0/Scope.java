@@ -9,9 +9,8 @@ import net.bpelunit.model.bpel.IScope;
 import net.bpelunit.model.bpel.IVariable;
 import net.bpelunit.model.bpel.IVisitor;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TScope;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TVariable;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TVariables;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TScope;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TVariable;
 
 class Scope extends AbstractSingleContainer<TScope> implements IScope {
 
@@ -24,10 +23,10 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 				TComplexContainerHelper.getChildActivity(wrappedScope)), f);
 		this.scope = wrappedScope;
 		
-		if (wrappedScope.getVariables() == null) {
-			wrappedScope.setVariables(new TVariables());
+		if (!wrappedScope.isSetVariables()) {
+			wrappedScope.addNewVariables();
 		}
-		for (TVariable v : wrappedScope.getVariables().getVariable()) {
+		for (TVariable v : wrappedScope.getVariables().getVariableArray()) {
 			variables.add(getFactory().createVariable(v));
 		}
 	}
@@ -56,17 +55,14 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 		return null;
 	}
 	
-	@Override
 	public List<? extends IVariable> getVariables() {
 		return Collections.unmodifiableList(this.variables);
 	}
 
-	@Override
 	public IVariable addVariable() {
-		TVariable nativeVariable = new TVariable();
-		Variable variable = getFactory().createVariable(nativeVariable);
+		TVariable nativeVariable = scope.getVariables().addNewVariable();
 
-		this.scope.getVariables().getVariable().add(nativeVariable);
+		Variable variable = getFactory().createVariable(nativeVariable);
 		this.variables.add(variable);
 		return variable;
 	}

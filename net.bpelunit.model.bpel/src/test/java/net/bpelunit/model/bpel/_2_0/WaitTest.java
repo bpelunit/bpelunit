@@ -4,7 +4,7 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TWait;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TWait;
 
 
 public class WaitTest {
@@ -15,7 +15,7 @@ public class WaitTest {
 	@Before
 	public void setUp() {
 		BpelFactory f = new BpelFactory();
-		nativeWait = new TWait();
+		nativeWait = TWait.Factory.newInstance();
 		wait = new Wait(nativeWait, f);
 	}
 	

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TAssign;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TAssign;
 
 
 public class AssignTest {
@@ -15,7 +15,7 @@ public class AssignTest {
 	@Before
 	public void setUp() {
 		BpelFactory f = new BpelFactory();
-		nativeAssign = new TAssign();
+		nativeAssign = TAssign.Factory.newInstance();
 		assign = new Assign(nativeAssign, f);
 	}
 	

@@ -4,8 +4,8 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TEmpty;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TOnMessage;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TEmpty;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnMessage;
 
 
 public class OnMessageTest {
@@ -18,10 +18,10 @@ public class OnMessageTest {
 	@Before
 	public void setUp() {
 		BpelFactory f = new BpelFactory();
-		nativeOnMessage = new TOnMessage();
+		nativeOnMessage = TOnMessage.Factory.newInstance();
 		onMessage = new OnMessage(nativeOnMessage, f);
 		
-		nativeMainActivity = new TEmpty();
+		nativeMainActivity = TEmpty.Factory.newInstance();
 		mainActivity = new Empty(nativeMainActivity, f);
 		
 		onMessage.setMainActivity(mainActivity);

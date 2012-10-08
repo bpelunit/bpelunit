@@ -7,7 +7,8 @@ import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.ISource;
 import net.bpelunit.model.bpel.ITarget;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TActivity;
+import org.apache.xmlbeans.XmlObject;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
 
 abstract class AbstractActivity<T extends TActivity> extends AbstractBpelObject implements IActivity {
 
@@ -27,12 +28,10 @@ abstract class AbstractActivity<T extends TActivity> extends AbstractBpelObject 
 		return null; // TODO
 	}
 
-	@Override
 	public String getName() {
 		return activity.getName();
 	}
 
-	@Override
 	public void setName(String value) {
 		activity.setName(value);
 	}
@@ -45,7 +44,6 @@ abstract class AbstractActivity<T extends TActivity> extends AbstractBpelObject 
 		return activity;
 	}
 	
-	@Override
 	public String getActivityName() {
 		return activity.getClass().getSimpleName().substring(1);
 	}
@@ -62,5 +60,10 @@ abstract class AbstractActivity<T extends TActivity> extends AbstractBpelObject 
 		} else {
 			return null;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void setNativeActivity(XmlObject newNativeActivity) {
+		this.activity = (T)newNativeActivity;
 	}
 }

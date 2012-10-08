@@ -12,7 +12,7 @@ import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.model.bpel.IWait;
 
 import org.junit.Test;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TWait;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TWait;
 
 
 public class ProcessTest {

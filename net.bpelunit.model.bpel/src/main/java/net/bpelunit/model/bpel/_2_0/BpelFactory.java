@@ -4,41 +4,39 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-
 import net.bpelunit.model.bpel.IBpelFactory;
 import net.bpelunit.model.bpel.ICompensate;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TAssign;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TCompensate;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TCompensateScope;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TCopy;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TDocumentation;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TEmpty;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TExit;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TFlow;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TForEach;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TFrom;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TIf;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TImport;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TInvoke;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TLink;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TPartnerLink;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TPick;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TProcess;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TReceive;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TRepeatUntil;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TReply;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TRethrow;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TScope;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TSequence;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TThrow;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TTo;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TValidate;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TVariable;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TWait;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TWhile;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.ProcessDocument;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TAssign;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TCompensate;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TCompensateScope;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TCopy;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TDocumentation;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TEmpty;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TExit;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TFlow;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TForEach;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TFrom;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TIf;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TImport;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TInvoke;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TLink;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TPartnerLink;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TPick;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TProcess;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TReceive;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TRepeatUntil;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TReply;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TRethrow;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TScope;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TSequence;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TThrow;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TTo;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TValidate;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TVariable;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TWait;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TWhile;
 
 public class BpelFactory implements IBpelFactory {
 
@@ -49,12 +47,14 @@ public class BpelFactory implements IBpelFactory {
 	private Process process;
 
 	public BpelFactory() {
-		this(new TProcess());
+		this(ProcessDocument.Factory.newInstance());
 	}
 	
-	public BpelFactory(TProcess nativeProcess) {
+	public BpelFactory(ProcessDocument nativeProcess) {
+		if(nativeProcess.getProcess() == null) {
+			nativeProcess.addNewProcess();
+		}
 		this.process = new Process(nativeProcess, this);
-		registerClass(TProcess.class);
 	}
 
 	AbstractActivity<?> createActivity(Object a) {
@@ -226,106 +226,85 @@ public class BpelFactory implements IBpelFactory {
 		return new Documentation(bpelDoc, this);
 	}
 
-	@Override
 	public Assign createAssign() {
-		return createActivity(new TAssign());
+		return createActivity(TAssign.Factory.newInstance());
 	}
 
-	@Override
 	public ICompensate createCompensate() {
-		return createActivity(new TCompensate());
+		return createActivity(TCompensate.Factory.newInstance());
 	}
 
-	@Override
 	public CompensateScope createCompensateScope() {
-		return createActivity(new TCompensateScope());
+		return createActivity(TCompensateScope.Factory.newInstance());
 	}
 
-	@Override
 	public Empty createEmpty() {
-		return createActivity(new TEmpty());
+		return createActivity(TEmpty.Factory.newInstance());
 	}
 
-	@Override
 	public Exit createExit() {
-		return createActivity(new TExit());
+		return createActivity(TExit.Factory.newInstance());
 	}
 
-	@Override
 	public Flow createFlow() {
-		return createActivity(new TFlow());
+		return createActivity(TFlow.Factory.newInstance());
 	}
 
-	@Override
 	public ForEach createForEach() {
-		TForEach forEach = new TForEach();
-		forEach.setScope(new TScope());
+		TForEach forEach = TForEach.Factory.newInstance();
 		return createActivity(forEach);
 	}
 
-	@Override
 	public If createIf() {
-		return createActivity(new TIf());
+		return createActivity(TIf.Factory.newInstance());
 	}
 
-	@Override
 	public Invoke createInvoke() {
-		return createActivity(new TInvoke());
+		return createActivity(TInvoke.Factory.newInstance());
 	}
 
-	@Override
 	public Pick createPick() {
-		return createActivity(new TPick());
+		return createActivity(TPick.Factory.newInstance());
 	}
 
-	@Override
 	public Receive createReceive() {
-		return createActivity(new TReceive());
+		return createActivity(TReceive.Factory.newInstance());
 	}
 	
-	@Override
 	public RepeatUntil createRepeatUntil() {
-		return createActivity(new TRepeatUntil());
+		return createActivity(TRepeatUntil.Factory.newInstance());
 	}
 
-	@Override
 	public Reply createReply() {
-		return createActivity(new TReply());
+		return createActivity(TReply.Factory.newInstance());
 	}
 
-	@Override
 	public Rethrow createRethrow() {
-		return createActivity(new TRethrow());
+		return createActivity(TRethrow.Factory.newInstance());
 	}
 	
-	@Override
 	public Scope createScope() {
-		return createActivity(new TScope());
+		return createActivity(TScope.Factory.newInstance());
 	}
 	
-	@Override
 	public Sequence createSequence() {
-		return createActivity(new TSequence());
+		return createActivity(TSequence.Factory.newInstance());
 	}
 	
-	@Override
 	public Throw createThrow() {
-		return createActivity(new TThrow());
+		return createActivity(TThrow.Factory.newInstance());
 	}
 	
-	@Override
 	public Validate createValidate() {
-		return createActivity(new TValidate());
+		return createActivity(TValidate.Factory.newInstance());
 	}
 
-	@Override
 	public Wait createWait() {
-		return createActivity(new TWait());
+		return createActivity(TWait.Factory.newInstance());
 	}
 	
-	@Override
 	public While createWhile() {
-		return createActivity(new TWhile());
+		return createActivity(TWhile.Factory.newInstance());
 	}
 
 	public PartnerLink createPartnerLink(TPartnerLink p) {
@@ -356,15 +335,10 @@ public class BpelFactory implements IBpelFactory {
 		return new From(from, this);
 	}
 
-	@Override
 	public String getNamespace() {
 		return NAMESPACE_BPEL_2_0; 
 	}
 
-	public JAXBContext getJAXBContext() throws JAXBException {
-		return JAXBContext.newInstance(classes.toArray(new Class<?>[0]));
-	}
-	
 	void registerClass(Class<?> clazz) {
 		try {
 			if(clazz.getConstructor() != null) {

@@ -3,7 +3,7 @@ package net.bpelunit.model.bpel._2_0;
 import net.bpelunit.model.bpel.IVisitor;
 import net.bpelunit.model.bpel.IWhile;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TWhile;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TWhile;
 
 public class While extends AbstractSingleContainer<TWhile> implements IWhile {
 

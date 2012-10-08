@@ -3,7 +3,7 @@ package net.bpelunit.model.bpel._2_0;
 import net.bpelunit.model.bpel.IActivity;
 import net.bpelunit.model.bpel.ISingleContainer;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TActivity;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
 
 abstract class AbstractSingleContainer<T extends TActivity> extends
 		AbstractActivity<T> implements ISingleContainer {
@@ -15,7 +15,6 @@ abstract class AbstractSingleContainer<T extends TActivity> extends
 		this.mainActivity = newMainActivity;
 	}
 
-	@Override
 	public void setMainActivity(IActivity a) {
 		if(a instanceof AbstractActivity<?>) {
 			this.mainActivity = (AbstractActivity<?>)a;
@@ -28,12 +27,10 @@ abstract class AbstractSingleContainer<T extends TActivity> extends
 	protected abstract void setMainActivityBpel(
 			AbstractActivity<?> nativeActivity);
 
-	@Override
 	public AbstractActivity<?> getMainActivity() {
 		return this.mainActivity;
 	}
 
-	@Override
 	public boolean isBasicActivity() {
 		return false;
 	}

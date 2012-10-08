@@ -5,8 +5,8 @@ import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IOnAlarm;
 import net.bpelunit.model.bpel.IVisitor;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TActivity;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TOnAlarmPick;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnAlarmPick;
 
 public class OnAlarm extends AbstractBpelObject implements IOnAlarm {
 
@@ -21,14 +21,12 @@ public class OnAlarm extends AbstractBpelObject implements IOnAlarm {
 		this.mainActivity = getFactory().createActivity(childActivity);
 	}
 	
-	@Override
 	public void setMainActivity(IActivity a) {
 		AbstractActivity<?> abstractActivity = (AbstractActivity<?>)a;
 		this.mainActivity = abstractActivity;
 		TComplexContainerHelper.setActivity(onAlarm, abstractActivity.getNativeActivity());
 	}
 
-	@Override
 	public AbstractActivity<?> getMainActivity() {
 		return this.mainActivity;
 	}

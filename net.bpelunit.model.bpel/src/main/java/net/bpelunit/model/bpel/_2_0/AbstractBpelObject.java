@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TDocumentation;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TExtensibleElements;
-
 import net.bpelunit.model.bpel.IActivity;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IVisitor;
+
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TDocumentation;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TExtensibleElements;
 
 abstract class AbstractBpelObject implements IBpelObject {
 
@@ -25,12 +25,11 @@ abstract class AbstractBpelObject implements IBpelObject {
 
 		this.nativeElement = t;
 
-		for (TDocumentation d : nativeElement.getDocumentation()) {
+		for (TDocumentation d : nativeElement.getDocumentationArray()) {
 			documentations.add(new Documentation(d, factory));
 		}
 	}
 
-	@Override
 	public BpelFactory getFactory() {
 		return factory;
 	}
@@ -51,25 +50,22 @@ abstract class AbstractBpelObject implements IBpelObject {
 		}
 	}
 
-	@Override
 	public List<Documentation> getDocumentation() {
 		return Collections.unmodifiableList(documentations);
 	}
 
-	@Override
 	public Documentation addDocumentation() {
-		TDocumentation bpelDoc = new TDocumentation();
+		
+		TDocumentation bpelDoc = nativeElement.addNewDocumentation();
 
 		Documentation bpelDocumentation = getFactory().createDocumentation(
 				bpelDoc);
 
-		nativeElement.getDocumentation().add(bpelDoc);
 		this.documentations.add(bpelDocumentation);
 
 		return bpelDocumentation;
 	}
 	
-	@Override
 	public String getXPathInDocument() {
 		return null;
 	}

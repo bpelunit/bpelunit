@@ -6,9 +6,9 @@ import java.util.List;
 import net.bpelunit.model.bpel.IAssign;
 import net.bpelunit.model.bpel.ICopy;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TAssign;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TCopy;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TExtensibleElements;
+import org.apache.xmlbeans.XmlObject;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TAssign;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TCopy;
 
 class Assign extends AbstractBasicActivity<TAssign> implements IAssign {
 
@@ -19,11 +19,7 @@ class Assign extends AbstractBasicActivity<TAssign> implements IAssign {
 		super(a, factory, IAssign.class);
 		this.assign = a;
 		
-		for(TExtensibleElements c : a.getCopyOrExtensionAssignOperation()) {
-			if(c instanceof TCopy) {
-				copy.add(getFactory().createCopy((TCopy)c));
-			}
-		}
+		setNativeActivity(a);
 	}
 	
 	public void setValidate(boolean value) {
@@ -34,14 +30,24 @@ class Assign extends AbstractBasicActivity<TAssign> implements IAssign {
 		return TBooleanHelper.convert(assign.getValidate());
 	}
 	
-	@Override
 	public ICopy addCopy() {
-		TCopy nativeCopy = new TCopy();
+		TCopy nativeCopy = this.assign.addNewCopy();
 		Copy newCopy = getFactory().createCopy(nativeCopy);
 		
 		this.copy.add(newCopy);
-		this.assign.getCopyOrExtensionAssignOperation().add(nativeCopy);
 		
 		return newCopy;
+	}
+	
+	@Override
+	protected void setNativeActivity(XmlObject newNativeActivity) {
+		super.setNativeActivity(newNativeActivity);
+		TAssign a = (TAssign)newNativeActivity;
+		this.assign = a;
+		
+		copy.clear();
+		for(TCopy c : a.getCopyArray()) {
+			copy.add(getFactory().createCopy((TCopy)c));
+		}
 	}
 }

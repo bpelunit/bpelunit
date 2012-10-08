@@ -1,41 +1,62 @@
 package net.bpelunit.model.bpel._2_0;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TDocumentation;
-
 import net.bpelunit.model.bpel.IDocumentation;
+import net.bpelunit.util.XMLUtil;
+
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TDocumentation;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 public class Documentation implements IDocumentation {
 
 	private TDocumentation documentation;
-	private BpelFactory factory;
-	
+
 	public Documentation(TDocumentation wrappedDocumentation, BpelFactory f) {
 		this.documentation = wrappedDocumentation;
-		this.factory = f;
 	}
-	
-	@Override
+
 	public List<Object> getDocumentationElements() {
-		return Collections.unmodifiableList(documentation.getContent());
+		List<Object> result = new ArrayList<Object>();
+		NodeList children = documentation.getDomNode().getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Node n = children.item(i);
+			if (n.getNodeType() != Node.ATTRIBUTE_NODE) {
+				result.add(n);
+			}
+		}
+
+		return result;
 	}
 
-	@Override
 	public void setDocumentationElement(Object doc) {
-		documentation.getContent().clear();
-		documentation.getContent().add(doc);
-		factory.registerClass(doc.getClass());
+		Node docNode = documentation.getDomNode();
+		XMLUtil.removeAllSubNodesExceptAttributes(docNode);
+
+		appendNode(doc, docNode);
 	}
 
-	@Override
+	private void appendNode(Object doc, Node docNode) {
+		if (doc instanceof Node) {
+			docNode.appendChild((Node) doc);
+		} else {
+			Text textNode = docNode.getOwnerDocument().createTextNode(
+					doc.toString());
+			docNode.appendChild(textNode);
+		}
+	}
+
 	public void setDocumentationElements(List<Object> e) {
-		documentation.getContent().clear();
-		if(e != null) {
-			documentation.getContent().addAll(e);
-			for(Object o : e) {
-				factory.registerClass(o.getClass());
+		Node docNode = documentation.getDomNode();
+
+		XMLUtil.removeAllSubNodesExceptAttributes(docNode);
+
+		if (e != null) {
+			for (Object doc : e) {
+				appendNode(doc, docNode);
 			}
 		}
 	}

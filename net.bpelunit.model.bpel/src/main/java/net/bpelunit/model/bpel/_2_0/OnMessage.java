@@ -5,8 +5,8 @@ import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IOnMessage;
 import net.bpelunit.model.bpel.IVisitor;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TActivity;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TOnMessage;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnMessage;
 
 public class OnMessage extends AbstractBpelObject implements IOnMessage {
 
@@ -21,14 +21,12 @@ public class OnMessage extends AbstractBpelObject implements IOnMessage {
 		this.mainActivity = getFactory().createActivity(childActivity);
 	}
 	
-	@Override
 	public void setMainActivity(IActivity a) {
 		AbstractActivity<?> abstractActivity = (AbstractActivity<?>)a;
 		this.mainActivity = abstractActivity;
 		TComplexContainerHelper.setActivity(onMessage, abstractActivity.getNativeActivity());
 	}
 
-	@Override
 	public AbstractActivity<?> getMainActivity() {
 		return this.mainActivity;
 	}

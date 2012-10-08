@@ -4,7 +4,7 @@ import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.ILink;
 import net.bpelunit.model.bpel.IVisitor;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TLink;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TLink;
 
 class Link extends AbstractBpelObject implements ILink {
 
@@ -15,12 +15,10 @@ class Link extends AbstractBpelObject implements ILink {
 		link = l;
 	}
 
-	@Override
 	public String getName() {
 		return link.getName();
 	}
 
-	@Override
 	public void setName(String value) {
 		link.setName(value);
 	}

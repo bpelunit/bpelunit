@@ -6,10 +6,10 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TEmpty;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TOnAlarmPick;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TOnMessage;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TPick;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TEmpty;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnAlarmPick;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnMessage;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TPick;
 
 
 public class PickTest {
@@ -27,18 +27,18 @@ public class PickTest {
 	@Before
 	public void setUp() {
 		BpelFactory f = new BpelFactory();
-		nativePick = new TPick();
+		nativePick = TPick.Factory.newInstance();
 		pick = new Pick(nativePick, f);
 		
 		onMessage = (OnMessage)pick.addOnMessage();
 		nativeOnMessage = onMessage.getNativeActivity();
-		nativeMainActivityOnMessage = new TEmpty();
+		nativeMainActivityOnMessage = TEmpty.Factory.newInstance();
 		mainActivityOnMessage = new Empty(nativeMainActivityOnMessage, f);
 		onMessage.setMainActivity(mainActivityOnMessage);
 		
 		onAlarm = (OnAlarm)pick.addOnAlarm();
 		nativeOnAlarm = onAlarm.getNativeActivity();
-		nativeMainActivityOnAlarm = new TEmpty();
+		nativeMainActivityOnAlarm = TEmpty.Factory.newInstance();
 		mainActivityOnAlarm = new Empty(nativeMainActivityOnAlarm, f);
 		onAlarm.setMainActivity(mainActivityOnAlarm);
 	}

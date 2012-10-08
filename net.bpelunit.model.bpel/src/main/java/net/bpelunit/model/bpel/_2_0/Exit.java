@@ -2,7 +2,7 @@ package net.bpelunit.model.bpel._2_0;
 
 import net.bpelunit.model.bpel.IExit;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TExit;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TExit;
 
 public class Exit extends AbstractBasicActivity<TExit> implements IExit {
 

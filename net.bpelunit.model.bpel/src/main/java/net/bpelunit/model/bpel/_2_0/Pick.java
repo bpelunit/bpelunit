@@ -10,10 +10,11 @@ import net.bpelunit.model.bpel.IOnMessage;
 import net.bpelunit.model.bpel.IPick;
 import net.bpelunit.model.bpel.IVisitor;
 
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TBoolean;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TOnAlarmPick;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TOnMessage;
-import org.oasis_open.docs.wsbpel._2_0.process.executable.TPick;
+import org.apache.xmlbeans.XmlObject;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnAlarmPick;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnMessage;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TPick;
 
 public class Pick extends AbstractActivity<TPick> implements IPick {
 
@@ -26,16 +27,24 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 
 		this.factory = f;
 		
-		for(TOnMessage m : wrappedPick.getOnMessage()) {
-			onMessages.add(new OnMessage(m, f));
-		}
-		
-		for(TOnAlarmPick a : wrappedPick.getOnAlarm()) {
-			onAlarms.add(new OnAlarm(a, f));
-		}
+		setNativeActivity(wrappedPick);
 	}
 
 	@Override
+	protected void setNativeActivity(XmlObject newNativeActivity) {
+		super.setNativeActivity(newNativeActivity);
+		
+		TPick wrappedPick = (TPick)newNativeActivity;
+		
+		for(TOnMessage m : wrappedPick.getOnMessageArray()) {
+			onMessages.add(new OnMessage(m, this.factory));
+		}
+		
+		for(TOnAlarmPick a : wrappedPick.getOnAlarmArray()) {
+			onAlarms.add(new OnAlarm(a, this.factory));
+		}
+	}
+
 	public boolean isBasicActivity() {
 		return false;
 	}
@@ -52,7 +61,6 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 		}
 	}
 
-	@Override
 	public void setCreateInstance(boolean b) {
 		if(b) {
 			getNativeActivity().setCreateInstance(TBoolean.YES);
@@ -61,37 +69,30 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 		}
 	}
 
-	@Override
 	public boolean isCreateInstance() {
 		return TBoolean.YES.equals(getNativeActivity().getCreateInstance());
 	}
 
-	@Override
 	public List<? extends IOnMessage> getOnMessages() {
 		return Collections.unmodifiableList(onMessages);
 	}
 
-	@Override
 	public List<? extends IOnAlarm> getOnAlarms() {
 		return Collections.unmodifiableList(onAlarms);
 	}
 
-	@Override
 	public OnMessage addOnMessage() {
-		TOnMessage nativeOnMessage = new TOnMessage();
+		TOnMessage nativeOnMessage = getNativeActivity().addNewOnMessage();
 		OnMessage onMessage = new OnMessage(nativeOnMessage, factory);
 		onMessages.add(onMessage);
-		getNativeActivity().getOnMessage().add(nativeOnMessage);
 		
 		return onMessage;
 	}
 
-	@Override
 	public OnAlarm addOnAlarm() {
-		TOnAlarmPick nativeOnAlarm = new TOnAlarmPick();
+		TOnAlarmPick nativeOnAlarm = getNativeActivity().addNewOnAlarm();
 		OnAlarm onAlarm = new OnAlarm(nativeOnAlarm, factory);
 		onAlarms.add(onAlarm);
-		getNativeActivity().getOnAlarm().add(nativeOnAlarm);
 		
 		return onAlarm;
 	}
