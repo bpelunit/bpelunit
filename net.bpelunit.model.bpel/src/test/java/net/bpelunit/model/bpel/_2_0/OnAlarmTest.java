@@ -17,14 +17,11 @@ public class OnAlarmTest {
 	
 	@Before
 	public void setUp() {
-		BpelFactory f = new BpelFactory();
 		nativeOnAlarm = TOnAlarmPick.Factory.newInstance();
-		onAlarm = new OnAlarm(nativeOnAlarm, f);
+		onAlarm = new OnAlarm(nativeOnAlarm);
 		
-		nativeMainActivity = TEmpty.Factory.newInstance();
-		mainActivity = new Empty(nativeMainActivity, f);
-		
-		onAlarm.setMainActivity(mainActivity);
+		mainActivity = onAlarm.setNewEmpty();
+		nativeMainActivity = mainActivity.getNativeActivity();
 	}
 	
 	@Test

@@ -16,18 +16,16 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 
 	private TScope scope;
 	private List<Variable> variables = new ArrayList<Variable>();
-
 	
-	Scope(TScope wrappedScope, BpelFactory f) {
-		super(wrappedScope, f.createActivity(
-				TComplexContainerHelper.getChildActivity(wrappedScope)), f);
+	public Scope(TScope wrappedScope) {
+		super(wrappedScope);
 		this.scope = wrappedScope;
 		
 		if (!wrappedScope.isSetVariables()) {
 			wrappedScope.addNewVariables();
 		}
 		for (TVariable v : wrappedScope.getVariables().getVariableArray()) {
-			variables.add(getFactory().createVariable(v));
+			variables.add(new Variable(v));
 		}
 	}
 
@@ -39,14 +37,16 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 	@Override
 	public void visit(IVisitor v) {
 		v.visit(this);
-		getMainActivity().visit(v);
+		AbstractActivity<?> mainActivity = getMainActivity();
+		if(mainActivity != null) {
+			mainActivity.visit(v);
+		}
 	}
 	
 	@Override
 	IBpelObject getObjectForNativeObject(Object nativeObject) {
-		IBpelObject o = super.getObjectForNativeObject(nativeObject);
-		if(o != null) {
-			return o;
+		if(nativeObject == scope) {
+			return this;
 		} else {
 			if(scope != null) {
 				return getMainActivity().getObjectForNativeObject(nativeObject);
@@ -62,20 +62,9 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 	public IVariable addVariable() {
 		TVariable nativeVariable = scope.getVariables().addNewVariable();
 
-		Variable variable = getFactory().createVariable(nativeVariable);
+		Variable variable = new Variable(nativeVariable);
 		this.variables.add(variable);
 		return variable;
 	}
 
-
-	@Override
-	protected void setMainActivityBpel(AbstractActivity<?> activity) {
-		TComplexContainerHelper.removeMainActivity(scope);
-		if (activity != null) {
-			TComplexContainerHelper.setActivity(scope,
-					activity.getNativeActivity());
-		} else {
-			TComplexContainerHelper.setActivity(scope, null);
-		}
-	}
 }

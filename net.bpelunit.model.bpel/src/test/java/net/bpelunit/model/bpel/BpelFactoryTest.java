@@ -1,4 +1,4 @@
-package net.bpelunit.bpel;
+package net.bpelunit.model.bpel;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,7 +14,7 @@ public class BpelFactoryTest {
 
 	@Test
 	public void testLoadProcess() throws Exception {
-		InputStream in = getClass().getResourceAsStream("/TEST.bpel");
+		InputStream in = getClass().getResourceAsStream("TEST.bpel");
 		IProcess p = BpelFactory.loadProcess(in);
 		assertEquals("TEST", p.getName());
 		assertEquals("TESTNS", p.getTargetNamespace());

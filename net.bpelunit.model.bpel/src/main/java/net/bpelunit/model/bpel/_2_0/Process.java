@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.bpelunit.model.bpel.IActivity;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IImport;
 import net.bpelunit.model.bpel.IPartnerLink;
@@ -20,43 +19,34 @@ import org.apache.commons.io.IOUtils;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.ProcessDocument;
-import org.oasisOpen.docs.wsbpel.x20.process.executable.TAssign;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TImport;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TPartnerLink;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TProcess;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TVariable;
 
-class Process extends AbstractBpelObject implements IProcess {
+class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 
 	private ProcessDocument processDoc;
 	private TProcess process;
-	private AbstractActivity<?> mainActivity;
 	private List<PartnerLink> partnerLinks = new ArrayList<PartnerLink>();
 	private List<Import> imports = new ArrayList<Import>();
 	private List<Variable> variables = new ArrayList<Variable>();
-	private BpelFactory factory;
 
-	Process(ProcessDocument newProcess, BpelFactory f) {
-		super(newProcess.getProcess(), null);
-		this.factory = f;
+	Process(ProcessDocument newProcess) {
+		super(newProcess.getProcess());
 		
 		this.processDoc = newProcess;
 		this.process = processDoc.getProcess();
 		
-		org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity childActivity = TComplexContainerHelper
-				.getChildActivity(process);
-		
-		this.setMainActivity(f.createActivity(childActivity));
-
 		if (process.getPartnerLinks() != null) {
 			for (TPartnerLink p : process.getPartnerLinks().getPartnerLinkArray()) {
-				partnerLinks.add(getFactory().createPartnerLink(p));
+				partnerLinks.add(new PartnerLink(p));
 			}
 		}
 
 		for (TImport i : process.getImportArray()) {
-			imports.add(getFactory().createImport(i));
+			imports.add(new Import(i));
 		}
 
 		if(process.getVariables() == null) {
@@ -66,15 +56,10 @@ class Process extends AbstractBpelObject implements IProcess {
 			process.addNewVariables();
 		}
 		for (TVariable v : process.getVariables().getVariableArray()) {
-			variables.add(getFactory().createVariable(v));
+			variables.add(new Variable(v));
 		}
 	}
 
-	@Override
-	public BpelFactory getFactory() {
-		return factory;
-	}
-	
 	public String getName() {
 		return process.getName();
 	}
@@ -99,22 +84,6 @@ class Process extends AbstractBpelObject implements IProcess {
 		process.setTargetNamespace(value);
 	}
 
-	public void setMainActivity(IActivity a) {
-		checkForCorrectModel(a);
-		AbstractActivity<?> activity = ((AbstractActivity<?>) a);
-		TComplexContainerHelper.removeMainActivity(process);
-		if (activity != null) {
-			TAssign tempActivity = process.addNewAssign();
-			XmlObject newNativeActivity = tempActivity.set(activity.getNativeActivity());
-			activity.setNativeActivity(newNativeActivity);
-		}
-		this.mainActivity = activity;
-	}
-
-	public AbstractActivity<?> getMainActivity() {
-		return this.mainActivity;
-	}
-
 	public List<? extends IPartnerLink> getPartnerLinks() {
 		return Collections.unmodifiableList(this.partnerLinks);
 	}
@@ -126,6 +95,15 @@ class Process extends AbstractBpelObject implements IProcess {
 	@Override
 	public void visit(IVisitor v) {
 		v.visit(this);
+		for(PartnerLink pl : partnerLinks) {
+			pl.visit(v);
+		}
+		for(Variable var : variables) {
+			var.visit(v);
+		}
+		for(Import imp : imports) {
+			imp.visit(v);
+		}
 		getMainActivity().visit(v);
 	}
 
@@ -136,7 +114,7 @@ class Process extends AbstractBpelObject implements IProcess {
 	public IVariable addVariable() {
 		TVariable nativeVariable = process.getVariables().addNewVariable();
 		
-		Variable variable = getFactory().createVariable(nativeVariable);
+		Variable variable = new Variable(nativeVariable);
 		this.variables.add(variable);
 		
 		return variable;
@@ -146,7 +124,7 @@ class Process extends AbstractBpelObject implements IProcess {
 		guaranteePartnerLinks(this.process);
 		TPartnerLink nativePartnerLink = process.getPartnerLinks().addNewPartnerLink();
 		
-		PartnerLink partnerLink = getFactory().createPartnerLink(nativePartnerLink);
+		PartnerLink partnerLink = new PartnerLink(nativePartnerLink);
 		this.partnerLinks.add(partnerLink);
 		
 		return partnerLink;
@@ -164,7 +142,7 @@ class Process extends AbstractBpelObject implements IProcess {
 			options.setSavePrettyPrint();
 			
 			Map<String, String> suggestedPrefixes = new HashMap<String, String>();
-			suggestedPrefixes.put(factory.getNamespace(), "bpel");
+			suggestedPrefixes.put(BpelFactory.INSTANCE.getNamespace(), "bpel");
 			options.setSaveSuggestedPrefixes(suggestedPrefixes);
 			
 			processDoc.save(out, options);
@@ -176,7 +154,7 @@ class Process extends AbstractBpelObject implements IProcess {
 	public IImport addImport() {
 		TImport nativeImport = process.addNewImport();;
 
-		Import imp = getFactory().createImport(nativeImport);
+		Import imp = new Import(nativeImport);
 		this.imports.add(imp);
 		
 		return imp;
@@ -184,9 +162,7 @@ class Process extends AbstractBpelObject implements IProcess {
 
 	public List<IBpelObject> getElementsByXPath(String xpathToBpelElement) {
 		
-		String xpath = "declare namespace bpel='"+ factory.getNamespace() + "' " + xpathToBpelElement;
-				
-		XmlObject[] results = process.selectPath(xpath);
+		XmlObject[] results = process.selectPath(xpathToBpelElement);
 		
 		List<IBpelObject> retval = new ArrayList<IBpelObject>();
 		for(XmlObject o : results){
@@ -203,10 +179,11 @@ class Process extends AbstractBpelObject implements IProcess {
 
 	@Override
 	IBpelObject getObjectForNativeObject(Object nativeObject) {
-		if(mainActivity != null) {
-			return mainActivity.getObjectForNativeObject(nativeObject);
+		if(getMainActivity() != null) {
+			return getMainActivity().getObjectForNativeObject(nativeObject);
 		} else {
 			return null;
 		}
 	}
 }
+

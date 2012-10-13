@@ -20,17 +20,14 @@ public class SequenceTest {
 	
 	@Before
 	public void setUp() {
-		BpelFactory f = new BpelFactory();
 		nativeSequence = TSequence.Factory.newInstance();
-		sequence = new Sequence(nativeSequence, f);
+		sequence = new Sequence(nativeSequence);
 		
-		nativeActivity1 = TEmpty.Factory.newInstance();
-		activity1 = new Empty(nativeActivity1, f);
-		sequence.addActivity(activity1);
+		activity1 = sequence.addEmpty();
+		nativeActivity1 = activity1.getNativeActivity();
 		
-		nativeActivity2 = TEmpty.Factory.newInstance();
-		activity2 = new Empty(nativeActivity2, f);
-		sequence.addActivity(activity2);
+		activity2 = sequence.addEmpty();
+		nativeActivity2 = activity2.getNativeActivity();
 	}
 	
 	@Test

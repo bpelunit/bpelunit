@@ -1,16 +1,25 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable" targetNamespace="ProcessNamespace" name="MyProcess">
-    <import importType="http://schemas.xmlsoap.org/wsdl/" location="testSimpleProcessSequence.wsdl" namespace="http://www.example.org/service"/>
-    <partnerLinks>
-        <partnerLink xmlns:ns2="http://www.example.org/service" myRole="process" partnerLinkType="ns2:processPLT" name="processPL"/>
-    </partnerLinks>
-    <variables>
-        <variable xmlns:ns2="http://www.example.org/service" messageType="ns2:Request" name="request"/>
-        <variable xmlns:ns2="http://www.example.org/service" messageType="ns2:Response" name="response"/>
-    </variables>
-    <sequence name="mainSequence">
-        <receive xmlns:ns2="http://www.example.org/service" createInstance="yes" variable="request" operation="operation" portType="ns2:Porttype" partnerLink="processPL" name="receive"/>
-        <assign name="assign"/>
-        <reply xmlns:ns2="http://www.example.org/service" variable="response" operation="operation" portType="ns2:Porttype" partnerLink="processPL" name="reply"/>
-    </sequence>
-</process>
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process name="MyProcess" targetNamespace="ProcessNamespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+  <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="testSimpleProcessSequence.wsdl" namespace="http://www.example.org/service"/>
+  <bpel:partnerLinks>
+    <bpel:partnerLink name="processPL" partnerLinkType="ser:processPLT" myRole="process" xmlns:ser="http://www.example.org/service"/>
+  </bpel:partnerLinks>
+  <bpel:variables>
+    <bpel:variable name="request" messageType="ser:Request" xmlns:ser="http://www.example.org/service"/>
+    <bpel:variable name="response" messageType="ser:Response" xmlns:ser="http://www.example.org/service"/>
+  </bpel:variables>
+  <bpel:sequence name="mainSequence">
+    <bpel:receive name="receive" createInstance="yes" variable="request" operation="operation" partnerLink="processPL" portType="ser:Porttype" xmlns:ser="http://www.example.org/service"/>
+    <bpel:assign name="assign">
+      <bpel:copy>
+        <bpel:from variable="request" part="parameters">
+          <bpel:query>in</bpel:query>
+        </bpel:from>
+        <bpel:to variable="response" part="parameters">
+          <bpel:query>in</bpel:query>
+        </bpel:to>
+      </bpel:copy>
+    </bpel:assign>
+    <bpel:reply name="reply" variable="response" operation="operation" partnerLink="processPL" portType="ser:Porttype" xmlns:ser="http://www.example.org/service"/>
+  </bpel:sequence>
+</bpel:process>

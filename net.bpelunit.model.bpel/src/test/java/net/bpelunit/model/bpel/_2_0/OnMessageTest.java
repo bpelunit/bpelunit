@@ -17,14 +17,11 @@ public class OnMessageTest {
 	
 	@Before
 	public void setUp() {
-		BpelFactory f = new BpelFactory();
 		nativeOnMessage = TOnMessage.Factory.newInstance();
-		onMessage = new OnMessage(nativeOnMessage, f);
+		onMessage = new OnMessage(nativeOnMessage);
 		
-		nativeMainActivity = TEmpty.Factory.newInstance();
-		mainActivity = new Empty(nativeMainActivity, f);
-		
-		onMessage.setMainActivity(mainActivity);
+		mainActivity = onMessage.setNewEmpty();
+		nativeMainActivity = mainActivity.getNativeActivity();
 	}
 	
 	@Test

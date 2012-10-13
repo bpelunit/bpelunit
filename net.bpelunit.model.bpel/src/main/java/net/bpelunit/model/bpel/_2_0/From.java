@@ -20,7 +20,7 @@ public class From implements IFrom {
 
 	private TFrom from;
 
-	From(TFrom wrappedFrom, BpelFactory f) {
+	From(TFrom wrappedFrom) {
 		this.from = wrappedFrom;
 	}
 

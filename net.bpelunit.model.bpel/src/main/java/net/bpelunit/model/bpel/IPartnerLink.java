@@ -2,7 +2,7 @@ package net.bpelunit.model.bpel;
 
 import javax.xml.namespace.QName;
 
-public interface IPartnerLink {
+public interface IPartnerLink extends IBpelObject {
 
 	String getName();
 

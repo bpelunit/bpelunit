@@ -1,5 +1,6 @@
 package net.bpelunit.model.bpel._2_0;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,23 +16,17 @@ abstract class AbstractBpelObject implements IBpelObject {
 
 	protected List<Documentation> documentations = new ArrayList<Documentation>();
 	private TExtensibleElements nativeElement;
-	private BpelFactory factory;
 	
-	public AbstractBpelObject(TExtensibleElements t, BpelFactory factory) {
+	public AbstractBpelObject(TExtensibleElements t) {
 		if (t == null) {
 			throw new NullPointerException("Wrapped activity must not be null!");
 		}
-		this.factory = factory;
 
 		this.nativeElement = t;
 
 		for (TDocumentation d : nativeElement.getDocumentationArray()) {
-			documentations.add(new Documentation(d, factory));
+			documentations.add(new Documentation(d));
 		}
-	}
-
-	public BpelFactory getFactory() {
-		return factory;
 	}
 
 	void checkForCorrectModel(IBpelObject o) {
@@ -58,8 +53,7 @@ abstract class AbstractBpelObject implements IBpelObject {
 		
 		TDocumentation bpelDoc = nativeElement.addNewDocumentation();
 
-		Documentation bpelDocumentation = getFactory().createDocumentation(
-				bpelDoc);
+		Documentation bpelDocumentation = new Documentation(bpelDoc);
 
 		this.documentations.add(bpelDocumentation);
 
@@ -72,5 +66,17 @@ abstract class AbstractBpelObject implements IBpelObject {
 	
 	abstract IBpelObject getObjectForNativeObject(Object nativeObject);
 	
-	abstract void visit(IVisitor v);
+	public void visit(IVisitor v) {
+		Class<? extends IVisitor> visitorClass = v.getClass();
+		for(Class<?> c : this.getClass().getInterfaces()) {
+			try {
+				Method m = visitorClass.getMethod("visit", c);
+				m.invoke(v, this);
+				return;
+			} catch (Exception e) {
+				// ignore
+			}
+		}
+		throw new RuntimeException("Cannot call visit for " + this.getClass());
+	}
 }

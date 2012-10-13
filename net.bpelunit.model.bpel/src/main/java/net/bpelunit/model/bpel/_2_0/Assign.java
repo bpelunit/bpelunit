@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.bpelunit.model.bpel.IAssign;
 import net.bpelunit.model.bpel.ICopy;
+import net.bpelunit.model.bpel.IVisitor;
 
 import org.apache.xmlbeans.XmlObject;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TAssign;
@@ -15,8 +16,8 @@ class Assign extends AbstractBasicActivity<TAssign> implements IAssign {
 	private TAssign assign;
 	private List<Copy> copy = new ArrayList<Copy>();
 	
-	Assign(TAssign a, BpelFactory factory) {
-		super(a, factory, IAssign.class);
+	public Assign(TAssign a) {
+		super(a);
 		this.assign = a;
 		
 		setNativeActivity(a);
@@ -32,7 +33,7 @@ class Assign extends AbstractBasicActivity<TAssign> implements IAssign {
 	
 	public ICopy addCopy() {
 		TCopy nativeCopy = this.assign.addNewCopy();
-		Copy newCopy = getFactory().createCopy(nativeCopy);
+		Copy newCopy = new Copy(nativeCopy);
 		
 		this.copy.add(newCopy);
 		
@@ -47,7 +48,15 @@ class Assign extends AbstractBasicActivity<TAssign> implements IAssign {
 		
 		copy.clear();
 		for(TCopy c : a.getCopyArray()) {
-			copy.add(getFactory().createCopy((TCopy)c));
+			copy.add(new Copy(c));
+		}
+	}
+	
+	@Override
+	public void visit(IVisitor v) {
+		v.visit(this);
+		for(Copy c : copy) {
+			c.visit(v);
 		}
 	}
 }

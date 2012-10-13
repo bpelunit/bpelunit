@@ -4,7 +4,6 @@ import javax.xml.namespace.QName;
 
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IVariable;
-import net.bpelunit.model.bpel.IVisitor;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TVariable;
 
@@ -12,8 +11,8 @@ public class Variable extends AbstractBpelObject implements IVariable {
 
 	private TVariable variable;
 
-	public Variable(TVariable v, BpelFactory f) {
-		super(v, f);
+	public Variable(TVariable v) {
+		super(v);
 		this.variable = v;
 	}
 
@@ -78,9 +77,5 @@ public class Variable extends AbstractBpelObject implements IVariable {
 		if(variable.getElement() != null) {
 			variable.unsetElement();
 		}
-	}
-	
-	@Override
-	void visit(IVisitor v) {
 	}
 }

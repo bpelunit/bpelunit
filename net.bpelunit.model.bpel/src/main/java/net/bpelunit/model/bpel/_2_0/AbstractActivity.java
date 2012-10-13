@@ -9,13 +9,16 @@ import net.bpelunit.model.bpel.ITarget;
 
 import org.apache.xmlbeans.XmlObject;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TExtensibleElements;
 
-abstract class AbstractActivity<T extends TActivity> extends AbstractBpelObject implements IActivity {
+abstract class AbstractActivity<T extends TExtensibleElements> extends
+		AbstractBpelObject implements IActivity {
 
 	T activity;
-	AbstractActivity(T a, BpelFactory factory) {
-		super(a, factory);
-		
+
+	AbstractActivity(T a) {
+		super(a);
+
 		this.activity = a;
 	}
 
@@ -29,33 +32,45 @@ abstract class AbstractActivity<T extends TActivity> extends AbstractBpelObject 
 	}
 
 	public String getName() {
-		return activity.getName();
+		if (activity instanceof TActivity) {
+			return ((TActivity) activity).getName();
+		} else {
+			return null;
+		}
 	}
 
 	public void setName(String value) {
-		activity.setName(value);
+		if (activity instanceof TActivity) {
+			((TActivity) activity).setName(value);
+		} else {
+			throw new UnsupportedOperationException("Cannot set name for " + activity.getClass().getSimpleName());
+		}
 	}
 
 	public void setSuppressJoinFailure(boolean value) {
-		activity.setSuppressJoinFailure(TBooleanHelper.convert(value));
+		if (activity instanceof TActivity) {
+			((TActivity) activity).setSuppressJoinFailure(TBooleanHelper.convert(value));
+		} else {
+			throw new UnsupportedOperationException("Cannot set name for " + activity.getClass().getSimpleName());
+		}
 	}
 
 	T getNativeActivity() {
 		return activity;
 	}
-	
+
 	public String getActivityName() {
 		return activity.getClass().getSimpleName().substring(1);
 	}
-	
+
 	@Override
 	public String getXPathInDocument() {
 		return "//" + getActivityName() + "['" + getName() + "']";
 	}
-	
+
 	@Override
 	IBpelObject getObjectForNativeObject(Object nativeObject) {
-		if(nativeObject == activity) {
+		if (nativeObject == activity) {
 			return this;
 		} else {
 			return null;
@@ -64,6 +79,6 @@ abstract class AbstractActivity<T extends TActivity> extends AbstractBpelObject 
 
 	@SuppressWarnings("unchecked")
 	protected void setNativeActivity(XmlObject newNativeActivity) {
-		this.activity = (T)newNativeActivity;
+		this.activity = (T) newNativeActivity;
 	}
 }

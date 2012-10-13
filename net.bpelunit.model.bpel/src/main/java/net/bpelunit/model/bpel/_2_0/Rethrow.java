@@ -6,7 +6,7 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TRethrow;
 
 public class Rethrow extends AbstractBasicActivity<TRethrow> implements IRethrow {
 
-	public Rethrow(TRethrow wrappedRethrow, BpelFactory f) {
-		super(wrappedRethrow, f, IRethrow.class);
+	public Rethrow(TRethrow wrappedRethrow) {
+		super(wrappedRethrow);
 	}
 }

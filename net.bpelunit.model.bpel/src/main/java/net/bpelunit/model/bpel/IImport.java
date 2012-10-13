@@ -1,6 +1,6 @@
 package net.bpelunit.model.bpel;
 
-public interface IImport {
+public interface IImport extends IBpelObject {
 
 	public static final String IMPORTTYPE_WSDL = "http://schemas.xmlsoap.org/wsdl/";
 	

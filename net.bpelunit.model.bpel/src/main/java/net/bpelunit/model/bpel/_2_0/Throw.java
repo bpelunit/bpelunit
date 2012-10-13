@@ -6,7 +6,7 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TThrow;
 
 public class Throw extends AbstractBasicActivity<TThrow> implements IThrow {
 
-	public Throw(TThrow t, BpelFactory f) {
-		super(t, f, IThrow.class);
+	public Throw(TThrow t) {
+		super(t);
 	}
 }

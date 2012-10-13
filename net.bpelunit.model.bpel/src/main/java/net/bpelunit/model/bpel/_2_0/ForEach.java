@@ -2,35 +2,24 @@ package net.bpelunit.model.bpel._2_0;
 
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IForEach;
-import net.bpelunit.model.bpel.IScope;
 import net.bpelunit.model.bpel.IVisitor;
 
-import org.apache.xmlbeans.XmlObject;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TForEach;
 
 public class ForEach extends AbstractActivity<TForEach> implements IForEach {
 
 	private Scope scope;
-	private TForEach forEach;
 
-	public ForEach(TForEach wrappedForEach, BpelFactory f) {
-		super(wrappedForEach, f);
+	public ForEach(TForEach wrappedForEach) {
+		super(wrappedForEach);
 
+		if(wrappedForEach.getScope() == null) {
+			wrappedForEach.addNewScope();
+		}
+		
+		this.scope = new Scope(wrappedForEach.getScope());
+		
 		setNativeActivity(wrappedForEach);
-	}
-
-	@Override
-	protected void setNativeActivity(XmlObject newNativeActivity) {
-		super.setNativeActivity(newNativeActivity);
-
-		this.forEach = (TForEach) newNativeActivity;
-		this.setScope(getFactory().createActivity(forEach.getScope()));
-	}
-
-	public void setScope(IScope s) {
-		checkForCorrectModel(s);
-		this.scope = (Scope) s;
-		this.forEach.setScope(this.scope.getNativeActivity());
 	}
 
 	public Scope getScope() {
@@ -57,4 +46,5 @@ public class ForEach extends AbstractActivity<TForEach> implements IForEach {
 		}
 		return null;
 	}
+
 }

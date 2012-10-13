@@ -2,15 +2,17 @@ package net.bpelunit.model.bpel._2_0;
 
 import javax.xml.namespace.QName;
 
+import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IPartnerLink;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TPartnerLink;
 
-public class PartnerLink implements IPartnerLink {
+public class PartnerLink extends AbstractBpelObject implements IPartnerLink {
 
 	private TPartnerLink partnerLink;
 
 	public PartnerLink(TPartnerLink wrappedPartnerLink) {
+		super(wrappedPartnerLink);
 		this.partnerLink = wrappedPartnerLink;
 	}
 
@@ -44,5 +46,14 @@ public class PartnerLink implements IPartnerLink {
 
 	public void setPartnerRole(String newPartnerRole) {
 		partnerLink.setPartnerRole(newPartnerRole);
+	}
+
+	@Override
+	IBpelObject getObjectForNativeObject(Object nativeObject) {
+		if (nativeObject == partnerLink) {
+			return this;
+		} else {
+			return null;
+		}
 	}
 }

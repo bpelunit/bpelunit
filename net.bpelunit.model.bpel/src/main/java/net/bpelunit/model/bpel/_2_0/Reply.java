@@ -9,8 +9,8 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TReply;
 
 public class Reply extends AbstractBasicActivity<TReply> implements IReply {
 
-	public Reply(TReply wrappedReply, BpelFactory f) {
-		super(wrappedReply, f,IReply.class);
+	public Reply(TReply wrappedReply) {
+		super(wrappedReply);
 	}
 
 	public QName getFaultName() {

@@ -2,15 +2,18 @@ package net.bpelunit.model.bpel;
 
 import java.util.List;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 public interface IDocumentation {
 
 	/**
 	 * Writable list of documentation elements
 	 * @return
 	 */
-	List<Object> getDocumentationElements();
+	List<Node> getDocumentationElements();
 	
-	void setDocumentationElement(Object doc);
+	void setDocumentationElement(Node doc);
 	
-	void setDocumentationElements(List<Object> e);
+	void setDocumentationElements(Element e);
 }

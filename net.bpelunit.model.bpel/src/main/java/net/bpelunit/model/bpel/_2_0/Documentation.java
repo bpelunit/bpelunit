@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.bpelunit.model.bpel.IDocumentation;
-import net.bpelunit.util.XMLUtil;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TDocumentation;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
@@ -15,12 +15,12 @@ public class Documentation implements IDocumentation {
 
 	private TDocumentation documentation;
 
-	public Documentation(TDocumentation wrappedDocumentation, BpelFactory f) {
+	public Documentation(TDocumentation wrappedDocumentation) {
 		this.documentation = wrappedDocumentation;
 	}
 
-	public List<Object> getDocumentationElements() {
-		List<Object> result = new ArrayList<Object>();
+	public List<Node> getDocumentationElements() {
+		List<Node> result = new ArrayList<Node>();
 		NodeList children = documentation.getDomNode().getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
 			Node n = children.item(i);
@@ -32,9 +32,9 @@ public class Documentation implements IDocumentation {
 		return result;
 	}
 
-	public void setDocumentationElement(Object doc) {
+	public void setDocumentationElement(Node doc) {
 		Node docNode = documentation.getDomNode();
-		XMLUtil.removeAllSubNodesExceptAttributes(docNode);
+//		XMLUtil.removeAllSubNodesExceptAttributes(docNode);
 
 		appendNode(doc, docNode);
 	}
@@ -49,15 +49,15 @@ public class Documentation implements IDocumentation {
 		}
 	}
 
-	public void setDocumentationElements(List<Object> e) {
+	public void setDocumentationElements(Element e) {
 		Node docNode = documentation.getDomNode();
 
-		XMLUtil.removeAllSubNodesExceptAttributes(docNode);
+//		XMLUtil.removeAllSubNodesExceptAttributes(docNode);
 
-		if (e != null) {
-			for (Object doc : e) {
-				appendNode(doc, docNode);
-			}
-		}
+//		if (e != null) {
+//			for (Object doc : e) {
+//				appendNode(doc, docNode);
+//			}
+//		}
 	}
 }

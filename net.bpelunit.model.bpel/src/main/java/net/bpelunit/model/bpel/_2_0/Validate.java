@@ -6,7 +6,7 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TValidate;
 
 public class Validate extends AbstractBasicActivity<TValidate> implements IValidate {
 
-	public Validate(TValidate wrappedValidate, BpelFactory f) {
-		super(wrappedValidate, f, IValidate.class);
+	public Validate(TValidate wrappedValidate) {
+		super(wrappedValidate);
 	}
 }

@@ -26,21 +26,19 @@ public class PickTest {
 	
 	@Before
 	public void setUp() {
-		BpelFactory f = new BpelFactory();
 		nativePick = TPick.Factory.newInstance();
-		pick = new Pick(nativePick, f);
+		pick = new Pick(nativePick);
 		
-		onMessage = (OnMessage)pick.addOnMessage();
+		onMessage = pick.addOnMessage();
 		nativeOnMessage = onMessage.getNativeActivity();
-		nativeMainActivityOnMessage = TEmpty.Factory.newInstance();
-		mainActivityOnMessage = new Empty(nativeMainActivityOnMessage, f);
-		onMessage.setMainActivity(mainActivityOnMessage);
 		
-		onAlarm = (OnAlarm)pick.addOnAlarm();
+		mainActivityOnMessage = onMessage.setNewEmpty();
+		nativeMainActivityOnMessage = mainActivityOnMessage.getNativeActivity();
+		
+		onAlarm = pick.addOnAlarm();
 		nativeOnAlarm = onAlarm.getNativeActivity();
-		nativeMainActivityOnAlarm = TEmpty.Factory.newInstance();
-		mainActivityOnAlarm = new Empty(nativeMainActivityOnAlarm, f);
-		onAlarm.setMainActivity(mainActivityOnAlarm);
+		mainActivityOnAlarm = onAlarm.setNewEmpty();
+		nativeMainActivityOnAlarm = mainActivityOnAlarm.getNativeActivity();
 	}
 	
 	@Test

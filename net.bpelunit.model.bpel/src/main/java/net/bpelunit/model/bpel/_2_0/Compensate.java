@@ -6,7 +6,7 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TCompensate;
 
 class Compensate extends AbstractBasicActivity<TCompensate> implements ICompensate {
 
-	Compensate(TCompensate wrappedCompensate, BpelFactory f) {
-		super(wrappedCompensate, f, ICompensate.class);
+	public Compensate(TCompensate wrappedCompensate) {
+		super(wrappedCompensate);
 	}
 }

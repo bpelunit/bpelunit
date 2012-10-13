@@ -2,7 +2,6 @@ package net.bpelunit.model.bpel._2_0;
 
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.ILink;
-import net.bpelunit.model.bpel.IVisitor;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TLink;
 
@@ -10,8 +9,8 @@ class Link extends AbstractBpelObject implements ILink {
 
 	private TLink link;
 	
-	Link(TLink l, BpelFactory f) {
-		super(l, f);
+	Link(TLink l) {
+		super(l);
 		link = l;
 	}
 
@@ -30,9 +29,5 @@ class Link extends AbstractBpelObject implements ILink {
 		} else {
 			return null;
 		}
-	}
-	
-	@Override
-	void visit(IVisitor v) {
 	}
 }

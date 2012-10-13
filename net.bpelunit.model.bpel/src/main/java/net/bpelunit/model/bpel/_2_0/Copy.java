@@ -4,7 +4,6 @@ import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.ICopy;
 import net.bpelunit.model.bpel.IFrom;
 import net.bpelunit.model.bpel.ITo;
-import net.bpelunit.model.bpel.IVisitor;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TCopy;
 
@@ -14,8 +13,8 @@ public class Copy extends AbstractBpelObject implements ICopy {
 	private From from;
 	private To to;
 	
-	Copy(TCopy c, BpelFactory f) {
-		super(c, f);
+	Copy(TCopy c) {
+		super(c);
 		copy = c;
 		if(c.getTo() == null) {
 			c.addNewTo();
@@ -25,8 +24,8 @@ public class Copy extends AbstractBpelObject implements ICopy {
 			c.addNewFrom();
 		}
 		
-		to = getFactory().createTo(c.getTo());
-		from = getFactory().createFrom(c.getFrom());
+		to = new To(c.getTo());
+		from = new From(c.getFrom());
 	}
 
 	public From getFrom() {
@@ -60,9 +59,5 @@ public class Copy extends AbstractBpelObject implements ICopy {
 		}
 		this.to = (To)value;
 		copy.setTo(((To)value).getNativeTo());
-	}
-	
-	@Override
-	void visit(IVisitor v) {
 	}
 }

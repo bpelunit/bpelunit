@@ -8,8 +8,8 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TWait;
 
 public class Wait extends AbstractBasicActivity<TWait> implements IWait {
 
-	public Wait(TWait wrappedWait, BpelFactory f) {
-		super(wrappedWait, f, IWait.class);
+	public Wait(TWait wrappedWait) {
+		super(wrappedWait);
 	}
 
 	public void setDuration(String durationExpression) {

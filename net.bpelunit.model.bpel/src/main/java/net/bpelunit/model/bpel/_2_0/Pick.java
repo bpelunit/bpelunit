@@ -20,13 +20,10 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 
 	private List<OnMessage> onMessages = new ArrayList<OnMessage>();
 	private List<OnAlarm> onAlarms = new ArrayList<OnAlarm>();
-	private BpelFactory factory;
 
-	public Pick(TPick wrappedPick, BpelFactory f) {
-		super(wrappedPick, f);
+	public Pick(TPick wrappedPick) {
+		super(wrappedPick);
 
-		this.factory = f;
-		
 		setNativeActivity(wrappedPick);
 	}
 
@@ -37,11 +34,11 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 		TPick wrappedPick = (TPick)newNativeActivity;
 		
 		for(TOnMessage m : wrappedPick.getOnMessageArray()) {
-			onMessages.add(new OnMessage(m, this.factory));
+			onMessages.add(new OnMessage(m));
 		}
 		
 		for(TOnAlarmPick a : wrappedPick.getOnAlarmArray()) {
-			onAlarms.add(new OnAlarm(a, this.factory));
+			onAlarms.add(new OnAlarm(a));
 		}
 	}
 
@@ -83,7 +80,7 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 
 	public OnMessage addOnMessage() {
 		TOnMessage nativeOnMessage = getNativeActivity().addNewOnMessage();
-		OnMessage onMessage = new OnMessage(nativeOnMessage, factory);
+		OnMessage onMessage = new OnMessage(nativeOnMessage);
 		onMessages.add(onMessage);
 		
 		return onMessage;
@@ -91,7 +88,7 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 
 	public OnAlarm addOnAlarm() {
 		TOnAlarmPick nativeOnAlarm = getNativeActivity().addNewOnAlarm();
-		OnAlarm onAlarm = new OnAlarm(nativeOnAlarm, factory);
+		OnAlarm onAlarm = new OnAlarm(nativeOnAlarm);
 		onAlarms.add(onAlarm);
 		
 		return onAlarm;

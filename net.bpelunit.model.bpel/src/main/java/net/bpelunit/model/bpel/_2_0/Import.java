@@ -1,15 +1,17 @@
 package net.bpelunit.model.bpel._2_0;
 
+import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IImport;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TImport;
 
-public class Import implements IImport {
+public class Import extends AbstractBpelObject implements IImport {
 
 	private static final String NAMESPACE_WSDL = "http://schemas.xmlsoap.org/wsdl/";
 	private TImport im;
 
 	public Import(TImport wrappedImport) {
+		super(wrappedImport);
 		this.im = wrappedImport;
 	}
 
@@ -40,4 +42,14 @@ public class Import implements IImport {
 	public boolean isWsdlImport() {
 		return NAMESPACE_WSDL.equals(getImportType());
 	}
+
+	@Override
+	IBpelObject getObjectForNativeObject(Object nativeObject) {
+		if(nativeObject == im) {
+			return this;
+		} else {
+			return null;
+		}
+	}
+
 }

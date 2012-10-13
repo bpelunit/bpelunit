@@ -11,8 +11,8 @@ class CompensateScope extends AbstractBasicActivity<TCompensateScope> implements
 
 	private TCompensateScope compensateScope;
 
-	CompensateScope(TCompensateScope wrappedCompensateScope, BpelFactory f) {
-		super(wrappedCompensateScope, f, ICompensateScope.class);
+	public CompensateScope(TCompensateScope wrappedCompensateScope) {
+		super(wrappedCompensateScope);
 		this.compensateScope = wrappedCompensateScope;
 	}
 

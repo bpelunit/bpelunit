@@ -10,8 +10,8 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TReceive;
 
 public class Receive extends AbstractBasicActivity<TReceive> implements IReceive {
 
-	public Receive(TReceive r, BpelFactory f) {
-		super(r, f, IReceive.class);
+	public Receive(TReceive r) {
+		super(r);
 	}
 
 	public String getOperation() {

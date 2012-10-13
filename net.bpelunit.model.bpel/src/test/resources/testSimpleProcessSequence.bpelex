@@ -26,6 +26,10 @@
   </extensions>
   <extensions>
     <extendedObject href="testSimpleProcessSequence.bpel#/"/>
-    <extensionObject xsi:type="org.eclipse.bpel.ui.uiextensionmodel:ProcessExtension" modificationStamp="1346745186272"/>
+    <extensionObject xsi:type="org.eclipse.bpel.ui.uiextensionmodel:ProcessExtension" modificationStamp="1349989440323"/>
+  </extensions>
+  <extensions>
+    <extendedObject href="testSimpleProcessSequence.bpel#//@activity/@activities.1/@copy.0"/>
+    <extensionObject xsi:type="org.eclipse.bpel.ui.uiextensionmodel:CopyExtension"/>
   </extensions>
 </extensionmodel:ExtensionMap>

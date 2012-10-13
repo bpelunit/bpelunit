@@ -5,7 +5,26 @@ import java.util.List;
 public interface IMultiContainer {
 
 	List<? extends IActivity> getActivities();
-	void addActivity(IActivity a);
-	void removeActivity(IActivity a);
+	
+	IReceive addReceive();
+	IAssign addAssign();
+	IReply addReply();
+	ICompensate addCompensate();
+	ICompensateScope addCompensateScope();
+	IEmpty addEmpty();
+	IExit addExit();
+	IFlow addFlow();
+	IForEach addForEach();
+	IIf addIf();
+	IInvoke addInvoke();
+	IPick addPick();
+	IRepeatUntil addRepeatUntil();
+	IRethrow addRethrow();
+	IScope addScope();
+	ISequence addSequence();
+	IThrow addThrow();
+	IValidate addValidate();
+	IWait addWait();
+	IWhile addWhile();
 
 }

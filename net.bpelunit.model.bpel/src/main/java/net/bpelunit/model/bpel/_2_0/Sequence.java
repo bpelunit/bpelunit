@@ -8,8 +8,8 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TSequence;
 
 public class Sequence extends AbstractMultiContainer<TSequence> implements ISequence {
 
-	public Sequence(TSequence wrappedSequence, BpelFactory f) {
-		super(wrappedSequence, f);
+	public Sequence(TSequence wrappedSequence) {
+		super(wrappedSequence);
 	}
 
 	@Override

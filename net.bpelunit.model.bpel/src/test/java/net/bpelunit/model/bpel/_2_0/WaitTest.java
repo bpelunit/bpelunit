@@ -14,9 +14,8 @@ public class WaitTest {
 	
 	@Before
 	public void setUp() {
-		BpelFactory f = new BpelFactory();
 		nativeWait = TWait.Factory.newInstance();
-		wait = new Wait(nativeWait, f);
+		wait = new Wait(nativeWait);
 	}
 	
 	@Test

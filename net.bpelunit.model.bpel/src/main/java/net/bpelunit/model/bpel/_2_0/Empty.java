@@ -6,8 +6,8 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TEmpty;
 
 class Empty extends AbstractBasicActivity<TEmpty> implements IEmpty {
 
-	Empty(TEmpty newEmpty, BpelFactory f) {
-		super(newEmpty, f, IEmpty.class);
+	public Empty(TEmpty newEmpty) {
+		super(newEmpty);
 	}
 
 }

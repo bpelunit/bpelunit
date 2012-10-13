@@ -7,22 +7,20 @@ import org.junit.Test;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TAssign;
 
 
-public class AssignTest {
+public class AssignTest extends AbstractBasicActivityTest<Assign> {
 
 	private Assign assign;
 	private TAssign nativeAssign;
 	
 	@Before
 	public void setUp() {
-		BpelFactory f = new BpelFactory();
 		nativeAssign = TAssign.Factory.newInstance();
-		assign = new Assign(nativeAssign, f);
+		assign = new Assign(nativeAssign);
+		setActivity(assign);
 	}
 	
 	@Test
 	public void testGetObjectForNativeObject() throws Exception {
 		assertSame(assign, assign.getObjectForNativeObject(nativeAssign));
 	}
-	
-	
 }

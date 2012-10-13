@@ -18,8 +18,8 @@ class Flow extends AbstractMultiContainer<TFlow> implements IFlow {
 	private TFlow flow;
 	private List<Link> links = new ArrayList<Link>();
 
-	Flow(TFlow wrappedFlow, BpelFactory f) {
-		super(wrappedFlow, f);
+	public Flow(TFlow wrappedFlow) {
+		super(wrappedFlow);
 		setNativeActivity(wrappedFlow);
 	}
 
@@ -33,7 +33,7 @@ class Flow extends AbstractMultiContainer<TFlow> implements IFlow {
 		}
 		
 		for (TLink l : this.flow.getLinks().getLinkArray()) {
-			links.add(getFactory().createLink(l));
+			links.add(new Link(l));
 		}
 	}
 
@@ -45,7 +45,7 @@ class Flow extends AbstractMultiContainer<TFlow> implements IFlow {
 		TLink l = flow.getLinks().addNewLink();
 		l.setName(name);
 
-		Link link = getFactory().createLink(l);
+		Link link = new Link(l);
 		links.add(link);
 
 		return link;
@@ -62,7 +62,7 @@ class Flow extends AbstractMultiContainer<TFlow> implements IFlow {
 
 	@Override
 	public void visit(IVisitor v) {
-		v.visit(this);
+		super.visit(v);
 		for(IActivity a : getActivities()) {
 			a.visit(v);
 		}

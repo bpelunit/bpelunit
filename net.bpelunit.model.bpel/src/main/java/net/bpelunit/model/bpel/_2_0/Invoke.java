@@ -11,8 +11,8 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TInvoke;
 public class Invoke extends AbstractBasicActivity<TInvoke> implements IInvoke {
 	private TInvoke invoke;
 	
-	public Invoke(TInvoke wrappedInvoke, BpelFactory f) {
-		super(wrappedInvoke, f, IInvoke.class);
+	public Invoke(TInvoke wrappedInvoke) {
+		super(wrappedInvoke);
 		setNativeActivity(wrappedInvoke);
 	}
 
