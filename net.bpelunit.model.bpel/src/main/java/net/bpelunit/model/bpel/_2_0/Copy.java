@@ -2,9 +2,8 @@ package net.bpelunit.model.bpel._2_0;
 
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.ICopy;
-import net.bpelunit.model.bpel.IFrom;
-import net.bpelunit.model.bpel.ITo;
 
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TCopy;
 
 public class Copy extends AbstractBpelObject implements ICopy {
@@ -28,6 +27,7 @@ public class Copy extends AbstractBpelObject implements ICopy {
 		from = new From(c.getFrom());
 	}
 
+	@Override
 	public From getFrom() {
 		return from;
 	}
@@ -41,23 +41,29 @@ public class Copy extends AbstractBpelObject implements ICopy {
 		}
 	}
 
+	@Override
 	public To getTo() {
 		return to;
 	}
-	
-	public void setFrom(IFrom value) {
-		if(! (value instanceof From)) {
-			throw new IllegalArgumentException("Illegal model element");
-		}
-		this.from = (From)value;
-		this.copy.setFrom(((From)value).getNativeFrom());
+
+	@Override
+	public boolean getKeepSrcElementName() {
+		return copy.getKeepSrcElementName().equals(TBoolean.YES);
 	}
 
-	public void setTo(ITo value) {
-		if(! (value instanceof To)) {
-			throw new IllegalArgumentException("Illegal model element");
-		}
-		this.to = (To)value;
-		copy.setTo(((To)value).getNativeTo());
+	@Override
+	public void setKeepSrcElementName(boolean value) {
+		copy.setKeepSrcElementName(TBooleanHelper.convert(value));
 	}
+
+	@Override
+	public boolean getIgnoreMissingFromData() {
+		return copy.getIgnoreMissingFromData().equals(TBoolean.YES);
+	}
+
+	@Override
+	public void setIgnoreMissingFromData(boolean value) {
+		copy.setIgnoreMissingFromData(TBooleanHelper.convert(value));
+	}
+	
 }

@@ -10,6 +10,8 @@ import java.util.Map;
 
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IImport;
+import net.bpelunit.model.bpel.IOnAlarmEventHandler;
+import net.bpelunit.model.bpel.IOnMessage;
 import net.bpelunit.model.bpel.IPartnerLink;
 import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.model.bpel.IVariable;
@@ -20,7 +22,10 @@ import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.ProcessDocument;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TDocumentation;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TImport;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnAlarmEvent;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnEvent;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TPartnerLink;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TProcess;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TVariable;
@@ -32,7 +37,10 @@ class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 	private List<PartnerLink> partnerLinks = new ArrayList<PartnerLink>();
 	private List<Import> imports = new ArrayList<Import>();
 	private List<Variable> variables = new ArrayList<Variable>();
-
+	private List<OnAlarmEventHandler> onAlarms = new ArrayList<OnAlarmEventHandler>();
+	private List<OnMessageHandler> onMessages = new ArrayList<OnMessageHandler>();
+	private List<Documentation> documentations = new ArrayList<Documentation>();
+	
 	Process(ProcessDocument newProcess) {
 		super(newProcess.getProcess());
 		
@@ -58,6 +66,19 @@ class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 		for (TVariable v : process.getVariables().getVariableArray()) {
 			variables.add(new Variable(v));
 		}
+		
+		if(process.getEventHandlers() != null) {
+			for(TOnAlarmEvent a : process.getEventHandlers().getOnAlarmArray()) {
+				this.onAlarms.add(new OnAlarmEventHandler(a));
+			}
+			for(TOnEvent e : process.getEventHandlers().getOnEventArray()) {
+				this.onMessages.add(new OnMessageHandler(e));
+			}
+		}
+		
+		for(TDocumentation d : process.getDocumentationArray()) {
+			documentations.add(new Documentation(d));
+		}
 	}
 
 	public String getName() {
@@ -71,13 +92,33 @@ class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 	public String getQueryLanguage() {
 		return process.getQueryLanguage();
 	}
+	
+	@Override
+	public void setQueryLanguage(String queryLanguageUrn) {
+		this.process.setQueryLanguage(queryLanguageUrn);	
+	}
 
 	public boolean getSuppressJoinFailure() {
 		return process.getSuppressJoinFailure().equals(TBoolean.YES);
 	}
+	
+	@Override
+	public void setSuppressJoinFailure(boolean value) {
+		process.setSuppressJoinFailure(TBooleanHelper.convert(value));
+	}
 
 	public void setName(String value) {
 		process.setName(value);
+	}
+	
+	@Override
+	public String getExpressionLanguage() {
+		return process.getExpressionLanguage();
+	}
+	
+	@Override
+	public void setExpressionLanguage(String expressionLanguageUrn) {
+		process.setExpressionLanguage(expressionLanguageUrn);
 	}
 
 	public void setTargetNamespace(String value) {
@@ -104,6 +145,13 @@ class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 		for(Import imp : imports) {
 			imp.visit(v);
 		}
+		for(OnAlarmEventHandler a : onAlarms) {
+			a.visit(v);
+		}
+		for(OnMessageHandler a : onMessages) {
+			a.visit(v);
+		}
+		
 		getMainActivity().visit(v);
 	}
 
@@ -184,6 +232,54 @@ class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public List<OnAlarmEventHandler> getOnAlarms() {
+		return new ArrayList<OnAlarmEventHandler>(onAlarms);
+	}
+
+	@Override
+	public List<OnMessageHandler> getOnMessages() {
+		return new ArrayList<OnMessageHandler>(onMessages);
+	}
+
+	@Override
+	public IOnAlarmEventHandler addNewOnAlarm() {
+		createEventHandlersIfNecessary();
+		
+		TOnAlarmEvent nativeOnAlarm = process.getEventHandlers().addNewOnAlarm();
+		OnAlarmEventHandler onAlarm = new OnAlarmEventHandler(nativeOnAlarm);
+		onAlarms.add(onAlarm);
+		
+		return onAlarm;
+	}
+
+	private void createEventHandlersIfNecessary() {
+		if(process.getEventHandlers() == null) {
+			process.addNewEventHandlers();
+		}
+	}
+
+	@Override
+	public IOnMessage addNewOnMessage() {
+		createEventHandlersIfNecessary();
+		
+		TOnEvent nativeOnMessage = process.getEventHandlers().addNewOnEvent();
+		OnMessageHandler onMessage = new OnMessageHandler(nativeOnMessage);
+		onMessages.add(onMessage);
+		
+		return onMessage;
+	}
+	
+	@Override
+	public boolean getExitOnStandardFault() {
+		return process.getExitOnStandardFault().equals(TBoolean.YES);
+	}
+	
+	@Override
+	public void setExitOnStandardFault(boolean value) {
+		process.setExitOnStandardFault(TBooleanHelper.convert(value));
 	}
 }
 

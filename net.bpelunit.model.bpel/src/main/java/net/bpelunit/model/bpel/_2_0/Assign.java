@@ -1,10 +1,10 @@
 package net.bpelunit.model.bpel._2_0;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.bpelunit.model.bpel.IAssign;
-import net.bpelunit.model.bpel.ICopy;
 import net.bpelunit.model.bpel.IVisitor;
 
 import org.apache.xmlbeans.XmlObject;
@@ -31,7 +31,7 @@ class Assign extends AbstractBasicActivity<TAssign> implements IAssign {
 		return TBooleanHelper.convert(assign.getValidate());
 	}
 	
-	public ICopy addCopy() {
+	public Copy addCopy() {
 		TCopy nativeCopy = this.assign.addNewCopy();
 		Copy newCopy = new Copy(nativeCopy);
 		
@@ -50,6 +50,11 @@ class Assign extends AbstractBasicActivity<TAssign> implements IAssign {
 		for(TCopy c : a.getCopyArray()) {
 			copy.add(new Copy(c));
 		}
+	}
+	
+	@Override
+	public List<Copy> getCopies() {
+		return Collections.unmodifiableList(copy);
 	}
 	
 	@Override

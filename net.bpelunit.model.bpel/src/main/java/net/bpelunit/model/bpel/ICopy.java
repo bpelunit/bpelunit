@@ -3,12 +3,12 @@ package net.bpelunit.model.bpel;
 
 public interface ICopy {
 
-	void setFrom(IFrom value);
-
-	void setTo(ITo value);
-
 	ITo getTo();
-
 	IFrom getFrom();
 
+	boolean getKeepSrcElementName();
+	void setKeepSrcElementName(boolean value);
+
+	boolean getIgnoreMissingFromData();
+	void setIgnoreMissingFromData(boolean value);
 }

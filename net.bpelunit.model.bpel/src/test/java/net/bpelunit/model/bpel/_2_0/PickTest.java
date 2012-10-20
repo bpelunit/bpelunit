@@ -6,6 +6,7 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.PickDocument;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TEmpty;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnAlarmPick;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnMessage;
@@ -26,7 +27,8 @@ public class PickTest {
 	
 	@Before
 	public void setUp() {
-		nativePick = TPick.Factory.newInstance();
+		PickDocument pickDoc = PickDocument.Factory.newInstance();
+		nativePick = pickDoc.addNewPick();
 		pick = new Pick(nativePick);
 		
 		onMessage = pick.addOnMessage();
@@ -63,5 +65,10 @@ public class PickTest {
 		
 		assertSame(mainActivityOnAlarm, onAlarm.getObjectForNativeObject(nativeMainActivityOnAlarm));
 		assertSame(mainActivityOnAlarm, pick.getObjectForNativeObject(nativeMainActivityOnAlarm));
+	}
+	
+	@Test
+	public void testGetActivityName() throws Exception {
+		assertEquals("Pick", pick.getActivityName());
 	}
 }

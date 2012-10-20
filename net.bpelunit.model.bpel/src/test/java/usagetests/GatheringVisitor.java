@@ -7,6 +7,7 @@ import java.util.List;
 import net.bpelunit.model.bpel.IAssign;
 import net.bpelunit.model.bpel.ICompensate;
 import net.bpelunit.model.bpel.ICompensateScope;
+import net.bpelunit.model.bpel.ICompensationHandler;
 import net.bpelunit.model.bpel.ICopy;
 import net.bpelunit.model.bpel.IEmpty;
 import net.bpelunit.model.bpel.IExit;
@@ -43,6 +44,7 @@ public class GatheringVisitor implements IVisitor {
 		objectsToVisit.addAll(Arrays.asList(activities));
 	}
 
+	
 	public List<Object> getRemainingObjects() {
 		return objectsToVisit;
 	}
@@ -192,5 +194,11 @@ public class GatheringVisitor implements IVisitor {
 	@Override
 	public void visit(ICopy c) {
 		processVisitedObject(c);
+	}
+
+
+	@Override
+	public void visit(ICompensationHandler compensationHandler) {
+		processVisitedObject(compensationHandler);
 	}
 }

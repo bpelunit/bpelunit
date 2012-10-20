@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<definitions name="handlers"
+        targetNamespace="TESTNS"
+        xmlns:tns="TESTNS"
+        xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:p="http://www.w3.org/2001/XMLSchema">
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     TYPE DEFINITION - List of services participating in this BPEL process 
+     The default output of the BPEL designer uses strings as input and 
+     output to the BPEL Process. But you can define or import any XML 
+     Schema type and us them as part of the message types.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <types>  
+        <schema attributeFormDefault="unqualified" 
+                elementFormDefault="qualified" 
+                targetNamespace="TESTNS" 
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                >
+                
+            <element name="handlersRequest">
+                <complexType>
+                    <sequence>
+                        <element name="input" type="string" />
+                    </sequence>
+                </complexType>
+            </element>
+                  
+            <element name="handlersResponse">
+                <complexType>
+                    <sequence>
+                        <element name="result" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+            
+            <element name="event1">
+            	<complexType>
+            		<sequence>
+            			<element name="in" type="string"></element>
+            		</sequence>
+            	</complexType>
+            </element>
+            <element name="event1Response">
+            	<complexType>
+            		<sequence>
+            			<element name="out" type="string"></element>
+            		</sequence>
+            	</complexType>
+            </element>
+            <element name="event2">
+            	<complexType>
+            		<sequence>
+            			<element name="in" type="string"></element>
+            		</sequence>
+            	</complexType>
+            </element>
+            <element name="event2Response">
+            	<complexType>
+            		<sequence>
+            			<element name="out" type="string"></element>
+            		</sequence>
+            	</complexType>
+            </element>
+        </schema>
+    </types>
+  
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     MESSAGE TYPE DEFINITION - Definition of the message types used as 
+     part of the port type defintions
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <message name="handlersRequestMessage">
+        <part name="payload" element="tns:handlersRequest"/>
+    </message>
+    
+    <message name="handlersResponseMessage">
+        <part name="payload" element="tns:handlersResponse"/>
+    </message>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PORT TYPE DEFINITION - A port type groups a set of operations into
+     a logical service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- portType implemented by the handlers BPEL process -->
+    <message name="event1Request">
+    	<part name="parameters" element="tns:event1"></part>
+    </message>
+    <message name="event1Response">
+    	<part name="parameters" element="tns:event1Response"></part>
+    </message>
+    <message name="event2Request">
+    	<part name="parameters" element="tns:event2"></part>
+    </message>
+    <message name="event2Response">
+    	<part name="parameters" element="tns:event2Response"></part>
+    </message>
+    <portType name="handlers">
+        <operation name="initiate">
+            <input message="tns:handlersRequestMessage"/>
+        </operation>
+        <operation name="event1">
+        	<input message="tns:event1Request"></input>
+        </operation>
+        <operation name="event2">
+        	<input message="tns:event2Request"></input>
+        </operation>
+    </portType>
+
+    <!-- portType implemented by the requester of handlers BPEL process 
+         for asynchronous callback purposes
+         -->
+    <portType name="handlersCallback">
+        <operation name="onResult">
+            <input message="tns:handlersResponseMessage"/>
+        </operation>
+    </portType>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PARTNER LINK TYPE DEFINITION
+         the handlers partnerLinkType binds the provider and
+         requester portType into an asynchronous conversation.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="handlers">
+        <plnk:role name="handlersProvider" portType="tns:handlers"/>
+        <plnk:role name="handlersRequester" portType="tns:handlersCallback"/>
+    </plnk:partnerLinkType>   
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     BINDING DEFINITION - Defines the message format and protocol details
+     for a web service.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <binding name="handlersBinding" type="tns:handlers">
+    	<soap:binding style="document"
+    		transport="http://schemas.xmlsoap.org/soap/http" />
+    	<operation name="initiate">
+    		<soap:operation soapAction="TESTNS/initiate" />
+    		<input>
+    			<soap:body use="literal" />
+    		</input>
+    	</operation>
+    	<operation name="event1">
+    		<soap:operation soapAction="TESTNS/event1" />
+    		<input>
+    			<soap:body use="literal" />
+    		</input>
+    	</operation>
+    	<operation name="event2">
+    		<soap:operation soapAction="TESTNS/event2" />
+    		<input>
+    			<soap:body use="literal" />
+    		</input>
+    	</operation>
+    </binding>
+
+    <binding name="handlersCallbackBinding" type="tns:handlersCallback">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="onResult">
+            <soap:operation
+    			soapAction="TESTNS/onResult"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+        </operation>
+    </binding>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     SERVICE DEFINITION - A service groups a set of ports into
+     a service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <service name="handlers">
+        <port name="handlersPort" binding="tns:handlersBinding">
+    		<soap:address location="http://localhost:8080/handlers"/>
+        </port>
+    </service>
+
+    <service name="handlersCallback">
+        <port name="handlersPortCallbackPort" binding="tns:handlersCallbackBinding">
+    		<soap:address location="http://localhost:8080/handlersCallback"/>
+        </port>
+    </service>
+</definitions>

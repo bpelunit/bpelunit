@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.bpelunit.model.bpel.IDocumentation;
+import net.bpelunit.util.XMLUtil;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TDocumentation;
 import org.w3c.dom.Element;
@@ -32,32 +33,32 @@ public class Documentation implements IDocumentation {
 		return result;
 	}
 
-	public void setDocumentationElement(Node doc) {
-		Node docNode = documentation.getDomNode();
-//		XMLUtil.removeAllSubNodesExceptAttributes(docNode);
-
-		appendNode(doc, docNode);
-	}
-
-	private void appendNode(Object doc, Node docNode) {
-		if (doc instanceof Node) {
-			docNode.appendChild((Node) doc);
+	@Override
+	public String getStringContent() {
+		Node firstChild = documentation.getDomNode().getFirstChild();
+		
+		if(firstChild != null && firstChild.getNodeType() == Node.TEXT_NODE) {
+			return firstChild.getNodeValue();
 		} else {
-			Text textNode = docNode.getOwnerDocument().createTextNode(
-					doc.toString());
-			docNode.appendChild(textNode);
+			return null;
 		}
+		
+	}
+	
+	public Element addDocumentationElement(String namespaceURI, String qualifiedName) {
+		Node docNode = documentation.getDomNode();
+		Element e = docNode.getOwnerDocument().createElementNS(namespaceURI, qualifiedName);
+		
+		docNode.appendChild(e);
+		return e;
 	}
 
-	public void setDocumentationElements(Element e) {
-		Node docNode = documentation.getDomNode();
-
-//		XMLUtil.removeAllSubNodesExceptAttributes(docNode);
-
-//		if (e != null) {
-//			for (Object doc : e) {
-//				appendNode(doc, docNode);
-//			}
-//		}
+	@Override
+	public void setStringContent(String content) {
+		Node domNode = documentation.getDomNode();
+		
+		XMLUtil.removeAllSubNodesExceptAttributes(domNode);
+		Text textNode = domNode.getOwnerDocument().createTextNode(content);
+		domNode.appendChild(textNode);
 	}
 }

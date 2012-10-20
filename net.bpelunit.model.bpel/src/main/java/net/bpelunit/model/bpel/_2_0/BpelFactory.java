@@ -3,8 +3,11 @@ package net.bpelunit.model.bpel._2_0;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 
+import javax.xml.namespace.NamespaceContext;
+
 import net.bpelunit.model.bpel.IBpelFactory;
 import net.bpelunit.model.bpel.IProcess;
+import net.bpelunit.util.SimpleNamespaceContext;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.ProcessDocument;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
@@ -75,5 +78,12 @@ public class BpelFactory implements IBpelFactory {
 			throw new RuntimeException("Cannot load process", e);
 		}
 		
+	}
+
+	public NamespaceContext createNamespaceContext() {
+		SimpleNamespaceContext ctx = new SimpleNamespaceContext();
+		ctx.addNamespace("bpel", NAMESPACE_BPEL_2_0);
+		
+		return ctx;
 	}
 }

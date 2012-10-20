@@ -7,13 +7,11 @@ import org.w3c.dom.Node;
 
 public interface IDocumentation {
 
-	/**
-	 * Writable list of documentation elements
-	 * @return
-	 */
 	List<Node> getDocumentationElements();
 	
-	void setDocumentationElement(Node doc);
+	String getStringContent();
 	
-	void setDocumentationElements(Element e);
+	void setStringContent(String content);
+	
+	Element addDocumentationElement(String namespaceURI, String localName);
 }

@@ -1,6 +1,6 @@
 package net.bpelunit.model.bpel;
 
-public interface ISingleContainer {
+public interface ISingleContainer extends IVisitable {
 
 	IActivity getMainActivity();
 

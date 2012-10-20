@@ -2,7 +2,7 @@ package net.bpelunit.model.bpel;
 
 import javax.xml.namespace.QName;
 
-public interface IInvoke extends IActivity {
+public interface IInvoke extends IActivity, ICompensationHandlerContainer {
 
 	String getPartnerLink();
 

@@ -1,10 +1,12 @@
 package net.bpelunit.model.bpel;
 
+import javax.xml.namespace.QName;
+
 import org.w3c.dom.Element;
 
 
 
-public interface IFrom {
+public interface IFrom extends IBpelObject {
 
 	public enum Roles {
 		PARTNER_ROLE, MY_ROLE
@@ -32,8 +34,17 @@ public interface IFrom {
 
 	void setVariable(IVariable v);
 
-	void setExpression(String string);
-
-	void setLiteral(Element content);
+	IQuery setNewQuery();
+	IQuery getQuery();
 	
+	Element setNewLiteral(String namespaceUri, String localName);
+	Element getLiteral();
+
+	QName getProperty();
+
+	void setProperty(QName string);
+	
+	void addGlobalNamespace(String prefix, String namespaceUri);
+	void addLocalNamespace(String prefix, String namespaceUri);
+	String getNamespacePrefix(String namespaceUri);
 }

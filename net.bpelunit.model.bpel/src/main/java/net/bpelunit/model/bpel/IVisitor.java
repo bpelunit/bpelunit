@@ -29,4 +29,5 @@ public interface IVisitor {
 	void visit(IVariable var);
 	void visit(IWait a);
 	void visit(IWhile a);
+	void visit(ICompensationHandler compensationHandler);
 }

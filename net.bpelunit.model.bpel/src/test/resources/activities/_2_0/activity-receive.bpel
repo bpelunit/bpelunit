@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process name="activity"
+         targetNamespace="TESTNS"
+         suppressJoinFailure="yes"
+         xmlns:tns="TESTNS"
+         xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         >
+    <!-- Import the client WSDL -->
+	<bpel:import location="activityArtifacts.wsdl" namespace="TESTNS" 
+	        importType="http://schemas.xmlsoap.org/wsdl/" />
+	        
+    <!-- ================================================================= -->         
+    <!-- PARTNERLINKS                                                      -->
+    <!-- List of services participating in this BPEL process               -->
+    <!-- ================================================================= -->         
+    <bpel:partnerLinks>
+        <!--
+        The 'client' role represents the requester of this service. It is 
+        used for callback. The location and correlation information associated
+        with the client role are automatically set using WS-Addressing.
+        -->
+        <bpel:partnerLink name="client"
+                     partnerLinkType="tns:activity"
+                     myRole="activityProvider"
+                     partnerRole="activityRequester"
+                     />
+    </bpel:partnerLinks>
+  
+    <!-- ================================================================= -->         
+    <!-- VARIABLES                                                         -->
+    <!-- List of messages and XML documents used within this BPEL process  -->
+    <!-- ================================================================= -->         
+    <bpel:variables>
+        <!-- Reference to the message passed as input during initiation -->
+        <bpel:variable name="input"
+                  messageType="tns:activityRequestMessage"/>
+                  
+        <!-- Reference to the message that will be sent back to the 
+             requester during callback
+             -->
+        <bpel:variable name="output"
+                  messageType="tns:activityResponseMessage"/>
+    </bpel:variables>
+
+    <!-- ================================================================= -->         
+    <!-- ORCHESTRATION LOGIC                                               -->
+    <!-- Set of activities coordinating the flow of messages across the    -->
+    <!-- services integrated within this business process                  -->
+    <!-- ================================================================= -->         
+    <bpel:receive />
+</bpel:process>
+

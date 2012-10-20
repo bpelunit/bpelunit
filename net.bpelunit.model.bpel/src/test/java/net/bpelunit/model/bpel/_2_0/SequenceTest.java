@@ -5,6 +5,7 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.SequenceDocument;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TEmpty;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TSequence;
 
@@ -20,7 +21,8 @@ public class SequenceTest {
 	
 	@Before
 	public void setUp() {
-		nativeSequence = TSequence.Factory.newInstance();
+		SequenceDocument seqDoc = SequenceDocument.Factory.newInstance();
+		nativeSequence = seqDoc.addNewSequence();
 		sequence = new Sequence(nativeSequence);
 		
 		activity1 = sequence.addEmpty();
@@ -44,4 +46,8 @@ public class SequenceTest {
 		assertSame(activity2, sequence.getObjectForNativeObject(nativeActivity2));
 	}
 	
+	@Test
+	public void testGetActivityName() throws Exception {
+		assertEquals("Sequence", sequence.getActivityName());
+	}
 }

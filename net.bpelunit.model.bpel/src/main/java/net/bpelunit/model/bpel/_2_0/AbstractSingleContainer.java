@@ -1,6 +1,5 @@
 package net.bpelunit.model.bpel._2_0;
 
-import java.lang.reflect.Method;
 
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.ISingleContainer;
@@ -130,22 +129,11 @@ abstract class AbstractSingleContainer<T extends TExtensibleElements> extends
 	}
 
 	private AbstractActivity<?> setNewActivityOfType(String activityType) {
-		try {
-			TComplexContainerHelper.removeMainActivity(getNativeActivity());
-			mainActivity = null;
-
-			Method m = getNativeActivity().getClass().getMethod(
-					"addNew" + activityType);
-			TActivity sequence = (TActivity) m.invoke(getNativeActivity());
-			AbstractActivity<?> wrapper = BpelFactory.INSTANCE
-					.createWrapper(sequence);
-			mainActivity = wrapper;
-			return mainActivity;
-		} catch (Exception e) {
-			throw new RuntimeException("Invalid configuration", e);
-		}
+		mainActivity = null;
+		mainActivity = TComplexContainerHelper.setNewActivityOfType(getNativeActivity(), activityType);
+		return mainActivity;
 	}
-
+	
 	@Override
 	public void visit(IVisitor v) {
 		super.visit(v);

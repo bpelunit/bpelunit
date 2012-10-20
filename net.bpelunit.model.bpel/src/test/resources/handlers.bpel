@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process name="handlers" targetNamespace="TESTNS"
+	suppressJoinFailure="yes" xmlns:tns="TESTNS"
+	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+	<!-- Import the client WSDL -->
+	<bpel:import location="handlersArtifacts.wsdl" namespace="TESTNS"
+		importType="http://schemas.xmlsoap.org/wsdl/" />
+
+	<!-- ================================================================= -->
+	<!-- PARTNERLINKS -->
+	<!-- List of services participating in this BPEL process -->
+	<!-- ================================================================= -->
+	<bpel:partnerLinks>
+		<!-- The 'client' role represents the requester of this service. It is 
+			used for callback. The location and correlation information associated with 
+			the client role are automatically set using WS-Addressing. -->
+		<bpel:partnerLink name="client" partnerLinkType="tns:handlers"
+			myRole="handlersProvider" partnerRole="handlersRequester" />
+	</bpel:partnerLinks>
+
+	<!-- ================================================================= -->
+	<!-- VARIABLES -->
+	<!-- List of messages and XML documents used within this BPEL process -->
+	<!-- ================================================================= -->
+	<bpel:variables>
+		<!-- Reference to the message passed as input during initiation -->
+		
+
+		<!-- Reference to the message that will be sent back to the requester during 
+			callback -->
+		<bpel:variable name="output" messageType="tns:handlersResponseMessage" />
+	</bpel:variables>
+
+	<!-- ================================================================= -->
+	<!-- ORCHESTRATION LOGIC -->
+	<!-- Set of activities coordinating the flow of messages across the -->
+	<!-- services integrated within this business process -->
+	<!-- ================================================================= -->
+	<bpel:faultHandlers>
+		<bpel:catch>
+			<bpel:sequence>
+				<bpel:compensate></bpel:compensate>
+				<bpel:rethrow></bpel:rethrow>
+			</bpel:sequence>
+		</bpel:catch>
+		<bpel:catch>
+            
+            <bpel:sequence>
+                <bpel:compensate></bpel:compensate>
+                <bpel:rethrow></bpel:rethrow>
+            </bpel:sequence>
+        </bpel:catch>
+        <bpel:catchAll>
+			<bpel:sequence>
+				<bpel:compensate></bpel:compensate>
+				<bpel:rethrow></bpel:rethrow>
+			</bpel:sequence>
+		</bpel:catch>
+	</bpel:faultHandlers>
+	<bpel:sequence name="main">
+
+		<!-- Receive input from requestor. Note: This maps to operation defined 
+			in handlers.wsdl -->
+		<bpel:receive name="receiveInput" partnerLink="client"
+			portType="tns:handlers" operation="initiate" variable="input"
+			createInstance="yes" />
+        
+        <!-- Asynchronous callback to the requester.
+             Note: the callback location and correlation id is transparently handled 
+             using WS-addressing.
+             -->
+        
+        <bpel:scope name="Scope">
+            <bpel:scope name="Scope1">
+            <bpel:eventHandlers>
+                <bpel:onEvent><bpel:scope></bpel:scope></bpel:onEvent>
+                <bpel:onEvent>
+                    <bpel:scope></bpel:scope>
+                </bpel:onEvent>
+                <bpel:onAlarm>
+                    <bpel:scope></bpel:scope>
+                </bpel:onAlarm>
+                <bpel:onAlarm>
+                    <bpel:scope></bpel:scope>
+                </bpel:onAlarm>
+            </bpel:eventHandlers>
+            <bpel:compensationHandler>
+                <bpel:sequence><bpel:compensate></bpel:compensate><bpel:rethrow></bpel:rethrow></bpel:sequence>
+            </bpel:compensationHandler>
+            <bpel:terminationHandler>
+                <bpel:compensate></bpel:compensate>
+            </bpel:terminationHandler>
+            </bpel:scope>
+            <bpel:eventHandlers>
+                <bpel:onEvent><bpel:scope></bpel:scope></bpel:onEvent>
+                <bpel:onEvent>
+                    <bpel:scope></bpel:scope>
+                </bpel:onEvent>
+                <bpel:onAlarm>
+                    <bpel:scope></bpel:scope>
+                </bpel:onAlarm>
+                <bpel:onAlarm>
+                    <bpel:scope></bpel:scope>
+                </bpel:onAlarm>
+            </bpel:eventHandlers>
+            <bpel:compensationHandler>
+                <bpel:sequence><bpel:compensate></bpel:compensate><bpel:rethrow></bpel:rethrow></bpel:sequence>
+            </bpel:compensationHandler>
+            <bpel:terminationHandler>
+                <bpel:compensate></bpel:compensate>
+            </bpel:terminationHandler>
+        </bpel:scope>
+        <bpel:invoke name="callbackClient" 
+                partnerLink="client"
+                portType="tns:handlersCallback"
+                operation="onResult" 
+                inputVariable="output"
+                ><bpel:catch><bpel:sequence><bpel:compensate></bpel:compensate><bpel:rethrow></bpel:rethrow></bpel:sequence></bpel:catch><bpel:catch><bpel:sequence><bpel:compensate></bpel:compensate><bpel:rethrow></bpel:rethrow></bpel:sequence></bpel:catch><bpel:catchAll><bpel:sequence><bpel:compensate></bpel:compensate><bpel:rethrow></bpel:rethrow></bpel:sequence></bpel:catchAll><bpel:compensationHandler><bpel:sequence><bpel:compensate></bpel:compensate><bpel:rethrow></bpel:rethrow></bpel:sequence></bpel:compensationHandler></bpel:invoke>
+    </bpel:sequence>
+	<bpel:eventHandlers>
+		<bpel:onEvent partnerLink="client" operation="initiate" portType="tns:handlers" variable="input">
+			<bpel:scope></bpel:scope>
+            <bpel:variable name="input" messageType="tns:handlersRequestMessage" />
+        </bpel:onEvent>
+        <bpel:onEvent>
+            <bpel:scope></bpel:scope>
+        </bpel:onEvent>
+        <bpel:onAlarm>
+            <bpel:scope></bpel:scope>
+        </bpel:onAlarm>
+        <bpel:onAlarm>
+            <bpel:scope></bpel:scope>
+        </bpel:onAlarm>
+    </bpel:eventHandlers>
+</bpel:process>
+

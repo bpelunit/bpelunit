@@ -73,4 +73,19 @@ final class TComplexContainerHelper {
 		}
 	}
 
+	static AbstractActivity<?> setNewActivityOfType(Object container, String activityType) {
+		try {
+			removeMainActivity(container);
+	
+			Method m = container.getClass().getMethod(
+					"addNew" + activityType);
+			TActivity sequence = (TActivity) m.invoke(container);
+			AbstractActivity<?> wrapper = BpelFactory.INSTANCE
+					.createWrapper(sequence);
+			return wrapper;
+		} catch (Exception e) {
+			throw new RuntimeException("Invalid configuration", e);
+		}
+	}
+
 }

@@ -137,7 +137,7 @@ public class UsageTests {
 		ICopy copy = assign.addCopy();
 		copy.getFrom().setVariable(request);
 		copy.getFrom().setPart("parameters");
-		copy.getFrom().setExpression("in");
+		copy.getFrom().setNewQuery().setQueryContents("in");
 		copy.getTo().setVariable(response);
 		copy.getTo().setPart("parameters");
 		copy.getTo().setExpression("in");

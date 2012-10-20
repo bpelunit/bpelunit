@@ -8,4 +8,6 @@ public interface IActivity extends IBpelObject, IVisitable {
 	String getActivityName();
 	String getName();
 	void setName(String newName);
+	boolean getSuppressJoinFailure();
+	void setSuppressJoinFailure(boolean value);
 }
