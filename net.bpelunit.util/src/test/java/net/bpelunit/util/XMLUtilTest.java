@@ -5,6 +5,7 @@
 package net.bpelunit.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 import java.io.ByteArrayOutputStream;
@@ -178,6 +179,34 @@ public class XMLUtilTest {
 		assertEquals(0, childNodes.getLength());
 		assertEquals("a", root.getAttribute("a"));
 		assertEquals("b", root.getAttribute("b"));
+	}
+	
+	@Test
+	public void testGetContentsOfTextOnlyNodeOnlyTextNodes() throws Exception {
+		Document doc = XMLUtil.createDocument();
+		
+		Element e = doc.createElement("a");
+		doc.appendChild(e);
+		
+		e.appendChild(doc.createTextNode("a"));
+		e.appendChild(doc.createTextNode("b"));
+		e.appendChild(doc.createTextNode("c"));
+		
+		assertEquals("abc", XMLUtil.getContentsOfTextOnlyNode(e));
+	}
+	
+	@Test
+	public void testGetContentsOfTextOnlyNodeNotOnlyTextNodes() throws Exception {
+		Document doc = XMLUtil.createDocument();
+		
+		Element e = doc.createElement("a");
+		doc.appendChild(e);
+		
+		e.appendChild(doc.createTextNode("a"));
+		e.appendChild(doc.createElement("b"));
+		e.appendChild(doc.createTextNode("c"));
+		
+		assertNull(XMLUtil.getContentsOfTextOnlyNode(e));
 	}
 	
 	private static class NodeListMock implements NodeList {
