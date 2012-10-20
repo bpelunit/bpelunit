@@ -160,6 +160,25 @@ public class XMLUtilTest {
 		assertEquals(new QName("", "b"), XMLUtil.getQName(doc.createElement("b")));
 		assertEquals(new QName("a", "b"), XMLUtil.getQName(doc.createElementNS("a", "b")));
 	}
+
+	@Test
+	public void testRemoveAllSubNodesExceptAttributes() throws Exception {
+		Document doc = XMLUtil.parseXML(getClass().getResourceAsStream(
+		"testRemoveAllSubNodesExceptAttributes.xml"));
+		Element root = doc.getDocumentElement();
+	
+		NodeList childNodes = root.getChildNodes();
+		assertEquals(5, childNodes.getLength());
+		assertEquals("a", root.getAttribute("a"));
+		assertEquals("b", root.getAttribute("b"));
+		
+		XMLUtil.removeAllSubNodesExceptAttributes(root);
+		
+		childNodes = root.getChildNodes();
+		assertEquals(0, childNodes.getLength());
+		assertEquals("a", root.getAttribute("a"));
+		assertEquals("b", root.getAttribute("b"));
+	}
 	
 	private static class NodeListMock implements NodeList {
 
