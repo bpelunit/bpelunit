@@ -6,7 +6,4 @@ public interface IWaitingActivity {
 	void setDeadline(String deadlineExpression);
 	String getDuration();
 	void setDuration(String durationExpression);
-
-
-	
 }

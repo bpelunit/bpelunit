@@ -6,11 +6,13 @@ import net.bpelunit.model.bpel.IActivity;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.ISource;
 import net.bpelunit.model.bpel.ITarget;
+import net.bpelunit.util.XMLUtil;
 
 import org.apache.xmlbeans.XmlObject;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TExtensibleElements;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
+import org.w3c.dom.Element;
 
 abstract class AbstractActivity<T extends TExtensibleElements> extends
 		AbstractBpelObject implements IActivity {
@@ -81,7 +83,7 @@ abstract class AbstractActivity<T extends TExtensibleElements> extends
 
 	@Override
 	public String getXPathInDocument() {
-		return "//" + getActivityName() + "['" + getName() + "']";
+		return XMLUtil.getXPathForElement((Element)activity.getDomNode(), BpelFactory.INSTANCE.createNamespaceContext());
 	}
 
 	@Override
