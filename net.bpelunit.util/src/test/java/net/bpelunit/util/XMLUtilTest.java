@@ -208,6 +208,21 @@ public class XMLUtilTest {
 		
 		assertNull(XMLUtil.getContentsOfTextOnlyNode(e));
 	}
+
+	@Test
+	public void testGetXPathForElement() throws Exception {
+		Document xml = XMLUtil.parseXML(getClass().getResourceAsStream("GetXPathForElement.xml"));
+		
+		SimpleNamespaceContext ctx = new SimpleNamespaceContext();
+		ctx.addNamespace("a", "a");
+		ctx.addNamespace("b", "b");
+		
+		Element a = xml.getDocumentElement();
+		Element b = (Element) XMLUtil.getChildElementsByName(a, "B").get(0);
+		Element c = (Element) XMLUtil.getChildElementsByName(b, "C").get(0);
+		
+		assertEquals("/b:B/a:C", XMLUtil.getXPathForElement(c, ctx));
+	}
 	
 	private static class NodeListMock implements NodeList {
 

@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -180,21 +181,44 @@ public final class XMLUtil {
 	 */
 	public static String getContentsOfTextOnlyNode(Node n) {
 		NodeList children = n.getChildNodes();
-		if(children.getLength() == 0) {
+		if (children.getLength() == 0) {
 			return null;
 		}
-		
+
 		StringBuffer sb = new StringBuffer();
 
-		for(int i = 0; i < children.getLength(); i++) {
+		for (int i = 0; i < children.getLength(); i++) {
 			Node node = children.item(i);
-			if(node.getNodeType() == Node.TEXT_NODE) {
+			if (node.getNodeType() == Node.TEXT_NODE) {
 				sb.append(node.getNodeValue());
 			} else {
 				return null;
 			}
 		}
-		
+
+		return sb.toString();
+	}
+
+	public static String getXPathForElement(Element e, NamespaceContext ctx) {
+		StringBuffer sb = new StringBuffer();
+		List<Node> path = new ArrayList<Node>();
+
+		Node currentNode = e;
+		while (currentNode.getParentNode() != currentNode.getOwnerDocument()) {
+			path.add(0, currentNode);
+			currentNode = currentNode.getParentNode();
+		}
+
+		for (Node n : path) {
+			sb.append("/");
+
+			String namespaceURI = n.getNamespaceURI();
+			if (namespaceURI != null && !namespaceURI.equals("")) {
+				sb.append(ctx.getPrefix(namespaceURI)).append(":");
+			}
+			sb.append(n.getLocalName());
+		}
+
 		return sb.toString();
 	}
 }
