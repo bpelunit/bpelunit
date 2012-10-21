@@ -18,8 +18,6 @@ public class ForEach extends AbstractActivity<TForEach> implements IForEach {
 		}
 		
 		this.scope = new Scope(wrappedForEach.getScope());
-		
-		setNativeActivity(wrappedForEach);
 	}
 
 	public Scope getScope() {

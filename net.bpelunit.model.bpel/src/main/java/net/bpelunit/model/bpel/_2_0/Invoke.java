@@ -6,7 +6,6 @@ import net.bpelunit.model.bpel.ICompensationHandler;
 import net.bpelunit.model.bpel.IInvoke;
 import net.bpelunit.model.bpel.IVariable;
 
-import org.apache.xmlbeans.XmlObject;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TInvoke;
 
 public class Invoke extends AbstractBasicActivity<TInvoke> implements IInvoke {
@@ -15,7 +14,7 @@ public class Invoke extends AbstractBasicActivity<TInvoke> implements IInvoke {
 	
 	public Invoke(TInvoke wrappedInvoke) {
 		super(wrappedInvoke);
-		setNativeActivity(wrappedInvoke);
+		this.invoke = wrappedInvoke;
 		if(invoke.getCompensationHandler() != null) {
 			compensationHandler = new CompensationHandler(invoke.getCompensationHandler());
 		}
@@ -67,13 +66,6 @@ public class Invoke extends AbstractBasicActivity<TInvoke> implements IInvoke {
 	
 	public void setOutputVariable(IVariable v) {
 		setOutputVariable(v.getName());
-	}
-	
-	@Override
-	protected void setNativeActivity(XmlObject newNativeActivity) {
-		super.setNativeActivity(newNativeActivity);
-		
-		this.invoke = (TInvoke)newNativeActivity;
 	}
 	
 	@Override

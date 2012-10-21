@@ -9,7 +9,6 @@ import net.bpelunit.model.bpel.IFlow;
 import net.bpelunit.model.bpel.ILink;
 import net.bpelunit.model.bpel.IVisitor;
 
-import org.apache.xmlbeans.XmlObject;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TFlow;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TLink;
 
@@ -20,13 +19,7 @@ class Flow extends AbstractMultiContainer<TFlow> implements IFlow {
 
 	public Flow(TFlow wrappedFlow) {
 		super(wrappedFlow);
-		setNativeActivity(wrappedFlow);
-	}
-
-	@Override
-	protected void setNativeActivity(XmlObject newNativeActivity) {
-		super.setNativeActivity(newNativeActivity);
-		this.flow = (TFlow) newNativeActivity;
+		this.flow = wrappedFlow;
 
 		if(!this.flow.isSetLinks()) {
 			this.flow.addNewLinks();

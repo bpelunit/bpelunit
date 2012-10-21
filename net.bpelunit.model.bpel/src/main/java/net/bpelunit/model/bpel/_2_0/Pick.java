@@ -10,7 +10,6 @@ import net.bpelunit.model.bpel.IOnMessage;
 import net.bpelunit.model.bpel.IPick;
 import net.bpelunit.model.bpel.IVisitor;
 
-import org.apache.xmlbeans.XmlObject;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnAlarmPick;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnMessage;
@@ -24,15 +23,6 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 	public Pick(TPick wrappedPick) {
 		super(wrappedPick);
 
-		setNativeActivity(wrappedPick);
-	}
-
-	@Override
-	protected void setNativeActivity(XmlObject newNativeActivity) {
-		super.setNativeActivity(newNativeActivity);
-		
-		TPick wrappedPick = (TPick)newNativeActivity;
-		
 		for(TOnMessage m : wrappedPick.getOnMessageArray()) {
 			onMessages.add(new OnMessage(m));
 		}

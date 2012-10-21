@@ -8,10 +8,9 @@ import net.bpelunit.model.bpel.ISource;
 import net.bpelunit.model.bpel.ITarget;
 import net.bpelunit.util.XMLUtil;
 
-import org.apache.xmlbeans.XmlObject;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
-import org.oasisOpen.docs.wsbpel.x20.process.executable.TExtensibleElements;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TExtensibleElements;
 import org.w3c.dom.Element;
 
 abstract class AbstractActivity<T extends TExtensibleElements> extends
@@ -93,10 +92,5 @@ abstract class AbstractActivity<T extends TExtensibleElements> extends
 		} else {
 			return null;
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	protected void setNativeActivity(XmlObject newNativeActivity) {
-		this.activity = (T) newNativeActivity;
 	}
 }
