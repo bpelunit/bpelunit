@@ -25,6 +25,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -199,19 +200,28 @@ public final class XMLUtil {
 		return sb.toString();
 	}
 
-	public static String getXPathForElement(Element e, NamespaceContext ctx) {
+	public static String getXPathForElement(Node e, NamespaceContext ctx) {
 		StringBuffer sb = new StringBuffer();
 		List<Node> path = new ArrayList<Node>();
 
 		Node currentNode = e;
 		while (currentNode.getParentNode() != currentNode.getOwnerDocument()) {
 			path.add(0, currentNode);
-			currentNode = currentNode.getParentNode();
+			if(currentNode instanceof Attr) {
+				Attr a = (Attr)currentNode;
+				currentNode = a.getOwnerElement();
+			} else {
+				currentNode = currentNode.getParentNode();
+			}
 		}
 
 		for (Node n : path) {
 			sb.append("/");
 
+			if(n.getNodeType() == Node.ATTRIBUTE_NODE) {
+				sb.append("@");
+			}
+			
 			String namespaceURI = n.getNamespaceURI();
 			if (namespaceURI != null && !namespaceURI.equals("")) {
 				sb.append(ctx.getPrefix(namespaceURI)).append(":");

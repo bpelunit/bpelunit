@@ -16,6 +16,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -220,8 +221,10 @@ public class XMLUtilTest {
 		Element a = xml.getDocumentElement();
 		Element b = (Element) XMLUtil.getChildElementsByName(a, "B").get(0);
 		Element c = (Element) XMLUtil.getChildElementsByName(b, "C").get(0);
+		Attr d = c.getAttributeNode("id");
 		
 		assertEquals("/b:B/a:C", XMLUtil.getXPathForElement(c, ctx));
+		assertEquals("/b:B/a:C/@id", XMLUtil.getXPathForElement(d, ctx));
 	}
 	
 	private static class NodeListMock implements NodeList {
