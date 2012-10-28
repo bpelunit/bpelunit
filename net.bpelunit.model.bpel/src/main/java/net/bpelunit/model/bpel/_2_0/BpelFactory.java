@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 
 import javax.xml.namespace.NamespaceContext;
 
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IBpelFactory;
 import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.util.SimpleNamespaceContext;
@@ -29,7 +30,7 @@ public class BpelFactory implements IBpelFactory {
 		return new Process(processDoc);
 	}
 
-	public AbstractActivity<?> createWrapper(TActivity child) {
+	public AbstractActivity<?> createWrapper(TActivity child, IActivityContainer parent) {
 		if(child == null) {
 			return null;
 		}
@@ -42,13 +43,13 @@ public class BpelFactory implements IBpelFactory {
 			Constructor<?> c = null;
 			for(Class<?> i : child.getClass().getInterfaces()) {
 				try {
-					c = clazz.getConstructor(i);
+					c = clazz.getConstructor(i, IActivityContainer.class);
 					break;
 				} catch (Exception e) {
 					// ignore
 				}
 			}
-			return (AbstractActivity<?>) c.newInstance(child);
+			return (AbstractActivity<?>) c.newInstance(child, parent);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot find wrapper " + wrapperClassName + " for " + child.getClass().getCanonicalName(), e);
 		}

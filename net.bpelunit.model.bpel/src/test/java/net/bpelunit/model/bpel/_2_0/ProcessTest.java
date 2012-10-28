@@ -3,14 +3,16 @@ package net.bpelunit.model.bpel._2_0;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.xml.namespace.NamespaceContext;
-
+import net.bpelunit.model.bpel.ActivityType;
 import net.bpelunit.model.bpel.BpelFactory;
 import net.bpelunit.model.bpel.IAssign;
 import net.bpelunit.model.bpel.ICompensate;
@@ -45,8 +47,6 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TWait;
  */
 public class ProcessTest {
 
-	private static final NamespaceContext context = net.bpelunit.model.bpel._2_0.BpelFactory.INSTANCE.createNamespaceContext();
-	
 	@Test
 	public void testQueryByXPath() throws Exception {
 		InputStream bpelResource = getClass().getResourceAsStream("waitprocess.bpel");
@@ -688,5 +688,34 @@ public class ProcessTest {
 		assertEquals("B", doc2.getStringContent());
 		assertSame(doc1, process.getDocumentation().get(0));
 		assertSame(doc2, process.getDocumentation().get(1));
+	}
+	
+	@Test
+	public void testEncapsulateInScope() throws Exception {
+		Process p = (Process) BpelFactory.createProcess();
+		Empty empty = p.setNewEmpty();
+		empty.setName("Empty1");
+		
+		p.encapsulateInNewScope(empty);
+		
+		Scope newMainScope = (Scope)p.getMainActivity();
+		assertEquals("ScopeOfEmpty1", newMainScope.getName());
+		assertSame(empty, newMainScope.getMainActivity());
+		assertEquals("Empty1", newMainScope.getMainActivity().getName());
+		
+		assertNull(p.getNativeActivity().getEmpty());
+		assertSame(newMainScope.getNativeActivity(), p.getNativeActivity().getScope());
+		assertSame(empty.getNativeActivity(), newMainScope.getNativeActivity().getEmpty());
+		
+		// Re-do assertions but this time save it and read a clean copy to
+		// see if BPEL element names are correct etc.
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		p.save(out);
+		p = (Process) BpelFactory.loadProcess(new ByteArrayInputStream(out.toByteArray()));
+		
+		newMainScope = (Scope)p.getMainActivity();
+		assertEquals("ScopeOfEmpty1", newMainScope.getName());
+		assertEquals(ActivityType.Empty, newMainScope.getMainActivity().getActivityType());
+		assertEquals("Empty1", newMainScope.getMainActivity().getName());
 	}
 }

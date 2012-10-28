@@ -18,7 +18,7 @@ public class OnAlarmTest {
 	@Before
 	public void setUp() {
 		nativeOnAlarm = TOnAlarmPick.Factory.newInstance();
-		onAlarm = new OnAlarm(nativeOnAlarm);
+		onAlarm = new OnAlarm(nativeOnAlarm, null);
 		
 		mainActivity = onAlarm.setNewEmpty();
 		nativeMainActivity = mainActivity.getNativeActivity();

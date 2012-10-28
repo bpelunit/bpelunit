@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import net.bpelunit.model.bpel.ActivityType;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.PickDocument;
@@ -29,7 +31,7 @@ public class PickTest {
 	public void setUp() {
 		PickDocument pickDoc = PickDocument.Factory.newInstance();
 		nativePick = pickDoc.addNewPick();
-		pick = new Pick(nativePick);
+		pick = new Pick(nativePick, null);
 		
 		onMessage = pick.addOnMessage();
 		nativeOnMessage = onMessage.getNativeActivity();
@@ -68,7 +70,7 @@ public class PickTest {
 	}
 	
 	@Test
-	public void testGetActivityName() throws Exception {
-		assertEquals("Pick", pick.getActivityName());
+	public void testGetActivityType() throws Exception {
+		assertEquals(ActivityType.Pick, pick.getActivityType());
 	}
 }

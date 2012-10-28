@@ -1,6 +1,5 @@
 package net.bpelunit.model.bpel._2_0;
 
-import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.ICopy;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
@@ -30,15 +29,6 @@ public class Copy extends AbstractBpelObject implements ICopy {
 	@Override
 	public From getFrom() {
 		return from;
-	}
-
-	@Override
-	IBpelObject getObjectForNativeObject(Object nativeObject) {
-		if(nativeObject == copy) {
-			return this;
-		} else {
-			return null;
-		}
 	}
 
 	@Override

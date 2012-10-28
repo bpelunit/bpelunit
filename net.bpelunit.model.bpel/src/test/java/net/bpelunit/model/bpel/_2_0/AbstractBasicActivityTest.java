@@ -29,4 +29,9 @@ public abstract class AbstractBasicActivityTest<T extends AbstractActivity<?>> {
 		assertFalse(activity.getSuppressJoinFailure());
 	}
 	
+	@Test
+	public void testIsBasicActivity() {
+		assertTrue(activity.isBasicActivity());
+	}
+	
 }

@@ -3,6 +3,8 @@ package net.bpelunit.model.bpel._2_0;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import net.bpelunit.model.bpel.IDocumentation;
 import net.bpelunit.util.XMLUtil;
 
@@ -45,9 +47,13 @@ public class Documentation implements IDocumentation {
 		
 	}
 	
-	public Element addDocumentationElement(String namespaceURI, String qualifiedName) {
+	public Element addDocumentationElement(QName name) {
+		return addDocumentationElement(name.getNamespaceURI(), name.getLocalPart());
+	}
+	
+	public Element addDocumentationElement(String namespaceURI, String localName) {
 		Node docNode = documentation.getDomNode();
-		Element e = docNode.getOwnerDocument().createElementNS(namespaceURI, qualifiedName);
+		Element e = docNode.getOwnerDocument().createElementNS(namespaceURI, localName);
 		
 		docNode.appendChild(e);
 		return e;

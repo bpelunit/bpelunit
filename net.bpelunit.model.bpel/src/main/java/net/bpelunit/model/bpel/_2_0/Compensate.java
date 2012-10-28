@@ -1,12 +1,13 @@
 package net.bpelunit.model.bpel._2_0;
 
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.ICompensate;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TCompensate;
 
 class Compensate extends AbstractBasicActivity<TCompensate> implements ICompensate {
 
-	public Compensate(TCompensate wrappedCompensate) {
-		super(wrappedCompensate);
+	public Compensate(TCompensate wrappedCompensate, IActivityContainer parent) {
+		super(wrappedCompensate, parent);
 	}
 }

@@ -1,23 +1,51 @@
 package net.bpelunit.model.bpel._2_0;
 
+import net.bpelunit.model.bpel.IActivity;
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IBpelObject;
+import net.bpelunit.model.bpel.IExpression;
 import net.bpelunit.model.bpel.IForEach;
+import net.bpelunit.model.bpel.IScope;
 import net.bpelunit.model.bpel.IVisitor;
 
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TForEach;
 
 public class ForEach extends AbstractActivity<TForEach> implements IForEach {
 
 	private Scope scope;
+	private Expression startCounterValue;
+	private Expression finalCounterValue;
+	private CompletionCondition completionCondition;
 
-	public ForEach(TForEach wrappedForEach) {
-		super(wrappedForEach);
+	public ForEach(TForEach wrappedForEach, IActivityContainer parent) {
+		super(wrappedForEach, parent);
 
+		setNativeObject(wrappedForEach);
+	}
+
+	void setNativeObject(Object nativeForEach) {
+		super.setNativeObject(nativeForEach);
+		TForEach wrappedForEach = (TForEach)nativeForEach;
+		
 		if(wrappedForEach.getScope() == null) {
 			wrappedForEach.addNewScope();
 		}
+		this.scope = new Scope(wrappedForEach.getScope(), this);
 		
-		this.scope = new Scope(wrappedForEach.getScope());
+		if(wrappedForEach.getParallel() == null) {
+			wrappedForEach.setParallel(TBoolean.NO);
+		}
+		
+		if(wrappedForEach.getStartCounterValue() == null) {
+			wrappedForEach.addNewStartCounterValue();
+		}
+		startCounterValue = new Expression(wrappedForEach.getStartCounterValue());
+		
+		if(wrappedForEach.getFinalCounterValue() == null) {
+			wrappedForEach.addNewFinalCounterValue();
+		}
+		startCounterValue = new Expression(wrappedForEach.getFinalCounterValue());
 	}
 
 	public Scope getScope() {
@@ -45,4 +73,54 @@ public class ForEach extends AbstractActivity<TForEach> implements IForEach {
 		return null;
 	}
 
+	@Override
+	public String getCounterName() {
+		return getNativeActivity().getCounterName();
+	}
+	
+	@Override
+	public void setCounterName(String newCounterName) {
+		getNativeActivity().setCounterName(newCounterName);
+	}
+	
+	@Override
+	public boolean isParallel() {
+		return getNativeActivity().getParallel().equals(TBoolean.YES);
+	}
+	
+	@Override
+	public void setParallel(boolean isParallel) {
+		getNativeActivity().setParallel(TBooleanHelper.convert(isParallel));	
+	}
+
+	@Override
+	public Expression getStartCounterValue() {
+		return startCounterValue;
+	}
+
+	@Override
+	public IExpression getFinalCounterValue() {
+		return finalCounterValue;
+	}
+
+	@Override
+	public CompletionCondition getCompletionCondition() {
+		return completionCondition;
+	}
+
+	@Override
+	public CompletionCondition setNewCompletionCondition() {
+		if(getNativeActivity().getCompletionCondition() != null) {
+			getNativeActivity().unsetCompletionCondition();
+		}
+		
+		completionCondition = new CompletionCondition(getNativeActivity().addNewCompletionCondition());
+		
+		return completionCondition;
+	}
+
+	@Override
+	public IScope encapsulateInNewScope(IActivity childActivity) {
+		throw new IllegalArgumentException("Cannot encapsulate a mandatory scope of a for-each activity");
+	}
 }

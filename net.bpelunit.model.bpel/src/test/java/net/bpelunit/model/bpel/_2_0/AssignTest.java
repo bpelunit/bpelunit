@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
 
+import net.bpelunit.model.bpel.ActivityType;
 import net.bpelunit.model.bpel.BpelFactory;
 import net.bpelunit.model.bpel.IAssign;
 import net.bpelunit.model.bpel.IProcess;
@@ -27,13 +28,13 @@ public class AssignTest extends AbstractBasicActivityTest<Assign> {
 	public void setUp() {
 		AssignDocument assignDoc = AssignDocument.Factory.newInstance();
 		nativeAssign = assignDoc.addNewAssign();
-		assign = new Assign(nativeAssign);
+		assign = new Assign(nativeAssign, null);
 		setActivity(assign);
 	}
 	
 	@Test
 	public void testValidateFromFile() throws Exception {
-		InputStream resourceStream = getClass().getResourceAsStream("/activities/activity-assign.bpel");
+		InputStream resourceStream = getClass().getResourceAsStream("/activities/_2_0/activity-assign.bpel");
 		IProcess process = BpelFactory.loadProcess(resourceStream);
 		
 		Assign a = (Assign)process.getMainActivity();
@@ -50,7 +51,7 @@ public class AssignTest extends AbstractBasicActivityTest<Assign> {
 
 	@Test
 	public void testCopyFromFile() throws Exception {
-		InputStream resourceStream = getClass().getResourceAsStream("/activities/activity-assign.bpel");
+		InputStream resourceStream = getClass().getResourceAsStream("/activities/_2_0/activity-assign.bpel");
 		IProcess process = BpelFactory.loadProcess(resourceStream);
 		IAssign a = (IAssign) process.getMainActivity();
 		
@@ -77,7 +78,7 @@ public class AssignTest extends AbstractBasicActivityTest<Assign> {
 	}
 	
 	@Test
-	public void testGetActivityName() throws Exception {
-		assertEquals("Assign", assign.getActivityName());
+	public void testGetActivityType() throws Exception {
+		assertEquals(ActivityType.Assign, assign.getActivityType());
 	}
 }

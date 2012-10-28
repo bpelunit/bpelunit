@@ -2,13 +2,16 @@ package usagetests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 
 import net.bpelunit.model.bpel.BpelFactory;
+import net.bpelunit.model.bpel.IActivity;
 import net.bpelunit.model.bpel.IAssign;
 import net.bpelunit.model.bpel.ICompensate;
 import net.bpelunit.model.bpel.ICompensateScope;
@@ -94,6 +97,11 @@ public class UsageTests {
 				exit, flow, forEach, forEach.getScope(), iif, invoke, pick,
 				receive, repeatUntil, reply, rethrow, scope, sequence, tthrow,
 				validate, wait, wwhile);
+		
+		List<? extends IActivity> activities = mainSequence.getActivities();
+		assertSame(assign, activities.get(0));
+		assertSame(compensate, activities.get(1));
+		assertSame(compensateScope, activities.get(2));
 	}
 
 	@Test

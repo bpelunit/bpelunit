@@ -1,9 +1,10 @@
 package net.bpelunit.model.bpel;
 
-public interface ISingleContainer extends IVisitable {
+public interface ISingleContainer extends IActivityContainer {
 
 	IActivity getMainActivity();
 
+	IActivity setNewActivity(ActivityType type);
 	IReceive setNewReceive();
 	IAssign setNewAssign();
 	IReply setNewReply();

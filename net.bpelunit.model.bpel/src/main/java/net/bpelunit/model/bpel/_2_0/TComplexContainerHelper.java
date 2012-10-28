@@ -4,6 +4,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.bpelunit.model.bpel.IActivityContainer;
+import net.bpelunit.util.StringUtil;
+
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
 
 final class TComplexContainerHelper {
@@ -73,18 +76,19 @@ final class TComplexContainerHelper {
 		}
 	}
 
-	static AbstractActivity<?> setNewActivityOfType(Object container, String activityType) {
+	static AbstractActivity<?> setNewActivityOfType(Object container, String activityType, IActivityContainer parent) {
+		String methodName = "addNew" + StringUtil.toFirstUpper(activityType);
 		try {
 			removeMainActivity(container);
-	
+			
 			Method m = container.getClass().getMethod(
-					"addNew" + activityType);
+					methodName);
 			TActivity sequence = (TActivity) m.invoke(container);
 			AbstractActivity<?> wrapper = BpelFactory.INSTANCE
-					.createWrapper(sequence);
+					.createWrapper(sequence, parent);
 			return wrapper;
 		} catch (Exception e) {
-			throw new RuntimeException("Invalid configuration", e);
+			throw new RuntimeException("Invalid configuration. Cannot find method name " + container.getClass().getName() + "." + methodName, e);
 		}
 	}
 

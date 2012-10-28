@@ -42,7 +42,7 @@ class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 	private List<Documentation> documentations = new ArrayList<Documentation>();
 	
 	Process(ProcessDocument newProcess) {
-		super(newProcess.getProcess());
+		super(newProcess.getProcess(), null);
 		
 		this.processDoc = newProcess;
 		this.process = processDoc.getProcess();
@@ -69,10 +69,10 @@ class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 		
 		if(process.getEventHandlers() != null) {
 			for(TOnAlarmEvent a : process.getEventHandlers().getOnAlarmArray()) {
-				this.onAlarms.add(new OnAlarmEventHandler(a));
+				this.onAlarms.add(new OnAlarmEventHandler(a, this));
 			}
 			for(TOnEvent e : process.getEventHandlers().getOnEventArray()) {
-				this.onMessages.add(new OnMessageHandler(e));
+				this.onMessages.add(new OnMessageHandler(e, this));
 			}
 		}
 		
@@ -249,7 +249,7 @@ class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 		createEventHandlersIfNecessary();
 		
 		TOnAlarmEvent nativeOnAlarm = process.getEventHandlers().addNewOnAlarm();
-		OnAlarmEventHandler onAlarm = new OnAlarmEventHandler(nativeOnAlarm);
+		OnAlarmEventHandler onAlarm = new OnAlarmEventHandler(nativeOnAlarm, this);
 		onAlarms.add(onAlarm);
 		
 		return onAlarm;
@@ -266,7 +266,7 @@ class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 		createEventHandlersIfNecessary();
 		
 		TOnEvent nativeOnMessage = process.getEventHandlers().addNewOnEvent();
-		OnMessageHandler onMessage = new OnMessageHandler(nativeOnMessage);
+		OnMessageHandler onMessage = new OnMessageHandler(nativeOnMessage, this);
 		onMessages.add(onMessage);
 		
 		return onMessage;

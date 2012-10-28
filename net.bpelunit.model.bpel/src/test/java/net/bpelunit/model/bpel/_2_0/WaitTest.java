@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
+import net.bpelunit.model.bpel.ActivityType;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TWait;
@@ -19,7 +21,7 @@ public class WaitTest {
 	public void setUp() {
 		WaitDocument waitDoc = WaitDocument.Factory.newInstance();
 		nativeWait = waitDoc.addNewWait();
-		wait = new Wait(nativeWait);
+		wait = new Wait(nativeWait, null);
 	}
 	
 	@Test
@@ -51,8 +53,9 @@ public class WaitTest {
 		assertSame(wait, wait.getObjectForNativeObject(nativeWait));
 	}
 
+
 	@Test
-	public void testGetActivityName() throws Exception {
-		assertEquals("Wait", wait.getActivityName());
+	public void testGetActivityType() throws Exception {
+		assertEquals(ActivityType.Wait, wait.getActivityType());
 	}
 }

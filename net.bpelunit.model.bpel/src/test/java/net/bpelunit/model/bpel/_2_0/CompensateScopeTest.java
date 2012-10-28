@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.InputStream;
 
+import net.bpelunit.model.bpel.ActivityType;
 import net.bpelunit.model.bpel.BpelFactory;
 import net.bpelunit.model.bpel.IProcess;
 
@@ -19,12 +20,12 @@ public class CompensateScopeTest {
 	@Before
 	public void setUp() {
 		CompensateScopeDocument compensateScopeDoc = CompensateScopeDocument.Factory.newInstance();
-		compensateScope = new CompensateScope(compensateScopeDoc.addNewCompensateScope());
+		compensateScope = new CompensateScope(compensateScopeDoc.addNewCompensateScope(), null);
 	}
 	
 	@Test
 	public void testTargetFromFile() throws Exception {
-		InputStream resourceStream = getClass().getResourceAsStream("/activities/activity-compensateScope.bpel");
+		InputStream resourceStream = getClass().getResourceAsStream("/activities/_2_0/activity-compensateScope.bpel");
 		IProcess process = BpelFactory.loadProcess(resourceStream);
 		
 		CompensateScope compensateScope = (CompensateScope)process.getMainActivity();
@@ -40,7 +41,7 @@ public class CompensateScopeTest {
 	}
 
 	@Test
-	public void testGetActivityName() throws Exception {
-		assertEquals("CompensateScope", compensateScope.getActivityName());
+	public void testGetActivityType() throws Exception {
+		assertEquals(ActivityType.CompensateScope, compensateScope.getActivityType());
 	}
 }

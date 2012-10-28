@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IAssign;
 import net.bpelunit.model.bpel.IVisitor;
 
@@ -15,14 +16,19 @@ class Assign extends AbstractBasicActivity<TAssign> implements IAssign {
 	private TAssign assign;
 	private List<Copy> copy = new ArrayList<Copy>();
 	
-	public Assign(TAssign a) {
-		super(a);
-		this.assign = a;
+	public Assign(TAssign a, IActivityContainer parent) {
+		super(a, parent);
+		setNativeObject(a);
 		
-		this.assign = a;
+	}
+
+	@Override
+	void setNativeObject(Object a) {
+		super.setNativeObject(a);
+		this.assign = (TAssign)a;
 		
 		copy.clear();
-		for(TCopy c : a.getCopyArray()) {
+		for(TCopy c : assign.getCopyArray()) {
 			copy.add(new Copy(c));
 		}
 	}

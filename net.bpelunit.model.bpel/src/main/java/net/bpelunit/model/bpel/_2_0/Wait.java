@@ -1,5 +1,6 @@
 package net.bpelunit.model.bpel._2_0;
 
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IWait;
 import net.bpelunit.util.XMLUtil;
 
@@ -11,8 +12,8 @@ import org.w3c.dom.Text;
 
 public class Wait extends AbstractBasicActivity<TWait> implements IWait {
 
-	public Wait(TWait wrappedWait) {
-		super(wrappedWait);
+	public Wait(TWait wrappedWait, IActivityContainer parent) {
+		super(wrappedWait, parent);
 	}
 
 	public void setDuration(String durationExpression) {

@@ -1,6 +1,5 @@
 package net.bpelunit.model.bpel._2_0;
 
-import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IImport;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TImport;
@@ -42,14 +41,4 @@ public class Import extends AbstractBpelObject implements IImport {
 	public boolean isWsdlImport() {
 		return NAMESPACE_WSDL.equals(getImportType());
 	}
-
-	@Override
-	IBpelObject getObjectForNativeObject(Object nativeObject) {
-		if(nativeObject == im) {
-			return this;
-		} else {
-			return null;
-		}
-	}
-
 }

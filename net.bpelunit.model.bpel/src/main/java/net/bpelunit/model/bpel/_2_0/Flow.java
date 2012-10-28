@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.bpelunit.model.bpel.IActivity;
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IFlow;
 import net.bpelunit.model.bpel.ILink;
 import net.bpelunit.model.bpel.IVisitor;
@@ -17,14 +18,20 @@ class Flow extends AbstractMultiContainer<TFlow> implements IFlow {
 	private TFlow flow;
 	private List<Link> links = new ArrayList<Link>();
 
-	public Flow(TFlow wrappedFlow) {
-		super(wrappedFlow);
-		this.flow = wrappedFlow;
+	public Flow(TFlow wrappedFlow, IActivityContainer parent) {
+		super(wrappedFlow, parent);
 
+		setNativeObject(wrappedFlow);
+	}
+
+	void setNativeObject(Object wrappedFlow) {
+		super.setNativeObject(wrappedFlow);
+		this.flow = (TFlow) wrappedFlow;
 		if(!this.flow.isSetLinks()) {
 			this.flow.addNewLinks();
 		}
-		
+
+		links.clear();
 		for (TLink l : this.flow.getLinks().getLinkArray()) {
 			links.add(new Link(l));
 		}
@@ -45,8 +52,6 @@ class Flow extends AbstractMultiContainer<TFlow> implements IFlow {
 	}
 
 	public void removeLink(ILink l) {
-		checkForCorrectModel(l);
-
 		int i = links.indexOf(l);
 
 		links.remove(i);

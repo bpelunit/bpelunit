@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.bpelunit.model.bpel.IActivity;
+import javax.xml.namespace.NamespaceContext;
+
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IVisitor;
+import net.bpelunit.util.XMLUtil;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TDocumentation;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TExtensibleElements;
@@ -18,53 +20,48 @@ abstract class AbstractBpelObject implements IBpelObject {
 	private TExtensibleElements nativeElement;
 	
 	public AbstractBpelObject(TExtensibleElements t) {
-		if (t == null) {
-			throw new NullPointerException("Wrapped activity must not be null!");
-		}
-
 		this.nativeElement = t;
 
+		setNativeObjectInternal(t);
+	}
+
+	void setNativeObject(Object newNativeObject) {
+		setNativeObjectInternal(newNativeObject);
+	}
+	
+	private final void setNativeObjectInternal(Object newNativeObject) {
+		nativeElement = (TExtensibleElements) newNativeObject;
+		
+		documentations.clear();
 		for (TDocumentation d : nativeElement.getDocumentationArray()) {
 			documentations.add(new Documentation(d));
 		}
 	}
-
-	void checkForCorrectModel(IBpelObject o) {
-		if (!(o instanceof AbstractBpelObject)) {
-			throw new IllegalArgumentException(o.getClass()
-					+ " is not supported by the BPEL 2.0 facade.");
-		}
-	}
-
-	AbstractActivity<?> checkForCorrectModel(IActivity a) {
-		try {
-			return (AbstractActivity<?>) a;
-		} catch (Exception e) {
-			throw new IllegalArgumentException(a.getClass()
-					+ " is not supported by the BPEL 2.0 facade.");
-		}
-	}
-
+	
 	public List<Documentation> getDocumentation() {
 		return Collections.unmodifiableList(documentations);
 	}
 
 	public Documentation addDocumentation() {
-		
 		TDocumentation bpelDoc = nativeElement.addNewDocumentation();
-
 		Documentation bpelDocumentation = new Documentation(bpelDoc);
-
 		this.documentations.add(bpelDocumentation);
 
 		return bpelDocumentation;
 	}
 	
 	public String getXPathInDocument() {
-		return null;
+		NamespaceContext ctx = BpelFactory.INSTANCE.createNamespaceContext();
+		return XMLUtil.getXPathForElement(nativeElement.getDomNode(), ctx);
 	}
 	
-	abstract IBpelObject getObjectForNativeObject(Object nativeObject);
+	IBpelObject getObjectForNativeObject(Object nativeObject) {
+		if(nativeElement == nativeObject) {
+			return this;
+		} else {
+			return null;
+		}
+	}
 	
 	public void visit(IVisitor v) {
 		Class<? extends IVisitor> visitorClass = v.getClass();

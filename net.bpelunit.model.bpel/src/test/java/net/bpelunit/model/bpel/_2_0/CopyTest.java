@@ -7,16 +7,20 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.CopyDocument;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TCopy;
 
 
 public class CopyTest {
 
 	private Copy copy;
+	private TCopy nativeCopy;
 
 	@Before
 	public void setUp() {
-		copy = new Copy(TCopy.Factory.newInstance());
+		CopyDocument copyDoc = CopyDocument.Factory.newInstance();
+		nativeCopy = copyDoc.addNewCopy();
+		copy = new Copy(nativeCopy);
 	}
 	
 	@Test
@@ -51,5 +55,10 @@ public class CopyTest {
 		
 		copy.setIgnoreMissingFromData(false);
 		assertFalse(copy.getIgnoreMissingFromData());
+	}
+	
+	@Test
+	public void testGetNativeObjectForObject() throws Exception {
+		assertSame(copy, copy.getObjectForNativeObject(nativeCopy));
 	}
 }

@@ -1,5 +1,6 @@
 package net.bpelunit.model.bpel._2_0;
 
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.ICompensateScope;
 import net.bpelunit.model.bpel.IScope;
 
@@ -8,22 +9,19 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TCompensateScope;
 class CompensateScope extends AbstractBasicActivity<TCompensateScope> implements
 		ICompensateScope {
 
-	private TCompensateScope compensateScope;
-
-	public CompensateScope(TCompensateScope wrappedCompensateScope) {
-		super(wrappedCompensateScope);
-		this.compensateScope = wrappedCompensateScope;
+	public CompensateScope(TCompensateScope wrappedCompensateScope, IActivityContainer parent) {
+		super(wrappedCompensateScope, parent);
 	}
 
 	public void setTarget(String scopeName) {
-		compensateScope.setTarget(scopeName);
+		getNativeActivity().setTarget(scopeName);
 	}
 
-	public void setTargetScope(IScope scope) {
-		compensateScope.setTarget(scope.getName());
+	public void setTarget(IScope scope) {
+		getNativeActivity().setTarget(scope.getName());
 	}
 
 	public String getTarget() {
-		return compensateScope.getTarget();
+		return getNativeActivity().getTarget();
 	}
 }

@@ -2,7 +2,7 @@ package net.bpelunit.model.bpel;
 
 import java.util.List;
 
-public interface IMultiContainer {
+public interface IMultiContainer extends IActivityContainer {
 
 	List<? extends IActivity> getActivities();
 	

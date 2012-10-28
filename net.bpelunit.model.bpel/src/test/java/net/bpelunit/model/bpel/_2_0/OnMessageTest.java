@@ -18,7 +18,7 @@ public class OnMessageTest {
 	@Before
 	public void setUp() {
 		nativeOnMessage = TOnMessage.Factory.newInstance();
-		onMessage = new OnMessage(nativeOnMessage);
+		onMessage = new OnMessage(nativeOnMessage, null);
 		
 		mainActivity = onMessage.setNewEmpty();
 		nativeMainActivity = mainActivity.getNativeActivity();

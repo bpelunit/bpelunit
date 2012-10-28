@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.bpelunit.model.bpel.IActivity;
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IOnAlarm;
 import net.bpelunit.model.bpel.IOnMessage;
 import net.bpelunit.model.bpel.IPick;
+import net.bpelunit.model.bpel.IScope;
 import net.bpelunit.model.bpel.IVisitor;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
@@ -20,15 +23,22 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 	private List<OnMessage> onMessages = new ArrayList<OnMessage>();
 	private List<OnAlarm> onAlarms = new ArrayList<OnAlarm>();
 
-	public Pick(TPick wrappedPick) {
-		super(wrappedPick);
+	public Pick(TPick wrappedPick, IActivityContainer parent) {
+		super(wrappedPick, parent);
 
-		for(TOnMessage m : wrappedPick.getOnMessageArray()) {
-			onMessages.add(new OnMessage(m));
+		setNativeObject(wrappedPick);
+	}
+
+	void setNativeObject(Object wrappedPick) {
+		super.setNativeObject(wrappedPick);
+		onMessages.clear();
+		for(TOnMessage m : getNativeActivity().getOnMessageArray()) {
+			onMessages.add(new OnMessage(m, this));
 		}
 		
-		for(TOnAlarmPick a : wrappedPick.getOnAlarmArray()) {
-			onAlarms.add(new OnAlarm(a));
+		onAlarms.clear();
+		for(TOnAlarmPick a : getNativeActivity().getOnAlarmArray()) {
+			onAlarms.add(new OnAlarm(a, this));
 		}
 	}
 
@@ -70,7 +80,7 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 
 	public OnMessage addOnMessage() {
 		TOnMessage nativeOnMessage = getNativeActivity().addNewOnMessage();
-		OnMessage onMessage = new OnMessage(nativeOnMessage);
+		OnMessage onMessage = new OnMessage(nativeOnMessage, this);
 		onMessages.add(onMessage);
 		
 		return onMessage;
@@ -78,7 +88,7 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 
 	public OnAlarm addOnAlarm() {
 		TOnAlarmPick nativeOnAlarm = getNativeActivity().addNewOnAlarm();
-		OnAlarm onAlarm = new OnAlarm(nativeOnAlarm);
+		OnAlarm onAlarm = new OnAlarm(nativeOnAlarm, this);
 		onAlarms.add(onAlarm);
 		
 		return onAlarm;
@@ -106,4 +116,11 @@ public class Pick extends AbstractActivity<TPick> implements IPick {
 		
 		return null;
 	}
+
+	@Override
+	public IScope encapsulateInNewScope(IActivity childActivity) {
+		throw new IllegalArgumentException("Cannot encapsulate any branches (onMessage, onAlarm) of a pick activity");
+	}
+	
+	
 }

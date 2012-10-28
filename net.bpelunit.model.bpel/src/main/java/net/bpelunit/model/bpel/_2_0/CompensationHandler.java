@@ -1,9 +1,11 @@
 package net.bpelunit.model.bpel._2_0;
 
+import net.bpelunit.model.bpel.ActivityType;
 import net.bpelunit.model.bpel.IActivity;
 import net.bpelunit.model.bpel.ICompensationHandler;
 import net.bpelunit.model.bpel.IForEach;
 import net.bpelunit.model.bpel.IRethrow;
+import net.bpelunit.model.bpel.IScope;
 import net.bpelunit.model.bpel.IVisitor;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivityContainer;
@@ -132,7 +134,18 @@ public class CompensationHandler implements ICompensationHandler {
 
 	private AbstractActivity<?> setNewActivityOfType(String activityType) {
 		mainActivity = null;
-		mainActivity = TComplexContainerHelper.setNewActivityOfType(compensationHandler, activityType);
+		mainActivity = TComplexContainerHelper.setNewActivityOfType(compensationHandler, activityType, this);
 		return mainActivity;
+	}
+
+	@Override
+	public IActivity setNewActivity(ActivityType type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IScope encapsulateInNewScope(IActivity childActivity) {
+		throw new UnsupportedOperationException();
 	}
 }

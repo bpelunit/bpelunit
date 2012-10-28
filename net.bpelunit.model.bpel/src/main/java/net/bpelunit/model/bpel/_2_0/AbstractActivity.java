@@ -2,8 +2,9 @@ package net.bpelunit.model.bpel._2_0;
 
 import java.util.List;
 
+import net.bpelunit.model.bpel.ActivityType;
 import net.bpelunit.model.bpel.IActivity;
-import net.bpelunit.model.bpel.IBpelObject;
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.ISource;
 import net.bpelunit.model.bpel.ITarget;
 import net.bpelunit.util.XMLUtil;
@@ -20,12 +21,23 @@ abstract class AbstractActivity<T extends TExtensibleElements> extends
 	
 	T activity;
 
-	AbstractActivity(T a) {
-		super(a);
+	private IActivityContainer parent;
 
+	AbstractActivity(T a, IActivityContainer parentContainer) {
+		super(a);
+		this.parent = parentContainer;
 		this.activity = a;
 	}
 
+	@Override
+	public IActivityContainer getParent() {
+		return parent;
+	}
+	
+	void reparent(IActivityContainer newParent) {
+		parent = newParent;
+	}
+	
 	public List<ITarget> getTargets() {
 		// TODO
 		return null;
@@ -36,48 +48,30 @@ abstract class AbstractActivity<T extends TExtensibleElements> extends
 	}
 
 	public String getName() {
-		if (activity instanceof TActivity) {
 			return ((TActivity) activity).getName();
-		} else {
-			return null;
-		}
 	}
 
 	public void setName(String value) {
-		if (activity instanceof TActivity) {
 			((TActivity) activity).setName(value);
-		} else {
-			throw new UnsupportedOperationException("Cannot set name for " + activity.getClass().getSimpleName());
-		}
 	}
 
 	public void setSuppressJoinFailure(boolean value) {
-		if (activity instanceof TActivity) {
 			((TActivity) activity).setSuppressJoinFailure(TBooleanHelper.convert(value));
-		} else {
-			throw new UnsupportedOperationException("Cannot set suppressJoinFailure for " + activity.getClass().getSimpleName());
-		}
 	}
 	
 	public boolean getSuppressJoinFailure() {
-		if (activity instanceof TActivity) {
 			return ((TActivity) activity).getSuppressJoinFailure().equals(TBoolean.YES);
-		} else {
-			throw new UnsupportedOperationException("Cannot get suppressJoinFailure for " + activity.getClass().getSimpleName());
-		}
 	}
 
 	T getNativeActivity() {
 		return activity;
 	}
 
-	public String getActivityName() {
+	public ActivityType getActivityType() {
 		String name = activity.getClass().getSimpleName().substring(1);
-		if(name.endsWith(IMPL_POSTFIX)) {
-			name = name.substring(0, name.length() - IMPL_POSTFIX.length());
-		}
+		name = name.substring(0, name.length() - IMPL_POSTFIX.length());
 		
-		return name;
+		return ActivityType.valueOf(name);
 	}
 
 	@Override
@@ -85,12 +79,9 @@ abstract class AbstractActivity<T extends TExtensibleElements> extends
 		return XMLUtil.getXPathForElement((Element)activity.getDomNode(), BpelFactory.INSTANCE.createNamespaceContext());
 	}
 
-	@Override
-	IBpelObject getObjectForNativeObject(Object nativeObject) {
-		if (nativeObject == activity) {
-			return this;
-		} else {
-			return null;
-		}
+	@SuppressWarnings("unchecked")
+	void setNativeObject(Object substitute) {
+		super.setNativeObject(substitute);
+		activity = (T)substitute;
 	}
 }

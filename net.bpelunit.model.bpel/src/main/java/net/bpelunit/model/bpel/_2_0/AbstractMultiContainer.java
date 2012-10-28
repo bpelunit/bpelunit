@@ -1,16 +1,20 @@
 package net.bpelunit.model.bpel._2_0;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import net.bpelunit.model.bpel.IActivity;
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IMultiContainer;
+import net.bpelunit.model.bpel.IScope;
 
 import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlObject;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TAssign;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TCompensate;
@@ -39,13 +43,24 @@ abstract class AbstractMultiContainer<T extends TActivity> extends
 	private List<AbstractActivity<?>> wrappedActivities = new ArrayList<AbstractActivity<?>>();
 	private List<TActivity> activities = new ArrayList<TActivity>();
 
-	AbstractMultiContainer(T wrappedActivity) {
-		super(wrappedActivity);
+	AbstractMultiContainer(T wrappedActivity, IActivityContainer parent) {
+		super(wrappedActivity, parent);
 
-		this.activities = new ArrayList<TActivity>();
+		setNativeObjectInternal(wrappedActivity);
+	}
+
+	void setNativeObject(Object newNativeObject) {
+		super.setNativeObject(newNativeObject);
+		setNativeObjectInternal(newNativeObject);
+	}
+
+	private final void setNativeObjectInternal(Object newNativeObject) {
+		TActivity wrappedActivity = (TActivity) newNativeObject;
+		this.activities.clear();
 		XmlCursor cursor = wrappedActivity.newCursor();
 		int childNo = 0;
-		for (boolean hasNext = cursor.toFirstChild(); hasNext; hasNext = cursor.toNextSibling()) {
+		for (boolean hasNext = cursor.toFirstChild(); hasNext; hasNext = cursor
+				.toNextSibling()) {
 			if (cursor.getObject() instanceof TActivity) {
 				activities.add((TActivity) cursor.getObject());
 			}
@@ -53,8 +68,9 @@ abstract class AbstractMultiContainer<T extends TActivity> extends
 		}
 		cursor.dispose();
 
+		wrappedActivities.clear();
 		for (TActivity child : activities) {
-			wrappedActivities.add(BpelFactory.INSTANCE.createWrapper(child));
+			wrappedActivities.add(BpelFactory.INSTANCE.createWrapper(child, this));
 		}
 	}
 
@@ -62,21 +78,14 @@ abstract class AbstractMultiContainer<T extends TActivity> extends
 		return Collections.unmodifiableList(wrappedActivities);
 	}
 
-	public void addActivity(IActivity a) {
-		AbstractActivity<?> activity = checkForCorrectModel(a);
-
-		wrappedActivities.add(activity);
-		activities.add((TActivity) activity.getNativeActivity());
-	}
-
-	public void removeActivity(IActivity a) {
-		AbstractActivity<?> activity = checkForCorrectModel(a);
-
-		int i = activities.indexOf(activity.getNativeActivity());
-
-		wrappedActivities.remove(i);
-		activities.remove(i);
-	}
+	// public void removeActivity(IActivity a) {
+	// AbstractActivity<?> activity = checkForCorrectModel(a);
+	//
+	// int i = activities.indexOf(activity.getNativeActivity());
+	//
+	// wrappedActivities.remove(i);
+	// activities.remove(i);
+	// }
 
 	public boolean isBasicActivity() {
 		return false;
@@ -101,270 +110,227 @@ abstract class AbstractMultiContainer<T extends TActivity> extends
 
 	@Override
 	public Reply addReply() {
-		try {
-			TReply nativeReply = (TReply) addNativeActivity("Reply");
-			Reply reply = new Reply(nativeReply);
-			activities.add(nativeReply);
-			wrappedActivities.add(reply);
-			return reply;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TReply nativeReply = (TReply) addNativeActivity("Reply");
+		Reply reply = new Reply(nativeReply, this);
+		activities.add(nativeReply);
+		wrappedActivities.add(reply);
+		return reply;
 	}
 
 	@Override
 	public Assign addAssign() {
-		try {
-			TAssign nativeAssign = (TAssign) addNativeActivity("Assign");
-			Assign assign = new Assign(nativeAssign);
-			activities.add(nativeAssign);
-			wrappedActivities.add(assign);
-			return assign;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TAssign nativeAssign = (TAssign) addNativeActivity("Assign");
+		Assign assign = new Assign(nativeAssign, this);
+		activities.add(nativeAssign);
+		wrappedActivities.add(assign);
+		return assign;
 	}
 
 	@Override
 	public Receive addReceive() {
-		try {
-			TReceive nativeReceive = (TReceive) addNativeActivity("Receive");
-			Receive receive = new Receive(nativeReceive);
-			activities.add(nativeReceive);
-			wrappedActivities.add(receive);
-			return receive;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TReceive nativeReceive = (TReceive) addNativeActivity("Receive");
+		Receive receive = new Receive(nativeReceive, this);
+		activities.add(nativeReceive);
+		wrappedActivities.add(receive);
+		return receive;
 	}
 
 	@Override
 	public Compensate addCompensate() {
-		try {
-			TCompensate nativeReceive = (TCompensate) addNativeActivity("Compensate");
-			Compensate compensate = new Compensate(nativeReceive);
-			activities.add(nativeReceive);
-			wrappedActivities.add(compensate);
-			return compensate;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TCompensate nativeReceive = (TCompensate) addNativeActivity("Compensate");
+		Compensate compensate = new Compensate(nativeReceive, this);
+		activities.add(nativeReceive);
+		wrappedActivities.add(compensate);
+		return compensate;
 	}
 
 	@Override
 	public CompensateScope addCompensateScope() {
-		try {
-			TCompensateScope nativeCompensateScope = (TCompensateScope) addNativeActivity("CompensateScope");
-			CompensateScope compensateScope = new CompensateScope(nativeCompensateScope);
-			activities.add(nativeCompensateScope);
-			wrappedActivities.add(compensateScope);
-			return compensateScope;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TCompensateScope nativeCompensateScope = (TCompensateScope) addNativeActivity("CompensateScope");
+		CompensateScope compensateScope = new CompensateScope(
+				nativeCompensateScope, this);
+		activities.add(nativeCompensateScope);
+		wrappedActivities.add(compensateScope);
+		return compensateScope;
 	}
 
 	@Override
 	public Empty addEmpty() {
-		try {
-			TEmpty nativeEmpty = (TEmpty) addNativeActivity("Empty");
-			Empty empty = new Empty(nativeEmpty);
-			activities.add(nativeEmpty);
-			wrappedActivities.add(empty);
-			return empty;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TEmpty nativeEmpty = (TEmpty) addNativeActivity("Empty");
+		Empty empty = new Empty(nativeEmpty, this);
+		activities.add(nativeEmpty);
+		wrappedActivities.add(empty);
+		return empty;
 	}
 
 	@Override
 	public Exit addExit() {
-		try {
-			TExit nativeExit = (TExit) addNativeActivity("Exit");
-			Exit exit = new Exit(nativeExit);
-			activities.add(nativeExit);
-			wrappedActivities.add(exit);
-			return exit;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TExit nativeExit = (TExit) addNativeActivity("Exit");
+		Exit exit = new Exit(nativeExit, this);
+		activities.add(nativeExit);
+		wrappedActivities.add(exit);
+		return exit;
 	}
 
 	@Override
 	public Flow addFlow() {
-		try {
-			TFlow nativeFlow = (TFlow) addNativeActivity("Flow");
-			Flow flow = new Flow(nativeFlow);
-			activities.add(nativeFlow);
-			wrappedActivities.add(flow);
-			return flow;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TFlow nativeFlow = (TFlow) addNativeActivity("Flow");
+		Flow flow = new Flow(nativeFlow, this);
+		activities.add(nativeFlow);
+		wrappedActivities.add(flow);
+		return flow;
 	}
 
 	@Override
 	public ForEach addForEach() {
-		try {
-			TForEach nativeForEach = (TForEach) addNativeActivity("ForEach");
-			ForEach forEach = new ForEach(nativeForEach);
-			activities.add(nativeForEach);
-			wrappedActivities.add(forEach);
-			return forEach;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TForEach nativeForEach = (TForEach) addNativeActivity("ForEach");
+		ForEach forEach = new ForEach(nativeForEach, this);
+		activities.add(nativeForEach);
+		wrappedActivities.add(forEach);
+		return forEach;
 	}
 
 	@Override
 	public If addIf() {
-		try {
-			TIf nativeIf = (TIf) addNativeActivity("If");
-			If receive = new If(nativeIf);
-			activities.add(nativeIf);
-			wrappedActivities.add(receive);
-			return receive;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TIf nativeIf = (TIf) addNativeActivity("If");
+		If receive = new If(nativeIf, this);
+		activities.add(nativeIf);
+		wrappedActivities.add(receive);
+		return receive;
 	}
 
 	@Override
 	public Invoke addInvoke() {
-		try {
-			TInvoke nativeInvoke = (TInvoke) addNativeActivity("Invoke");
-			Invoke invoke = new Invoke(nativeInvoke);
-			activities.add(nativeInvoke);
-			wrappedActivities.add(invoke);
-			return invoke;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TInvoke nativeInvoke = (TInvoke) addNativeActivity("Invoke");
+		Invoke invoke = new Invoke(nativeInvoke, this);
+		activities.add(nativeInvoke);
+		wrappedActivities.add(invoke);
+		return invoke;
 	}
 
 	@Override
 	public Pick addPick() {
-		try {
-			TPick nativePick = (TPick) addNativeActivity("Pick");
-			Pick pick = new Pick(nativePick);
-			activities.add(nativePick);
-			wrappedActivities.add(pick);
-			return pick;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TPick nativePick = (TPick) addNativeActivity("Pick");
+		Pick pick = new Pick(nativePick, this);
+		activities.add(nativePick);
+		wrappedActivities.add(pick);
+		return pick;
 	}
 
 	@Override
 	public RepeatUntil addRepeatUntil() {
-		try {
-			TRepeatUntil nativeRepeatUntil = (TRepeatUntil) addNativeActivity("RepeatUntil");
-			RepeatUntil repeatUntil = new RepeatUntil(nativeRepeatUntil);
-			activities.add(nativeRepeatUntil);
-			wrappedActivities.add(repeatUntil);
-			return repeatUntil;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TRepeatUntil nativeRepeatUntil = (TRepeatUntil) addNativeActivity("RepeatUntil");
+		RepeatUntil repeatUntil = new RepeatUntil(nativeRepeatUntil, this);
+		activities.add(nativeRepeatUntil);
+		wrappedActivities.add(repeatUntil);
+		return repeatUntil;
 	}
 
 	@Override
 	public Rethrow addRethrow() {
-		try {
-			TRethrow nativeRethrow = (TRethrow) addNativeActivity("Rethrow");
-			Rethrow rethrow = new Rethrow(nativeRethrow);
-			activities.add(nativeRethrow);
-			wrappedActivities.add(rethrow);
-			return rethrow;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TRethrow nativeRethrow = (TRethrow) addNativeActivity("Rethrow");
+		Rethrow rethrow = new Rethrow(nativeRethrow, this);
+		activities.add(nativeRethrow);
+		wrappedActivities.add(rethrow);
+		return rethrow;
 	}
 
 	@Override
 	public Scope addScope() {
-		try {
-			TScope nativeScope = (TScope) addNativeActivity("Scope");
-			Scope scope = new Scope(nativeScope);
-			activities.add(nativeScope);
-			wrappedActivities.add(scope);
-			return scope;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TScope nativeScope = (TScope) addNativeActivity("Scope");
+		Scope scope = new Scope(nativeScope, this);
+		activities.add(nativeScope);
+		wrappedActivities.add(scope);
+		return scope;
 	}
 
 	@Override
 	public Sequence addSequence() {
-		try {
-			TSequence nativeSequence = (TSequence) addNativeActivity("Sequence");
-			Sequence sequence = new Sequence(nativeSequence);
-			activities.add(nativeSequence);
-			wrappedActivities.add(sequence);
-			return sequence;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TSequence nativeSequence = (TSequence) addNativeActivity("Sequence");
+		Sequence sequence = new Sequence(nativeSequence, this);
+		activities.add(nativeSequence);
+		wrappedActivities.add(sequence);
+		return sequence;
 	}
 
 	@Override
 	public Throw addThrow() {
-		try {
-			TThrow nativeThrow = (TThrow) addNativeActivity("Throw");
-			Throw tthrow = new Throw(nativeThrow);
-			activities.add(nativeThrow);
-			wrappedActivities.add(tthrow);
-			return tthrow;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TThrow nativeThrow = (TThrow) addNativeActivity("Throw");
+		Throw tthrow = new Throw(nativeThrow, this);
+		activities.add(nativeThrow);
+		wrappedActivities.add(tthrow);
+		return tthrow;
 	}
 
 	@Override
 	public Validate addValidate() {
-		try {
-			TValidate nativeValidate = (TValidate) addNativeActivity("Validate");
-			Validate validate = new Validate(nativeValidate);
-			activities.add(nativeValidate);
-			wrappedActivities.add(validate);
-			return validate;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
-		}
+		TValidate nativeValidate = (TValidate) addNativeActivity("Validate");
+		Validate validate = new Validate(nativeValidate, this);
+		activities.add(nativeValidate);
+		wrappedActivities.add(validate);
+		return validate;
 	}
 
 	@Override
 	public Wait addWait() {
+		TWait nativeWait = (TWait) addNativeActivity("Wait");
+		Wait wait = new Wait(nativeWait, this);
+		activities.add(nativeWait);
+		wrappedActivities.add(wait);
+		return wait;
+	}
+
+	@Override
+	public While addWhile() {
+		TWhile nativeWhile = (TWhile) addNativeActivity("While");
+		While wwhile = new While(nativeWhile, this);
+		activities.add(nativeWhile);
+		wrappedActivities.add(wwhile);
+		return wwhile;
+
+	}
+
+	private TActivity addNativeActivity(String activityName) {
 		try {
-			TWait nativeWait = (TWait) addNativeActivity("Wait");
-			Wait wait = new Wait(nativeWait);
-			activities.add(nativeWait);
-			wrappedActivities.add(wait);
-			return wait;
+			Method m = getNativeActivity().getClass().getMethod(
+					"addNew" + activityName);
+			return (TActivity) m.invoke(getNativeActivity());
 		} catch (Exception e) {
 			throw new RuntimeException("Error in configuration.", e);
 		}
 	}
 
 	@Override
-	public While addWhile() {
-		try {
-			TWhile nativeWhile = (TWhile) addNativeActivity("While");
-			While wwhile = new While(nativeWhile);
-			activities.add(nativeWhile);
-			wrappedActivities.add(wwhile);
-			return wwhile;
-		} catch (Exception e) {
-			throw new RuntimeException("Error in configuration.", e);
+	public IScope encapsulateInNewScope(IActivity childActivity) {
+		AbstractActivity<?> a = (AbstractActivity<?>) childActivity;
+
+		int indexOfActivity = wrappedActivities.indexOf(a);
+		if (indexOfActivity < 0) {
+			throw new IllegalArgumentException("Cannot encapsulate "
+					+ childActivity
+					+ " because it is not a child of this activity");
 		}
-	}
 
-	private TActivity addNativeActivity(String activityName)
-			throws NoSuchMethodException, IllegalAccessException,
-			InvocationTargetException {
-		Method m = getNativeActivity().getClass().getMethod(
-				"addNew" + activityName);
-		return (TActivity) m.invoke(getNativeActivity());
-	}
+		TScope newNativeScope = TScope.Factory.newInstance();
+		Scope newScope = new Scope(newNativeScope, this);
+		XmlObject copyOfOldNativeActivity = a.getNativeActivity().copy();
+		wrappedActivities.add(indexOfActivity, newScope);
+		wrappedActivities.remove(indexOfActivity + 1);
 
+		TActivity nativeActivity = activities.get(indexOfActivity);
+		TScope newScopeNative = (TScope) nativeActivity.substitute(new QName(
+				BpelFactory.INSTANCE.getNamespace(), "scope"), newNativeScope
+				.schemaType());
+		newScopeNative = (TScope) newScopeNative.set(newNativeScope);
+		newScope.setNativeObject(newScopeNative);
+		
+		activities.add(indexOfActivity, newScopeNative);
+		activities.remove(indexOfActivity + 1);
+
+		a.setNativeObject(copyOfOldNativeActivity);
+		newScope.replace(null, a);
+
+		newScope.setName("ScopeOf" + a.getName());
+		return newScope;
+	}
 }
