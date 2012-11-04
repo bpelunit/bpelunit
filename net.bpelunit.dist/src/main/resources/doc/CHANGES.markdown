@@ -5,6 +5,7 @@ Staged for next version
 -----------------------
 
 * _Fix_: BPELUnit previously produced test timeouts by waiting for skipped activities or partner tracks (using the `assume` attribute) to provide replies to requests from the composition. This has now been fixed.
+* _Fix_: do not allow for relative paths from the current directory in the `src` attribute of the `<dataSource>` element. Only URLs, absolute paths and relative paths from the BPTS file should be accepted.
 
 Version 1.6.0
 -----------------------
