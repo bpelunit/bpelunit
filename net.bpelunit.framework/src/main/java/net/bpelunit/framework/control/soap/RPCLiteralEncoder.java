@@ -19,6 +19,7 @@ import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -30,10 +31,6 @@ import org.w3c.dom.NodeList;
  * This class implements an Encoder for SOAP messages in rpc/literal style. The
  * WSDL specifying the target web service must be structured as specified in the
  * WS-I Basic Profile, which has the following implications for this encoder:
- * </p>
- * <p>
- * The operation which defines the message must be a document/literal operation,
- * as defined in section 5.3 of WS-I BP.
  * </p>
  * <p>
  * <ul>
@@ -60,11 +57,15 @@ import org.w3c.dom.NodeList;
  * <p>
  * <ul>
  * <li>In RPC/Literal SOAP messages, there may only be one child to the SOAP
- * BODY, and it must be the WSDL-Target-Namespace-Qualified name of the invoked
- * WSDL operation, for example: <q0:NewOperation
- * xmlns:q0="http://www.example.org/TestWSDL/"></li>
- * <li>The children of this element are the completely unqualified part names of
- * the WSDL message, containing inside the actual content.</li>
+ * Body element. Its namespace will be equal to the value of the namespace attribute
+ * in the soapbind:body element of the WSDL file, and the local part will be equal
+ * to the operation name for a request, or to the operation name + "Response" for a
+ * response (WS-I BP allows just the operation name for a response as well, but
+ * Apache ODE expects the "Response" suffix in all RPC-style responses). For example,
+ * this would be the wrapper for a request: <code>&lt;q0:NewOperation xmlns:q0="http://www.example.org/TestWSDL/"&gt;</code>
+ * </li>
+ * <li>The children of this element are the <em>completely unqualified</em> part
+ * names of the WSDL message, containing inside the actual content.</li>
  * </ul>
  * </p>
  * 
@@ -91,48 +92,60 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 						"RPC style cannot be used with SOAP faults: check section 3.6 of the WSDL 1.1 standard");
 			}
 
-			MessageFactory mFactory = MessageFactory.newInstance();
-			SOAPFactory sFactory = SOAPFactory.newInstance();
-
-			SOAPMessage message = mFactory.createMessage();
-			SOAPBody body = message.getSOAPBody();
+			final MessageFactory mFactory = MessageFactory.newInstance();
+			final SOAPFactory sFactory = SOAPFactory.newInstance();
+			final SOAPMessage message = mFactory.createMessage();
+			final SOAPBody body = message.getSOAPBody();
 
 			// The RPC wrapper element name must match the error code if this
 			// is a fault, and the operation name otherwise.
-			SOAPElement data = body;
+			final SOAPElement data = body;
 
 			// Create the RPC/Literal wrapper if it doesn't exist.
 			// It would be easier (and less error prone in corner cases) to
 			// just assume all literal data for rpc/lit operations were
 			// properly wrapped, but that'd break backwards compatibility.
 			//
-			// TODO deprecate old unwrapped style?
-			String bodyNamespace = operation.getBodyNamespace();
-			Element firstElement = getFirstElementChild(literalData);
-			SOAPElement newWrapper = sFactory.createElement(
-					operation.getName(), RPC_WRAPPER_NAMESPACE_PREFIX,
-					bodyNamespace);
-			NodeList list;
-			if (firstElement != null
-					&& bodyNamespace.equals(firstElement.getNamespaceURI())
-					&& operation.getName().equals(firstElement.getLocalName())) {
-				// already wrapped: don't wrap twice
-				list = firstElement.getChildNodes();
+			// See WS-I Basic Profile 1.1, section 4.7.10 "Namespaces for soapbind Elements" for details on
+			// how to handle the element that wraps the parts in the RPC messsage and how it should be treated
+			// in the WSDL <binding> element.
+			//
+			// http://www.ws-i.org/profiles/basicprofile-1.1-2004-08-24.html#Namespaces_for_soapbind_Elements
+			final String bodyNamespace = operation.getBodyNamespace();
+			final String operationName = operation.getName();
+			final Element firstElement = getFirstElementChild(literalData);
+			final SOAPElement newWrapper = sFactory.createElement(
+					operation.getDirection() == SOAPOperationDirectionIdentifier.INPUT ? operationName : operationName + "Response",
+					RPC_WRAPPER_NAMESPACE_PREFIX, bodyNamespace);
+
+			NodeList partNodes;
+			final String firstElementName = firstElement != null ? firstElement.getLocalName() : null;
+			final String firstElementNS   = firstElement != null ? firstElement.getNamespaceURI() : null;
+			if (bodyNamespace.equals(firstElementNS) && (operationName.equals(firstElementName) || (operationName + "Response").equals(firstElementName))) {
+				// already wrapped according to WS-I BP 1.1 S4.7.10: the parts are the children of the wrapper
+				partNodes = firstElement.getChildNodes();
 			} else {
-				// not wrapped yet
-				list = literalData.getChildNodes();
+				// not wrapped yet: we can grab the parts straight from the literal data
+				partNodes = literalData.getChildNodes();
 			}
 
-			for (int i = 0; i < list.getLength(); i++) {
-				Node node = list.item(i);
-				if (node instanceof Element) {
-					Element actual = (Element) list.item(i);
-					newWrapper.addChildElement(sFactory.createElement(actual));
+			for (int i = 0; i < partNodes.getLength(); i++) {
+				final Node part = partNodes.item(i);
+				if (part instanceof Element) {
+					final Element actual = (Element) partNodes.item(i);
+					
+					// Ensure that the part meets WS-I BP 1.1 S4.7.20 R2735: part accessors should not belong to any namespace
+					//
+					// http://www.ws-i.org/profiles/basicprofile-1.1-2004-08-24.html#Part_Accessors
+					final SOAPElement copy = sFactory.createElement(actual);
+					final QName unqualifiedName = new QName(null, copy.getLocalName());
+					copy.setElementQName(unqualifiedName);
+					
+					newWrapper.addChildElement(copy);
 				}
 			}
 			data.addChildElement(newWrapper);
 			return message;
-
 		} catch (SOAPException e) {
 			throw new SOAPEncodingException(
 					"A SOAPException occurred in the DocumentLiteralEncoder while encoding to operation "
@@ -140,9 +153,7 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 		}
 	}
 
-	public Element deconstruct(SOAPOperationCallIdentifier operation,
-			SOAPMessage message) throws SOAPEncodingException {
-
+	public Element deconstruct(SOAPOperationCallIdentifier operation, SOAPMessage message) throws SOAPEncodingException {
 		try {
 			SOAPBody body = message.getSOAPBody();
 
