@@ -112,6 +112,9 @@ public class TestCaseRunner {
 	public void run() {
 		// Pool connections to avoid socket leaks
 		MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
+		// Increase maximum per host, as most will use the same host (localhost)
+		connectionManager.getParams().setDefaultMaxConnectionsPerHost(10);
+
 		fClient = new HttpClient(connectionManager);
 
 		try {
