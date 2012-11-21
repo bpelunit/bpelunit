@@ -134,14 +134,15 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 				if (part instanceof Element) {
 					final Element actual = (Element) partNodes.item(i);
 					
-					// While we copy the element into the actual message, ensure
-					// that the part meets WS-I BP 1.1 S4.7.20 R2735: part
-					// accessors should not belong to any namespace.
-					//
-					// http://www.ws-i.org/profiles/basicprofile-1.1-2004-08-24.html#Part_Accessors
-					final SOAPElement copy = sFactory.createElement(actual);
-					final QName unqualifiedName = new QName(null, copy.getLocalName());
-					copy.setElementQName(unqualifiedName);
+					SOAPElement copy = sFactory.createElement(actual);
+					if (copy.getNamespaceURI() != null) {
+						// While we copy the element into the actual message, ensure
+						// that the part meets WS-I BP 1.1 S4.7.20 R2735: part
+						// accessors should not belong to any namespace.
+						//
+						// http://www.ws-i.org/profiles/basicprofile-1.1-2004-08-24.html#Part_Accessors
+						copy = copy.setElementQName(new QName(null, copy.getLocalName()));
+					}
 					
 					newWrapper.addChildElement(copy);
 				}

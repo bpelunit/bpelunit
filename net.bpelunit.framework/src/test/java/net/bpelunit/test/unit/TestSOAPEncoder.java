@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 
 import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
@@ -41,17 +42,11 @@ public class TestSOAPEncoder extends SimpleTest {
 
 	private static final String PATH_TO_FILES= "/soapencoder/";
 
-	private String toString(SOAPMessage message) throws SOAPException, IOException {
-		StringOutputStream sos= new StringOutputStream();
-		message.writeTo(sos);
-		String s= sos.getString();
-		return s;
-	}
 
 	// ********************* Test Cases ************************
 
 	@Test
-	public void testEncodeDocLit() throws SpecificationException, Exception {
+	public void testEncodeDocLit() throws Exception {
 
 		// Create a document/literal message
 
@@ -70,8 +65,68 @@ public class TestSOAPEncoder extends SimpleTest {
 						+ "  <tns:me name=\"Phil\"/>\n" + "</tns:about></SOAP-ENV:Body></SOAP-ENV:Envelope>"), nl(messageAsString));
 	}
 
-	private String nl(String messageAsString) {
-		return StringUtils.remove(messageAsString, '\r');
+	@Test
+	public void testEncodeRPCLitUnwrapped() throws Exception {
+		testEncodeRPCLit("rpclit1.xmlfrag");
+	}
+	
+	@Test
+	public void testEncodeRPCLitUnwrappedWithPartsInNamespaces() throws Exception {
+		Element literal = TestUtil.readLiteralData(PATH_TO_FILES + "rpclit4.xmlfrag");
+		SOAPOperationCallIdentifier operation = TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
+		ISOAPEncoder encoder = new RPCLiteralEncoder();
+		SOAPMessage message = encoder.construct(operation, literal,
+				BPELUnitConstants.SOAP_FAULT_CODE_CLIENT,
+				BPELUnitConstants.SOAP_FAULT_DESCRIPTION);
+
+		final SOAPBody soapBody = message.getSOAPBody();
+		assertEquals(1, soapBody.getElementsByTagName("someFirstPart").getLength());
+		assertEquals(1, soapBody.getElementsByTagName("someSecondPart").getLength()); 
+	}
+
+	@Test
+	public void testEncodeRPCLitWrapped() throws Exception {
+		testEncodeRPCLit("rpclit3.xmlfrag");
+	}
+
+	@Test
+	public void testDecodeDocLit() throws Exception {
+
+		MessageFactory factory= MessageFactory.newInstance();
+		SOAPMessage rcvMessage= factory.createMessage(null, this.getClass().getResourceAsStream(PATH_TO_FILES + "doclit2.xmlfrag"));
+		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
+
+		ISOAPEncoder encoder= new DocumentLiteralEncoder();
+		Element parent= encoder.deconstruct(operation, rcvMessage);
+
+		NamespaceContextImpl nsi= new NamespaceContextImpl();
+		nsi.setNamespace("tns", "http://xxx");
+
+		Node node= TestUtil.getNode(parent, nsi, "tns:about");
+		assertNotNull(node);
+
+		Node node2= TestUtil.getNode(parent, nsi, "tns:about/tns:me");
+		assertNotNull(node2);
+	}
+
+	@Test
+	public void testDecodeRPCLit() throws Exception {
+
+		MessageFactory factory= MessageFactory.newInstance();
+		SOAPMessage rcvMessage= factory.createMessage(null, this.getClass().getResourceAsStream(PATH_TO_FILES + "rpclit2.xmlfrag"));
+		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
+
+		ISOAPEncoder encoder= new RPCLiteralEncoder();
+		Element parent= encoder.deconstruct(operation, rcvMessage);
+
+		NamespaceContextImpl nsi= new NamespaceContextImpl();
+		nsi.setNamespace("tns", "http://xxx");
+
+		Node node= TestUtil.getNode(parent, nsi, "someFirstPart");
+		assertNotNull(node);
+
+		Node node2= TestUtil.getNode(parent, nsi, "someFirstPart/tns:me");
+		assertNotNull(node2);
 	}
 
 	/* Reuse the same test body for both RPC encoding tests (wrapped/unwrapped) */
@@ -93,53 +148,13 @@ public class TestSOAPEncoder extends SimpleTest {
 				nl(messageAsString));
 	}
 
-	@Test
-	public void testEncodeRPCLitUnwrapped() throws SpecificationException, Exception {
-		testEncodeRPCLit("rpclit1.xmlfrag");
+	private String toString(SOAPMessage message) throws SOAPException, IOException {
+		StringOutputStream sos = new StringOutputStream();
+		message.writeTo(sos);
+		return sos.getString();
 	}
 
-	@Test
-	public void testEncodeRPCLitWrapped() throws SpecificationException, Exception {
-		testEncodeRPCLit("rpclit3.xmlfrag");
-	}
-
-	@Test
-	public void testDecodeDocLit() throws SpecificationException, Exception {
-
-		MessageFactory factory= MessageFactory.newInstance();
-		SOAPMessage rcvMessage= factory.createMessage(null, this.getClass().getResourceAsStream(PATH_TO_FILES + "doclit2.xmlfrag"));
-		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
-
-		ISOAPEncoder encoder= new DocumentLiteralEncoder();
-		Element parent= encoder.deconstruct(operation, rcvMessage);
-
-		NamespaceContextImpl nsi= new NamespaceContextImpl();
-		nsi.setNamespace("tns", "http://xxx");
-
-		Node node= TestUtil.getNode(parent, nsi, "tns:about");
-		assertNotNull(node);
-
-		Node node2= TestUtil.getNode(parent, nsi, "tns:about/tns:me");
-		assertNotNull(node2);
-	}
-
-	@Test
-	public void testDecodeRPCLit() throws SpecificationException, Exception {
-
-		MessageFactory factory= MessageFactory.newInstance();
-		SOAPMessage rcvMessage= factory.createMessage(null, this.getClass().getResourceAsStream(PATH_TO_FILES + "rpclit2.xmlfrag"));
-		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
-
-		ISOAPEncoder encoder= new RPCLiteralEncoder();
-		Element parent= encoder.deconstruct(operation, rcvMessage);
-
-		NamespaceContextImpl nsi= new NamespaceContextImpl();
-		nsi.setNamespace("tns", "http://xxx");
-
-		Node node= TestUtil.getNode(parent, nsi, "someFirstPart");
-		assertNotNull(node);
-
-		Node node2= TestUtil.getNode(parent, nsi, "someFirstPart/tns:me");
-		assertNotNull(node2);
+	private String nl(String messageAsString) {
+		return StringUtils.remove(messageAsString, '\r');
 	}
 }
