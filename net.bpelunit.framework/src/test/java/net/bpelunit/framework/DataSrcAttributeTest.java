@@ -5,14 +5,11 @@ import java.io.File;
 import net.bpelunit.test.templates.AbstractTemplateTest;
 import net.bpelunit.test.util.TestUtil;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 public class DataSrcAttributeTest {
 
-	protected static final File TEST_BPTS_DIR = new File(
-			FileUtils.toFile(AbstractTemplateTest.class.getResource("/")),
-			"datasrc");
+	protected static final File TEST_BPTS_DIR = new File(AbstractTemplateTest.class.getResource("/datasrc").getPath());
 
 	@Test
 	public void dataSrcWorks() throws Exception {

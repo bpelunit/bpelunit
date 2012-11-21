@@ -15,7 +15,6 @@ import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import org.apache.commons.lang.StringUtils;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.soap.DocumentLiteralEncoder;
 import net.bpelunit.framework.control.soap.NamespaceContextImpl;
@@ -24,8 +23,11 @@ import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.exception.SOAPEncodingException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
+import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import net.bpelunit.test.util.StringOutputStream;
 import net.bpelunit.test.util.TestUtil;
+
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -40,6 +42,8 @@ import org.w3c.dom.Node;
  */
 public class TestSOAPEncoder extends SimpleTest {
 
+	private static final String PARTNER_OPERATION = "NewOperation";
+	private static final String PARTNER_WSDL = "MyPartner.wsdl";
 	private static final String PATH_TO_FILES= "/soapencoder/";
 
 
@@ -47,11 +51,9 @@ public class TestSOAPEncoder extends SimpleTest {
 
 	@Test
 	public void testEncodeDocLit() throws Exception {
-
 		// Create a document/literal message
-
 		Element literal= TestUtil.readLiteralData(PATH_TO_FILES + "doclit1.xmlfrag");
-		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
+		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, PARTNER_WSDL, PARTNER_OPERATION, SOAPOperationDirectionIdentifier.INPUT);
 
 		ISOAPEncoder encoder= new DocumentLiteralEncoder();
 		SOAPMessage message= encoder.construct(operation, literal,
@@ -73,7 +75,7 @@ public class TestSOAPEncoder extends SimpleTest {
 	@Test
 	public void testEncodeRPCLitUnwrappedWithPartsInNamespaces() throws Exception {
 		Element literal = TestUtil.readLiteralData(PATH_TO_FILES + "rpclit4.xmlfrag");
-		SOAPOperationCallIdentifier operation = TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
+		SOAPOperationCallIdentifier operation = TestUtil.getCall(PATH_TO_FILES, PARTNER_WSDL, PARTNER_OPERATION, SOAPOperationDirectionIdentifier.INPUT);
 		ISOAPEncoder encoder = new RPCLiteralEncoder();
 		SOAPMessage message = encoder.construct(operation, literal,
 				BPELUnitConstants.SOAP_FAULT_CODE_CLIENT,
@@ -90,11 +92,23 @@ public class TestSOAPEncoder extends SimpleTest {
 	}
 
 	@Test
+	public void testEncodeRPCLiteResponseUnwrapped() throws Exception {
+		Element literal= TestUtil.readLiteralData(PATH_TO_FILES + "rpclit1.xmlfrag");
+		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, PARTNER_WSDL, PARTNER_OPERATION, SOAPOperationDirectionIdentifier.OUTPUT);
+		ISOAPEncoder encoder= new RPCLiteralEncoder();
+		SOAPMessage message= encoder.construct(operation, literal,
+				BPELUnitConstants.SOAP_FAULT_CODE_CLIENT,
+				BPELUnitConstants.SOAP_FAULT_DESCRIPTION);
+		
+		assertEquals(0, message.getSOAPBody().getElementsByTagNameNS(operation.getBodyNamespace(), operation.getName()).getLength());
+		assertEquals(1, message.getSOAPBody().getElementsByTagNameNS(operation.getBodyNamespace(), operation.getName() + "Response").getLength());
+	}
+	
+	@Test
 	public void testDecodeDocLit() throws Exception {
-
 		MessageFactory factory= MessageFactory.newInstance();
 		SOAPMessage rcvMessage= factory.createMessage(null, this.getClass().getResourceAsStream(PATH_TO_FILES + "doclit2.xmlfrag"));
-		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
+		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, PARTNER_WSDL, PARTNER_OPERATION, SOAPOperationDirectionIdentifier.INPUT);
 
 		ISOAPEncoder encoder= new DocumentLiteralEncoder();
 		Element parent= encoder.deconstruct(operation, rcvMessage);
@@ -111,10 +125,9 @@ public class TestSOAPEncoder extends SimpleTest {
 
 	@Test
 	public void testDecodeRPCLit() throws Exception {
-
 		MessageFactory factory= MessageFactory.newInstance();
 		SOAPMessage rcvMessage= factory.createMessage(null, this.getClass().getResourceAsStream(PATH_TO_FILES + "rpclit2.xmlfrag"));
-		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
+		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, PARTNER_WSDL, PARTNER_OPERATION, SOAPOperationDirectionIdentifier.INPUT);
 
 		ISOAPEncoder encoder= new RPCLiteralEncoder();
 		Element parent= encoder.deconstruct(operation, rcvMessage);
@@ -135,7 +148,7 @@ public class TestSOAPEncoder extends SimpleTest {
 			IOException {
 		// Create a RPC Literal message
 		Element literal= TestUtil.readLiteralData(PATH_TO_FILES + fragmentPath);
-		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, "MyPartner.wsdl", "NewOperation");
+		SOAPOperationCallIdentifier operation= TestUtil.getCall(PATH_TO_FILES, PARTNER_WSDL, PARTNER_OPERATION, SOAPOperationDirectionIdentifier.INPUT);
 		ISOAPEncoder encoder= new RPCLiteralEncoder();
 		SOAPMessage message= encoder.construct(operation, literal,
 				BPELUnitConstants.SOAP_FAULT_CODE_CLIENT,
