@@ -62,20 +62,25 @@
           </execution>
         </executions>
       </plugin>
-      <!-- In addition to the regular .jar, generate an OSGi bundle Tycho can reuse -->
+      <!--
+          In addition to the regular .jar, generate an OSGi bundle
+          Tycho can reuse. Do not embed the dependencies already
+          brought in by net.bpelunit.util in order to avoid OSGi
+          classloader issues.
+      -->
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Export-Package>!net.bpelunit.util;!net.bpelunit.bpel;!net.bpelunit.model.*;net.bpelunit.control.deploy;net.bpelunit.*;schemaorg_apache_xmlbeans.system.*</Export-Package>
+            <Export-Package>!net.bpelunit.util;!net.bpelunit.model.*;net.bpelunit.*;schemaorg_apache_xmlbeans.system.*</Export-Package>
             <_exportcontents>com.ibm.wsdl.*;javax.wsdl.*;org.apache.xmlbeans.*;org.apache.commons.lang;org.apache.log4j.*;de.schlichtherle.io.*</_exportcontents>
-            <Import-Package>!*</Import-Package>
+            <Import-Package>org.jdom.*;org.apache.commons.io.*;!*</Import-Package>
             <Require-Bundle>net.bpelunit.util,net.bpelunit.model.bpel</Require-Bundle>
-            <Bundle-SymbolicName>net.bpelunit.framework;symbolic:=true</Bundle-SymbolicName>
+            <Bundle-SymbolicName>net.bpelunit.framework</Bundle-SymbolicName>
             <Embed-Transitive>true</Embed-Transitive>
             <Embed-Directory>target/dependency</Embed-Directory>
-            <Embed-Dependency>*;scope=compile;artifactId=!stax-api</Embed-Dependency>
+            <Embed-Dependency>*;scope=compile;artifactId=!stax-api|jdom|commons-io</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
           </instructions>
         </configuration>
@@ -106,10 +111,6 @@
     <dependency>
       <groupId>org.apache.xmlbeans</groupId>
       <artifactId>xmlbeans</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jdom</groupId>
-      <artifactId>jdom</artifactId>
     </dependency>
     <dependency>
       <groupId>wsdl4j</groupId>
