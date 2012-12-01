@@ -6,6 +6,7 @@
 package net.bpelunit.toolsupport.editors;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import net.bpelunit.toolsupport.ToolSupportActivator;
 import net.bpelunit.toolsupport.editors.src.XMLEditor;
 import net.bpelunit.toolsupport.util.WSDLReadingException;
 import net.bpelunit.toolsupport.util.schema.WSDLParser;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -136,8 +138,18 @@ public class BPELUnitEditor extends FormEditor {
 		}
 
 		try {
-			this.fDocument = XMLTestSuiteDocument.Factory.parse(new InputStreamReader(baseFile
+			// Try to parse from a file whenever possible, so we may have access to the path
+			// where it is stored. This could be important for editing fields which contain
+			// relative paths from the .bpts file.
+			final IPath rawLocation = baseFile.getRawLocation();
+			if (rawLocation != null) {
+				final File file = rawLocation.makeAbsolute().toFile();
+				this.fDocument = XMLTestSuiteDocument.Factory.parse(file);
+			}
+			else {
+				this.fDocument = XMLTestSuiteDocument.Factory.parse(new InputStreamReader(baseFile
 					.getContents(), baseFile.getCharset()));
+			}
 			if (this.needsBasicRestructuring(this.fDocument)) {
 				this.fTestSuitePage.markDirty();
 			}
