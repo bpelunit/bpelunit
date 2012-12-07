@@ -6,6 +6,7 @@ import net.bpelunit.model.bpel.ICompensationHandler;
 import net.bpelunit.model.bpel.IForEach;
 import net.bpelunit.model.bpel.IRethrow;
 import net.bpelunit.model.bpel.IScope;
+import net.bpelunit.model.bpel.ISequence;
 import net.bpelunit.model.bpel.IVisitor;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivityContainer;
@@ -145,7 +146,18 @@ public class CompensationHandler implements ICompensationHandler {
 	}
 
 	@Override
-	public IScope encapsulateInNewScope(IActivity childActivity) {
+	public IScope wrapActivityInNewScope(IActivity childActivity) {
 		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public ISequence wrapActivityInNewSequence(IActivity childActivity) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void removeMainActivity() {
+		mainActivity = null;
+		TComplexContainerHelper.removeMainActivity(getMainActivity());
 	}
 }

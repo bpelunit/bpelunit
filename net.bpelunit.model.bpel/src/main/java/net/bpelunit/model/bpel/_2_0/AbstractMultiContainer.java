@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.xml.namespace.QName;
-
+import net.bpelunit.model.bpel.ActivityType;
 import net.bpelunit.model.bpel.IActivity;
-import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IMultiContainer;
 import net.bpelunit.model.bpel.IScope;
@@ -38,12 +36,12 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TWait;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TWhile;
 
 abstract class AbstractMultiContainer<T extends TActivity> extends
-		AbstractActivity<T> implements IMultiContainer {
+		AbstractActivity<T> implements IMultiContainer, IContainer {
 
 	private List<AbstractActivity<?>> wrappedActivities = new ArrayList<AbstractActivity<?>>();
 	private List<TActivity> activities = new ArrayList<TActivity>();
 
-	AbstractMultiContainer(T wrappedActivity, IActivityContainer parent) {
+	AbstractMultiContainer(T wrappedActivity, IContainer parent) {
 		super(wrappedActivity, parent);
 
 		setNativeObjectInternal(wrappedActivity);
@@ -55,37 +53,31 @@ abstract class AbstractMultiContainer<T extends TActivity> extends
 	}
 
 	private final void setNativeObjectInternal(Object newNativeObject) {
+		extractNativeActivities(newNativeObject);
+
+		wrappedActivities.clear();
+		for (TActivity child : activities) {
+			wrappedActivities.add(BpelFactory.INSTANCE.createWrapper(child,
+					this));
+		}
+	}
+
+	private void extractNativeActivities(Object newNativeObject) {
 		TActivity wrappedActivity = (TActivity) newNativeObject;
 		this.activities.clear();
 		XmlCursor cursor = wrappedActivity.newCursor();
-		int childNo = 0;
 		for (boolean hasNext = cursor.toFirstChild(); hasNext; hasNext = cursor
 				.toNextSibling()) {
 			if (cursor.getObject() instanceof TActivity) {
 				activities.add((TActivity) cursor.getObject());
 			}
-			childNo++;
 		}
 		cursor.dispose();
-
-		wrappedActivities.clear();
-		for (TActivity child : activities) {
-			wrappedActivities.add(BpelFactory.INSTANCE.createWrapper(child, this));
-		}
 	}
 
 	public List<AbstractActivity<?>> getActivities() {
 		return Collections.unmodifiableList(wrappedActivities);
 	}
-
-	// public void removeActivity(IActivity a) {
-	// AbstractActivity<?> activity = checkForCorrectModel(a);
-	//
-	// int i = activities.indexOf(activity.getNativeActivity());
-	//
-	// wrappedActivities.remove(i);
-	// activities.remove(i);
-	// }
 
 	public boolean isBasicActivity() {
 		return false;
@@ -108,6 +100,16 @@ abstract class AbstractMultiContainer<T extends TActivity> extends
 		return null;
 	}
 
+	AbstractActivity<?> addActivity(ActivityType a) {
+		Method method;
+		try {
+			method = getClass().getMethod("add" + a.name());
+			return (AbstractActivity<?>) method.invoke(this);
+		} catch (Exception e) {
+			throw new RuntimeException("Illegal configuration: No add found for " + a);
+		}
+	}
+	
 	@Override
 	public Reply addReply() {
 		TReply nativeReply = (TReply) addNativeActivity("Reply");
@@ -301,36 +303,169 @@ abstract class AbstractMultiContainer<T extends TActivity> extends
 	}
 
 	@Override
-	public IScope encapsulateInNewScope(IActivity childActivity) {
+	public IScope wrapActivityInNewScope(IActivity childActivity) {
 		AbstractActivity<?> a = (AbstractActivity<?>) childActivity;
 
+		getIndexOfChildActivity(a);
+
+		Scope newScope = addScope();
+		newScope.setName("ScopeOf" + a.getName());
+		moveBefore(newScope, a);
+
+		newScope.setMainActivity(a);
+
+		return newScope;
+	}
+
+	private int getIndexOfChildActivity(AbstractActivity<?> a) {
 		int indexOfActivity = wrappedActivities.indexOf(a);
 		if (indexOfActivity < 0) {
-			throw new IllegalArgumentException("Cannot encapsulate "
-					+ childActivity
+			throw new IllegalArgumentException("Cannot work with "
+					+ a
 					+ " because it is not a child of this activity");
 		}
+		return indexOfActivity;
+	}
 
-		TScope newNativeScope = TScope.Factory.newInstance();
-		Scope newScope = new Scope(newNativeScope, this);
-		XmlObject copyOfOldNativeActivity = a.getNativeActivity().copy();
-		wrappedActivities.add(indexOfActivity, newScope);
-		wrappedActivities.remove(indexOfActivity + 1);
+	void replace(AbstractActivity<?> oldActivity,
+			AbstractActivity<?> newActivity) {
+		if (oldActivity == newActivity) {
+			return;
+		}
 
-		TActivity nativeActivity = activities.get(indexOfActivity);
-		TScope newScopeNative = (TScope) nativeActivity.substitute(new QName(
-				BpelFactory.INSTANCE.getNamespace(), "scope"), newNativeScope
-				.schemaType());
-		newScopeNative = (TScope) newScopeNative.set(newNativeScope);
-		newScope.setNativeObject(newScopeNative);
+		int index = getIndexOfChildActivity(oldActivity);
+
+		XmlCursor oldCursor = oldActivity.getNativeActivity().newCursor();
+		XmlCursor newCursor = null;
+		try {
+			newCursor = newActivity.getNativeActivity().newCursor();
+			newCursor.moveXml(oldCursor);
+			oldCursor.removeXml();
+
+			wrappedActivities.remove(newActivity);
+			wrappedActivities.add(index, newActivity);
+			wrappedActivities.remove(oldActivity);
+		} finally {
+			oldCursor.dispose();
+			newCursor.dispose();
+		}
 		
-		activities.add(indexOfActivity, newScopeNative);
-		activities.remove(indexOfActivity + 1);
+		updateNativeActivities();
+	}
 
-		a.setNativeObject(copyOfOldNativeActivity);
-		newScope.replace(null, a);
+	@Override
+	public Sequence wrapActivityInNewSequence(IActivity childActivity) {
+		Sequence newSequence = addSequence();
+		newSequence.setName("SequenceOf" + childActivity.getName());
+		moveBefore(newSequence, childActivity);
+		newSequence.add((AbstractActivity<?>) childActivity);
+		
+		return newSequence;
+	}
+	
+	void add(AbstractActivity<?> a) {
+		AbstractActivity<?> tempActivity = addActivity(a.getActivityType());
 
-		newScope.setName("ScopeOf" + a.getName());
-		return newScope;
+		XmlObject tempNative = tempActivity.getNativeActivity();
+		XmlObject actNative = a.getNativeActivity();
+		tempNative.set(actNative);
+		
+		a.setNativeObject(tempNative);
+		XmlCursor c = actNative.newCursor();
+		try {
+			c.removeXml();
+		} catch(IllegalStateException e) {
+			// ignore: Can happen if native activity is a document or has already been removed
+		} finally {
+			c.dispose();
+		}
+		
+		wrappedActivities.add(a);
+		wrappedActivities.remove(tempActivity);
+		a.reparent(this);
+	}
+	
+	private void updateNativeActivities() {
+		extractNativeActivities(activity);
+		
+		for(int i = 0; i < activities.size(); i++) {
+			wrappedActivities.get(i).setNativeObject(activities.get(i));
+		}
+	}
+	
+	@Override
+	public void remove(IActivity a) {
+		AbstractActivity<?> activityToDelete = (AbstractActivity<?>)a;
+		int index = wrappedActivities.indexOf(a);
+		
+		if(index < 0) {
+			throw new RuntimeException(activityToDelete.getName() + " is not a child of this activity.");
+		}
+		
+		wrappedActivities.remove(activityToDelete);
+		XmlCursor cursor = activityToDelete.getNativeActivity().newCursor();
+		cursor.removeXml();
+		cursor.dispose();
+		
+		activityToDelete.reparent(null);
+		updateNativeActivities();
+	}
+	
+	@Override
+	public void moveBefore(IActivity toMove, IActivity moveBefore) {
+		if(toMove == moveBefore) {
+			return;
+		}
+		
+		int newIndex = wrappedActivities.indexOf(moveBefore);
+		int oldIndex = wrappedActivities.indexOf(toMove);
+		
+		if(newIndex < 0 || oldIndex < 0) {
+			throw new RuntimeException("One of the activities is not a child of this activity");
+		}
+		
+		XmlCursor moveToCursor = ((AbstractActivity<?>)moveBefore).getNativeActivity().newCursor();
+		XmlCursor moveFromCursor = ((AbstractActivity<?>)toMove).getNativeActivity().newCursor();
+		
+		moveFromCursor.moveXml(moveToCursor);
+		
+		moveToCursor.dispose();
+		moveFromCursor.dispose();
+		
+		wrappedActivities.remove(toMove);
+		if(oldIndex < newIndex) {
+			newIndex--;
+		}
+		wrappedActivities.add(newIndex, (AbstractActivity<?>)toMove);
+		
+		updateNativeActivities();
+	}
+	
+	@Override
+	public void moveToEnd(IActivity toMove) {
+		Empty dummyActivity = addEmpty();
+		
+		moveBefore(toMove, dummyActivity);
+		remove(dummyActivity);
+	}
+	
+	@Override
+	public void unregister(AbstractActivity<?> a) {
+		int index = wrappedActivities.indexOf(a);
+		
+		if(index >= 0) {
+			wrappedActivities.remove(index);
+			XmlObject nativeActivity = activities.get(index);
+			
+			XmlCursor c = activity.newCursor();
+			for(c.toFirstChild(); c.toNextSibling(); ) {
+				if(c.getObject() == nativeActivity) {
+					c.removeXml();
+					break;
+				}
+			}
+			c.dispose();
+			activities.remove(index);
+		}
 	}
 }

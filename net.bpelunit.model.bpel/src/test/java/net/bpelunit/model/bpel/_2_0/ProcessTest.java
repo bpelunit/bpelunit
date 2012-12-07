@@ -91,8 +91,8 @@ public class ProcessTest {
 	
 	@Test
 	public void testAssignFromModel() throws Exception {
-		IProcess process = BpelFactory.createProcess();
-		IAssign assign = process.setNewAssign();
+		Process process = (Process) BpelFactory.createProcess();
+		Assign assign = process.setNewAssign();
 		assertNotNull(assign);
 		assertSame(assign, process.getMainActivity());
 		
@@ -696,10 +696,10 @@ public class ProcessTest {
 		Empty empty = p.setNewEmpty();
 		empty.setName("Empty1");
 		
-		p.encapsulateInNewScope(empty);
+		p.wrapActivityInNewScope(empty);
 		
 		Scope newMainScope = (Scope)p.getMainActivity();
-		assertEquals("ScopeOfEmpty1", newMainScope.getName());
+		assertEquals("Scope_Of_Empty1", newMainScope.getName());
 		assertSame(empty, newMainScope.getMainActivity());
 		assertEquals("Empty1", newMainScope.getMainActivity().getName());
 		
@@ -714,8 +714,40 @@ public class ProcessTest {
 		p = (Process) BpelFactory.loadProcess(new ByteArrayInputStream(out.toByteArray()));
 		
 		newMainScope = (Scope)p.getMainActivity();
-		assertEquals("ScopeOfEmpty1", newMainScope.getName());
+		assertEquals("Scope_Of_Empty1", newMainScope.getName());
 		assertEquals(ActivityType.Empty, newMainScope.getMainActivity().getActivityType());
 		assertEquals("Empty1", newMainScope.getMainActivity().getName());
+	}
+	
+	@Test
+	public void testWrapActivityInNewSequence() throws Exception {
+		Process p = (Process) BpelFactory.createProcess();
+		Empty empty = p.setNewEmpty();
+		empty.setName("Empty1");
+		
+		p.wrapActivityInNewSequence(empty);
+		
+		Sequence newMainSequence = (Sequence)p.getMainActivity();
+		assertEquals("Sequence_Of_Empty1", newMainSequence.getName());
+		assertEquals(1, newMainSequence.getActivities().size());
+		assertSame(empty, newMainSequence.getActivities().get(0));
+		assertEquals("Empty1", newMainSequence.getActivities().get(0).getName());
+		
+		assertNull(p.getNativeActivity().getEmpty());
+		assertSame(newMainSequence.getNativeActivity(), p.getNativeActivity().getSequence());
+		assertEquals(1, newMainSequence.getNativeActivity().getEmptyArray().length);
+		assertSame(empty.getNativeActivity(), newMainSequence.getNativeActivity().getEmptyArray(0));
+		
+		// Re-do assertions but this time save it and read a clean copy to
+		// see if BPEL element names are correct etc.
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		p.save(out);
+		p = (Process) BpelFactory.loadProcess(new ByteArrayInputStream(out.toByteArray()));
+		
+		newMainSequence = (Sequence)p.getMainActivity();
+		assertEquals("Sequence_Of_Empty1", newMainSequence.getName());
+		assertEquals(1, newMainSequence.getActivities().size());
+		assertEquals(ActivityType.Empty, newMainSequence.getActivities().get(0).getActivityType());
+		assertEquals("Empty1", newMainSequence.getActivities().get(0).getName());
 	}
 }

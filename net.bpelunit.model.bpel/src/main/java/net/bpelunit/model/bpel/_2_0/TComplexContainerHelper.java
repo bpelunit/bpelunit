@@ -43,22 +43,24 @@ final class TComplexContainerHelper {
 	}
 
 	static void removeMainActivity(Object o) {
-		for(String activityName : activityNames) {
+		for (String activityName : activityNames) {
 			String methodName = "unset" + activityName;
 			Method m;
 			try {
 				m = o.getClass().getMethod(methodName);
 			} catch (Exception e) {
-				throw new RuntimeException("Passed invalid object that does not support " + methodName, e);
+				throw new RuntimeException(
+						"Passed invalid object that does not support "
+								+ methodName, e);
 			}
 			try {
 				m.invoke(o);
 			} catch (Exception e) {
-				//ignore
+				// ignore
 			}
 		}
 	}
-		
+
 	static void setActivity(Object container, TActivity bpelActivity) {
 		if (bpelActivity != null) {
 			String setterName = "set"
@@ -76,20 +78,24 @@ final class TComplexContainerHelper {
 		}
 	}
 
-	static AbstractActivity<?> setNewActivityOfType(Object container, String activityType, IActivityContainer parent) {
+	static AbstractActivity<?> setNewActivityOfType(Object container,
+			String activityType, IActivityContainer parent) {
 		String methodName = "addNew" + StringUtil.toFirstUpper(activityType);
+		TActivity sequence = null;
 		try {
-			removeMainActivity(container);
-			
-			Method m = container.getClass().getMethod(
-					methodName);
-			TActivity sequence = (TActivity) m.invoke(container);
-			AbstractActivity<?> wrapper = BpelFactory.INSTANCE
-					.createWrapper(sequence, parent);
-			return wrapper;
-		} catch (Exception e) {
-			throw new RuntimeException("Invalid configuration. Cannot find method name " + container.getClass().getName() + "." + methodName, e);
-		}
-	}
+//			removeMainActivity(container);
 
+			Method m = container.getClass().getMethod(methodName);
+			sequence = (TActivity) m.invoke(container);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Invalid configuration. Cannot find method name "
+							+ container.getClass().getName() + "." + methodName,
+					e);
+		}
+		AbstractActivity<?> wrapper = BpelFactory.INSTANCE.createWrapper(
+				sequence, parent);
+		return wrapper;
+	}
+	
 }

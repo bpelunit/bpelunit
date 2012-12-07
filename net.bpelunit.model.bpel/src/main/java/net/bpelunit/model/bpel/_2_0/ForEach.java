@@ -1,24 +1,24 @@
 package net.bpelunit.model.bpel._2_0;
 
 import net.bpelunit.model.bpel.IActivity;
-import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IExpression;
 import net.bpelunit.model.bpel.IForEach;
 import net.bpelunit.model.bpel.IScope;
+import net.bpelunit.model.bpel.ISequence;
 import net.bpelunit.model.bpel.IVisitor;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TForEach;
 
-public class ForEach extends AbstractActivity<TForEach> implements IForEach {
+public class ForEach extends AbstractActivity<TForEach> implements IContainer, IForEach {
 
 	private Scope scope;
 	private Expression startCounterValue;
 	private Expression finalCounterValue;
 	private CompletionCondition completionCondition;
 
-	public ForEach(TForEach wrappedForEach, IActivityContainer parent) {
+	public ForEach(TForEach wrappedForEach, IContainer parent) {
 		super(wrappedForEach, parent);
 
 		setNativeObject(wrappedForEach);
@@ -120,7 +120,17 @@ public class ForEach extends AbstractActivity<TForEach> implements IForEach {
 	}
 
 	@Override
-	public IScope encapsulateInNewScope(IActivity childActivity) {
-		throw new IllegalArgumentException("Cannot encapsulate a mandatory scope of a for-each activity");
+	public IScope wrapActivityInNewScope(IActivity childActivity) {
+		throw new IllegalArgumentException("Cannot wrap a mandatory scope of a for-each activity");
+	}
+	
+	@Override
+	public ISequence wrapActivityInNewSequence(IActivity childActivity) {
+		throw new IllegalArgumentException("Cannot wrap a mandatory scope of a for-each activity");
+	}
+
+	@Override
+	public void unregister(AbstractActivity<?> a) {
+		throw new IllegalArgumentException("Cannot unregister a mandatory scope of a for-each activity");
 	}
 }

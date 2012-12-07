@@ -2,7 +2,6 @@ package net.bpelunit.model.bpel._2_0;
 
 import javax.xml.namespace.QName;
 
-import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IReply;
 import net.bpelunit.model.bpel.IVariable;
 
@@ -10,7 +9,7 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TReply;
 
 public class Reply extends AbstractBasicActivity<TReply> implements IReply {
 
-	public Reply(TReply wrappedReply, IActivityContainer parent) {
+	public Reply(TReply wrappedReply, IContainer parent) {
 		super(wrappedReply, parent);
 	}
 

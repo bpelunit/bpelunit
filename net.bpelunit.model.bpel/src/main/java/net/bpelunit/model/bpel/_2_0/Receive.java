@@ -2,7 +2,6 @@ package net.bpelunit.model.bpel._2_0;
 
 import javax.xml.namespace.QName;
 
-import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IReceive;
 import net.bpelunit.model.bpel.IVariable;
 
@@ -11,7 +10,7 @@ import org.oasisOpen.docs.wsbpel.x20.process.executable.TReceive;
 
 public class Receive extends AbstractBasicActivity<TReceive> implements IReceive {
 
-	public Receive(TReceive r, IActivityContainer parent) {
+	public Receive(TReceive r, IContainer parent) {
 		super(r, parent);
 	}
 

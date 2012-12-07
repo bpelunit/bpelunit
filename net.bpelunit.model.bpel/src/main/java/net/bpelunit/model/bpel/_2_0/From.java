@@ -90,6 +90,14 @@ public class From implements IFrom {
 	}
 
 	public void setQuery(String expr) {
+		unsetQueryAndLiteral();
+		TQuery tq = from.addNewQuery();
+		Document doc = tq.getDomNode().getOwnerDocument();
+		Text exprNode = doc.createTextNode(expr);
+		tq.getDomNode().appendChild(exprNode);
+	}
+
+	private void unsetQueryAndLiteral() {
 		if (from.getLiteral() != null) {
 			from.unsetLiteral();
 		}
@@ -97,10 +105,6 @@ public class From implements IFrom {
 			from.unsetQuery();
 			query = null;
 		}
-		TQuery tq = from.addNewQuery();
-		Document doc = tq.getDomNode().getOwnerDocument();
-		Text exprNode = doc.createTextNode(expr);
-		tq.getDomNode().appendChild(exprNode);
 	}
 
 	public void setExpressionLanguage(String value) {
@@ -108,13 +112,7 @@ public class From implements IFrom {
 	}
 
 	public Element setNewLiteral(String namespaceUri, String localName) {
-		if (from.getLiteral() != null) {
-			from.unsetLiteral();
-		}
-		if (from.getQuery() != null) {
-			from.unsetQuery();
-			query = null;
-		}
+		unsetQueryAndLiteral();
 
 		TLiteral literal = from.addNewLiteral();
 		Node domNode = literal.getDomNode();

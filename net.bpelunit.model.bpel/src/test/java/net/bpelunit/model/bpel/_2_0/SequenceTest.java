@@ -2,11 +2,13 @@ package net.bpelunit.model.bpel._2_0;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import net.bpelunit.model.bpel.ActivityType;
 
+import org.apache.xmlbeans.XmlCursor;
 import org.junit.Before;
 import org.junit.Test;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.SequenceDocument;
@@ -60,10 +62,11 @@ public class SequenceTest {
 	}
 	
 	@Test
-	public void testEncapsulateInNewScopeFirstActivity() throws Exception {
+	public void testWrapInNewScopeFirstActivity() throws Exception {
 		assertEquals(2, sequence.getActivities().size());
+		int xmlChildrenCount = sequence.getNativeActivity().getDomNode().getChildNodes().getLength();
 		
-		sequence.encapsulateInNewScope(activity1);
+		sequence.wrapActivityInNewScope(activity1);
 		
 		List<AbstractActivity<?>> activities = sequence.getActivities();
 		assertEquals(2, activities.size());
@@ -76,13 +79,16 @@ public class SequenceTest {
 		TScope newNativeScope = (TScope)activities.get(0).getNativeActivity();
 		assertSame(newNativeScope, nativeSequence.getScopeArray(0));
 		assertSame(nativeActivity1, newNativeScope.getEmpty());
+		
+		assertEquals(xmlChildrenCount, sequence.getNativeActivity().getDomNode().getChildNodes().getLength());
 	}
 	
 	@Test
-	public void testEncapsulateInNewScopeSecondActivity() throws Exception {
+	public void testWrapInNewScopeSecondActivity() throws Exception {
 		assertEquals(2, sequence.getActivities().size());
+		int xmlChildrenCount = sequence.getNativeActivity().getDomNode().getChildNodes().getLength();
 		
-		sequence.encapsulateInNewScope(activity2);
+		sequence.wrapActivityInNewScope(activity2);
 		
 		List<AbstractActivity<?>> activities = sequence.getActivities();
 		assertEquals(2, activities.size());
@@ -95,5 +101,155 @@ public class SequenceTest {
 		TScope newNativeScope = (TScope)activities.get(1).getNativeActivity();
 		assertSame(newNativeScope, nativeSequence.getScopeArray(0));
 		assertSame(nativeActivity2, newNativeScope.getEmpty());
+		
+		assertEquals(xmlChildrenCount, sequence.getNativeActivity().getDomNode().getChildNodes().getLength());
+	}
+	
+	@Test
+	public void testWrapInNewSequenceFirstActivity() throws Exception {
+		assertEquals(2, sequence.getActivities().size());
+		int xmlChildrenCount = sequence.getNativeActivity().getDomNode().getChildNodes().getLength();
+		
+		sequence.wrapActivityInNewSequence(activity1);
+		
+		List<AbstractActivity<?>> activities = sequence.getActivities();
+		assertEquals(2, activities.size());
+		Sequence sequenceOfActivity1 = (Sequence) activities.get(0);
+		assertEquals("SequenceOfActivity1", sequenceOfActivity1.getName());
+		assertEquals(1, sequenceOfActivity1.getActivities().size());
+		assertSame(activity1, sequenceOfActivity1.getActivities().get(0));
+		assertSame(activity2, activities.get(1));
+		
+		nativeActivity1 = activity1.getNativeActivity();
+		TSequence newNativeSequence = (TSequence)activities.get(0).getNativeActivity();
+		assertSame(newNativeSequence, nativeSequence.getSequenceArray(0));
+		assertSame(nativeActivity1, newNativeSequence.getEmptyArray()[0]);
+		
+		assertEquals(xmlChildrenCount, sequence.getNativeActivity().getDomNode().getChildNodes().getLength());
+	}
+	
+	@Test
+	public void testWrapInNewSequenceSecondActivity() throws Exception {
+		assertEquals(2, sequence.getActivities().size());
+		int xmlChildrenCount = sequence.getNativeActivity().getDomNode().getChildNodes().getLength();
+		
+		sequence.wrapActivityInNewSequence(activity2);
+		
+		List<AbstractActivity<?>> activities = sequence.getActivities();
+		assertEquals(2, activities.size());
+		assertSame(activity1, activities.get(0));
+		Sequence sequenceOfActivity2 = (Sequence) activities.get(1);
+		assertEquals("SequenceOfActivity2", sequenceOfActivity2.getName());
+		assertEquals(1, sequenceOfActivity2.getActivities().size());
+		assertSame(activity2, sequenceOfActivity2.getActivities().get(0));
+		
+		nativeActivity2 = activity2.getNativeActivity();
+		TSequence newNativeSequence = (TSequence)activities.get(1).getNativeActivity();
+		assertSame(newNativeSequence, nativeSequence.getSequenceArray(0));
+		assertSame(nativeActivity2, newNativeSequence.getEmptyArray()[0]);
+		
+		assertEquals(xmlChildrenCount, sequence.getNativeActivity().getDomNode().getChildNodes().getLength());
+	}
+	
+	@Test
+	public void testReplaceMoveActivityForward() throws Exception {
+		Empty firstActivity = activity1;
+		Empty oldActivity = activity2;
+		Assign newActivity = sequence.addAssign();
+		newActivity.setName("NewActivity");
+		assertEquals(3, sequence.getActivities().size());
+		
+		sequence.replace(oldActivity, newActivity);
+		List<AbstractActivity<?>> activitiesAfterReplace = sequence.getActivities();
+		assertEquals(2, activitiesAfterReplace.size());
+		assertSame(firstActivity, activitiesAfterReplace.get(0));
+		assertEquals("Activity1", firstActivity.getName());
+		assertSame(newActivity, activitiesAfterReplace.get(1));
+		assertEquals("NewActivity", newActivity.getName());
+		
+		assertEquals(1, nativeSequence.getEmptyArray().length);
+		assertEquals(1, nativeSequence.getAssignArray().length);
+		
+		XmlCursor sequenceCursor = nativeSequence.newCursor();
+		assertTrue(sequenceCursor.toFirstChild());
+		assertSame(firstActivity.getNativeActivity(), sequenceCursor.getObject());
+		sequenceCursor.toNextSibling();
+		assertSame(newActivity.getNativeActivity(), sequenceCursor.getObject());
+	}
+	
+	@Test
+	public void testReplaceMoveActivityBackward() throws Exception {
+		Empty firstActivity = activity1;
+		Empty newActivity = activity2;
+		Assign oldActivity = sequence.addAssign();
+		assertEquals(3, sequence.getActivities().size());
+		
+		sequence.replace(oldActivity, newActivity);
+		List<AbstractActivity<?>> activitiesAfterReplace = sequence.getActivities();
+		assertEquals(2, activitiesAfterReplace.size());
+		assertSame(firstActivity, activitiesAfterReplace.get(0));
+		assertSame(newActivity, activitiesAfterReplace.get(1));
+		
+		assertEquals(2, nativeSequence.getEmptyArray().length);
+		
+		XmlCursor sequenceCursor = nativeSequence.newCursor();
+		assertTrue(sequenceCursor.toFirstChild());
+		assertSame(firstActivity.getNativeActivity(), sequenceCursor.getObject());
+		sequenceCursor.toNextSibling();
+		assertSame(newActivity.getNativeActivity(), sequenceCursor.getObject());
+	}
+	
+	@Test
+	public void testRemove() throws Exception {
+		assertEquals(2, sequence.getActivities().size());
+		
+		sequence.remove(activity1);
+		assertEquals(1, sequence.getActivities().size());
+		assertSame(activity2, sequence.getActivities().get(0));
+		assertEquals("Activity2", activity2.getName());
+	}
+	
+	@Test
+	public void testMoveBefore() throws Exception {
+		Empty activity3 = sequence.addEmpty();
+		activity3.setName("Activity3");
+		
+		sequence.moveBefore(activity3, activity1);
+		List<AbstractActivity<?>> activities = sequence.getActivities();
+		assertSame(activity3, activities.get(0));
+		assertSame(activity1, activities.get(1));
+		assertSame(activity2, activities.get(2));
+		assertEquals("Activity3", activity3.getName());
+		assertEquals("Activity1", activity1.getName());
+		assertEquals("Activity2", activity2.getName());
+		
+		sequence.moveBefore(activity2, activity1);
+		activities = sequence.getActivities();
+		assertSame(activity3, activities.get(0));
+		assertSame(activity2, activities.get(1));
+		assertSame(activity1, activities.get(2));
+		assertEquals("Activity3", activity3.getName());
+		assertEquals("Activity1", activity1.getName());
+		assertEquals("Activity2", activity2.getName());
+		
+		sequence.moveBefore(activity3, activity1);
+		activities = sequence.getActivities();
+		assertSame(activity2, activities.get(0));
+		assertSame(activity3, activities.get(1));
+		assertSame(activity1, activities.get(2));
+		assertEquals("Activity3", activity3.getName());
+		assertEquals("Activity1", activity1.getName());
+		assertEquals("Activity2", activity2.getName());
+	}
+	
+	@Test
+	public void testMoveToEnd() throws Exception {
+		sequence.moveToEnd(activity1);
+		
+		List<AbstractActivity<?>> activities = sequence.getActivities();
+		assertSame(activity2, activities.get(0));
+		assertSame(activity1, activities.get(1));
+		assertEquals("Activity1", activity1.getName());
+		assertEquals("Activity2", activity2.getName());
 	}
 }

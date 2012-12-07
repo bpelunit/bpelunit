@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import net.bpelunit.model.bpel.IActivity;
-import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IFlow;
 import net.bpelunit.model.bpel.ILink;
 import net.bpelunit.model.bpel.IVisitor;
@@ -18,7 +17,7 @@ class Flow extends AbstractMultiContainer<TFlow> implements IFlow {
 	private TFlow flow;
 	private List<Link> links = new ArrayList<Link>();
 
-	public Flow(TFlow wrappedFlow, IActivityContainer parent) {
+	public Flow(TFlow wrappedFlow, IContainer parent) {
 		super(wrappedFlow, parent);
 
 		setNativeObject(wrappedFlow);

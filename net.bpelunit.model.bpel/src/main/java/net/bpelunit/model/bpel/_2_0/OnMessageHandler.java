@@ -2,14 +2,13 @@ package net.bpelunit.model.bpel._2_0;
 
 import javax.xml.namespace.QName;
 
-import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IOnMessage;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnEvent;
 
 public class OnMessageHandler extends AbstractSingleContainer<TOnEvent> implements IOnMessage {
 
-	public OnMessageHandler(TOnEvent e, IActivityContainer parent) {
+	public OnMessageHandler(TOnEvent e, IContainer parent) {
 		super(e, parent);
 	}
 

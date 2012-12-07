@@ -43,7 +43,7 @@ public class BpelFactory implements IBpelFactory {
 			Constructor<?> c = null;
 			for(Class<?> i : child.getClass().getInterfaces()) {
 				try {
-					c = clazz.getConstructor(i, IActivityContainer.class);
+					c = clazz.getConstructor(i, IContainer.class);
 					break;
 				} catch (Exception e) {
 					// ignore

@@ -60,6 +60,7 @@
 					<execution>
 						<phase>package</phase>
 						<goals>
+							<goal>jar</goal>
 							<goal>test-jar</goal>
 						</goals>
 					</execution>
@@ -81,12 +82,46 @@
 					</instructions>
 				</configuration>
 			</plugin>
+			<plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.5.2</version>
+        <configuration>
+          <instrumentation>
+            <ignores>
+              <ignore>org.oasisOpen.docs.wsbpel.x20.process.executable.*</ignore>
+              <ignore>org.oasisOpen.docs.wsbpel.x20.process.executable.impl.*</ignore>
+              <ignore>org.w3.xml.x1998.namespace.*</ignore>
+              <ignore>org.w3.xml.x1998.namespace.impl.*</ignore>
+              <ignore>org.xmlsoap.schemas.ws.x2003.x03.businessProcess.*</ignore>
+              <ignore>org.xmlsoap.schemas.wsdl.*</ignore>
+              <ignore>schemaorg_apache_xmlbeans.*</ignore>
+            </ignores>
+            <excludes>
+              <exclude>org.oasisOpen.docs.wsbpel.x20.process.executable.*</exclude>
+              <exclude>org.oasisOpen.docs.wsbpel.x20.process.executable.impl.*</exclude>
+              <exclude>org.w3.xml.x1998.namespace.*</exclude>
+              <exclude>org.w3.xml.x1998.namespace.impl.*</exclude>
+              <exclude>org.xmlsoap.schemas.ws.x2003.x03.businessProcess.*</exclude>
+              <exclude>org.xmlsoap.schemas.wsdl.*</exclude>
+              <exclude>schemaorg_apache_xmlbeans.*</exclude>
+            </excludes>
+          </instrumentation>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>net.bpelunit</groupId>
-			<artifactId>net.bpelunit.util</artifactId>
+			<artifactId>util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -103,4 +138,14 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
+	<reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.5.2</version>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

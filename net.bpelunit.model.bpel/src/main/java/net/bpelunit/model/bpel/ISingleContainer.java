@@ -25,4 +25,6 @@ public interface ISingleContainer extends IActivityContainer {
 	IValidate setNewValidate();
 	IWait setNewWait();
 	IWhile setNewWhile();
+	
+	void removeMainActivity();
 }

@@ -2,7 +2,6 @@ package net.bpelunit.model.bpel._2_0;
 
 import javax.xml.namespace.QName;
 
-import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.ICompensationHandler;
 import net.bpelunit.model.bpel.IInvoke;
 import net.bpelunit.model.bpel.IVariable;
@@ -13,7 +12,7 @@ public class Invoke extends AbstractBasicActivity<TInvoke> implements IInvoke {
 	private TInvoke invoke;
 	private CompensationHandler compensationHandler;
 	
-	public Invoke(TInvoke wrappedInvoke, IActivityContainer parent) {
+	public Invoke(TInvoke wrappedInvoke, IContainer parent) {
 		super(wrappedInvoke, parent);
 		setNativeObjectInternal(wrappedInvoke);
 	}

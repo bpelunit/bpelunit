@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IIf;
 import net.bpelunit.model.bpel.IVisitor;
 
@@ -17,7 +16,7 @@ public class If extends AbstractSingleContainer<TIf> implements IIf {
 	private Else eelse;
 	private Expression condition;
 
-	public If(TIf i, IActivityContainer parent) {
+	public If(TIf i, IContainer parent) {
 		super(i, parent);
 		
 		setNativeObject(i);

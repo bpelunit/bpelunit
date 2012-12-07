@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IOnAlarmEventHandler;
 import net.bpelunit.model.bpel.IScope;
@@ -23,7 +22,7 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 	private List<OnMessageHandler> onMessages = new ArrayList<OnMessageHandler>();
 	private CompensationHandler compensationHandler;
 
-	public Scope(TScope wrappedScope, IActivityContainer parent) {
+	public Scope(TScope wrappedScope, IContainer parent) {
 		super(wrappedScope, parent);
 
 		setNativeObjectInternal(wrappedScope);
@@ -163,5 +162,7 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 	public CompensationHandler getCompensationHandler() {
 		return compensationHandler;
 	}
+
+	
 
 }

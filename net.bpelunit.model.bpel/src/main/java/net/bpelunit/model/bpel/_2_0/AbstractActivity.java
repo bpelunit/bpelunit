@@ -21,9 +21,9 @@ abstract class AbstractActivity<T extends TExtensibleElements> extends
 	
 	T activity;
 
-	private IActivityContainer parent;
+	private IContainer parent;
 
-	AbstractActivity(T a, IActivityContainer parentContainer) {
+	AbstractActivity(T a, IContainer parentContainer) {
 		super(a);
 		this.parent = parentContainer;
 		this.activity = a;
@@ -34,7 +34,10 @@ abstract class AbstractActivity<T extends TExtensibleElements> extends
 		return parent;
 	}
 	
-	void reparent(IActivityContainer newParent) {
+	void reparent(IContainer newParent) {
+		if(parent != null) {
+			parent.unregister(this);
+		}
 		parent = newParent;
 	}
 	
@@ -83,5 +86,10 @@ abstract class AbstractActivity<T extends TExtensibleElements> extends
 	void setNativeObject(Object substitute) {
 		super.setNativeObject(substitute);
 		activity = (T)substitute;
+	}
+	
+	@Override
+	public String toString() {
+		return getName();
 	}
 }

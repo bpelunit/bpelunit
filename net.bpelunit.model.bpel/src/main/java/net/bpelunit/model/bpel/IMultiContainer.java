@@ -27,4 +27,7 @@ public interface IMultiContainer extends IActivityContainer {
 	IWait addWait();
 	IWhile addWhile();
 
+	void moveBefore(IActivity toMove, IActivity moveBefore);
+	void moveToEnd(IActivity toMove);
+	void remove(IActivity activityToDelete);
 }
