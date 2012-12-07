@@ -28,6 +28,7 @@ import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.model.test.wire.IncomingMessage;
 
 import org.apache.velocity.context.Context;
 import org.w3c.dom.Element;
@@ -119,10 +120,10 @@ public class ReceiveDataSpecification extends DataSpecification {
 	 * @param context
 	 * @param incomingMessage
 	 */
-	public void handle(ActivityContext context, String incomingMessage) {
+	public void handle(ActivityContext context, IncomingMessage msg) {
 
 		// Check content
-		setInWireFormat(incomingMessage);
+		setInWireFormat(msg);
 
 		if (hasProblems()) {
 			return;
@@ -167,11 +168,11 @@ public class ReceiveDataSpecification extends DataSpecification {
 
 	// ************************* Inner Stuff ***********************
 
-	private void setInWireFormat(String body) {
+	private void setInWireFormat(IncomingMessage msg) {
 		try {
-			fPlainMessage= body;
+			fPlainMessage= new String(msg.getBody()); // TODO FIX CHARSET
 			MessageFactory factory= MessageFactory.newInstance();
-			fSOAPMessage= factory.createMessage(null, new ByteArrayInputStream(body.getBytes()));
+			fSOAPMessage= factory.createMessage(null, new ByteArrayInputStream(msg.getBody())); // TODO FIX CHARSET
 		} catch (Exception e) {
 			setStatus(ArtefactStatus.createErrorStatus("Could not create SOAP message from incoming message: " + e.getMessage(), e));
 		}

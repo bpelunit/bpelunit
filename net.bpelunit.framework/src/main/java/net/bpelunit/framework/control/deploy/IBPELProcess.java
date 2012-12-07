@@ -1,6 +1,7 @@
 package net.bpelunit.framework.control.deploy;
 
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.xml.namespace.QName;
 
@@ -24,13 +25,14 @@ public interface IBPELProcess {
 	 * @param wsdlFileName
 	 *            File name of the WSDL, can be changed in order to avoid naming
 	 *            conflicts in the deployment
-	 * @param namespace 
+	 * @param namespace
 	 * @param contents
 	 *            Contents of the WSDL file that will be included in the
 	 *            deployment archive and will be referenced by the BPEL Process
-	 * @throws DeploymentException 
+	 * @throws DeploymentException
 	 */
-	void addWSDLImport(String wsdlFileName, String namespace, InputStream contents) throws DeploymentException;
+	void addWSDLImport(String wsdlFileName, String namespace,
+			InputStream contents) throws DeploymentException;
 
 	/**
 	 * Adds a new import to BPEL and updates the deployment accordingly. Changes
@@ -43,8 +45,10 @@ public interface IBPELProcess {
 	 * @param contents
 	 *            Contents of the WSDL file that will be included in the
 	 *            deployment archive and will be referenced by the BPEL Process
+	 * @throws DeploymentException
 	 */
-	void addXSDImport(String xsdFileName, String namespace, InputStream contents);
+	void addXSDImport(String xsdFileName, String namespace, InputStream contents)
+			throws DeploymentException;
 
 	/**
 	 * Returns an instance of the BPEL XML code that will be deployed. Changes
@@ -66,15 +70,26 @@ public interface IBPELProcess {
 	 *            referencable/imported by the BPEL process (see addWSDLImport)
 	 * @param processRole
 	 *            the role as defined in the partnerlinkType for the process
+	 *            null if process does not offer a service
+	 * @param processEndpointSuffix
+	 *            path element used for constructing the service endpoint URL; must not be null if processRole != null
 	 * @param partnerRole
 	 *            the role as defined in the partnerlinkType for the partner
 	 * @param service
-	 *            a WSDL service that
+	 *            a WSDL service that is being used in the deployment to call
+	 *            the service; must not be null if partnerRole != null
 	 * @param port
+	 *            a WSDL port in service that is being used in the deployment to
+	 *            call the service; must not be null if partnerRole != null
 	 * @param endpointURL
+	 *            physical endpoint to call; if null value from WSDL will be
+	 *            used
+	 * @return The physical endpoint for the service provided by the process or
+	 *         null if processRole was null
 	 */
-	void addPartnerlink(String name, QName partnerlinkType, String processRole,
-			String partnerRole, QName service, String port, String endpointURL);
+	URL addPartnerlink(String name, QName partnerlinkType, String processRole,
+			String processEndpointSuffix, String partnerRole,
+			QName partnerService, String partnerPort, String partnerEndpointURL);
 
 	/**
 	 * Changes the endpoint configuration of a partner link to the the new

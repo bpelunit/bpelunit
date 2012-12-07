@@ -65,7 +65,7 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 			return;
 		}
 
-		getReceiveSpec().handle(context, incoming.getBody());
+		getReceiveSpec().handle(context, incoming);
 
 		/*
 		 * This is the only place in the testing framework where we can (and should actually return

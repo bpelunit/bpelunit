@@ -82,18 +82,18 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 
 		if (returnMsg.getReturnCode() == 200) {
 			// Send is ok
-			getReceiveSpec().handle(context, returnMsg.getBody());
+			getReceiveSpec().handle(context, returnMsg);
 			setStatus(getReceiveSpec().getStatus());
 		} else if ( (returnMsg.getReturnCode() >= 500 && returnMsg.getReturnCode() < 600)) {
 			// could be SOAP fault. Let receive handle it.
-			getReceiveSpec().handle(context, returnMsg.getBody());
+			getReceiveSpec().handle(context, returnMsg);
 			setStatus(getReceiveSpec().getStatus());
 		} else {
 			// something went really wrong
 			setStatus(ArtefactStatus
 					.createErrorStatus("Error: Answer from synchronous call had non-expected return code " + returnMsg.getReturnCode()));
 
-			fWrongReturnBody= returnMsg.getBody();
+			fWrongReturnBody= new String(msg.getBody()); // TODO FIX CHARSET
 			if ("".equals(fWrongReturnBody)) {
 				fWrongReturnBody= "(empty)";
 			}

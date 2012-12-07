@@ -5,6 +5,7 @@
  */
 package net.bpelunit.framework.control.run;
 
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.context.Context;
 
@@ -325,11 +327,17 @@ public class TestCaseRunner {
 			// Execute the method.
 
 			int statusCode = fClient.executeMethod(method);
-			String responseBody = method.getResponseBodyAsString();
+			InputStream in = method.getResponseBodyAsStream();
+			byte[] msg = null;
+			try {
+				msg = IOUtils.toByteArray(in);
+			} finally {
+				IOUtils.closeQuietly(in);
+			}
 
 			IncomingMessage returnMsg = new IncomingMessage();
 			returnMsg.setStatusCode(statusCode);
-			returnMsg.setBody(responseBody);
+			returnMsg.setBody(msg);
 
 			return returnMsg;
 

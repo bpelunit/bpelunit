@@ -98,7 +98,7 @@ public final class ActivityUtil {
 	private ActivityUtil() {
 		// Utility class
 	}
-	
+
 	// ****************************** Activity names & constants
 	// **************************
 
@@ -147,7 +147,7 @@ public final class ActivityUtil {
 		ActivityConstant[] constants = ActivityConstant.values();
 		List<ActivityConstant> list = new ArrayList<ActivityConstant>();
 		for (int i = 0; i < constants.length; i++) {
-			if (!constants[i].equals(ActivityConstant.RECEIVE) 
+			if (!constants[i].equals(ActivityConstant.RECEIVE)
 					&& (!constants[i].equals(ActivityConstant.SEND))
 					&& (!constants[i]
 							.equals(ActivityConstant.COMPLETEHUMANTASK))) {
@@ -339,11 +339,15 @@ public final class ActivityUtil {
 		List<XMLActivity> activities = new ArrayList<XMLActivity>();
 		XmlCursor newCursor = xmlClientTrack.newCursor();
 
-		if (newCursor.toFirstChild()) {
-			addActivity(activities, newCursor.getObject());
-			while (newCursor.toNextSibling()) {
+		try {
+			if (newCursor.toFirstChild()) {
 				addActivity(activities, newCursor.getObject());
+				while (newCursor.toNextSibling()) {
+					addActivity(activities, newCursor.getObject());
+				}
 			}
+		} finally {
+			newCursor.dispose();
 		}
 		return activities;
 	}
@@ -390,15 +394,19 @@ public final class ActivityUtil {
 	 */
 	public static XMLTrack getEnclosingTrack(XMLActivity activity) {
 		XmlCursor c = activity.newCursor();
-		while (c.toParent()) {
-			XmlObject object = c.getObject();
-			if (object == null) {
-				return null;
-			} else if (object instanceof XMLTrack) {
-				return ((XMLTrack) object);
+		try {
+			while (c.toParent()) {
+				XmlObject object = c.getObject();
+				if (object == null) {
+					return null;
+				} else if (object instanceof XMLTrack) {
+					return ((XMLTrack) object);
+				}
 			}
+			return null;
+		} finally {
+			c.dispose();
 		}
-		return null;
 	}
 
 	// ******************************* FAULTS

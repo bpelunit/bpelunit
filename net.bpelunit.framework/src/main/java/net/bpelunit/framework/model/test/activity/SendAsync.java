@@ -112,7 +112,7 @@ public class SendAsync extends Activity {
 			// server side.
 			// Asynchronous receives may not throw a SOAP error.
 			setStatus(ArtefactStatus.createErrorStatus("Asynchronous send got a non-2XX error code: " + incoming.getReturnCode(), null));
-			fWrongBody= incoming.getBody();
+			fWrongBody= new String(incoming.getBody()); // TODO FIX CHARSET
 		}
 	}
 

@@ -239,11 +239,12 @@ public class SpecificationLoader {
 
 		String xmlPutWSDL = xmlPut.getWsdl();
 		String xmlPutPartnerWSDL = xmlPut.getPartnerWSDL();
-		
+
 		Partner suiteClient = new Partner(BPELUnitConstants.CLIENT_NAME,
-				loadWsdlDefinition(testDirectory, xmlPutWSDL, BPELUnitConstants.CLIENT_NAME), 
-				loadWsdlDefinition(testDirectory, xmlPutPartnerWSDL, BPELUnitConstants.CLIENT_NAME),
-				suiteBaseURL.toString());
+				loadWsdlDefinition(testDirectory, xmlPutWSDL,
+						BPELUnitConstants.CLIENT_NAME), loadWsdlDefinition(
+						testDirectory, xmlPutPartnerWSDL,
+						BPELUnitConstants.CLIENT_NAME), suiteBaseURL.toString());
 
 		/*
 		 * The Partners. Each partner is initialized with the attached WSDL
@@ -327,8 +328,8 @@ public class SpecificationLoader {
 		int rounds = computeNumberOfRounds(xmlTestSuiteDocument, isVary);
 		fLogger.info("Varying: " + isVary + " (Rounds: " + rounds + ")");
 
-		IDataSource dataSource = readDataSource(testDirectory,
-				xmlTestSuite, xmlTestCase);
+		IDataSource dataSource = readDataSource(testDirectory, xmlTestSuite,
+				xmlTestCase);
 
 		final int nRows = getNumberOfRows(dataSource);
 		final int nRounds = getNumberOfRounds(isVary, rounds);
@@ -367,8 +368,7 @@ public class SpecificationLoader {
 	}
 
 	private int getNumberOfRows(IDataSource dataSource) {
-		final int nRows = dataSource != null ? dataSource.getNumberOfRows()
-				: 1;
+		final int nRows = dataSource != null ? dataSource.getNumberOfRows() : 1;
 		return nRows;
 	}
 
@@ -400,23 +400,24 @@ public class SpecificationLoader {
 		for (XMLPartnerDeploymentInformation xmlPDI : xmlDeployment
 				.getPartnerList()) {
 			String name = xmlPDI.getName();
-			Partner p = new Partner(name, 
-					loadWsdlDefinition(testDirectory, xmlPDI.getWsdl(), name), 
-					loadWsdlDefinition(testDirectory, xmlPDI.getPartnerWsdl(), name),
-					suiteBaseURL.toString());
+			Partner p = new Partner(name, loadWsdlDefinition(testDirectory,
+					xmlPDI.getWsdl(), name), loadWsdlDefinition(testDirectory,
+					xmlPDI.getPartnerWsdl(), name), suiteBaseURL.toString());
 			suitePartners.put(p.getName(), p);
 		}
 	}
 
-	public static Definition loadWsdlDefinition(String baseDir, String wsdlFileName,
-			String partnerName) throws SpecificationException {
-		if(wsdlFileName == null || wsdlFileName.equals("")) {
+	public static Definition loadWsdlDefinition(String baseDir,
+			String wsdlFileName, String partnerName)
+			throws SpecificationException {
+		if (wsdlFileName == null || wsdlFileName.equals("")) {
 			return null;
 		}
-		
-		return loadWsdlDefinition(new File(baseDir, wsdlFileName).getPath(), partnerName);
+
+		return loadWsdlDefinition(new File(baseDir, wsdlFileName).getPath(),
+				partnerName);
 	}
-	
+
 	/**
 	 * TODO FIXME Used in tests as well but this is not clean...
 	 * 
@@ -427,14 +428,14 @@ public class SpecificationLoader {
 	 */
 	public static Definition loadWsdlDefinition(String wsdlFileName,
 			String partnerName) throws SpecificationException {
-		
+
 		// Check file exists
 		if (!new File(wsdlFileName).exists()) {
 			throw new SpecificationException(
 					"Cannot read WSDL file for partner " + partnerName
 							+ ": File \"" + wsdlFileName + "\" not found.");
 		}
-			
+
 		// load WSDL
 		try {
 			WSDLFactory factory = WSDLFactory.newInstance();
@@ -447,7 +448,7 @@ public class SpecificationLoader {
 							+ " from file \"" + wsdlFileName + "\".", e);
 		}
 	}
-	
+
 	private ProcessUnderTest createProcessUnderTest(String testDirectory,
 			URL suiteBaseURL, Map<String, Partner> suitePartners,
 			XMLPUTDeploymentInformation xmlPut) throws SpecificationException {
@@ -457,10 +458,9 @@ public class SpecificationLoader {
 		String xmlPutType = xmlPut.getType();
 
 		ProcessUnderTest processUnderTest = new ProcessUnderTest(xmlPutName,
-				testDirectory, 
-				loadWsdlDefinition(testDirectory, xmlPutWSDL, xmlPutName), 
-				loadWsdlDefinition(testDirectory, xmlPutPartnerWSDL, xmlPutName),
-				suiteBaseURL.toString());
+				testDirectory, loadWsdlDefinition(testDirectory, xmlPutWSDL,
+						xmlPutName), loadWsdlDefinition(testDirectory,
+						xmlPutPartnerWSDL, xmlPutName), suiteBaseURL.toString());
 
 		for (XMLProperty property : xmlPut.getPropertyList()) {
 			processUnderTest.setXMLDeploymentOption(property.getName(),
@@ -552,7 +552,8 @@ public class SpecificationLoader {
 			} catch (XPathExpressionException e) {
 				// This should not happen.
 				throw new SpecificationException(
-						"There was a problem finding delay sequences. This most likely indicates a bug in the framework.", e);
+						"There was a problem finding delay sequences. This most likely indicates a bug in the framework.",
+						e);
 			}
 		}
 		return rounds;
@@ -571,8 +572,9 @@ public class SpecificationLoader {
 	}
 
 	private TestCase createTestCase(Map<String, Partner> suitePartners,
-			Map<String, HumanPartner> suiteHumanPartners, Partner suiteClient, TestSuite suite, XMLTestCase xmlTestCase,
-			String xmlTestCaseName, int round, String testDirectory) throws SpecificationException {
+			Map<String, HumanPartner> suiteHumanPartners, Partner suiteClient,
+			TestSuite suite, XMLTestCase xmlTestCase, String xmlTestCaseName,
+			int round, String testDirectory) throws SpecificationException {
 
 		TestCase test = new TestCase(suite, xmlTestCaseName);
 
@@ -582,45 +584,43 @@ public class SpecificationLoader {
 
 		// Partners Partner Track
 		readPartners(suitePartners, xmlTestCase, round, testDirectory, test);
-		readHumanPartners(suiteHumanPartners, xmlTestCase, 
-				testDirectory, test);
+		readHumanPartners(suiteHumanPartners, xmlTestCase, testDirectory, test);
 		return test;
 	}
 
 	private void readHumanPartners(
 			Map<String, HumanPartner> suiteHumanPartners,
-			XMLTestCase xmlTestCase, String testDirectory,
-			TestCase test) throws SpecificationException {
+			XMLTestCase xmlTestCase, String testDirectory, TestCase test)
+			throws SpecificationException {
 		List<XMLHumanPartnerTrack> humanPartnerTrackList = xmlTestCase
 				.getHumanPartnerTrackList();
 
 		if (humanPartnerTrackList != null) {
 			for (XMLHumanPartnerTrack xmlHumanPartnerTrack : humanPartnerTrackList) {
-				readHumanPartner(suiteHumanPartners,  
-						testDirectory, test, xmlHumanPartnerTrack);
+				readHumanPartner(suiteHumanPartners, testDirectory, test,
+						xmlHumanPartnerTrack);
 			}
 		}
 
 	}
 
 	private void readHumanPartner(Map<String, HumanPartner> suiteHumanPartners,
-			String testDirectory,
-			TestCase test, XMLHumanPartnerTrack xmlHumanPartnerTrack)
+			String testDirectory, TestCase test,
+			XMLHumanPartnerTrack xmlHumanPartnerTrack)
 			throws SpecificationException {
 		String xmlPartnerTrackName = xmlHumanPartnerTrack.getName();
 		HumanPartner realPartner = suiteHumanPartners.get(xmlPartnerTrackName);
 
 		PartnerTrack pTrack = new PartnerTrack(test, realPartner);
-		readActivities(pTrack, xmlHumanPartnerTrack,
-				testDirectory);
+		readActivities(pTrack, xmlHumanPartnerTrack, testDirectory);
 		pTrack.setNamespaceContext(getNamespaceMap(xmlHumanPartnerTrack
 				.newCursor()));
 		test.addPartnerTrack(pTrack);
 	}
 
 	private void readActivities(PartnerTrack pTrack,
-			XMLHumanPartnerTrack xmlHumanPartnerTrack,
-			String testDirectory) throws SpecificationException {
+			XMLHumanPartnerTrack xmlHumanPartnerTrack, String testDirectory)
+			throws SpecificationException {
 		if (xmlHumanPartnerTrack.getCompleteHumanTaskList() != null) {
 			for (XMLCompleteHumanTaskActivity xmlActivity : xmlHumanPartnerTrack
 					.getCompleteHumanTaskList()) {
@@ -629,7 +629,9 @@ public class SpecificationLoader {
 				NamespaceContext context = getNamespaceMap(xmlActivity
 						.newCursor());
 				CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(
-						activity, context, (Element)getLiteralDataForSend(xmlActivity.getData(), testDirectory).getFirstChild(), pTrack);
+						activity, context, (Element) getLiteralDataForSend(
+								xmlActivity.getData(), testDirectory)
+								.getFirstChild(), pTrack);
 
 				// get conditions
 				List<XMLCondition> xmlConditionList = xmlActivity
@@ -675,7 +677,8 @@ public class SpecificationLoader {
 		Partner realPartner = suitePartners.get(xmlPartnerTrackName);
 
 		PartnerTrack pTrack = new PartnerTrack(test, realPartner);
-		readActivities(pTrack, xmlTestCase, xmlPartnerTrack, round, testDirectory);
+		readActivities(pTrack, xmlTestCase, xmlPartnerTrack, round,
+				testDirectory);
 		pTrack.setNamespaceContext(getNamespaceMap(xmlPartnerTrack.newCursor()));
 		if (xmlPartnerTrack.isSetAssume()) {
 			pTrack.setAssumption(xmlPartnerTrack.getAssume());
@@ -727,9 +730,7 @@ public class SpecificationLoader {
 	 */
 	private void readActivities(PartnerTrack partnerTrack,
 			XMLTestCase xmlTestCase, XMLTrack xmlTrack, int round,
-			String testDirectory)
-			throws SpecificationException
-	{
+			String testDirectory) throws SpecificationException {
 		List<XMLActivity> xmlActivities = ActivityUtil.getActivities(xmlTrack);
 
 		if (xmlActivities.isEmpty()) {
@@ -770,9 +771,11 @@ public class SpecificationLoader {
 				 */
 
 				if (event instanceof XMLWaitActivity) {
-					readWait(partnerTrack, activities, event, (XMLWaitActivity) event);
+					readWait(partnerTrack, activities, event,
+							(XMLWaitActivity) event);
 				} else if (event instanceof XMLReceiveActivity) {
-					readReceive(partnerTrack, activities, event, (XMLReceiveActivity) event);
+					readReceive(partnerTrack, activities, event,
+							(XMLReceiveActivity) event);
 				} else if (event instanceof XMLSendActivity) {
 					readSend(partnerTrack, round, testDirectory, activities,
 							event, (XMLSendActivity) event);
@@ -795,28 +798,25 @@ public class SpecificationLoader {
 			String testDirectory, List<Activity> activities, XMLActivity event,
 			XMLTwoWayActivity op) throws SpecificationException {
 		Activity activity = null;
-		if (ActivityUtil.isActivity(op,
-				ActivityConstant.RECEIVE_SEND_SYNC)) {
-			activity = createReceiveSendSynchronous(op,
-					partnerTrack, round, testDirectory);
+		if (ActivityUtil.isActivity(op, ActivityConstant.RECEIVE_SEND_SYNC)) {
+			activity = createReceiveSendSynchronous(op, partnerTrack, round,
+					testDirectory);
 		} else if (ActivityUtil.isActivity(op,
 				ActivityConstant.SEND_RECEIVE_SYNC)) {
-			activity = createSendReceiveSynchronous(op,
-					partnerTrack, round, testDirectory);
+			activity = createSendReceiveSynchronous(op, partnerTrack, round,
+					testDirectory);
 		} else if (ActivityUtil.isActivity(op,
 				ActivityConstant.RECEIVE_SEND_ASYNC)) {
-			ReceiveSendAsync a = new ReceiveSendAsync(
-					partnerTrack);
+			ReceiveSendAsync a = new ReceiveSendAsync(partnerTrack);
 			fillAsyncTwoWay(a, op, round, testDirectory);
 			activity = a;
 		} else if (ActivityUtil.isActivity(op,
 				ActivityConstant.SEND_RECEIVE_ASYNC)) {
-			SendReceiveAsync a = new SendReceiveAsync(
-					partnerTrack);
+			SendReceiveAsync a = new SendReceiveAsync(partnerTrack);
 			fillAsyncTwoWay(a, op, round, testDirectory);
 			activity = a;
 		}
-		
+
 		activity.setAssumption(event.getAssume());
 		activities.add(activity);
 	}
@@ -826,9 +826,8 @@ public class SpecificationLoader {
 			XMLSendActivity xmlSend) throws SpecificationException {
 		SendAsync activity = new SendAsync(partnerTrack);
 		SendDataSpecification spec = createSendSpecificationFromStandalone(
-				activity, xmlSend,
-				SOAPOperationDirectionIdentifier.INPUT, round,
-				testDirectory);
+				activity, xmlSend, SOAPOperationDirectionIdentifier.INPUT,
+				round, testDirectory);
 		activity.initialize(spec);
 		activity.setAssumption(event.getAssume());
 
@@ -840,8 +839,7 @@ public class SpecificationLoader {
 			XMLReceiveActivity xmlReceive) throws SpecificationException {
 		ReceiveAsync activity = new ReceiveAsync(partnerTrack);
 		ReceiveDataSpecification spec = createReceiveSpecificationStandalone(
-				activity, xmlReceive,
-				SOAPOperationDirectionIdentifier.INPUT);
+				activity, xmlReceive, SOAPOperationDirectionIdentifier.INPUT);
 		activity.initialize(spec);
 		activity.setAssumption(event.getAssume());
 
@@ -869,8 +867,9 @@ public class SpecificationLoader {
 	/**
 	 * 
 	 * Creates a synchronous send/receive activity.
-	 * @throws IOException 
-	 * @throws XmlException 
+	 * 
+	 * @throws IOException
+	 * @throws XmlException
 	 * 
 	 */
 	private Activity createSendReceiveSynchronous(
@@ -913,8 +912,9 @@ public class SpecificationLoader {
 
 	/**
 	 * Creates a synchronous receive/send activity.
-	 * @throws IOException 
-	 * @throws XmlException 
+	 * 
+	 * @throws IOException
+	 * @throws XmlException
 	 * 
 	 */
 	private Activity createReceiveSendSynchronous(
@@ -979,7 +979,7 @@ public class SpecificationLoader {
 			throw new SpecificationException(
 					"An asynchronous receive/send or send/receive activity must have both receive and send children.");
 		}
-			
+
 		XMLHeaderProcessor xmlHeaderProcessor = xmlAsyncTwoWay
 				.getHeaderProcessor();
 		List<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
@@ -1006,14 +1006,15 @@ public class SpecificationLoader {
 	/**
 	 * Creates a send specification for an asnychronous send-only. In this case,
 	 * service information must be stored directly on the send activity itself.
-	 * @throws IOException 
-	 * @throws XmlException 
+	 * 
+	 * @throws IOException
+	 * @throws XmlException
 	 * 
 	 */
 	private SendDataSpecification createSendSpecificationFromStandalone(
 			Activity parentActivity, XMLSendActivity xmlSend,
-			SOAPOperationDirectionIdentifier direction, int round, String testDirectory)
-			throws SpecificationException {
+			SOAPOperationDirectionIdentifier direction, int round,
+			String testDirectory) throws SpecificationException {
 
 		SOAPOperationCallIdentifier operation = getOperationCallIdentifier(
 				parentActivity, getService(parentActivity, xmlSend),
@@ -1025,16 +1026,16 @@ public class SpecificationLoader {
 	/**
 	 * Creates a send specficiation for a synchronous send/receive. In this
 	 * case, service information must be stored on the send/receive activity.
-	 * @throws IOException 
-	 * @throws XmlException 
+	 * 
+	 * @throws IOException
+	 * @throws XmlException
 	 * 
 	 */
 	private SendDataSpecification createSendSpecificationFromParent(
 			Activity parentActivity, XMLTwoWayActivity xmlSendReceiveSync,
 			XMLSendActivity xmlSend,
 			SOAPOperationDirectionIdentifier direction, int round,
-			String testDirectory)
-			throws SpecificationException {
+			String testDirectory) throws SpecificationException {
 
 		SOAPOperationCallIdentifier operation = getOperationCallIdentifier(
 				parentActivity, getService(parentActivity, xmlSendReceiveSync),
@@ -1047,8 +1048,9 @@ public class SpecificationLoader {
 	/**
 	 * Creates a send specification for the given activity and operation and
 	 * from the given XML Send Specification.
-	 * @throws IOException 
-	 * @throws XmlException 
+	 * 
+	 * @throws IOException
+	 * @throws XmlException
 	 * 
 	 */
 	private SendDataSpecification createSendSpecification(Activity activity,
@@ -1084,31 +1086,41 @@ public class SpecificationLoader {
 		String templateText = null;
 
 		try {
-		if (xmlSend.isSetData()) {
-			rawDataRoot = getLiteralDataForSend(xmlSend.getData(), testDirectory);
-		} else if (xmlSend.isSetTemplate()) {
-			if (xmlSend.getTemplate().isSetSrc()) {
-				// 'src' attribute in <template> - load as raw text, *not* XML - much less escaping involved
-				// Cannot reuse namespaces in .bpts - user must set namespaces in the .vm (same as when loading an external XML file)
-				final StringBuffer sbuf = new StringBuffer();
-				sbuf.append("<");
-				sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
-				sbuf.append(">");
-				sbuf.append(FileUtils.readFileToString(new File(testDirectory, xmlSend.getTemplate().getSrc())));
-				sbuf.append("</");
-				sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
-				sbuf.append(">");
-				templateText = sbuf.toString();
-			} else {
-				// Embedded templates are parsed as XML and can reuse existing templates
-				Element templateRoot = copyAsRootWithNamespaces(xmlSend.getTemplate());
-				templateText = XmlObject.Factory.parse(templateRoot).xmlText();
+			if (xmlSend.isSetData()) {
+				rawDataRoot = getLiteralDataForSend(xmlSend.getData(),
+						testDirectory);
+			} else if (xmlSend.isSetTemplate()) {
+				if (xmlSend.getTemplate().isSetSrc()) {
+					// 'src' attribute in <template> - load as raw text, *not*
+					// XML - much less escaping involved
+					// Cannot reuse namespaces in .bpts - user must set
+					// namespaces in the .vm (same as when loading an external
+					// XML file)
+					final StringBuffer sbuf = new StringBuffer();
+					sbuf.append("<");
+					sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
+					sbuf.append(">");
+					sbuf.append(FileUtils.readFileToString(new File(
+							testDirectory, xmlSend.getTemplate().getSrc())));
+					sbuf.append("</");
+					sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
+					sbuf.append(">");
+					templateText = sbuf.toString();
+				} else {
+					// Embedded templates are parsed as XML and can reuse
+					// existing templates
+					Element templateRoot = copyAsRootWithNamespaces(xmlSend
+							.getTemplate());
+					templateText = XmlObject.Factory.parse(templateRoot)
+							.xmlText();
+				}
 			}
-		}
 		} catch (Exception ex) {
-			throw new SpecificationException("There was a problem while interpreting the 'src' attribute in activity " + activity, ex);
+			throw new SpecificationException(
+					"There was a problem while interpreting the 'src' attribute in activity "
+							+ activity, ex);
 		}
-	
+
 		/*
 		 * Get round data
 		 */
@@ -1148,40 +1160,42 @@ public class SpecificationLoader {
 			// src attribute in <data>
 			final String path = dataInSend.getSrc();
 			try {
-				rawDataRoot = copyAsRootWithNamespaces(XmlObject.Factory.parse(new File(testDirectory, path)));
+				rawDataRoot = copyAsRootWithNamespaces(XmlObject.Factory
+						.parse(new File(testDirectory, path)));
 			} catch (Exception e) {
-				throw new SpecificationException("Error while importing data: " + e.getMessage(), e);
+				throw new SpecificationException("Error while importing data: "
+						+ e.getMessage(), e);
 			}
-		}
-		else {
+		} else {
 			rawDataRoot = copyAsRootWithNamespaces(dataInSend);
 		}
 		return rawDataRoot;
 	}
 
 	private Element copyAsRootWithNamespaces(XmlObject xmlData)
-			throws SpecificationException
-	{
+			throws SpecificationException {
 		try {
-		Element rawDataRoot;
-		rawDataRoot = BPELUnitUtil.generateDummyElementNode();
-		// Use the internal namespace mechanism of XMLBeans to
-		// sort out namespaces and add them to the top-level element,
-		// ready to be copied by importNode().
-		XmlObject test = XmlObject.Factory.parse(xmlData.xmlText());
-		NodeList cn = test.getDomNode().getChildNodes();
-		for (int i = 0; i < cn.getLength(); i++) {
-			Node currentItem = cn.item(i);
-			// must be elements. There might be comments flying around,
-			// filter them.
-			if (currentItem instanceof Element) {
-					rawDataRoot.appendChild(rawDataRoot.getOwnerDocument().importNode(currentItem, true));
+			Element rawDataRoot;
+			rawDataRoot = BPELUnitUtil.generateDummyElementNode();
+			// Use the internal namespace mechanism of XMLBeans to
+			// sort out namespaces and add them to the top-level element,
+			// ready to be copied by importNode().
+			XmlObject test = XmlObject.Factory.parse(xmlData.xmlText());
+			NodeList cn = test.getDomNode().getChildNodes();
+			for (int i = 0; i < cn.getLength(); i++) {
+				Node currentItem = cn.item(i);
+				// must be elements. There might be comments flying around,
+				// filter them.
+				if (currentItem instanceof Element) {
+					rawDataRoot.appendChild(rawDataRoot.getOwnerDocument()
+							.importNode(currentItem, true));
+				}
 			}
-		}
-		return rawDataRoot;
+			return rawDataRoot;
 		} catch (XmlException e) {
 			throw new SpecificationException(
-				"An error occurred when reading the literal data or template of send for an activity", e);
+					"An error occurred when reading the literal data or template of send for an activity",
+					e);
 		}
 	}
 
@@ -1397,7 +1411,7 @@ public class SpecificationLoader {
 							+ activity.getName()
 							+ " (PartnerTrack for partner " + partner + ").");
 		}
-		
+
 		return partner.getOperation(service, port, operation, direction);
 	}
 
@@ -1443,24 +1457,28 @@ public class SpecificationLoader {
 			String partnerTrackName) {
 
 		XmlCursor cursor = xmlTestCase.newCursor();
-		String basedOn = xmlTestCase.getBasedOn();
-		if (cursor.toParent()) {
-			XMLTestCasesSection section = (XMLTestCasesSection) cursor
-					.getObject();
-			for (XMLTestCase xmlTestCaseFor : section.getTestCaseList()) {
-				if (basedOn.equals(xmlTestCaseFor.getName())) {
-					if (hasNonEmptyPartnerTrack(xmlTestCaseFor,
-							partnerTrackName)) {
-						return xmlTestCaseFor;
-					} else 	if (xmlTestCaseFor.getBasedOn() != null
+		try {
+			String basedOn = xmlTestCase.getBasedOn();
+			if (cursor.toParent()) {
+				XMLTestCasesSection section = (XMLTestCasesSection) cursor
+						.getObject();
+				for (XMLTestCase xmlTestCaseFor : section.getTestCaseList()) {
+					if (basedOn.equals(xmlTestCaseFor.getName())) {
+						if (hasNonEmptyPartnerTrack(xmlTestCaseFor,
+								partnerTrackName)) {
+							return xmlTestCaseFor;
+						} else if (xmlTestCaseFor.getBasedOn() != null
 								&& !"".equals(xmlTestCaseFor.getBasedOn())) {
 							return findInHierarchy(xmlTestCaseFor,
 									partnerTrackName);
+						}
 					}
 				}
 			}
+			return null;
+		} finally {
+			cursor.dispose();
 		}
-		return null;
 	}
 
 	private boolean hasNonEmptyPartnerTrack(XMLTestCase xmlTestCase,

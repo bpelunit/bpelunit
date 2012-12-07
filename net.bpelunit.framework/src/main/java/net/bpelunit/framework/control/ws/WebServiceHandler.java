@@ -5,9 +5,8 @@
  */
 package net.bpelunit.framework.control.ws;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.util.concurrent.TimeoutException;
 
 import net.bpelunit.framework.control.run.TestCaseRunner;
@@ -15,10 +14,10 @@ import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.PartnerNotFoundException;
 import net.bpelunit.framework.model.test.PartnerTrack;
-import net.bpelunit.framework.model.test.report.ArtefactStatus.StatusCode;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.mortbay.http.HttpRequest;
@@ -126,19 +125,20 @@ public class WebServiceHandler extends AbstractHttpHandler {
 
 		wsLogger.debug("Request method is: " + request.getMethod());
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				request.getInputStream()));
-		String line;
-		StringBuffer theRequest = new StringBuffer();
-		while ((line = reader.readLine()) != null) {
-			theRequest.append(line);
+		byte[] theRequest = null;
+		InputStream in = request.getInputStream();
+		try {
+			theRequest = IOUtils.toByteArray(in);
+		} finally {
+			IOUtils.closeQuietly(in);
 		}
-
+		
+		
 		wsLogger
-				.debug("Incoming request payload is:\n" + theRequest.toString());
+				.debug("Incoming request payload is:\n" + new String(theRequest)); // TODO FIX CHARSET
 
 		IncomingMessage iMessage = new IncomingMessage();
-		iMessage.setBody(theRequest.toString());
+		iMessage.setBody(theRequest);
 
 		try {
 

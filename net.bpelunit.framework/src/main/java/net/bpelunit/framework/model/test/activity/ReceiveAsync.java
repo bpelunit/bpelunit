@@ -78,7 +78,7 @@ public class ReceiveAsync extends Activity {
 			return;
 		}
 
-		fReceiveSpec.handle(context, incoming.getBody());
+		fReceiveSpec.handle(context, incoming);
 
 		/*
 		 * 

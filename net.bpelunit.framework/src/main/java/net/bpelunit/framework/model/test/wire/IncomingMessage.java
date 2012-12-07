@@ -24,7 +24,7 @@ public class IncomingMessage {
 	/**
 	 * The body of the message
 	 */
-	private String fBody;
+	private byte[] fBody;
 
 
 	public void setStatusCode(int code) {
@@ -35,11 +35,11 @@ public class IncomingMessage {
 		return fCode;
 	}
 
-	public void setBody(String body) {
+	public void setBody(byte[] body) {
 		fBody= body;
 	}
 
-	public String getBody() {
+	public byte[] getBody() {
 		return fBody;
 	}
 
