@@ -1,21 +1,24 @@
 package net.bpelunit.framework.coverage.instrumentation;
 
 import static org.junit.Assert.assertEquals;
-
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import net.bpelunit.framework.coverage.marker.Marker;
 import net.bpelunit.framework.coverage.marker.MarkerFactory;
 import net.bpelunit.model.bpel.BpelFactory;
 import net.bpelunit.model.bpel.IActivity;
+import net.bpelunit.model.bpel.IAssign;
+import net.bpelunit.model.bpel.IInvoke;
 import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.model.bpel.IScope;
-import net.bpelunit.services.marker.Mark;
+import net.bpelunit.model.bpel.ISequence;
+import net.bpelunit.util.XMLUtil;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 
 public class MarkerToActivityConverterTest {
@@ -27,15 +30,18 @@ public class MarkerToActivityConverterTest {
 	private Marker marker1;
 	private Marker marker2;
 	private Marker marker3;
+	private Element markerMsg;
 	
 	@Before
 	public void setUp() {
 		p = BpelFactory.createProcess();
-		activity = p.getFactory().createEmpty();
+		activity = p.setNewEmpty();
 		activity.setName("ActivityToInstrument");
-		activity.addDocumentation();
 		
 		markerToActivityConverter = new MarkerToActivityConverter();
+		Document xmlDoc = XMLUtil.createDocument();
+		markerMsg = xmlDoc.createElement("e");
+		xmlDoc.appendChild(markerMsg);
 		
 		marker1 = mf.createMarker();
 		marker2 = mf.createMarker();
@@ -44,42 +50,46 @@ public class MarkerToActivityConverterTest {
 	
 	@Test
 	public void testCreateRequestForMarkersNoMarkers() throws Exception {
-		Mark request = markerToActivityConverter.createRequestForMarkers(activity);
-		assertEquals(0, request.getMarker().size());		
+		markerToActivityConverter.buildCoverageMarkerMessage(markerMsg, activity);
+		assertEquals(0, markerMsg.getChildNodes().getLength());
 	}
 	
 	@Test
 	public void testCreateRequestForMarkersThreeMarkers() throws Exception {
 		addThreeMarkersToActivity();
 		
-		Mark request = markerToActivityConverter.createRequestForMarkers(activity);
-		assertEquals(3, request.getMarker().size());
-		assertEquals(marker1.getName(), request.getMarker().get(0));
-		assertEquals(marker2.getName(), request.getMarker().get(1));
-		assertEquals(marker3.getName(), request.getMarker().get(2));
+		assertEquals(3, activity.getDocumentation().get(0).getDocumentationElements().size());
+		
+		markerToActivityConverter.buildCoverageMarkerMessage(markerMsg, activity);
+		NodeList children = markerMsg.getChildNodes();
+		assertEquals(3, children.getLength());
+		assertEquals(marker1.getName(), children.item(0).getTextContent());
+		assertEquals(marker2.getName(), children.item(1).getTextContent());
+		assertEquals(marker3.getName(), children.item(2).getTextContent());
 	}
 
 	private void addThreeMarkersToActivity() {
-		List<Object> documentationElements = new ArrayList<Object>();
-		documentationElements.add("Some String");
-		documentationElements.add(marker1);
-		documentationElements.add(marker2);
-		documentationElements.add("Some other String");
-		documentationElements.add(marker3);
-		documentationElements.add("Final String");
-		
-		activity.getDocumentation().get(0).setDocumentationElements(documentationElements);
+		AbstractInstrumenter.addCoverageMarker(activity, marker1);
+		AbstractInstrumenter.addCoverageMarker(activity, marker2);
+		AbstractInstrumenter.addCoverageMarker(activity, marker3);
 	}
 	
 	@Test
 	public void testCreateScopeForMarkers() throws Exception {
 		addThreeMarkersToActivity();
 		
-		IScope scope = markerToActivityConverter.createScopeForMarkers(activity);
-		p.setMainActivity(scope);
+		markerToActivityConverter.createScopeForMarkers(activity);
 		
-		ByteArrayOutputStream actualXMLAsStream = new ByteArrayOutputStream();
-		p.save(actualXMLAsStream);
-		System.out.println(new String(actualXMLAsStream.toByteArray()));
+		IScope scope = (IScope)p.getMainActivity();
+		assertEquals("__BPELUNIT_MARK_REQUEST__", scope.getVariables().get(0).getName());
+		
+		ISequence seq = (ISequence)scope.getMainActivity();
+		assertTrue(seq.getActivities().get(0) instanceof IAssign);
+		assertTrue(seq.getActivities().get(1) instanceof IInvoke);
+		assertSame(activity, seq.getActivities().get(2));
+		
+//		ByteArrayOutputStream actualXMLAsStream = new ByteArrayOutputStream();
+//		p.save(actualXMLAsStream);
+//		System.out.println(new String(actualXMLAsStream.toByteArray()));
 	}
 }

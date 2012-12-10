@@ -2,10 +2,13 @@ package net.bpelunit.framework.coverage.instrumentation.activity;
 
 import java.util.List;
 
+import net.bpelunit.model.bpel.ActivityType;
 import net.bpelunit.model.bpel.IActivity;
+import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.IBpelFactory;
 import net.bpelunit.model.bpel.IDocumentation;
 import net.bpelunit.model.bpel.IVisitor;
+import net.bpelunit.util.StringUtil;
 
 class DummyActivity implements IActivity {
 
@@ -51,5 +54,24 @@ class DummyActivity implements IActivity {
 
 	public void setName(String newName) {
 		throw new UnsupportedOperationException("Test Mock");
+	}
+
+	public ActivityType getActivityType() {
+		return ActivityType.valueOf(StringUtil.toFirstUpper(activityType));
+	}
+
+	public boolean getSuppressJoinFailure() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setSuppressJoinFailure(boolean value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public IActivityContainer getParent() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

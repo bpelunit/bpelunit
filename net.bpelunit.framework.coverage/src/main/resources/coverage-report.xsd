@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.bpelunit.net/coverage/1_0" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bpelunit.net/coverage/1_0">
+
+    <element name="CoverageReport">
+    	<complexType>
+    		<sequence>
+    			<element name="Process">
+    				<complexType>
+    					<sequence>
+    						<element name="Name" type="QName"></element>
+    						<element name="Metric" minOccurs="0"
+    							maxOccurs="unbounded">
+    							<complexType>
+    								<sequence>
+    									<element name="Name"
+    										type="string">
+    									</element>
+    									<element
+    										name="MeasurementPoints" minOccurs="0" maxOccurs="unbounded">
+    										<complexType>
+    											<sequence>
+    												<element
+    													name="MeasurementPoint" type="string">
+    												</element>
+    												<element name="Min"
+    													type="decimal">
+    												</element>
+    												<element name="Max"
+    													type="decimal">
+    												</element>
+    												<element name="Avg"
+    													type="decimal">
+    												</element>
+    												<element
+    													name="Total" type="decimal">
+    												</element>
+    												<element
+    													name="Coverage" type="decimal">
+    												</element>
+    											</sequence>
+    										</complexType>
+    									</element>
+    								</sequence>
+    							</complexType>
+    						</element>
+    					</sequence>
+    				</complexType>
+    			</element>
+    		</sequence>
+    	</complexType>
+    </element>
+</schema>

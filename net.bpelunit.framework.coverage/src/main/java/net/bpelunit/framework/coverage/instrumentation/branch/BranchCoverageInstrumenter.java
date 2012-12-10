@@ -12,14 +12,18 @@ import net.bpelunit.model.bpel.IActivity;
 import net.bpelunit.model.bpel.IAssign;
 import net.bpelunit.model.bpel.ICompensate;
 import net.bpelunit.model.bpel.ICompensateScope;
+import net.bpelunit.model.bpel.ICompensationHandler;
+import net.bpelunit.model.bpel.ICopy;
 import net.bpelunit.model.bpel.IEmpty;
 import net.bpelunit.model.bpel.IExit;
 import net.bpelunit.model.bpel.IFlow;
 import net.bpelunit.model.bpel.IForEach;
 import net.bpelunit.model.bpel.IIf;
+import net.bpelunit.model.bpel.IImport;
 import net.bpelunit.model.bpel.IInvoke;
 import net.bpelunit.model.bpel.IOnAlarm;
 import net.bpelunit.model.bpel.IOnMessage;
+import net.bpelunit.model.bpel.IPartnerLink;
 import net.bpelunit.model.bpel.IPick;
 import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.model.bpel.IReceive;
@@ -30,6 +34,7 @@ import net.bpelunit.model.bpel.IScope;
 import net.bpelunit.model.bpel.ISequence;
 import net.bpelunit.model.bpel.IThrow;
 import net.bpelunit.model.bpel.IValidate;
+import net.bpelunit.model.bpel.IVariable;
 import net.bpelunit.model.bpel.IWait;
 import net.bpelunit.model.bpel.IWhile;
 
@@ -141,6 +146,31 @@ public class BranchCoverageInstrumenter extends AbstractInstrumenter {
 	}
 
 	public void visit(IOnMessage a) {
+	}
+
+	public void visit(ICopy c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void visit(IImport i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void visit(IPartnerLink pl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void visit(IVariable var) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void visit(ICompensationHandler compensationHandler) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

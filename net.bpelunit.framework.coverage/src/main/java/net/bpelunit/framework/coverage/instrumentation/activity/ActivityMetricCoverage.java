@@ -60,7 +60,7 @@ public class ActivityMetricCoverage implements IMetricCoverage {
 		for(String activityType : activityTypes) {
 			results.add(
 				new ActivityCoverageResult(
-					"//" + activityType, 
+					"//" + activityType.toLowerCase(), 
 					minPerActivityType.get(activityType), 
 					maxPerActivityType.get(activityType), 
 					(double)counterPerActivityType.get(activityType) / (double)totalActivitiesPerType.get(activityType), 
@@ -81,7 +81,7 @@ public class ActivityMetricCoverage implements IMetricCoverage {
 			double coverage = Math.min(counter, 1.0);
 			results.add(new ActivityCoverageResult(a.getXPathInDocument(), counter, counter, counter, counter, coverage));
 			
-			String activityName = a.getActivityName();
+			String activityName = a.getActivityType().name();
 			if(!counterPerActivityType.containsKey(activityName)) {
 				counterPerActivityType.put(activityName, counter);
 				minPerActivityType.put(activityName, counter);

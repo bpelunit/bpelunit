@@ -22,17 +22,9 @@
 			</resource>
 		</resources>
 		<plugins>
-			<plugin>
-				<groupId>org.jvnet.jaxb2.maven2</groupId>
-				<artifactId>maven-jaxb2-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+			<!-- plugin> <groupId>org.jvnet.jaxb2.maven2</groupId> <artifactId>maven-jaxb2-plugin</artifactId> 
+				<executions> <execution> <goals> <goal>generate</goal> </goals> </execution> 
+				</executions> </plugin -->
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<configuration>
@@ -87,8 +79,27 @@
 		</dependency>
 		<dependency>
 			<groupId>net.bpelunit</groupId>
+			<artifactId>framework</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.bpelunit</groupId>
 			<artifactId>util</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+	      <groupId>jetty</groupId>
+	      <artifactId>jetty</artifactId>
+	    </dependency>
+		<dependency>
+			<groupId>net.bpelunit</groupId>
+			<artifactId>model-bpel</artifactId>
+			<version>${project.version}</version>
+			<classifier>bundle</classifier>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

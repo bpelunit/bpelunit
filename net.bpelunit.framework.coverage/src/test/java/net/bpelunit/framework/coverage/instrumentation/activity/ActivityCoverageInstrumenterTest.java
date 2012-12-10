@@ -1,15 +1,19 @@
 package net.bpelunit.framework.coverage.instrumentation.activity;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import net.bpelunit.framework.coverage.marker.Marker;
 import net.bpelunit.model.bpel.BpelFactory;
-import net.bpelunit.model.bpel.IBpelFactory;
 import net.bpelunit.model.bpel.IEmpty;
 import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.model.bpel.ISequence;
+import net.bpelunit.util.XMLUtil;
 
 import org.junit.Test;
+import org.w3c.dom.Node;
 
 
 public class ActivityCoverageInstrumenterTest {
@@ -19,29 +23,22 @@ public class ActivityCoverageInstrumenterTest {
 	@Test
 	public void testInstrumentation() throws Exception {
 		IProcess p = BpelFactory.createProcess();
-		IBpelFactory factory = p.getFactory();
 		
-		ISequence s1 = factory.createSequence();
-		p.setMainActivity(s1);
+		ISequence s1 = p.setNewSequence();
 		
-		ISequence s2 = factory.createSequence();
-		s1.addActivity(s2);
+		ISequence s2 = s1.addSequence();
 		
-		IEmpty empty1 = factory.createEmpty();
+		IEmpty empty1 = s1.addEmpty();
 		empty1.setName("empty1");
-		s1.addActivity(empty1);
 
-		IEmpty empty2 = factory.createEmpty();
+		IEmpty empty2 = s1.addEmpty();
 		empty2.setName("empty2");
-		s1.addActivity(empty2);
 		
-		IEmpty empty3 = factory.createEmpty();
+		IEmpty empty3 = s2.addEmpty();
 		empty3.setName("empty3");
-		s2.addActivity(empty3);
 		
-		IEmpty empty4 = factory.createEmpty();
+		IEmpty empty4 = s2.addEmpty();
 		empty4.setName("empty4");
-		s2.addActivity(empty4);
 		
 		instrumenter.addCoverageMarkers(p);
 		
@@ -52,7 +49,8 @@ public class ActivityCoverageInstrumenterTest {
 		
 		for(IEmpty e : new IEmpty[]{ empty1, empty2, empty3, empty4} ) {
 			assertEquals(e.getName() + " must carry coverage marker", 1, e.getDocumentation().size());
-			assertTrue(e.getName(), e.getDocumentation().get(0).getDocumentationElements().get(0) instanceof Marker);
+			List<Node> docElements = e.getDocumentation().get(0).getDocumentationElements();
+			assertTrue(e.getName(), docElements.size() > 0);
 		}
 	}
 	

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Body>
+		<tns:mark xmlns:tns="http://www.bpelunit.net/services/marker">
+			<tns:Marker>M1</tns:Marker>
+			<tns:Marker>M2</tns:Marker>
+			<tns:Marker>M3</tns:Marker>
+		</tns:mark>
+	</soap:Body>
+</soap:Envelope>

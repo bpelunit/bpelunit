@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://www.bpelunit.net/services/marker" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bpelunit.net/services/marker">
+<schema targetNamespace="http://www.bpelunit.net/services/marker" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bpelunit.net/services/marker" xmlns="http://www.w3.org/2001/XMLSchema">
  <element name="mark">
         <complexType>
           <sequence>
