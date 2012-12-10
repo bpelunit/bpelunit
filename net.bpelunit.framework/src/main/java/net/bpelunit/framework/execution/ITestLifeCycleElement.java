@@ -52,4 +52,11 @@ public interface ITestLifeCycleElement {
 	 */
 	void doReport(IBPELUnitContext context);
 
+	/**
+	 * In this phase the process can be read and to a certain extent changed.
+	 * However, structural modifications to a process are not allowed in this
+	 * phase but should be done in the doPrepareProcesses phase.
+	 */
+	void doMarkProcesses(IBPELUnitContext context);
+
 }

@@ -7,6 +7,7 @@ package net.bpelunit.framework.control.deploy.simple;
 
 import net.bpelunit.framework.control.deploy.IBPELDeployer;
 import net.bpelunit.framework.control.deploy.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.control.deploy.IDeployment;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
 
@@ -48,5 +49,12 @@ public class TestModeDeployer implements IBPELDeployer {
 
 	public void cleanUpAfterTestCase() {
 		// do nothing.
+	}
+
+	@Override
+	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
+			throws DeploymentException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -16,6 +16,7 @@ import javax.xml.soap.SOAPException;
 
 import net.bpelunit.framework.control.deploy.IBPELDeployer;
 import net.bpelunit.framework.control.deploy.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.control.deploy.IDeployment;
 import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
@@ -381,6 +382,13 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	static int getTerminatedProcessCount() {
 		return terminatedProcessCount;
+	}
+
+	@Override
+	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
+			throws DeploymentException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 
