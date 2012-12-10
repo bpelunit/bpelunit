@@ -11,5 +11,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="target/dependency/xmlbeans-2.4.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.framework"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

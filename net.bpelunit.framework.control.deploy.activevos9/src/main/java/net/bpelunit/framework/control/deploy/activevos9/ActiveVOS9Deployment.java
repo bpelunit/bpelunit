@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +26,6 @@ import net.bpelunit.framework.control.soap.NamespaceContextImpl;
 import net.bpelunit.framework.control.util.XPathTool;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.model.bpel.BpelFactory;
-import net.bpelunit.model.bpel.IImport;
 import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.util.FileUtil;
 import net.bpelunit.util.XMLUtil;
@@ -52,7 +52,7 @@ public class ActiveVOS9Deployment extends AbstractDeployment {
 		private static final String PATH_TO_BPELUNIT_ADDED_FILES = "wsdl/bpelunit/";
 
 		BPELInfo(File bpelFile, File pddFile, Document pdd)
-				throws FileNotFoundException, JAXBException {
+				throws IOException, JAXBException {
 			super();
 			this.bpelFile = bpelFile;
 			this.pddFile = pddFile;
@@ -82,24 +82,27 @@ public class ActiveVOS9Deployment extends AbstractDeployment {
 		}
 
 		@Override
-		public void addWSDLImport(String wsdlFileName, String namespace, InputStream contents) throws DeploymentException {
+		public void addWSDLImport(String wsdlFileName, String namespace,
+				InputStream contents) throws DeploymentException {
 			String classpath = PATH_TO_BPELUNIT_ADDED_FILES + wsdlFileName;
-			
-//			IImport newImport = bpelModel.addImport();
-//			newImport.setImportType(IImport.IMPORTTYPE_WSDL);
-//			newImport.setLocation(calculateRelativePathTo(wsdlFileName));
-//			newImport.setNamespace(namespace);
-			
-			String catalogLocation = catalogDoc.getCatalog().getURI() + "/" + PATH_TO_BPELUNIT_ADDED_FILES + wsdlFileName;
+
+			// IImport newImport = bpelModel.addImport();
+			// newImport.setImportType(IImport.IMPORTTYPE_WSDL);
+			// newImport.setLocation(calculateRelativePathTo(wsdlFileName));
+			// newImport.setNamespace(namespace);
+
+			String catalogLocation = catalogDoc.getCatalog().getURI() + "/"
+					+ PATH_TO_BPELUNIT_ADDED_FILES + wsdlFileName;
 			addFileToExplodedBPR(wsdlFileName, contents);
 			addCatalogEntryIfNecessary(catalogLocation, classpath);
 		}
 
 		String calculateRelativePathTo(String wsdlFileName) {
 			int pathElementsInTempDirectory = StringUtils.countMatches(
-					tempDirectory.getAbsolutePath().replaceAll("\\\\", "/"), "/");
-			int pathElementsInBPELFile = StringUtils.countMatches(
-					bpelFile.getAbsolutePath().replaceAll("\\\\", "/"), "/");
+					tempDirectory.getAbsolutePath().replaceAll("\\\\", "/"),
+					"/");
+			int pathElementsInBPELFile = StringUtils.countMatches(bpelFile
+					.getAbsolutePath().replaceAll("\\\\", "/"), "/");
 
 			StringBuilder relativePath = new StringBuilder();
 			for (int i = 0; i < pathElementsInBPELFile
@@ -108,7 +111,7 @@ public class ActiveVOS9Deployment extends AbstractDeployment {
 			}
 			relativePath.append(PATH_TO_BPELUNIT_ADDED_FILES);
 			relativePath.append(wsdlFileName);
-			
+
 			return relativePath.toString();
 		}
 
@@ -166,13 +169,15 @@ public class ActiveVOS9Deployment extends AbstractDeployment {
 		}
 
 		@Override
-		public void addPartnerlink(String name, QName partnerlinkType,
-				String processRole, String partnerRole, QName service,
-				String port, String endpointURL) {
+		public URL addPartnerlink(String name, QName partnerlinkType,
+				String processRole, String processEndpointSuffix,
+				String partnerRole, QName partnerService, String partnerPort,
+				String partnerEndpointURL) {
+
 			getPddXml(); // use this in order to set changed flags correctly
 			getProcessModel();
-			// TODO Auto-generated method stub
 
+			return null; // TODO
 		}
 
 		@Override

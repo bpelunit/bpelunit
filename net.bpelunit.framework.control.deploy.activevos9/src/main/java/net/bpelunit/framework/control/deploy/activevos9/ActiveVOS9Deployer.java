@@ -12,9 +12,9 @@ import com.active_endpoints.docs.wsdl.engineapi._2010._05.enginemanagement.Admin
 import com.active_endpoints.schemas.engineapi._2010._05.engineapitypes.AesContribution;
 
 import net.bpelunit.framework.control.deploy.activevos9.ActiveVOSAdministrativeFunctions.DeployException;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
-import net.bpelunit.framework.control.ext.IDeployment;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
+import net.bpelunit.framework.control.deploy.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.control.deploy.IDeployment;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
 import net.bpelunit.util.FileUtil;
@@ -184,7 +184,6 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 		}
 	}
 
-	@Override
 	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
 			throws DeploymentException {
 		if(this.deployment == null) {
@@ -195,14 +194,8 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 		return null;
 	}
 
-	@Override
-	public String getArchiveLocation(String pathToTest) {
+	private String getArchiveLocation(String pathToTest) {
 		return new File(pathToTest, this.deploymentLocation).getAbsolutePath();
-	}
-
-	@Override
-	public void setArchiveLocation(String archive) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
