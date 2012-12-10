@@ -35,7 +35,6 @@ import net.bpelunit.framework.control.util.ActivityUtil;
 import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
-import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.HumanPartner;
@@ -146,22 +145,6 @@ public class SpecificationLoader {
 			fLogger.info("Loaded test suite with name \"" + testSuite.getName()
 					+ "\" and " + testSuite.getTestCaseCount() + " test cases.");
 
-			if (BPELUnitRunner.measureTestCoverage()) {
-				ICoverageMeasurementTool tool = BPELUnitRunner
-						.getCoverageMeasurmentTool();
-				try {
-
-					String encodingStyle = tool.getEncodingStyle();
-					if (encodingStyle != null) {
-						tool.setSOAPEncoder(fRunner
-								.createNewSOAPEncoder(encodingStyle));
-					}
-				} catch (Exception e) {
-					tool.setErrorStatus("CoverageTool: " + e.getMessage());
-
-				}
-
-			}
 			return testSuite;
 
 		} catch (XmlException e) {

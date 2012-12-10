@@ -8,16 +8,12 @@ package net.bpelunit.framework.control.deploy.ode;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
-import net.bpelunit.framework.control.ext.IDeployment;
 import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.exception.DeploymentException;
-import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.ProcessUnderTest;
 import net.bpelunit.util.JDomUtil;
 
@@ -217,26 +213,6 @@ public class ODEDeployer implements IBPELDeployer {
 					"ODE Server reported a undeployment Error: "
 							+ responseBody);
 		}
-	}
-
-	public IDeployment getDeployment(ProcessUnderTest put)
-			throws DeploymentException {
-
-		IDeployment deployment;
-		Map<String, Partner> partnerList = put.getPartners();
-		Partner[] partners = new Partner[partnerList.values().size()];
-		partners = (Partner[]) (new ArrayList<Partner>(partnerList.values())
-				.toArray(partners));
-
-		if (partners != null && fArchive != null) {
-			deployment = new ODEDeployment(partners, getArchiveLocation(put
-					.getBasePath()));
-		} else {
-			throw new DeploymentException("Problem creating ODEDeployment: ",
-					null);
-		}
-
-		return deployment;
 	}
 
 	public String getArchiveLocation(String pathToTest) {

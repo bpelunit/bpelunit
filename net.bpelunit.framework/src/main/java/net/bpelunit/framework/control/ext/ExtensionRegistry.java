@@ -5,28 +5,18 @@
  */
 package net.bpelunit.framework.control.ext;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerOption;
 import net.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
-import net.bpelunit.framework.control.run.TestCaseRunner;
-import net.bpelunit.framework.coverage.CoverageConstants;
-import net.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
-import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
-import net.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
-import net.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
-import net.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.xml.config.XMLConfiguration;
@@ -36,14 +26,9 @@ import net.bpelunit.framework.xml.config.XMLTestConfigurationDocument;
 import net.bpelunit.framework.xml.extension.XMLBPELUnitCoreExtensions;
 import net.bpelunit.framework.xml.extension.XMLExtension;
 import net.bpelunit.framework.xml.extension.XMLExtensionRegistryDocument;
-import net.bpelunit.util.JDomUtil;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 
 /**
  * The BPELUnit Extension Registry handles reading the extensions.xml file and
@@ -352,83 +337,6 @@ public final class ExtensionRegistry {
 
 	private static String setterName(String key) {
 		return SETTER_PREFIX + key;
-	}
-
-	/**
-	 * Read configuration data from file.
-	 * 
-	 * @param file
-	 * @throws ConfigurationException
-	 */
-	public static Map<String, List<String>> loadCoverageToolConfiguration(
-			File file) throws ConfigurationException {
-		SAXBuilder builder = new SAXBuilder();
-		Map<String, List<String>> map = null;
-		try {
-			Document doc = builder.build(file);
-			Element config = doc.getRootElement();
-			String attribute = config
-					.getAttributeValue(CoverageConstants.CONFIG_ATTRIBUTE_WAIT_TIME);
-			if (attribute != null) {
-				try {
-					int i = Integer.parseInt(attribute);
-					TestCaseRunner.setWaitTimeForCoverageMarkers(i);
-				} catch (Exception e) {
-					BPELUnitRunner.getCoverageMeasurmentTool().setErrorStatus(
-							"Configuration of wait time is not valid.");
-				}
-			}
-			map = handleMetricElements(config);
-		} catch (JDOMException e) {
-			throw new ConfigurationException(
-					"An XML reading error occurred reading the configuration of coverage tool from file "
-							+ file.getAbsolutePath(), e);
-		} catch (IOException e) {
-			throw new ConfigurationException(
-					"An I/O error occurred reading the configuration of coverage tool from file "
-							+ file.getAbsolutePath(), e);
-		}
-		return map;
-	}
-
-	private static Map<String, List<String>> handleMetricElements(Element config) {
-		String attribute;
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		List<Element> children = JDomUtil.getChildren(config,
-				CoverageConstants.CONFIG_METRIC_ELEMENT,
-				CoverageConstants.NAMESPACE_CONFIGURATION);
-		for (Iterator<Element> iter = children.iterator(); iter.hasNext();) {
-			Element element = iter.next();
-			attribute = element
-					.getAttributeValue(CoverageConstants.CONFIG_ATTRIBUT_NAME);
-			if (attribute != null) {
-				if (attribute.equalsIgnoreCase(ActivityMetric.METRIC_NAME)) {
-					map.put(ActivityMetric.METRIC_NAME, null);
-					Element child2 = element.getChild(
-							CoverageConstants.CONFIG_PROPERTY_ELEMENT,
-							CoverageConstants.NAMESPACE_CONFIGURATION);
-					String name = child2
-							.getAttributeValue(CoverageConstants.CONFIG_ATTRIBUT_NAME);
-					if (name != null
-							&& name
-									.equals(CoverageConstants.CONFIG_ELEMENT_BASIC_ACTIVITIES)) {
-						List<String> list = new ArrayList<String>();
-						list.addAll(analyzeString(child2.getText()));
-						map.put(ActivityMetric.METRIC_NAME, list);
-					}
-				} else if (attribute.equalsIgnoreCase(BranchMetric.METRIC_NAME)) {
-					map.put(BranchMetric.METRIC_NAME, null);
-				} else if (attribute.equalsIgnoreCase(LinkMetric.METRIC_NAME)) {
-					map.put(LinkMetric.METRIC_NAME, null);
-				} else if (attribute.equalsIgnoreCase(FaultMetric.METRIC_NAME)) {
-					map.put(FaultMetric.METRIC_NAME, null);
-				} else if (attribute
-						.equalsIgnoreCase(CompensationMetric.METRIC_NAME)) {
-					map.put(CompensationMetric.METRIC_NAME, null);
-				}
-			}
-		}
-		return map;
 	}
 
 	static List<String> analyzeString(String activities) {

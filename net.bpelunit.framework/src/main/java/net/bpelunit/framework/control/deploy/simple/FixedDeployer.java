@@ -7,11 +7,8 @@ package net.bpelunit.framework.control.deploy.simple;
 
 import java.util.Map;
 
-import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.ext.IDeployment;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
-import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
 
@@ -34,12 +31,6 @@ public class FixedDeployer implements IBPELDeployer {
 	public void deploy(String path, ProcessUnderTest processUnderTest)
 			throws DeploymentException {
 		// do nothing.
-		if (BPELUnitRunner.measureTestCoverage()) {
-			ICoverageMeasurementTool tool = BPELUnitRunner
-					.getCoverageMeasurmentTool();
-			tool
-					.setErrorStatus("Test coverage can not be measured by the Fixed Deployer!");
-		}
 	}
 
 	public void undeploy(String path, ProcessUnderTest processUnderTest)
@@ -51,14 +42,7 @@ public class FixedDeployer implements IBPELDeployer {
 		// do nothing.
 	}
 
-	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
-			throws DeploymentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public String getArchiveLocation(String pathToTest) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

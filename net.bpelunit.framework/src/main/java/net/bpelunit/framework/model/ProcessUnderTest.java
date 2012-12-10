@@ -17,12 +17,8 @@ import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.ext.DeploymentOption;
 import net.bpelunit.framework.control.ext.ExtensionRegistry;
 import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.ext.IDeployment;
 import net.bpelunit.framework.control.ext.PartnerLink;
-import net.bpelunit.framework.coverage.ArchiveUtil;
-import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.DeploymentException;
-import net.bpelunit.framework.exception.EndPointException;
 import net.bpelunit.framework.exception.SpecificationException;
 
 /**
@@ -95,49 +91,11 @@ public class ProcessUnderTest extends Partner {
 	public void deploy() throws DeploymentException {
 		// changing end point logic goes here.
 		if (BPELUnitRunner.changeEndpoints()) {
-			IDeployment deployment = fDeployer.getDeployment(this);
-			PartnerLink[] partnerLinks = deployment.getPartnerLinks();
-			Partner[] partners = fPartners.values().toArray(new Partner[] {});
-			Map<Partner, PartnerLink> linkMap = getLinkMapping(partners,
-					partnerLinks);
-
-			try {
-				for (Partner p : linkMap.keySet()) {
-					PartnerLink pl = linkMap.get(p);
-					deployment.replaceEndpoints(pl, p);
-				}
-			} catch (EndPointException e) {
-				throw new DeploymentException("Error in changing endpoints.", e);
-			}
-		}
-
-		boolean archiveCopied = false;
-		String newFile = null;
-
-		if (BPELUnitRunner.measureTestCoverage()) {
-			ICoverageMeasurementTool coverageTool = BPELUnitRunner
-					.getCoverageMeasurmentTool();
-			try {
-
-				newFile = coverageTool.prepareArchiveForCoverageMeasurement(
-						fDeployer.getArchiveLocation(getBasePath()), this,
-						fDeployer);
-				fDeployer.setArchiveLocation(newFile);
-				archiveCopied = true;
-
-			} catch (Exception e) {
-				coverageTool
-						.setErrorStatus("Coverage measurment has failed. An error occurred when annotation for coverage: "
-								+ e.getMessage());
-			}
+			throw new DeploymentException("Temporarily removed until reimplemented");
 		}
 
 		fDeployer.deploy(getBasePath(), this);
 		// if no exception was thrown, the service is deployed.
-
-		if (archiveCopied) {
-			ArchiveUtil.deleteArchive(newFile);
-		}
 
 		isDeployed = true;
 	}

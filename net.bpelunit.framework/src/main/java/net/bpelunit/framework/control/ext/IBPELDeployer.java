@@ -100,18 +100,6 @@ public interface IBPELDeployer {
 	void undeploy(String testPath, ProcessUnderTest processUnderTest)
 			throws DeploymentException;
 
-	/**
-	 * Gets the corresponding IDeployment implementation for this deployer.
-	 * 
-	 * @param processUnderTest
-	 *            ProcessUnderTest object corresponding to the process to be
-	 *            deployed. This holds information such as partners of the
-	 *            process which are required for initializing the IDeployment
-	 *            implementation class.
-	 */
-	IDeployment getDeployment(ProcessUnderTest processUnderTest)
-			throws DeploymentException;
-	
 	String getArchiveLocation(String pathToTest);
 	
 	void setArchiveLocation(String archive);

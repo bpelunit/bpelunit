@@ -17,7 +17,6 @@ import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
-import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.TestSuite;
@@ -91,11 +90,7 @@ public abstract class BPELUnitRunner {
 
 	private static boolean fHaltOnFailure = false;
 
-	private static boolean fMeasureCoverage = false;
-
 	private static boolean fChangeEndpoints = false;
-
-	private static ICoverageMeasurementTool coverageMeasurmentTool = null;
 
 	/**
 	 * Indicates whether the runner has been properly initialized
@@ -141,14 +136,6 @@ public abstract class BPELUnitRunner {
 			fHaltOnFailure = true;
 		}
 
-		coverageMeasurmentTool = null;
-		fMeasureCoverage = false;
-		String measureCoverage = options.get(MEASURE_COVERAGE);
-		if ((measureCoverage != null) 
-				&& (measureCoverage.equalsIgnoreCase("true"))) {
-			fMeasureCoverage = true;
-		}
-
 		String changeEndpoints = options.get(CHANGE_ENDPOINTS);
 		if ((changeEndpoints != null)
 				&& (changeEndpoints.equalsIgnoreCase("true"))) {
@@ -174,10 +161,6 @@ public abstract class BPELUnitRunner {
 
 		configureExtensions();
 		configureDeployers();
-
-		if (fMeasureCoverage) {
-			configureCoverageTool();
-		}
 
 		// Okay
 		fInitialized = true;
@@ -210,12 +193,6 @@ public abstract class BPELUnitRunner {
 	 * @throws ConfigurationException
 	 */
 	public abstract void configureDeployers() throws ConfigurationException;
-
-	/**
-	 * Called by initialize() to configure the measurement of coverage.
-	 * 
-	 */
-	public abstract void configureCoverageTool() throws ConfigurationException;
 
 	/**
 	 * 
@@ -334,20 +311,8 @@ public abstract class BPELUnitRunner {
 		return fHaltOnFailure;
 	}
 
-	public static boolean measureTestCoverage() {
-		return fMeasureCoverage;
-	}
-
 	public static boolean changeEndpoints() {
 		return fChangeEndpoints;
-	}
-
-	public static void setCoverageMeasurmentTool(ICoverageMeasurementTool tool) {
-		coverageMeasurmentTool = tool;
-	}
-
-	public static ICoverageMeasurementTool getCoverageMeasurmentTool() {
-		return coverageMeasurmentTool;
 	}
 
 	// ******************** internals ******************

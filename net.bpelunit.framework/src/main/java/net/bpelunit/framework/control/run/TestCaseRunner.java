@@ -17,7 +17,6 @@ import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.control.ws.LocalHTTPServer;
-import net.bpelunit.framework.coverage.CoverageConstants;
 import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.PartnerNotFoundException;
 import net.bpelunit.framework.exception.SynchronousSendException;
@@ -53,8 +52,6 @@ public class TestCaseRunner {
 		RUNNING, COMPLETED
 	};
 	
-	private static int waitTimeForCoverageMarkers = CoverageConstants.DEFAULT_WAITTIME;
-
 	// Data
 	private TestCase fTestCase;
 
@@ -83,13 +80,8 @@ public class TestCaseRunner {
 
 	private boolean fAbortedByUser;
 
-	private TestCaseRunner instance;
-
-	private boolean allMarkersReceived;
-
 	public TestCaseRunner(LocalHTTPServer localServer, TestCase caseToRun) {
 
-		instance = this;
 		fTestCase = caseToRun;
 		fServer = localServer;
 
@@ -125,11 +117,6 @@ public class TestCaseRunner {
 		fServer.startTest(this);
 
 		List<Thread> threads = new ArrayList<Thread>();
-		boolean measureTestcoverage=BPELUnitRunner.measureTestCoverage();
-		if(measureTestcoverage) {
-			BPELUnitRunner.getCoverageMeasurmentTool().setCurrentTestCase(
-				fTestCase.getName());
-		}
 		for (PartnerTrack partnerTrack : fPartnerTracks.keySet()) {
 			Thread trackThread = new Thread(partnerTrack, partnerTrack
 					.getPartnerName());
@@ -143,25 +130,6 @@ public class TestCaseRunner {
 
 		// Wait for return or error
 		waitForPartnerTracksOrError();
-		if (measureTestcoverage) {
-			Thread thread = new Thread() {
-
-
-				@Override
-				public void run() {
-					try {
-						sleep(getWaitTimeForCoverageMarkers());
-					} catch (InterruptedException e) {
-						// nothing to do
-					}
-					instance.setAllMarkersReceived(true);
-				}
-			};
-			allMarkersReceived = false;
-			thread.start();
-
-			waitForAllCoverageMarkers();
-		}
 
 		if (fProblemOccurred || fAbortedByUser) {
 
@@ -198,23 +166,6 @@ public class TestCaseRunner {
 		fServer.stopTest(this);
 
 		fLogger.info("Stopping testCase " + fTestCase.getName());
-
-	}
-
-	private synchronized void waitForAllCoverageMarkers() {
-		fLogger.info("TestcaseRunner is waiting for coverage markers!");
-		while (!allMarkersReceived) {
-			try {
-				wait(BPELUnitConstants.TIMEOUT_SLEEP_TIME);
-			} catch (InterruptedException e) {
-			}
-		}
-
-		fLogger.info("TestcaseRunner all coverage markers received!");
-	}
-
-	protected void setAllMarkersReceived(boolean markersReceived) {
-		allMarkersReceived = markersReceived;
 
 	}
 
@@ -445,14 +396,5 @@ public class TestCaseRunner {
 
 	public Context createVelocityContext() throws DataSourceException  {
 		return fTestCase.createVelocityContext();
-	}
-
-	public static void setWaitTimeForCoverageMarkers(
-			int waitTimeForCoverageMarkers) {
-		TestCaseRunner.waitTimeForCoverageMarkers = waitTimeForCoverageMarkers;
-	}
-
-	public static int getWaitTimeForCoverageMarkers() {
-		return waitTimeForCoverageMarkers;
 	}
 }

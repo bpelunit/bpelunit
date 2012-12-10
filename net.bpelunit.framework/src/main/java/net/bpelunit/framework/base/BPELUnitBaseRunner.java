@@ -7,9 +7,6 @@ package net.bpelunit.framework.base;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.ext.ExtensionRegistry;
@@ -17,9 +14,6 @@ import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
-import net.bpelunit.framework.coverage.CoverageConstants;
-import net.bpelunit.framework.coverage.CoverageMeasurementTool;
-import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.SpecificationException;
 
@@ -41,7 +35,6 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	public static final String EXTENSIONS_FILE_NAME= "extensions.xml";
 	public static final String DEPLOYER_CONFIG_FILE_NAME= "configuration.xml";
 
-	public static final String COVERAGETOOL_CONFIG_FILE_NAME= "coverageMetricsConfiguration.xml";
 	private String fHomeDirectory;
 
 	public BPELUnitBaseRunner() {
@@ -114,24 +107,4 @@ public abstract class BPELUnitBaseRunner extends BPELUnitRunner {
 	public IDataSource createNewDataSource(String type) throws SpecificationException {
 		return ExtensionRegistry.createNewDataSourceForType(type);
 	}
-	
-	@Override
-	public void configureCoverageTool() throws ConfigurationException {
-		ICoverageMeasurementTool coverageTool=new CoverageMeasurementTool();
-		setCoverageMeasurmentTool(coverageTool);
-		getCoverageMeasurmentTool().setPathToWSDL(FilenameUtils.concat(FilenameUtils.concat(fHomeDirectory,CONFIG_DIR),CoverageConstants.COVERAGE_SERVICE_WSDL));
-		String coverageFile= FilenameUtils.concat(fHomeDirectory, FilenameUtils.concat(CONFIG_DIR, COVERAGETOOL_CONFIG_FILE_NAME));
-		if ( (coverageFile == null) || ! (new File(coverageFile).exists())){
-			coverageTool.setErrorStatus("BPELUnit was expecting a coverage tool configuration file.");
-			throw new ConfigurationException("BPELUnit was expecting a coverage tool configuration file.");
-		}
-		
-		Map<String, List<String>> configMap = ExtensionRegistry.loadCoverageToolConfiguration(new File(coverageFile));
-		List<String> directory=new ArrayList<String>();
-		directory.add(FilenameUtils.concat(fHomeDirectory,CONFIG_DIR));
-		
-		coverageTool.configureMetrics(configMap);
-	}
-
-
 }

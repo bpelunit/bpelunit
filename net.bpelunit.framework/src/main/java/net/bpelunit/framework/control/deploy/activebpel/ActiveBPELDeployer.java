@@ -16,7 +16,6 @@ import javax.xml.soap.SOAPException;
 
 import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
-import net.bpelunit.framework.control.ext.IDeployment;
 import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
@@ -261,12 +260,6 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 					"ActiveBPEL deployment configuration is missing the "
 							+ description + ".");
 		}
-	}
-
-	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
-			throws DeploymentException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

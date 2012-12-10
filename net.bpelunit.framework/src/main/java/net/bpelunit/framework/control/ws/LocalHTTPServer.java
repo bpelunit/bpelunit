@@ -5,11 +5,9 @@
  */
 package net.bpelunit.framework.control.ws;
 
-import org.apache.log4j.Logger;
-import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.run.TestCaseRunner;
-import net.bpelunit.framework.coverage.CoverageConstants;
-import net.bpelunit.framework.coverage.receiver.MarkersServiceHandler;
+
+import org.apache.log4j.Logger;
 import org.mortbay.http.HttpContext;
 import org.mortbay.http.HttpServer;
 import org.mortbay.http.SocketListener;
@@ -40,8 +38,6 @@ public class LocalHTTPServer {
 
 	private Logger wsLogger = Logger.getLogger(this.getClass());
 
-	private MarkersServiceHandler fHandler2;
-
 	private SocketListener listener2 = null;
 
 	public LocalHTTPServer(int portNumber, String rootPath) {
@@ -66,27 +62,6 @@ public class LocalHTTPServer {
 		context.addHandler(new NotFoundHandler());
 
 		fServer.addContext(context);
-
-		if (BPELUnitRunner.measureTestCoverage()) {
-
-			listener2 = new SocketListener();
-			listener2.setPort(CoverageConstants.SERVICE_PORT);
-			listener2.setBufferSize(20000);
-			listener2.setBufferReserve(1024);
-
-			fServer.addListener(listener2);
-			// Create the context for the root path
-			HttpContext context2 = new HttpContext();
-			context2.setContextPath(CoverageConstants.SERVICE_CONTEXT);
-			context2.setResourceBase("");
-			fHandler2 = new MarkersServiceHandler();
-			// Add the ws handler first
-			context2.addHandler(fHandler2);
-
-			// Add a 404 handler last
-			context2.addHandler(new NotFoundHandler());
-			fServer.addContext(context2);
-		}
 	}
 
 	public void startTest(TestCaseRunner runner) {
