@@ -14,9 +14,9 @@ import java.util.Map;
 import javax.wsdl.Definition;
 
 import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
 import net.bpelunit.framework.control.ext.DeploymentOption;
 import net.bpelunit.framework.control.ext.ExtensionRegistry;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.PartnerLink;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;

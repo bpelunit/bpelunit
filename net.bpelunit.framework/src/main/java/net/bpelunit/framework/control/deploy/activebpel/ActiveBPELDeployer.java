@@ -14,8 +14,8 @@ import java.util.regex.Pattern;
 
 import javax.xml.soap.SOAPException;
 
-import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
+import net.bpelunit.framework.control.deploy.IBPELDeployer.IBPELDeployerCapabilities;
 import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
@@ -234,7 +234,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		}
 	}
 
-	public String getArchiveLocation(String pathToTest) {
+	private String getArchiveLocation(String pathToTest) {
 		try {
 			if (fBPRFile.isAbsolute()) {
 				// absolute paths are left as is
@@ -247,10 +247,6 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 			// if the path cannot be cleaned up, just turn it into an absolute path
 			return fBPRFile.getAbsolutePath();
 		}
-	}
-
-	public void setArchiveLocation(String archive) {
-		setBPRFile(archive);
 	}
 
 	private void check(Object toCheck, String description)

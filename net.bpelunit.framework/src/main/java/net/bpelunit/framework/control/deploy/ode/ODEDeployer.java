@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Iterator;
 
-import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
+import net.bpelunit.framework.control.deploy.IBPELDeployer.IBPELDeployerCapabilities;
 import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
@@ -215,15 +215,11 @@ public class ODEDeployer implements IBPELDeployer {
 		}
 	}
 
-	public String getArchiveLocation(String pathToTest) {
+	private String getArchiveLocation(String pathToTest) {
 		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
 				.getFullPath(fArchive));
 		String archiveName = FilenameUtils.getName(fArchive);
 		return FilenameUtils.concat(pathToArchive, archiveName);
-	}
-
-	public void setArchiveLocation(String archive) {
-		this.fArchive = archive;
 	}
 
 	// *****Private helper methods*****

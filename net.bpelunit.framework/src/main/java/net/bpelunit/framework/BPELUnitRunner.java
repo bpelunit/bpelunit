@@ -10,8 +10,8 @@ import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
 import net.bpelunit.framework.control.ext.ExtensionRegistry;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;

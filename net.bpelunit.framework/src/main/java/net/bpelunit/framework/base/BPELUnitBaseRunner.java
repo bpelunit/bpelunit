@@ -9,8 +9,8 @@ import java.io.File;
 import java.net.MalformedURLException;
 
 import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
 import net.bpelunit.framework.control.ext.ExtensionRegistry;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;

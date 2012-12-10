@@ -2,6 +2,7 @@ package net.bpelunit.framework.control.deploy;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,12 +28,6 @@ public class DeploymentMock implements IDeployment {
 
 			this.name = new QName(bpelprocess.getTargetNamespace(),
 					bpelprocess.getName());
-		}
-
-		@Override
-		public void addPartnerlink(String name, QName partnerlinkType,
-				String processRole, String partnerRole, QName service,
-				String port, String endpointURL) {
 		}
 
 		@Override
@@ -63,6 +58,15 @@ public class DeploymentMock implements IDeployment {
 		@Override
 		public void addXSDImport(String wsdlFileName, String namespace, InputStream contents) {
 			// not used in test
+		}
+
+		@Override
+		public URL addPartnerlink(String name, QName partnerlinkType,
+				String processRole, String processEndpointSuffix,
+				String partnerRole, QName partnerService, String partnerPort,
+				String partnerEndpointURL) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 

@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerOption;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
+import net.bpelunit.framework.control.deploy.IBPELDeployer.IBPELDeployerOption;
 import net.bpelunit.framework.control.ext.IDataSource.ConfigurationOption;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.SpecificationException;

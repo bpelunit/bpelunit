@@ -7,8 +7,8 @@ package net.bpelunit.framework.control.deploy.simple;
 
 import java.util.Map;
 
-import net.bpelunit.framework.control.ext.IBPELDeployer;
-import net.bpelunit.framework.control.ext.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
+import net.bpelunit.framework.control.deploy.IBPELDeployer.IBPELDeployerCapabilities;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
 

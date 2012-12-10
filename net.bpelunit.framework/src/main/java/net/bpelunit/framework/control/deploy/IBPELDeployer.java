@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package net.bpelunit.framework.control.ext;
+package net.bpelunit.framework.control.deploy;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -100,10 +100,6 @@ public interface IBPELDeployer {
 	void undeploy(String testPath, ProcessUnderTest processUnderTest)
 			throws DeploymentException;
 
-	String getArchiveLocation(String pathToTest);
-	
-	void setArchiveLocation(String archive);
-
 	/**
 	 * Performs engine-specific test cleanup after each test. This may or
 	 * may not include killing any stale processes which may have end up in
@@ -118,4 +114,15 @@ public interface IBPELDeployer {
 	 * test case.
 	 */
 	void cleanUpAfterTestCase() throws DeploymentException;
+
+	/**
+	 * Returns the deployment this deployer is configured for. Must only
+	 * be called after all options are set.
+	 * 
+	 * @param processUnderTest
+	 * @return
+	 * @throws DeploymentException
+	 */
+	IDeployment getDeployment(ProcessUnderTest processUnderTest)
+			throws DeploymentException;
 }
