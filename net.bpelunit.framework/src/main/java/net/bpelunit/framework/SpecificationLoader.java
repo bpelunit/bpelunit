@@ -541,8 +541,7 @@ public class SpecificationLoader {
 				for (int i = 0; i < set.getLength(); i++) {
 					if (set.item(i) instanceof Attr) {
 						Attr attr = (Attr) set.item(i);
-						List<Integer> ints = getRoundInformation(attr
-								.getValue());
+						List<Double> ints = getRoundInformation(attr.getValue());
 						if (ints != null) {
 							currentMax = ints.size();
 						}
@@ -1113,8 +1112,8 @@ public class SpecificationLoader {
 		 * Get round data
 		 */
 		String delaySequence = xmlSend.getDelaySequence();
-		List<Integer> sequence = getRoundInformation(delaySequence);
-		int currentDelay = 0;
+		List<Double> sequence = getRoundInformation(delaySequence);
+		double currentDelay = 0;
 		if (sequence != null && sequence.size() > round) {
 			currentDelay = sequence.get(round);
 		}
@@ -1489,13 +1488,13 @@ public class SpecificationLoader {
 		return track;
 	}
 
-	private List<Integer> getRoundInformation(String roundsAsText) {
-		List<Integer> list = new ArrayList<Integer>();
+	private List<Double> getRoundInformation(String roundsAsText) {
+		List<Double> list = new ArrayList<Double>();
 		if (roundsAsText != null && !"".equals(roundsAsText)) {
 			String[] values = roundsAsText.split(",");
 			for (int j = 0; j < values.length; j++) {
 				try {
-					list.add(Integer.parseInt(values[j].trim()));
+					list.add(Double.parseDouble(values[j].trim()));
 				} catch (NumberFormatException e) {
 					return null;
 				}

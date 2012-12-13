@@ -4,6 +4,7 @@ Changelog
 Staged for next version
 -----------------------
 
+* _Feature_: the 'delay' and 'delayExpression' attributes now accept floating-point values (such as "2.5" or "0.5") in addition to integer values.
 * _Feature_: BPELUnit automatically ensures that rpc/literal part accessors are unqualified XML elements, according to WS-I BP 1.1 R2735, even if the .bpts file (incorrectly) qualifies these elements.
 * _Fix_: BPELUnit did not wrap rpc/literal responses using the operation name plus the 'Response' suffix suggested by WS-I BP 1.1 and enforced by engines such as Apache ODE.
 * _Fix_: BPELUnit previously produced test timeouts by waiting for skipped activities or partner tracks (using the `assume` attribute) to provide replies to requests from the composition. This has now been fixed.
