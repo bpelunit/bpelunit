@@ -215,9 +215,4 @@ public class BPELUnitAntRunner extends BPELUnitBaseRunner implements ITestResult
 		}
 	}
 
-	@Override
-	public void configureCoverageTool() throws ConfigurationException {
-		// TODO Auto-generated method stub
-		
-	}
 }
