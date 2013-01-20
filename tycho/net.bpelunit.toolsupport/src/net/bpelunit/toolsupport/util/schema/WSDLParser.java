@@ -456,7 +456,7 @@ public class WSDLParser {
 		if (elementName == null)
 			throw new InvalidInputException(
 				"Style is doc/lit, but the part "
-					+ part.getName() + " uses the element attribute");
+					+ part.getName() + " uses the type attribute");
 
 		return schemaManager.getElement(elementName);
 	}
