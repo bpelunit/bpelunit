@@ -303,8 +303,12 @@
 	    <_nodefaultversion>true</_nodefaultversion>
             <classifier>bundle</classifier>
             <manifestLocation>META-INF</manifestLocation>
-            <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
-	    <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+            <instructions>
+                <!-- Replace the SNAPSHOT qualifier with a proper timestamp -->
+                <Bundle-Version>$(replace;${project.version};-SNAPSHOT;.$(tstamp))</Bundle-Version>
+                <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+	        <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+            </instructions>
           </configuration>
         </plugin>
         <plugin>
