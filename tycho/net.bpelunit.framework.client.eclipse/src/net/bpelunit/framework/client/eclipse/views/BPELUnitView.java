@@ -5,6 +5,7 @@
  */
 package net.bpelunit.framework.client.eclipse.views;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import net.bpelunit.framework.client.model.TestRunSession;
 import net.bpelunit.framework.model.test.ITestResultListener;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.data.ReceiveCondition;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
@@ -308,21 +310,20 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 	 * 
 	 */
 	public void registerLaunchSession(TestRunSession session) {
-
 		fTestRunSession = session;
-
-		session.getSuite().addResultListener(this);
+		TestSuite suite = session.getSuite();
+		suite.addResultListener(this);
+		Collection<TestCase> testCasesToExecute = suite.getTestCasesToExecute();
 
 		// Set tree input
-		fTreeViewer.setInput(session.getSuite());
+		fTreeViewer.setInput(suite);
 
 		// Set progress views
-		fTestCaseProgress.reset(session.getSuite().getTestCaseCount());
+		fTestCaseProgress.reset(testCasesToExecute.size());
 		fActivityProgress.reset();
 
 		// Set counter panel
-		fCounterPanel.reset(session.getSuite().getName(), session.getSuite()
-				.getTestCaseCount());
+		fCounterPanel.reset(suite.getName(), testCasesToExecute.size());
 
 		// Actions
 		fStopTestAction.setEnabled(true);
@@ -330,7 +331,7 @@ public class BPELUnitView extends ViewPart implements ITestResultListener {
 
 		// Info
 		fTestInfoLabel.setText(" Now starting test: "
-				+ session.getSuite().getName());
+				+ suite.getName());
 	}
 
 	public void deregisterLaunchSession(TestRunSession session) {

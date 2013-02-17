@@ -5,7 +5,14 @@
  */
 package net.bpelunit.framework.client.eclipse.launch;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.xml.suite.XMLTestCase;
+import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -14,6 +21,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -38,6 +46,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -48,7 +57,7 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
-import org.eclipse.ui.views.navigator.ResourceSorter;
+import org.eclipse.ui.views.navigator.ResourceComparator;
 
 /**
  * The main tab for the BPELUnit test Suite Runner.
@@ -56,28 +65,30 @@ import org.eclipse.ui.views.navigator.ResourceSorter;
  * Most of this code has been blatantly ripped out of JavaMainTab (JDT).
  * 
  * @version $Id$
- * @author Philip Mayer
- * 
+ * @author Philip Mayer, Daniel Luebke (Test Case selection)
  */
 public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 
-	private Text fProjText;
-	private Button fProjButton;
-	private Text fSuiteText;
-	private Button fSearchButton;
+	private Text projText;
+	private Button projButton;
+	private Text suiteText;
+	private Button searchTestSuiteButton;
+	private List testCasesList;
+	private Button runAllTestCasesButton;
 
 	public void createControl(Composite parent) {
-		Font font= parent.getFont();
-		Composite comp= new Composite(parent, SWT.NONE);
+		Font font = parent.getFont();
+		Composite comp = new Composite(parent, SWT.NONE);
 		setControl(comp);
-		GridLayout topLayout= new GridLayout();
-		topLayout.verticalSpacing= 0;
+		GridLayout topLayout = new GridLayout();
+		topLayout.verticalSpacing = 0;
 		comp.setLayout(topLayout);
 		comp.setFont(font);
+
 		createProjectSection(comp);
 		createVerticalSpacer(comp, 1);
-
-		createSuiteSection(comp, "&BPEL Test Suite File:", new Button[] {});
+		createSuiteSection(comp, "&BPEL Test Suite File:");
+		createTestCaseSection(comp);
 	}
 
 	public String getName() {
@@ -87,48 +98,56 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		updateProjectFromConfig(configuration);
 		updateSuiteFromConfig(configuration);
-
+		updateTestCasesFromConfig(configuration);
 	}
 
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(LaunchConstants.ATTR_PROJECT_NAME, fProjText.getText().trim());
-		configuration.setAttribute(LaunchConstants.ATTR_SUITE_FILE_NAME, fSuiteText.getText().trim());
+		configuration.setAttribute(LaunchConstants.ATTR_PROJECT_NAME, projText
+				.getText().trim());
+		configuration.setAttribute(LaunchConstants.ATTR_SUITE_FILE_NAME,
+				suiteText.getText().trim());
+		if(runAllTestCasesButton.getSelection()) {
+			configuration.setAttribute(LaunchConstants.ATTR_TEST_CASES_NAMES, Collections.EMPTY_LIST);
+		} else {
+			configuration.setAttribute(LaunchConstants.ATTR_TEST_CASES_NAMES, Arrays.asList(testCasesList.getSelection()));
+		}
 		mapResources(configuration);
-
+		
 	}
 
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		IFile selectedFile= getContext();
+		IFile selectedFile = getContext();
 		if (selectedFile != null) {
 			initializeProject(selectedFile, configuration);
 		} else {
-			configuration.setAttribute(LaunchConstants.ATTR_PROJECT_NAME, LaunchConstants.EMPTY_STRING);
+			configuration.setAttribute(LaunchConstants.ATTR_PROJECT_NAME,
+					LaunchConstants.EMPTY_STRING);
 		}
 		initializeSuiteAndName(selectedFile, configuration);
 
 	}
 
 	protected void createProjectSection(Composite parent) {
-		Font font= parent.getFont();
-		Group group= new Group(parent, SWT.NONE);
+		Font font = parent.getFont();
+		Group group = new Group(parent, SWT.NONE);
 		group.setText("&Project:");
-		GridData gd= new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		group.setLayoutData(gd);
-		GridLayout layout= new GridLayout();
-		layout.numColumns= 2;
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
 		group.setLayout(layout);
 		group.setFont(font);
-		fProjText= new Text(group, SWT.SINGLE | SWT.BORDER);
-		gd= new GridData(GridData.FILL_HORIZONTAL);
-		fProjText.setLayoutData(gd);
-		fProjText.setFont(font);
-		fProjText.addModifyListener(new ModifyListener() {
+		projText = new Text(group, SWT.SINGLE | SWT.BORDER);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		projText.setLayoutData(gd);
+		projText.setFont(font);
+		projText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				updateLaunchConfigurationDialog();
 			}
 		});
-		fProjButton= createPushButton(group, "&Browse...", null);
-		fProjButton.addSelectionListener(new SelectionListener() {
+		projButton = createPushButton(group, "&Browse...", null);
+		projButton.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 
@@ -139,23 +158,24 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 	}
 
 	protected void handleProjectButtonSelected() {
-		IProject project= chooseProject();
+		IProject project = chooseProject();
 		if (project == null) {
 			return;
 		}
-		String projectName= project.getName();
-		fProjText.setText(projectName);
+		String projectName = project.getName();
+		projText.setText(projectName);
 	}
 
 	private IProject chooseProject() {
-		ILabelProvider labelProvider= new WorkbenchLabelProvider();
-		ElementListSelectionDialog dialog= new ElementListSelectionDialog(getShell(), labelProvider);
+		ILabelProvider labelProvider = new WorkbenchLabelProvider();
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(
+				getShell(), labelProvider);
 		dialog.setTitle("Project Selection");
 		dialog.setMessage("Select a project to constrain your search.");
 
 		dialog.setElements(getWorkspaceRoot().getProjects());
 
-		IProject project= getProject();
+		IProject project = getProject();
 		if (project != null) {
 			dialog.setInitialSelections(new Object[] { project });
 		}
@@ -166,11 +186,11 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 	}
 
 	/**
-	 * Return the IProject corresponding to the project name in the project name text field, or null
-	 * if the text does not match a project name.
+	 * Return the IProject corresponding to the project name in the project name
+	 * text field, or null if the text does not match a project name.
 	 */
 	protected IProject getProject() {
-		String projectName= fProjText.getText().trim();
+		String projectName = projText.getText().trim();
 		if (projectName.length() < 1) {
 			return null;
 		}
@@ -187,29 +207,33 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 	/**
 	 * Creates the widgets for specifying a main type.
 	 * 
-	 * @param parent the parent composite
+	 * @param parent
+	 *            the parent composite
 	 */
-	protected void createSuiteSection(Composite parent, String text, Button[] buttons) {
-		Font font= parent.getFont();
-		Group mainGroup= new Group(parent, SWT.NONE);
+	protected void createSuiteSection(Composite parent, String text) {
+		Font font = parent.getFont();
+		Group mainGroup = new Group(parent, SWT.NONE);
 		mainGroup.setText(text);
-		GridData gd= new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		mainGroup.setLayoutData(gd);
-		GridLayout layout= new GridLayout();
-		layout.numColumns= 2;
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
 		mainGroup.setLayout(layout);
 		mainGroup.setFont(font);
-		fSuiteText= new Text(mainGroup, SWT.SINGLE | SWT.BORDER);
-		gd= new GridData(GridData.FILL_HORIZONTAL);
-		fSuiteText.setLayoutData(gd);
-		fSuiteText.setFont(font);
-		fSuiteText.addModifyListener(new ModifyListener() {
+		suiteText = new Text(mainGroup, SWT.SINGLE | SWT.BORDER);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		suiteText.setLayoutData(gd);
+		suiteText.setFont(font);
+		suiteText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				updateLaunchConfigurationDialog();
+				
+				updateTestCasesList();
 			}
+
 		});
-		fSearchButton= createPushButton(mainGroup, "&Search...", null);
-		fSearchButton.addSelectionListener(new SelectionListener() {
+		searchTestSuiteButton = createPushButton(mainGroup, "&Search...", null);
+		searchTestSuiteButton.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 
@@ -217,28 +241,95 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 				handleSearchButtonSelected();
 			}
 		});
-		if (buttons != null) {
-			for (Button element : buttons) {
-				element.setParent(mainGroup);
-			}
+	}
+
+	private void updateTestCasesList() {
+		if(StringUtils.isEmpty(suiteText.getText()) || StringUtils.isEmpty(projText.getText())) {
+			testCasesList.removeAll();
+			return;
 		}
+
+		try {
+			String previouslySelectedTestCases[] = new String[0];
+			previouslySelectedTestCases = testCasesList.getSelection();
+			testCasesList.removeAll();
+			Path path = new Path(suiteText.getText());
+		    IFile file = ResourcesPlugin.getWorkspace().getRoot().getProject(projText.getText()).getFile(path);
+		    // TODO Check whether factory closes input stream
+		    XMLTestSuiteDocument testSuiteDoc = XMLTestSuiteDocument.Factory.parse(file.getContents());
+		    XMLTestCase[] xmlTestCases = testSuiteDoc.getTestSuite().getTestCases().getTestCaseList().toArray(new XMLTestCase[0]);
+		    for(XMLTestCase ts : xmlTestCases) {
+		    	testCasesList.add(ts.getName());
+		    }
+		    testCasesList.setSelection(previouslySelectedTestCases);
+		} catch(Exception ex) {
+			// error reading test suite or test suite has no test cases, so simply show empty list
+		}
+	}
+	
+	private void createTestCaseSection(Composite parent) {
+		Group mainGroup = new Group(parent, SWT.NONE);
+		mainGroup.setText("Test Cases to run");
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		mainGroup.setLayoutData(gd);
+		GridLayout layout = new GridLayout();
+		mainGroup.setLayout(layout);
+		mainGroup.setFont(parent.getFont());
+
+		runAllTestCasesButton = new Button(mainGroup, SWT.CHECK);
+		runAllTestCasesButton.setText("Run all Test Cases");
+		runAllTestCasesButton.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				testCasesList.setEnabled(!runAllTestCasesButton.getSelection());
+				updateLaunchConfigurationDialog();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				testCasesList.setEnabled(!runAllTestCasesButton.getSelection());
+				updateLaunchConfigurationDialog();
+			}
+		});
+
+		testCasesList = new List(mainGroup, SWT.BORDER
+				| SWT.V_SCROLL | SWT.MULTI);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		testCasesList.setLayoutData(gd);
+		testCasesList.setFont(parent.getFont());
+		testCasesList.setEnabled(!runAllTestCasesButton.getSelection());
+		testCasesList.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				updateLaunchConfigurationDialog();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+		});
 	}
 
 	/**
 	 * Show a dialog that lists all main types
 	 */
 	protected void handleSearchButtonSelected() {
-		ElementTreeSelectionDialog dialog= new ElementTreeSelectionDialog(getShell(), new WorkbenchLabelProvider(), new WorkbenchContentProvider());
+		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(
+				getShell(), new WorkbenchLabelProvider(),
+				new WorkbenchContentProvider());
 		dialog.setTitle("Select a .bpts file:");
 		dialog.setMessage("Select the .bpts file to run:");
 		dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
-		dialog.setSorter(new ResourceSorter(ResourceSorter.NAME));
+		dialog.setComparator(new ResourceComparator(ResourceComparator.NAME));
 		dialog.addFilter(new ViewerFilter() {
 			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
+			public boolean select(Viewer viewer, Object parentElement,
+					Object element) {
 
 				if (element instanceof IFile) {
-					IFile file= (IFile) element;
+					IFile file = (IFile) element;
 					if (!file.getFileExtension().equals("bpts"))
 						return false;
 				}
@@ -249,25 +340,30 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 		dialog.setValidator(new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if ( (selection != null) && (selection.length > 0)) {
-					Object first= selection[0];
+				if ((selection != null) && (selection.length > 0)) {
+					Object first = selection[0];
 					if (first instanceof IFile) {
-						IFile file= (IFile) first;
+						IFile file = (IFile) first;
 						if (file.getFileExtension().equals("bpts"))
 							return Status.OK_STATUS;
 					}
 				}
-				return new Status(IStatus.ERROR, BPELUnitActivator.getUniqueIdentifier(), -1, "Select a .bpts file.", null);
+				return new Status(IStatus.ERROR, BPELUnitActivator
+						.getUniqueIdentifier(), -1, "Select a .bpts file.",
+						null);
 			}
 
 		});
 
 		if (dialog.open() == IDialogConstants.OK_ID) {
-			IResource resource= (IResource) dialog.getFirstResult();
-			if (! (resource instanceof IFile) || !resource.getFileExtension().equals("bpts")) {
-				MessageDialog.openError(this.getShell(), "BPELUnit Test Suite", "Must select a file with a .bpts ending");
+			IResource resource = (IResource) dialog.getFirstResult();
+			if (!(resource instanceof IFile)
+					|| !resource.getFileExtension().equals("bpts")) {
+				MessageDialog.openError(this.getShell(), "BPELUnit Test Suite",
+						"Must select a file with a .bpts ending");
 			} else {
-				fSuiteText.setText(resource.getProjectRelativePath().toString());
+				suiteText
+						.setText(resource.getProjectRelativePath().toString());
 			}
 		}
 	}
@@ -275,31 +371,68 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 	/**
 	 * Loads the main type from the launch configuration's preference store
 	 * 
-	 * @param config the config to load the main type from
+	 * @param config
+	 *            the config to load the main type from
 	 */
-	protected void updateSuiteFromConfig(ILaunchConfiguration config) {
-		String suiteName= LaunchConstants.EMPTY_STRING;
+	private void updateSuiteFromConfig(ILaunchConfiguration config) {
+		String suiteName = LaunchConstants.EMPTY_STRING;
+		
 		try {
-			suiteName= config.getAttribute(LaunchConstants.ATTR_SUITE_FILE_NAME, LaunchConstants.EMPTY_STRING);
+			suiteName = config.getAttribute(
+					LaunchConstants.ATTR_SUITE_FILE_NAME,
+					LaunchConstants.EMPTY_STRING);
 		} catch (CoreException ce) {
 			BPELUnitActivator.log(ce);
 		}
-		fSuiteText.setText(suiteName);
+		suiteText.setText(suiteName);
 	}
 
 	/**
 	 * updates the project text field form the configuration
 	 * 
-	 * @param config the configuration we are editing
+	 * @param config
+	 *            the configuration we are editing
 	 */
-	private void updateProjectFromConfig(ILaunchConfiguration config) {
-		String projectName= LaunchConstants.EMPTY_STRING;
+	@SuppressWarnings("unchecked")
+	private void updateTestCasesFromConfig(ILaunchConfiguration config) {
+		String[] testCaseNames = new String[0];
 		try {
-			projectName= config.getAttribute(LaunchConstants.ATTR_PROJECT_NAME, LaunchConstants.EMPTY_STRING);
+			testCaseNames = ((java.util.List<String>) config.getAttribute(
+					LaunchConstants.ATTR_TEST_CASES_NAMES,
+					LaunchConstants.EMPTY_LIST)).toArray(testCaseNames);
 		} catch (CoreException ce) {
 			BPELUnitActivator.log(ce);
 		}
-		fProjText.setText(projectName);
+
+		testCasesList.deselectAll();
+		if (testCaseNames != null && testCaseNames.length > 0) {
+			runAllTestCasesButton.setSelection(false);
+			testCasesList.setEnabled(true);
+			for (String testCaseName : testCaseNames) {
+				testCasesList.select(testCasesList.indexOf(testCaseName));
+			}
+		} else {
+			runAllTestCasesButton.setSelection(true);
+			testCasesList.setEnabled(false);
+		}
+	}
+	
+	/**
+	 * updates the project text field form the configuration
+	 * 
+	 * @param config
+	 *            the configuration we are editing
+	 */
+	private void updateProjectFromConfig(ILaunchConfiguration config) {
+		String projectName = LaunchConstants.EMPTY_STRING;
+		try {
+			projectName = config.getAttribute(
+					LaunchConstants.ATTR_PROJECT_NAME,
+					LaunchConstants.EMPTY_STRING);
+		} catch (CoreException ce) {
+			BPELUnitActivator.log(ce);
+		}
+		projText.setText(projectName);
 	}
 
 	/**
@@ -308,35 +441,36 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 	 * @param config
 	 */
 	protected void mapResources(ILaunchConfigurationWorkingCopy config) {
-		IProject project= getProject();
-		IResource[] resources= null;
+		IProject project = getProject();
+		IResource[] resources = null;
 		if (project != null) {
-			resources= new IResource[] { project.getProject() };
+			resources = new IResource[] { project.getProject() };
 		}
 		config.setMappedResources(resources);
 	}
 
 	/**
-	 * Returns the current file context in the active workbench page or <code>null</code> if none.
+	 * Returns the current file context in the active workbench page or
+	 * <code>null</code> if none.
 	 * 
 	 * @return current file in the active page or <code>null</code>
 	 */
 	protected IFile getContext() {
-		IWorkbenchPage page= getActivePage();
+		IWorkbenchPage page = getActivePage();
 		if (page != null) {
-			ISelection selection= page.getSelection();
+			ISelection selection = page.getSelection();
 			if (selection instanceof IStructuredSelection) {
-				IStructuredSelection ss= (IStructuredSelection) selection;
+				IStructuredSelection ss = (IStructuredSelection) selection;
 				if (!ss.isEmpty()) {
-					Object obj= ss.getFirstElement();
+					Object obj = ss.getFirstElement();
 					if (obj instanceof IFile) {
 						return (IFile) obj;
 					}
 				}
 			}
-			IEditorPart part= page.getActiveEditor();
+			IEditorPart part = page.getActiveEditor();
 			if (part != null) {
-				IEditorInput input= part.getEditorInput();
+				IEditorInput input = part.getEditorInput();
 
 				return (IFile) input.getAdapter(IFile.class);
 			}
@@ -345,13 +479,12 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 	}
 
 	public static IWorkbenchPage getActivePage() {
-		IWorkbenchWindow w= getActiveWorkbenchWindow();
+		IWorkbenchWindow w = getActiveWorkbenchWindow();
 		if (w != null) {
 			return w.getActivePage();
 		}
 		return null;
 	}
-
 
 	/**
 	 * Returns the active workbench window
@@ -359,43 +492,48 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 	 * @return the active workbench window
 	 */
 	public static IWorkbenchWindow getActiveWorkbenchWindow() {
-		return BPELUnitActivator.getDefault().getWorkbench().getActiveWorkbenchWindow();
+		return BPELUnitActivator.getDefault().getWorkbench()
+				.getActiveWorkbenchWindow();
 	}
 
 	/**
-	 * Sets the project attribute on the given working copy to the project associated with the given
-	 * file.
+	 * Sets the project attribute on the given working copy to the project
+	 * associated with the given file.
 	 * 
-	 * @param file File this tab is associated with
-	 * @param config configuration on which to set the project attribute
+	 * @param file
+	 *            File this tab is associated with
+	 * @param config
+	 *            configuration on which to set the project attribute
 	 */
-	protected void initializeProject(IFile file, ILaunchConfigurationWorkingCopy config) {
-		IProject project= file.getProject();
-		String name= null;
+	protected void initializeProject(IFile file,
+			ILaunchConfigurationWorkingCopy config) {
+		IProject project = file.getProject();
+		String name = null;
 		if (project != null && project.exists()) {
-			name= project.getName();
+			name = project.getName();
 		}
 		config.setAttribute(LaunchConstants.ATTR_PROJECT_NAME, name);
 	}
 
-	protected void initializeSuiteAndName(IFile file, ILaunchConfigurationWorkingCopy config) {
-		String name= null;
+	protected void initializeSuiteAndName(IFile file,
+			ILaunchConfigurationWorkingCopy config) {
+		String name = null;
 
 		if (file != null && file.getFileExtension().equals("bpts")) {
-			name= file.getProjectRelativePath().toString();
+			name = file.getProjectRelativePath().toString();
 
 		}
 		if (name == null) {
-			name= LaunchConstants.EMPTY_STRING;
+			name = LaunchConstants.EMPTY_STRING;
 		}
 		config.setAttribute(LaunchConstants.ATTR_SUITE_FILE_NAME, name);
 		if (name.length() > 0) {
 			// Remove .bpts
-			int index= name.lastIndexOf('.');
+			int index = name.lastIndexOf('.');
 			if (index > 0) {
-				name= name.substring(0, index);
+				name = name.substring(0, index);
 			}
-			name= getLaunchConfigurationDialog().generateName(name);
+			name = getLaunchConfigurationDialog().generateName(name);
 			config.rename(name);
 		}
 	}
@@ -408,7 +546,6 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 		return BPELUnitActivator.getImage(BPELUnitActivator.IMAGE_BPEL);
 	}
 
-
 	protected static Image createImage(String path) {
 		return BPELUnitActivator.getImageDescriptor(path).createImage();
 	}
@@ -418,13 +555,15 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 
 		setErrorMessage(null);
 		setMessage(null);
-		String fileName= fProjText.getText().trim();
-		IProject project= null;
+		String fileName = projText.getText().trim();
+		IProject project = null;
 		if (fileName.length() > 0) {
-			IWorkspace workspace= ResourcesPlugin.getWorkspace();
-			IStatus status= workspace.validateName(fileName, IResource.PROJECT);
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			IStatus status = workspace
+					.validateName(fileName, IResource.PROJECT);
 			if (status.isOK()) {
-				project= ResourcesPlugin.getWorkspace().getRoot().getProject(fileName);
+				project = ResourcesPlugin.getWorkspace().getRoot()
+						.getProject(fileName);
 				if (!project.exists()) {
 					setErrorMessage("Project " + fileName + " does not exist");
 					return false;
@@ -439,7 +578,7 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 			}
 		}
 
-		fileName= fSuiteText.getText().trim();
+		fileName = suiteText.getText().trim();
 		if (fileName.length() == 0) {
 			setErrorMessage("Test Suite file not specified.");
 			return false;

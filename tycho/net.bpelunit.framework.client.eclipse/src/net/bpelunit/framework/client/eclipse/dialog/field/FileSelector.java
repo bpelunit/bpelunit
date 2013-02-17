@@ -6,6 +6,7 @@
 package net.bpelunit.framework.client.eclipse.dialog.field;
 
 import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -22,7 +23,7 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
-import org.eclipse.ui.views.navigator.ResourceSorter;
+import org.eclipse.ui.views.navigator.ResourceComparator;
 
 /**
  * Provides methods for selecting a file in the workspace.
@@ -99,7 +100,7 @@ public class FileSelector {
 		dialog.setInput(rootElement);
 		if (selectedFile != null)
 			dialog.setInitialSelection(selectedFile);
-		dialog.setSorter(new ResourceSorter(ResourceSorter.NAME));
+		dialog.setComparator(new ResourceComparator(ResourceComparator.NAME));
 
 		if (dialog.open() == Window.OK) {
 			return (IFile) dialog.getFirstResult();

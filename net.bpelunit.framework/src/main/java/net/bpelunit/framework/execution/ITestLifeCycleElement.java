@@ -1,5 +1,7 @@
 package net.bpelunit.framework.execution;
 
+import net.bpelunit.framework.exception.DeploymentException;
+
 /**
  * Interface for plug-ins that are executed during the test cycle, e.g.
  * deployers, runners, instrumenters, ...
@@ -20,33 +22,16 @@ public interface ITestLifeCycleElement {
 	 * In this phase the processes and the deployment are changed for testing.
 	 * This includes endpoint replacements and coverage instrumentation and
 	 * similar activities.
+	 * @throws DeploymentException 
 	 */
-	void doPrepareProcesses(IBPELUnitContext context);
+	void doPrepareProcesses(IBPELUnitContext context) throws DeploymentException;
 
 	/**
-	 * In this phase all mocks and other services are started that are offered
+	 * In this phase all mocks and other services are registered that will be offered
 	 * by BPELUnit.
 	 */
-	void doStartMocks(IBPELUnitContext context);
-
-	/**
-	 * Deploy all necessary services and processes
-	 * 
-	 * @param context
-	 */
-	void doDeploy(IBPELUnitContext context);
-
-	/**
-	 * In this phase tests are run. This phase is usually only implemented in
-	 * the runner.
-	 */
-	void doRunTests(IBPELUnitContext context);
-
-	/**
-	 * Mocks and other services offered by BPELUnit are stopped in this phase.
-	 */
-	void doStopMocks(IBPELUnitContext context);
-
+	void doRegisterMocks(IBPELUnitContext context);
+	
 	/**
 	 * In this phase all reports and other test results are created.
 	 */
@@ -56,7 +41,8 @@ public interface ITestLifeCycleElement {
 	 * In this phase the process can be read and to a certain extent changed.
 	 * However, structural modifications to a process are not allowed in this
 	 * phase but should be done in the doPrepareProcesses phase.
+	 * @throws DeploymentException 
 	 */
-	void doMarkProcesses(IBPELUnitContext context);
+	void doMarkProcesses(IBPELUnitContext context) throws DeploymentException;
 
 }

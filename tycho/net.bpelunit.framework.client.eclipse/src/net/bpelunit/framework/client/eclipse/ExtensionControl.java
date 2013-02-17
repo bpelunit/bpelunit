@@ -15,7 +15,7 @@ import net.bpelunit.framework.client.model.Extension;
 import net.bpelunit.framework.client.model.HeaderProcessorExtension;
 import net.bpelunit.framework.client.model.SOAPEncoderExtension;
 import net.bpelunit.framework.control.datasource.DataSourceHelper;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.exception.SpecificationException;
 import org.eclipse.core.runtime.CoreException;

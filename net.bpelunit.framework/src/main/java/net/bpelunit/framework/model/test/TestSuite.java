@@ -8,6 +8,8 @@ package net.bpelunit.framework.model.test;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -120,7 +122,7 @@ public class TestSuite implements ITestArtefact {
 	}
 
 	public void addTestCase(TestCase test) {
-		fTestCaseMap.put(test.getName().toLowerCase(), test);
+		fTestCaseMap.put(test.getRawName().toLowerCase(), test);
 	}
 
 	/**
@@ -437,5 +439,13 @@ public class TestSuite implements ITestArtefact {
 
 	public void setSetUpVelocityScript(String script) {
 		fSetUpVelocityScript = script;
+	}
+
+	public Collection<TestCase> getTestCasesToExecute() {
+		if(fTestCaseFilter == null || fTestCaseFilter.size() == 0) {
+			return fTestCaseMap.values();
+		} else {
+			return Collections.unmodifiableList(fTestCaseFilter);
+		}
 	}
 }

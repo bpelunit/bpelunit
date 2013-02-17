@@ -5,27 +5,25 @@
  */
 package net.bpelunit.framework.client.eclipse.launch;
 
-import java.net.URL;
+import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.WriterAppender;
-import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
 import net.bpelunit.framework.client.eclipse.EclipseBPELUnitRunner;
 import net.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
 import net.bpelunit.framework.client.model.TestRunSession;
-import net.bpelunit.framework.coverage.CoverageConstants;
-import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.exception.TestCaseNotFoundException;
 import net.bpelunit.framework.model.test.TestSuite;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.WriterAppender;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -45,7 +43,6 @@ import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.views.IViewDescriptor;
-import org.osgi.framework.Bundle;
 
 /**
  * The BPELUnit launch delegate. This delegate is instantiated and run each time
@@ -67,7 +64,11 @@ public class BPELLaunchConfigurationDelegate implements
 					LaunchConstants.ATTR_PROJECT_NAME, "");
 			String fileName = configuration.getAttribute(
 					LaunchConstants.ATTR_SUITE_FILE_NAME, "");
-
+			@SuppressWarnings("unchecked")
+			List<String> testCasesToRun = configuration.getAttribute(
+					LaunchConstants.ATTR_TEST_CASES_NAMES, 
+					LaunchConstants.EMPTY_LIST); 
+			
 			BPELUnitActivator plugin = BPELUnitActivator.getDefault();
 			EclipseBPELUnitRunner unitCore = plugin.getBPELUnitCore();
 
@@ -85,43 +86,6 @@ public class BPELLaunchConfigurationDelegate implements
 			IFile suiteFile = project.getFile(fileName);
 
 			setUpLogging(plugin, unitCore);
-			// HIER
-			setUpCoverageTool(plugin, unitCore);
-
-			// Bundle bundle = Platform
-			// .getBundle(BPELUnitActivator.FRAMEWORK_BUNDLE_SYMBOLICNAME);
-			if (BPELUnitRunner.getCoverageMeasurmentTool() != null) {
-				Bundle bundle = plugin.getBundle();
-				URL url = bundle
-						.getResource(CoverageConstants.COVERAGE_SERVICE_WSDL);
-				if (url != null) {
-					System.out.println("URL " + url.getPath());
-					url = FileLocator.toFileURL(url);
-					BPELUnitRunner.getCoverageMeasurmentTool().setPathToWSDL(url.getPath());
-				} else
-					BPELUnitRunner.getCoverageMeasurmentTool().setErrorStatus("File " + CoverageConstants.COVERAGE_SERVICE_WSDL
-									+ " not found");
-			}
-
-			// FileLocator.openStream(bundle, file, substituteArgs);
-
-			// Bundle bundle = Platform
-			// .getBundle(BPELUnitActivator.FRAMEWORK_BUNDLE_SYMBOLICNAME);
-			// if (bundle != null) {
-			// Enumeration enumer=bundle.findEntries("/",
-			// CoverageConstants.COVERAGE_SERVICE_WSDL,true);
-			// while(enumer.hasMoreElements()){
-			// Logger logger=Logger.getLogger(getClass());
-			// logger.info("HIER!! "+((URL)enumer.nextElement()).getPath());
-			// logger.info("HIER!! "+bundle.getLocation());
-			// // URL url = (URL)enumer.nextElement();
-			// // String path=bundle.getLocation().substring(7);
-			// //
-			// CoverageLabelsReceiver.ABSOLUT_CONFIG_PATH=FilenameUtils.concat(path,url.getPath());
-			// }
-			//
-			// }
-			// System.out.println("BUNDLE "+ bundle.getLocation());
 
 			TestSuite suite = unitCore.loadTestSuite(suiteFile.getRawLocation()
 					.toFile());
@@ -131,7 +95,15 @@ public class BPELLaunchConfigurationDelegate implements
 			 * session to close.
 			 */
 
-			plugin.initializeCoverageResultView();
+			if(testCasesToRun != null && testCasesToRun.size() > 0) {
+				try {
+					suite.setFilter(testCasesToRun);
+				} catch(TestCaseNotFoundException e) {
+					showError(e);
+					return;
+				}
+			}
+			
 			TestRunSession testRunSession = new TestRunSession(suite, launch);
 			plugin.registerLaunchSession(testRunSession);
 			try {
@@ -147,7 +119,7 @@ public class BPELLaunchConfigurationDelegate implements
 				showError(e);
 				return;
 			}
-
+			
 			/*
 			 * User may have already canceled the session...
 			 */
@@ -162,10 +134,6 @@ public class BPELLaunchConfigurationDelegate implements
 			} finally {
 				plugin.deregisterLaunchSession(testRunSession);
 			}
-			if (BPELUnitRunner.measureTestCoverage()) {
-				ICoverageMeasurementTool tool=BPELUnitRunner.getCoverageMeasurmentTool();
-				plugin.showCoverageResult(suite.getTestCases(), tool.getStatistics(), tool.getErrorStatus());
-			}
 		} catch (SpecificationException e) {
 			e.printStackTrace();
 			showError(e);
@@ -176,19 +144,6 @@ public class BPELLaunchConfigurationDelegate implements
 			showError(e);
 			BPELUnitActivator.log(e);
 		}
-		finally{
-			BPELUnitRunner.setCoverageMeasurmentTool(null);
-		}
-	}
-
-	private void setUpCoverageTool(BPELUnitActivator plugin,
-			EclipseBPELUnitRunner unitCore) {
-		boolean coverageMeasure = plugin.getPreferenceStore().getBoolean(
-				PreferenceConstants.P_COVERAGE_MEASURMENT);
-		if (coverageMeasure) {
-			unitCore.configureCoverageTool(plugin);
-		}
-
 	}
 
 	// **************** Console ********************
@@ -257,8 +212,7 @@ public class BPELLaunchConfigurationDelegate implements
 				message, exception));
 	}
 
-	private boolean showError(final IStatus status) {
-		final boolean[] success = new boolean[] { false };
+	private void showError(final IStatus status) {
 		BPELUnitActivator.getDisplay().syncExec(new Runnable() {
 			public void run() {
 				Shell shell = BPELUnitActivator.getActiveWorkbenchWindow()
@@ -268,11 +222,9 @@ public class BPELLaunchConfigurationDelegate implements
 				if (shell != null) {
 					ErrorDialog.openError(shell, "BPELUnit Launcher",
 							"An error occurred during the launch.", status);
-					success[0] = true;
 				}
 			}
 		});
-		return success[0];
 	}
 
 }

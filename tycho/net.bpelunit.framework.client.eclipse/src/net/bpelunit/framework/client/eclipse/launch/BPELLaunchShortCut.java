@@ -149,7 +149,7 @@ public class BPELLaunchShortCut implements ILaunchShortcut {
 
 		try {
 			ILaunchConfigurationType configType= getConfigurationType();
-			wc= configType.newInstance(null, getLaunchManager().generateUniqueLaunchConfigurationNameFrom(configName));
+			wc= configType.newInstance(null, getLaunchManager().generateLaunchConfigurationName(configName));
 			wc.setAttribute(LaunchConstants.ATTR_PROJECT_NAME, file.getProject().getName());
 			wc.setAttribute(LaunchConstants.ATTR_SUITE_FILE_NAME, file.getProjectRelativePath().toString());
 			wc.setMappedResources(new IResource[] { file.getProject() });

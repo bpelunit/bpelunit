@@ -1,7 +1,7 @@
 package net.bpelunit.framework.client.eclipse.dialog.field;
 
 import net.bpelunit.framework.control.ext.ExtensionRegistry;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
 
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;

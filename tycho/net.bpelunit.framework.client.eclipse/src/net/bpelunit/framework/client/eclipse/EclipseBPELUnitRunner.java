@@ -5,36 +5,24 @@
  */
 package net.bpelunit.framework.client.eclipse;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import net.bpelunit.framework.BPELUnitRunner;
-import net.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
 import net.bpelunit.framework.client.model.DataSourceExtension;
 import net.bpelunit.framework.client.model.DeployerExtension;
 import net.bpelunit.framework.client.model.ExtensionUtil;
 import net.bpelunit.framework.client.model.HeaderProcessorExtension;
 import net.bpelunit.framework.client.model.SOAPEncoderExtension;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
-import net.bpelunit.framework.control.run.TestCaseRunner;
-import net.bpelunit.framework.coverage.CoverageMeasurementTool;
-import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
-import net.bpelunit.framework.coverage.annotation.metrics.activitycoverage.ActivityMetric;
-import net.bpelunit.framework.coverage.annotation.metrics.branchcoverage.BranchMetric;
-import net.bpelunit.framework.coverage.annotation.metrics.chcoverage.CompensationMetric;
-import net.bpelunit.framework.coverage.annotation.metrics.fhcoverage.FaultMetric;
-import net.bpelunit.framework.coverage.annotation.metrics.linkcoverage.LinkMetric;
-import net.bpelunit.framework.coverage.annotation.tools.bpelxmltools.BasicActivities;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.SpecificationException;
+
+import org.apache.log4j.Appender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
@@ -125,83 +113,6 @@ public class EclipseBPELUnitRunner extends BPELUnitRunner {
 		} else
 			throw new SpecificationException(
 					"Could not find a Data Source for type " + type);
-	}
-
-	@Override
-	public void configureCoverageTool() throws ConfigurationException {
-		// TODO Check Auto-generated method stub
-	}
-
-	public void configureCoverageTool(BPELUnitActivator plugin) {
-		// TODO Refactor -> Move up and make Strategy pattern with map
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		List<String> list = new ArrayList<String>();
-		IPreferenceStore preference = plugin.getPreferenceStore();
-		if (preference.getBoolean(BasicActivities.RECEIVE_ACTIVITY)) {
-			list.add(BasicActivities.RECEIVE_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.REPLY_ACTIVITY)) {
-			list.add(BasicActivities.REPLY_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.INVOKE_ACTIVITY)) {
-			list.add(BasicActivities.INVOKE_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.ASSIGN_ACTIVITY)) {
-			list.add(BasicActivities.ASSIGN_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.THROW_ACTIVITY)) {
-			list.add(BasicActivities.THROW_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.EXIT_ACTIVITY)) {
-			list.add(BasicActivities.EXIT_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.WAIT_ACTIVITY)) {
-			list.add(BasicActivities.WAIT_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.EMPTY_ACTIVITY)) {
-			list.add(BasicActivities.EMPTY_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.COMPENSATE_ACTIVITY)) {
-			list.add(BasicActivities.COMPENSATE_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.COMPENSATESCOPE_ACTIVITY)) {
-			list.add(BasicActivities.COMPENSATESCOPE_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.RETHROW_ACTIVITY)) {
-			list.add(BasicActivities.RETHROW_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.VALIDATE_ACTIVITY)) {
-			list.add(BasicActivities.VALIDATE_ACTIVITY);
-		}
-		if (preference.getBoolean(BasicActivities.TERMINATE_ACTIVITY)) {
-			list.add(BasicActivities.TERMINATE_ACTIVITY);
-		}
-		if (list.size() > 0) {
-			map.put(ActivityMetric.METRIC_NAME, list);
-		}
-		if (preference.getBoolean(BranchMetric.METRIC_NAME)) {
-			map.put(BranchMetric.METRIC_NAME, null);
-		}
-		if (preference.getBoolean(LinkMetric.METRIC_NAME)) {
-			map.put(LinkMetric.METRIC_NAME, null);
-		}
-		if (preference.getBoolean(FaultMetric.METRIC_NAME)) {
-			map.put(FaultMetric.METRIC_NAME, null);
-		}
-		if (preference.getBoolean(CompensationMetric.METRIC_NAME)) {
-			map.put(CompensationMetric.METRIC_NAME, null);
-		}
-
-		TestCaseRunner.setWaitTimeForCoverageMarkers(preference
-				.getInt(PreferenceConstants.P_COVERAGE_WAIT_TIME));
-
-		ICoverageMeasurementTool coverageTool = new CoverageMeasurementTool();
-		BPELUnitRunner.setCoverageMeasurmentTool(coverageTool);
-		try {
-			coverageTool.configureMetrics(map);
-		} catch (ConfigurationException e) {
-			// TODO Meaningful error dialog
-		}
 	}
 
 	@Override

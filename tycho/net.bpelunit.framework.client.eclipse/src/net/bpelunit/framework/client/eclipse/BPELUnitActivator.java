@@ -8,17 +8,15 @@ package net.bpelunit.framework.client.eclipse;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.client.eclipse.preferences.PreferenceConstants;
-import net.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView;
 import net.bpelunit.framework.client.eclipse.views.BPELUnitView;
 import net.bpelunit.framework.client.model.TestRunSession;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
-import net.bpelunit.framework.coverage.result.statistic.IFileStatistic;
 import net.bpelunit.framework.exception.ConfigurationException;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -202,21 +200,6 @@ public class BPELUnitActivator extends AbstractUIPlugin {
 			}
 		}
 
-		// Display.getDefault().syncExec(new Runnable() {
-		// // Add to UI
-		// public void run() {
-		// try {
-		// BPELUnitCoverageResultView view = findBPELUnitCoverageView();
-		// if(view!=null){
-		// view.initialize();
-		// }
-		// } catch (PartInitException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// });
-
 		// Set new current session
 		fCurrentSession = session;
 
@@ -249,40 +232,6 @@ public class BPELUnitActivator extends AbstractUIPlugin {
 			}
 		});
 		fCurrentSession = null;
-	}
-
-	// HIER
-	public void showCoverageResult(final List<String> testCases,
-			final List<IFileStatistic> statistics, final String string) {
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				try {
-					getBPELUnitCoverageView().setData(testCases, statistics,
-							string);
-				} catch (PartInitException e) {
-					BPELUnitActivator.log(e);
-				}
-			}
-		});
-
-	}
-
-	/**
-	 * Finds and returns the BPELUnitCoverageView.
-	 * 
-	 * @return
-	 * @throws PartInitException
-	 */
-	private BPELUnitCoverageResultView getBPELUnitCoverageView()
-			throws PartInitException {
-		return (BPELUnitCoverageResultView) getActiveWorkbenchWindow()
-				.getActivePage().showView(BPELUNIT_COVERAGE_VIEW_ID);
-	}
-
-	private BPELUnitCoverageResultView findBPELUnitCoverageView()
-			throws PartInitException {
-		return (BPELUnitCoverageResultView) getActiveWorkbenchWindow()
-				.getActivePage().findView(BPELUNIT_COVERAGE_VIEW_ID);
 	}
 
 	/**
@@ -368,22 +317,4 @@ public class BPELUnitActivator extends AbstractUIPlugin {
 	public static Image getImage(String key) {
 		return getDefault().getImageRegistry().get(key);
 	}
-
-	public void initializeCoverageResultView() {
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				try {
-					BPELUnitCoverageResultView view = findBPELUnitCoverageView();
-					if (view != null) {
-						view.initialize();
-					}
-				} catch (PartInitException e) {
-					BPELUnitActivator.log(e);
-					System.out.println("FEHLER " + e.getMessage());
-				}
-			}
-		});
-
-	}
-
 }

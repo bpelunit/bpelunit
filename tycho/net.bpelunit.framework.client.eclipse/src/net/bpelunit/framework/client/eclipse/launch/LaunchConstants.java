@@ -5,6 +5,9 @@
  */
 package net.bpelunit.framework.client.eclipse.launch;
 
+import java.util.Collections;
+import java.util.List;
+
 import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
 
 /**
@@ -27,6 +30,12 @@ public class LaunchConstants {
 	 * to launch.
 	 */
 	public static final String ATTR_SUITE_FILE_NAME= BPELUnitActivator.getUniqueIdentifier() + ".SUITE_NAME_ATTR"; //$NON-NLS-1$
+	
+	/**
+	 * Launch configuration attribute key. The value is a project-relative path of a test suite file
+	 * to launch.
+	 */
+	public static final String ATTR_TEST_CASES_NAMES= BPELUnitActivator.getUniqueIdentifier() + ".TEST_CASES_NAMES"; //$NON-NLS-1$
 
 	/**
 	 * Launch config type as defined in the plugin.xml file
@@ -34,8 +43,13 @@ public class LaunchConstants {
 	public static final String ID_LAUNCH_CONFIG_TYPE= "net.bpelunit.framework.client.eclipse.testSuiteLauncher";
 
 	/**
-	 * The empty string
+	 * The empty string for fetching launch config string attributes
 	 */
 	public static final String EMPTY_STRING= ""; //$NON-NLS-1$
+
+	/**
+	 * An empty list for fetching launch config list attributes
+	 */
+	public static final List<?> EMPTY_LIST = Collections.EMPTY_LIST;
 
 }

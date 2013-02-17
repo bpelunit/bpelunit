@@ -49,11 +49,6 @@
             class="net.bpelunit.framework.client.eclipse.views.BPELUnitView"
             id="net.bpelunit.framework.client.eclipse.views.BPELUnitView">
       </view>
-      <view
-            category="net.bpelunit.framework.client.eclipse"
-            class="net.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView"
-            id="net.bpelunit.framework.client.eclipse.views.BPELUnitCoverageResultView"
-            name="Test Coverage"/>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">

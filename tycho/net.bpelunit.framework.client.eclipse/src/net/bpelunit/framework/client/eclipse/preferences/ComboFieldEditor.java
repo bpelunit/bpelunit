@@ -6,7 +6,6 @@
 package net.bpelunit.framework.client.eclipse.preferences;
 
 import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -44,26 +43,8 @@ public class ComboFieldEditor extends FieldEditor {
 
 	public ComboFieldEditor(String name, String labelText, String[][] entryNamesAndValues, Composite parent) {
 		init(name, labelText);
-		Assert.isTrue(checkArray(entryNamesAndValues));
 		fEntryNamesAndValues= entryNamesAndValues;
 		createControl(parent);
-	}
-
-	/**
-	 * Checks whether given <code>String[][]</code> is of "type" <code>String[][2]</code>.
-	 * 
-	 * @return <code>true</code> if it is ok, and <code>false</code> otherwise
-	 */
-	private boolean checkArray(String[][] table) {
-		if (table == null) {
-			return false;
-		}
-		for (String[] array : table) {
-			if (array == null || array.length != 2) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	/**
