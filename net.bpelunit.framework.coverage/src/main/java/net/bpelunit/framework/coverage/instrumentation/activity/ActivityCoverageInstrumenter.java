@@ -40,7 +40,6 @@ import net.bpelunit.model.bpel.IWhile;
 
 public class ActivityCoverageInstrumenter extends AbstractInstrumenter {
 
-	
 	private Map<String, IActivity> markerMapping = new HashMap<String, IActivity>();
 	private Map<String, Integer> markerCounter = new HashMap<String, Integer>();
 	private List<String> markers = new ArrayList<String>();

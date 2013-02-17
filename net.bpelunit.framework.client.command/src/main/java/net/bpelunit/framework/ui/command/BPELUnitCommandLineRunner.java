@@ -10,17 +10,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.base.BPELUnitBaseRunner;
 import net.bpelunit.framework.control.result.XMLResultProducer;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
-import net.bpelunit.framework.coverage.ICoverageMeasurementTool;
-import net.bpelunit.framework.coverage.result.XMLCoverageResultProducer;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
@@ -76,7 +72,6 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 	private boolean verbose;
 	private String xmlFileName;
 	private String logFileName;
-	private String covFileName;
 	private PrintWriter screen;
 	private File testSuiteFile;
 	private List<String> testCaseNames;
@@ -134,13 +129,6 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 			verbose = cmd.hasOption(PARAMETER_VERBOSE);
 			xmlFileName = trimEqualsSignFromStart(cmd.getOptionValue(PARAMETER_XMLFILE));
 			logFileName = trimEqualsSignFromStart(cmd.getOptionValue(PARAMETER_LOGFILE));
-			if(cmd.hasOption(PARAMETER_COVERAGEFILE)) {
-				covFileName = trimEqualsSignFromStart(cmd.getOptionValue(PARAMETER_COVERAGEFILE)); 
-			}
-			if(cmd.hasOption(PARAMETER_DETAILEDCOVERAGEFILE)) {
-				covFileName = trimEqualsSignFromStart(cmd.getOptionValue(PARAMETER_DETAILEDCOVERAGEFILE));
-				saveCoverageDetails = true;
-			}
 			
 			ArrayList<String> remainingOptions = new ArrayList<String>(cmd.getArgList());
 			setAndValidateTestSuiteFileName(remainingOptions.remove(0));
@@ -222,12 +210,7 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 		
 		try {			
 			Map<String, String> options;
-			if (covFileName != null) {
-				options = new HashMap<String, String>();
-				options.put(BPELUnitRunner.MEASURE_COVERAGE, Boolean.TRUE.toString()); //$NON-NLS-1$
-			} else {
-				options = BPELUnitConstants.NULL_OPTIONS;
-			}
+			options = BPELUnitConstants.NULL_OPTIONS;
 			
 			initialize(options);
 
@@ -291,31 +274,12 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 			} catch (DeploymentException e) {
 				abort(Messages.getString("BPELUnitCommandLineRunner.MSG_ERROR_UNDEPLOY"), e); //$NON-NLS-1$
 			}
-			if (covFileName != null) {
-				try {
-					ICoverageMeasurementTool tool = BPELUnitRunner.getCoverageMeasurmentTool();
-					if (tool != null) {
-						XMLCoverageResultProducer.writeResult(
-								new FileOutputStream(covFileName),
-								tool.getStatistics(), tool.getErrorStatus(),
-								saveCoverageDetails);
-					}
-				} catch (IOException e) {
-					abort(
-						String.format(
-							Messages.getString("BPELUnitCommandLineRunner.MSG_ERROR_COVERAGEFILE"), //$NON-NLS-1$
-									covFileName)
-						, e);
-				}
-			}
 			screen.println(Messages.getString("BPELUnitCommandLineRunner.MSG_PROGRESS_UNDEPLOYED")); //$NON-NLS-1$
 			screen.println(Messages.getString("BPELUnitCommandLineRunner.MSG_BYE")); //$NON-NLS-1$
 		} catch (ConfigurationException e) {
 			abort(Messages.getString("BPELUnitCommandLineRunner.MSG_ERROR_COFIGURATION_ERROR"), e); //$NON-NLS-1$
 		} catch (SpecificationException e) {
 			abort(Messages.getString("BPELUnitCommandLineRunner.MSG_ERROR_BPTS_ERROR"), e); //$NON-NLS-1$
-		} finally {
-			BPELUnitRunner.setCoverageMeasurmentTool(null);
 		}
 	}
 
@@ -402,13 +366,6 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 	/**
 	 * Only for tests
 	 */
-	boolean getCoverageDetails() {
-		return saveCoverageDetails;
-	}
-
-	/**
-	 * Only for tests
-	 */
 	File getTestSuiteFile() {
 		return testSuiteFile;
 	}
@@ -418,13 +375,6 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 	 */
 	List<String> getTestCaseNames() {
 		return new ArrayList<String>(testCaseNames);
-	}
-
-	/**
-	 * Only for tests
-	 */
-	boolean isSaveCoverageDetails() {
-		return saveCoverageDetails;
 	}
 
 	/**
@@ -446,12 +396,5 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements ITe
 	 */
 	String getLogFileName() {
 		return logFileName;
-	}
-
-	/**
-	 * Only for tests
-	 */
-	String getCovFileName() {
-		return covFileName;
 	}
 }

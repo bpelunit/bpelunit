@@ -30,6 +30,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 public final class XMLUtil {
@@ -231,4 +232,34 @@ public final class XMLUtil {
 
 		return sb.toString();
 	}
+
+	/**
+	 * DOM Level 2 compliant method for adding text to an element
+	 * 
+	 * @param e element to which text should be added
+	 * @param contents new text to be added
+	 * @return
+	 */
+	public static Text appendTextNode(Element e, String contents) {
+		Text textNode = e.getOwnerDocument().createTextNode(contents);
+		e.appendChild(textNode);
+		return textNode;
+	}
+	
+	public static String getTextContent(Node e) {
+		StringBuilder sb = new StringBuilder();
+		
+		NodeList children = e.getChildNodes();
+		if(children != null) {
+			for(int i = 0; i < children.getLength(); i++) {
+				Node n = children.item(i);
+				if(n.getNodeType() == Node.TEXT_NODE) {
+					sb.append(n.getNodeValue());
+				}
+			}
+		}
+		
+		return sb.toString();
+	}
+	
 }

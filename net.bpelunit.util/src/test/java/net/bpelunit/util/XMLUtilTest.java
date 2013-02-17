@@ -21,6 +21,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 public class XMLUtilTest {
 
@@ -227,6 +228,27 @@ public class XMLUtilTest {
 		assertEquals("/b:B/a:C/@id", XMLUtil.getXPathForElement(d, ctx));
 	}
 	
+	public void testAddTextNode() {
+		Document xml = XMLUtil.createDocument();
+		Element element = xml.createElement("a");
+		Text t = XMLUtil.appendTextNode(element, "abc");
+		
+		assertEquals("abc", element.getTextContent());
+		assertEquals(1, element.getChildNodes().getLength());
+		assertSame(t, element.getChildNodes().item(0));
+	}
+	
+	public void testGetTextContent() {
+		Document xml = XMLUtil.createDocument();
+		Element element = xml.createElement("a");
+		
+		XMLUtil.appendTextNode(element, "abc");
+		assertEquals("abc", XMLUtil.getTextContent(element));
+		
+		XMLUtil.appendTextNode(element, "def");
+		assertEquals("abcdef", XMLUtil.getTextContent(element));
+	}
+	
 	private static class NodeListMock implements NodeList {
 
 		Node[] nodes;
@@ -246,7 +268,7 @@ public class XMLUtilTest {
 		}
 		
 	}
-	
+
 	private String normalize(String s) {
 		return s.trim().replaceAll("\r", "");
 	}

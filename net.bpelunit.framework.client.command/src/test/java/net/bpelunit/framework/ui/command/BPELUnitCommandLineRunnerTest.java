@@ -69,8 +69,8 @@ public class BPELUnitCommandLineRunnerTest {
 		assertEquals(false, runner.isVerbose());
 		assertNull(runner.getXmlFileName());
 		assertNull(runner.getLogFileName());
-		assertNull(runner.getCovFileName());
-		assertFalse(runner.getCoverageDetails());
+//		assertNull(runner.getCovFileName());
+//		assertFalse(runner.getCoverageDetails());
 		assertEquals(FILENAME_TESTSUITE, runner.getTestSuiteFileName());
 		assertEquals(0, runner.getTestCaseNames().size());
 	}
@@ -95,8 +95,8 @@ public class BPELUnitCommandLineRunnerTest {
 		assertEquals(true, runner.isVerbose());
 		assertEquals(FILE_XML, runner.getXmlFileName());
 		assertEquals(FILE_LOG, runner.getLogFileName());
-		assertEquals(FILE_COV, runner.getCovFileName());
-		assertFalse(runner.getCoverageDetails());
+//		assertEquals(FILE_COV, runner.getCovFileName());
+//		assertFalse(runner.getCoverageDetails());
 		assertEquals(FILENAME_TESTSUITE, runner.getTestSuiteFileName());
 		assertEquals(2, runner.getTestCaseNames().size());
 		assertEquals("tc1", runner.getTestCaseNames().get(0));
@@ -124,8 +124,8 @@ public class BPELUnitCommandLineRunnerTest {
 		assertEquals(true, runner.isVerbose());
 		assertEquals(FILE_XML, runner.getXmlFileName());
 		assertEquals(FILE_LOG, runner.getLogFileName());
-		assertEquals(FILE_COV, runner.getCovFileName());
-		assertTrue(runner.getCoverageDetails());
+//		assertEquals(FILE_COV, runner.getCovFileName());
+//		assertTrue(runner.getCoverageDetails());
 		assertEquals(FILENAME_TESTSUITE, runner.getTestSuiteFileName());
 		assertEquals(2, runner.getTestCaseNames().size());
 		assertEquals("tc1", runner.getTestCaseNames().get(0));

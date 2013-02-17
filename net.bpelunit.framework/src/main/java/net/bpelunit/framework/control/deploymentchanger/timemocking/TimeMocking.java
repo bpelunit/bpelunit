@@ -15,7 +15,7 @@ import net.bpelunit.model.bpel.IWaitingActivity;
 import net.bpelunit.util.QNameUtil;
 
 /**
- * Locking for mocking wait activities in BPEL. Can be added as a deployment
+ * Mocking for mocking wait activities in BPEL. Can be added as a deployment
  * component when BPELUnit deploys the PUT.
  * 
  * Options configurable from test:
@@ -100,7 +100,7 @@ public class TimeMocking implements IDeploymentChanger {
 
 		if (objects.size() == 0) {
 			throw new DeploymentException(
-					"XPath does not reference BPEL Activities: " + xpathToWait);
+					"XPath does not reference any BPEL Activities: " + xpathToWait);
 		}
 
 		for (IBpelObject n : objects) {
@@ -108,8 +108,8 @@ public class TimeMocking implements IDeploymentChanger {
 				((IWaitingActivity) n).setDuration(duration);
 			} else {
 				throw new DeploymentException(
-						"XPath does not (only) reference BPEL Activities: "
-								+ xpathToWait);
+						"XPath does not (only) reference timed BPEL Activities: "
+								+ xpathToWait + ". Failed activity: " + n.getXPathInDocument());
 			}
 		}
 	}
