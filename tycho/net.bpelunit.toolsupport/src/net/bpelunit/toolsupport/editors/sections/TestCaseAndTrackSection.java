@@ -355,15 +355,20 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 	private XMLTestCase getTestCase(XmlObject o) {
 		XmlCursor c = o.newCursor();
-		if (!c.toParent()) {
-			return null;
-		}
+		try {
+			if (!c.toParent()) {
+				return null;
+			}
 
-		XmlObject object = c.getObject();
-		if (object instanceof XMLTestCase) {
-			return (XMLTestCase) object;
-		} else {
-			return null;
+			XmlObject object = c.getObject();
+			if (object instanceof XMLTestCase) {
+				return (XMLTestCase) object;
+			} else {
+				return null;
+			}
+
+		} finally {
+			c.dispose();
 		}
 	}
 
@@ -395,8 +400,9 @@ public class TestCaseAndTrackSection extends TreeSection {
 				// previous sibling, i.e. one up.
 				xmlTestCase.newCursor().moveXml(currentCursor);
 				adjust();
-				setSelection(testSuite.getTestCases().getTestCaseList().get(currentPosition -1));
+				setSelection(testSuite.getTestCases().getTestCaseList().get(currentPosition - 1));
 			}
+			currentCursor.dispose();
 		}
 	}
 
@@ -416,6 +422,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 				adjust();
 				setSelection(testSuite.getTestCases().getTestCaseList().get(currentPosition + 1));
 			}
+			currentCursor.dispose();
 		}
 	}
 

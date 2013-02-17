@@ -40,6 +40,7 @@ public class NamespaceEditor {
 			XmlCursor cursor = this.baseSuite.newCursor();
 			cursor.toNextToken();
 			cursor.insertNamespace(prefix, url);
+			cursor.dispose();
 			return true;
 		} else {
 			return false;
@@ -57,27 +58,36 @@ public class NamespaceEditor {
 
 	public boolean editNamespaceInSuite(NamespaceDeclaration current, String prefix, String url) {
 		XmlCursor cursor = this.getPlacedCursor(current);
-		if (cursor != null) {
-			// These two operations effectively change the prefix for the
-			// complete document
-			// Upon re-serialization, the new prefix for the given URL is used
-			// in all declarations
-			cursor.removeXml();
-			// cursor.currentTokenType();
-			this.addNamespaceToSuite(prefix, url);
-			// cursor.insertNamespace(prefix, url);
-			return true;
+		try {
+			if (cursor != null) {
+				// These two operations effectively change the prefix for the
+				// complete document
+				// Upon re-serialization, the new prefix for the given URL is
+				// used
+				// in all declarations
+				cursor.removeXml();
+				// cursor.currentTokenType();
+				this.addNamespaceToSuite(prefix, url);
+				// cursor.insertNamespace(prefix, url);
+				return true;
+			}
+			return false;
+		} finally {
+			cursor.dispose();
 		}
-		return false;
 	}
 
 	public boolean removeNamespaceFromSuite(NamespaceDeclaration prop) {
 		XmlCursor cursor = this.getPlacedCursor(prop);
-		if (cursor != null) {
-			cursor.removeXml();
-			return true;
+		try {
+			if (cursor != null) {
+				cursor.removeXml();
+				return true;
+			}
+			return false;
+		} finally {
+			cursor.dispose();
 		}
-		return false;
 	}
 
 	private String generatePrefix(String url) {
@@ -106,6 +116,12 @@ public class NamespaceEditor {
 		return prefix;
 	}
 
+	/**
+	 * Caller must dispose() the delivered cursor
+	 * 
+	 * @param current
+	 * @return
+	 */
 	private XmlCursor getPlacedCursor(NamespaceDeclaration current) {
 		XmlCursor cursor = this.baseSuite.newCursor();
 

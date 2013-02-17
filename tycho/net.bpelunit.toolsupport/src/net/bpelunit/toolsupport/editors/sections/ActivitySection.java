@@ -20,7 +20,6 @@ import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
 import net.bpelunit.framework.client.eclipse.dialog.field.ListField;
 import net.bpelunit.framework.control.util.ActivityUtil;
 import net.bpelunit.framework.control.util.ActivityUtil.ActivityConstant;
-import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.xml.suite.XMLActivity;
 import net.bpelunit.framework.xml.suite.XMLCompleteHumanTaskActivity;
 import net.bpelunit.framework.xml.suite.XMLCondition;
@@ -48,7 +47,6 @@ import net.bpelunit.toolsupport.editors.wizards.WaitActivityWizard;
 import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import net.bpelunit.toolsupport.util.WSDLReadingException;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
@@ -360,6 +358,7 @@ public class ActivitySection extends TreeSection {
 						rcvOp.removeCondition(index);
 				}
 			}
+			cursor.dispose();
 		} // endif XMLCondition
 		adjust(false);
 	}
@@ -378,6 +377,7 @@ public class ActivitySection extends TreeSection {
 				activity.newCursor().moveXml(currentCursor);
 				adjust(true);
 			}
+			currentCursor.dispose();
 		}
 	}
 
@@ -395,6 +395,7 @@ public class ActivitySection extends TreeSection {
 				currentCursor.moveXml(activity.newCursor());
 				adjust(true);
 			}
+			currentCursor.dispose();
 		}
 	}
 
@@ -648,6 +649,7 @@ public class ActivitySection extends TreeSection {
 
 					adjust(true);
 				}
+				cursor.dispose();
 
 			} catch (XmlException e) {
 				// simply do not paste.

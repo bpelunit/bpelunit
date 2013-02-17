@@ -12,7 +12,7 @@ import java.util.List;
 import net.bpelunit.framework.client.eclipse.ExtensionControl;
 import net.bpelunit.framework.client.eclipse.dialog.field.FileSelector;
 import net.bpelunit.framework.control.ext.ExtensionRegistry;
-import net.bpelunit.framework.control.ext.IBPELDeployer;
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLProperty;
