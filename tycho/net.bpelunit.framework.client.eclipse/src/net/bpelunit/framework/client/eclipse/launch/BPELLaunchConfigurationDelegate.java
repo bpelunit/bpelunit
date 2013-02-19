@@ -16,6 +16,7 @@ import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.exception.TestCaseNotFoundException;
 import net.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
@@ -226,5 +227,4 @@ public class BPELLaunchConfigurationDelegate implements
 			}
 		});
 	}
-
 }

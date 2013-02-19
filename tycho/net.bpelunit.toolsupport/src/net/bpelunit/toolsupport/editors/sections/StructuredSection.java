@@ -349,10 +349,10 @@ public abstract class StructuredSection extends BPELUnitSection {
 	}
 
 	protected Action createAction(IMenuManager newMenu, String text,
-			Action newSendOnlyActivity) {
-		newSendOnlyActivity.setText(text);
-		newMenu.add(newSendOnlyActivity);
-		return newSendOnlyActivity;
+			Action action) {
+		action.setText(text);
+		newMenu.add(action);
+		return action;
 	}
 
 }

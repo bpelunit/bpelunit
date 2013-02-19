@@ -8,14 +8,13 @@ package net.bpelunit.toolsupport.editors.sections;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.xmlbeans.XmlCursor;
-import org.apache.xmlbeans.XmlObject;
 import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
 import net.bpelunit.framework.client.eclipse.dialog.field.CheckBoxField;
 import net.bpelunit.framework.client.eclipse.dialog.field.ComboField;
 import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
 import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
 import net.bpelunit.framework.client.eclipse.dialog.validate.NullValidator;
+import net.bpelunit.framework.client.eclipse.launch.BPELLaunchShortCut;
 import net.bpelunit.framework.control.util.ActivityUtil;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.xml.suite.XMLHumanPartnerDeploymentInformation;
@@ -28,6 +27,10 @@ import net.bpelunit.framework.xml.suite.XMLTestSuite;
 import net.bpelunit.framework.xml.suite.XMLTrack;
 import net.bpelunit.toolsupport.ToolSupportActivator;
 import net.bpelunit.toolsupport.editors.TestSuitePage;
+
+import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlObject;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -640,7 +643,23 @@ public class TestCaseAndTrackSection extends TreeSection {
 				}
 			});
 			duplicateAction.setEnabled(getIsDeleteEnabled(object));
+			
+			if(object instanceof XMLTestCase) {
+				manager.add(new Separator());
+				
+				createAction(manager, "Run Test Case", new Action() {
+					@Override
+					public void run() {
+						runTestCase((XMLTestCase) object);
+					}
+				});
+			}
 		}
+	}
+
+	protected void runTestCase(XMLTestCase testCase) {
+		BPELLaunchShortCut launchShortCut = new BPELLaunchShortCut();
+		launchShortCut.launch((IFile)getEditor().getEditorInput().getAdapter(IFile.class), testCase.getName(), "run");
 	}
 
 	private boolean getIsMoveEnabled(Object object) {

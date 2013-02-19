@@ -30,6 +30,7 @@ import net.bpelunit.toolsupport.ToolSupportActivator;
 import net.bpelunit.toolsupport.editors.src.XMLEditor;
 import net.bpelunit.toolsupport.util.WSDLReadingException;
 import net.bpelunit.toolsupport.util.schema.WSDLParser;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;

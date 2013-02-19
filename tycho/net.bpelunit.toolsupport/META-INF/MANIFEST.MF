@@ -13,11 +13,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.ui.forms,
- net.bpelunit.framework,
- net.bpelunit.framework.client.eclipse,
  org.eclipse.help,
  org.eclipse.help.ui,
- org.junit4
+ org.junit4,
+ net.bpelunit.framework.client.eclipse,
+ net.bpelunit.framework
 Eclipse-LazyStart: true
 Bundle-Vendor: Leibniz Universität Hannover
 Import-Package: javax.wsdl
