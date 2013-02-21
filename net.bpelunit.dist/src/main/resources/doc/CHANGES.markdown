@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Staged for next version
+-----------------------
+
+Nothing yet: stay tuned!
+
 Version 1.6.1
 -----------------------
 

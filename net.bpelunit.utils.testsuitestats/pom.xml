@@ -3,11 +3,11 @@
   <parent>
     <artifactId>bpelunit</artifactId>
     <groupId>net.bpelunit</groupId>
-    <version>1.6.1</version>
+    <version>1.6.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>testsuitestats</artifactId>
-  <version>1.6.1</version>
+  <version>1.6.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>BPELUnit :: Test Suite Statistics</name>
 

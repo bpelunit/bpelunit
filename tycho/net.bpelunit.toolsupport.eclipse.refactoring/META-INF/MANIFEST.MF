@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit Eclipse Standalone Refactoring Tools
 Bundle-SymbolicName: net.bpelunit.toolsupport.eclipse.refactoring; singleton:=true
-Bundle-Version: 1.6.1
+Bundle-Version: 1.6.2.qualifier
 Bundle-Activator: net.bpelunit.toolsupport.RefactoringToolSupportActivator
 Require-Bundle: org.eclipse.ui,
  net.bpelunit.framework,
