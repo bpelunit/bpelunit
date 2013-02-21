@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Staged for next version
+Version 1.6.1
 -----------------------
 
 * _Feature_: the 'delay' and 'delayExpression' attributes now accept floating-point values (such as "2.5" or "0.5") in addition to integer values.

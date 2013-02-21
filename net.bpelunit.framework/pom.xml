@@ -4,11 +4,11 @@
   <parent>
     <artifactId>bpelunit</artifactId>
     <groupId>net.bpelunit</groupId>
-    <version>1.6.1-SNAPSHOT</version>
+    <version>1.6.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>framework</artifactId>
-  <version>1.6.1-SNAPSHOT</version>
+  <version>1.6.1</version>
   <packaging>bundle</packaging>
   <name>BPELUnit :: Framework</name>
   <build>

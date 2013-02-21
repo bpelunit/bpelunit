@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/net.bpelunit.eclipse.feature_1.6.1.qualifier.jar" id="net.bpelunit.eclipse.feature" version="1.6.1.qualifier"/>
+   <feature url="features/net.bpelunit.eclipse.feature_1.6.1.jar" id="net.bpelunit.eclipse.feature" version="1.6.1"/>
 </site>
