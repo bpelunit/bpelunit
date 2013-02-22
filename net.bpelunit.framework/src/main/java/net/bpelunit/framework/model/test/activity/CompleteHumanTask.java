@@ -17,7 +17,7 @@ import org.example.wsHT.api.XMLTTask;
 public class CompleteHumanTask extends Activity {
 
 	private String taskName;
-	private int waitTime = 50;
+	private int waitTime = 100;
 	private int maxTimeOut = 10000;
 	private CompleteHumanTaskSpecification dataSpec;
 	private String taskId;
@@ -46,17 +46,20 @@ public class CompleteHumanTask extends Activity {
 				int timeout = 0;
 				List<XMLTTask> taskList;
 				do {
+					if(Thread.interrupted()) {
+						setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for task.", null));
+					}
 					HumanPartner.WSHT_LOCK.lock();
 					locked = true;
 					taskList = client.getReadyTaskList(taskName).getTaskAbstractList();
 					if(taskList.size() == 0) {
 						HumanPartner.WSHT_LOCK.unlock();
 						locked = false;
-						timeout += waitTime ;
+						timeout += waitTime;
 						Thread.sleep(waitTime);
 					}
 					
-					if(timeout >= maxTimeOut ) {
+					if(timeout >= maxTimeOut) {
 						setStatus(ArtefactStatus.createErrorStatus("Timeout while waiting for task " + taskName));
 						return;
 					}
