@@ -1,4 +1,4 @@
-package net.bpelunit.framework.control.deploymentchanger.endpointreplacement;
+package net.bpelunit.framework.execution.endpointreplacement;
 
 import static org.junit.Assert.assertEquals;
 

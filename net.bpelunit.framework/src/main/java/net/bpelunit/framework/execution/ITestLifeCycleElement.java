@@ -13,6 +13,10 @@ import net.bpelunit.framework.exception.DeploymentException;
  */
 public interface ITestLifeCycleElement {
 
+	public @interface TestLifeCycleElementOption {
+		String description() default "";
+	}
+
 	/**
 	 * In this phase the test suite and corresponding artifacts are loaded.
 	 */

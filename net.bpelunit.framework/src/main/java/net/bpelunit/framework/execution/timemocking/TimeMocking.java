@@ -1,4 +1,4 @@
-package net.bpelunit.framework.control.deploymentchanger.timemocking;
+package net.bpelunit.framework.execution.timemocking;
 
 import java.util.List;
 
@@ -6,8 +6,9 @@ import javax.xml.namespace.QName;
 
 import net.bpelunit.framework.control.deploy.IBPELProcess;
 import net.bpelunit.framework.control.deploy.IDeployment;
-import net.bpelunit.framework.control.ext.IDeploymentChanger;
 import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.execution.AbstractTestLifeCycleElement;
+import net.bpelunit.framework.execution.IBPELUnitContext;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IProcess;
@@ -32,7 +33,7 @@ import net.bpelunit.util.QNameUtil;
  * 
  * @author Daniel Luebke <bpelunit@daniel-luebke.de>
  */
-public class TimeMocking implements IDeploymentChanger {
+public class TimeMocking extends AbstractTestLifeCycleElement {
 
 	private static final String DURATION_TEMPLATE = "'PT%dS'";
 	private String duration;
@@ -45,7 +46,7 @@ public class TimeMocking implements IDeploymentChanger {
 	 * @param xpath
 	 *            see annotation for description
 	 */
-	@DeploymentChangerOption(description = "XPath expression that selects at least one wait activity. Please do not use any BPEL namespace prefix (e.g. //wait[@name='myWait']).")
+	@TestLifeCycleElementOption(description = "XPath expression that selects at least one wait activity. Please do not use any BPEL namespace prefix (e.g. //wait[@name='myWait']).")
 	public void setActivityToMock(String xpath) {
 		this.xpathToWait = xpath;
 	}
@@ -56,7 +57,7 @@ public class TimeMocking implements IDeploymentChanger {
 	 * @param xpath
 	 *            see annotation for description
 	 */
-	@DeploymentChangerOption(description = "The new duration in seconds")
+	@TestLifeCycleElementOption(description = "The new duration in seconds")
 	public void setNewDuration(String newDurationInSeconds) {
 		this.duration = String.format(DURATION_TEMPLATE,
 				Integer.valueOf(newDurationInSeconds));
@@ -68,11 +69,17 @@ public class TimeMocking implements IDeploymentChanger {
 	 * @param xpath
 	 *            see annotation for description
 	 */
-	@DeploymentChangerOption
+	@TestLifeCycleElementOption
 	public void setBPELName(String bpelToChange) {
 		this.bpelName = bpelToChange;
 	}
 
+	@Override
+	public void doPrepareProcesses(IBPELUnitContext context)
+			throws DeploymentException {
+		changeDeployment(context.getDeployment(), context.getTestSuite());
+	}
+	
 	/**
 	 * Executes the change to the deployment. The option values have to be set
 	 * before.
@@ -80,7 +87,6 @@ public class TimeMocking implements IDeploymentChanger {
 	 * @param d
 	 *            the deployment that is to be changed
 	 */
-	@Override
 	public void changeDeployment(IDeployment d, TestSuite testSuite)
 			throws DeploymentException {
 		List<? extends IBPELProcess> processes = d.getBPELProcesses();

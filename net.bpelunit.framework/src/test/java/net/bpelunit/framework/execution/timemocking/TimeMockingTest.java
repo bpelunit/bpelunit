@@ -1,4 +1,4 @@
-package net.bpelunit.framework.control.deploymentchanger.timemocking;
+package net.bpelunit.framework.execution.timemocking;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
