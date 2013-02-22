@@ -26,8 +26,7 @@ public class BPELUnitCommandLineRunnerTest {
 	private class BPELUnitCommandLineRunnerWithoutRunAndExit extends
 			BPELUnitCommandLineRunner {
 
-		public BPELUnitCommandLineRunnerWithoutRunAndExit(ConsoleMock cmd,
-				String[] args) {
+		public BPELUnitCommandLineRunnerWithoutRunAndExit(ConsoleMock cmd, String[] args) {
 			super(cmd, args);
 		}
 
