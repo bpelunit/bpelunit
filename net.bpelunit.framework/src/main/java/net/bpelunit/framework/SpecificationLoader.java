@@ -67,6 +67,7 @@ import net.bpelunit.framework.verify.NoCyclesInConditionGroupInheritanceValidato
 import net.bpelunit.framework.verify.PartnersHaveUniqueNamesValidator;
 import net.bpelunit.framework.verify.PartnersInTestCasesHaveNamesValidator;
 import net.bpelunit.framework.verify.PartnersUsedInTestCaseAreDeclaredInTestSuiteValidator;
+import net.bpelunit.framework.verify.TestCaseNamesAreUniqueValidator;
 import net.bpelunit.framework.verify.TestSuiteRootInformationValidator;
 import net.bpelunit.framework.verify.TestSuiteXMLValidator;
 import net.bpelunit.framework.verify.XMLDataIsEitherSetOrImportedValidator;
@@ -183,7 +184,8 @@ public class SpecificationLoader {
 				new PartnersInTestCasesHaveNamesValidator(),
 				new ConditionGroupsExistInTestSuiteValidator(),
 				new NoCyclesInConditionGroupInheritanceValidator(),
-				new XMLDataIsEitherSetOrImportedValidator() };
+				new XMLDataIsEitherSetOrImportedValidator(),
+				new TestCaseNamesAreUniqueValidator()};
 
 		for (ITestSuiteValidator v : validators) {
 			v.validate(doc);
