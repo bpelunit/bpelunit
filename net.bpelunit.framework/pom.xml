@@ -43,6 +43,8 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <!-- Jenkins will choke on the XMLResultProducerTest otherwise -->
+          <argLine>-XX:MaxPermSize=128m</argLine>
           <excludes>
             <exclude>net/bpelunit/test/unit/SimpleTest.java</exclude>
             <exclude>net/bpelunit/test/util/TestUtil.java</exclude>
