@@ -32,7 +32,6 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.context.Context;
 
@@ -259,7 +258,7 @@ public class TestCaseRunner {
 				+ message.getSOAPHTTPAction() + "\"");
 		RequestEntity entity;
 		try {
-			entity = new StringRequestEntity(message.getBody(),
+			entity = new StringRequestEntity(message.getMessageAsString(),
 					BPELUnitConstants.TEXT_XML_CONTENT_TYPE,
 					BPELUnitConstants.DEFAULT_HTTP_CHARSET);
 		} catch (UnsupportedEncodingException e) {
@@ -279,16 +278,10 @@ public class TestCaseRunner {
 
 			int statusCode = fClient.executeMethod(method);
 			InputStream in = method.getResponseBodyAsStream();
-			byte[] msg = null;
-			try {
-				msg = IOUtils.toByteArray(in);
-			} finally {
-				IOUtils.closeQuietly(in);
-			}
 
 			IncomingMessage returnMsg = new IncomingMessage();
 			returnMsg.setStatusCode(statusCode);
-			returnMsg.setBody(msg);
+			returnMsg.setMessage(in);
 
 			return returnMsg;
 

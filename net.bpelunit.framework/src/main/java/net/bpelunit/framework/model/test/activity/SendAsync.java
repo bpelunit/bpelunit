@@ -88,7 +88,7 @@ public class SendAsync extends Activity {
 		OutgoingMessage msg= new OutgoingMessage();
 		msg.setSOAPAction(fSendSpec.getSOAPHTTPAction());
 		msg.setTargetURL(fSendSpec.getTargetURL());
-		msg.setBody(fSendSpec.getInWireFormat());
+		msg.setBody(fSendSpec.getSOAPMessage());
 
 		IncomingMessage incoming;
 		try {
@@ -112,7 +112,7 @@ public class SendAsync extends Activity {
 			// server side.
 			// Asynchronous receives may not throw a SOAP error.
 			setStatus(ArtefactStatus.createErrorStatus("Asynchronous send got a non-2XX error code: " + incoming.getReturnCode(), null));
-			fWrongBody= new String(incoming.getBody()); // TODO FIX CHARSET
+			fWrongBody= incoming.getMessageAsString();
 		}
 	}
 

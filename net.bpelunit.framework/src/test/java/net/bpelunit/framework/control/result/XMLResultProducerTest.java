@@ -202,7 +202,7 @@ public class XMLResultProducerTest {
 			String expectedResult,
 			Map<String, String> expectedStateData) {
 		if (expectedResult != null) {
-			assertEquals(expectedResult, artefact.getResult());
+			assertEquals(artefact.toString(), expectedResult, artefact.getResult());
 		}
 		for (XMLInfo info : artefact.getStateList()) {
 			final String key = info.getName();

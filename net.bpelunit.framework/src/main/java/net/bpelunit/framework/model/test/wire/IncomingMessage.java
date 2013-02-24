@@ -5,6 +5,17 @@
  */
 package net.bpelunit.framework.model.test.wire;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import org.apache.commons.io.IOUtils;
+
 /**
  * An IncomingMessage object is a plain, on-the-wire representation of an "incoming message" from
  * the frameworks point of view, be it a HTTP Response (in which case it includes a HTTP Code) or a
@@ -21,10 +32,9 @@ public class IncomingMessage {
 	 */
 	private int fCode;
 
-	/**
-	 * The body of the message
-	 */
-	private byte[] fBody;
+	private SOAPMessage message;
+
+	private String messageAsString;
 
 
 	public void setStatusCode(int code) {
@@ -35,12 +45,41 @@ public class IncomingMessage {
 		return fCode;
 	}
 
-	public void setBody(byte[] body) {
-		fBody= body;
+	public void setMessage(InputStream in) {
+		try {
+			message = MessageFactory.newInstance().createMessage(null, in);
+		} catch (IOException e) {
+			message = null;
+		} catch (SOAPException e) {
+			message = null;
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+	}
+	
+	public void setMessage(byte[] body) {
+		setMessage(new ByteArrayInputStream(body));
 	}
 
-	public byte[] getBody() {
-		return fBody;
+	public String getMessageAsString() {
+		if(message == null) {
+			return null;
+		} 
+		
+		if(messageAsString == null) {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			try {
+				message.writeTo(out);
+				messageAsString = out.toString(); // TODO Character set
+			} catch (SOAPException e) {
+			} catch (IOException e) {
+			}
+		}
+		
+		return messageAsString;
 	}
-
+	
+	public SOAPMessage getMessage() {
+		return message;
+	}
 }

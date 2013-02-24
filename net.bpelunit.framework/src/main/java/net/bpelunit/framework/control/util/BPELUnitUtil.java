@@ -85,7 +85,7 @@ public final class BPELUnitUtil {
 	 * 
 	 * @return
 	 */
-	public static String generateGenericSOAPFault() {
+	public static SOAPMessage generateGenericSOAPFault() {
 
 		try {
 			MessageFactory mFactory= MessageFactory.newInstance();
@@ -99,12 +99,10 @@ public final class BPELUnitUtil {
 			DetailEntry entry= detail.addDetailEntry(new QName("http://www.bpelunit.org/framework/error", "BPELUnitFault"));
 			entry.addTextNode("The BPELUnit test framework has detected a test failure or error. This test case is aborted.");
 
-			ByteArrayOutputStream b= new ByteArrayOutputStream();
-			message.writeTo(b);
-			return b.toString();
+			return message;
 
 		} catch (Exception e) {
-			return "(internal fault)";
+			return null;
 		}
 	}
 

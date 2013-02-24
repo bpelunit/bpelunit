@@ -5,8 +5,15 @@
  */
 package net.bpelunit.framework.model.test.wire;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import org.apache.commons.io.IOUtils;
 
 import net.bpelunit.framework.control.run.BlackBoard;
 import net.bpelunit.framework.control.run.BlackBoardKey;
@@ -47,10 +54,11 @@ public class OutgoingMessage implements BlackBoardKey {
 	 */
 	private int code;
 
+	
 	/**
-	 * The body of the message
+	 * The body of the HTTP message, i.e. the SOAP message
 	 */
-	private String body;
+	private SOAPMessage message;
 
 	public void setTargetURL(String targetURL) {
 		this.targetURL = targetURL;
@@ -68,14 +76,30 @@ public class OutgoingMessage implements BlackBoardKey {
 		return soapAction;
 	}
 
-	public void setBody(String body) {
-		this.body = body;
+	public void setBody(SOAPMessage message) {
+		this.message = message;
 	}
 
-	public String getBody() {
-		return body;
+	public SOAPMessage getMessage() {
+		return message;
 	}
 
+	public String getMessageAsString() {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			message.writeTo(out);
+			return out.toString();
+		} catch (SOAPException e) {
+			return "";
+		} catch (IOException e) {
+			return "";
+		} catch (NullPointerException e) {
+			return "";
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
+	}
+	
 	public int getCode() {
 		return code;
 	}

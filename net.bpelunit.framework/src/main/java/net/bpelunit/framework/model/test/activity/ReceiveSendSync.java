@@ -85,7 +85,7 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 				} else {
 					msg.setCode(HTTP_OK);
 				}
-				msg.setBody(getSendSpec().getInWireFormat());
+				msg.setBody(getSendSpec().getSOAPMessage());
 			} else {
 				// Could not successfully generate a return value for
 				// whatever reason.

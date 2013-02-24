@@ -62,7 +62,7 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 		OutgoingMessage msg= new OutgoingMessage();
 		msg.setTargetURL(getSendSpec().getTargetURL());
 		msg.setSOAPAction(getSendSpec().getSOAPHTTPAction());
-		msg.setBody(getSendSpec().getInWireFormat());
+		msg.setBody(getSendSpec().getSOAPMessage());
 
 		IncomingMessage returnMsg;
 		try {
@@ -93,7 +93,7 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 			setStatus(ArtefactStatus
 					.createErrorStatus("Error: Answer from synchronous call had non-expected return code " + returnMsg.getReturnCode()));
 
-			fWrongReturnBody= new String(msg.getBody()); // TODO FIX CHARSET
+			fWrongReturnBody= new String(msg.getMessageAsString());
 			if ("".equals(fWrongReturnBody)) {
 				fWrongReturnBody= "(empty)";
 			}

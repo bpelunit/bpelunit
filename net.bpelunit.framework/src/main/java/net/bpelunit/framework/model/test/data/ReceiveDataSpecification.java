@@ -5,13 +5,11 @@
  */
 package net.bpelunit.framework.model.test.data;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
-import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
@@ -170,9 +168,8 @@ public class ReceiveDataSpecification extends DataSpecification {
 
 	private void setInWireFormat(IncomingMessage msg) {
 		try {
-			fPlainMessage= new String(msg.getBody()); // TODO FIX CHARSET
-			MessageFactory factory= MessageFactory.newInstance();
-			fSOAPMessage= factory.createMessage(null, new ByteArrayInputStream(msg.getBody())); // TODO FIX CHARSET
+			fSOAPMessage= msg.getMessage();
+			fPlainMessage= msg.getMessageAsString();
 		} catch (Exception e) {
 			setStatus(ArtefactStatus.createErrorStatus("Could not create SOAP message from incoming message: " + e.getMessage(), e));
 		}

@@ -112,7 +112,7 @@ public class ReceiveAsync extends Activity {
 			OutgoingMessage outgoing= new OutgoingMessage();
 			// always accept.
 			outgoing.setCode(202);
-			outgoing.setBody("");
+			//outgoing.setBody("");
 			context.postAnswer(this.getPartnerTrack(), outgoing);
 
 			if (fReceiveSpec.hasProblems()) {

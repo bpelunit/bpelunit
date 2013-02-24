@@ -5,9 +5,12 @@
  */
 package net.bpelunit.framework.control.ws;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.concurrent.TimeoutException;
+
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
 
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
@@ -17,7 +20,6 @@ import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.mortbay.http.HttpRequest;
@@ -94,7 +96,6 @@ public class WebServiceHandler extends AbstractHttpHandler {
 			return;
 		}
 
-		String partnerName = getPartnerName(pathInContext);
 
 		if (fRunner == null) {
 			wsLogger.error("Not initialized - rejecting message for URL "
@@ -104,6 +105,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 		}
 		// find target according to path in context
 
+		String partnerName = getPartnerName(pathInContext);
 		wsLogger
 				.debug("Supposed partner name for this request: " + partnerName);
 
@@ -125,23 +127,10 @@ public class WebServiceHandler extends AbstractHttpHandler {
 
 		wsLogger.debug("Request method is: " + request.getMethod());
 
-		byte[] theRequest = null;
-		InputStream in = request.getInputStream();
-		try {
-			theRequest = IOUtils.toByteArray(in);
-		} finally {
-			IOUtils.closeQuietly(in);
-		}
-		
-		
-		wsLogger
-				.debug("Incoming request payload is:\n" + new String(theRequest)); // TODO FIX CHARSET
-
 		IncomingMessage iMessage = new IncomingMessage();
-		iMessage.setBody(theRequest);
+		iMessage.setMessage(request.getInputStream());
 
 		try {
-
 			wsLogger.debug("Posting incoming message to blackboard...");
 			fRunner.putWSIncomingMessage(key, iMessage);
 
@@ -151,7 +140,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 			wsLogger.debug("Got answer from framework, now sending...");
 
 			int code = m2.getCode();
-			String body = m2.getBody();
+			String body = m2.getMessageAsString();
 
 			wsLogger.debug("Answer is:\n" + body);
 			for(String option : m2.getProtocolOptionNames()) {
@@ -178,6 +167,10 @@ public class WebServiceHandler extends AbstractHttpHandler {
 					.error("This most likely indicates another error occurred.");
 			wsLogger.error("Sending fault.");
 			sendResponse(response, HTTP_INTERNAL_ERROR, BPELUnitUtil.generateGenericSOAPFault());
+		} catch(Exception e) {
+			// Debugging only
+			e.printStackTrace();
+			return;
 		}
 	}
 
@@ -198,8 +191,19 @@ public class WebServiceHandler extends AbstractHttpHandler {
 		stringToTest = StringUtils.substringAfterLast(stringToTest, "/");
 		return stringToTest;
 	}
-
-
+	
+	private void sendResponse(HttpResponse response, int code, SOAPMessage body)
+	throws IOException {
+		// TODO Refactor all message serializations into an own utility method
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		
+		try {
+			body.writeTo(out);
+			sendResponse(response, code, out.toString());
+		} catch (SOAPException e) {
+			sendResponse(response, code, "");
+		}
+	}
 
 	private void sendResponse(HttpResponse response, int code, String body)
 			throws IOException {
@@ -207,6 +211,9 @@ public class WebServiceHandler extends AbstractHttpHandler {
 		response.setContentType(BPELUnitConstants.TEXT_XML_CONTENT_TYPE);
 		response.setStatus(code);
 
+		if(body == null) {
+			body = "";
+		}
 		ByteArrayISO8859Writer writer = new ByteArrayISO8859Writer(2048);
 		writer.write(body);
 		writer.flush();
