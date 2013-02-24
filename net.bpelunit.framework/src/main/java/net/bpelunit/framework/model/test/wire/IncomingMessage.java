@@ -17,9 +17,10 @@ import javax.xml.soap.SOAPMessage;
 import org.apache.commons.io.IOUtils;
 
 /**
- * An IncomingMessage object is a plain, on-the-wire representation of an "incoming message" from
- * the frameworks point of view, be it a HTTP Response (in which case it includes a HTTP Code) or a
- * HTTP Request (made by an entity external to the framework).
+ * An IncomingMessage object is a plain, on-the-wire representation of an
+ * "incoming message" from the frameworks point of view, be it a HTTP Response
+ * (in which case it includes a HTTP Code) or a HTTP Request (made by an entity
+ * external to the framework).
  * 
  * @version $Id$
  * @author Philip Mayer
@@ -28,17 +29,15 @@ import org.apache.commons.io.IOUtils;
 public class IncomingMessage {
 
 	/**
-	 * If this message is a HTTP response, this is the HTTP code of the response.
+	 * If this message is a HTTP response, this is the HTTP code of the
+	 * response.
 	 */
 	private int fCode;
 
 	private SOAPMessage message;
 
-	private String messageAsString;
-
-
 	public void setStatusCode(int code) {
-		fCode= code;
+		fCode = code;
 	}
 
 	public int getReturnCode() {
@@ -56,29 +55,27 @@ public class IncomingMessage {
 			IOUtils.closeQuietly(in);
 		}
 	}
-	
+
 	public void setMessage(byte[] body) {
 		setMessage(new ByteArrayInputStream(body));
 	}
 
 	public String getMessageAsString() {
-		if(message == null) {
+		if (message == null) {
 			return null;
-		} 
-		
-		if(messageAsString == null) {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			try {
-				message.writeTo(out);
-				messageAsString = out.toString(); // TODO Character set
-			} catch (SOAPException e) {
-			} catch (IOException e) {
-			}
 		}
-		
-		return messageAsString;
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			message.writeTo(out);
+			return out.toString(); // TODO Character set
+		} catch (SOAPException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
 	}
-	
+
 	public SOAPMessage getMessage() {
 		return message;
 	}
