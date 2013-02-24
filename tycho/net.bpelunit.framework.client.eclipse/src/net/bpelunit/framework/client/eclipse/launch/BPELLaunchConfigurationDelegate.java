@@ -16,7 +16,6 @@ import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.exception.TestCaseNotFoundException;
 import net.bpelunit.framework.model.test.TestSuite;
-import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
@@ -67,11 +66,31 @@ public class BPELLaunchConfigurationDelegate implements
 					LaunchConstants.ATTR_SUITE_FILE_NAME, "");
 			@SuppressWarnings("unchecked")
 			List<String> testCasesToRun = configuration.getAttribute(
-					LaunchConstants.ATTR_TEST_CASES_NAMES, 
-					LaunchConstants.EMPTY_LIST); 
-			
+					LaunchConstants.ATTR_TEST_CASES_NAMES,
+					LaunchConstants.EMPTY_LIST);
+
+			boolean haltOnError;
+			try {
+				haltOnError = configuration
+						.getAttribute(LaunchConstants.ATTR_HALT_ON_ERROR, "")
+						.toLowerCase().equals("true");
+			} catch (NullPointerException e) {
+				haltOnError = false;
+			}
+
+			boolean haltOnFailure;
+			try {
+				haltOnFailure = configuration
+						.getAttribute(LaunchConstants.ATTR_HALT_ON_FAILURE, "")
+						.toLowerCase().equals("true");
+			} catch (NullPointerException e) {
+				haltOnFailure = false;
+			}
+
 			BPELUnitActivator plugin = BPELUnitActivator.getDefault();
 			EclipseBPELUnitRunner unitCore = plugin.getBPELUnitCore();
+			unitCore.setHaltOnError(haltOnError);
+			unitCore.setHaltOnFailure(haltOnFailure);
 
 			IViewDescriptor[] views = plugin.getWorkbench().getViewRegistry()
 					.getViews();
@@ -91,20 +110,19 @@ public class BPELLaunchConfigurationDelegate implements
 			TestSuite suite = unitCore.loadTestSuite(suiteFile.getRawLocation()
 					.toFile());
 
-			/*
-			 * Register the new suite. Note that this might wait for an old
-			 * session to close.
-			 */
-
-			if(testCasesToRun != null && testCasesToRun.size() > 0) {
+			if (testCasesToRun != null && testCasesToRun.size() > 0) {
 				try {
 					suite.setFilter(testCasesToRun);
-				} catch(TestCaseNotFoundException e) {
+				} catch (TestCaseNotFoundException e) {
 					showError(e);
 					return;
 				}
 			}
-			
+
+			/*
+			 * Register the new suite. Note that this might wait for an old
+			 * session to close.
+			 */
 			TestRunSession testRunSession = new TestRunSession(suite, launch);
 			plugin.registerLaunchSession(testRunSession);
 			try {
@@ -120,7 +138,7 @@ public class BPELLaunchConfigurationDelegate implements
 				showError(e);
 				return;
 			}
-			
+
 			/*
 			 * User may have already canceled the session...
 			 */

@@ -14,7 +14,7 @@ import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
  * Some constants for the launch.
  * 
  * @version $Id$
- * @author Philip Mayer
+ * @author Philip Mayer, Daniel Luebke
  * 
  */
 public class LaunchConstants {
@@ -52,4 +52,13 @@ public class LaunchConstants {
 	 */
 	public static final List<?> EMPTY_LIST = Collections.EMPTY_LIST;
 
+	/**
+	 * Launch configuration attribute key. The value is a boolean indicating whether BPELUnit should halt after an error occurred.
+	 */
+	public static final String ATTR_HALT_ON_ERROR = BPELUnitActivator.getUniqueIdentifier() + ".HALT_ON_ERROR"; //$NON-NLS-1$
+	
+	/**
+	 * Launch configuration attribute key. The value is a boolean indicating whether BPELUnit should halt after a failure occurred.
+	 */
+	public static final String ATTR_HALT_ON_FAILURE = BPELUnitActivator.getUniqueIdentifier() + ".HALT_ON_FAILURE"; //$NON-NLS-1$
 }

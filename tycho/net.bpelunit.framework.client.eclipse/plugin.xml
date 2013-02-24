@@ -93,7 +93,7 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="net.bpelunit.framework.client.eclipse.launch.BPELLaunchGroup"
+            class="net.bpelunit.framework.client.eclipse.launch.ui.BPELUnitLaunchGroup"
             id="net.bpelunit.framework.client.eclipse.testSuiteLauncher.tabGroup"
             type="net.bpelunit.framework.client.eclipse.testSuiteLauncher"/>
    </extension>

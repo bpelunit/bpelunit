@@ -3,7 +3,7 @@
  * license file for more information.
  * 
  */
-package net.bpelunit.framework.client.eclipse.launch;
+package net.bpelunit.framework.client.eclipse.launch.ui;
 
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
@@ -16,11 +16,14 @@ import org.eclipse.debug.ui.ILaunchConfigurationTab;
  * @author Philip Mayer
  * 
  */
-public class BPELLaunchGroup extends AbstractLaunchConfigurationTabGroup {
+public class BPELUnitLaunchGroup extends AbstractLaunchConfigurationTabGroup {
 
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 
-		ILaunchConfigurationTab[] tabs= new ILaunchConfigurationTab[] { new BPELLaunchMainTab() };
+		BPELUnitLaunchTestCasesTab testCasesTab = new BPELUnitLaunchTestCasesTab();
+		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
+				new BPELUnitLaunchMainTab(testCasesTab), 
+				testCasesTab };
 		setTabs(tabs);
 	}
 

@@ -3,16 +3,13 @@
  * license file for more information.
  * 
  */
-package net.bpelunit.framework.client.eclipse.launch;
+package net.bpelunit.framework.client.eclipse.launch.ui;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
-import net.bpelunit.framework.xml.suite.XMLTestCase;
-import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
+import net.bpelunit.framework.client.eclipse.launch.LaunchConstants;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -21,7 +18,6 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -46,7 +42,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -67,15 +62,20 @@ import org.eclipse.ui.views.navigator.ResourceComparator;
  * @version $Id$
  * @author Philip Mayer, Daniel Luebke (Test Case selection)
  */
-public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
+public class BPELUnitLaunchMainTab extends AbstractLaunchConfigurationTab {
 
 	private Text projText;
 	private Button projButton;
 	private Text suiteText;
 	private Button searchTestSuiteButton;
-	private List testCasesList;
-	private Button runAllTestCasesButton;
-
+	private Button haltOnErrorButton;
+	private Button haltOnFailureButton;
+	private java.util.List<IBPELUnitLaunchMainTabListener> listeners;
+	
+	public BPELUnitLaunchMainTab(IBPELUnitLaunchMainTabListener... listeners) {
+		this.listeners = Arrays.asList(listeners);
+	}
+	
 	public void createControl(Composite parent) {
 		Font font = parent.getFont();
 		Composite comp = new Composite(parent, SWT.NONE);
@@ -88,7 +88,7 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 		createProjectSection(comp);
 		createVerticalSpacer(comp, 1);
 		createSuiteSection(comp, "&BPEL Test Suite File:");
-		createTestCaseSection(comp);
+		createHaltSection(comp);
 	}
 
 	public String getName() {
@@ -98,7 +98,8 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		updateProjectFromConfig(configuration);
 		updateSuiteFromConfig(configuration);
-		updateTestCasesFromConfig(configuration);
+		updateHaltOnErrorFromConfiguration(configuration);
+		updateHaltOnFailureFromConfiguration(configuration);
 	}
 
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
@@ -106,13 +107,11 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 				.getText().trim());
 		configuration.setAttribute(LaunchConstants.ATTR_SUITE_FILE_NAME,
 				suiteText.getText().trim());
-		if(runAllTestCasesButton.getSelection()) {
-			configuration.setAttribute(LaunchConstants.ATTR_TEST_CASES_NAMES, Collections.EMPTY_LIST);
-		} else {
-			configuration.setAttribute(LaunchConstants.ATTR_TEST_CASES_NAMES, Arrays.asList(testCasesList.getSelection()));
-		}
-		mapResources(configuration);
 		
+		configuration.setAttribute(LaunchConstants.ATTR_HALT_ON_ERROR, "" + haltOnErrorButton.getSelection());
+		configuration.setAttribute(LaunchConstants.ATTR_HALT_ON_FAILURE, "" + haltOnFailureButton.getSelection());
+		
+		mapResources(configuration);
 	}
 
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
@@ -124,7 +123,6 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 					LaunchConstants.EMPTY_STRING);
 		}
 		initializeSuiteAndName(selectedFile, configuration);
-
 	}
 
 	protected void createProjectSection(Composite parent) {
@@ -227,8 +225,6 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 		suiteText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				updateLaunchConfigurationDialog();
-				
-				updateTestCasesList();
 			}
 
 		});
@@ -243,75 +239,38 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 		});
 	}
 
-	private void updateTestCasesList() {
-		if(StringUtils.isEmpty(suiteText.getText()) || StringUtils.isEmpty(projText.getText())) {
-			testCasesList.removeAll();
-			return;
-		}
-
-		try {
-			String previouslySelectedTestCases[] = new String[0];
-			previouslySelectedTestCases = testCasesList.getSelection();
-			testCasesList.removeAll();
-			Path path = new Path(suiteText.getText());
-		    IFile file = ResourcesPlugin.getWorkspace().getRoot().getProject(projText.getText()).getFile(path);
-		    // TODO Check whether factory closes input stream
-		    XMLTestSuiteDocument testSuiteDoc = XMLTestSuiteDocument.Factory.parse(file.getContents());
-		    XMLTestCase[] xmlTestCases = testSuiteDoc.getTestSuite().getTestCases().getTestCaseList().toArray(new XMLTestCase[0]);
-		    for(XMLTestCase ts : xmlTestCases) {
-		    	testCasesList.add(ts.getName());
-		    }
-		    testCasesList.setSelection(previouslySelectedTestCases);
-		} catch(Exception ex) {
-			// error reading test suite or test suite has no test cases, so simply show empty list
-		}
-	}
 	
-	private void createTestCaseSection(Composite parent) {
+	private void createHaltSection(Composite parent) {
 		Group mainGroup = new Group(parent, SWT.NONE);
-		mainGroup.setText("Test Cases to run");
+		mainGroup.setText("Halt on Error/Failure");
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		mainGroup.setLayoutData(gd);
 		GridLayout layout = new GridLayout();
 		mainGroup.setLayout(layout);
 		mainGroup.setFont(parent.getFont());
-
-		runAllTestCasesButton = new Button(mainGroup, SWT.CHECK);
-		runAllTestCasesButton.setText("Run all Test Cases");
-		runAllTestCasesButton.addSelectionListener(new SelectionListener() {
-
+		
+		SelectionListener selectionListener = new SelectionListener() {
+			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testCasesList.setEnabled(!runAllTestCasesButton.getSelection());
-				updateLaunchConfigurationDialog();
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				testCasesList.setEnabled(!runAllTestCasesButton.getSelection());
-				updateLaunchConfigurationDialog();
-			}
-		});
-
-		testCasesList = new List(mainGroup, SWT.BORDER
-				| SWT.V_SCROLL | SWT.MULTI);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		testCasesList.setLayoutData(gd);
-		testCasesList.setFont(parent.getFont());
-		testCasesList.setEnabled(!runAllTestCasesButton.getSelection());
-		testCasesList.addSelectionListener(new SelectionListener() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
 				updateLaunchConfigurationDialog();
 			}
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
+				updateLaunchConfigurationDialog();
 			}
-		});
+		};
+		
+		haltOnErrorButton = new Button(mainGroup, SWT.CHECK);
+		haltOnErrorButton.setText("Halt after Error");
+		haltOnErrorButton.addSelectionListener(selectionListener);
+		
+		haltOnFailureButton = new Button(mainGroup, SWT.CHECK);
+		haltOnFailureButton.setText("Halt after Failure");
+		haltOnFailureButton.addSelectionListener(selectionListener);
 	}
-
+	
 	/**
 	 * Show a dialog that lists all main types
 	 */
@@ -386,36 +345,34 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 		}
 		suiteText.setText(suiteName);
 	}
-
-	/**
-	 * updates the project text field form the configuration
-	 * 
-	 * @param config
-	 *            the configuration we are editing
-	 */
-	@SuppressWarnings("unchecked")
-	private void updateTestCasesFromConfig(ILaunchConfiguration config) {
-		String[] testCaseNames = new String[0];
+	
+	private void updateHaltOnErrorFromConfiguration(ILaunchConfiguration config) {
+		String haltOnError = LaunchConstants.EMPTY_STRING;
+		
 		try {
-			testCaseNames = ((java.util.List<String>) config.getAttribute(
-					LaunchConstants.ATTR_TEST_CASES_NAMES,
-					LaunchConstants.EMPTY_LIST)).toArray(testCaseNames);
+			haltOnError = config.getAttribute(
+					LaunchConstants.ATTR_HALT_ON_ERROR,
+					LaunchConstants.EMPTY_STRING);
 		} catch (CoreException ce) {
 			BPELUnitActivator.log(ce);
 		}
-
-		testCasesList.deselectAll();
-		if (testCaseNames != null && testCaseNames.length > 0) {
-			runAllTestCasesButton.setSelection(false);
-			testCasesList.setEnabled(true);
-			for (String testCaseName : testCaseNames) {
-				testCasesList.select(testCasesList.indexOf(testCaseName));
-			}
-		} else {
-			runAllTestCasesButton.setSelection(true);
-			testCasesList.setEnabled(false);
-		}
+		haltOnErrorButton.setSelection(haltOnError != null && haltOnError.toLowerCase().equals("true"));
 	}
+
+	private void updateHaltOnFailureFromConfiguration(ILaunchConfiguration config) {
+		String haltOnFailure = LaunchConstants.EMPTY_STRING;
+		
+		try {
+			haltOnFailure = config.getAttribute(
+					LaunchConstants.ATTR_HALT_ON_FAILURE,
+					LaunchConstants.EMPTY_STRING);
+		} catch (CoreException ce) {
+			BPELUnitActivator.log(ce);
+		}
+		haltOnFailureButton.setSelection(haltOnFailure != null && haltOnFailure.toLowerCase().equals("true"));
+	}
+	
+	
 	
 	/**
 	 * updates the project text field form the configuration
@@ -588,5 +545,13 @@ public class BPELLaunchMainTab extends AbstractLaunchConfigurationTab {
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	protected void updateLaunchConfigurationDialog() {
+		super.updateLaunchConfigurationDialog();
+		for(IBPELUnitLaunchMainTabListener l : this.listeners) {
+			l.updated(projText.getText(), suiteText.getText());
+		}
 	}
 }
