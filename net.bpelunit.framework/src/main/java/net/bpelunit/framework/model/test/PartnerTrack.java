@@ -117,59 +117,54 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 	}
 	
 	public void run() {
-
-		fLogger.info(getName() + " now active.");
-		fActivityContext = new ActivityContext(fRunner, this);
-
-		// wait till all partners are active
-		// XXX make this better
 		try {
+			fLogger.info(getName() + " now active.");
+			fActivityContext = new ActivityContext(fRunner, this);
+
+			// wait till all partners are active
+			// XXX make this better
 			Thread.sleep(DELAY_AT_START);
-		} catch (InterruptedException e) {
-			// ignore because we are just waiting for some time
-			return;
-		}
-		
-		if (assumptionHolds(fAssumption)) {
-			for (Activity activity : fActivities) {
 
-				if (assumptionHolds(activity.getAssumption())) {
-					fLogger.info(getName() + " now starting activity "
-							+ activity);
-					activity.run(fActivityContext);
-					fLogger.info(getName() + " returned from activity "
-							+ activity);
-				} else {
-					fLogger.info(getName() + " skipped activity " + activity);
+			if (assumptionHolds(fAssumption)) {
+				for (Activity activity : fActivities) {
+					if (assumptionHolds(activity.getAssumption())) {
+						fLogger.info(getName() + " now starting activity " + activity);
+						activity.run(fActivityContext);
+						fLogger.info(getName() + " returned from activity " + activity);
+					} else {
+						fLogger.info(getName() + " skipped activity " + activity);
+					}
+
+					reportProgress(activity);
+					if (activity.hasProblems()) {
+						fStatus = activity.getStatus();
+						break;
+					}
 				}
-
-				reportProgress(activity);
-
-				if (activity.hasProblems()) {
-					fStatus = activity.getStatus();
-					break;
-				}
+			} else {
+				fLogger.info(getName() + " was skipped.");
 			}
-		} else {
-			fLogger.info(getName() + " was skipped.");
+
+			// Ensure set status before notification
+			if (!hasProblems()) {
+				fStatus = ArtefactStatus.createPassedStatus();
+			}
+
+			// Notify
+			fLogger.info(getName() + " finished.");
+			reportProgress(this);
 		}
-
-		// Ensure set status before notification
-		if (!hasProblems()) {
-			fStatus = ArtefactStatus.createPassedStatus();
+		catch (InterruptedException ex) {
+			fStatus = ArtefactStatus.createErrorStatus("Partner track " + getName() + " was interrupted");
 		}
-
-		// Notify
-		fLogger.info(getName() + " finished.");
-		reportProgress(this);
-
-		// Return
-		if (hasProblems()) {
-			fRunner.doneWithFault(this);
-		} else {
-			fRunner.done(this);
+		finally {
+			// Return
+			if (hasProblems()) {
+				fRunner.doneWithFault(this);
+			} else {
+				fRunner.done(this);
+			}
 		}
-
 	}
 
 	public boolean hasProblems() {
