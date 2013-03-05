@@ -45,34 +45,34 @@ Now, suppose your template is *not* a valid XML fragment, like this one:
       <foo>$i</foo>
     </template>
 
-You will need to use one of these options to get it working:
+That `<template>` element would not be parsed correctly. You will need to use one of these options to get it working:
 
 1. Put all VTL commands inside the first child element of `<template>`, so it is valid XML again:
 
-      <template>
-        <foo>
-      #set( $i = 0 )
-        $i
-        </foo>
-      </template>
+        <template>
+          <foo>
+        #set( $i = 0 )
+          $i
+          </foo>
+        </template>
 
 2. Put the entire template inside a CDATA section, so it is interpreted as text:
 
-      <template>
-        <![CDATA[<foo>
-      #set( $i = 0 )
-        $i
-        </foo>]]>
-      </template>
+        <template>
+          <![CDATA[<foo>
+        #set( $i = 0 )
+          $i
+          </foo>]]>
+        </template>
 
 3. Put the template in an external file. This is also useful for reusing the sample template over multiple activities or test cases. Supposing `template.vm` contains:
 
-      #set($i = 0)
-      <foo>$i</foo>
+        #set($i = 0)
+        <foo>$i</foo>
 
    Then you can safely refer to it from the `.bpts` file, like this:
 
-      <template src="template.vm"/>
+        <template src="template.vm"/>
 
 
 Template variables
