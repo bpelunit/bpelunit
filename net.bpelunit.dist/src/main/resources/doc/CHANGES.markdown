@@ -4,7 +4,7 @@ Changelog
 Staged for next version
 -----------------------
 
-Nothing yet: stay tuned!
+* _Feature_: CDATA sections are now supported for the 'template' element, as an alternative to using 'src' for templates that are not well-formed XML.
 
 Version 1.6.1
 -----------------------
