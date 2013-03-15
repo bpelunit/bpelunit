@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.bpelunit.framework.control.datasource.DataSourceUtil;
+import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.exception.DataSourceException;
@@ -20,7 +21,6 @@ import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
 
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.context.Context;
 
 import com.rits.cloning.Cloner;
 
@@ -72,7 +72,7 @@ public class TestCase implements ITestArtefact {
 
 	private String fSetUpVelocityScript;
 
-	private Context fTestSuiteVelocityContext;
+	private WrappedContext fTestSuiteVelocityContext;
 
 	private IDataSource fDataSource;
 
@@ -220,12 +220,13 @@ public class TestCase implements ITestArtefact {
 	 * case.
 	 * @throws DataSourceException 
 	 * */
-	public Context createVelocityContext() throws DataSourceException {
+	public WrappedContext createVelocityContext() throws DataSourceException {
 		if (fTestSuiteVelocityContext == null) {
 			fTestSuiteVelocityContext = getSuite().createVelocityContext();
 		}
-		Context ctx = CLONER.deepClone(fTestSuiteVelocityContext);
-		ctx.put("testCaseName", getRawName());
+
+		final WrappedContext ctx = CLONER.deepClone(fTestSuiteVelocityContext);
+		ctx.putReadOnly("testCaseName", getRawName());
 		if (fDataSource != null) {
 			DataSourceUtil.initializeContext(ctx, fDataSource, fRowIndex);
 		}

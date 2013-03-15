@@ -231,9 +231,9 @@ public class ReceiveDataSpecification extends DataSpecification {
 		try {
 			conditionContext = templateContext.createVelocityContext();
 		} catch (Exception e) {
-			setStatus(ArtefactStatus.createFailedStatus(String.format(
+			setStatus(ArtefactStatus.createErrorStatus(String.format(
 				"Could not create the Velocity context for this condition: %s",
-				e.getLocalizedMessage())));
+				e.getLocalizedMessage()), e));
 			return;
 		}
 		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);

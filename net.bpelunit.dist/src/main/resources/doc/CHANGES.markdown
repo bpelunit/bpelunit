@@ -4,6 +4,7 @@ Changelog
 Staged for next version
 -----------------------
 
+* _Feature_: Velocity templates are now explicitly forbidden to override predefined variables. Trying to do so will result in an exception being thrown.
 * _Feature_: CDATA sections are now supported for the 'template' element, as an alternative to using 'src' for templates that are not well-formed XML.
 
 Version 1.6.1

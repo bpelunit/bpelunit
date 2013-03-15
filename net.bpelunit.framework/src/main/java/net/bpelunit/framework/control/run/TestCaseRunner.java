@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
-import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.control.ws.LocalHTTPServer;
 import net.bpelunit.framework.coverage.CoverageConstants;
 import net.bpelunit.framework.exception.DataSourceException;
@@ -33,7 +33,6 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
-import org.apache.velocity.context.Context;
 
 /**
  * 
@@ -439,7 +438,7 @@ public class TestCaseRunner {
 
 	// ********************* Velocity contexts *********************
 
-	public Context createVelocityContext() throws DataSourceException  {
+	public WrappedContext createVelocityContext() throws DataSourceException  {
 		return fTestCase.createVelocityContext();
 	}
 

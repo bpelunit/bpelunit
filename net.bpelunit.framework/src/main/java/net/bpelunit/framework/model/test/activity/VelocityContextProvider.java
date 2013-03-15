@@ -1,10 +1,8 @@
 package net.bpelunit.framework.model.test.activity;
 
+import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.exception.DataSourceException;
 
-import org.apache.velocity.context.Context;
-
 public interface VelocityContextProvider {
-
-	Context createVelocityContext() throws DataSourceException;
+	WrappedContext createVelocityContext() throws DataSourceException;
 }

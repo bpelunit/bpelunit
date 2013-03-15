@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:exa="http://www.example.org/bookSearchWrapper/" xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:book="http://bpelunit.net/test/bookSearchArtifacts">
+    <tes:name>BookSearchTest</tes:name>
+    <tes:baseURL>http://localhost:7777/ws/</tes:baseURL>
+    <tes:deployment>
+        <tes:put type="testmode" name="BookSearch">
+            <tes:wsdl>BookSearchArtifacts.wsdl</tes:wsdl>
+        </tes:put>
+        <tes:partner name="BookSearch" wsdl="BookSearchArtifacts.wsdl"/>
+    </tes:deployment>
+    <tes:setUp>
+        <tes:script>#set($request = ['A', 'B', 'C', 'D'])</tes:script>
+    </tes:setUp>
+    <tes:testCases>
+        <!--First test case: test suite set up blocks work-->
+        <tes:testCase name="FourResultsA" basedOn="" abstract="false" vary="false">
+            <tes:clientTrack>
+                <tes:sendReceive service="exa:bookSearchService" port="bookSearchServiceSOAP" operation="search">
+                    <tes:send fault="false">
+                        <tes:data>
+                            <exa:search>
+                                <exa:keywords>
+                                    <exa:keyword>word</exa:keyword>
+                                </exa:keywords>
+                            </exa:search>
+                        </tes:data>
+                    </tes:send>
+                    <tes:receive fault="false">
+                        <tes:condition>
+                            <tes:expression>count(//exa:result)</tes:expression>
+                            <tes:value>4</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                </tes:sendReceive>
+            </tes:clientTrack>
+            <tes:partnerTrack name="BookSearch">
+                <tes:receiveSend service="book1:bookSearchHelper" port="bookSearchHelperSOAP" operation="search" xmlns:book1="http://www.example.org/bookSearchWrapper/">
+                    <tes:receive fault="false"/>
+                    <tes:send fault="false">
+                        <tes:template>
+                            <exa:searchResponse>
+                                <exa:results>
+                                    #foreach($r in $request)
+                                    <exa:result>$r</exa:result>
+                                    #end
+                                </exa:results>
+                            </exa:searchResponse>
+                        </tes:template>
+                    </tes:send>
+                </tes:receiveSend>
+            </tes:partnerTrack>
+        </tes:testCase>
+        <!--Second test case: test case set up blocks also work-->
+        <tes:testCase name="FourResultsB" basedOn="FourResultsA" abstract="false" vary="false">
+            <tes:setUp>
+                <tes:script>$request.set(2, 'X');</tes:script>
+            </tes:setUp>
+            <tes:clientTrack/>
+            <tes:partnerTrack name="BookSearch"/>
+        </tes:testCase>
+        <!--Third test case: set up blocks are properly isolated-->
+        <tes:testCase name="FourResultsC" basedOn="FourResultsB" abstract="false" vary="false">
+            <tes:setUp>
+                <tes:script>$request.set(3, 'X');</tes:script>
+            </tes:setUp>
+            <tes:clientTrack/>
+            <tes:partnerTrack name="BookSearch"/>
+        </tes:testCase>
+    </tes:testCases>
+</tes:testSuite>

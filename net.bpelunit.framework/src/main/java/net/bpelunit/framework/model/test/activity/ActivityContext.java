@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
+import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.control.ext.SendPackage;
 import net.bpelunit.framework.control.run.TestCaseRunner;
@@ -24,7 +25,6 @@ import net.bpelunit.framework.model.test.data.SendDataSpecification;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
-import org.apache.velocity.context.Context;
 import org.w3c.dom.Element;
 
 /**
@@ -218,7 +218,7 @@ public class ActivityContext implements VelocityContextProvider {
 
 	// **************************** Velocity ********************************
 
-	public Context createVelocityContext() throws DataSourceException {
+	public WrappedContext createVelocityContext() throws DataSourceException {
 		return fTrack.createVelocityContext();
 	}
 }

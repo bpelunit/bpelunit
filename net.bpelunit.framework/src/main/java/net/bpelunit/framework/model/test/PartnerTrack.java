@@ -15,6 +15,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.control.run.BlackBoard;
 import net.bpelunit.framework.control.run.BlackBoardKey;
 import net.bpelunit.framework.control.run.TestCaseRunner;
@@ -83,7 +84,7 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 
 	private NamespaceContext fNamespaceContext;
 
-	private Context fTestCaseVelocityContext;
+	private WrappedContext fTestCaseVelocityContext;
 
 	private ActivityContext fActivityContext;
 
@@ -261,20 +262,20 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 	 * @return Base VelocityContext for the partner track.
 	 * @throws DataSourceException 
 	 */
-	public Context createVelocityContext() throws DataSourceException   {
+	public WrappedContext createVelocityContext() throws DataSourceException   {
 		if (fTestCaseVelocityContext == null) {
 			fTestCaseVelocityContext = fRunner.createVelocityContext();
 		}
-		Context ctx = CLONER.deepClone(fTestCaseVelocityContext);
-		ctx.put("partnerTrackName", getRawName());
-		
+		WrappedContext ctx = CLONER.deepClone(fTestCaseVelocityContext);
+		ctx.putReadOnly("partnerTrackName", getRawName());
+
 		if(getPartner() instanceof Partner) {
-			ctx.put("partnerTrackURL", ((Partner)getPartner()).getSimulatedURL());
+			ctx.putReadOnly("partnerTrackURL", ((Partner)getPartner()).getSimulatedURL());
 		}
 		if (fActivityContext != null) {
-			ctx.put("request", fActivityContext.getLastRequest());
-			ctx.put("partnerTrackReceived", fActivityContext.getReceivedMessages());
-			ctx.put("partnerTrackSent", fActivityContext.getSentMessages());
+			ctx.putReadOnly("request", fActivityContext.getLastRequest());
+			ctx.putReadOnly("partnerTrackReceived", fActivityContext.getReceivedMessages());
+			ctx.putReadOnly("partnerTrackSent", fActivityContext.getSentMessages());
 		}
 		return ctx;
 	}

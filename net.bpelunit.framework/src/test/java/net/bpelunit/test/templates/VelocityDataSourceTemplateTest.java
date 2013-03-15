@@ -1,5 +1,9 @@
 package net.bpelunit.test.templates;
 
+import static org.junit.Assert.assertTrue;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
+import net.bpelunit.test.util.TestTestRunner;
 import net.bpelunit.test.util.TestUtil;
 
 import org.junit.Test;
@@ -108,5 +112,21 @@ public class VelocityDataSourceTemplateTest extends AbstractTemplateTest {
 	@Test
 	public void receiveConditionTemplatesShouldWork() throws Exception {
 		TestUtil.getResults(TC_VDS_TSDS_TEMP_RECVCOND);
+	}
+
+	/**
+	 * Checks that trying to redefine predefined variables is detected and reported correctly. 
+	 */
+	@Test
+	public void duplicateVariablesAreReportedAndRejected() throws Exception {
+		final TestTestRunner runner = new TestTestRunner(TC_SUP_DUPVARS.getParent(), TC_SUP_DUPVARS.getName());
+		runner.testRun();
+
+		assertTrue(runner.getTestSuite().getStatus().hasProblems());
+
+		final TestCase firstTestCase = (TestCase)runner.getTestSuite().getChildren().get(0);
+		final ArtefactStatus status = firstTestCase.getStatus();
+		assertTrue(status.hasProblems());
+		assertTrue(status.getExceptionMessage().contains("overwrite"));
 	}
 }
