@@ -48,12 +48,12 @@ import net.bpelunit.framework.model.test.TestSuite;
  * <tr>
  * <td>HALT_ON_ERROR</td>
  * <td>If set to "true", this option causes BPELUnit to stop after the first
- * test case error. The default is false.</td>
+ * test case error. The default is false. Can also be set by using setHaltOnError.</td>
  * </tr>
  * <tr>
  * <td>HALT_ON_FAILURE</td>
  * <td>If set to "true", this option causes BPELUnit to stop after the first
- * test case failure. The default is false.</td>
+ * test case failure. The default is false. Can also be set by using setHaltOnFailure.</td>
  * </tr>
  * </table>
  * </p>
@@ -127,13 +127,18 @@ public abstract class BPELUnitRunner {
 		fHaltOnError = false;
 		String haltOnErr = options.get(HALT_ON_ERROR);
 		if ((haltOnErr != null) && (haltOnErr.equalsIgnoreCase("true"))) {
-			fHaltOnError = true;
+			setHaltOnError(true);
+		} else {
+			// is default but when resetting this is needed
+			setHaltOnError(false);
 		}
 
 		fHaltOnFailure = false;
 		String haltOnFail = options.get(HALT_ON_FAILURE);
 		if ((haltOnFail != null) && (haltOnFail.equalsIgnoreCase("true"))) {
-			fHaltOnFailure = true;
+			setHaltOnFailure(true);
+		} else {
+			setHaltOnFailure(false);
 		}
 
 		String changeEndpoints = options.get(CHANGE_ENDPOINTS);
@@ -164,6 +169,14 @@ public abstract class BPELUnitRunner {
 
 		// Okay
 		fInitialized = true;
+	}
+
+	public void setHaltOnFailure(boolean b) {
+		fHaltOnFailure = b;
+	}
+
+	public void setHaltOnError(boolean b) {
+		fHaltOnError = b;
 	}
 
 	/**

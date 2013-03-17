@@ -16,6 +16,7 @@ import org.example.wsHT.api.XMLTTask;
 
 public class CompleteHumanTask extends Activity {
 
+	private static final int WAIT_IN_WSHT_QUERYTASK_LOOP = 200;
 	private String taskName;
 	private int waitTime = 100;
 	private int maxTimeOut = 10000;
@@ -48,10 +49,12 @@ public class CompleteHumanTask extends Activity {
 				do {
 					if(Thread.interrupted()) {
 						setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for task.", null));
+						return;
 					}
 					HumanPartner.WSHT_LOCK.lock();
 					locked = true;
 					taskList = client.getReadyTaskList(taskName).getTaskAbstractList();
+					System.out.println("List size: " + taskList.size());
 					if(taskList.size() == 0) {
 						HumanPartner.WSHT_LOCK.unlock();
 						locked = false;
@@ -63,7 +66,10 @@ public class CompleteHumanTask extends Activity {
 						setStatus(ArtefactStatus.createErrorStatus("Timeout while waiting for task " + taskName));
 						return;
 					}
+					Thread.sleep(WAIT_IN_WSHT_QUERYTASK_LOOP);
+					System.out.println("Pass through WS-HT loop");
 				} while (taskList.size() == 0);
+				System.out.println("Finished WS-HT loop");
 				XMLTTask taskToFinish = taskList.get(taskList.size()-1);
 				
 				this.taskId = taskToFinish.getId();
@@ -83,10 +89,11 @@ public class CompleteHumanTask extends Activity {
 			} else {
 				setStatus(ArtefactStatus.createPassedStatus());
 			}
+		} catch(InterruptedException e) {
+			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for task.", e));
 		} catch (Exception e) {
 			setStatus(ArtefactStatus.createErrorStatus("Error while completing human task: " + e.getMessage(), e));
 		}
-
 	}
 
 	@Override

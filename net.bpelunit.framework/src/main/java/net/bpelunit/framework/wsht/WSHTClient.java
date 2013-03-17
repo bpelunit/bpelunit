@@ -8,6 +8,7 @@ import java.net.URL;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.soap.SOAPFactory;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.lf5.util.StreamUtils;
@@ -33,6 +34,7 @@ import org.example.wsHT.api.xsd.XMLStartDocument;
 import org.example.wsHT.api.xsd.XMLStartDocument.Start;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class WSHTClient {
@@ -47,13 +49,14 @@ public class WSHTClient {
 			super(msg, t);
 		}
 	}
-	
+
 	private static class SOAPCreator {
 
 		private String soapMessage;
 
 		public SOAPCreator() throws IOException {
-			soapMessage = new String(StreamUtils.getBytes(WSHTClient.class.getResourceAsStream("soap.xml")));
+			soapMessage = new String(StreamUtils.getBytes(WSHTClient.class
+					.getResourceAsStream("soap.xml")));
 		}
 
 		public String createSOAP(String xml) {
@@ -68,87 +71,115 @@ public class WSHTClient {
 		} catch (Exception e) {
 			throw new WSHTException("Build problem: Resource not found", e);
 		}
-		
+
 		setAuthorizationRealm(username, password);
 	}
 
 	final void setAuthorizationRealm(String username, String password) {
 		String effectivePassword = password;
-		if(effectivePassword == null) {
+		if (effectivePassword == null) {
 			effectivePassword = "";
 		}
-		this.authorizationRealm = new String(Base64.encodeBase64((username + ":" + effectivePassword).getBytes()));
+		this.authorizationRealm = new String(Base64.encodeBase64((username
+				+ ":" + effectivePassword).getBytes()));
 	}
 
-	public GetMyTasksResponse getReadyTaskList() throws IOException, XmlException, ParserConfigurationException, SAXException {
+	public GetMyTasksResponse getReadyTaskList() throws IOException,
+			XmlException, ParserConfigurationException, SAXException {
 		return getReadyTaskList(null);
 	}
-	
-	public GetMyTasksResponse getTaskList(String taskName, XMLTStatus.Enum[] state) throws IOException, XmlException, ParserConfigurationException, SAXException  {
+
+	public GetMyTasksResponse getTaskList(String taskName,
+			XMLTStatus.Enum[] state) throws IOException, XmlException,
+			ParserConfigurationException, SAXException {
 		XMLGetMyTasksDocument doc = XMLGetMyTasksDocument.Factory.newInstance();
 		GetMyTasks getMyTasks = doc.addNewGetMyTasks();
 		getMyTasks.setTaskType("TASK");
 		getMyTasks.setStatusArray(state);
-		if(taskName != null) {
+		if (taskName != null) {
 			getMyTasks.setWhereClause("Task.Name = '" + taskName + "'");
 		}
 
 		Node result = makeWSHTSOAPRequest(doc.xmlText());
+		try {
+			System.out.println("{" + result.getNamespaceURI() + "}" + result.getLocalName());
+
+			NodeList firstLevel = result.getChildNodes();
+			for (int i = 0; i < firstLevel.getLength(); i++) {
+				Node firstLevelItem = firstLevel.item(i);
+				System.out.println("- {" + firstLevelItem.getNamespaceURI() + "}" + firstLevelItem.getLocalName() + firstLevelItem.getNodeType() );
+				
+				NodeList secondLevel = firstLevelItem.getChildNodes();
+				for(int j = 0; j < secondLevel.getLength(); j++) {
+					Node secondLevelItem = secondLevel.item(j);
+					System.out.println("-- {" + secondLevelItem.getNamespaceURI() + "}" + secondLevelItem
+							.getLocalName() + ": " + secondLevelItem.getNodeType());
+				}
+			}
+		} catch (Exception e) {
+
+		}
 
 		XMLGetMyTasksResponseDocument resDoc = XMLGetMyTasksResponseDocument.Factory
 				.parse(result);
 
 		return resDoc.getGetMyTasksResponse();
 	}
-	
-	public GetMyTasksResponse getReadyTaskList(String taskName) throws IOException, XmlException,
-			ParserConfigurationException, SAXException {
-		return getTaskList(taskName, new XMLTStatus.Enum[] {XMLTStatus.Enum.forString("READY")});
+
+	public GetMyTasksResponse getReadyTaskList(String taskName)
+			throws IOException, XmlException, ParserConfigurationException,
+			SAXException {
+		return getTaskList(taskName,
+				new XMLTStatus.Enum[] { XMLTStatus.Enum.forString("READY") });
 	}
 
 	public void completeTaskWithOutput(String taskId, XmlObject completeData) {
 		claim(taskId);
 		start(taskId);
-		
+
 		setOutput(taskId, completeData);
 		complete(taskId);
 	}
 
 	public GetInputResponse getInput(String taskId) {
 		try {
-			XMLGetInputDocument getInputDoc = XMLGetInputDocument.Factory.newInstance();
+			XMLGetInputDocument getInputDoc = XMLGetInputDocument.Factory
+					.newInstance();
 			GetInput getInput = getInputDoc.addNewGetInput();
 			getInput.setIdentifier(taskId);
-			
+
 			Node response = makeWSHTSOAPRequest(getInputDoc);
-			
-			XMLGetInputResponseDocument getInputResponseDoc = XMLGetInputResponseDocument.Factory.parse(response);
+
+			XMLGetInputResponseDocument getInputResponseDoc = XMLGetInputResponseDocument.Factory
+					.parse(response);
 			return getInputResponseDoc.getGetInputResponse();
 		} catch (Exception e) {
 			throw new WSHTException(e.getMessage(), e);
 		}
 	}
-	
+
 	private void setOutput(String taskId, XmlObject xmlPayload) {
 		try {
-			XMLSetOutputDocument setOutputDoc = XMLSetOutputDocument.Factory.newInstance();
+			XMLSetOutputDocument setOutputDoc = XMLSetOutputDocument.Factory
+					.newInstance();
 			SetOutput setOutput = setOutputDoc.addNewSetOutput();
 			setOutput.setIdentifier(taskId);
 			XmlObject taskData = setOutput.addNewTaskData();
 			taskData.set(xmlPayload);
-			
+
 			makeWSHTSOAPRequest(setOutputDoc);
 		} catch (Exception e) {
 			throw new WSHTException(e.getMessage(), e);
 		}
 	}
-	
+
 	private void complete(String taskId) {
 		try {
-			XMLCompleteDocument completeDoc = XMLCompleteDocument.Factory.newInstance();
+			XMLCompleteDocument completeDoc = XMLCompleteDocument.Factory
+					.newInstance();
 			Complete complete = completeDoc.addNewComplete();
 			complete.setIdentifier(taskId);
-			
+
 			makeWSHTSOAPRequest(completeDoc);
 		} catch (Exception e) {
 			throw new WSHTException(e.getMessage(), e);
@@ -180,8 +211,7 @@ public class WSHTClient {
 	}
 
 	private Node makeWSHTSOAPRequest(XmlTokenSource request)
-			throws IOException,	ParserConfigurationException, 
-			SAXException {
+			throws IOException, ParserConfigurationException, SAXException {
 		return makeWSHTSOAPRequest(request.xmlText());
 	}
 
@@ -190,7 +220,8 @@ public class WSHTClient {
 		HttpURLConnection con = (HttpURLConnection) wsHtEndpoint
 				.openConnection();
 		con.setRequestMethod("POST");
-		con.setRequestProperty("Authorization", "Basic " + getAuthorizationRealm());
+		con.setRequestProperty("Authorization", "Basic "
+				+ getAuthorizationRealm());
 		con.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
 		con.setRequestProperty("Accept", "application/soap+xml, text/xml");
 		con.setDoOutput(true);
