@@ -27,4 +27,6 @@ public interface ISingleContainer extends IActivityContainer {
 	IWhile setNewWhile();
 	
 	void removeMainActivity();
+	
+	String getXPathInDocument();
 }

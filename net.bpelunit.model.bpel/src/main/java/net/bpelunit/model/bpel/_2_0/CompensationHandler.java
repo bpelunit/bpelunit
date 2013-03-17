@@ -160,4 +160,10 @@ public class CompensationHandler implements ICompensationHandler {
 		mainActivity = null;
 		TComplexContainerHelper.removeMainActivity(getMainActivity());
 	}
+	
+	@Override
+	public String getXPathInDocument() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
