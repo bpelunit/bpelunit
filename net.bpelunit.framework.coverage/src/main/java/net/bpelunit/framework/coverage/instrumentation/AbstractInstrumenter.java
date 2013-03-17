@@ -49,6 +49,12 @@ public abstract class AbstractInstrumenter implements IVisitor  {
 		XMLUtil.appendTextNode(e, m.getName());
 	}
 	
+	/**
+	 * Called when the framework detects the execution of a certain marker.
+	 * Might be called for markers that don't belong to this metric.
+	 * 
+	 * @param markerName
+	 */
 	public abstract void pushMarker(String markerName);
 
 	public abstract IMetricCoverage getCoverageResult();

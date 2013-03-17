@@ -212,4 +212,130 @@ public class ActivityMetricCoverageTest {
 		markerMapping.put(marker, a);
 		markerCounter.put(marker, counter);
 	}
+	
+	@Test
+	public void testSimpleProcessOnePath() throws Exception {
+		// process is receive->if(assign, else:assign)->reply
+		addActivityEntry("Receive", "receive", 1);
+		addActivityEntry("A1", "assign", 1);
+		addActivityEntry("A2", "assign", 0);
+		addActivityEntry("Reply", "reply", 1);
+		
+		ActivityMetricCoverage amc = new ActivityMetricCoverage(markers, markerMapping, markerCounter);
+		
+		List<ICoverageResult> result = amc.getCoverageResult();
+		assertEquals(8, result.size());
+		
+		ICoverageResult currentResult = result.remove(0);
+		assertEquals("//receive['Receive']", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.remove(0);
+		assertEquals("//assign['A1']", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.remove(0);
+		assertEquals("//assign['A2']", currentResult.getBPELElementReference());
+		assertEquals(0.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.remove(0);
+		assertEquals("//reply['Reply']", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+
+		currentResult = result.remove(0);
+		assertEquals("//assign", currentResult.getBPELElementReference());
+		assertEquals(0.5, currentResult.coverage(), 0.001);
+		assertEquals(0.0, currentResult.min(), 0.001);
+		assertEquals(1.0, currentResult.max(), 0.001);
+		assertEquals(0.5, currentResult.avg(), 0.001);
+		assertEquals(1, currentResult.getExecutionCount());
+		
+		currentResult = result.remove(0);
+		assertEquals("//receive", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		assertEquals(1.0, currentResult.min(), 0.001);
+		assertEquals(1.0, currentResult.max(), 0.001);
+		assertEquals(1.0, currentResult.avg(), 0.001);
+		assertEquals(1, currentResult.getExecutionCount());
+		
+		currentResult = result.remove(0);
+		assertEquals("//reply", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		assertEquals(1.0, currentResult.min(), 0.001);
+		assertEquals(1.0, currentResult.max(), 0.001);
+		assertEquals(1.0, currentResult.avg(), 0.001);
+		assertEquals(1, currentResult.getExecutionCount());
+		
+		currentResult = result.remove(0);
+		assertEquals("Overall", currentResult.getBPELElementReference());
+		assertEquals(0.75, currentResult.coverage(), 0.001);
+		assertEquals(0.0, currentResult.min(), 0.001);
+		assertEquals(1.0, currentResult.max(), 0.001);
+		assertEquals(0.75, currentResult.avg(), 0.001);
+		assertEquals(3, currentResult.getExecutionCount());
+		
+	}
+	
+	@Test
+	public void testSimpleProcessTwoPaths() throws Exception {
+		// process is receive->if(assign, else:assign)->reply
+		addActivityEntry("Receive", "receive", 2);
+		addActivityEntry("A1", "assign", 1);
+		addActivityEntry("A2", "assign", 1);
+		addActivityEntry("Reply", "reply", 2);
+		
+		ActivityMetricCoverage amc = new ActivityMetricCoverage(markers, markerMapping, markerCounter);
+		
+		List<ICoverageResult> result = amc.getCoverageResult();
+		assertEquals(8, result.size());
+		
+		ICoverageResult currentResult = result.remove(0);
+		assertEquals("//receive['Receive']", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.remove(0);
+		assertEquals("//assign['A1']", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.remove(0);
+		assertEquals("//assign['A2']", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.remove(0);
+		assertEquals("//reply['Reply']", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		
+		currentResult = result.remove(0);
+		assertEquals("//assign", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		assertEquals(1.0, currentResult.min(), 0.001);
+		assertEquals(1.0, currentResult.max(), 0.001);
+		assertEquals(1.0, currentResult.avg(), 0.001);
+		assertEquals(2, currentResult.getExecutionCount());
+		
+		currentResult = result.remove(0);
+		assertEquals("//receive", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		assertEquals(2.0, currentResult.min(), 0.001);
+		assertEquals(2.0, currentResult.max(), 0.001);
+		assertEquals(2.0, currentResult.avg(), 0.001);
+		assertEquals(2, currentResult.getExecutionCount());
+		
+		currentResult = result.remove(0);
+		assertEquals("//reply", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		assertEquals(2.0, currentResult.min(), 0.001);
+		assertEquals(2.0, currentResult.max(), 0.001);
+		assertEquals(2.0, currentResult.avg(), 0.001);
+		assertEquals(2, currentResult.getExecutionCount());
+		
+		currentResult = result.remove(0);
+		assertEquals("Overall", currentResult.getBPELElementReference());
+		assertEquals(1.0, currentResult.coverage(), 0.001);
+		assertEquals(1.0, currentResult.min(), 0.001);
+		assertEquals(2.0, currentResult.max(), 0.001);
+		assertEquals(1.5, currentResult.avg(), 0.001);
+		assertEquals(6, currentResult.getExecutionCount());
+		
+	}
 }

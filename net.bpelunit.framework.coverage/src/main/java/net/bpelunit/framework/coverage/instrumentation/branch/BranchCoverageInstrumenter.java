@@ -14,6 +14,8 @@ import net.bpelunit.model.bpel.ICompensate;
 import net.bpelunit.model.bpel.ICompensateScope;
 import net.bpelunit.model.bpel.ICompensationHandler;
 import net.bpelunit.model.bpel.ICopy;
+import net.bpelunit.model.bpel.IElse;
+import net.bpelunit.model.bpel.IElseIf;
 import net.bpelunit.model.bpel.IEmpty;
 import net.bpelunit.model.bpel.IExit;
 import net.bpelunit.model.bpel.IFlow;
@@ -93,11 +95,19 @@ public class BranchCoverageInstrumenter extends AbstractInstrumenter {
 	}
 
 	public void visit(IForEach a) {
-		// TODO Structured Activity
+		instrumentActivity(a.getScope(), a.getXPathInDocument());
 	}
 
 	public void visit(IIf a) {
-		// TODO Structured Activity
+		instrumentActivity(a.getMainActivity(), a.getXPathInDocument());
+		for(IElseIf i : a.getElseIfs()) {
+			instrumentActivity(i.getMainActivity(), i.getXPathInDocument());
+		}
+		if(a.getElse() == null) {
+			IElse e = a.setNewElse();
+			e.setNewEmpty();
+		}
+		instrumentActivity(a.getElse().getMainActivity(), a.getElse().getXPathInDocument());
 	}
 
 	public void visit(IInvoke a) {

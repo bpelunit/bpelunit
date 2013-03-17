@@ -194,7 +194,7 @@ public class MarkerServiceTest {
 		post.setURI(new URI("http://localhost:" + TEST_PORT + "/" + CONTEXT + "/" + CoverageConstants.COVERAGE_SERVICE_BPELUNIT_NAME));
 		post.setRequestHeader("Content-Type", "text/xml");
 		InputStream soapMsgStream = getClass().getResourceAsStream("mark.soap.xml");
-		assertNotNull(soapMsgStream);
+		assertNotNull("mark.soap.xml exists in test resources", soapMsgStream);
 		post.setRequestBody(soapMsgStream);
 		client.executeMethod(post);
 		

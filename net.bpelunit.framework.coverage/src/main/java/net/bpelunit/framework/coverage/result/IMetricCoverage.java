@@ -11,7 +11,7 @@ public interface IMetricCoverage {
 	String getMetricName();
 	
 	/**
-	 * @return full class name of the metric that generated the coverage info
+	 * @return Metric ID for this metric as a technical ID without whitespace characters
 	 */
 	String getMetricId();
 		
