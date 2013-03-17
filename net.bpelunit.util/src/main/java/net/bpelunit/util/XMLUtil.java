@@ -208,36 +208,75 @@ public final class XMLUtil {
 		Node currentNode = e;
 		while (currentNode.getParentNode() != currentNode.getOwnerDocument()) {
 			path.add(0, currentNode);
-			if(currentNode instanceof Attr) {
-				Attr a = (Attr)currentNode;
+			if (currentNode instanceof Attr) {
+				Attr a = (Attr) currentNode;
 				currentNode = a.getOwnerElement();
 			} else {
 				currentNode = currentNode.getParentNode();
 			}
 		}
+		path.add(0, currentNode); // We need the root element
 
 		for (Node n : path) {
 			sb.append("/");
 
-			if(n.getNodeType() == Node.ATTRIBUTE_NODE) {
+			if (n.getNodeType() == Node.ATTRIBUTE_NODE) {
 				sb.append("@");
 			}
-			
+
 			String namespaceURI = n.getNamespaceURI();
 			if (namespaceURI != null && !namespaceURI.equals("")) {
 				sb.append(ctx.getPrefix(namespaceURI)).append(":");
 			}
 			sb.append(n.getLocalName());
+
+			if (n.getNodeType() == Node.ELEMENT_NODE) {
+				appendElementQualifier(sb, (Element)n);
+			}
 		}
 
 		return sb.toString();
 	}
 
 	/**
+	 * Append XPath [expr] like /a/b[1] or /a/b[@name='x']
+	 * @param sb
+	 * @param n
+	 */
+	private static void appendElementQualifier(StringBuffer sb, Element n) {
+		if(n.getParentNode() == n.getOwnerDocument()) {
+			return;
+		}
+		
+		if (n.getAttributes() != null
+				&& n.getAttributes().getNamedItem("name") != null) {
+			sb.append("[@name='")
+					.append(n.getAttributes().getNamedItem("name")
+							.getNodeValue()).append("']");
+		} else {
+			sb.append("[").append(getPosition(n)).append("]");
+		}
+	}
+
+	/**
+	 * Corresponds to the pos() xpath function
+	 * 
+	 * @param e
+	 * @return pos(), also the start index is 1 not 0
+	 */
+	public static int getPosition(Element e) {
+		Element parent = (Element)e.getParentNode();
+		List<Element> children = getChildElements(parent);
+		return children.indexOf(e) + 1;
+	}
+
+	/**
 	 * DOM Level 2 compliant method for adding text to an element
 	 * 
-	 * @param e element to which text should be added
-	 * @param contents new text to be added
+	 * @param e
+	 *            element to which text should be added
+	 * @param contents
+	 *            new text to be added
 	 * @return
 	 */
 	public static Text appendTextNode(Element e, String contents) {
@@ -245,21 +284,21 @@ public final class XMLUtil {
 		e.appendChild(textNode);
 		return textNode;
 	}
-	
+
 	public static String getTextContent(Node e) {
 		StringBuilder sb = new StringBuilder();
-		
+
 		NodeList children = e.getChildNodes();
-		if(children != null) {
-			for(int i = 0; i < children.getLength(); i++) {
+		if (children != null) {
+			for (int i = 0; i < children.getLength(); i++) {
 				Node n = children.item(i);
-				if(n.getNodeType() == Node.TEXT_NODE) {
+				if (n.getNodeType() == Node.TEXT_NODE) {
 					sb.append(n.getNodeValue());
 				}
 			}
 		}
-		
+
 		return sb.toString();
 	}
-	
+
 }

@@ -222,12 +222,15 @@ public class XMLUtilTest {
 		Element a = xml.getDocumentElement();
 		Element b = (Element) XMLUtil.getChildElementsByName(a, "B").get(0);
 		Element c = (Element) XMLUtil.getChildElementsByName(b, "C").get(0);
-		Attr d = c.getAttributeNode("id");
+		Element d = (Element) XMLUtil.getChildElementsByName(c, "D").get(0);
+		Attr id = c.getAttributeNode("id");
 		
-		assertEquals("/b:B/a:C", XMLUtil.getXPathForElement(c, ctx));
-		assertEquals("/b:B/a:C/@id", XMLUtil.getXPathForElement(d, ctx));
+		assertEquals("/a:A/b:B[1]/a:C[1]", XMLUtil.getXPathForElement(c, ctx));
+		assertEquals("/a:A/b:B[1]/a:C[1]/@id", XMLUtil.getXPathForElement(id, ctx));
+		assertEquals("/a:A/b:B[1]/a:C[1]/a:D[@name='testName']", XMLUtil.getXPathForElement(d, ctx));
 	}
 	
+	@Test
 	public void testAddTextNode() {
 		Document xml = XMLUtil.createDocument();
 		Element element = xml.createElement("a");
@@ -238,6 +241,7 @@ public class XMLUtilTest {
 		assertSame(t, element.getChildNodes().item(0));
 	}
 	
+	@Test
 	public void testGetTextContent() {
 		Document xml = XMLUtil.createDocument();
 		Element element = xml.createElement("a");
@@ -247,6 +251,15 @@ public class XMLUtilTest {
 		
 		XMLUtil.appendTextNode(element, "def");
 		assertEquals("abcdef", XMLUtil.getTextContent(element));
+	}
+
+	@Test
+	public void testGetPosition() throws Exception {
+		Document xml = XMLUtil.parseXML(getClass().getResourceAsStream("Position.xml"));
+		List<Element> children = XMLUtil.getChildElements(xml.getDocumentElement());
+		assertEquals(2, children.size());
+		assertEquals(1, XMLUtil.getPosition(children.get(0)));
+		assertEquals(2, XMLUtil.getPosition(children.get(1)));
 	}
 	
 	private static class NodeListMock implements NodeList {
