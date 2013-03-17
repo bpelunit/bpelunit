@@ -42,6 +42,7 @@
 			<groupId>net.bpelunit</groupId>
 			<artifactId>util</artifactId>
 			<version>${project.version}</version>
+			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
