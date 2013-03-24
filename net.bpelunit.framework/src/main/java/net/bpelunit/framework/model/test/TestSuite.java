@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.control.ws.LocalHTTPServer;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.TestCaseNotFoundException;
@@ -337,7 +338,7 @@ public class TestSuite implements ITestArtefact {
 	 * NOTE: to keep test cases and activities isolated, this context should
 	 * not be wrapped, but rather be cloned and then extended.
 	 */
-	public Context createVelocityContext()  {
+	public WrappedContext createVelocityContext()  {
 		try {
 			Velocity.init();
 		} catch(Exception e) {
@@ -347,12 +348,12 @@ public class TestSuite implements ITestArtefact {
 			Velocity.init();
 		}
 
-		Context ctx = toolManager.createContext();
-		ctx.put("baseURL", getBaseURL().toString());
-		ctx.put("collections", java.util.Collections.class);
-		ctx.put("putName", fProcessUnderTest.getName());
-		ctx.put("testSuiteName", this.getRawName());
-		ctx.put("testCaseCount", this.getTestCaseCount());
+		final WrappedContext ctx = new WrappedContext(toolManager.createContext());
+		ctx.putReadOnly("baseURL", getBaseURL().toString());
+		ctx.putReadOnly("collections", java.util.Collections.class);
+		ctx.putReadOnly("putName", fProcessUnderTest.getName());
+		ctx.putReadOnly("testSuiteName", this.getRawName());
+		ctx.putReadOnly("testCaseCount", this.getTestCaseCount());
 
 		if (fSetUpVelocityScript != null) {
 			StringWriter sW = new StringWriter();

@@ -226,19 +226,15 @@ public final class DataSourceUtil {
 					+ externalReference + "'", e);
 			}
 
-			// Try opening it as a file - absolute path
-			File f = new File(externalReference);
+			// File paths: either absolute, or relative from BPTS
 			try {
-				return new FileInputStream(f);
-			}
-			catch (FileNotFoundException e){
-				// let's try again as a relative path
-			}
-
-			// Last chance - relative path
-			f = new File(basedir, externalReference);
-			try {
-				return new FileInputStream(f);
+				final File f = new File(externalReference);
+				if (f.isAbsolute()) {
+					return new FileInputStream(f);
+				}
+				else {
+					return new FileInputStream(new File(basedir, externalReference));
+				}
 			} catch (FileNotFoundException e) {
 				throw new DataSourceException("File not found: '"
 						+ externalReference + "'", e);

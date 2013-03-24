@@ -8,6 +8,8 @@ package net.bpelunit.test.unit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.File;
+
 import javax.wsdl.Definition;
 import javax.xml.namespace.QName;
 
@@ -16,7 +18,6 @@ import net.bpelunit.framework.model.Partner;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 /**
@@ -29,7 +30,7 @@ import org.junit.Test;
  */
 public class TestWSDLReader extends SimpleTest {
 
-	private static final String ABS_PATH = FileUtils.toFile(TestWSDLReader.class.getResource("/")).getAbsolutePath() + "/wsdlreader/";
+	private static final String ABS_PATH = TestWSDLReader.class.getResource("/wsdlreader").getPath() + "/";
 	
 	// Helpers
 

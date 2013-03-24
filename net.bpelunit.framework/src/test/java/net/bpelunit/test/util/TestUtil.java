@@ -89,14 +89,14 @@ public class TestUtil {
 		return parse(str);
 	}
 
-	public static SOAPOperationCallIdentifier getCall(String path, String wsdl, String operationName) throws SpecificationException {
+	public static SOAPOperationCallIdentifier getCall(String path, String wsdl, String operationName, SOAPOperationDirectionIdentifier direction) throws SpecificationException {
 		String abspath = FileUtils.toFile(TestUtil.class.getResource(path)).getAbsolutePath() + File.separator;
 		
 		Definition d = SpecificationLoader.loadWsdlDefinition(abspath, wsdl, "TEST");
 		
 		Partner p= new Partner("MyPartner", d, null, "");
 		QName service= new QName("http://www.example.org/MyPartner/", "MyPartner");
-		SOAPOperationCallIdentifier operation= p.getOperation(service, "MyPartnerSOAP", operationName, SOAPOperationDirectionIdentifier.INPUT);
+		SOAPOperationCallIdentifier operation= p.getOperation(service, "MyPartnerSOAP", operationName, direction);
 		return operation;
 	}
 

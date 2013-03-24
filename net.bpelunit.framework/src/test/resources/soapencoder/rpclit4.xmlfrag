@@ -1,0 +1,5 @@
+<pre:someFirstPart xmlns:pre="http://www.example.org/MyPartner/">
+	<tns:me name="Phil" xmlns:tns="http://xxx" />
+</pre:someFirstPart>
+
+<pre:someSecondPart xmlns:pre="http://www.example.org/MyPartner/">directStringPart</pre:someSecondPart>

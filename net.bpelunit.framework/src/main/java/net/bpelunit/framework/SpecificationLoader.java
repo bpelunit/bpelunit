@@ -104,6 +104,7 @@ import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -526,8 +527,7 @@ public class SpecificationLoader {
 				for (int i = 0; i < set.getLength(); i++) {
 					if (set.item(i) instanceof Attr) {
 						Attr attr = (Attr) set.item(i);
-						List<Integer> ints = getRoundInformation(attr
-								.getValue());
+						List<Double> ints = getRoundInformation(attr.getValue());
 						if (ints != null) {
 							currentMax = ints.size();
 						}
@@ -1045,8 +1045,7 @@ public class SpecificationLoader {
 		// Namespaces
 		NamespaceContext context = getNamespaceMap(xmlSend.newCursor());
 
-		SendDataSpecification spec = new SendDataSpecification(activity,
-				context);
+		SendDataSpecification spec = new SendDataSpecification(activity, context);
 
 		String encodingStyle = operation.getEncodingStyle();
 		String targetURL = operation.getTargetURL();
@@ -1064,12 +1063,12 @@ public class SpecificationLoader {
 		}
 		final String delayExpression = xmlSend.getDelay();
 
-		// Import namespaces in the BPTS file to the root elements of the
-		// <data> or <template> element, and convert the <template> contents
-		// to text.
+		/*
+		 * Import namespaces in the BPTS file to the root elements of the <data>
+		 * or <template> element, and convert the <template> contents to text.
+		 */
 		Element rawDataRoot = null;
 		String templateText = null;
-
 		try {
 			if (xmlSend.isSetData()) {
 				rawDataRoot = getLiteralDataForSend(xmlSend.getData(),
@@ -1091,13 +1090,25 @@ public class SpecificationLoader {
 					sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
 					sbuf.append(">");
 					templateText = sbuf.toString();
-				} else {
-					// Embedded templates are parsed as XML and can reuse
-					// existing templates
-					Element templateRoot = copyAsRootWithNamespaces(xmlSend
-							.getTemplate());
-					templateText = XmlObject.Factory.parse(templateRoot)
-							.xmlText();
+				}
+				else if (hasChildElements(xmlSend.getTemplate())) {
+					// We have child elements: import their namespaces and then dump them as text
+					Element templateRoot = copyAsRootWithNamespaces(xmlSend.getTemplate());
+					templateText = XmlObject.Factory.parse(templateRoot).xmlText();
+				}
+				else {
+					/*
+					 * No child elements: the <template> is probably using a
+					 * CDATA section to store a standalone template that is not
+					 * valid XML, so use the text as-is.
+					 */
+					final XmlCursor c = xmlSend.getTemplate().newCursor();
+					String chars = "";
+					if (!c.toFirstContentToken().isFinish()) {
+						chars = c.getChars();
+					}
+					templateText = wrapWithDummyElement(chars);
+					c.dispose();
 				}
 			}
 		} catch (Exception ex) {
@@ -1110,8 +1121,8 @@ public class SpecificationLoader {
 		 * Get round data
 		 */
 		String delaySequence = xmlSend.getDelaySequence();
-		List<Integer> sequence = getRoundInformation(delaySequence);
-		int currentDelay = 0;
+		List<Double> sequence = getRoundInformation(delaySequence);
+		double currentDelay = 0;
 		if (sequence != null && sequence.size() > round) {
 			currentDelay = sequence.get(round);
 		}
@@ -1138,8 +1149,30 @@ public class SpecificationLoader {
 		return spec;
 	}
 
-	private Element getLiteralDataForSend(XMLAnyElement dataInSend,
-			String testDirectory) throws SpecificationException {
+	private String wrapWithDummyElement(final String text) {
+		String templateText;
+		final StringBuffer sbuf = new StringBuffer();
+		sbuf.append("<");
+		sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
+		sbuf.append(">");
+		sbuf.append(text);
+		sbuf.append("</");
+		sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
+		sbuf.append(">");
+		templateText = sbuf.toString();
+		return templateText;
+	}
+
+	private boolean hasChildElements(XmlObject xmlObject) {
+		final XmlCursor c = xmlObject.newCursor();
+		try {
+			return c.toFirstChild();
+		} finally {
+			c.dispose();
+		}
+	}
+
+	private Element getLiteralDataForSend(XMLAnyElement dataInSend, String testDirectory) throws SpecificationException {
 		Element rawDataRoot;
 		if (dataInSend.isSetSrc()) {
 			// src attribute in <data>
@@ -1157,31 +1190,29 @@ public class SpecificationLoader {
 		return rawDataRoot;
 	}
 
-	private Element copyAsRootWithNamespaces(XmlObject xmlData)
-			throws SpecificationException {
-		try {
-			Element rawDataRoot;
-			rawDataRoot = BPELUnitUtil.generateDummyElementNode();
-			// Use the internal namespace mechanism of XMLBeans to
-			// sort out namespaces and add them to the top-level element,
-			// ready to be copied by importNode().
-			XmlObject test = XmlObject.Factory.parse(xmlData.xmlText());
-			NodeList cn = test.getDomNode().getChildNodes();
-			for (int i = 0; i < cn.getLength(); i++) {
-				Node currentItem = cn.item(i);
-				// must be elements. There might be comments flying around,
-				// filter them.
-				if (currentItem instanceof Element) {
-					rawDataRoot.appendChild(rawDataRoot.getOwnerDocument()
-							.importNode(currentItem, true));
+	private Element copyAsRootWithNamespaces(XmlObject xmlData) throws SpecificationException {
+		final Element rawDataRoot = BPELUnitUtil.generateDummyElementNode();
+		final Document rawDataDoc = rawDataRoot.getOwnerDocument();
+
+		final XmlCursor dataCursor = xmlData.newCursor();
+		if (dataCursor.toFirstChild()) {
+			do {
+				// Skip comments
+				if (dataCursor.isComment()) {
+					continue;
 				}
-			}
-			return rawDataRoot;
-		} catch (XmlException e) {
-			throw new SpecificationException(
-					"An error occurred when reading the literal data or template of send for an activity",
-					e);
+
+				if (dataCursor.isContainer()) {
+					// Import elements, including their namespace nodes
+					final Node original = dataCursor.getDomNode();
+					final Node imported = rawDataDoc.importNode(original, true);
+					rawDataRoot.appendChild(imported);
+				}
+			} while (dataCursor.toNextSibling());
 		}
+
+		dataCursor.dispose();
+		return rawDataRoot;
 	}
 
 	/**
@@ -1492,13 +1523,13 @@ public class SpecificationLoader {
 		return track;
 	}
 
-	private List<Integer> getRoundInformation(String roundsAsText) {
-		List<Integer> list = new ArrayList<Integer>();
+	private List<Double> getRoundInformation(String roundsAsText) {
+		List<Double> list = new ArrayList<Double>();
 		if (roundsAsText != null && !"".equals(roundsAsText)) {
 			String[] values = roundsAsText.split(",");
 			for (int j = 0; j < values.length; j++) {
 				try {
-					list.add(Integer.parseInt(values[j].trim()));
+					list.add(Double.parseDouble(values[j].trim()));
 				} catch (NumberFormatException e) {
 					return null;
 				}

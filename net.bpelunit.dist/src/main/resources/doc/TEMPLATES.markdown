@@ -10,7 +10,7 @@ In addition, BPELUnit integrates all the generic tools in Velocity Tools 2.0, us
 How to build messages using templates
 -------------------------------------
 
-Simply replace the usual `<data>` element in the send activity with a `<template>` element. Suppose we had this fragment to start with:
+If your template is a valid XML fragment, you can simply replace the usual `<data>` element in the send activity with a `<template>` element. Suppose we had this fragment to start with:
 
     <send fault="false">
       <data>
@@ -24,7 +24,7 @@ Simply replace the usual `<data>` element in the send activity with a `<template
       </data>
     </send>
 
-Then we could change to a template and build its output using the `#foreach` Velocity command:
+Then we could change to a template and build its output using the `#foreach` Velocity command, so the test case is now a *test case template*:
 
     <send fault="false">
       <template>
@@ -38,36 +38,42 @@ Then we could change to a template and build its output using the `#foreach` Vel
       </template>
     </send>
 
-You should place Velocity commands at the start of their own lines. They will still work even if you place them later in a line, but you will get unwanted whitespace in the resulting SOAP message.
-
-*NOTE*: from now on, we will call test cases which use one or more templates *test case templates*.
-
-*IMPORTANT*: due to the way XMLBeans parses the BPTS files, you should put all VTL commands inside the first child of `<template>`. This works:
-
-    <template>
-      <foo>
-    #set( $i = 0 )
-      $i
-      </foo>
-    </template>
-
-This does *NOT*:
+Now, suppose your template is *not* a valid XML fragment, like this one:
 
     <template>
     #set( $i = 0 )
       <foo>$i</foo>
     </template>
-    
-Alternatively, you can use an external template to work around the previous restriction and reuse templates over multiple activities or test cases. Supposing `template.vm` contains:
 
-    #set($i = 0)
-    <foo>$i</foo>
+That `<template>` element would not be parsed correctly. You will need to use one of these options to get it working:
 
-Then you can safely refer to it from the `.bpts` file, like this:
+1. Put all VTL commands inside the first child element of `<template>`, so it is valid XML again:
 
-    <template src="template.vm"/>
+        <template>
+          <foo>
+        #set( $i = 0 )
+          $i
+          </foo>
+        </template>
 
-Also, make sure your data source variables are named differently than the built-in variables listed in the rest of this document. Conflicting variables can lead to unexpected behaviour.
+2. Put the entire template inside a CDATA section, so it is interpreted as text:
+
+        <template>
+          <![CDATA[<foo>
+        #set( $i = 0 )
+          $i
+          </foo>]]>
+        </template>
+
+3. Put the template in an external file. This is also useful for reusing the sample template over multiple activities or test cases. Supposing `template.vm` contains:
+
+        #set($i = 0)
+        <foo>$i</foo>
+
+   Then you can safely refer to it from the `.bpts` file, like this:
+
+        <template src="template.vm"/>
+
 
 Template variables
 ------------------

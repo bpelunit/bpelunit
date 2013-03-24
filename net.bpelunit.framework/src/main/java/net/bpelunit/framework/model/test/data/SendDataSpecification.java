@@ -102,7 +102,7 @@ public class SendDataSpecification extends DataSpecification {
 	/**
 	 * Constant delay for this send specification (if any).
 	 */
-	private int fDelay;
+	private double fDelay;
 
 	/**
 	 * Expression to be used to initialize the constant delay in fDelay, when equal to zero.
@@ -136,7 +136,7 @@ public class SendDataSpecification extends DataSpecification {
 		super(parent, nsContext);
 	}
 
-	public void initialize(SOAPOperationCallIdentifier operation, int delay, String delayExpression, String targetURL, String soapAction, String encodingStyle,
+	public void initialize(SOAPOperationCallIdentifier operation, double delay, String delayExpression, String targetURL, String soapAction, String encodingStyle,
 			ISOAPEncoder encoder, Element rawDataRoot, String dataTemplate, QName faultCode, String faultString) {
 		fOperation= operation;
 		fLiteralData= rawDataRoot;
@@ -224,7 +224,7 @@ public class SendDataSpecification extends DataSpecification {
 	public void delay(ActivityContext context) throws DataSourceException, XPathExpressionException, InterruptedException {
 		if (getDelay(context) > 0) {
 			Logger.getLogger(getClass()).info("Delaying send for " + getDelay(context) + " seconds...");
-			Thread.sleep(getDelay(context) * 1000);
+			Thread.sleep((int)(getDelay(context) * 1000));
 		}
 	}
 
@@ -252,11 +252,11 @@ public class SendDataSpecification extends DataSpecification {
 		return fOperation.isFault();
 	}
 
-	public void setDelay(int fDelay) {
+	public void setDelay(double fDelay) {
 		this.fDelay = fDelay;
 	}
 
-	public int getDelay(ActivityContext activityContext) throws DataSourceException, XPathExpressionException {
+	public double getDelay(ActivityContext activityContext) throws DataSourceException, XPathExpressionException {
 		if (getDelayExpression() != null) {
 			final Context vtlContext = activityContext.createVelocityContext();
 			final ContextXPathVariableResolver xpathResolver = new ContextXPathVariableResolver(vtlContext);
@@ -266,7 +266,7 @@ public class SendDataSpecification extends DataSpecification {
 			xpath.setXPathVariableResolver(xpathResolver);
 
 			// We should only evaluate these expressions once per row and round
-			fDelay = ((Double)xpath.evaluate(getDelayExpression(), fLiteralData, XPathConstants.NUMBER)).intValue();
+			fDelay = (Double)xpath.evaluate(getDelayExpression(), fLiteralData, XPathConstants.NUMBER);
 			setDelayExpression(null);
 		}
 		return fDelay;

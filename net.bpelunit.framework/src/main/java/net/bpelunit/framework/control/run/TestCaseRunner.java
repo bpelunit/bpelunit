@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import net.bpelunit.framework.BPELUnitRunner;
+import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
-import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.control.ws.LocalHTTPServer;
 import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.PartnerNotFoundException;
@@ -33,7 +33,6 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
-import org.apache.velocity.context.Context;
 
 /**
  * 
@@ -68,26 +67,19 @@ public class TestCaseRunner {
 	// Connection stuff
 	private LocalHTTPServer fServer;
 
-	// Pool connections over all test cases, to avoid socket leaks
-	private static final MultiThreadedHttpConnectionManager CONNECTION_MANAGER
-		= new NoPersistenceConnectionManager();
-
-	private HttpClient fClient;
-
 	// Other stuff
 	private Logger fLogger;
 
 	private boolean fAbortedByUser;
 
-	public TestCaseRunner(LocalHTTPServer localServer, TestCase caseToRun) {
+	private HttpClient fClient;
 
+	public TestCaseRunner(LocalHTTPServer localServer, TestCase caseToRun) {
 		fTestCase = caseToRun;
 		fServer = localServer;
 
 		fProblemOccurred = false;
 		fAbortedByUser = false;
-
-		fClient = new HttpClient(CONNECTION_MANAGER);
 
 		initializePartnerTracks(caseToRun);
 
@@ -110,62 +102,70 @@ public class TestCaseRunner {
 	}
 
 	public void run() {
+		// Pool connections to avoid socket leaks
+		MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
+		// Increase maximum per host, as most will use the same host (localhost)
+		connectionManager.getParams().setDefaultMaxConnectionsPerHost(10);
 
-		fLogger.info("Initiating testCase " + fTestCase.getName());
+		fClient = new HttpClient(connectionManager);
 
-		fServer.startTest(this);
+		try {
+			fLogger.info("Initiating testCase " + fTestCase.getName());
+			fServer.startTest(this);
 
-		List<Thread> threads = new ArrayList<Thread>();
+			final List<Thread> threads = new ArrayList<Thread>();
+			startPartnerTracks(threads);
+			waitForPartnerTracksOrError();
+
+			if (fProblemOccurred || fAbortedByUser) {
+				checkPartnerTracksForProblems();
+				interruptAllThreads(threads);
+				waitForPartnerTracks();
+			} else {
+				fLogger.info("Test case passed.");
+			}
+			fLogger.debug("All threads returned.");
+
+			fLogger.info("Stopping testCase " + fTestCase.getName());
+			fServer.stopTest(this);
+		}
+		finally {
+			connectionManager.shutdown();
+		}
+	}
+
+	private void startPartnerTracks(final List<Thread> threads) {
 		for (PartnerTrack partnerTrack : fPartnerTracks.keySet()) {
-			Thread trackThread = new Thread(partnerTrack, partnerTrack
-					.getPartnerName());
+			Thread trackThread = new Thread(partnerTrack,
+					partnerTrack.getPartnerName());
 			fLogger.debug("Now starting thread for partner "
 					+ partnerTrack.getPartnerName());
 			trackThread.start();
 			threads.add(trackThread);
 		}
-
 		fLogger.info("TestCase was started.");
+	}
 
-		// Wait for return or error
-		waitForPartnerTracksOrError();
-
-		if (fProblemOccurred || fAbortedByUser) {
-
-			for (PartnerTrack partnerTrack : fPartnerTracks.keySet()) {
-				if (partnerTrack.getStatus().isError()
-						|| partnerTrack.getStatus().isFailure()) {
-					fLogger.info(String.format(
-							"A test failure or error occurred on %s: %s",
-							partnerTrack.getName(),
-							partnerTrack.getStatus().getMessage()));
-				}
+	private void checkPartnerTracksForProblems() {
+		for (PartnerTrack partnerTrack : fPartnerTracks.keySet()) {
+			if (partnerTrack.getStatus().isError()
+					|| partnerTrack.getStatus().isFailure()) {
+				fLogger.info(String.format(
+						"A test failure or error occurred on %s: %s",
+						partnerTrack.getName(), partnerTrack
+								.getStatus().getMessage()));
 			}
-
-			fLogger.debug("Trying to interrupt all threads...");
-
-			// Interrupt all threads
-			for (Thread t : threads) {
-				if (t.isAlive()) {
-					t.interrupt();
-				}
-			}
-
-			fLogger.debug("All threads interrupted. Waiting for threads...");
-
-			// Wait till all have really returned
-			waitForPartnerTracks();
-
-		} else {
-			fLogger.info("Test case passed.");
 		}
+	}
 
-		fLogger.debug("All threads returned.");
-
-		fServer.stopTest(this);
-
-		fLogger.info("Stopping testCase " + fTestCase.getName());
-
+	private void interruptAllThreads(final List<Thread> threads) {
+		fLogger.debug("Trying to interrupt all threads...");
+		for (Thread t : threads) {
+			if (t.isAlive()) {
+				t.interrupt();
+			}
+		}
+		fLogger.debug("All threads interrupted. Waiting for threads...");
 	}
 
 	public synchronized PartnerTrack findPartnerTrackForName(String name)
@@ -387,7 +387,7 @@ public class TestCaseRunner {
 
 	// ********************* Velocity contexts *********************
 
-	public Context createVelocityContext() throws DataSourceException  {
+	public WrappedContext createVelocityContext() throws DataSourceException  {
 		return fTestCase.createVelocityContext();
 	}
 }

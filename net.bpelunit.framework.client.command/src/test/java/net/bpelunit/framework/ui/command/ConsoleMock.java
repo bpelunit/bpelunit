@@ -3,7 +3,7 @@ package net.bpelunit.framework.ui.command;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import net.bpelunit.framework.util.Console;
+import net.bpelunit.util.Console;
 
 public class ConsoleMock extends Console {
 

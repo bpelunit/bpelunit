@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>bpelunit</artifactId>
 		<groupId>net.bpelunit</groupId>
-		<version>1.6.1-SNAPSHOT</version>
+		<version>1.6.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>deployer-activevos9</artifactId>
-	<version>1.6.1-SNAPSHOT</version>
+	<version>1.6.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>BPELUnit :: ActiveVOS 9 Deployer</name>
 	<build>
@@ -73,7 +73,7 @@
 							net.bpelunit.framework.control.deployer.activevos9;singleton:=true
 						</Bundle-SymbolicName>
 						<Require-Bundle>
-							net.bpelunit.framework.client.eclipse,net.bpelunit.framework,net.bpelunit.util
+							net.bpelunit.framework.client.eclipse,net.bpelunit.framework
 						</Require-Bundle>
 						<Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
 						<Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>

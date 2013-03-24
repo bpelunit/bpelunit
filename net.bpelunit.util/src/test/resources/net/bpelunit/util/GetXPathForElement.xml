@@ -1,5 +1,9 @@
 <a:A xmlns:a="a">
 	<b:B xmlns:b="b">
-		<a:C id="SomeId"><a:D name="testName"/></a:C>
+		<a:C id="SomeId">
+			<a:D name="testName" />
+			<a:D />
+		</a:C>
+		<a:D />
 	</b:B>
 </a:A>

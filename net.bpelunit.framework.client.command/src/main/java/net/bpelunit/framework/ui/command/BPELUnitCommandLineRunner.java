@@ -27,7 +27,7 @@ import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.data.XMLData;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
-import net.bpelunit.framework.util.Console;
+import net.bpelunit.util.Console;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

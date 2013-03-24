@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.xmlbeans.XmlOptions;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.xml.result.XMLArtefact;
@@ -26,6 +27,8 @@ import net.bpelunit.framework.xml.result.XMLReceiveCondition.Condition;
 import net.bpelunit.test.end2end.End2EndTester;
 import net.bpelunit.test.util.StringOutputStream;
 import net.bpelunit.test.util.TestTestRunner;
+
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -37,6 +40,11 @@ import org.w3c.dom.Node;
  * @author Antonio García-Domínguez
  */
 public class XMLResultProducerTest {
+
+	@AfterClass
+	public static void shutdown() {
+		MultiThreadedHttpConnectionManager.shutdownAll();
+	}
 
 	@Test
 	public void testSendOnlyReceiveOnlyResultsAreValid() throws Exception {

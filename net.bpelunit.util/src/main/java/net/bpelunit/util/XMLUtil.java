@@ -253,9 +253,25 @@ public final class XMLUtil {
 			sb.append("[@name='")
 					.append(n.getAttributes().getNamedItem("name")
 							.getNodeValue()).append("']");
-		} else {
+		} else if(getChildrenCount((Element)n.getParentNode(), n.getNamespaceURI(), n.getLocalName()) == 1) {
+			// do nothing because it is already unique
+		}	else {
 			sb.append("[").append(getPosition(n)).append("]");
 		}
+	}
+
+	private static int getChildrenCount(Element parentNode,
+			String namespaceURI, String localName) {
+		int counter = 0;
+		
+		List<Element> children = getChildElements(parentNode);
+		for(Element c: children) {
+			if(namespaceURI.equals(c.getNamespaceURI()) && localName.equals(c.getLocalName())) {
+				counter++;
+			}
+		}
+		
+		return counter;
 	}
 
 	/**

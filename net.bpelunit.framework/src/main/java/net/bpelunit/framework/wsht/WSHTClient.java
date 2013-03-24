@@ -8,7 +8,6 @@ import java.net.URL;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.soap.SOAPFactory;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.lf5.util.StreamUtils;
@@ -34,7 +33,6 @@ import org.example.wsHT.api.xsd.XMLStartDocument;
 import org.example.wsHT.api.xsd.XMLStartDocument.Start;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class WSHTClient {
@@ -101,24 +99,6 @@ public class WSHTClient {
 		}
 
 		Node result = makeWSHTSOAPRequest(doc.xmlText());
-		try {
-			System.out.println("{" + result.getNamespaceURI() + "}" + result.getLocalName());
-
-			NodeList firstLevel = result.getChildNodes();
-			for (int i = 0; i < firstLevel.getLength(); i++) {
-				Node firstLevelItem = firstLevel.item(i);
-				System.out.println("- {" + firstLevelItem.getNamespaceURI() + "}" + firstLevelItem.getLocalName() + firstLevelItem.getNodeType() );
-				
-				NodeList secondLevel = firstLevelItem.getChildNodes();
-				for(int j = 0; j < secondLevel.getLength(); j++) {
-					Node secondLevelItem = secondLevel.item(j);
-					System.out.println("-- {" + secondLevelItem.getNamespaceURI() + "}" + secondLevelItem
-							.getLocalName() + ": " + secondLevelItem.getNodeType());
-				}
-			}
-		} catch (Exception e) {
-
-		}
 
 		XMLGetMyTasksResponseDocument resDoc = XMLGetMyTasksResponseDocument.Factory
 				.parse(result);

@@ -86,7 +86,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IAssign);
 		assertTrue(process.getMainActivity() instanceof Assign);
 		
-		assertEquals("/bpel:assign", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:assign[@name='AssignName']", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -96,7 +96,7 @@ public class ProcessTest {
 		assertNotNull(assign);
 		assertSame(assign, process.getMainActivity());
 		
-		assertEquals("/bpel:assign", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:assign", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -109,7 +109,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof ICompensate);
 		assertTrue(process.getMainActivity() instanceof Compensate);
 		
-		assertEquals("/bpel:compensate", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:compensate[@name='Compensate']", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -119,7 +119,7 @@ public class ProcessTest {
 		assertNotNull(compensate);
 		assertSame(compensate, process.getMainActivity());
 		
-		assertEquals("/bpel:compensate", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:compensate", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -132,7 +132,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof ICompensateScope);
 		assertTrue(process.getMainActivity() instanceof CompensateScope);
 		
-		assertEquals("/bpel:compensateScope", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:compensateScope[@name='CompensateScope']", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -142,7 +142,7 @@ public class ProcessTest {
 		assertNotNull(compensateScope);
 		assertSame(compensateScope, process.getMainActivity());
 		
-		assertEquals("/bpel:compensateScope", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:compensateScope", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -155,7 +155,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IEmpty);
 		assertTrue(process.getMainActivity() instanceof Empty);
 		
-		assertEquals("/bpel:empty", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:empty", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -165,7 +165,7 @@ public class ProcessTest {
 		assertNotNull(empty);
 		assertSame(empty, process.getMainActivity());
 		
-		assertEquals("/bpel:empty", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:empty", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -178,7 +178,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IExit);
 		assertTrue(process.getMainActivity() instanceof Exit);
 		
-		assertEquals("/bpel:exit", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:exit", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -188,7 +188,7 @@ public class ProcessTest {
 		assertNotNull(exit);
 		assertSame(exit, process.getMainActivity());
 		
-		assertEquals("/bpel:exit", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:exit", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -201,7 +201,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IFlow);
 		assertTrue(process.getMainActivity() instanceof Flow);
 		
-		assertEquals("/bpel:flow", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:flow", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -211,7 +211,7 @@ public class ProcessTest {
 		assertNotNull(flow);
 		assertSame(flow, process.getMainActivity());
 		
-		assertEquals("/bpel:flow", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:flow", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -224,7 +224,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IForEach);
 		assertTrue(process.getMainActivity() instanceof ForEach);
 		
-		assertEquals("/bpel:forEach", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:forEach", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -234,7 +234,7 @@ public class ProcessTest {
 		assertNotNull(forEach);
 		assertSame(forEach, process.getMainActivity());
 		
-		assertEquals("/bpel:forEach", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:forEach", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -247,7 +247,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IIf);
 		assertTrue(process.getMainActivity() instanceof If);
 		
-		assertEquals("/bpel:if", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:if", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -257,7 +257,7 @@ public class ProcessTest {
 		assertNotNull(iif);
 		assertSame(iif, process.getMainActivity());
 		
-		assertEquals("/bpel:if", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:if", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -270,7 +270,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IInvoke);
 		assertTrue(process.getMainActivity() instanceof Invoke);
 		
-		assertEquals("/bpel:invoke", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:invoke", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -280,7 +280,7 @@ public class ProcessTest {
 		assertNotNull(invoke);
 		assertSame(invoke, process.getMainActivity());
 		
-		assertEquals("/bpel:invoke", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:invoke", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -293,7 +293,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IPick);
 		assertTrue(process.getMainActivity() instanceof Pick);
 		
-		assertEquals("/bpel:pick", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:pick", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -303,7 +303,7 @@ public class ProcessTest {
 		assertNotNull(pick);
 		assertSame(pick, process.getMainActivity());
 		
-		assertEquals("/bpel:pick", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:pick", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -316,7 +316,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IReceive);
 		assertTrue(process.getMainActivity() instanceof Receive);
 		
-		assertEquals("/bpel:receive", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:receive", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -326,7 +326,7 @@ public class ProcessTest {
 		assertNotNull(receive);
 		assertSame(receive, process.getMainActivity());
 		
-		assertEquals("/bpel:receive", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:receive", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -339,7 +339,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IRepeatUntil);
 		assertTrue(process.getMainActivity() instanceof RepeatUntil);
 		
-		assertEquals("/bpel:repeatUntil", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:repeatUntil", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -349,7 +349,7 @@ public class ProcessTest {
 		assertNotNull(repeatUntil);
 		assertSame(repeatUntil, process.getMainActivity());
 		
-		assertEquals("/bpel:repeatUntil", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:repeatUntil", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -362,7 +362,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IReply);
 		assertTrue(process.getMainActivity() instanceof Reply);
 		
-		assertEquals("/bpel:reply", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:reply", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -372,7 +372,7 @@ public class ProcessTest {
 		assertNotNull(reply);
 		assertSame(reply, process.getMainActivity());
 		
-		assertEquals("/bpel:reply", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:reply", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -385,7 +385,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IRethrow);
 		assertTrue(process.getMainActivity() instanceof Rethrow);
 		
-		assertEquals("/bpel:rethrow", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:rethrow", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -395,7 +395,7 @@ public class ProcessTest {
 		assertNotNull(rethrow);
 		assertSame(rethrow, process.getMainActivity());
 		
-		assertEquals("/bpel:rethrow", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:rethrow", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -408,7 +408,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IScope);
 		assertTrue(process.getMainActivity() instanceof Scope);
 		
-		assertEquals("/bpel:scope", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:scope", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -418,7 +418,7 @@ public class ProcessTest {
 		assertNotNull(scope);
 		assertSame(scope, process.getMainActivity());
 		
-		assertEquals("/bpel:scope", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:scope", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -431,7 +431,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof ISequence);
 		assertTrue(process.getMainActivity() instanceof Sequence);
 		
-		assertEquals("/bpel:sequence", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:sequence", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -441,7 +441,7 @@ public class ProcessTest {
 		assertNotNull(scope);
 		assertSame(scope, process.getMainActivity());
 		
-		assertEquals("/bpel:sequence", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:sequence", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -454,7 +454,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IThrow);
 		assertTrue(process.getMainActivity() instanceof Throw);
 		
-		assertEquals("/bpel:throw", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:throw", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -464,7 +464,7 @@ public class ProcessTest {
 		assertNotNull(t);
 		assertSame(t, process.getMainActivity());
 		
-		assertEquals("/bpel:throw", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:throw", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -477,7 +477,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IValidate);
 		assertTrue(process.getMainActivity() instanceof Validate);
 		
-		assertEquals("/bpel:validate", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:validate", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -487,7 +487,7 @@ public class ProcessTest {
 		assertNotNull(validate);
 		assertSame(validate, process.getMainActivity());
 		
-		assertEquals("/bpel:validate", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:validate", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -500,7 +500,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IWait);
 		assertTrue(process.getMainActivity() instanceof Wait);
 		
-		assertEquals("/bpel:wait", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:wait", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -510,7 +510,7 @@ public class ProcessTest {
 		assertNotNull(wait);
 		assertSame(wait, process.getMainActivity());
 		
-		assertEquals("/bpel:wait", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:wait", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -523,7 +523,7 @@ public class ProcessTest {
 		assertTrue(process.getMainActivity() instanceof IWhile);
 		assertTrue(process.getMainActivity() instanceof While);
 		
-		assertEquals("/bpel:while", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:while", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test
@@ -533,7 +533,7 @@ public class ProcessTest {
 		assertNotNull(w);
 		assertSame(w, process.getMainActivity());
 		
-		assertEquals("/bpel:while", process.getMainActivity().getXPathInDocument());
+		assertEquals("/bpel:process/bpel:while", process.getMainActivity().getXPathInDocument());
 	}
 	
 	@Test

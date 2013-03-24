@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit Eclipse Client Plugin
 Bundle-SymbolicName: net.bpelunit.framework.client.eclipse; singleton:=true
-Bundle-Version: 1.6.1.qualifier
+Bundle-Version: 1.6.2.qualifier
 Bundle-Activator: net.bpelunit.framework.client.eclipse.BPELUnitActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -29,4 +29,5 @@ Export-Package: net.bpelunit.framework.client.eclipse,
  net.bpelunit.framework.client.model
 Bundle-Vendor: Leibniz Universität Hannover
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.apache.xmlbeans

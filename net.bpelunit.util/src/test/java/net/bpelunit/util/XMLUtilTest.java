@@ -222,12 +222,16 @@ public class XMLUtilTest {
 		Element a = xml.getDocumentElement();
 		Element b = (Element) XMLUtil.getChildElementsByName(a, "B").get(0);
 		Element c = (Element) XMLUtil.getChildElementsByName(b, "C").get(0);
-		Element d = (Element) XMLUtil.getChildElementsByName(c, "D").get(0);
+		Element d1 = (Element) XMLUtil.getChildElementsByName(c, "D").get(0);
+		Element d2 = (Element) XMLUtil.getChildElementsByName(c, "D").get(1);
+		Element d3 = (Element) XMLUtil.getChildElementsByName(b, "D").get(0);
 		Attr id = c.getAttributeNode("id");
 		
-		assertEquals("/a:A/b:B[1]/a:C[1]", XMLUtil.getXPathForElement(c, ctx));
-		assertEquals("/a:A/b:B[1]/a:C[1]/@id", XMLUtil.getXPathForElement(id, ctx));
-		assertEquals("/a:A/b:B[1]/a:C[1]/a:D[@name='testName']", XMLUtil.getXPathForElement(d, ctx));
+		assertEquals("/a:A/b:B/a:C", XMLUtil.getXPathForElement(c, ctx));
+		assertEquals("/a:A/b:B/a:C/@id", XMLUtil.getXPathForElement(id, ctx));
+		assertEquals("/a:A/b:B/a:C/a:D[@name='testName']", XMLUtil.getXPathForElement(d1, ctx));
+		assertEquals("/a:A/b:B/a:C/a:D[2]", XMLUtil.getXPathForElement(d2, ctx));
+		assertEquals("/a:A/b:B/a:D", XMLUtil.getXPathForElement(d3, ctx));
 	}
 	
 	@Test
@@ -257,9 +261,11 @@ public class XMLUtilTest {
 	public void testGetPosition() throws Exception {
 		Document xml = XMLUtil.parseXML(getClass().getResourceAsStream("Position.xml"));
 		List<Element> children = XMLUtil.getChildElements(xml.getDocumentElement());
-		assertEquals(2, children.size());
+		assertEquals(4, children.size());
 		assertEquals(1, XMLUtil.getPosition(children.get(0)));
 		assertEquals(2, XMLUtil.getPosition(children.get(1)));
+		assertEquals(3, XMLUtil.getPosition(children.get(2)));
+		assertEquals(4, XMLUtil.getPosition(children.get(3)));
 	}
 	
 	private static class NodeListMock implements NodeList {

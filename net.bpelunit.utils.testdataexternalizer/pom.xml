@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>bpelunit</artifactId>
 		<groupId>net.bpelunit</groupId>
-		<version>1.6.1-SNAPSHOT</version>
+		<version>1.6.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>testdataexternalizer</artifactId>
-	<version>1.6.1-SNAPSHOT</version>
+	<version>1.6.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>BPELUnit :: Test Data Externalizer</name>
 	<build>
@@ -21,15 +21,16 @@
 			</resource>
 		</resources>
 		<plugins>
-                          <plugin>
-                              <groupId>org.apache.felix</groupId>
-                              <artifactId>maven-bundle-plugin</artifactId>
-                              <configuration>
-                                  <instructions>
-                                      <Bundle-SymbolicName>net.bpelunit.utils.testdataexternalizer;symbolic:=true</Bundle-SymbolicName>
-                                  </instructions>
-                              </configuration>
-                          </plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>net.bpelunit.utils.testdataexternalizer;symbolic:=true</Bundle-SymbolicName>
+						<Import-Package>org.jdom.*;org.apache.commons.io.*;!*</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -49,9 +50,9 @@
 			<artifactId>junit</artifactId>
 		</dependency>
 		<dependency>
-		<groupId>commons-cli</groupId>
-		<artifactId>commons-cli</artifactId>
-		<version>1.2</version>
-	</dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 </project>

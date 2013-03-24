@@ -4,7 +4,17 @@ Changelog
 Staged for next version
 -----------------------
 
-* None yet: please check back soon!
+* _Feature_: Velocity templates are now explicitly forbidden to override predefined variables. Trying to do so will result in an exception being thrown.
+* _Feature_: CDATA sections are now supported for the 'template' element, as an alternative to using 'src' for templates that are not well-formed XML.
+
+Version 1.6.1
+-----------------------
+
+* _Feature_: the 'delay' and 'delayExpression' attributes now accept floating-point values (such as "2.5" or "0.5") in addition to integer values.
+* _Feature_: BPELUnit automatically ensures that rpc/literal part accessors are unqualified XML elements, according to WS-I BP 1.1 R2735, even if the .bpts file (incorrectly) qualifies these elements.
+* _Fix_: BPELUnit did not wrap rpc/literal responses using the operation name plus the 'Response' suffix suggested by WS-I BP 1.1 and enforced by engines such as Apache ODE.
+* _Fix_: BPELUnit previously produced test timeouts by waiting for skipped activities or partner tracks (using the `assume` attribute) to provide replies to requests from the composition. This has now been fixed.
+* _Fix_: do not allow for relative paths from the current directory in the `src` attribute of the `<dataSource>` element. Only URLs, absolute paths and relative paths from the BPTS file should be accepted.
 
 Version 1.6.0
 -----------------------

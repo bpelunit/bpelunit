@@ -1,3 +1,3 @@
-#set($delayLeft       = [0, 2])
-#set($delayRight      = [2, 0])
-#set($expectedMessage = ['left: Hello', 'right: Bye'])
+#set($delayLeft       = [0, 2, 1.5])
+#set($delayRight      = [2, 0, 0.5])
+#set($expectedMessage = ['left: Hello', 'right: Bye', 'right: Bye'])

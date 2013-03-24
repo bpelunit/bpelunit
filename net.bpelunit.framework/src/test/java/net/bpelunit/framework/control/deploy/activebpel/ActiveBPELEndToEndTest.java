@@ -98,7 +98,7 @@ public class ActiveBPELEndToEndTest {
 
 		final TestTestRunner runner = new TestTestRunner("src/test/resources/engines/activebpel/delay", "EchoFirst.bpts");
 		runner.testRun();
-		assertEquals("All tests should have passed", 2, runner.getPassed());
+		assertEquals("All tests should have passed", 3, runner.getPassed());
 		assertEquals("No tests should have failed or had errors", 0, runner.getProblems());
 	}
 
