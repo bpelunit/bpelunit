@@ -650,6 +650,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 				createAction(manager, "Run Test Case", new Action() {
 					@Override
 					public void run() {
+						getEditor().doSave(null);
 						runTestCase((XMLTestCase) object);
 					}
 				});
