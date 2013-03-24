@@ -33,6 +33,7 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
  * 
  */
 public class BPELUnitNewWizard extends BasicNewResourceWizard {
+	private static final String DEFAULT_BASEURL = "http://localhost:7777/ws";
 	private WizardNewFileCreationPage mainPage;
 
 	public BPELUnitNewWizard() {
@@ -88,6 +89,7 @@ public class BPELUnitNewWizard extends BasicNewResourceWizard {
 		
 		// Create some initial stuff
 		XMLTestSuite suite= document.addNewTestSuite();
+		suite.setBaseURL(DEFAULT_BASEURL);
 		XMLDeploymentSection deploymentSection= suite.addNewDeployment();
 		deploymentSection.addNewPut();
 		suite.addNewTestCases();
