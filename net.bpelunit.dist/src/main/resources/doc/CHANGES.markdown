@@ -6,6 +6,13 @@ Staged for next version
 
 * _Feature_: Velocity templates are now explicitly forbidden to override predefined variables. Trying to do so will result in an exception being thrown.
 * _Feature_: CDATA sections are now supported for the 'template' element, as an alternative to using 'src' for templates that are not well-formed XML.
+* _Feature_: Eclipse runner does now allow to make a launch config with selected test cases
+* _Feature_: Eclipse tooling supports running a test case from the context menu
+* _Feature_: Eclipse runner supports "halt on error" and "halt on failure"
+* _Improvement_: Set a default base URL when creating a new test case in Eclipse tooling
+* _Improvement_: Do not allow duplicate test case names when running a test suite
+* _Improvement_: Internal clean-ups in framework
+* _Architecture_: Old code coverage code is in progress of being replaced with a new implementation
 
 Version 1.6.1
 -----------------------
