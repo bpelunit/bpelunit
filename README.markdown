@@ -27,16 +27,7 @@ These are regular Java projects. However, the core library and the data source t
 Building with Maven
 -------------------
 
-In order to build the code with Maven 3.0 or higher (needed for the Tycho-based projects), you only need to run these commands:
-
-    mvn install
-    cd tycho
-    mvn install
-    cd ..
-    cd net.bpelunit.dist
-    mvn install
-
-This will build and install into your local Maven repository everything: core projects, Eclipse plugins, the Eclipse feature and update site, and the standalone distribution.
+In order to build the code with Maven 3.0 or higher (needed for the Tycho-based projects), you only need to run ``./build-all.sh``. It will build and install into your local Maven repository everything: core projects, Eclipse plugins, the Eclipse feature and update site, and the standalone distribution.
 
 Please note that due to a limitation in Tycho, the core projects and the Eclipse plugins have been split into separate reactors. Also, you *must* install the core projects into your Maven repository before you can build the Tycho-based projects or the ``net.bpelunit.dist`` project.
 
@@ -52,11 +43,7 @@ If you experience a StackOverflowException most likely you will need to increase
 Building with Eclipse PDE
 -------------------------
 
-If you want, you can also work on the BPELUnit code straight from the Eclipse Plug-in Development Environment. To do so, you will still need Maven to bootstrap the environment. Just run this from this directory:
-
-    mvn install -DskipTests=true
-
-That will ensure that the dependencies will be available in the ``target/dependency`` directory in each core project, and that the required code and ``MANIFEST.MF`` files are automatically generated.
+If you want, you can also work on the BPELUnit code straight from the Eclipse Plug-in Development Environment. To do so, you will still need Maven to bootstrap the environment. Just run ``./prepare-eclipse-projects.sh``from this directory. It will ensure that the dependencies will be available in the ``target/dependency`` directory in each core project, and that the required code and ``MANIFEST.MF`` files are automatically generated.
 
 You should now import the projects into your Eclipse workspace. You may need to define the M2_REPO variable in the "Java Build Path" section of one of the projects if you have not done so yet. It needs to point to your local Maven repository: on most UNIX-based systems, it should be ``$HOME/.m2/repository``. Please consult the Maven documentation for more details.
 
