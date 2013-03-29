@@ -31,7 +31,7 @@ Bundle-License: http://www.eclipse.org/legal/epl-v10.html
 Bundle-ManifestVersion: 2
 Bundle-Name: BPELUnit :: Coverage Measurement
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-SymbolicName: net.bpelunit.framework;symbolic:=true
+Bundle-SymbolicName: net.bpelunit.framework.coverage;symbolic:=true
 Bundle-Vendor: Leibniz Universität Hannover
 Bundle-Version: 1.6.1.SNAPSHOT
 Created-By: Apache Maven Bundle Plugin

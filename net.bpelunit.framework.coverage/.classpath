@@ -8,8 +8,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.model.bpel"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/net.bpelunit.util"/>
-	<classpathentry kind="lib" path="target/dependency/commons-io-1.3.2.jar"/>
-	<classpathentry kind="lib" path="target/dependency/jdom-1.1.jar"/>
 	<classpathentry kind="src" path="/net.bpelunit.framework"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
