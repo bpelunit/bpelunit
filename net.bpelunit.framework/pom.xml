@@ -75,8 +75,8 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Export-Package>net.bpelunit.framework.control.deploy;net.bpelunit.framework;net.bpelunit.framework.*;schemaorg_apache_xmlbeans.system.*;net.bpelunit.framework.control.ext;net.bpelunit.framework.control.deploy.*;net.bpelunit.framework.xml.suite.*;net.bpelunit.framework.control.ext.*;net.bpelunit.framework.control.*;org.apache.xmlbeans.*</Export-Package>
-            <_exportcontents>com.ibm.wsdl.*;javax.wsdl.*;org.apache.xmlbeans.*;org.apache.commons.lang;org.apache.log4j.*;de.schlichtherle.io.*;net.bpelunit.framework.xml.suite.*</_exportcontents>
+            <Export-Package>net.bpelunit.framework.*;schemaorg_apache_xmlbeans.system.*</Export-Package>
+            <_exportcontents>com.ibm.wsdl.*;javax.wsdl.*;org.apache.xmlbeans.*;org.apache.commons.lang;org.apache.log4j.*;de.schlichtherle.io.*</_exportcontents>
             <Import-Package>org.jdom.*;org.apache.commons.io.*;!*</Import-Package>
             <Require-Bundle>net.bpelunit.model.bpel</Require-Bundle>
 <!-- 
