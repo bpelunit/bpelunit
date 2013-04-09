@@ -8,7 +8,8 @@
 	<deployer extensionClass="net.bpelunit.framework.control.deploy.activevos9.ActiveVOS9Deployer" type="activevos9"/>
 	<deployer extensionClass="net.bpelunit.framework.control.deploy.simple.TestModeDeployer" type="testmode"/>
 	<deployer extensionClass="net.bpelunit.framework.control.deploy.simple.FixedDeployer" type="fixed"/>
-	
+        <deployer extensionClass="net.bpelunit.framework.control.deploy.ode.ODEDeployer" type="ode"/>
+
 	<encoder type="document/literal" extensionClass="net.bpelunit.framework.control.soap.DocumentLiteralEncoder" />
 	<encoder type="rpc/literal" extensionClass="net.bpelunit.framework.control.soap.RPCLiteralEncoder" />
 	
