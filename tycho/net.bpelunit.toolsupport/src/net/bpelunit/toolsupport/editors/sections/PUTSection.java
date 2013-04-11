@@ -11,11 +11,12 @@ import java.util.List;
 
 import net.bpelunit.framework.client.eclipse.ExtensionControl;
 import net.bpelunit.framework.client.eclipse.dialog.field.FileSelector;
-import net.bpelunit.framework.control.ext.ExtensionRegistry;
 import net.bpelunit.framework.control.deploy.IBPELDeployer;
+import net.bpelunit.framework.control.ext.ExtensionRegistry;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLProperty;
+import net.bpelunit.framework.xml.suite.XMLSetUp;
 import net.bpelunit.toolsupport.editors.TestSuitePage;
 import net.bpelunit.toolsupport.editors.formwidgets.ComboEntry;
 import net.bpelunit.toolsupport.editors.formwidgets.ContextPart;
@@ -23,7 +24,9 @@ import net.bpelunit.toolsupport.editors.formwidgets.EntryAdapter;
 import net.bpelunit.toolsupport.editors.formwidgets.FormEntry;
 import net.bpelunit.toolsupport.editors.formwidgets.FormEntryAdapter;
 import net.bpelunit.toolsupport.editors.formwidgets.TextEntry;
+import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
 import net.bpelunit.toolsupport.editors.wizards.DeploymentOptionWizard;
+import net.bpelunit.toolsupport.editors.wizards.SetupWizard;
 import net.bpelunit.toolsupport.util.WSDLFileFilter;
 import net.bpelunit.toolsupport.util.WSDLFileValidator;
 
@@ -31,6 +34,8 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -40,6 +45,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
@@ -83,9 +89,50 @@ public class PUTSection extends BPELUnitSection implements ContextPart, IHyperli
 				content,
 				"<form><p><a href=\"deploymentOptions\">Configure Deployment Options...</a></p></form>",
 				toolkit, this);
-
+		createTestSetup(content, toolkit);
 		section.setClient(content);
 		toolkit.paintBordersFor(content);
+	}
+
+	private void createTestSetup(Composite content, FormToolkit toolkit) {
+		Hyperlink link = toolkit.createHyperlink(content, "Edit Setup...", SWT.NULL);
+		link.addHyperlinkListener(new IHyperlinkListener() {
+			@Override
+			public void linkActivated(HyperlinkEvent arg0) {
+				// TODO Auto-generated method stub
+				XMLSetUp setup = getTestSuite().getSetUp();
+				if (setup == null) {
+					setup = getTestSuite().addNewSetUp();
+				}
+				Wizard wizard = new SetupWizard(getPage(), ActivityEditMode.ADD, setup, null);
+
+				if (openWizard(wizard)) {
+					markDirty();
+				}
+				if (!setup.isSetDataSource() && !setup.isSetScript()) {
+					getTestSuite().unsetSetUp();
+				}
+			}
+
+			@Override
+			public void linkEntered(HyperlinkEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void linkExited(HyperlinkEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+	}
+
+	private boolean openWizard(IWizard wizard) {
+
+		WizardDialog dialog = new WizardDialog(getShell(), wizard);
+		return (dialog.open() == Window.OK);
 	}
 
 	private void createWSDLEntry(Composite client, FormToolkit toolkit) {

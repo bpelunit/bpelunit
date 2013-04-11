@@ -14,23 +14,24 @@ import net.bpelunit.framework.client.eclipse.dialog.field.ComboField;
 import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
 import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
 import net.bpelunit.framework.client.eclipse.dialog.validate.NullValidator;
-import net.bpelunit.framework.client.eclipse.launch.BPELLaunchShortCut;
 import net.bpelunit.framework.control.util.ActivityUtil;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.xml.suite.XMLHumanPartnerDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLHumanPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLPartnerTrack;
+import net.bpelunit.framework.xml.suite.XMLSetUp;
 import net.bpelunit.framework.xml.suite.XMLTestCase;
 import net.bpelunit.framework.xml.suite.XMLTestCasesSection;
 import net.bpelunit.framework.xml.suite.XMLTestSuite;
 import net.bpelunit.framework.xml.suite.XMLTrack;
 import net.bpelunit.toolsupport.ToolSupportActivator;
 import net.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
+import net.bpelunit.toolsupport.editors.wizards.SetupWizard;
 
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -44,6 +45,9 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -178,6 +182,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 	public TestCaseAndTrackSection(Composite parent, TestSuitePage page, FormToolkit toolkit) {
 		super(parent, toolkit, page, true, true, null);
 		testSuite = page.getSuiteEditor().getTestSuite();
+
 		init();
 	}
 
@@ -239,7 +244,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 	}
 
 	private void addTestCase() {
-		String[] results = editTestCase("Add a new test case", null, null, false, false);
+		String[] results = editTestCase("Add a new test case", null, null, false, false, null);
 
 		if (results != null) {
 			XMLTestCase testCase = getTestCasesXMLPart().addNewTestCase();
@@ -277,16 +282,10 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 			XMLTestCase testCase = (XMLTestCase) current;
 
-			String[] results = editTestCase("Edit a test case", testCase.getName(),
-					testCase.getBasedOn(), testCase.getAbstract(), testCase.getVary());
-			if (results != null) {
-				testCase.setName(results[0]);
-				testCase.setBasedOn(results[1]);
-				testCase.setAbstract(Boolean.parseBoolean(results[2]));
-				testCase.setVary(Boolean.parseBoolean(results[3]));
-				setEditRemoveDuplicateEnabled(true);
-				adjust();
-			}
+			editTestCase("Edit a test case", testCase.getName(),
+					testCase.getBasedOn(), testCase.getAbstract(), testCase.getVary(), testCase);
+			
+
 		} else if (current instanceof XMLPartnerTrack) {
 			// TODO use a combo
 			editPartnerTrack((XMLPartnerTrack) current);
@@ -358,20 +357,15 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 	private XMLTestCase getTestCase(XmlObject o) {
 		XmlCursor c = o.newCursor();
-		try {
-			if (!c.toParent()) {
-				return null;
-			}
+		if (!c.toParent()) {
+			return null;
+		}
 
-			XmlObject object = c.getObject();
-			if (object instanceof XMLTestCase) {
-				return (XMLTestCase) object;
-			} else {
-				return null;
-			}
-
-		} finally {
-			c.dispose();
+		XmlObject object = c.getObject();
+		if (object instanceof XMLTestCase) {
+			return (XMLTestCase) object;
+		} else {
+			return null;
 		}
 	}
 
@@ -405,7 +399,6 @@ public class TestCaseAndTrackSection extends TreeSection {
 				adjust();
 				setSelection(testSuite.getTestCases().getTestCaseList().get(currentPosition - 1));
 			}
-			currentCursor.dispose();
 		}
 	}
 
@@ -425,7 +418,6 @@ public class TestCaseAndTrackSection extends TreeSection {
 				adjust();
 				setSelection(testSuite.getTestCases().getTestCaseList().get(currentPosition + 1));
 			}
-			currentCursor.dispose();
 		}
 	}
 
@@ -513,34 +505,63 @@ public class TestCaseAndTrackSection extends TreeSection {
 		return combo.getSelection();
 	}
 
+	private boolean openWizard(IWizard wizard) {
+
+		WizardDialog dialog = new WizardDialog(getShell(), wizard);
+		return (dialog.open() == Window.OK);
+	}
+
 	private String[] editTestCase(String title, String currentName, String currentBasedOn,
-			boolean currentAbstractSetting, boolean currentVarySetting) {
+			boolean currentAbstractSetting, boolean currentVarySetting, XMLTestCase testCase) {
 
 		FieldBasedInputDialog dialog = new FieldBasedInputDialog(getShell(), title);
 
 		TextField nameField = new TextField(dialog, "Name:", currentName, TextField.Style.SINGLE);
 		nameField.setValidator(new NotEmptyValidator("Name"));
-		dialog.addField(nameField);
 
 		TextField basedOnField = new TextField(dialog, "Based On:", currentBasedOn,
 				TextField.Style.SINGLE);
 		basedOnField.setValidator(new NullValidator());
-		dialog.addField(basedOnField);
 
 		CheckBoxField abstractField = new CheckBoxField(dialog, "Abstract", currentAbstractSetting);
 		abstractField.setValidator(new NotEmptyValidator("Abstract"));
-		dialog.addField(abstractField);
 
 		CheckBoxField varyField = new CheckBoxField(dialog, "Vary send delay times",
 				currentVarySetting);
 		varyField.setValidator(new NotEmptyValidator("Vary"));
-		dialog.addField(varyField);
 
-		if (dialog.open() != Window.OK)
-			return null;
+		if (testCase != null) {
+			XMLSetUp setup = testCase.getSetUp();
+			if (setup == null) {
+				setup = testCase.addNewSetUp();
+			}
+			Wizard wizard = new SetupWizard(getPage(), ActivityEditMode.ADD, setup, testCase);
 
+			if (openWizard(wizard)) {
+				markDirty();
+			}
+			if (!setup.isSetDataSource() && !setup.isSetScript()) {
+				testCase.unsetSetUp();
+			}
+			setEditRemoveDuplicateEnabled(true);
+			adjust();
+
+		} else {
+
+			dialog.addField(nameField);
+
+			dialog.addField(basedOnField);
+
+			dialog.addField(abstractField);
+
+			dialog.addField(varyField);
+
+			if (dialog.open() != Window.OK)
+				return null;
+		}
 		return new String[] { nameField.getSelection(), basedOnField.getSelection(),
 				abstractField.getSelection(), varyField.getSelection() };
+
 	}
 
 	@Override
@@ -643,24 +664,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 				}
 			});
 			duplicateAction.setEnabled(getIsDeleteEnabled(object));
-			
-			if(object instanceof XMLTestCase) {
-				manager.add(new Separator());
-				
-				createAction(manager, "Run Test Case", new Action() {
-					@Override
-					public void run() {
-						getEditor().doSave(null);
-						runTestCase((XMLTestCase) object);
-					}
-				});
-			}
 		}
-	}
-
-	protected void runTestCase(XMLTestCase testCase) {
-		BPELLaunchShortCut launchShortCut = new BPELLaunchShortCut();
-		launchShortCut.launch((IFile)getEditor().getEditorInput().getAdapter(IFile.class), testCase.getName(), "run");
 	}
 
 	private boolean getIsMoveEnabled(Object object) {
@@ -677,7 +681,6 @@ public class TestCaseAndTrackSection extends TreeSection {
 
 	private boolean getIsDeleteEnabled(Object object) {
 		return object != null;
-		// (object instanceof XMLTestCase);
 	}
 
 }
