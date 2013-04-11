@@ -5,6 +5,8 @@
  */
 package net.bpelunit.toolsupport.editors.wizards.pages;
 
+
+
 import net.bpelunit.framework.xml.suite.XMLSendActivity;
 import net.bpelunit.framework.xml.suite.XMLSoapActivity;
 import net.bpelunit.framework.xml.suite.XMLTestSuite;
@@ -14,8 +16,8 @@ import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import net.bpelunit.toolsupport.editors.wizards.components.SendComponent;
 import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
 import net.bpelunit.toolsupport.util.ToolUtil;
-import org.eclipse.swt.widgets.Composite;
 
+import org.eclipse.swt.widgets.Composite;
 /**
  * A page for editing a "complete" send, i.e. operation and literal XML field.
  * 
@@ -46,12 +48,14 @@ public class SendCompleteWizardPage extends OperationWizardPage {
 	@Override
 	protected void createFieldControls(Composite composite, int nColumns) {
 		super.createFieldControls(composite, nColumns);
-
+		
 		this.fSendComponent = new SendComponent(this, this.getFontMetrics());
 		this.fSendComponent.init(this.getSendActivity());
 		this.fSendComponent.createControls(composite, nColumns);
 		this.fSendComponent.addComponentListener(this);
-
+		
+		
+		
 		this.valueChanged(null);
 	}
 
@@ -62,7 +66,7 @@ public class SendCompleteWizardPage extends OperationWizardPage {
 	@Override
 	public void valueChanged(DialogField field) {
 		super.valueChanged(field);
-
+		
 		if (this.isPageComplete()) { // TODO this is because of errors from
 			// "above"
 			// (operation!) - but what about updating the
@@ -92,8 +96,19 @@ public class SendCompleteWizardPage extends OperationWizardPage {
 						}
 					}
 				}
+				
 			}
-
+			if(this.fSendComponent!=null && fSendComponent.fieldTemplate!=null)
+			{
+			  
+				if(fSendComponent.fieldTemplate.getError()){
+					this.fail(fSendComponent.fieldTemplate.getMsgError());
+					return;
+				}
+			}
+			
+			
+			
 			this.setErrorMessage(null);
 			this.setPageComplete(true);
 		}
@@ -114,6 +129,10 @@ public class SendCompleteWizardPage extends OperationWizardPage {
 
 	public void setSendXML(String xml) {
 		this.fSendComponent.setXmlText(xml);
+	}
+	public SendComponent getSendComponent()
+	{
+		return fSendComponent;
 	}
 
 	public String getDelaySequence() {

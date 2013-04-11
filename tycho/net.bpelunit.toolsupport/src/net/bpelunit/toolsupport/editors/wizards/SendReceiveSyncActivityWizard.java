@@ -21,6 +21,8 @@ public class SendReceiveSyncActivityWizard extends TwoWayActivityWizard {
 
 	private SendCompleteWizardPage fSendPage;
 	private ReceiveSimpleWizardPage fReceiveSimpleWizardPage;
+	
+	
 
 	public SendReceiveSyncActivityWizard(TestSuitePage page, ActivityEditMode mode, XMLTwoWayActivity twoWayActivity) {
 		super(page, mode, twoWayActivity);
@@ -30,7 +32,7 @@ public class SendReceiveSyncActivityWizard extends TwoWayActivityWizard {
 	public boolean performFinish() {
 
 		XMLTwoWayActivity twoWayActivity= getTwoWayActivity();
-
+		
 		transferOperation(fSendPage, twoWayActivity);
 		transferFault(fSendPage.getSendFault(), twoWayActivity.getSend());
 		transferFaultString(fSendPage.getSendFaultName(), twoWayActivity.getSend());
@@ -41,7 +43,7 @@ public class SendReceiveSyncActivityWizard extends TwoWayActivityWizard {
 
 		processHeaderPage();
 		processDataCopyPage();
-
+		fSendPage.getSendComponent().saveData();
 		return true;
 	}
 

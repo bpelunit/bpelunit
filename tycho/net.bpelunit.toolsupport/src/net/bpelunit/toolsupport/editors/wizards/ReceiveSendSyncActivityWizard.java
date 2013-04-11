@@ -9,6 +9,7 @@ import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import net.bpelunit.toolsupport.editors.TestSuitePage;
 import net.bpelunit.toolsupport.editors.wizards.pages.ReceiveCompleteWizardPage;
 import net.bpelunit.toolsupport.editors.wizards.pages.SendSimpleWizardPage;
+
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -24,6 +25,8 @@ public class ReceiveSendSyncActivityWizard extends TwoWayActivityWizard {
 	private SendSimpleWizardPage fSendPage;
 	private ReceiveCompleteWizardPage fReceivePage;
 
+	
+	
 	public ReceiveSendSyncActivityWizard(TestSuitePage page,
 			ActivityEditMode mode, XMLTwoWayActivity twoWayActivity) {
 		super(page, mode, twoWayActivity);
@@ -33,7 +36,9 @@ public class ReceiveSendSyncActivityWizard extends TwoWayActivityWizard {
 	public boolean performFinish() {
 
 		XMLTwoWayActivity twoWayActivity = this.getTwoWayActivity();
-
+		
+		
+		
 		this.transferOperation(this.fReceivePage, twoWayActivity);
 		this.transferFault(this.fReceivePage.getSendFault(), twoWayActivity
 				.getSend());
@@ -49,7 +54,9 @@ public class ReceiveSendSyncActivityWizard extends TwoWayActivityWizard {
 
 		this.processHeaderPage();
 		this.processDataCopyPage();
-
+		
+		fSendPage.getSendComponent().saveData();
+		
 		return true;
 	}
 

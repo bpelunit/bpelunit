@@ -20,7 +20,9 @@ public class SendOnlyWizard extends ActivityWizard {
 
 	private XMLSendActivity fSendActivity;
 	private SendCompleteWizardPage fSendPage;
-
+	
+	
+	
 	public SendOnlyWizard(TestSuitePage page, ActivityEditMode mode, XMLSendActivity operation) {
 		super(page, mode);
 		fSendActivity= operation;
@@ -28,14 +30,14 @@ public class SendOnlyWizard extends ActivityWizard {
 
 	@Override
 	public boolean performFinish() {
-
+		
 		transferOperation(fSendPage, fSendActivity);
 		transferFault(fSendPage.getSendFault(), fSendActivity);
 		transferFaultString(fSendPage.getSendFaultName(), fSendActivity);
 
 		transferLiteralSendData(fSendPage.getSendXML(), fSendActivity);
 		transferDelay(fSendPage.getDelaySequence(), fSendActivity);
-
+		fSendPage.getSendComponent().saveData();
 		return true;
 	}
 

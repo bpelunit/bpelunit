@@ -5,6 +5,7 @@
  */
 package net.bpelunit.toolsupport.editors.wizards.pages;
 
+
 import net.bpelunit.framework.xml.suite.XMLSendActivity;
 import net.bpelunit.framework.xml.suite.XMLTestSuite;
 import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
@@ -35,16 +36,16 @@ public class SendSimpleWizardPage extends ActivityWizardPage implements
 		super(pageName, mode);
 		this.setDescription("Enter the data to be sent.");
 		this.fSendActivity = sendActivity;
+				
 	}
 
 	@Override
 	protected void createFieldControls(Composite composite, int nColumns) {
-
+		
 		this.fSendComponent = new SendComponent(this, this.getFontMetrics());
 		this.fSendComponent.init(this.fSendActivity);
 		this.fSendComponent.createControls(composite, nColumns);
 		this.fSendComponent.addComponentListener(this);
-
 		this.valueChanged(null);
 
 	}
@@ -70,10 +71,16 @@ public class SendSimpleWizardPage extends ActivityWizardPage implements
 					try {
 						Integer.parseInt(element.trim());
 					} catch (NumberFormatException e) {
-						this
-								.fail("Delay Sequence must be a comma-separate integer list.");
+						this.fail("Delay Sequence must be a comma-separate integer list");
 						return;
 					}
+				}
+			}
+			if(this.fSendComponent!=null && fSendComponent.fieldTemplate!=null)
+			{
+				if(fSendComponent.fieldTemplate.getError()){
+					this.fail(fSendComponent.fieldTemplate.getMsgError());
+					return;
 				}
 			}
 		}
@@ -97,6 +104,10 @@ public class SendSimpleWizardPage extends ActivityWizardPage implements
 
 	public String getDelaySequence() {
 		return this.fSendComponent.getDelaySequence();
+	}
+	public SendComponent getSendComponent()
+	{
+		return fSendComponent;
 	}
 
 	@Override
