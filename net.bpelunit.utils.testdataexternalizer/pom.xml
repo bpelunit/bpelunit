@@ -21,16 +21,16 @@
 			</resource>
 		</resources>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<configuration>
-					<instructions>
-						<Bundle-SymbolicName>net.bpelunit.utils.testdataexternalizer;symbolic:=true</Bundle-SymbolicName>
-						<Import-Package>org.jdom.*;org.apache.commons.io.*;!*</Import-Package>
-					</instructions>
-				</configuration>
-			</plugin>
+                          <plugin>
+                              <groupId>org.apache.felix</groupId>
+                              <artifactId>maven-bundle-plugin</artifactId>
+                              <configuration>
+                                  <instructions>
+                                      <Bundle-SymbolicName>net.bpelunit.utils.testdataexternalizer</Bundle-SymbolicName>
+                                      <Import-Package>!org.apache.commons.cli.*;*</Import-Package>
+                                  </instructions>
+                              </configuration>
+                          </plugin>
 		</plugins>
 	</build>
 	<dependencies>
