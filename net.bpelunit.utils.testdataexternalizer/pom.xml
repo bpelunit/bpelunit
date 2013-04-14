@@ -26,7 +26,8 @@
                               <artifactId>maven-bundle-plugin</artifactId>
                               <configuration>
                                   <instructions>
-                                      <Bundle-SymbolicName>net.bpelunit.utils.testdataexternalizer;symbolic:=true</Bundle-SymbolicName>
+                                      <Bundle-SymbolicName>net.bpelunit.utils.testdataexternalizer</Bundle-SymbolicName>
+                                      <Import-Package>!org.apache.commons.cli.*;*</Import-Package>
                                   </instructions>
                               </configuration>
                           </plugin>
