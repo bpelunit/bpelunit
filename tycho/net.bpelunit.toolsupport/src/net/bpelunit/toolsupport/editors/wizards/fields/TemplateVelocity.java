@@ -2,6 +2,8 @@ package net.bpelunit.toolsupport.editors.wizards.fields;
 
 import java.io.StringReader;
 
+import net.bpelunit.toolsupport.ToolSupportActivator;
+
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.RuntimeSingleton;
 import org.apache.velocity.runtime.parser.ParseException;
@@ -106,7 +108,7 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ToolSupportActivator.logErrorMessage(e.getMessage());
 		}
 	}
 
@@ -119,7 +121,7 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 			rs.init();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			ToolSupportActivator.logErrorMessage(e1.getMessage());
 		}
 
 		Parser p = new Parser(rs);
@@ -211,18 +213,13 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 			endL=-1;
 		}
 
-		StyleRange styleRangeO = new StyleRange();
-
-		styleRangeO.start = endL + pC;
-
 		if (styledText.getLineCount() == pL) {
-			styleRangeO.length = styledText.getText().length() - (endL + pC);
+			color (pL, pC, styledText.getText().length() - (endL + pC), ccomment, endL + pC);
+			//styleRangeO.length = styledText.getText().length() - (endL + pC);
 		} else {
-			styleRangeO.length = styledText.getOffsetAtLine(pL) - (endL + pC);
+			color (pL, pC,styledText.getOffsetAtLine(pL) - (endL + pC), ccomment, endL + pC);
+			//styleRangeO.length = styledText.getOffsetAtLine(pL) - (endL + pC);
 		}
-		styleRangeO.fontStyle = SWT.ITALIC;
-		styleRangeO.foreground = ccomment;
-		styledText.setStyleRange(styleRangeO);
 		return visit((SimpleNode) arg0, arg1);
 	}
 
@@ -244,15 +241,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		}else{
 			endL=-1;
 		}
-
-		StyleRange styleRangeO = new StyleRange();
-
-		styleRangeO.start = endL + pC;
-		styleRangeO.length = fC - pC + 1;
-		styleRangeO.fontStyle = SWT.ITALIC;
-		styleRangeO.foreground = cstringtextinteger;
-		styledText.setStyleRange(styleRangeO);
-
+		
+		color (pL, pC, fC - pC + 1, cstringtextinteger, endL + pC);
 		return visit((SimpleNode) arg0, arg1);
 	}
 
@@ -269,15 +259,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		}else{
 			endL=-1;
 		}
-
-		StyleRange styleRangeO = new StyleRange();
-
-		styleRangeO.start = endL + pC;
-		styleRangeO.length = fC - pC + 1;
-		styleRangeO.fontStyle = SWT.ITALIC;
-		styleRangeO.foreground = cstringtextinteger;
-		styledText.setStyleRange(styleRangeO);
-
+		
+		color (pL, pC, fC - pC + 1, cstringtextinteger, endL + pC);
 		return visit((SimpleNode) arg0, arg1);
 	}
 
@@ -297,38 +280,26 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 
 		pC = arg0.getFirstToken().beginColumn;
 		fC = arg0.getFirstToken().endColumn;
-
+				
 		if ((pL - 1) > 0) {
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
 		}else{
 			endL=-1;
 		}
-
-		StyleRange styleRangeO = new StyleRange();
-
-		styleRangeO.start = endL + pC;
-		styleRangeO.length = fC - pC + 1;
-		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetforeach;
-		styledText.setStyleRange(styleRangeO);
-
-		StyleRange styleRange1 = new StyleRange();
-
+		
+		color (pL, pC, fC - pC + 1, cifsetforeach, endL + pC);
 		pL = arg0.getLastToken().beginLine;
 
 		pC = arg0.getLastToken().beginColumn;
 		fC = arg0.getLastToken().endColumn;
-
+		
 		if ((pL - 1) > 0) {
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
 		}else{
 			endL=-1;
 		}
-		styleRange1.start = endL + pC;
-		styleRange1.length = fC - pC + 1;
-		styleRange1.fontStyle = SWT.BOLD;
-		styleRange1.foreground = cifsetforeach;
-		styledText.setStyleRange(styleRange1);
+		
+		color (pL, pC, fC - pC + 1, cifsetforeach, endL + pC);
 		return visit((SimpleNode) arg0, arg1);
 	}
 
@@ -370,14 +341,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		}else{
 			endL=-1;
 		}
-
-		StyleRange styleRangeO = new StyleRange();
-
-		styleRangeO.start = endL + pC;
-		styleRangeO.length = fC - pC + 1;
-		styleRangeO.foreground = creference;
-		styledText.setStyleRange(styleRangeO);
-
+		
+		color (pL, pC, fC - pC + 1, creference, endL + pC);
 		return visit((SimpleNode) arg0, arg1);
 	}
 
@@ -420,23 +385,11 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 			}
 
 		} else if ((pL - 1) > 0) {
-
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
-
-			StyleRange styleRangeO = new StyleRange();
-			styleRangeO.start = endL + pC;
-			styleRangeO.length = fC - pC + 1;
-			styleRangeO.fontStyle = SWT.ITALIC;
-			styleRangeO.foreground = cstringtextinteger;
-			styledText.setStyleRange(styleRangeO);
+			color (pL, pC, fC - pC + 1, cstringtextinteger, endL + pC);
 		} else {
 			endL=-1;
-			StyleRange styleRangeO = new StyleRange();
-			styleRangeO.start = endL + pC;
-			styleRangeO.length = fC - pC + 1;
-			styleRangeO.fontStyle = SWT.ITALIC;
-			styleRangeO.foreground = cstringtextinteger;
-			styledText.setStyleRange(styleRangeO);
+			color (pL, pC, fC - pC + 1, cstringtextinteger, endL + pC);
 		}
 		return visit((SimpleNode) arg0, arg1);
 	}
@@ -448,111 +401,64 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		pC = arg0.getFirstToken().beginColumn;
 
 		if ((pL - 1) > 0) {
-
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
 		}else{
 			endL=-1;
 		}
-
-		StyleRange styleRangeO = new StyleRange();
-
-		styleRangeO.start = endL + pC;
-		styleRangeO.length = 3;
-		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetforeach;
-		styledText.setStyleRange(styleRangeO);
-
-		StyleRange styleRange1 = new StyleRange();
-
+		
+		color (pL, pC, 3, cifsetforeach, endL + pC);
 		pL = arg0.getLastToken().beginLine;
-
 		pC = arg0.getLastToken().beginColumn;
 
 		if ((pL - 1) > 0) {
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
 		}
-		styleRange1.start = endL + pC;
-		styleRange1.length = 4;
-		styleRange1.fontStyle = SWT.BOLD;
-		styleRange1.foreground = cifsetforeach;
-		styledText.setStyleRange(styleRange1);
-
+		
+		color (pL, pC, 4, cifsetforeach, endL + pC);
 		return visit((SimpleNode) arg0, arg1);
 	}
 
 	public Object visit(ASTElseStatement arg0, Object arg1) {
-		int pL, pC;
-		pL = arg0.getFirstToken().beginLine;
-
-		pC = arg0.getFirstToken().beginColumn;
+		int pL = arg0.getFirstToken().beginLine;
+		int pC = arg0.getFirstToken().beginColumn;
 
 		if ((pL - 1) > 0) {
-
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
-
 		}else{
 			endL=-1;
 		}
 
-		StyleRange styleRangeO = new StyleRange();
-
-		styleRangeO.start = endL + pC;
-		styleRangeO.length = 5;
-		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetforeach;
-		styledText.setStyleRange(styleRangeO);
+		
+		color (pL, pC, 5, cifsetforeach, endL + pC);
 		return visit((SimpleNode) arg0, arg1);
 	}
 
 	public Object visit(ASTElseIfStatement arg0, Object arg1) {
-		int pL, pC;
-		pL = arg0.getFirstToken().beginLine;
-
-		pC = arg0.getFirstToken().beginColumn;
+		int pL = arg0.getFirstToken().beginLine;
+		int pC = arg0.getFirstToken().beginColumn;
 
 		if ((pL - 1) > 0) {
-
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
-
 		}else{
 			endL=-1;
 		}
-
-		StyleRange styleRangeO = new StyleRange();
-
-		styleRangeO.start = endL + pC;
-		styleRangeO.length = 7;
-		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetforeach;
-		styledText.setStyleRange(styleRangeO);
-
+		
+		color (pL, pC, 7, cifsetforeach, endL + pC);
 		return visit((SimpleNode) arg0, arg1);
 	}
 
 	public Object visit(ASTSetDirective arg0, Object arg1) {
-		int pL, pC, fC;
-		pL = arg0.getFirstToken().beginLine;
-
-		pC = arg0.getFirstToken().beginColumn;
-		fC = arg0.getFirstToken().endColumn;
-
-		StyleRange styleRangeO = new StyleRange();
+		int pL = arg0.getFirstToken().beginLine;
+		int pC = arg0.getFirstToken().beginColumn;
+		int fC = arg0.getFirstToken().endColumn;
 
 		if ((pL - 1) > 0) {
-
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
-			styleRangeO.start = endL + pC;
-
+			color (pL, pC,  4, cifsetforeach, endL + pC);
 		} else if (pL - 1 == 0) {
 			endL=-1;
-			styleRangeO.start = endL + fC - 4;
+			color (pL, pC, 4, cifsetforeach, endL + fC - 4);
 		}
-
-		styleRangeO.length = 4;
-		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetforeach;
-		styledText.setStyleRange(styleRangeO);
-
 		return visit((SimpleNode) arg0, arg1);
 	}
 
@@ -646,4 +552,15 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 			decorate();
 		}
 	}
+	
+	private void color (int pL,int pC,int lenght,Color color, int start)
+	{
+		StyleRange styleRangeO = new StyleRange();
+		styleRangeO.start = start;
+		styleRangeO.length = lenght;
+		styleRangeO.fontStyle = SWT.BOLD;
+		styleRangeO.foreground = color;
+		styledText.setStyleRange(styleRangeO);
+	}
 }
+

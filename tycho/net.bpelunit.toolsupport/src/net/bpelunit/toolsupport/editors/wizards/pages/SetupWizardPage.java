@@ -7,6 +7,7 @@ import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import net.bpelunit.toolsupport.editors.wizards.components.EditSetupDataSource;
 import net.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
 import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+import net.bpelunit.toolsupport.editors.wizards.fields.TemplateVelocity;
 
 import org.eclipse.swt.widgets.Composite;
 
@@ -41,16 +42,17 @@ public class SetupWizardPage extends ActivityWizardPage implements IComponentLis
 	}
 
 	public void valueChanged(DialogField field) {
-
-		if (this.fFormSetUpDataSource != null && fFormSetUpDataSource.fieldScript != null) {
-			if (fFormSetUpDataSource.fieldScript.getError()) {
-				this.fail("Script: " + fFormSetUpDataSource.fieldScript.getMsgError());
+		TemplateVelocity fieldContents =  this.fFormSetUpDataSource.fieldContents();
+		TemplateVelocity fieldScript =  this.fFormSetUpDataSource.fieldScript();
+		if (this.fFormSetUpDataSource != null && fieldScript != null) {
+			if (fieldScript.getError()) {
+				this.fail("Script: " + fieldScript.getMsgError());
 				return;
 			}
 		}
-		if (this.fFormSetUpDataSource != null && fFormSetUpDataSource.fieldContents != null) {
-			if (fFormSetUpDataSource.fieldContents.getError()) {
-				this.fail("Data Source: " + fFormSetUpDataSource.fieldContents.getMsgError());
+		if (this.fFormSetUpDataSource != null && fieldContents != null) {
+			if (fieldContents.getError()) {
+				this.fail("Data Source: " + fieldContents.getMsgError());
 				return;
 			}
 		}

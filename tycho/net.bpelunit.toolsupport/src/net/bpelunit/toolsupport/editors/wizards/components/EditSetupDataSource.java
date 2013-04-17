@@ -7,11 +7,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 
 import net.bpelunit.framework.client.eclipse.ExtensionControl;
 import net.bpelunit.framework.client.model.DataSourceExtension;
@@ -25,6 +28,11 @@ import net.bpelunit.framework.xml.suite.XMLSetUp;
 import net.bpelunit.framework.xml.suite.XMLTestCase;
 import net.bpelunit.toolsupport.editors.wizards.fields.TemplateVelocity;
 import net.bpelunit.toolsupport.util.schema.nodes.Element;
+
+import net.bpelunit.toolsupport.ToolSupportActivator;
+
+
+
 
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -65,10 +73,10 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 	private XMLTestCase testCase;
 	
 	
-	public TemplateVelocity fieldScript;
+	private TemplateVelocity fieldScript;
 
 	private Text fieldPathToContents;
-	public TemplateVelocity fieldContents;
+	private TemplateVelocity fieldContents;
 	private Button browserButton;
 	private Combo comboBoxType;
 	private Button propertyButton;
@@ -130,14 +138,22 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 		
 	}
 
+
 	private void saveFile(String FilePath, String FileContent) {
 
 		FileWriter file;
 		BufferedWriter writer;
 		if(!FilePath.startsWith("/")){
-			final File fBPTS = new File(fSendData.documentProperties().getSourceName().toString().substring(5));
+			try {
+				URL url =new URL(fSendData.documentProperties().getSourceName().toString());
+				final File fBPTS = new File(url.getFile());
+				
+				FilePath=fBPTS.getParentFile().toString()+ "/"+FilePath;
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				ToolSupportActivator.logErrorMessage(e.getMessage());
+			}
 			
-			FilePath=fBPTS.getParentFile().toString()+ "/"+FilePath;
 		}
 		try {
 			file = new FileWriter(FilePath, false);
@@ -147,10 +163,14 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 			writer.close();
 			file.close();
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			
+			ToolSupportActivator.logErrorMessage(ex.getMessage());
 		}
 	}
+	
 
+	
+	
 	public void init(XMLSetUp sendData,XMLTestCase ftestCase) {
 
 		fSendData = sendData;
@@ -160,11 +180,19 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 			if (fSendData.getDataSource().isSetSrc()) {
 				File file = new File(fSendData.getDataSource().getSrc().toString());
 				if (!file.exists()) {
-					final String docSrc = fSendData.documentProperties().getSourceName();
-					final File fBPTS = new File(docSrc.toString().substring(5));
-					file = new File(fBPTS.getParentFile(), fSendData.getDataSource().getSrc()
-							.toString());
-					fieldPathToContents.setText(file.getAbsolutePath());
+					
+					
+					try {
+						URL url =new URL(fSendData.documentProperties().getSourceName().toString());
+						final File fBPTS = new File(url.getFile());
+						file = new File(fBPTS.getParentFile(), fSendData.getDataSource().getSrc()
+								.toString());
+						fieldPathToContents.setText(file.getAbsolutePath());
+						
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						ToolSupportActivator.logErrorMessage(e.getMessage());
+					}
 				}else{
 					fieldPathToContents.setText(fSendData.getDataSource().getSrc().toString());
 				}
@@ -331,8 +359,7 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 			fieldContents.setText(textfile);
 			bf.close();
 		} catch (Exception execution) {
-			// FIXME: add logging
-			System.out.println("Fail file");
+			ToolSupportActivator.logErrorMessage("Fail file");
 		}
 	}
 
@@ -576,7 +603,7 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 					}
 				} catch (SpecificationException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					ToolSupportActivator.logErrorMessage(e1.getMessage());
 				}
 			}
 		}
@@ -640,6 +667,13 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 		createControls(composite,nColumns);
 
 		
+	}
+	public TemplateVelocity fieldScript(){
+		return fieldScript;
+	}
+
+	public TemplateVelocity fieldContents() {
+		return fieldContents;
 	}
 
 	

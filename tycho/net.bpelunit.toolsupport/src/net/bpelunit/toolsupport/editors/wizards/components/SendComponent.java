@@ -11,11 +11,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.bpelunit.framework.xml.suite.XMLAnyElement;
 import net.bpelunit.framework.xml.suite.XMLSendActivity;
+import net.bpelunit.toolsupport.ToolSupportActivator;
 import net.bpelunit.toolsupport.editors.formwidgets.HyperlinkField;
 import net.bpelunit.toolsupport.editors.formwidgets.HyperlinkField.IHyperLinkFieldListener;
 import net.bpelunit.toolsupport.editors.wizards.NamespaceWizard;
@@ -131,9 +134,20 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 		FileWriter file;
 		BufferedWriter writer;
 		if(!FilePath.startsWith("/")){
-			final File fBPTS = new File(fSendData.documentProperties().getSourceName().toString().substring(5));
+			try {
+				URL url =new URL(fSendData.documentProperties().getSourceName().toString());
+				final File fBPTS = new File(url.getFile());
+				FilePath=fBPTS.getParentFile().toString()+ "/"+FilePath;
+				
+				
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				ToolSupportActivator.logErrorMessage(e.getMessage());
+			}
 			
-			FilePath=fBPTS.getParentFile().toString()+ "/"+FilePath;
+			
+			
+			
 		}
 		try {
 			file = new FileWriter(FilePath, false);
@@ -319,10 +333,19 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 			if (template.isSetSrc()) {
 				File file = new File(template.getSrc().toString());
 				if (!file.exists()) {
-					final String docSrc = fSendData.documentProperties().getSourceName();
-					final File fBPTS = new File(docSrc.toString().substring(5));
-					file = new File(fBPTS.getParentFile(), template.getSrc().toString());
-					browserFolder.setText(file.getAbsolutePath());
+					
+					try {
+						URL url =new URL(fSendData.documentProperties().getSourceName().toString());
+						final File fBPTS = new File(url.getFile());
+						file = new File(fBPTS.getParentFile(), template.getSrc().toString());
+						browserFolder.setText(file.getAbsolutePath());
+						
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						ToolSupportActivator.logErrorMessage(e.getMessage());
+					}
+					
+					
 				}else{
 					browserFolder.setText(template.getSrc().toString());
 				}
