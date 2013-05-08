@@ -2,7 +2,7 @@ package net.bpelunit.model.bpel;
 
 import java.util.List;
 
-public interface IFlow {
+public interface IFlow extends IMultiContainer {
 
 	List<?extends ILink> getLinks();
 

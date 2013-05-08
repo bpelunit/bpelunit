@@ -11,6 +11,4 @@ public interface IActivity extends IBpelObject, IVisitable {
 	boolean getSuppressJoinFailure();
 	void setSuppressJoinFailure(boolean value);
 	IActivityContainer getParent();
-	
-	String getXPathInDocument();
 }

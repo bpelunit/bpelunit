@@ -10,6 +10,8 @@ import net.bpelunit.model.bpel.IScope;
 import net.bpelunit.model.bpel.IVariable;
 import net.bpelunit.model.bpel.IVisitor;
 
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivityContainer;
+import org.oasisOpen.docs.wsbpel.x20.process.executable.TCatch;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnAlarmEvent;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnEvent;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TScope;
@@ -21,19 +23,33 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 	private List<OnAlarmEventHandler> onAlarms = new ArrayList<OnAlarmEventHandler>();
 	private List<OnMessageHandler> onMessages = new ArrayList<OnMessageHandler>();
 	private CompensationHandler compensationHandler;
+	private List<Catch> catches = new ArrayList<Catch>();
+	private CatchAll catchAll;
 
 	public Scope(TScope wrappedScope, IContainer parent) {
 		super(wrappedScope, parent);
-
 		setNativeObjectInternal(wrappedScope);
+
+		if (wrappedScope.isSetCompensationHandler()) {
+			compensationHandler = new CompensationHandler(
+					wrappedScope.getCompensationHandler(), this);
+		}
+		if (wrappedScope.isSetFaultHandlers()) {
+			for (TCatch c : wrappedScope.getFaultHandlers().getCatchArray()) {
+				catches.add(new Catch(c, this));
+			}
+			if (wrappedScope.getFaultHandlers().isSetCatchAll()) {
+				catchAll = new CatchAll(wrappedScope.getFaultHandlers().getCatchAll(), this);
+			}
+		}
 	}
 
 	@Override
 	void setNativeObject(Object o) {
 		super.setNativeObject(o);
-		setNativeObjectInternal((TScope)o);
+		setNativeObjectInternal((TScope) o);
 	}
-	
+
 	private final void setNativeObjectInternal(TScope wrappedScope) {
 		variables.clear();
 		if (wrappedScope.isSetVariables()) {
@@ -57,7 +73,7 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 
 		if (getNativeActivity().getCompensationHandler() != null) {
 			compensationHandler = new CompensationHandler(getNativeActivity()
-					.getCompensationHandler());
+					.getCompensationHandler(), this);
 		} else {
 			compensationHandler = null;
 		}
@@ -79,6 +95,12 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 		if (compensationHandler != null) {
 			compensationHandler.visit(v);
 		}
+		if (catchAll != null) {
+			catchAll.visit(v);
+		}
+		for (Catch c : catches) {
+			c.visit(v);
+		}
 	}
 
 	@Override
@@ -98,7 +120,7 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 	}
 
 	public IVariable addVariable() {
-		if(!getNativeActivity().isSetVariables()) {
+		if (!getNativeActivity().isSetVariables()) {
 			getNativeActivity().addNewVariables();
 		}
 		TVariable nativeVariable = getNativeActivity().getVariables()
@@ -125,7 +147,8 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 
 		TOnAlarmEvent nativeOnAlarm = getNativeActivity().getEventHandlers()
 				.addNewOnAlarm();
-		OnAlarmEventHandler onAlarm = new OnAlarmEventHandler(nativeOnAlarm, this);
+		OnAlarmEventHandler onAlarm = new OnAlarmEventHandler(nativeOnAlarm,
+				this);
 		onAlarms.add(onAlarm);
 
 		return onAlarm;
@@ -151,10 +174,12 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 
 	@Override
 	public CompensationHandler setNewCompensationHandler() {
-		getNativeActivity().unsetCompensationHandler();
+		if (compensationHandler != null) {
+			getNativeActivity().unsetCompensationHandler();
+		}
 
 		compensationHandler = new CompensationHandler(getNativeActivity()
-				.addNewCompensationHandler());
+				.addNewCompensationHandler(), this);
 		return compensationHandler;
 	}
 
@@ -163,6 +188,39 @@ class Scope extends AbstractSingleContainer<TScope> implements IScope {
 		return compensationHandler;
 	}
 
-	
+	@Override
+	public Catch addNewCatch() {
+		addFaultHandlersIfNcessary();
+
+		TCatch nativeCatch = getNativeActivity().getFaultHandlers()
+				.addNewCatch();
+		Catch c = new Catch(nativeCatch, this);
+		catches.add(c);
+
+		return c;
+	}
+
+	private void addFaultHandlersIfNcessary() {
+		if (getNativeActivity().getFaultHandlers() == null) {
+			getNativeActivity().addNewFaultHandlers();
+		}
+	}
+
+	@Override
+	public CatchAll setNewCatchAll() {
+		if (getNativeActivity().getFaultHandlers() != null
+				&& getNativeActivity().getFaultHandlers().getCatchAll() != null) {
+			getNativeActivity().getFaultHandlers().unsetCatchAll();
+			catchAll = null;
+		}
+
+		addFaultHandlersIfNcessary();
+
+		TActivityContainer nativeCatchAll = getNativeActivity()
+				.getFaultHandlers().addNewCatchAll();
+		catchAll = new CatchAll(nativeCatchAll, this);
+
+		return catchAll;
+	}
 
 }

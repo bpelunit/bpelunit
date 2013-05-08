@@ -30,4 +30,10 @@ public interface IVisitor {
 	void visit(IWait a);
 	void visit(IWhile a);
 	void visit(ICompensationHandler compensationHandler);
+	void visit(IOnMessageHandler onMessageHandler);
+	void visit(IElseIf elseIf);
+	void visit(IElse else1);
+	void visit(ILink link);
+	void visit(ICatch ccatch);
+	void visit(ICatchAll catchAll);
 }

@@ -1,4 +1,4 @@
-package net.bpelunit.framework.coverage.instrumentation.branch;
+package net.bpelunit.framework.coverage.instrumentation.handler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,41 +44,11 @@ import net.bpelunit.model.bpel.IVariable;
 import net.bpelunit.model.bpel.IWait;
 import net.bpelunit.model.bpel.IWhile;
 
-public class BranchCoverageInstrumenter extends AbstractInstrumenter {
+public class HandlerCoverageInstrumenter extends AbstractInstrumenter {
 
-	
-	private Map<String, String> markerMapping = new HashMap<String, String>();
+	private Map<String, IActivity> markerMapping = new HashMap<String, IActivity>();
 	private Map<String, Integer> markerCounter = new HashMap<String, Integer>();
 	private List<String> markers = new ArrayList<String>();
-	
-	@Override
-	public String getMarkerPrefix()	{
-		return "BRANCH_MARKER";
-	}
-	
-	@Override
-	public void pushMarker(String markerName) {
-		Integer markerCount = markerCounter.get(markerName);
-		if(markerCount != null) {
-			markerCount++;
-			markerCounter.put(markerName, markerCount);
-		}
-	}
-
-	@Override
-	public IMetricCoverage getCoverageResult() {
-		return new BranchMetricCoverage(markers, markerMapping, markerCounter);
-	}
-	
-	private void instrumentActivity(IActivity a, String xpathToBranch) {
-		Marker newMarker = addCoverageMarker(a);
-		
-		markerMapping.put(newMarker.getName(), xpathToBranch);
-		markerCounter.put(newMarker.getName(), 0);
-		markers.add(newMarker.getName());
-	}
-	
-	/*---- Visitor Functions ----*/
 	
 	public void visit(IAssign a) {
 	}
@@ -87,6 +57,9 @@ public class BranchCoverageInstrumenter extends AbstractInstrumenter {
 	}
 
 	public void visit(ICompensateScope a) {
+	}
+
+	public void visit(ICopy c) {
 	}
 
 	public void visit(IEmpty a) {
@@ -99,26 +72,27 @@ public class BranchCoverageInstrumenter extends AbstractInstrumenter {
 	}
 
 	public void visit(IForEach a) {
-		instrumentActivity(a.getScope(), a.getXPathInDocument());
 	}
 
 	public void visit(IIf a) {
-		instrumentActivity(a.getMainActivity(), a.getXPathInDocument());
-		for(IElseIf i : a.getElseIfs()) {
-			instrumentActivity(i.getMainActivity(), i.getXPathInDocument());
-		}
-		if(a.getElse() == null) {
-			IElse e = a.setNewElse();
-			e.setNewEmpty();
-		}
-		instrumentActivity(a.getElse().getMainActivity(), a.getElse().getXPathInDocument());
+	}
+
+	public void visit(IImport i) {
 	}
 
 	public void visit(IInvoke a) {
 	}
 
+	public void visit(IOnAlarm a) {
+	}
+
+	public void visit(IOnMessage a) {
+	}
+
+	public void visit(IPartnerLink pl) {
+	}
+
 	public void visit(IPick a) {
-		// TODO Structured Activity		
 	}
 
 	public void visit(IProcess a) {
@@ -128,7 +102,6 @@ public class BranchCoverageInstrumenter extends AbstractInstrumenter {
 	}
 
 	public void visit(IRepeatUntil a) {
-		// TODO Structured Activity		
 	}
 
 	public void visit(IReply a) {
@@ -149,46 +122,30 @@ public class BranchCoverageInstrumenter extends AbstractInstrumenter {
 	public void visit(IValidate a) {
 	}
 
+	public void visit(IVariable var) {
+	}
+
 	public void visit(IWait a) {
 	}
 
 	public void visit(IWhile a) {
-		// TODO Structured Activity		
-	}
-
-	public void visit(IOnAlarm a) {
-	}
-
-	public void visit(IOnMessage a) {
-	}
-
-	public void visit(ICopy c) {
-	}
-
-	public void visit(IImport i) {
-	}
-
-	public void visit(IPartnerLink pl) {
-	}
-
-	public void visit(IVariable var) {
-	}
-
-	public void visit(ICompensationHandler compensationHandler) {
-	}
-
-	public void visit(IOnMessageHandler onMessageHandler) {
-	}
-
-	public void visit(IElseIf elseIf) {
-		// Covered by IIf
 	}
 
 	public void visit(IElse else1) {
-		// Covered by IIf
+	}
+	
+	public void visit(ILink link) {
+	}
+	
+	public void visit(IElseIf elseIf) {
+	}
+	
+	public void visit(ICompensationHandler compensationHandler) {
+		instrumentActivity(compensationHandler.getMainActivity(), compensationHandler.getXPathInDocument());
 	}
 
-	public void visit(ILink link) {
+	public void visit(IOnMessageHandler onMessageHandler) {
+		instrumentActivity(onMessageHandler.getScope().getMainActivity(), onMessageHandler);
 	}
 
 	public void visit(ICatch ccatch) {
@@ -196,5 +153,33 @@ public class BranchCoverageInstrumenter extends AbstractInstrumenter {
 
 	public void visit(ICatchAll catchAll) {
 	}
+
+	@Override
+	public String getMarkerPrefix() {
+		return "HANDLER_COVERAGE";
+	}
+
+	@Override
+	public void pushMarker(String markerName) {
+		Integer markerCount = markerCounter.get(markerName);
+		if(markerCount != null) {
+			markerCount++;
+			markerCounter.put(markerName, markerCount);
+		}
+	}
+
+	@Override
+	public IMetricCoverage getCoverageResult() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
+	private void instrumentActivity(IActivity activityToInstrument, IActivity activityToMeasure) {
+		Marker newMarker = addCoverageMarker(activityToInstrument);
+		
+		markerMapping.put(newMarker.getName(), activityToMeasure);
+		markerCounter.put(newMarker.getName(), 0);
+		markers.add(newMarker.getName());
+	}
+
 }

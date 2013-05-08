@@ -18,7 +18,6 @@ class Assign extends AbstractBasicActivity<TAssign> implements IAssign {
 	public Assign(TAssign a, IContainer parent) {
 		super(a, parent);
 		setNativeObject(a);
-		
 	}
 
 	@Override

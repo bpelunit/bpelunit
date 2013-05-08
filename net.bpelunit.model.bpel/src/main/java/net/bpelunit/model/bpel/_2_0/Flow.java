@@ -63,5 +63,8 @@ class Flow extends AbstractMultiContainer<TFlow> implements IFlow {
 		for(IActivity a : getActivities()) {
 			a.visit(v);
 		}
+		for(ILink l : getLinks()) {
+			l.visit(v);
+		}
 	}
 }

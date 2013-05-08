@@ -1,6 +1,6 @@
 package net.bpelunit.model.bpel;
 
-public interface ILink extends IBpelObject {
+public interface ILink extends IBpelObject, IVisitable {
 
 	String getName();
 

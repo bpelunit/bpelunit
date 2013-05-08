@@ -2,16 +2,32 @@ package net.bpelunit.model.bpel._2_0;
 
 import javax.xml.namespace.QName;
 
-import net.bpelunit.model.bpel.IOnMessage;
+import net.bpelunit.model.bpel.IOnMessageHandler;
+import net.bpelunit.model.bpel.IVisitor;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TOnEvent;
 
-public class OnMessageHandler extends AbstractSingleContainer<TOnEvent> implements IOnMessage {
+public class OnMessageHandler extends AbstractSingleContainer<TOnEvent> implements IOnMessageHandler {
 
 	public OnMessageHandler(TOnEvent e, IContainer parent) {
 		super(e, parent);
+		if(getScope() == null) {
+			this.setNewScope();
+		}
 	}
-
+	
+	@Override
+	public void visit(IVisitor v) {
+		v.visit(this);
+		if(getMainActivity() != null) {
+			getMainActivity().visit(v);
+		}
+	}
+	
+	public Scope getScope() {
+		return (Scope)getMainActivity();
+	}
+	
 	@Override
 	public String getPartnerLink() {
 		return this.getNativeActivity().getPartnerLink();
@@ -62,4 +78,8 @@ public class OnMessageHandler extends AbstractSingleContainer<TOnEvent> implemen
 		this.getNativeActivity().setVariable(variableName);
 	}
 
+	@Override
+	public String toString() {
+		return "OnMessage";
+	}
 }

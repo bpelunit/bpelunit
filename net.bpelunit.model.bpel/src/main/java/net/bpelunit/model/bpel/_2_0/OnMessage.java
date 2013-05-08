@@ -11,7 +11,7 @@ public class OnMessage extends AbstractSingleContainer<TOnMessage> implements IO
 	public OnMessage(TOnMessage e, IContainer parent) {
 		super(e, parent);
 	}
-
+	
 	@Override
 	public String getPartnerLink() {
 		return this.getNativeActivity().getPartnerLink();
@@ -61,5 +61,9 @@ public class OnMessage extends AbstractSingleContainer<TOnMessage> implements IO
 	public void setVariable(String variableName) {
 		this.getNativeActivity().setVariable(variableName);
 	}
-
+	
+	@Override
+	public String toString() {
+		return "OnMessage";
+	}
 }
