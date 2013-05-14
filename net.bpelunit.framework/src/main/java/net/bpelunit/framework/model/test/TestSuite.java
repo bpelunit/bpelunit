@@ -169,9 +169,7 @@ public class TestSuite implements ITestArtefact {
 		try {
 			getLocalServer().startServer();
 		} catch (Exception e) {
-			fLogger
-					.error("Error starting local HTTP server: "
-							+ e.getMessage());
+			fLogger.error("Error starting local HTTP server: " + e.getMessage());
 			throw new DeploymentException(
 					"Could not start local HTTP server - maybe the address is in use? ",
 					e);
@@ -182,22 +180,20 @@ public class TestSuite implements ITestArtefact {
 	}
 
 	public void shutDown() throws DeploymentException {
-
 		fLogger.info("Now stopping fixture server...");
 
 		// Stop the server first (before any DeploymentExceptions are thrown by
 		// the undeployer)
 		try {
 			getLocalServer().stopServer();
-		} catch (InterruptedException e) {
-			// do nothing.
+		} catch (Exception e) {
+			fLogger.error("Exception while stopping fixture server", e);
 		}
 
 		if (fProcessUnderTest.isDeployed()) {
 			fLogger.info("Now undeploying: " + fProcessUnderTest);
 			fProcessUnderTest.undeploy();
 		}
-
 	}
 
 	public void run() {

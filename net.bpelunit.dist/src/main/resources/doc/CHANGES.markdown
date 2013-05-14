@@ -13,6 +13,7 @@ Staged for next version
 * _Improvement_: Do not allow duplicate test case names when running a test suite
 * _Improvement_: Internal clean-ups in framework
 * _Architecture_: Old code coverage code is in progress of being replaced with a new implementation
+* _Improvement_: Upgrade to Jetty 8 (uses Servlet 3.0, same as recent ODE releases)
 
 Version 1.6.1
 -----------------------

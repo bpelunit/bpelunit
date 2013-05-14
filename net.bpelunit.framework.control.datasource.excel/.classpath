@@ -15,7 +15,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="target/dependency/poi-ooxml-3.6.jar"/>
-	<classpathentry kind="lib" path="target/dependency/commons-lang-2.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="target/dependency/poi-3.6.jar"/>
 	<classpathentry kind="lib" path="target/dependency/dom4j-1.6.1.jar"/>

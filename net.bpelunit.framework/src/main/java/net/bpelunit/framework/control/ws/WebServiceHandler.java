@@ -9,6 +9,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
@@ -22,10 +25,9 @@ import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.mortbay.http.HttpRequest;
-import org.mortbay.http.HttpResponse;
-import org.mortbay.http.handler.AbstractHttpHandler;
-import org.mortbay.util.ByteArrayISO8859Writer;
+import org.eclipse.jetty.http.HttpMethods;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.util.ByteArrayISO8859Writer;
 
 /**
  * The handler for incoming HTTP connections. Each incoming request is related
@@ -35,13 +37,11 @@ import org.mortbay.util.ByteArrayISO8859Writer;
  * @author Philip Mayer
  * 
  */
-public class WebServiceHandler extends AbstractHttpHandler {
+public class WebServiceHandler extends org.eclipse.jetty.server.handler.AbstractHandler {
 
 	private static final int HTTP_INTERNAL_ERROR = 500;
 
 	private Logger wsLogger = Logger.getLogger(this.getClass());
-
-	private static final long serialVersionUID = -2402788148972993151L;
 
 	/**
 	 * The test runner handling the requests made to this web service handler
@@ -83,19 +83,19 @@ public class WebServiceHandler extends AbstractHttpHandler {
 	 * </ul>
 	 * 
 	 */
-	public void handle(String pathInContext, String pathParams,
-			HttpRequest request, HttpResponse response) throws IOException {
+	@Override
+	public void handle(String pathInContext, Request rawRequest,
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		wsLogger.info("Incoming request for path " + pathInContext);
 
-		if (!request.getMethod().equals(HttpRequest.__POST)) {
+		if (!request.getMethod().equals(HttpMethods.POST)) {
 			wsLogger.error("Got a non-POST request - rejecting message "
 					+ pathInContext);
 			// no POST method
 			// let default 404 handler handle this situation.
 			return;
 		}
-
 
 		if (fRunner == null) {
 			wsLogger.error("Not initialized - rejecting message for URL "
@@ -144,7 +144,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 
 			wsLogger.debug("Answer is:\n" + body);
 			for(String option : m2.getProtocolOptionNames()) {
-				response.addField(option, m2.getProtocolOption(option));
+				response.addHeader(option, m2.getProtocolOption(option));
 			}
 			sendResponse(response, code, body);
 
@@ -192,7 +192,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 		return stringToTest;
 	}
 	
-	private void sendResponse(HttpResponse response, int code, SOAPMessage body)
+	private void sendResponse(HttpServletResponse response, int code, SOAPMessage body)
 	throws IOException {
 		// TODO Refactor all message serializations into an own utility method
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -205,7 +205,7 @@ public class WebServiceHandler extends AbstractHttpHandler {
 		}
 	}
 
-	private void sendResponse(HttpResponse response, int code, String body)
+	private void sendResponse(HttpServletResponse response, int code, String body)
 			throws IOException {
 
 		response.setContentType(BPELUnitConstants.TEXT_XML_CONTENT_TYPE);

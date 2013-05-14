@@ -8,10 +8,11 @@ package net.bpelunit.framework.control.ws;
 import net.bpelunit.framework.control.run.TestCaseRunner;
 
 import org.apache.log4j.Logger;
-import org.mortbay.http.HttpContext;
-import org.mortbay.http.HttpServer;
-import org.mortbay.http.SocketListener;
-import org.mortbay.http.handler.NotFoundHandler;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.HandlerList;
 
 /**
  * The class LocalHTTPServer implements the necessary functionality for starting
@@ -32,36 +33,27 @@ public class LocalHTTPServer {
 
 	}
 
-	private HttpServer fServer;
+	private Server fServer;
 
 	private WebServiceHandler fHandler;
 
-	private Logger wsLogger = Logger.getLogger(this.getClass());
-
-	private SocketListener listener2 = null;
+	private final static Logger LOGGER = Logger.getLogger(LocalHTTPServer.class);
 
 	public LocalHTTPServer(int portNumber, String rootPath) {
+		if (rootPath.endsWith("/")) {
+			// Jetty 9 does not like context paths with trailing slashes - remove them
+			rootPath = rootPath.substring(0, rootPath.length() - 1);
+		}
+		fServer = new Server(portNumber);
 
-		fServer = new HttpServer();
-		SocketListener listener = new SocketListener();
-		listener.setPort(portNumber);
-
-		fServer.addListener(listener);
-
-		// Create the context for the root path
-		HttpContext context = new HttpContext();
-		context.setContextPath(rootPath);
-		wsLogger.info("!!!!ROOTPATH " + rootPath);
-		context.setResourceBase("");
 		fHandler = new WebServiceHandler();
+		final ContextHandler context = new ContextHandler();
+		context.setContextPath(rootPath);
+		LOGGER.info("!!!!ROOTPATH " + rootPath);
+		context.setResourceBase("");
+		context.setHandler(fHandler);
 
-		// Add the ws handler first
-		context.addHandler(fHandler);
-
-		// Add a 404 handler last
-		context.addHandler(new NotFoundHandler());
-
-		fServer.addContext(context);
+		fServer.setHandler(context);
 	}
 
 	public void startTest(TestCaseRunner runner) {
@@ -78,14 +70,13 @@ public class LocalHTTPServer {
 		Logger.getLogger(getClass()).info("Local HTTP server was started.");
 	}
 
-	public void stopServer() throws InterruptedException {
-		wsLogger.info("Connections=" + fServer.getConnections());
-		wsLogger.info("ConnectionsOpen=" + fServer.getConnectionsOpen());
-		wsLogger.info("ConnectionsRequests=" + fServer.getRequests());
-		if (listener2 != null) {
-			wsLogger.info("ACCEPTQUESIZE=" + listener2.getAcceptQueueSize());
-		}
-		fServer.stop(true);
+	public void stopServer() throws Exception {
+		final Connector firstConnector = fServer.getConnectors()[0];
+
+		LOGGER.info("Connections = " + firstConnector.getConnections());
+		LOGGER.info("ConnectionsOpen = " + firstConnector.getConnectionsOpen());
+		LOGGER.info("ConnectionsRequests = " + firstConnector.getRequests());
+		fServer.stop();
 	}
 
 	public void stopTest(TestCaseRunner runner) {

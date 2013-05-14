@@ -8,15 +8,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import net.bpelunit.framework.control.datasource.DataSourceUtil;
 import net.bpelunit.framework.exception.DataSourceException;
+
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mortbay.http.HttpContext;
-import org.mortbay.http.HttpServer;
-import org.mortbay.http.SocketListener;
-import org.mortbay.http.handler.ResourceHandler;
 
 /**
  * Tests for the creation of InputStreams for each of the supported data source
@@ -38,7 +37,7 @@ public class DataSourceContentReferencesTest {
 	private static String FILE_SOURCE_ABSPATH;
 
 	// HTTP URLs
-	private HttpServer fHttpServer;
+	private Server fHttpServer;
 	private static final int HTTP_PORT = 7945;
 	private static final String HTTP_SOURCE_URL = "http://127.0.0.1:"
 			+ HTTP_PORT + "/" + FILE_SOURCE_BASENAME;
@@ -47,18 +46,13 @@ public class DataSourceContentReferencesTest {
 	public void setUp() throws Exception {
 		FILE_SOURCE_ABSPATH = new File(FILE_SOURCE_PATH).getCanonicalPath();
 
-		fHttpServer = new HttpServer();
+		fHttpServer = new Server(HTTP_PORT);
 
-		SocketListener sockListener = new SocketListener();
-		sockListener.setPort(HTTP_PORT);
-		fHttpServer.addListener(sockListener);
-
-		HttpContext context = new HttpContext();
+		ContextHandler context = new ContextHandler();
 		context.setContextPath("/");
 		context.setResourceBase(FILE_SOURCE_DIR);
-		context.addHandler(new ResourceHandler());
-		fHttpServer.addContext(context);
-
+		context.setHandler(new ResourceHandler());
+		fHttpServer.setHandler(context);
 		fHttpServer.start();
 	}
 

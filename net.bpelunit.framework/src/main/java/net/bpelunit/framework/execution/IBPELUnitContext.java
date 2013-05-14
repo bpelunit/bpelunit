@@ -3,10 +3,10 @@ package net.bpelunit.framework.execution;
 import java.net.URL;
 import java.util.List;
 
-import org.mortbay.http.handler.AbstractHttpHandler;
-
 import net.bpelunit.framework.control.deploy.IDeployment;
 import net.bpelunit.framework.model.test.TestSuite;
+
+import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public interface IBPELUnitContext {
 
@@ -16,7 +16,7 @@ public interface IBPELUnitContext {
 	/**
 	 * TODO Make independent of Jetty
 	 */
-	URL addService(String name, AbstractHttpHandler handler);
+	URL addService(String name, AbstractHandler handler);
 
 	List<? extends ITestLifeCycleElement> getElementsInLoad();
 	List<? extends ITestLifeCycleElement> getElementsInPrepareProcesses();
