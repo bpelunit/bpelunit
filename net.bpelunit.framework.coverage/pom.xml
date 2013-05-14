@@ -88,8 +88,8 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-	      <groupId>jetty</groupId>
-	      <artifactId>jetty</artifactId>
+	      <groupId>org.eclipse.jetty</groupId>
+	      <artifactId>jetty-server</artifactId>
 	    </dependency>
 		<dependency>
 			<groupId>net.bpelunit</groupId>

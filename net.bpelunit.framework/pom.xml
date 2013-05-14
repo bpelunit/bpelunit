@@ -123,8 +123,8 @@
       <artifactId>log4j</artifactId>
     </dependency>
     <dependency>
-      <groupId>jetty</groupId>
-      <artifactId>jetty</artifactId>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
