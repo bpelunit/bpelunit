@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: WSDL4J OSGi Bundle
+Bundle-SymbolicName: sf.net.wsdl4j
+Bundle-Version: 1.6.2
+Bundle-Vendor: BPELUnit
+Export-Package: com.ibm.wsdl;version="1.6.2",
+ com.ibm.wsdl.extensions;version="1.6.2",
+ com.ibm.wsdl.extensions.http;version="1.6.2",
+ com.ibm.wsdl.extensions.mime;version="1.6.2",
+ com.ibm.wsdl.extensions.schema;version="1.6.2",
+ com.ibm.wsdl.extensions.soap;version="1.6.2",
+ com.ibm.wsdl.extensions.soap12;version="1.6.2",
+ com.ibm.wsdl.factory;version="1.6.2",
+ com.ibm.wsdl.util;version="1.6.2",
+ com.ibm.wsdl.util.xml;version="1.6.2",
+ com.ibm.wsdl.xml;version="1.6.2",
+ javax.wsdl;version="1.6.2",
+ javax.wsdl.extensions;version="1.6.2",
+ javax.wsdl.extensions.http;version="1.6.2",
+ javax.wsdl.extensions.mime;version="1.6.2",
+ javax.wsdl.extensions.schema;version="1.6.2",
+ javax.wsdl.extensions.soap;version="1.6.2",
+ javax.wsdl.extensions.soap12;version="1.6.2",
+ javax.wsdl.factory;version="1.6.2",
+ javax.wsdl.xml;version="1.6.2"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

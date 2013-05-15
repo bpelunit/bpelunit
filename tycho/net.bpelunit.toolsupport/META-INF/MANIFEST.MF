@@ -4,7 +4,6 @@ Bundle-Name: BPELUnit Eclipse Tool Support Plugin
 Bundle-SymbolicName: net.bpelunit.toolsupport; singleton:=true
 Bundle-Version: 1.6.2.qualifier
 Bundle-Activator: net.bpelunit.toolsupport.ToolSupportActivator
-Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface.text,
@@ -18,9 +17,15 @@ Require-Bundle: org.eclipse.ui,
  org.junit4,
  net.bpelunit.framework.client.eclipse,
  net.bpelunit.framework
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Leibniz Universität Hannover
-Import-Package: javax.wsdl
+Import-Package: javax.wsdl;version="1.6.2",
+ javax.wsdl.extensions;version="1.6.2",
+ javax.wsdl.extensions.schema;version="1.6.2",
+ javax.wsdl.extensions.soap;version="1.6.2",
+ javax.wsdl.extensions.soap12;version="1.6.2",
+ javax.wsdl.factory;version="1.6.2",
+ javax.wsdl.xml;version="1.6.2"
 Bundle-ClassPath: .,
  lib/xsom14.jar,
  lib/relaxngDatatype-1.0.jar

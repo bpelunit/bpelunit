@@ -77,12 +77,12 @@
           <instructions>
             <Export-Package>net.bpelunit.framework.*</Export-Package>
             <_exportcontents>com.ibm.wsdl.*;javax.wsdl.*;org.apache.xmlbeans.*;org.apache.commons.lang;org.apache.log4j.*;de.schlichtherle.io.*</_exportcontents>
-            <Import-Package>org.jdom.*;org.apache.commons.io.*;!*</Import-Package>
+            <Import-Package>org.jdom.*;org.apache.commons.io.*;javax.wsdl.*;!*</Import-Package>
             <Require-Bundle>net.bpelunit.model.bpel</Require-Bundle>
             <Bundle-SymbolicName>net.bpelunit.framework</Bundle-SymbolicName>
             <Embed-Transitive>true</Embed-Transitive>
             <Embed-Directory>target/dependency</Embed-Directory>
-            <Embed-Dependency>*;scope=compile;artifactId=!stax-api|jdom|commons-io</Embed-Dependency>
+            <Embed-Dependency>*;scope=compile;artifactId=!stax-api|jdom|commons-io|wsdl4j</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
           </instructions>
         </configuration>
