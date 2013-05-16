@@ -78,7 +78,6 @@
     <module>net.bpelunit.toolsupport.eclipse.refactoring</module>
     <module>net.bpelunit.eclipse.feature</module>
     <module>net.bpelunit.eclipse.updatesite</module>
-    <module>sf.net.wsdl4j</module>
   </modules>
 
   <dependencies>

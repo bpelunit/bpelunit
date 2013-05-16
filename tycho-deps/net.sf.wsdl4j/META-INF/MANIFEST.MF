@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: WSDL4J OSGi Bundle
-Bundle-SymbolicName: sf.net.wsdl4j
+Bundle-SymbolicName: net.sf.wsdl4j
 Bundle-Version: 1.6.2
 Bundle-Vendor: BPELUnit
 Export-Package: com.ibm.wsdl;version="1.6.2",

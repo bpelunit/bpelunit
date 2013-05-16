@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.bpelunit.deps</groupId>
-  <artifactId>sf.net.wsdl4j</artifactId>
+  <artifactId>net.sf.wsdl4j</artifactId>
   <version>1.6.2</version>
   <packaging>eclipse-plugin</packaging>
   <name>BPELUnit Dependencies :: WSDL4J</name>
