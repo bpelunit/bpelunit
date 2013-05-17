@@ -8,7 +8,7 @@ Require-Bundle: org.eclipse.ui,
  net.bpelunit.framework,
  org.eclipse.core.resources,
  org.eclipse.core.runtime;bundle-version="3.6.0",
- net.bpelunit.utils.testdataexternalizer;bundle-version="1.6.1"
+ net.bpelunit.utils.testdataexternalizer
 Bundle-Vendor: Leibniz Universität Hannover
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
