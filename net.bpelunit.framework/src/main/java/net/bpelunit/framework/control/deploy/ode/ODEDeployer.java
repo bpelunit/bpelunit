@@ -35,15 +35,14 @@ import de.schlichtherle.io.ArchiveException;
 import de.schlichtherle.io.File;
 
 /**
- * ODE Deployer-deploys/undeploys a process to an ODE server.
- * 
- * @author Buddhika Chamith
+ * Deploys and undeploys processes to an Apache ODE server.
+ *
+ * @author Buddhika Chamith, Antonio Garcia-Dominguez
  */
-
 @IBPELDeployerCapabilities(canDeploy = true, canMeasureTestCoverage = false)
 public class ODEDeployer implements IBPELDeployer {
 
-	private Logger fLogger = Logger.getLogger(getClass());
+	private static final Logger LOGGER = Logger.getLogger(ODEDeployer.class);
 
 	private String fProcessId;
 
@@ -75,41 +74,30 @@ public class ODEDeployer implements IBPELDeployer {
 
 	public void deploy(String pathToTest, ProcessUnderTest put)
 			throws DeploymentException {
-		fLogger.info("ODE deployer got request to deploy " + put);
+		LOGGER.info("ODE deployer got request to deploy " + put);
 
 		check(fArchive, "Archive Location");
 		check(fDeploymentAdminServiceURL, "deployment admin server URL");
 
-		boolean archiveCreated = false;
-
 		String archivePath = getArchiveLocation(pathToTest);
+		if (new File(archivePath).exists()) {
+			throw new DeploymentException(String.format("The archive location '%s' does not exist", archivePath));
+		}
 
+		boolean archiveIsTemporary = false;
 		if (!FilenameUtils.getName(archivePath).endsWith(".zip")) {
-			// if the deployment is a directory not a zip file
+			// if the deployment is a directory and not a zip file
+			if (new File(archivePath).isDirectory()) {
+				archivePath = zipDirectory(new File(archivePath));
 
-			File dir = new File(archivePath);
-			if (dir.isDirectory()) {
-				// creates a zip file in the same location as directory
-
-				File zipFile = new File(dir.getAbsolutePath() + ".zip");
-				dir.copyAllTo(zipFile);
-				archivePath = zipFile.getAbsolutePath();
-
-				fArchive += ".zip";// Newly created zip archive.
-
-				try {
-					File.umount(true, true, true, true);
-				} catch (ArchiveException e) {
-					throw new DeploymentException(
-							"Could not convert to zip deployment format", e);
-				}
-
-				archiveCreated = true; // Separate zip file was created
+				// Separate zip file was created and should be later cleaned up
+				archiveIsTemporary = true;
 			} else {
 				throw new DeploymentException(
 						"Unknown archive format for the archive " + fArchive);
 			}
 		}
+		java.io.File uploadingFile = new java.io.File(archivePath);
 
 		// process the bundle for replacing wsdl eprs here. requires base url
 		// string from specification loader.
@@ -122,27 +110,17 @@ public class ODEDeployer implements IBPELDeployer {
 
 		// test coverage logic. Moved to ProcessUnderTest deploy() method.
 
-		java.io.File uploadingFile = new java.io.File(archivePath);
-
-		if (!uploadingFile.exists()) {
-			throw new DeploymentException(
-					"ODE deployer could not find zip file " + fArchive);
-		}
-
 		HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
 		PostMethod method = new PostMethod(fDeploymentAdminServiceURL);
-
 		RequestEntity re = fFactory.getDeployRequestEntity(uploadingFile);
-
 		method.setRequestEntity(re);
 
-		fLogger
+		LOGGER
 				.info("ODE deployer about to send SOAP request to deploy "
 						+ put);
 
-		// Provide custom retry handler is necessary
-		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-				new DefaultHttpMethodRetryHandler(1, false));
+		// Provide custom retry handler if necessary
+		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(1, false));
 		method.addRequestHeader("SOAPAction", "");
 
 		String responseBody;
@@ -156,12 +134,12 @@ public class ODEDeployer implements IBPELDeployer {
 		} finally {
 			method.releaseConnection();
 
-			if (uploadingFile.exists() && archiveCreated) {
+			if (uploadingFile.exists() && archiveIsTemporary) {
 				uploadingFile.delete();
 			}
 		}
 		
-		if (isHttpOkayCode(statusCode)) {
+		if (isHttpErrorCode(statusCode)) {
 			throw new DeploymentException(
 					"ODE Server reported a Deployment Error: "
 							+ responseBody);
@@ -176,27 +154,23 @@ public class ODEDeployer implements IBPELDeployer {
 		}
 	}
 
-	private boolean isHttpOkayCode(int statusCode) {
-		return statusCode < 200 || statusCode > 299;
-	}
-
 	public void undeploy(String testPath, ProcessUnderTest put)
 			throws DeploymentException {
-
+	
 		HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
 		PostMethod method = new PostMethod(fDeploymentAdminServiceURL);
-
+	
 		RequestEntity re = fFactory.getUndeployRequestEntity(fProcessId);
 		method.setRequestEntity(re);
-
-		fLogger.info("ODE deployer about to send SOAP request to undeploy "
+	
+		LOGGER.info("ODE deployer about to send SOAP request to undeploy "
 				+ put);
-
+	
 		// Provide custom retry handler is necessary
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
 				new DefaultHttpMethodRetryHandler(1, false));
 		method.addRequestHeader("SOAPAction", "");
-
+	
 		int statusCode = 0;
 		String responseBody = null;
 		try {
@@ -209,21 +183,52 @@ public class ODEDeployer implements IBPELDeployer {
 			method.releaseConnection();
 		}
 		
-		if(isHttpOkayCode(statusCode)) {
+		if(isHttpErrorCode(statusCode)) {
 			throw new DeploymentException(
 					"ODE Server reported a undeployment Error: "
 							+ responseBody);
 		}
 	}
 
+	@Override
+	public void cleanUpAfterTestCase() throws DeploymentException {
+		// do nothing.
+	}
+
+	@Override
+	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
+			throws DeploymentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String zipDirectory(File dir) throws DeploymentException {
+		// Creates a zip file in the same location as the directory
+		File zipFile = new File(dir.getAbsolutePath() + ".zip");
+		dir.copyAllTo(zipFile);
+		String archivePath = zipFile.getAbsolutePath();
+
+		// Newly created zip archive
+		fArchive += ".zip";
+		try {
+			File.umount(true, true, true, true);
+		} catch (ArchiveException e) {
+			throw new DeploymentException(
+					"Could not pack directory " + dir + " into zip", e);
+		}
+
+		return archivePath;
+	}
+
+	private boolean isHttpErrorCode(int statusCode) {
+		return statusCode < 200 || statusCode > 299;
+	}
+
 	private String getArchiveLocation(String pathToTest) {
-		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils
-				.getFullPath(fArchive));
+		String pathToArchive = FilenameUtils.concat(pathToTest, FilenameUtils.getFullPath(fArchive));
 		String archiveName = FilenameUtils.getName(fArchive);
 		return FilenameUtils.concat(pathToArchive, archiveName);
 	}
-
-	// *****Private helper methods*****
 
 	private String extractProcessId(String responseBody) throws IOException {
 		SAXBuilder builder = new SAXBuilder();
@@ -252,18 +257,6 @@ public class ODEDeployer implements IBPELDeployer {
 					"ODE deployment configuration is missing the "
 							+ description + ".");
 		}
-	}
-
-	@Override
-	public void cleanUpAfterTestCase() throws DeploymentException {
-		// do nothing.
-	}
-
-	@Override
-	public IDeployment getDeployment(ProcessUnderTest processUnderTest)
-			throws DeploymentException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
