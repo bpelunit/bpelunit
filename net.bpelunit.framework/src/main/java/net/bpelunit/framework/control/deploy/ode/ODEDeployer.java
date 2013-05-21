@@ -80,7 +80,7 @@ public class ODEDeployer implements IBPELDeployer {
 		check(fDeploymentAdminServiceURL, "deployment admin server URL");
 
 		String archivePath = getArchiveLocation(pathToTest);
-		if (new File(archivePath).exists()) {
+		if (!new File(archivePath).exists()) {
 			throw new DeploymentException(String.format("The archive location '%s' does not exist", archivePath));
 		}
 
