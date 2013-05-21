@@ -42,14 +42,13 @@ import net.bpelunit.model.bpel.IWhile;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.eclipse.jetty.server.Server;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mortbay.http.HttpContext;
-import org.mortbay.http.HttpServer;
-import org.mortbay.util.InetAddrPort;
 
 
 public class MarkerServiceTest {
@@ -162,18 +161,14 @@ public class MarkerServiceTest {
 
 	}
 
-	private static HttpServer httpServer;
+	private static Server httpServer;
 	private static DummyInstrumenter dummyInstrumenter = new DummyInstrumenter();
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		httpServer = new HttpServer();
-		HttpContext context = httpServer.addContext(CONTEXT);
-		InetAddrPort a = new InetAddrPort();
-		a.setHost("localhost");
-		a.setPort(TEST_PORT);
-		httpServer.addListener(a);
-		context.addHandler(new MarkerService(Arrays.asList(dummyInstrumenter)));
+		
+		httpServer = new Server(TEST_PORT);
+		httpServer.setHandler(new MarkerService(Arrays.asList(dummyInstrumenter)));
 		httpServer.start();
 	}
 	
@@ -191,11 +186,11 @@ public class MarkerServiceTest {
 	public void testHandleWithCorrectConfiguration() throws Exception {
 		HttpClient client = new HttpClient();
 		PostMethod post = new PostMethod();
-		post.setURI(new URI("http://localhost:" + TEST_PORT + "/" + CONTEXT + "/" + CoverageConstants.COVERAGE_SERVICE_BPELUNIT_NAME));
+		post.setURI(new URI("http://localhost:" + TEST_PORT + "/" + CONTEXT + "/" + CoverageConstants.COVERAGE_SERVICE_BPELUNIT_NAME, false));
 		post.setRequestHeader("Content-Type", "text/xml");
 		InputStream soapMsgStream = getClass().getResourceAsStream("mark.soap.xml");
 		assertNotNull("mark.soap.xml exists in test resources", soapMsgStream);
-		post.setRequestBody(soapMsgStream);
+		post.setRequestEntity(new InputStreamRequestEntity(soapMsgStream));
 		client.executeMethod(post);
 		
 		assertEquals(3, dummyInstrumenter.markers.size());

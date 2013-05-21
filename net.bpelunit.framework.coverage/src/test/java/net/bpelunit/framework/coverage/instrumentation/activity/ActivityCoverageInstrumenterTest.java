@@ -5,12 +5,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import net.bpelunit.framework.coverage.marker.Marker;
 import net.bpelunit.model.bpel.BpelFactory;
 import net.bpelunit.model.bpel.IEmpty;
 import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.model.bpel.ISequence;
-import net.bpelunit.util.XMLUtil;
 
 import org.junit.Test;
 import org.w3c.dom.Node;

@@ -49,9 +49,9 @@ public class CoverageLifeCycle implements ITestLifeCycleElement {
 	}
 	
 	public void doReport(IBPELUnitContext context) {
-		for(AbstractCoverageOutputter o : coverageOutputters) {
-//			o.exportCoverageInformation(doc);
-		}
+		/*for(AbstractCoverageOutputter o : coverageOutputters) {
+			o.exportCoverageInformation(doc);
+		}*/
 	}
 
 }
