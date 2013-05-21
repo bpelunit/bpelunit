@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:dep="http://www.bpelunit.net/dependencies">
+    <tes:name>dependencies.bpts</tes:name>
+    <tes:baseURL>http://localhost:7777/ws</tes:baseURL>
+    <tes:deployment>
+        <tes:put type="fixed" name="dependencies">
+            <tes:wsdl>dependencies.wsdl</tes:wsdl>
+        </tes:put>
+        <tes:partner name="Receiver" wsdl="dependencies.wsdl" partnerWsdl=""/>
+        <tes:partner name="Sender1" wsdl="dependencies.wsdl" partnerWsdl=""/>
+        <tes:partner name="Sender2" wsdl="dependencies.wsdl" partnerWsdl=""/>
+    </tes:deployment>
+    <tes:testCases>
+        <tes:testCase name="TC1-CorrectOrderWithDependencies" basedOn="" abstract="false" vary="false">
+            <tes:clientTrack/>
+            <tes:partnerTrack name="Receiver">
+                <tes:receiveOnly service="dep:dependencies" port="dependenciesSOAP" operation="NewOperation" fault="false">
+                    <tes:condition>
+                        <tes:expression>//in</tes:expression>
+                        <tes:value>'1'</tes:value>
+                    </tes:condition>
+                </tes:receiveOnly>
+                <tes:receiveOnly service="dep:dependencies" port="dependenciesSOAP" operation="NewOperation" fault="false">
+                    <tes:condition>
+                        <tes:expression>//in</tes:expression>
+                        <tes:value>'2'</tes:value>
+                    </tes:condition>
+                </tes:receiveOnly>
+            </tes:partnerTrack>
+            <tes:partnerTrack name="Sender1">
+                <tes:wait>
+                    <tes:waitForMilliseconds>1000</tes:waitForMilliseconds>
+                </tes:wait>
+                <tes:sendOnly id="Sender1" service="dep:dependencies" port="dependenciesSOAP" operation="NewOperation" fault="false">
+                    <tes:data>
+                        <dep:NewOperation>
+                            <in>1</in>
+                        </dep:NewOperation>
+                    </tes:data>
+                </tes:sendOnly>
+            </tes:partnerTrack>
+            <tes:partnerTrack name="Sender2">
+                <tes:sendOnly dependsOn="Sender1" service="dep:dependencies" port="dependenciesSOAP" operation="NewOperation" fault="false">
+                    <tes:data>
+                        <dep:NewOperation>
+                            <in>2</in>
+                        </dep:NewOperation>
+                    </tes:data>
+                </tes:sendOnly>
+            </tes:partnerTrack>
+        </tes:testCase>
+    </tes:testCases>
+</tes:testSuite>

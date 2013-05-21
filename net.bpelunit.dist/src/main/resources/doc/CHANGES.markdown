@@ -9,6 +9,7 @@ Staged for next version
 * _Feature_: Eclipse runner does now allow to make a launch config with selected test cases
 * _Feature_: Eclipse tooling supports running a test case from the context menu
 * _Feature_: Eclipse runner supports "halt on error" and "halt on failure"
+* _Feature_: Activities can have execution dependencies across partner tracks. This way it is possible to defer a send activity until another activity has been finished
 * _Improvement_: Set a default base URL when creating a new test case in Eclipse tooling
 * _Improvement_: Do not allow duplicate test case names when running a test suite
 * _Improvement_: Internal clean-ups in framework

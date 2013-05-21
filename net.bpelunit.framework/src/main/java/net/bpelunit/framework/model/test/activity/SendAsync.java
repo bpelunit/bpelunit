@@ -76,7 +76,7 @@ public class SendAsync extends Activity {
 	// ***************************** Activity **************************
 
 	@Override
-	public void run(ActivityContext context) {
+	public void runInternal(ActivityContext context) {
 
 		fSendSpec.handle(context);
 

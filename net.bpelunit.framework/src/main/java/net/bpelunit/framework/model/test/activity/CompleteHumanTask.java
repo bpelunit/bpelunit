@@ -37,7 +37,7 @@ public class CompleteHumanTask extends Activity {
 	}
 
 	@Override
-	public void run(ActivityContext context) {
+	public void runInternal(ActivityContext context) {
 		HumanPartner partner = (HumanPartner) getPartner();
 		WSHTClient client = partner.getWSHTClient();
 		boolean locked = false;
@@ -54,7 +54,6 @@ public class CompleteHumanTask extends Activity {
 					HumanPartner.WSHT_LOCK.lock();
 					locked = true;
 					taskList = client.getReadyTaskList(taskName).getTaskAbstractList();
-					System.out.println("List size: " + taskList.size());
 					if(taskList.size() == 0) {
 						HumanPartner.WSHT_LOCK.unlock();
 						locked = false;
