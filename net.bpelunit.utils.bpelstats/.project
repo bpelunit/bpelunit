@@ -1,0 +1,17 @@
+<projectDescription>
+  <name>bpelstats</name>
+  <comment>BPEL has become the defacto standard language for composing Web services. However, as every other programming language developers can introduce defects into the code that can lead to undesired consequences when the software is rolled out at the client-side. Therefore, all software development methodologies include testing as one of the important activities. For nearly every programming language, a unit testing framework exists, for example JUnit for Java. These testing frameworks allow developers to easily test small chunks of the code that they have written. Until recently, BPEL lacked such support. However, BPELUnit was developed for closing this gap. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>net.bpelunit.framework</project>
+    <project>net.bpelunit.model.bpel</project>
+    <project>net.bpelunit.util</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>

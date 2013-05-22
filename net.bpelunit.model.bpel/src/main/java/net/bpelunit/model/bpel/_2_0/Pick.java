@@ -50,11 +50,11 @@ public class Pick extends AbstractActivity<TPick> implements IPick, IContainer {
 	public void visit(IVisitor v) {
 		v.visit(this);
 		for (IOnMessage m : onMessages) {
-			v.visit(m);
+			m.visit(v);
 		}
 
 		for (IOnAlarm a : onAlarms) {
-			v.visit(a);
+			a.visit(v);
 		}
 	}
 

@@ -46,6 +46,14 @@ public class ActivityContext implements VelocityContextProvider {
 	 */
 	private TestCaseRunner fRunner;
 
+	public void markActivityAsExecuted(String activityId) {
+		fRunner.markActivityAsExecuted(activityId);
+	}
+
+	public List<String> getExecutedActivities() {
+		return fRunner.getExecutedActivities();
+	}
+
 	/**
 	 * Current partner track
 	 */

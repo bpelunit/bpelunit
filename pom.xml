@@ -487,6 +487,7 @@
     <module>net.bpelunit.framework.control.deploy.activevos9</module>
     <module>net.bpelunit.util</module>
     <module>net.bpelunit.utils.bptstool</module>
+    <module>net.bpelunit.utils.bpelstats</module>
     <module>net.bpelunit.utils.datasourceinliner</module>
     <module>net.bpelunit.utils.testdataexternalizer</module>
     <module>net.bpelunit.utils.testsuitesplitter</module>

@@ -1,6 +1,6 @@
 package net.bpelunit.model.bpel;
 
-public interface ISingleContainer extends IActivityContainer {
+public interface ISingleContainer extends IActivityContainer, IVisitable {
 
 	IActivity getMainActivity();
 
@@ -27,6 +27,4 @@ public interface ISingleContainer extends IActivityContainer {
 	IWhile setNewWhile();
 	
 	void removeMainActivity();
-	
-	String getXPathInDocument();
 }

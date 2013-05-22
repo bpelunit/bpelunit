@@ -1,6 +1,6 @@
 package net.bpelunit.model.bpel;
 
-public interface IScopeOnlyContainer {
+public interface IScopeOnlyContainer extends IVisitable, IBpelObject {
 
 	IScope getScope();
 	

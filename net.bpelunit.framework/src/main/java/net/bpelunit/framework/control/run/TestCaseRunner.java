@@ -55,6 +55,8 @@ public class TestCaseRunner {
 
 	private Map<PartnerTrack, PartnerTrackResult> fPartnerTracks;
 
+	private List<String> executedActivities;
+	
 	private boolean fProblemOccurred;
 
 	// Thread communication
@@ -87,6 +89,8 @@ public class TestCaseRunner {
 		fOutgoingBlackboard = new BlackBoard<PartnerTrack, OutgoingMessage>();
 		fSentBlackBoard = new BlackBoard<OutgoingMessage, Boolean>();
 
+		executedActivities = new ArrayList<String>();
+		
 		fLogger = Logger.getLogger(getClass());
 	}
 
@@ -385,6 +389,16 @@ public class TestCaseRunner {
 		fAbortedByUser = true;
 	}
 
+	public void markActivityAsExecuted(String activityId) {
+		if(activityId != null) {
+			executedActivities.add(activityId);
+		}
+	}
+	
+	public List<String> getExecutedActivities() {
+		return new ArrayList<String>(this.executedActivities);
+	}
+	
 	// ********************* Velocity contexts *********************
 
 	public WrappedContext createVelocityContext() throws DataSourceException  {

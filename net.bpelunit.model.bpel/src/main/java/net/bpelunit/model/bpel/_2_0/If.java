@@ -20,6 +20,15 @@ public class If extends AbstractSingleContainer<TIf> implements IIf {
 		super(i, parent);
 		
 		setNativeObject(i);
+		
+		if(i.isSetElse()) {
+			eelse = new Else(i.getElse(), this);
+		}
+		
+		for(TElseif elseIf : i.getElseifArray()) {
+			ElseIf e = new ElseIf(elseIf, this);
+			elseIfs.add(e);
+		}
 	}
 
 	void setNativeObjectInternal(Object nativeIf) {

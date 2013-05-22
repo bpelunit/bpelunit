@@ -10,6 +10,8 @@ import net.bpelunit.framework.coverage.marker.Marker;
 import net.bpelunit.framework.coverage.result.IMetricCoverage;
 import net.bpelunit.model.bpel.IActivity;
 import net.bpelunit.model.bpel.IAssign;
+import net.bpelunit.model.bpel.ICatch;
+import net.bpelunit.model.bpel.ICatchAll;
 import net.bpelunit.model.bpel.ICompensate;
 import net.bpelunit.model.bpel.ICompensateScope;
 import net.bpelunit.model.bpel.ICompensationHandler;
@@ -23,8 +25,10 @@ import net.bpelunit.model.bpel.IForEach;
 import net.bpelunit.model.bpel.IIf;
 import net.bpelunit.model.bpel.IImport;
 import net.bpelunit.model.bpel.IInvoke;
+import net.bpelunit.model.bpel.ILink;
 import net.bpelunit.model.bpel.IOnAlarm;
 import net.bpelunit.model.bpel.IOnMessage;
+import net.bpelunit.model.bpel.IOnMessageHandler;
 import net.bpelunit.model.bpel.IPartnerLink;
 import net.bpelunit.model.bpel.IPick;
 import net.bpelunit.model.bpel.IProcess;
@@ -159,28 +163,38 @@ public class BranchCoverageInstrumenter extends AbstractInstrumenter {
 	}
 
 	public void visit(ICopy c) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void visit(IImport i) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void visit(IPartnerLink pl) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void visit(IVariable var) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void visit(ICompensationHandler compensationHandler) {
-		// TODO Auto-generated method stub
-		
+	}
+
+	public void visit(IOnMessageHandler onMessageHandler) {
+	}
+
+	public void visit(IElseIf elseIf) {
+		// Covered by IIf
+	}
+
+	public void visit(IElse else1) {
+		// Covered by IIf
+	}
+
+	public void visit(ILink link) {
+	}
+
+	public void visit(ICatch ccatch) {
+	}
+
+	public void visit(ICatchAll catchAll) {
 	}
 	
 }

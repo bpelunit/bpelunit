@@ -37,7 +37,7 @@ public class CompleteHumanTask extends Activity {
 	}
 
 	@Override
-	public void run(ActivityContext context) {
+	public void runInternal(ActivityContext context) {
 		HumanPartner partner = (HumanPartner) getPartner();
 		WSHTClient client = partner.getWSHTClient();
 		boolean locked = false;
@@ -54,7 +54,6 @@ public class CompleteHumanTask extends Activity {
 					HumanPartner.WSHT_LOCK.lock();
 					locked = true;
 					taskList = client.getReadyTaskList(taskName).getTaskAbstractList();
-					System.out.println("List size: " + taskList.size());
 					if(taskList.size() == 0) {
 						HumanPartner.WSHT_LOCK.unlock();
 						locked = false;
@@ -67,9 +66,7 @@ public class CompleteHumanTask extends Activity {
 						return;
 					}
 					Thread.sleep(WAIT_IN_WSHT_QUERYTASK_LOOP);
-					System.out.println("Pass through WS-HT loop");
 				} while (taskList.size() == 0);
-				System.out.println("Finished WS-HT loop");
 				XMLTTask taskToFinish = taskList.get(taskList.size()-1);
 				
 				this.taskId = taskToFinish.getId();

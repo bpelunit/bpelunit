@@ -5,6 +5,7 @@
  */
 package net.bpelunit.framework.model.test.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.bpelunit.framework.model.AbstractPartner;
@@ -44,11 +45,11 @@ public abstract class Activity implements ITestArtefact {
 	 */
 	private ArtefactStatus fStatus;
 
-	protected void setStatus(ArtefactStatus status) {
-		this.fStatus = status;
-	}
-
 	private String fAssumption;
+
+	private String id;
+
+	private List<String> dependsOn = new ArrayList<String>();
 
 	// ******************* Initialization *********************
 
@@ -60,7 +61,31 @@ public abstract class Activity implements ITestArtefact {
 
 	// ************************** Run *************************
 
-	public abstract void run(ActivityContext context);
+	public final void run(ActivityContext context) {
+		preRun(context);
+		if(getStatus().isAborted()) {
+			return;
+		}
+		
+		runInternal(context);
+		postRun(context);
+	}
+	
+	public abstract void runInternal(ActivityContext context);
+
+	protected void preRun(ActivityContext context) {
+		while(!context.getExecutedActivities().containsAll(dependsOn)) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				setStatus(ArtefactStatus.createAbortedStatus("Thread was interrupted while waiting for all dependent activities to complete."));
+			}
+		}
+	}
+	
+	protected void postRun(ActivityContext context) {
+		context.markActivityAsExecuted(this.getId());
+	}
 
 
 	// ******************* Getters and Setters ***************
@@ -103,6 +128,10 @@ public abstract class Activity implements ITestArtefact {
 		return fStatus;
 	}
 
+	protected void setStatus(ArtefactStatus status) {
+		this.fStatus = status;
+	}
+	
 	public abstract ITestArtefact getParent();
 
 	public abstract List<ITestArtefact> getChildren();
@@ -125,6 +154,22 @@ public abstract class Activity implements ITestArtefact {
 	protected static void copyProtocolOptions(SendDataSpecification source, OutgoingMessage target) {
 		for(String option : source.getProtocolOptionNames()) {
 			target.addProtocolOption(option, source.getProtocolOption(option));
+		}
+	}
+
+	public void setId(String newId) {
+		this.id = newId;
+	}
+
+	private String getId() {
+		return this.id;
+	}
+	
+	public void setDependsOn(List<String> newDependsOn) {
+		if(newDependsOn != null) {
+			this.dependsOn = new ArrayList<String>(newDependsOn);
+		} else {
+			this.dependsOn = new ArrayList<String>();
 		}
 	}
 }

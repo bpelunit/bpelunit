@@ -11,7 +11,6 @@ import java.util.Map;
 import net.bpelunit.model.bpel.IBpelObject;
 import net.bpelunit.model.bpel.IImport;
 import net.bpelunit.model.bpel.IOnAlarmEventHandler;
-import net.bpelunit.model.bpel.IOnMessage;
 import net.bpelunit.model.bpel.IPartnerLink;
 import net.bpelunit.model.bpel.IProcess;
 import net.bpelunit.model.bpel.IVariable;
@@ -262,7 +261,7 @@ class Process extends AbstractSingleContainer<TProcess> implements IProcess {
 	}
 
 	@Override
-	public IOnMessage addNewOnMessage() {
+	public OnMessageHandler addNewOnMessage() {
 		createEventHandlersIfNecessary();
 		
 		TOnEvent nativeOnMessage = process.getEventHandlers().addNewOnEvent();

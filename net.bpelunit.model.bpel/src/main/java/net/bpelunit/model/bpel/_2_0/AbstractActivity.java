@@ -7,12 +7,10 @@ import net.bpelunit.model.bpel.IActivity;
 import net.bpelunit.model.bpel.IActivityContainer;
 import net.bpelunit.model.bpel.ISource;
 import net.bpelunit.model.bpel.ITarget;
-import net.bpelunit.util.XMLUtil;
 
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TActivity;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TBoolean;
 import org.oasisOpen.docs.wsbpel.x20.process.executable.TExtensibleElements;
-import org.w3c.dom.Element;
 
 abstract class AbstractActivity<T extends TExtensibleElements> extends
 		AbstractBpelObject implements IActivity {
@@ -77,11 +75,6 @@ abstract class AbstractActivity<T extends TExtensibleElements> extends
 		return ActivityType.valueOf(name);
 	}
 
-	@Override
-	public String getXPathInDocument() {
-		return XMLUtil.getXPathForElement((Element)activity.getDomNode(), BpelFactory.INSTANCE.createNamespaceContext());
-	}
-
 	@SuppressWarnings("unchecked")
 	void setNativeObject(Object substitute) {
 		super.setNativeObject(substitute);
@@ -90,6 +83,6 @@ abstract class AbstractActivity<T extends TExtensibleElements> extends
 	
 	@Override
 	public String toString() {
-		return getName();
+		return getClass().getSimpleName() + ":" + getName();
 	}
 }
