@@ -64,7 +64,7 @@ public class StatisticGathererVisitor implements IVisitor {
 
 	private int countForEach;
 
-	private int countIff;
+	private int countIf;
 
 	private int countInvoke;
 
@@ -105,99 +105,165 @@ public class StatisticGathererVisitor implements IVisitor {
 	public int getCountAssign() {
 		return countAssign;
 	}
+
 	public int getCountCatch() {
 		return countCatch;
 	}
+
 	public int getCountCatchAll() {
 		return countCatchAll;
 	}
+
 	public int getCountCompensate() {
 		return countCompensate;
 	}
+
 	public int getCountCompensateScope() {
 		return countCompensateScope;
 	}
+
 	public int getCountCompensationHandler() {
 		return countCompensationHandler;
 	}
+
 	public int getCountCopy() {
 		return countCopy;
 	}
+
 	public int getCountElse() {
 		return countElse;
 	}
+
 	public int getCountElseIf() {
 		return countElseIf;
 	}
+
 	public int getCountEmpty() {
 		return countEmpty;
 	}
+
 	public int getCountExit() {
 		return countExit;
 	}
+
 	public int getCountFlow() {
 		return countFlow;
 	}
+
 	public int getCountForEach() {
 		return countForEach;
 	}
+
 	public int getCountIff() {
-		return countIff;
+		return countIf;
 	}
+
 	public int getCountInvoke() {
 		return countInvoke;
 	}
+
 	public int getCountLink() {
 		return countLink;
 	}
+
 	public int getCountOnAlarm() {
 		return countOnAlarm;
 	}
+
 	public int getCountOnMessage() {
 		return countOnMessage;
 	}
+
 	public int getCountOnMessageHandler() {
 		return countOnMessageHandler;
 	}
+
 	public int getCountPartnerLink() {
 		return countPartnerLink;
 	}
+
 	public int getCountPick() {
 		return countPick;
 	}
+
 	public int getCountReceive() {
 		return countReceive;
 	}
+
 	public int getCountRepeatUntil() {
 		return countRepeatUntil;
 	}
+
 	public int getCountReply() {
 		return countReply;
 	}
+
 	public int getCountRethrow() {
 		return countRethrow;
 	}
+
 	public int getCountScope() {
 		return countScope;
 	}
+
 	public int getCountSequence() {
 		return countSequence;
 	}
+
 	public int getCountThrow() {
 		return countThrow;
 	}
+
 	public int getCountValidate() {
 		return countValidate;
 	}
+
 	public int getCountVariable() {
 		return countVariable;
 	}
+
 	public int getCountWait() {
 		return countWait;
 	}
+
 	public int getCountWhile() {
 		return countWhile;
 	}
+
+	public int getCountAllActivities() {
+		return countAssign + countCatch + countCatchAll + countCompensate
+				+ countCompensateScope + countCompensationHandler + countCopy
+				+ countElse + countElseIf + countEmpty + countExit + countFlow
+				+ countForEach + countIf + countInvoke + countOnAlarm
+				+ countOnMessage + countOnMessageHandler + countPick
+				+ countReceive + countRepeatUntil + countReply + countRethrow
+				+ countScope + countSequence + countThrow + countValidate;
+	}
+
+	public int getCountBasicActivities() {
+		return countAssign + countCompensate + countCompensateScope
+				+ countEmpty + countExit + countInvoke + countReceive
+				+ countReply + countRethrow + countThrow + countValidate;
+	}
+
+	public int getCountStructuredActivities() {
+		return countCatch + countCatchAll + countCompensationHandler
+				+ countFlow + countForEach + countIf
+				// TODO onAlarm handler
+				+countOnMessageHandler + countPick + countRepeatUntil
+				+ countScope + countSequence;
+	}
+
+	public int getCountNonLinearActivities() {
+		return countCatch + countCatchAll + countCompensate
+				+ countCompensateScope + countCompensationHandler 
+				+ countElse + countElseIf + countExit + countFlow
+				+ countForEach + countIf + countOnAlarm
+				+ countOnMessage + countOnMessageHandler + countPick
+				+ countReceive + countRepeatUntil + countRethrow
+				+ countThrow;
+	}
+
 	
 	public void visit(IAssign a) {
 		countAssign++;
@@ -252,7 +318,7 @@ public class StatisticGathererVisitor implements IVisitor {
 	}
 
 	public void visit(IIf a) {
-		countIff++;
+		countIf++;
 	}
 
 	public void visit(IImport i) {

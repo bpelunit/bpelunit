@@ -44,7 +44,7 @@ public final class BpelStats {
 				out = new PrintStream(new FileOutputStream(cmd.getOptionValue('c')));
 			}
 			if(cmd.hasOption('h')) {
-				out.println(String.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
+				out.println(String.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
 						"Filename",
 						"#Assign",
 						"#Catch",
@@ -75,14 +75,19 @@ public final class BpelStats {
 						"#Sequence",
 						"#Throw",
 						"#Validate",
-						"#Variable"));
+						"#Variable",
+						"#AllActivities",
+						"#BasicActivities",
+						"#Structured Activities",
+						"#Nonlinear Activities"
+						));
 			}
 		
 			for(String bpelFileName : bpelFileList) {
 				IProcess bpelProcess = BpelFactory.INSTANCE.loadProcess(new FileInputStream(bpelFileName));
 				StatisticGathererVisitor v = new StatisticGathererVisitor();
 				bpelProcess.visit(v);
-				out.println(String.format("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
+				out.println(String.format("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
 						bpelFileName,
 						v.getCountAssign(),
 						v.getCountCatch(),
@@ -113,7 +118,12 @@ public final class BpelStats {
 						v.getCountSequence(),
 						v.getCountThrow(),
 						v.getCountValidate(),
-						v.getCountVariable()));
+						v.getCountVariable(),
+						v.getCountAllActivities(),
+						v.getCountBasicActivities(),
+						v.getCountStructuredActivities(),
+						v.getCountNonLinearActivities()
+						));
 			}
 			
 		} catch (ParseException e) {
