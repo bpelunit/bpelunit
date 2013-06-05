@@ -51,7 +51,7 @@ public final class BPELUnitConstants {
 	public static final String CLIENT_NAME= "client";
 
 	/**
-	 * Default timeout value for all send and receive activities (25 seconds)
+	 * Default timeout value for all send and receive activities (50 seconds)
 	 */
 	public static final int TIMEOUT= 50000;
 

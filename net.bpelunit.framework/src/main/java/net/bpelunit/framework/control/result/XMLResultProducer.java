@@ -47,7 +47,7 @@ public final class XMLResultProducer {
 	}
 	
 	/**
-	 * Writes a complete trace of a test suite to the output stream in form of an XML document.
+	 * Writes a complete trace of a test suite to the output stream in form of an XML document encoded in UTF-8.
 	 * 
 	 * @param out stream to write to
 	 * @param suite suite with the data to be written
@@ -60,6 +60,7 @@ public final class XMLResultProducer {
                 XmlOptions opts= new XmlOptions();
                 opts.setSavePrettyPrint();
                 opts.setSavePrettyPrintIndent(4);
+                opts.setCharacterEncoding("UTF-8");
 
                 xmlTestResultDocument.save(out, opts);
         }
