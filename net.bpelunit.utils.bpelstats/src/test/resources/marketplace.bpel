@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+   BPEL Process Definition
+   Edited using ActiveBPEL(tm) Designer Version 3.0.0 (http://www.active-endpoints.com)
+  --><process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:tns="http://docs.active-endpoints.com/activebpel/sample/wsdl/marketplace/2006/09/marketplace.wsdl" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="marketplace" targetNamespace="http://docs.active-endpoints.com/activebpel/sample/wsdl/marketplace/2006/09/marketplace.wsdl">
+
+  <import importType="http://schemas.xmlsoap.org/wsdl/" location="marketplace.wsdl" namespace="http://docs.active-endpoints.com/activebpel/sample/wsdl/marketplace/2006/09/marketplace.wsdl"/>
+  <partnerLinks>
+    <partnerLink myRole="sales" name="seller" partnerLinkType="tns:salesplnk"/>
+    <partnerLink myRole="buying" name="buyer" partnerLinkType="tns:buyingplnk"/>
+  </partnerLinks>
+  <variables>
+    <variable messageType="tns:sellerInfoMessage" name="sellerInfo"/>
+    <variable messageType="tns:negotiationMessage" name="negotiationOutcome"/>
+    <variable messageType="tns:buyerInfoMessage" name="buyerInfo"/>
+  </variables>
+
+  <correlationSets>
+    <correlationSet name="negotiationIdentifier" properties="tns:negotiatedItem"/>
+  </correlationSets>
+
+  <faultHandlers>
+    <catch faultName="bpel:joinFailure">
+      <compensate/>
+    </catch>
+    <catchAll>
+      <!-- Do not compensate implicitly: we want the mutant without
+           a joinCondition to behave differently -->
+      <empty/>
+    </catchAll>
+  </faultHandlers>
+
+  <flow name="MarketplaceFlow">
+    <links>
+      <link name="firstSeller1"/>
+      <link name="firstBuyer1"/>
+      <link name="firstSeller2"/>
+      <link name="firstBuyer2"/>
+      <link name="secondSeller"/>
+      <link name="secondBuyer"/>
+      <link name="ifToSellerReply"/>
+      <link name="ifToBuyerReply"/>
+    </links>
+
+    <!-- First message, either from the buyer or the seller -->
+    <pick createInstance="yes" name="FirstMessage">
+      <onMessage operation="submit" partnerLink="seller" portType="tns:sellerPT" variable="sellerInfo">
+        <correlations>
+          <correlation initiate="join" set="negotiationIdentifier"/>
+        </correlations>
+        <scope name="FirstMessageFromSeller">
+          <compensationHandler>
+            <sequence>
+              <assign name="CancelledAssignSeller">
+                <copy>
+                  <from>'Deal Cancelled'</from>
+                  <to part="outcome" variable="negotiationOutcome"/>
+                </copy>
+              </assign>
+              <reply name="NotifySellerOfCancelledDeal" operation="submit" partnerLink="seller" portType="tns:sellerPT" variable="negotiationOutcome"/>
+            </sequence>
+          </compensationHandler>
+          <empty>
+            <sources>
+              <source linkName="firstSeller1"/>
+              <source linkName="firstSeller2"/>
+            </sources>
+          </empty>
+        </scope>
+      </onMessage>
+      <onMessage operation="submit" partnerLink="buyer" portType="tns:buyerPT" variable="buyerInfo">
+        <correlations>
+          <correlation initiate="join" set="negotiationIdentifier"/>
+        </correlations>
+        <scope name="FirstMessageFromBuyer">
+          <compensationHandler>
+            <sequence>
+              <assign name="CancelledAssignBuyer">
+                <copy>
+                  <from>'Deal Cancelled'</from>
+                  <to part="outcome" variable="negotiationOutcome"/>
+                </copy>
+              </assign>
+              <reply name="NotifyBuyerOfCancelledDeal" operation="submit" partnerLink="buyer" portType="tns:buyerPT" variable="negotiationOutcome"/>
+            </sequence>
+          </compensationHandler>
+          <empty>
+            <sources>
+              <source linkName="firstBuyer1"/>
+              <source linkName="firstBuyer2"/>
+            </sources>
+          </empty>
+        </scope>
+      </onMessage>
+    </pick>
+
+    <!-- The other party has 5 seconds to send a message -->
+    <pick name="SecondMessage">
+      <targets>
+        <target linkName="firstBuyer1"/>
+        <target linkName="firstSeller1"/>
+      </targets>
+
+      <onMessage operation="submit" partnerLink="seller" portType="tns:sellerPT" variable="sellerInfo">
+        <correlations>
+          <correlation initiate="join" set="negotiationIdentifier"/>
+        </correlations>
+        <empty>
+          <sources>
+            <source linkName="secondSeller"/>
+          </sources>
+        </empty>
+      </onMessage>
+      <onMessage operation="submit" partnerLink="buyer" portType="tns:buyerPT" variable="buyerInfo">
+        <correlations>
+          <correlation initiate="join" set="negotiationIdentifier"/>
+        </correlations>
+        <empty>
+          <sources>
+            <source linkName="secondBuyer"/>
+          </sources>
+        </empty>
+      </onMessage>
+      <onAlarm>
+        <for>'P0DT0H5S'</for>
+        <empty/>
+      </onAlarm>
+    </pick>
+
+    <!-- Negotiate -->
+    <if name="MarketplaceSwitch">
+      <targets>
+        <target linkName="firstSeller2"/>
+        <target linkName="firstBuyer2"/>
+        <target linkName="secondSeller"/>
+        <target linkName="secondBuyer"/>
+        <joinCondition>
+          ($firstSeller2 and $secondBuyer) or ($firstBuyer2 and $secondSeller)
+        </joinCondition>
+      </targets>
+      <sources>
+        <source linkName="ifToSellerReply"/>
+        <source linkName="ifToBuyerReply"/>
+      </sources>
+      <condition>($sellerInfo.askingPrice &lt;= $buyerInfo.offer)</condition>
+      <assign name="SuccessAssign">
+        <copy>
+          <from>'Deal Successful'</from>
+          <to part="outcome" variable="negotiationOutcome"/>
+        </copy>
+      </assign>
+      <else>
+        <assign name="FailedAssign">
+          <copy>
+            <from>'Deal Failed'</from>
+            <to part="outcome" variable="negotiationOutcome"/>
+          </copy>
+        </assign>
+      </else>
+    </if>
+
+    <!-- Report results -->
+    <reply name="SellerReply" operation="submit" partnerLink="seller" portType="tns:sellerPT" suppressJoinFailure="yes" variable="negotiationOutcome">
+      <targets>
+        <target linkName="ifToSellerReply"/>
+      </targets>
+    </reply>
+    <reply name="BuyerReply" operation="submit" partnerLink="buyer" portType="tns:buyerPT" suppressJoinFailure="yes" variable="negotiationOutcome">
+      <targets>
+        <target linkName="ifToBuyerReply"/>
+      </targets>
+    </reply>
+
+  </flow>
+</process>

@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+  Copyright (c) 2007, Sun Microsystems, Inc. All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+  * Neither the name of Sun Microsystems, Inc. nor the names of its contributors
+    may be used to endorse or promote products derived from this software without
+    specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+  THE POSSIBILITY OF SUCH DAMAGE.
+--><process xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:uca="http://www.uca.es/xpath/2007/11" xmlns:ares="http://www.sun.com/javaone/05/AirlineReservationService" xmlns:vres="http://www.sun.com/javaone/05/VehicleReservationService" xmlns:tres="http://www.sun.com/javaone/05/TravelReservationService" xmlns:tns="tres" xmlns:bpws="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ota="http://www.opentravel.org/OTA/2003/05" xmlns:hres="http://www.sun.com/javaone/05/HotelReservationService" name="TravelReservationService" targetNamespace="tres" uca:instrumentVariablesByDefault="yes">
+
+    <import importType="http://www.w3.org/2001/XMLSchema" location="OTA_TravelItinerary.xsd" namespace="http://www.opentravel.org/OTA/2003/05"/>
+    <import importType="http://schemas.xmlsoap.org/wsdl/" location="TravelReservationService.wsdl" namespace="http://www.sun.com/javaone/05/TravelReservationService"/>
+    <import importType="http://schemas.xmlsoap.org/wsdl/" location="AirlineReservationService.wsdl" namespace="http://www.sun.com/javaone/05/AirlineReservationService"/>
+    <import importType="http://schemas.xmlsoap.org/wsdl/" location="VehicleReservationService.wsdl" namespace="http://www.sun.com/javaone/05/VehicleReservationService"/>
+    <import importType="http://schemas.xmlsoap.org/wsdl/" location="HotelReservationService.wsdl" namespace="http://www.sun.com/javaone/05/HotelReservationService"/>
+
+    <extensions>
+      <extension mustUnderstand="no" namespace="http://www.uca.es/xpath/2007/11" />
+    </extensions>
+
+    <partnerLinks>
+        <partnerLink myRole="TravelReservationServiceRole" name="Travel" partnerLinkType="tres:TravelReservationPartnerLinkType"/>
+        <partnerLink myRole="AirlineReservationCallbackServiceRole" name="Airline" partnerLinkType="ares:AirlineReservationPartnerLinkType" partnerRole="AirlineReservationServiceRole"/>
+        <partnerLink myRole="VehicleReservationCallbackServiceRole" name="Vehicle" partnerLinkType="vres:VehicleReservationPartnerLinkType" partnerRole="VehicleReservationServiceRole"/>
+        <partnerLink myRole="HotelReservationCallbackServiceRole" name="Hotel" partnerLinkType="hres:HotelReservationPartnerLinkType" partnerRole="HotelReservationServiceRole"/>
+    </partnerLinks>
+
+    <messageExchanges>
+        <messageExchange name="M1"/>
+    </messageExchanges>
+
+    <variables>
+        <variable messageType="vres:CancelVehicleOut" name="CancelVehicleOut" />
+        <variable messageType="vres:CancelVehicleIn" name="CancelVehicleIn" />
+        <variable messageType="ares:CancelAirlineOut" name="CancelAirlineOut" />
+        <variable messageType="ares:CancelAirlineIn" name="CancelAirlineIn" />
+        <variable messageType="tres:ItineraryIn" name="ItineraryIn" uca:instrument="yes"/>
+        <variable messageType="tres:ItineraryOut" name="ItineraryOut" uca:instrument="yes"/>
+        <variable messageType="tres:ItineraryFault" name="ItineraryFault"/>
+        <variable messageType="ares:ReserveAirlineIn" name="ReserveAirlineIn" uca:instrument="yes"/>
+        <variable messageType="ares:AirlineReservedIn" name="AirlineReservedIn"/>
+        <variable messageType="vres:ReserveVehicleIn" name="ReserveVehicleIn" uca:instrument="yes"/>
+        <variable messageType="vres:VehicleReservedIn" name="VehicleReservedIn"/>
+        <variable messageType="hres:ReserveHotelIn" name="ReserveHotelIn" uca:instrument="yes"/>
+        <variable messageType="hres:CancelHotelIn" name="CancelHotelIn"/>
+        <variable messageType="hres:CancelHotelOut" name="CancelHotelOut"/>
+        <variable messageType="hres:HotelReservedIn" name="HotelReservedIn"/>
+        <variable name="FCTLog" type="xsd:string">
+            <from>
+                <literal/>
+            </from>
+        </variable>
+    </variables>
+
+    <correlationSets>
+        <correlationSet name="ItineraryCorrelator" properties="tres:ItineraryRefId"/>
+    </correlationSets>
+
+    <faultHandlers>
+        <catchAll>
+            <sequence name="faultHandlersSequence">
+                <compensate name="ReverseCompletedTransactions"/>
+                <assign name="GenerateFaultMessage">
+                    <copy>
+                        <from>concat('The following FCT activities have occurred:', $FCTLog)</from>
+                        <to part="faultMessage" variable="ItineraryFault"/>
+                    </copy>
+                </assign>
+                <reply faultName="tres:itineraryProblem" messageExchange="M1" name="SendItineraryError" operation="buildItinerary" partnerLink="Travel" variable="ItineraryFault"/>
+            </sequence>
+        </catchAll>
+    </faultHandlers>
+
+    <eventHandlers>
+        <onEvent messageType="ares:AirlineReservationFailedIn" operation="airlineReservationFailed" partnerLink="Airline" portType="ares:AirlineReservationCallbackPortType" variable="AirlineReservationFailedIn">
+            <correlations>
+                <correlation initiate="no" set="ItineraryCorrelator"/>
+            </correlations>
+            <scope>
+                <sequence name="onEventSequence">
+                    <assign name="GenerateFaultMessage">
+                        <copy>
+                            <from>
+                                <literal>Airline reservation has failed.</literal>
+                            </from>
+                            <to part="faultMessage" variable="ItineraryFault"/>
+                        </copy>
+                    </assign>
+                    <reply faultName="tres:itineraryProblem" messageExchange="M1" name="SendAirlineReservationFailedError" operation="buildItinerary" partnerLink="Travel" variable="ItineraryFault"/>
+                </sequence>
+            </scope>
+        </onEvent>
+    </eventHandlers>
+
+    <sequence name="Main">
+        <receive createInstance="yes" messageExchange="M1" name="ReceiveItinerary" operation="buildItinerary" partnerLink="Travel" portType="tres:TravelReservationPortType" variable="ItineraryIn">
+            <correlations>
+                <correlation initiate="yes" set="ItineraryCorrelator"/>
+            </correlations>
+        </receive>
+        <assign name="CopyItineraryIn">
+            <copy>
+                <from part="itinerary" variable="ItineraryIn"/>
+                <to part="itinerary" variable="ItineraryOut"/>
+            </copy>
+            <copy>
+                <from part="itinerary" variable="ItineraryIn"/>
+                <to part="itinerary" variable="ReserveAirlineIn"/>
+            </copy>
+            <copy>
+                <from part="itinerary" variable="ItineraryIn"/>
+                <to part="itinerary" variable="ReserveVehicleIn"/>
+            </copy>
+            <copy>
+                <from part="itinerary" variable="ItineraryIn"/>
+                <to part="itinerary" variable="ReserveHotelIn"/>
+            </copy>
+        </assign>
+
+        <if name="HasAirline">
+            <condition>
+                count($ItineraryIn.itinerary/ota:ItineraryInfo/ota:ReservationItems/ota:Item/ota:Air) &gt; 0
+            </condition>
+
+            <scope name="AirlineScope">
+                <faultHandlers>
+                    <catch faultName="AirlineCustomerPersonNameDoesNotExist">
+                        <sequence>
+                            <assign name="AirlineCustomerPersonNameHandleError">
+                                <copy>
+                                    <from>concat($FCTLog, 'Fault - Airline Data without customer person name.')</from>
+                                    <to variable="FCTLog"/>
+                                </copy>
+                            </assign>
+                            <rethrow/>
+                        </sequence>
+                    </catch>
+                    <catch faultName="AirlineCustomerEmailDoesNotExist">
+                        <sequence>
+                            <assign name="AirlineCustomerEmailHandleError">
+                                <copy>
+                                    <from>concat($FCTLog, 'Fault - Airline Data without customer email.')</from>
+                                    <to variable="FCTLog"/>
+                                </copy>
+                            </assign>
+                            <rethrow/>
+                        </sequence>
+                    </catch>
+                    <catch faultName="AirlineFormOfPaymentDoesNotExist">
+                        <sequence>
+                            <assign name="AirlineFormOfPaymentHandleError">
+                                <copy>
+                                    <from>concat($FCTLog, 'Fault - Airline Data without form of payment.')</from>
+                                    <to variable="FCTLog"/>
+                                </copy>
+                            </assign>
+                            <rethrow/>
+                        </sequence>
+                    </catch>
+                    <catchAll>
+                        <sequence>
+                            <assign name="HandleError">
+                                <copy>
+                                    <from>concat($FCTLog, 'Fault from Airline activity.')</from>
+                                    <to variable="FCTLog"/>
+                                </copy>
+                            </assign>
+                            <rethrow/>
+                        </sequence>
+                    </catchAll>
+                </faultHandlers>
+
+                <flow>
+                    <scope>
+                        <terminationHandler>
+                            <assign name="HandleTermination">
+                                <copy>
+                                    <from>concat($FCTLog, 'Termination - reserveAirline invoke activity is terminated.')</from>
+                                    <to variable="FCTLog"/>
+                                </copy>
+                            </assign>
+                        </terminationHandler>
+                        <wait><for>'PT0H0M2S'</for></wait>
+                    </scope>
+
+                    <sequence>
+                        <if name="CustomerPersonNameDoesNotExist">
+                            <condition>
+                                count($ItineraryIn.itinerary/ota:CustomerInfos/ota:CustomerInfo/ota:Customer/ota:PersonName) = 0
+                            </condition>
+                            <throw faultName="AirlineCustomerPersonNameDoesNotExist"/>
+                        </if>
+
+                        <if name="CustomerEmailDoesNotExist">
+                            <condition>
+                                count($ItineraryIn.itinerary/ota:CustomerInfos/ota:CustomerInfo/ota:Customer/ota:Email) = 0
+                            </condition>
+                            <throw faultName="AirlineCustomerEmailDoesNotExist"/>
+                        </if>
+
+                        <if name="FormOfPaymentDoesNotExist">
+                            <condition>
+                                count($ItineraryIn.itinerary/ota:TravelCost/ota:FormOfPayment) = 0
+                            </condition>
+                            <throw faultName="AirlineFormOfPaymentDoesNotExist"/>
+                        </if>
+
+                        <invoke inputVariable="ReserveAirlineIn" name="ReserveAirline" operation="reserveAirline" partnerLink="Airline" portType="ares:AirlineReservationPortType">
+                            <correlations>
+                                <correlation pattern="request" set="ItineraryCorrelator"/>
+                            </correlations>
+                        </invoke>
+
+                        <pick name="Pick1">
+                            <onMessage operation="airlineReserved" partnerLink="Airline" portType="ares:AirlineReservationCallbackPortType" variable="AirlineReservedIn">
+                                <correlations>
+                                    <correlation set="ItineraryCorrelator"/>
+                                </correlations>
+
+                                <assign name="CopyAirlineReservation">
+                                    <copy>
+                                        <from part="itinerary" variable="AirlineReservedIn"/>
+                                        <to part="itinerary" variable="ItineraryOut"/>
+                                    </copy>
+                                    <copy>
+                                        <from part="itinerary" variable="AirlineReservedIn"/>
+                                        <to part="itinerary" variable="ReserveVehicleIn"/>
+                                    </copy>
+                                </assign>
+                            </onMessage>
+
+                            <onAlarm>
+                                <for>'P0Y0M0DT0H0M10S'</for>
+                                <sequence name="AirlineCancelSequence">
+                                    <assign name="CopyAirlineCancellation">
+                                        <copy>
+                                            <from>$ReserveAirlineIn.itinerary/ota:ItineraryRef</from>
+                                            <to part="itinerary" variable="CancelAirlineIn"/>
+                                        </copy>
+                                    </assign>
+                                    <invoke inputVariable="CancelAirlineIn" name="CancelAirline" operation="cancelAirline" outputVariable="CancelAirlineOut" partnerLink="Airline" portType="ares:AirlineReservationPortType">
+                                        <correlations>
+                                            <correlation pattern="request" set="ItineraryCorrelator"/>
+                                        </correlations>
+                                    </invoke>
+                                </sequence>
+                            </onAlarm>
+                        </pick>
+                    </sequence>
+                </flow>
+            </scope>
+        </if>
+
+        <if name="HasVehicle">
+            <condition>
+              count($ItineraryIn.itinerary/ota:ItineraryInfo/ota:ReservationItems//ota:Vehicle) &gt; 0
+            </condition>
+            <sequence>
+                <invoke inputVariable="ReserveVehicleIn" name="ReserveVehicle" operation="reserveVehicle" partnerLink="Vehicle" portType="vres:VehicleReservationPortType">
+                    <correlations>
+                        <correlation pattern="request" set="ItineraryCorrelator"/>
+                    </correlations>
+                </invoke>
+                <pick name="Pick2">
+                    <onMessage operation="vehicleReserved" partnerLink="Vehicle" portType="vres:VehicleReservationCallbackPortType" variable="VehicleReservedIn">
+                        <correlations>
+                            <correlation set="ItineraryCorrelator"/>
+                        </correlations>
+                        <assign name="CopyVehicleReservation">
+                            <copy>
+                                <from part="itinerary" variable="VehicleReservedIn"/>
+                                <to part="itinerary" variable="ItineraryOut"/>
+                            </copy>
+                            <copy>
+                                <from part="itinerary" variable="VehicleReservedIn"/>
+                                <to part="itinerary" variable="ReserveHotelIn"/>
+                            </copy>
+                        </assign>
+                    </onMessage>
+                    <onAlarm>
+                        <!--<until>'2010-01-01'</until>-->
+                        <for>'P0Y0M0DT0H0M5S'</for>
+                        <sequence name="CancelVehicleSequence">
+                            <assign name="CopyVehicleCancellation">
+                                <copy>
+                                    <from>$ReserveVehicleIn.itinerary/ota:ItineraryRef</from>
+                                    <to part="itinerary" variable="CancelVehicleIn"/>
+                                </copy>
+                            </assign>
+                            <invoke inputVariable="CancelVehicleIn" name="CancelVehicle" operation="cancelVehicle" outputVariable="CancelVehicleOut" partnerLink="Vehicle" portType="vres:VehicleReservationPortType">
+                                <correlations>
+                                    <correlation pattern="request" set="ItineraryCorrelator"/>
+                                </correlations>
+                            </invoke>
+                        </sequence>
+                    </onAlarm>
+                </pick>
+            </sequence>
+        </if>
+
+        <if name="HasHotel">
+            <condition>
+              count($ItineraryIn.itinerary/ota:ItineraryInfo/ota:ReservationItems/ota:Item/ota:Hotel) &gt; 0
+            </condition>
+            <sequence>
+                <invoke inputVariable="ReserveHotelIn" name="ReserveHotel" operation="reserveHotel" partnerLink="Hotel" portType="hres:HotelReservationPortType">
+                    <correlations>
+                        <correlation pattern="request" set="ItineraryCorrelator"/>
+                    </correlations>
+                </invoke>
+                <pick createInstance="no" name="Timeout">
+                    <onMessage operation="hotelReserved" partnerLink="Hotel" portType="hres:HotelReservationCallbackPortType" variable="HotelReservedIn">
+                        <correlations>
+                            <correlation set="ItineraryCorrelator"/>
+                        </correlations>
+                        <sequence name="HotelReserved">
+                            <assign name="CopyHotelReservation">
+                                <copy>
+                                    <from part="itinerary" variable="HotelReservedIn"/>
+                                    <to part="itinerary" variable="ItineraryOut"/>
+                                </copy>
+                            </assign>
+                        </sequence>
+                    </onMessage>
+                    <onAlarm>
+                        <!--<until>'2010-02-28'</until>-->
+                        <for>'P0Y0M0DT0H0M5S'</for>
+                        <sequence name="Timer">
+                            <assign name="CopyHotelCancellation">
+                                <copy>
+                                    <from>$ReserveHotelIn.itinerary/ota:ItineraryRef</from>
+                                    <to part="itinerary" variable="CancelHotelIn"/>
+                                </copy>
+                            </assign>
+                            <invoke inputVariable="CancelHotelIn" name="CancelHotel" operation="cancelHotel" outputVariable="CancelHotelOut" partnerLink="Hotel" portType="hres:HotelReservationPortType">
+                                <correlations>
+                                    <correlation pattern="request" set="ItineraryCorrelator"/>
+                                </correlations>
+                            </invoke>
+                        </sequence>
+                    </onAlarm>
+                </pick>
+            </sequence>
+        </if>
+
+        <reply messageExchange="M1" name="ReturnItinerary" operation="buildItinerary" partnerLink="Travel" portType="tres:TravelReservationPortType" variable="ItineraryOut"/>
+    </sequence>
+</process>

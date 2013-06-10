@@ -1,5 +1,5 @@
 package net.bpelunit.model.bpel;
 
-public interface IOnAlarmEventHandler extends IOnAlarm {
+public interface IOnAlarmEventHandler extends IOnAlarmCommon, IScopeOnlyContainer {
 
 }

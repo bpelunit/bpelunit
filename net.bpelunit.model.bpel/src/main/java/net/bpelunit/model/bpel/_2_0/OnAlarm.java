@@ -9,9 +9,6 @@ public class OnAlarm extends AbstractSingleContainer<TOnAlarmPick> implements IO
 
 	public OnAlarm(TOnAlarmPick nativeOnAlarm, IContainer parent) {
 		super(nativeOnAlarm, parent);
-		if(getScope() == null) {
-			this.setNewScope();
-		}
 	}
 	
 	@Override
@@ -20,10 +17,6 @@ public class OnAlarm extends AbstractSingleContainer<TOnAlarmPick> implements IO
 		if(getMainActivity() != null) {
 			getMainActivity().visit(v);
 		}
-	}
-	
-	public Scope getScope() {
-		return (Scope)getMainActivity();
 	}
 	
 	@Override
