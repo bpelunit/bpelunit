@@ -24,6 +24,8 @@ import net.bpelunit.framework.model.ProcessUnderTest;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -36,6 +38,9 @@ import org.apache.log4j.Logger;
  * listening at http://localhost:8080, and deployment archives are stored at
  * $CATALINA_HOME/bpr, where $CATALINA_HOME is an environment variable that
  * needs to be set to the home directory of the application server.
+ * 
+ * If ActiveBPEL is password protected, users can specify a username and a
+ * password. By default, these are not set.
  * 
  * @author Philip Mayer, Antonio Garcia-Dominguez
  */
@@ -84,13 +89,13 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	private Logger fLogger = Logger.getLogger(getClass());
 
 	private String fResultingFile;
-
 	private File fBPRFile;
-
 	private String fDeploymentDirectory;
 
 	private String fDeploymentAdminServiceURL = DEFAULT_DEPLOYMENT_URL;
 	private String fAdminServiceURL = DEFAULT_ADMIN_URL;
+
+	private String fUsername = "", fPassword = "";
 
 	private ProcessUnderTest put;
 
@@ -129,6 +134,24 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		if (adminServiceURL != null) {
 			this.fAdminServiceURL = adminServiceURL;
 		}
+	}
+
+	public String getUsername() {
+		return fUsername;
+	}
+
+	@IBPELDeployerOption(defaultValue = "")
+	public void setUsername(String fUsername) {
+		this.fUsername = fUsername;
+	}
+
+	public String getPassword() {
+		return fPassword;
+	}
+
+	@IBPELDeployerOption(defaultValue = "")
+	public void setPassword(String fPassword) {
+		this.fPassword = fPassword;
 	}
 
 	public void deploy(String pathToTest, ProcessUnderTest put)
@@ -264,12 +287,18 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	 * @return Response from the ActiveBPEL administration service.
 	 * @throws IOException
 	 */
-	private static RequestResult sendRequestToActiveBPEL(
+	private RequestResult sendRequestToActiveBPEL(
 			final String url, RequestEntity re)
-			throws IOException {
+			throws IOException
+	{
 		PostMethod method = null;
 		try {
 			HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
+			if (fUsername != null && !"".equals(fUsername) && fPassword != null && !"".equals(fPassword)) {
+				client.getState().setCredentials(
+						new AuthScope(null, -1),
+						new UsernamePasswordCredentials(fUsername, fPassword));
+			}
 			method = new PostMethod(url);
 			method.setRequestEntity(re);
 
