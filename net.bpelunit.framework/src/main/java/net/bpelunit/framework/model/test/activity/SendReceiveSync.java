@@ -63,6 +63,7 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 		msg.setTargetURL(getSendSpec().getTargetURL());
 		msg.setSOAPAction(getSendSpec().getSOAPHTTPAction());
 		msg.setBody(getSendSpec().getSOAPMessage());
+		Activity.copyProtocolOptions(getSendSpec(), msg);
 
 		IncomingMessage returnMsg;
 		try {

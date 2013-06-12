@@ -89,6 +89,7 @@ public class SendAsync extends Activity {
 		msg.setSOAPAction(fSendSpec.getSOAPHTTPAction());
 		msg.setTargetURL(fSendSpec.getTargetURL());
 		msg.setBody(fSendSpec.getSOAPMessage());
+		Activity.copyProtocolOptions(fSendSpec, msg);
 
 		IncomingMessage incoming;
 		try {

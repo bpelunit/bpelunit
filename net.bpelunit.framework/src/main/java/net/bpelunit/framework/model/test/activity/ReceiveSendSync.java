@@ -73,6 +73,7 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 		 */
 
 		OutgoingMessage msg= new OutgoingMessage();
+		Activity.copyProtocolOptions(getSendSpec(), msg);
 
 		if (!getReceiveSpec().hasProblems()) {
 			// Receive was successful
