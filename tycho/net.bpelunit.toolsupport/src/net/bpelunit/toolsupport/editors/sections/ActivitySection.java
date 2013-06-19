@@ -140,10 +140,6 @@ public class ActivitySection extends TreeSection {
 					XMLReceiveActivity rcvOp = (XMLReceiveActivity) activity;
 					return rcvOp.getConditionList().toArray();
 				}
-				if (activity instanceof XMLWaitActivity) {
-					XMLWaitActivity waitAct = (XMLWaitActivity) activity;
-					return new Object[] { "Duration: " + waitAct.getWaitForMilliseconds() + "ms" };
-				}
 				if (ActivityUtil.isTwoWayActivity(activity)) {
 					XMLTwoWayActivity twoWayActivity = (XMLTwoWayActivity) activity;
 					List<XmlObject> moreActivities = new ArrayList<XmlObject>();
@@ -172,7 +168,7 @@ public class ActivitySection extends TreeSection {
 		}
 
 		public boolean hasChildren(Object element) {
-			if (element instanceof XMLTwoWayActivity || element instanceof XMLWaitActivity)
+			if (element instanceof XMLTwoWayActivity)
 				return true;
 
 			if (element instanceof XMLReceiveActivity)

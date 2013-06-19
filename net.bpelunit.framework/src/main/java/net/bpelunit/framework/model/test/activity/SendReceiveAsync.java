@@ -35,7 +35,7 @@ public class SendReceiveAsync extends TwoWayAsyncActivity {
 	// ***************************** Activity **************************
 
 	@Override
-	public void run(ActivityContext context) {
+	public void runInternal(ActivityContext context) {
 
 		context.setHeaderProcessor(getHeaderProcessor());
 

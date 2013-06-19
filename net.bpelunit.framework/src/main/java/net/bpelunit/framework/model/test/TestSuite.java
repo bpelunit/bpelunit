@@ -27,7 +27,6 @@ import net.bpelunit.framework.model.test.report.StateData;
 
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.ToolManager;
 
 /**

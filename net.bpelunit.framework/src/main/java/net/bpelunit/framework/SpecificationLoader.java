@@ -713,6 +713,7 @@ public class SpecificationLoader {
 	 * @param round
 	 * @throws SpecificationException
 	 */
+	@SuppressWarnings("unchecked")
 	private void readActivities(PartnerTrack partnerTrack,
 			XMLTestCase xmlTestCase, XMLTrack xmlTrack, int round,
 			String testDirectory) throws SpecificationException {
@@ -749,37 +750,39 @@ public class SpecificationLoader {
 			List<Activity> activities = new ArrayList<Activity>();
 			for (XMLActivity event : xmlActivities) {
 
+				Activity a;
 				/*
 				 * Each activity is one of the seven specified activites:
 				 * ReceiveOnly, SendOnly, ReceiveSendSync, SendReceiveSync,
 				 * ReceiveSendAsync, SendReceiveAsync, and Wait.
 				 */
-
 				if (event instanceof XMLWaitActivity) {
-					readWait(partnerTrack, activities, event,
+					a = readWait(partnerTrack, activities, event,
 							(XMLWaitActivity) event);
 				} else if (event instanceof XMLReceiveActivity) {
-					readReceive(partnerTrack, activities, event,
+					a = readReceive(partnerTrack, activities, event,
 							(XMLReceiveActivity) event);
 				} else if (event instanceof XMLSendActivity) {
-					readSend(partnerTrack, round, testDirectory, activities,
+					a = readSend(partnerTrack, round, testDirectory, activities,
 							event, (XMLSendActivity) event);
 				} else if (event instanceof XMLTwoWayActivity) {
 					XMLTwoWayActivity op = (XMLTwoWayActivity) event;
-					readTwoWayActivity(partnerTrack, round, testDirectory,
+					a = readTwoWayActivity(partnerTrack, round, testDirectory,
 							activities, event, op);
 				} else {
 					throw new SpecificationException(
 							"No activity found when reading event list for "
 									+ partnerTrack);
 				}
+				a.setId(event.getId());
+				a.setDependsOn(event.getDependsOn());
 			}
 
 			partnerTrack.setActivities(activities);
 		}
 	}
 
-	private void readTwoWayActivity(PartnerTrack partnerTrack, int round,
+	private Activity readTwoWayActivity(PartnerTrack partnerTrack, int round,
 			String testDirectory, List<Activity> activities, XMLActivity event,
 			XMLTwoWayActivity op) throws SpecificationException {
 		Activity activity = null;
@@ -804,9 +807,11 @@ public class SpecificationLoader {
 
 		activity.setAssumption(event.getAssume());
 		activities.add(activity);
+		
+		return activity;
 	}
 
-	private void readSend(PartnerTrack partnerTrack, int round,
+	private Activity readSend(PartnerTrack partnerTrack, int round,
 			String testDirectory, List<Activity> activities, XMLActivity event,
 			XMLSendActivity xmlSend) throws SpecificationException {
 		SendAsync activity = new SendAsync(partnerTrack);
@@ -817,9 +822,10 @@ public class SpecificationLoader {
 		activity.setAssumption(event.getAssume());
 
 		activities.add(activity);
+		return activity;
 	}
 
-	private void readReceive(PartnerTrack partnerTrack,
+	private Activity readReceive(PartnerTrack partnerTrack,
 			List<Activity> activities, XMLActivity event,
 			XMLReceiveActivity xmlReceive) throws SpecificationException {
 		ReceiveAsync activity = new ReceiveAsync(partnerTrack);
@@ -829,14 +835,16 @@ public class SpecificationLoader {
 		activity.setAssumption(event.getAssume());
 
 		activities.add(activity);
+		return activity;
 	}
 
-	private void readWait(PartnerTrack partnerTrack, List<Activity> activities,
+	private Activity readWait(PartnerTrack partnerTrack, List<Activity> activities,
 			XMLActivity event, XMLWaitActivity xmlWait) {
 		Wait activity = new Wait(partnerTrack);
 		activity.setWaitDuration(xmlWait.getWaitForMilliseconds());
 		activity.setAssumption(event.getAssume());
 		activities.add(activity);
+		return activity;
 	}
 
 	private String getPartnerTrackName(XMLTrack xmlTrack) {

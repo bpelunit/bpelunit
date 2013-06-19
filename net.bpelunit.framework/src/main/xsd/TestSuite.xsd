@@ -379,6 +379,8 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 		</xs:annotation>
 		<xs:sequence></xs:sequence>
 		<xs:attribute name="assume" type="xs:string"></xs:attribute>
+		<xs:attribute name="id" type="xs:ID"></xs:attribute>
+		<xs:attribute name="dependsOn" type="xs:IDREFS"></xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="SoapActivity">
 		<xs:annotation>
