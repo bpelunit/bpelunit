@@ -22,6 +22,7 @@ import net.bpelunit.model.bpel.IImport;
 import net.bpelunit.model.bpel.IInvoke;
 import net.bpelunit.model.bpel.ILink;
 import net.bpelunit.model.bpel.IOnAlarm;
+import net.bpelunit.model.bpel.IOnAlarmEventHandler;
 import net.bpelunit.model.bpel.IOnMessage;
 import net.bpelunit.model.bpel.IOnMessageHandler;
 import net.bpelunit.model.bpel.IPartnerLink;
@@ -238,5 +239,11 @@ public class GatheringVisitor implements IVisitor {
 	@Override
 	public void visit(ICatchAll catchAll) {
 		processVisitedObject(catchAll);
+	}
+
+
+	@Override
+	public void visit(IOnAlarmEventHandler onAlarmEventHandler) {
+		processVisitedObject(onAlarmEventHandler);
 	}
 }

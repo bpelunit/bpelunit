@@ -106,8 +106,7 @@ public class VisitingTest {
 		activities.add(onMessage.setNewAssign());
 		IOnAlarm onAlarm = pick.addOnAlarm();
 		activities.add(onAlarm);
-		activities.add(onAlarm.getScope());
-		activities.add(onAlarm.getScope().setNewEmpty());
+		activities.add(onAlarm.setNewEmpty());
 		activities.add(sequence.addReceive());
 		IRepeatUntil repeatUntil = sequence.addRepeatUntil();
 		activities.add(repeatUntil);

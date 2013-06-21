@@ -36,4 +36,5 @@ public interface IVisitor {
 	void visit(ILink link);
 	void visit(ICatch ccatch);
 	void visit(ICatchAll catchAll);
+	void visit(IOnAlarmEventHandler onAlarmEventHandler);
 }
