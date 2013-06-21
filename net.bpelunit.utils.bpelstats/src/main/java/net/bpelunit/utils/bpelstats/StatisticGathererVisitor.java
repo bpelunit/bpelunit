@@ -39,25 +39,25 @@ import net.bpelunit.model.bpel.IWhile;
 
 public class StatisticGathererVisitor implements IVisitor {
 
-	private int countAssign = 0;
+	private int countAssign;
 
 	private int countCatch;
 
 	private int countCatchAll;
 
-	private int countCompensate = 0;
+	private int countCompensate;
 
-	private int countCompensateScope = 0;
+	private int countCompensateScope;
 
 	private int countCompensationHandler;
 
-	private int countCopy = 0;
+	private int countCopy;
 
 	private int countElse;
 
 	private int countElseIf;
 
-	private int countEmpty = 0;
+	private int countEmpty;
 
 	private int countExit;
 
@@ -157,7 +157,7 @@ public class StatisticGathererVisitor implements IVisitor {
 		return countForEach;
 	}
 
-	public int getCountIff() {
+	public int getCountIf() {
 		return countIf;
 	}
 
@@ -172,9 +172,11 @@ public class StatisticGathererVisitor implements IVisitor {
 	public int getCountOnAlarm() {
 		return countOnAlarm;
 	}
+
 	public int getCountOnAlarmHandler() {
 		return countOnAlarmHandler;
 	}
+
 	public int getCountOnMessage() {
 		return countOnMessage;
 	}
@@ -255,7 +257,7 @@ public class StatisticGathererVisitor implements IVisitor {
 		return countCatch + countCatchAll + countCompensationHandler
 				+ countFlow + countForEach + countIf
 				// TODO onAlarm handler
-				+countOnMessageHandler + countPick + countRepeatUntil
+				+ countOnMessageHandler + countPick + countRepeatUntil
 				+ countScope + countSequence;
 	}
 
