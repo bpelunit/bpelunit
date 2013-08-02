@@ -33,9 +33,9 @@ readlink_f() {
 # By default, the .jar and the script are distributed together
 JARFILE=$(dirname $(readlink -f "$0"))/${project.artifactId}.jar
 
-if [ -z "${JAVA_HOME}" ]; then
+if [ -z "$JAVA_HOME" ]; then
   echo "Please set the JAVA_HOME environment variable to the path to your JVM"
   exit 1
 fi
 
-${JAVA_HOME}/bin/java -Xmx512m -Xss20m -jar "$JARFILE" $@
+$JAVA_HOME/bin/java -Xmx512m -Xss20m -jar "$JARFILE" $@
