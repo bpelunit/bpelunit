@@ -639,7 +639,7 @@ public class TestCaseAndTrackSection extends TreeSection {
 			Action duplicateAction = createAction(manager, "D&uplicate", new Action() {
 				@Override
 				public void run() {
-					removePressed();
+					duplicatePressed();
 				}
 			});
 			duplicateAction.setEnabled(getIsDeleteEnabled(object));
