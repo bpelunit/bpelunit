@@ -19,13 +19,13 @@ Require-Bundle: org.eclipse.ui,
  net.bpelunit.framework
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Leibniz Universität Hannover
-Import-Package: javax.wsdl;version="1.6.2",
- javax.wsdl.extensions;version="1.6.2",
- javax.wsdl.extensions.schema;version="1.6.2",
- javax.wsdl.extensions.soap;version="1.6.2",
- javax.wsdl.extensions.soap12;version="1.6.2",
- javax.wsdl.factory;version="1.6.2",
- javax.wsdl.xml;version="1.6.2"
+Import-Package: javax.wsdl;version="1.6",
+ javax.wsdl.extensions;version="1.6",
+ javax.wsdl.extensions.schema;version="1.6",
+ javax.wsdl.extensions.soap;version="1.6",
+ javax.wsdl.extensions.soap12;version="1.6",
+ javax.wsdl.factory;version="1.6",
+ javax.wsdl.xml;version="1.6"
 Bundle-ClassPath: .,
  lib/xsom14.jar,
  lib/relaxngDatatype-1.0.jar
