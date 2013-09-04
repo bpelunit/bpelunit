@@ -130,7 +130,11 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 
 		FileWriter file;
 		BufferedWriter writer;
-
+		if(!FilePath.startsWith("/")){
+			final File fBPTS = new File(fSendData.documentProperties().getSourceName().toString().substring(5));
+			
+			FilePath=fBPTS.getParentFile().toString()+ "/"+FilePath;
+		}
 		try {
 			file = new FileWriter(FilePath, false);
 			writer = new BufferedWriter(file);
@@ -301,15 +305,16 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 				File file = new File(template.getSrc().toString());
 				if (!file.exists()) {
 					final String docSrc = fSendData.documentProperties().getSourceName();
-					final File fBPTS = new File(docSrc);
+					final File fBPTS = new File(docSrc.toString().substring(5));
 					file = new File(fBPTS.getParentFile(), template.getSrc().toString());
 					browserFolder.setText(file.getAbsolutePath());
+				}else{
+					browserFolder.setText(template.getSrc().toString());
 				}
 
 				if (!file.exists()) {
 					getWizardPage().setErrorMessage("File not found");
 				} else {
-					browserFolder.setText(template.getSrc().toString());
 					loadFile(file.getAbsolutePath());
 				}
 			} else {

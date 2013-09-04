@@ -134,7 +134,11 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 
 		FileWriter file;
 		BufferedWriter writer;
-
+		if(!FilePath.startsWith("/")){
+			final File fBPTS = new File(fSendData.documentProperties().getSourceName().toString().substring(5));
+			
+			FilePath=fBPTS.getParentFile().toString()+ "/"+FilePath;
+		}
 		try {
 			file = new FileWriter(FilePath, false);
 			writer = new BufferedWriter(file);
@@ -157,16 +161,17 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 				File file = new File(fSendData.getDataSource().getSrc().toString());
 				if (!file.exists()) {
 					final String docSrc = fSendData.documentProperties().getSourceName();
-					final File fBPTS = new File(docSrc);
+					final File fBPTS = new File(docSrc.toString().substring(5));
 					file = new File(fBPTS.getParentFile(), fSendData.getDataSource().getSrc()
 							.toString());
 					fieldPathToContents.setText(file.getAbsolutePath());
+				}else{
+					fieldPathToContents.setText(fSendData.getDataSource().getSrc().toString());
 				}
 
 				if (!file.exists()) {
 					getWizardPage().setErrorMessage("File not found");
 				} else {
-					fieldPathToContents.setText(fSendData.getDataSource().getSrc().toString());
 					loadFile(file.getAbsolutePath());
 				}
 				comboBoxType.setText(fSendData.getDataSource().getType().toString());
