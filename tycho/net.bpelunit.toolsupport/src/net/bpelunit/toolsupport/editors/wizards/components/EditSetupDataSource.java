@@ -65,7 +65,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-
+/**
+ * Edit the item setup TestSuite and TestCase
+ *
+ * @author Alejandro Acosta (alex_acos@informaticos.com)
+ */
 public class EditSetupDataSource extends DataComponent implements MessageChangeListener,
 		StringValueListener {
 

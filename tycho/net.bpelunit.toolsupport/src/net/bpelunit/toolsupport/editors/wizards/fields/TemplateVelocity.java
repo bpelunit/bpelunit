@@ -56,7 +56,11 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-
+/**
+ * Field, to analyze the sentences velocity and paint
+ *
+ * @author Alejandro Acosta (alex_acos@informaticos.com)
+ */
 public class TemplateVelocity extends StyledText implements Listener, ParserVisitor {
 
 	// http://www.wikilengua.org/index.php/Lista_de_colores

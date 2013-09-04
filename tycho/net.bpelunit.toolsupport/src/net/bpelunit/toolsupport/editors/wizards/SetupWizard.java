@@ -5,6 +5,12 @@ import net.bpelunit.framework.xml.suite.XMLTestCase;
 import net.bpelunit.toolsupport.editors.TestSuitePage;
 import net.bpelunit.toolsupport.editors.wizards.pages.SetupWizardPage;
 
+/**
+ * Creation of wizard to edit the item setup from TestCase and TestSuite
+ *
+ * @author Alejandro Acosta (alex_acos@informaticos.com)
+ */
+
 public class SetupWizard extends TwoWayActivityWizard {
 
 	private SetupWizardPage fSendPage;

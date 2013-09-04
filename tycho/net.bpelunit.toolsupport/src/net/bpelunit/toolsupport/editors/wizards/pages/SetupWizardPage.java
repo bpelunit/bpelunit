@@ -10,7 +10,11 @@ import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
 import net.bpelunit.toolsupport.editors.wizards.fields.TemplateVelocity;
 
 import org.eclipse.swt.widgets.Composite;
-
+/**
+ * Page created for the wizard to edit the item Setup from TestCase and TestSuite
+ *
+ * @author Alejandro Acosta (alex_acos@informaticos.com)
+ */
 public class SetupWizardPage extends ActivityWizardPage implements IComponentListener {
 	private EditSetupDataSource fFormSetUpDataSource;
 	private XMLSetUp fXMLSetUp;
