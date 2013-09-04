@@ -198,8 +198,8 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 	public Composite createControls(Composite composite, int nColumns ) {
 			
 		GridData gd = new GridData();
-		gd.minimumHeight = 175;
-		gd.widthHint = 300;
+		gd.minimumHeight = 150;
+		gd.widthHint = 500;
 		gd.horizontalAlignment = GridData.FILL;
 		gd.verticalAlignment = GridData.FILL;
 		gd.grabExcessHorizontalSpace = true;
@@ -221,10 +221,18 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 			groupOptions[k].setLayoutData(gd);
 
 		}
+		GridData gdField = new GridData();
+		gdField.minimumHeight = 160;
+		gdField.widthHint = 300;
+		gdField.horizontalAlignment = GridData.FILL;
+		gdField.verticalAlignment = GridData.FILL;
+		gdField.grabExcessHorizontalSpace = true;
+		gdField.grabExcessVerticalSpace = true;
+		gdField.horizontalSpan = nColumns;
 
-		createScriptEditorGroup(composite, gd, groupOptions);
+		createScriptEditorGroup(composite, gdField, groupOptions);
 
-		createDataSourceEditorGroup(composite, gd, groupOptions);
+		createDataSourceEditorGroup(composite, gdField, groupOptions);
 
 		return composite;
 	}
@@ -255,6 +263,13 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 		});
 
 		fieldPathToContents = new Text(groupOptions[1], SWT.LINE_CUSTOM | SWT.BORDER);
+		GridData gdPath = new GridData();
+		gdPath.minimumHeight = 100;
+		gdPath.widthHint = 0;
+		gdPath.horizontalAlignment = GridData.FILL;
+		gdPath.verticalAlignment = GridData.FILL;
+		gdPath.grabExcessHorizontalSpace = true;
+		fieldPathToContents.setLayoutData(gdPath);
 
 		browserButton = new Button(groupOptions[1], SWT.BUTTON1);
 		browserButton.setText("Browse...");

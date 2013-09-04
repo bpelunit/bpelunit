@@ -257,7 +257,7 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 
 		createTreeMessageEditorGroup(groupOptions);
 		createLiteralMessageEditorGroup(composite, nColumns, group, groupOptions);
-		createTemplateEditorGroup(composite, group, gd, stackLayout, groupOptions);
+		createTemplateEditorGroup(composite, group,  stackLayout, groupOptions);
 
 		return group;
 	}
@@ -271,11 +271,19 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 		this.messageEditor.setXML(this.fSendField.getText());
 	}
 
-	private void createTemplateEditorGroup(Composite composite, final Group group, GridData gd,
+	private void createTemplateEditorGroup(Composite composite, final Group group, 
 			final StackLayout stackLayout, final Group[] groupOptions) {
 		fieldTemplate = new TemplateVelocity(groupOptions[2], SWT.MULTI | SWT.V_SCROLL
 				| SWT.H_SCROLL | SWT.WRAP);
-		fieldTemplate.setLayoutData(gd);
+		GridData gdField = new GridData();
+		gdField.minimumHeight = 160;
+		gdField.widthHint = 300;
+		gdField.horizontalAlignment = GridData.FILL;
+		gdField.verticalAlignment = GridData.FILL;
+		gdField.grabExcessHorizontalSpace = true;
+		gdField.grabExcessVerticalSpace = true;
+		gdField.horizontalSpan = 4;
+		fieldTemplate.setLayoutData(gdField);
 		fieldTemplate.addListener(SWT.CHANGED, new Listener() {
 			public void handleEvent(Event e) {
 				SendComponent.this.fireValueChanged(null);
@@ -283,6 +291,13 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 		});
 
 		browserFolder = new Text(groupOptions[2], SWT.LINE_CUSTOM | SWT.BORDER);
+		GridData gdPath = new GridData();
+		gdPath.minimumHeight = 100;
+		gdPath.widthHint = 0;
+		gdPath.horizontalAlignment = GridData.FILL;
+		gdPath.verticalAlignment = GridData.FILL;
+		gdPath.grabExcessHorizontalSpace = true;
+		browserFolder.setLayoutData(gdPath);
 
 		final Button browserButton = new Button(groupOptions[2], SWT.BUTTON1);
 		browserButton.setText("Browse...");

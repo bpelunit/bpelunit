@@ -6,7 +6,6 @@ import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.RuntimeSingleton;
 import org.apache.velocity.runtime.parser.ParseException;
 import org.apache.velocity.runtime.parser.Parser;
-import org.apache.velocity.runtime.parser.ParserVisitor;
 import org.apache.velocity.runtime.parser.node.ASTAddNode;
 import org.apache.velocity.runtime.parser.node.ASTAndNode;
 import org.apache.velocity.runtime.parser.node.ASTAssignment;
@@ -40,13 +39,13 @@ import org.apache.velocity.runtime.parser.node.ASTObjectArray;
 import org.apache.velocity.runtime.parser.node.ASTOrNode;
 import org.apache.velocity.runtime.parser.node.ASTReference;
 import org.apache.velocity.runtime.parser.node.ASTSetDirective;
-import org.apache.velocity.runtime.parser.node.ASTStop;
 import org.apache.velocity.runtime.parser.node.ASTStringLiteral;
 import org.apache.velocity.runtime.parser.node.ASTSubtractNode;
 import org.apache.velocity.runtime.parser.node.ASTText;
 import org.apache.velocity.runtime.parser.node.ASTTrue;
 import org.apache.velocity.runtime.parser.node.ASTWord;
 import org.apache.velocity.runtime.parser.node.ASTprocess;
+import org.apache.velocity.runtime.parser.node.ParserVisitor;
 import org.apache.velocity.runtime.parser.node.SimpleNode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
@@ -60,7 +59,7 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 
 	// http://www.wikilengua.org/index.php/Lista_de_colores
 	private static Color creference = new Color(null, 255, 191, 0);// Ambar
-	private static Color cifsetstop = new Color(null, 102, 2, 60);// Purpura de
+	private static Color cifsetforeach = new Color(null, 102, 2, 60);// Purpura de
 																	// Tiro
 	private static Color cstringtextinteger = new Color(null, 135, 206, 255);// Celeste
 	private static Color ccomment = new Color(null, 0, 168, 107);// Jade
@@ -81,7 +80,7 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 	}
 
 	public void setColorIfSetStop(Color color) {
-		cifsetstop = color;
+		cifsetforeach = color;
 	}
 
 	public void setColorStringTextInteger(Color color) {
@@ -208,6 +207,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
 
+		}else{
+			endL=-1;
 		}
 
 		StyleRange styleRangeO = new StyleRange();
@@ -215,11 +216,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		styleRangeO.start = endL + pC;
 
 		if (styledText.getLineCount() == pL) {
-			System.out.println("CountLine: " + styledText.getLineCount() + " Longitud:"
-					+ styledText.getText().length());
 			styleRangeO.length = styledText.getText().length() - (endL + pC);
 		} else {
-			System.out.println("Final de Linea:" + styledText.getOffsetAtLine(pL));
 			styleRangeO.length = styledText.getOffsetAtLine(pL) - (endL + pC);
 		}
 		styleRangeO.fontStyle = SWT.ITALIC;
@@ -243,6 +241,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
 
+		}else{
+			endL=-1;
 		}
 
 		StyleRange styleRangeO = new StyleRange();
@@ -266,6 +266,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
 
+		}else{
+			endL=-1;
 		}
 
 		StyleRange styleRangeO = new StyleRange();
@@ -297,9 +299,9 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		fC = arg0.getFirstToken().endColumn;
 
 		if ((pL - 1) > 0) {
-
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
-
+		}else{
+			endL=-1;
 		}
 
 		StyleRange styleRangeO = new StyleRange();
@@ -307,9 +309,26 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		styleRangeO.start = endL + pC;
 		styleRangeO.length = fC - pC + 1;
 		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetstop;
+		styleRangeO.foreground = cifsetforeach;
 		styledText.setStyleRange(styleRangeO);
 
+		StyleRange styleRange1 = new StyleRange();
+
+		pL = arg0.getLastToken().beginLine;
+
+		pC = arg0.getLastToken().beginColumn;
+		fC = arg0.getLastToken().endColumn;
+
+		if ((pL - 1) > 0) {
+			endL = styledText.getOffsetAtLine(pL - 1) - 1;
+		}else{
+			endL=-1;
+		}
+		styleRange1.start = endL + pC;
+		styleRange1.length = fC - pC + 1;
+		styleRange1.fontStyle = SWT.BOLD;
+		styleRange1.foreground = cifsetforeach;
+		styledText.setStyleRange(styleRange1);
 		return visit((SimpleNode) arg0, arg1);
 	}
 
@@ -348,6 +367,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
 
+		}else{
+			endL=-1;
 		}
 
 		StyleRange styleRangeO = new StyleRange();
@@ -409,6 +430,7 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 			styleRangeO.foreground = cstringtextinteger;
 			styledText.setStyleRange(styleRangeO);
 		} else {
+			endL=-1;
 			StyleRange styleRangeO = new StyleRange();
 			styleRangeO.start = endL + pC;
 			styleRangeO.length = fC - pC + 1;
@@ -428,7 +450,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		if ((pL - 1) > 0) {
 
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
-			System.out.println(" pL:" + styledText.getOffsetAtLine(pL - 1) + " ENDL:" + endL);
+		}else{
+			endL=-1;
 		}
 
 		StyleRange styleRangeO = new StyleRange();
@@ -436,7 +459,7 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		styleRangeO.start = endL + pC;
 		styleRangeO.length = 3;
 		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetstop;
+		styleRangeO.foreground = cifsetforeach;
 		styledText.setStyleRange(styleRangeO);
 
 		StyleRange styleRange1 = new StyleRange();
@@ -446,14 +469,12 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		pC = arg0.getLastToken().beginColumn;
 
 		if ((pL - 1) > 0) {
-
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
-			System.out.println(" pL:" + styledText.getOffsetAtLine(pL - 1) + " ENDL:" + endL);
 		}
 		styleRange1.start = endL + pC;
 		styleRange1.length = 4;
 		styleRange1.fontStyle = SWT.BOLD;
-		styleRange1.foreground = cifsetstop;
+		styleRange1.foreground = cifsetforeach;
 		styledText.setStyleRange(styleRange1);
 
 		return visit((SimpleNode) arg0, arg1);
@@ -469,6 +490,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
 
+		}else{
+			endL=-1;
 		}
 
 		StyleRange styleRangeO = new StyleRange();
@@ -476,7 +499,7 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		styleRangeO.start = endL + pC;
 		styleRangeO.length = 5;
 		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetstop;
+		styleRangeO.foreground = cifsetforeach;
 		styledText.setStyleRange(styleRangeO);
 		return visit((SimpleNode) arg0, arg1);
 	}
@@ -491,6 +514,8 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 
 			endL = styledText.getOffsetAtLine(pL - 1) - 1;
 
+		}else{
+			endL=-1;
 		}
 
 		StyleRange styleRangeO = new StyleRange();
@@ -498,7 +523,7 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 		styleRangeO.start = endL + pC;
 		styleRangeO.length = 7;
 		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetstop;
+		styleRangeO.foreground = cifsetforeach;
 		styledText.setStyleRange(styleRangeO);
 
 		return visit((SimpleNode) arg0, arg1);
@@ -519,36 +544,15 @@ public class TemplateVelocity extends StyledText implements Listener, ParserVisi
 			styleRangeO.start = endL + pC;
 
 		} else if (pL - 1 == 0) {
+			endL=-1;
 			styleRangeO.start = endL + fC - 4;
 		}
 
 		styleRangeO.length = 4;
 		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetstop;
+		styleRangeO.foreground = cifsetforeach;
 		styledText.setStyleRange(styleRangeO);
 
-		return visit((SimpleNode) arg0, arg1);
-	}
-
-	public Object visit(ASTStop arg0, Object arg1) {
-		int pL, pC;
-		pL = arg0.getFirstToken().beginLine;
-
-		pC = arg0.getFirstToken().beginColumn;
-
-		if ((pL - 1) > 0) {
-
-			endL = styledText.getOffsetAtLine(pL - 1) - 1;
-
-		}
-
-		StyleRange styleRangeO = new StyleRange();
-
-		styleRangeO.start = endL + pC;
-		styleRangeO.length = 5;
-		styleRangeO.fontStyle = SWT.BOLD;
-		styleRangeO.foreground = cifsetstop;
-		styledText.setStyleRange(styleRangeO);
 		return visit((SimpleNode) arg0, arg1);
 	}
 
