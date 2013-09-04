@@ -25,7 +25,10 @@ Import-Package: javax.wsdl;version="1.6",
  javax.wsdl.extensions.soap;version="1.6",
  javax.wsdl.extensions.soap12;version="1.6",
  javax.wsdl.factory;version="1.6",
- javax.wsdl.xml;version="1.6"
+ javax.wsdl.xml;version="1.6",
+ org.apache.velocity.runtime;version="1.5.0",
+ org.apache.velocity.runtime.parser;version="1.5.0",
+ org.apache.velocity.runtime.parser.node;version="1.5.0"
 Bundle-ClassPath: .,
  lib/xsom14.jar,
  lib/relaxngDatatype-1.0.jar
