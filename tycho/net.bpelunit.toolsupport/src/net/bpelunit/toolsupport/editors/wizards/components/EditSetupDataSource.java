@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
 
 import net.bpelunit.framework.client.eclipse.ExtensionControl;
 import net.bpelunit.framework.client.model.DataSourceExtension;
@@ -26,13 +24,9 @@ import net.bpelunit.framework.xml.suite.XMLDataSource;
 import net.bpelunit.framework.xml.suite.XMLProperty;
 import net.bpelunit.framework.xml.suite.XMLSetUp;
 import net.bpelunit.framework.xml.suite.XMLTestCase;
+import net.bpelunit.toolsupport.ToolSupportActivator;
 import net.bpelunit.toolsupport.editors.wizards.fields.TemplateVelocity;
 import net.bpelunit.toolsupport.util.schema.nodes.Element;
-
-import net.bpelunit.toolsupport.ToolSupportActivator;
-
-
-
 
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -320,10 +314,8 @@ public class EditSetupDataSource extends DataComponent implements MessageChangeL
 				| SWT.VERTICAL);
 
 		final Map<String, DataSourceExtension> fDataSources = ExtensionControl.getDataSources();
-		for (Iterator<Entry<String, DataSourceExtension>> it = fDataSources.entrySet().iterator(); it
-				.hasNext();) {
-			Map.Entry e = (Map.Entry) it.next();
-			comboBoxType.add(new String(e.getKey().toString()));
+		for (Map.Entry<String, DataSourceExtension> e : fDataSources.entrySet()) {
+			comboBoxType.add(e.getKey());
 		}
 
 		propertyButton = new Button(groupOptions[1], SWT.BUTTON1);

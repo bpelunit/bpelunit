@@ -51,6 +51,8 @@ import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -287,6 +289,9 @@ public class ActivitySection extends TreeSection {
 				break;
 			case COMPLETEHUMANTASK:
 				wizard = new CompleteHumanTaskActivityWizard((XMLCompleteHumanTaskActivity)currentActivity);
+				break;
+			default:
+				ToolSupportActivator.logErrorMessage("Unknown activity type " + activityConstant);
 			}
 			if (wizard != null) {
 				if (code != null)
@@ -396,10 +401,10 @@ public class ActivitySection extends TreeSection {
 	}
 
 	private void removeActivity(XMLTrack track, Object activity) {
-		System.out.println("Removing activity " + activity);
 		int index = getActivityIndex(track, activity);
 		if (index != -1) {
-			switch (ActivityUtil.getActivityConstant(activity)) {
+			final ActivityConstant activityType = ActivityUtil.getActivityConstant(activity);
+			switch (activityType) {
 			case SEND_ONLY:
 				fCurrentPartnerTrack.removeSendOnly(index);
 				break;
@@ -419,9 +424,13 @@ public class ActivitySection extends TreeSection {
 				fCurrentPartnerTrack.removeReceiveSendAsynchronous(index);
 				break;
 			case WAIT:
-				System.out.println("Removing WAIT[" + index + "]");
+				ToolSupportActivator.log(new Status(
+					IStatus.INFO, ToolSupportActivator.PLUGIN_ID,
+					"Removing WAIT[" + index + "]"));
 				fCurrentPartnerTrack.removeWait(index);
 				break;
+			default:
+				ToolSupportActivator.logErrorMessage("Unknown activity type " + activityType);
 			}
 		}
 	}
@@ -451,6 +460,8 @@ public class ActivitySection extends TreeSection {
 				fCurrentPartnerTrack.setReceiveSendAsynchronousArray(index,
 						(XMLTwoWayActivity) theReplacement);
 				break;
+			default:
+				ToolSupportActivator.logErrorMessage("Unknown activity type " + type);
 			}
 		}
 	}
@@ -880,6 +891,8 @@ public class ActivitySection extends TreeSection {
 			}
 			break;
 		}
+		default:
+			ToolSupportActivator.logErrorMessage("Unknown activity constant " + constant);
 		}
 		if (added != null) {
 			adjust(false);

@@ -14,7 +14,10 @@ import org.eclipse.swt.widgets.Text;
 public class CompleteHumanTaskWizardPage extends ActivityWizardPage {
 
 	private XMLCompleteHumanTaskActivity xmlCompleteHumanTaskActivity;
+
+	@SuppressWarnings("unused")
 	private SendComponent sendComponent;
+
 	private Text taskNameText;
 
 	public CompleteHumanTaskWizardPage(String pageName, ActivityEditMode mode, XMLCompleteHumanTaskActivity completeHumanTaskActivity) {
