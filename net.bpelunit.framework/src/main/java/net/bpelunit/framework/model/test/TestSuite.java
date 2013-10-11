@@ -18,6 +18,7 @@ import java.util.Map;
 import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.control.ws.LocalHTTPServer;
+import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.TestCaseNotFoundException;
 import net.bpelunit.framework.model.ProcessUnderTest;
@@ -332,15 +333,20 @@ public class TestSuite implements ITestArtefact {
 	 *
 	 * NOTE: to keep test cases and activities isolated, this context should
 	 * not be wrapped, but rather be cloned and then extended.
+	 * @throws DataSourceException 
 	 */
-	public WrappedContext createVelocityContext()  {
+	public WrappedContext createVelocityContext() throws DataSourceException  {
 		try {
 			Velocity.init();
 		} catch(Exception e) {
 			// XXX DL: This is stupid but it seems that the logger
 			// cannot be initialized on the first try when running
 			// under Eclipse and ATM I don't know a better solution
-			Velocity.init();
+			try {
+				Velocity.init();
+			} catch (Exception e1) {
+				throw new DataSourceException(e);
+			}
 		}
 
 		final WrappedContext ctx = new WrappedContext(toolManager.createContext());
@@ -352,7 +358,11 @@ public class TestSuite implements ITestArtefact {
 
 		if (fSetUpVelocityScript != null) {
 			StringWriter sW = new StringWriter();
-			Velocity.evaluate(ctx, sW, "setUpTestSuite", fSetUpVelocityScript);
+			try {
+				Velocity.evaluate(ctx, sW, "setUpTestSuite", fSetUpVelocityScript);
+			} catch (Exception e) {
+				throw new DataSourceException(e);
+			}
 		}
 		return ctx;
 	}

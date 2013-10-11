@@ -18,4 +18,8 @@ public class DataSourceException extends BPELUnitException {
 		super(message);
 	}
 
+	public DataSourceException(Throwable cause) {
+		super(cause);
+	}
+
 }

@@ -232,7 +232,11 @@ public class TestCase implements ITestArtefact {
 		}
 		if (fSetUpVelocityScript != null) {
 			StringWriter sW = new StringWriter();
-			Velocity.evaluate(ctx, sW, "setUpTestCase", fSetUpVelocityScript);
+			try {
+				Velocity.evaluate(ctx, sW, "setUpTestCase", fSetUpVelocityScript);
+			} catch (Exception e) {
+				throw new DataSourceException(e);
+			}
 		}
 		return ctx;
 	}

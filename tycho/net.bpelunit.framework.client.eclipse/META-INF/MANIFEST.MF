@@ -4,7 +4,6 @@ Bundle-Name: BPELUnit Eclipse Client Plugin
 Bundle-SymbolicName: net.bpelunit.framework.client.eclipse; singleton:=true
 Bundle-Version: 1.6.2.qualifier
 Bundle-Activator: net.bpelunit.framework.client.eclipse.BPELUnitActivator
-Bundle-Localization: plugin
 Require-Bundle: net.bpelunit.framework,
  org.eclipse.ui,
  org.eclipse.core.runtime,

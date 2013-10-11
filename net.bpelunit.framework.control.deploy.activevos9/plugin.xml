@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <requires>
-      <import plugin="net.bpelunit.framework.client.eclipse"/>
-   </requires>
    <extension
          point="net.bpelunit.framework.client.eclipse.bpelDeployer">
       <bpelDeployer
@@ -12,6 +9,4 @@
             name="ActiveVOS 9.x">
       </bpelDeployer>
    </extension>
-
-
 </plugin>

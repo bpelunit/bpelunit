@@ -28,6 +28,10 @@ public class BPELUnitException extends Exception {
 		fOriginalException= null;
 	}
 
+	public BPELUnitException(Throwable cause) {
+		super(cause);
+	}
+
 	@Override
 	public String getMessage() {
 		StringBuffer buffer= new StringBuffer();

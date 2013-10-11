@@ -86,7 +86,11 @@ public abstract class DataSpecification implements ITestArtefact {
 
 		// Expand the template as a regular string
 		StringWriter writer = new StringWriter();
-		Velocity.evaluate(velocityCtx, writer, "expandTemplate", template);
+		try {
+			Velocity.evaluate(velocityCtx, writer, "expandTemplate", template);
+		} catch (Exception e) {
+			throw new DataSourceException(e);
+		}
 		return writer.toString();
 	}
 

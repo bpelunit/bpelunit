@@ -95,6 +95,9 @@ public class CounterPanel extends Composite {
 			case FAILED:
 				fFailures++;
 				break;
+			default:
+				// ignore
+				break;
 		}
 		fRuns++;
 		updateLabels();
