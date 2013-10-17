@@ -62,13 +62,16 @@ public abstract class Activity implements ITestArtefact {
 	// ************************** Run *************************
 
 	public final void run(ActivityContext context) {
-		preRun(context);
-		if(getStatus().isAborted()) {
-			return;
-		}
+		try {
+			preRun(context);
+			if(getStatus().isAborted()) {
+				return;
+			}
 		
-		runInternal(context);
-		postRun(context);
+			runInternal(context);
+		} finally {
+			postRun(context);
+		}
 	}
 	
 	public abstract void runInternal(ActivityContext context);
