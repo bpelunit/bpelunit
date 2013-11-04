@@ -56,12 +56,20 @@ public class ODEDeployer implements IBPELDeployer {
 		fFactory = ODERequestEntityFactory.newInstance();
 	}
 
+	public String getDeploymentArchive() {
+		return fArchive;
+	}
+
 	@IBPELDeployerOption(
 			testSuiteSpecific=true,
 			description="The (relative) path to the deployment archive that is to be deployed."
 	)
 	public void setDeploymentArchive(String archive) {
 		this.fArchive = archive;
+	}
+
+	public String getODEDeploymentServiceURL() {
+		return fDeploymentAdminServiceURL;
 	}
 
 	@IBPELDeployerOption(
@@ -138,7 +146,7 @@ public class ODEDeployer implements IBPELDeployer {
 				uploadingFile.delete();
 			}
 		}
-		
+
 		if (isHttpErrorCode(statusCode)) {
 			throw new DeploymentException(
 					"ODE Server reported a Deployment Error: "
@@ -156,21 +164,21 @@ public class ODEDeployer implements IBPELDeployer {
 
 	public void undeploy(String testPath, ProcessUnderTest put)
 			throws DeploymentException {
-	
+
 		HttpClient client = new HttpClient(new NoPersistenceConnectionManager());
 		PostMethod method = new PostMethod(fDeploymentAdminServiceURL);
-	
+
 		RequestEntity re = fFactory.getUndeployRequestEntity(fProcessId);
 		method.setRequestEntity(re);
-	
+
 		LOGGER.info("ODE deployer about to send SOAP request to undeploy "
 				+ put);
-	
+
 		// Provide custom retry handler is necessary
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
 				new DefaultHttpMethodRetryHandler(1, false));
 		method.addRequestHeader("SOAPAction", "");
-	
+
 		int statusCode = 0;
 		String responseBody = null;
 		try {
@@ -182,7 +190,7 @@ public class ODEDeployer implements IBPELDeployer {
 		} finally {
 			method.releaseConnection();
 		}
-		
+
 		if(isHttpErrorCode(statusCode)) {
 			throw new DeploymentException(
 					"ODE Server reported a undeployment Error: "
