@@ -49,18 +49,6 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Export-Package>net.bpelunit.*</Export-Package>
-            <_exportcontents>org.jdom.*;org.apache.commons.*</_exportcontents>
-            <Import-Package>!*</Import-Package>
-            <Bundle-SymbolicName>net.bpelunit.util</Bundle-SymbolicName>
-            <Embed-Transitive>true</Embed-Transitive>
-            <Embed-Directory>target/dependency</Embed-Directory>
-            <Embed-Dependency>*;scope=compile;artifactId=!stax-api</Embed-Dependency>
-            <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
-          </instructions>
-        </configuration>
       </plugin>
     </plugins>
   </build>
