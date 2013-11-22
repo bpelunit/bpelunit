@@ -6,7 +6,10 @@
 
 package net.bpelunit.framework.control.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,10 +25,6 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.xml.sax.InputSource;
-
-import de.schlichtherle.io.File;
-import de.schlichtherle.io.FileInputStream;
-import de.schlichtherle.io.FileWriter;
 
 public final class ParseUtil {
 

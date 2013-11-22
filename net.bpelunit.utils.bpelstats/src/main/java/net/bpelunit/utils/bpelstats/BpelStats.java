@@ -1,5 +1,6 @@
 package net.bpelunit.utils.bpelstats;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -18,8 +19,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.IOUtils;
-
-import de.schlichtherle.io.FileInputStream;
 
 public final class BpelStats {
 

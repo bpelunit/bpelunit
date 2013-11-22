@@ -1,11 +1,10 @@
 package net.bpelunit.utils.testdataexternalizer.io;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-
-import de.schlichtherle.io.FileOutputStream;
 
 public class FileSystemFileWriter implements IFileWriter {
 

@@ -34,7 +34,6 @@
 	<classpathentry exported="true" kind="lib" path="target/dependency/commons-codec-1.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/commons-lang-2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/commons-logging-1.1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="target/dependency/truezip-6.8.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/xmlbeans-2.4.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="target/dependency/jetty-server-8.1.9.v20130131.jar" sourcepath="/home/antonio/.m2/repository/org/eclipse/jetty/jetty-server/8.1.9.v20130131/jetty-server-8.1.9.v20130131-sources.jar"/>

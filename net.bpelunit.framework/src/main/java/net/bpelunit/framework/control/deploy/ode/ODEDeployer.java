@@ -6,6 +6,7 @@
 
 package net.bpelunit.framework.control.deploy.ode;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Iterator;
@@ -17,6 +18,7 @@ import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.model.ProcessUnderTest;
 import net.bpelunit.util.JDomUtil;
+import net.bpelunit.util.ZipUtil;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
@@ -30,9 +32,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.filter.ElementFilter;
 import org.jdom.input.SAXBuilder;
-
-import de.schlichtherle.io.ArchiveException;
-import de.schlichtherle.io.File;
 
 /**
  * Deploys and undeploys processes to an Apache ODE server.
@@ -213,19 +212,17 @@ public class ODEDeployer implements IBPELDeployer {
 	private String zipDirectory(File dir) throws DeploymentException {
 		// Creates a zip file in the same location as the directory
 		File zipFile = new File(dir.getAbsolutePath() + ".zip");
-		dir.copyAllTo(zipFile);
-		String archivePath = zipFile.getAbsolutePath();
-
-		// Newly created zip archive
-		fArchive += ".zip";
+		
 		try {
-			File.umount(true, true, true, true);
-		} catch (ArchiveException e) {
+			ZipUtil.zipDirectory(dir, zipFile);
+		} catch (IOException e) {
 			throw new DeploymentException(
 					"Could not pack directory " + dir + " into zip", e);
 		}
-
-		return archivePath;
+		
+		fArchive = zipFile.getAbsolutePath();
+		
+		return fArchive;
 	}
 
 	private boolean isHttpErrorCode(int statusCode) {
