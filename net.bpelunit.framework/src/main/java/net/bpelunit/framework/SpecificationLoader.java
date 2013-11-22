@@ -88,6 +88,7 @@ import net.bpelunit.framework.xml.suite.XMLPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLProperty;
 import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
 import net.bpelunit.framework.xml.suite.XMLSendActivity;
+import net.bpelunit.framework.xml.suite.XMLSendOnlyActivity;
 import net.bpelunit.framework.xml.suite.XMLSetUp;
 import net.bpelunit.framework.xml.suite.XMLSoapActivity;
 import net.bpelunit.framework.xml.suite.XMLTestCase;
@@ -762,9 +763,9 @@ public class SpecificationLoader {
 				} else if (event instanceof XMLReceiveActivity) {
 					a = readReceive(partnerTrack, activities, event,
 							(XMLReceiveActivity) event);
-				} else if (event instanceof XMLSendActivity) {
+				} else if (event instanceof XMLSendOnlyActivity) {
 					a = readSend(partnerTrack, round, testDirectory, activities,
-							event, (XMLSendActivity) event);
+							event, (XMLSendOnlyActivity) event);
 				} else if (event instanceof XMLTwoWayActivity) {
 					XMLTwoWayActivity op = (XMLTwoWayActivity) event;
 					a = readTwoWayActivity(partnerTrack, round, testDirectory,
@@ -813,12 +814,17 @@ public class SpecificationLoader {
 
 	private Activity readSend(PartnerTrack partnerTrack, int round,
 			String testDirectory, List<Activity> activities, XMLActivity event,
-			XMLSendActivity xmlSend) throws SpecificationException {
+			XMLSendOnlyActivity xmlSend) throws SpecificationException {
 		SendAsync activity = new SendAsync(partnerTrack);
 		SendDataSpecification spec = createSendSpecificationFromStandalone(
 				activity, xmlSend, SOAPOperationDirectionIdentifier.INPUT,
 				round, testDirectory);
-		activity.initialize(spec);
+		
+		XMLHeaderProcessor xmlHeaderProcessor = xmlSend
+				.getHeaderProcessor();
+		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
+
+		activity.initialize(spec, proc);
 		activity.setAssumption(event.getAssume());
 
 		activities.add(activity);
@@ -881,6 +887,7 @@ public class SpecificationLoader {
 
 		XMLHeaderProcessor xmlHeaderProcessor = xmlSendReceiveSync
 				.getHeaderProcessor();
+		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
 
 		// Always send to an input element
 		SendDataSpecification sSpec = createSendSpecificationFromParent(
@@ -895,7 +902,6 @@ public class SpecificationLoader {
 		ReceiveDataSpecification rSpec = createReceiveSpecificationFromParent(
 				activity, xmlSendReceiveSync, xmlReceive, receiveDirection);
 
-		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
 		List<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				activity, xmlSendReceiveSync);
 
@@ -982,7 +988,7 @@ public class SpecificationLoader {
 		SendDataSpecification sSpec = createSendSpecificationFromStandalone(
 				sendAct, xmlSend, SOAPOperationDirectionIdentifier.INPUT,
 				round, testDirectory);
-		sendAct.initialize(sSpec);
+		sendAct.initialize(sSpec, null);
 
 		ReceiveAsync receiveAct = new ReceiveAsync(twoWayActivity);
 		ReceiveDataSpecification rSpec = createReceiveSpecificationStandalone(

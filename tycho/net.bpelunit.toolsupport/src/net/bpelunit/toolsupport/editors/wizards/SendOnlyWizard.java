@@ -5,8 +5,9 @@
  */
 package net.bpelunit.toolsupport.editors.wizards;
 
-import net.bpelunit.framework.xml.suite.XMLSendActivity;
+import net.bpelunit.framework.xml.suite.XMLSendOnlyActivity;
 import net.bpelunit.toolsupport.editors.TestSuitePage;
+import net.bpelunit.toolsupport.editors.wizards.pages.HeaderProcessorPage;
 import net.bpelunit.toolsupport.editors.wizards.pages.SendCompleteWizardPage;
 
 /**
@@ -18,12 +19,13 @@ import net.bpelunit.toolsupport.editors.wizards.pages.SendCompleteWizardPage;
  */
 public class SendOnlyWizard extends ActivityWizard {
 
-	private XMLSendActivity fSendActivity;
+	private XMLSendOnlyActivity fSendActivity;
 	private SendCompleteWizardPage fSendPage;
+	private HeaderProcessorPage fHeaderPage;
 	
 	
 	
-	public SendOnlyWizard(TestSuitePage page, ActivityEditMode mode, XMLSendActivity operation) {
+	public SendOnlyWizard(TestSuitePage page, ActivityEditMode mode, XMLSendOnlyActivity operation) {
 		super(page, mode);
 		fSendActivity= operation;
 	}
@@ -46,10 +48,16 @@ public class SendOnlyWizard extends ActivityWizard {
 		super.addPages();
 		fSendPage= new SendCompleteWizardPage(fSendActivity, fSendActivity, getMode(), getPageName());
 		addPage(fSendPage);
+		addHeaderProcessorPage();
 	}
 
+	protected void addHeaderProcessorPage() {
+		fHeaderPage= new HeaderProcessorPage(fSendActivity, getMode(), getPageName());
+		addPage(fHeaderPage);
+	}
+	
 	@Override
 	protected String getPageName() {
-		return "Send Synchronous";
+		return "Send Asynchronous";
 	}
 }
