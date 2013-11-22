@@ -9,7 +9,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.SOAPException;
@@ -215,12 +214,16 @@ public class WebServiceHandler extends org.eclipse.jetty.server.handler.Abstract
 			body = "";
 		}
 		ByteArrayISO8859Writer writer = new ByteArrayISO8859Writer(2048);
+		try {
 		writer.write(body);
 		writer.flush();
 
 		response.setContentLength(writer.size());
-		writer.writeTo(response.getOutputStream());
-		writer.destroy();
+		writer.writeTo(response.getOutputStream()); 
+		} finally {
+			writer.close();
+			writer.destroy();
+		}
 	}
 
 }

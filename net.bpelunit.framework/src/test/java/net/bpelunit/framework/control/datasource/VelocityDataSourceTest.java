@@ -225,7 +225,6 @@ public class VelocityDataSourceTest {
 	/**
 	 * Checks that nested list literals work.
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void nestedListLiteralsWork() throws Exception {
 		IDataSource ds = createDataSourceFromString("lines",
@@ -242,7 +241,7 @@ public class VelocityDataSourceTest {
 
 		for (int iRow = 0; iRow < ds.getNumberOfRows(); ++iRow) {
 			ds.setRow(iRow);
-			List actualLines = (List) ds.getValueFor("lines");
+			List<?> actualLines = (List<?>) ds.getValueFor("lines");
 			final String[] expectedLines = expectedRows[iRow];
 			assertEquals(expectedLines.length, actualLines.size());
 			for (int iLine = 0; iLine < expectedLines.length; ++iLine) {

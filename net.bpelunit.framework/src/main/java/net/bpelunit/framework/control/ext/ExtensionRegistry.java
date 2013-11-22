@@ -35,7 +35,7 @@ import org.apache.xmlbeans.XmlException;
  * The BPELUnit Extension Registry handles reading the extensions.xml file and
  * instantiates the extensions.
  * 
- * @author Alex Salnikow, Antonio García-Domínguez
+ * @author Alex Salnikow, Antonio GarcÃ­a-DomÃ­nguez
  * @version 1.1 (2010/03/06)
  */
 public final class ExtensionRegistry {
@@ -44,19 +44,19 @@ public final class ExtensionRegistry {
 
 	private ExtensionRegistry() {
 	}
-	
+
 	private static Logger fsLogger = Logger
 			.getLogger("net.bpelunit.framework.ExtensionRegistry");
 
-	private static Map<String, Class<?extends IBPELDeployer>> fsDeployerRegistry;
+	private static Map<String, Class<? extends IBPELDeployer>> fsDeployerRegistry;
 
 	private static Map<String, Map<String, String>> fsDeployerOptions;
 
-	private static Map<String, Class<?extends ISOAPEncoder>> fsEncoderRegistry;
+	private static Map<String, Class<? extends ISOAPEncoder>> fsEncoderRegistry;
 
-	private static Map<String, Class<?extends IHeaderProcessor>> fsHeaderRegistry;
+	private static Map<String, Class<? extends IHeaderProcessor>> fsHeaderRegistry;
 
-	private static Map<String, Class<?extends IDataSource>> fsDataSourceRegistry;
+	private static Map<String, Class<? extends IDataSource>> fsDataSourceRegistry;
 
 	private static boolean fsIgnoreOnNotFound;
 
@@ -77,10 +77,10 @@ public final class ExtensionRegistry {
 
 		fsIgnoreOnNotFound = ignoreOnNotFound;
 
-		fsDeployerRegistry = new HashMap<String, Class<?extends IBPELDeployer>>();
-		fsEncoderRegistry = new HashMap<String, Class<?extends ISOAPEncoder>>();
+		fsDeployerRegistry = new HashMap<String, Class<? extends IBPELDeployer>>();
+		fsEncoderRegistry = new HashMap<String, Class<? extends ISOAPEncoder>>();
 		fsHeaderRegistry = new HashMap<String, Class<? extends IHeaderProcessor>>();
-		fsDataSourceRegistry = new HashMap<String, Class<?extends IDataSource>>();
+		fsDataSourceRegistry = new HashMap<String, Class<? extends IDataSource>>();
 		fsDeployerOptions = new HashMap<String, Map<String, String>>();
 
 		XMLExtensionRegistryDocument document;
@@ -214,8 +214,9 @@ public final class ExtensionRegistry {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> void load(XMLExtension extension, Class<?extends T> requiredType,
-			String readableName, Map<String, Class<?extends T>> registry)
+	private static <T> void load(XMLExtension extension,
+			Class<? extends T> requiredType, String readableName,
+			Map<String, Class<? extends T>> registry)
 			throws ConfigurationException {
 		try {
 			Class<?> theClazz = getClassFor(extension);
@@ -230,8 +231,7 @@ public final class ExtensionRegistry {
 		} catch (ConfigurationException e) {
 			if (!fsIgnoreOnNotFound) {
 				throw new ConfigurationException(e.getMessage(), e);
-			}
-			else {
+			} else {
 				fsLogger.debug("Configuration Error in extensions.xml; "
 						+ e.getMessage());
 			}
@@ -343,9 +343,13 @@ public final class ExtensionRegistry {
 	static List<String> analyzeString(String activities) {
 		List<String> basicActivities = new ArrayList<String>();
 		Scanner scanner = new Scanner(activities);
-		scanner.useDelimiter(",");
-		while (scanner.hasNext()) {
-			basicActivities.add(scanner.next().trim());
+		try {
+			scanner.useDelimiter(",");
+			while (scanner.hasNext()) {
+				basicActivities.add(scanner.next().trim());
+			}
+		} finally {
+			scanner.close();
 		}
 		return basicActivities;
 	}
@@ -373,22 +377,23 @@ public final class ExtensionRegistry {
 	public static Map<String, IBPELDeployerOption> getConfigurationAnnotations(
 			Class<? extends IBPELDeployer> deployerClass, boolean forSuite) {
 		Map<String, IBPELDeployerOption> configurationOptions = new HashMap<String, IBPELDeployerOption>();
-		
+
 		for (Method m : deployerClass.getMethods()) {
 			String name = m.getName();
-			IBPELDeployerOption annotation = m.getAnnotation(IBPELDeployerOption.class);
-			
+			IBPELDeployerOption annotation = m
+					.getAnnotation(IBPELDeployerOption.class);
+
 			if (annotation != null && isStringSetter(m)
-					&& (forSuite || !annotation.testSuiteSpecific())
-			) {
-				String optionName = name.substring(SETTER_PREFIX.length()); // subtract "set"
+					&& (forSuite || !annotation.testSuiteSpecific())) {
+				String optionName = name.substring(SETTER_PREFIX.length()); // subtract
+																			// "set"
 				configurationOptions.put(optionName, annotation);
 			}
 		}
-		
+
 		return configurationOptions;
 	}
-	
+
 	/**
 	 * Returns the default value of a configuration parameter of an
 	 * IBPELDeployer as specified by its annotations. The method never returns
@@ -418,29 +423,29 @@ public final class ExtensionRegistry {
 	public static Map<String, ConfigurationOption> getConfigurationAnnotations(
 			Class<? extends IDataSource> dsClass) {
 		Map<String, ConfigurationOption> configurationOptions = new HashMap<String, ConfigurationOption>();
-		
+
 		for (Method m : dsClass.getMethods()) {
 			ConfigurationOption annotation = m
-			.getAnnotation(ConfigurationOption.class);
-			
+					.getAnnotation(ConfigurationOption.class);
+
 			if (annotation != null && isStringSetter(m)) {
-					String name = m.getName();
-					String optionName = name.substring(SETTER_PREFIX.length()); // subtract "set"
-					configurationOptions.put(optionName, annotation);
+				String name = m.getName();
+				String optionName = name.substring(SETTER_PREFIX.length()); // subtract
+																			// "set"
+				configurationOptions.put(optionName, annotation);
 			}
 		}
-		
+
 		return configurationOptions;
 	}
-	
+
 	static boolean isStringSetter(Method m) {
 		Class<?>[] parameters = m.getParameterTypes();
 		Class<?> returnType = m.getReturnType();
 		String name = m.getName();
-		
-		return name.startsWith(SETTER_PREFIX)
-			&& parameters.length == 1
-			&& String.class.equals(parameters[0])
-			&& returnType.equals(void.class);		
+
+		return name.startsWith(SETTER_PREFIX) && parameters.length == 1
+				&& String.class.equals(parameters[0])
+				&& returnType.equals(void.class);
 	}
 }

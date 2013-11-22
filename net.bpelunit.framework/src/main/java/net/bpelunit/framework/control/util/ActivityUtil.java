@@ -541,6 +541,8 @@ public final class ActivityUtil {
 			return toTrack.addNewSendReceiveAsynchronous();
 		case SEND_RECEIVE_SYNC:
 			return toTrack.addNewSendReceive();
+		case WAIT:
+			return toTrack.addNewWait();
 		}
 		return null;
 	}
