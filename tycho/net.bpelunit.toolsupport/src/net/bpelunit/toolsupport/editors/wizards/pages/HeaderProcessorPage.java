@@ -5,12 +5,14 @@
  */
 package net.bpelunit.toolsupport.editors.wizards.pages;
 
+import net.bpelunit.framework.xml.suite.XMLSendOnlyActivity;
 import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import net.bpelunit.toolsupport.editors.wizards.ActivityEditMode;
 import net.bpelunit.toolsupport.editors.wizards.WizardPageCode;
 import net.bpelunit.toolsupport.editors.wizards.components.HeaderProcessorComponent;
 import net.bpelunit.toolsupport.editors.wizards.components.IComponentListener;
 import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
+
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -24,11 +26,21 @@ public class HeaderProcessorPage extends ActivityWizardPage implements IComponen
 
 	private HeaderProcessorComponent fHeaderComponent;
 	private XMLTwoWayActivity fTwoWayActivity;
+	private XMLSendOnlyActivity fSendOnlyActivity;
 
-	public HeaderProcessorPage(XMLTwoWayActivity activity, ActivityEditMode mode, String pageName) {
+	private HeaderProcessorPage(ActivityEditMode mode, String pageName) {
 		super(pageName, mode);
-		fTwoWayActivity= activity;
 		setDescription("Add an optional header processor");
+	}
+	
+	public HeaderProcessorPage(XMLTwoWayActivity activity, ActivityEditMode mode, String pageName) {
+		this(mode, pageName);
+		fTwoWayActivity= activity;
+	}
+
+	public HeaderProcessorPage(XMLSendOnlyActivity activity, ActivityEditMode mode, String pageName) {
+		super(pageName, mode);
+		fSendOnlyActivity= activity;
 	}
 
 	@Override
@@ -36,7 +48,11 @@ public class HeaderProcessorPage extends ActivityWizardPage implements IComponen
 
 		fHeaderComponent= new HeaderProcessorComponent(this, getFontMetrics());
 
-		fHeaderComponent.init(fTwoWayActivity);
+		if(fTwoWayActivity != null) {
+			fHeaderComponent.init(fTwoWayActivity);
+		} else {
+			fHeaderComponent.init(fSendOnlyActivity);
+		}
 		fHeaderComponent.createControls(composite, nColumns);
 		fHeaderComponent.addComponentListener(this);
 

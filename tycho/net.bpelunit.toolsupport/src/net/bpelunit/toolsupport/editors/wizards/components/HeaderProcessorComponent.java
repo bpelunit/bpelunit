@@ -13,7 +13,9 @@ import net.bpelunit.framework.client.eclipse.dialog.FieldBasedInputDialog;
 import net.bpelunit.framework.client.eclipse.dialog.field.SelectionField;
 import net.bpelunit.framework.client.eclipse.dialog.field.TextField;
 import net.bpelunit.framework.client.eclipse.dialog.validate.NotEmptyValidator;
+import net.bpelunit.framework.xml.suite.XMLHeaderProcessor;
 import net.bpelunit.framework.xml.suite.XMLProperty;
+import net.bpelunit.framework.xml.suite.XMLSendOnlyActivity;
 import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import net.bpelunit.toolsupport.editors.wizards.fields.ComboDialogField;
 import net.bpelunit.toolsupport.editors.wizards.fields.DialogField;
@@ -87,11 +89,12 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 	}
 
 	private ComboDialogField fHeaderProcessorField;
-	private XMLTwoWayActivity fParentActivity;
+	private XMLTwoWayActivity fParentTwoWayActivity;
 	private ListDialogField fPropertiesField;
 
 	private String fCurrentlySelectedHeaderProcessor;
 	private String[][] fDeployerMetaInformations;
+	private XMLSendOnlyActivity fSendOnlyActivity;
 
 
 	public HeaderProcessorComponent(IWizardPage wizard, FontMetrics metrics) {
@@ -103,7 +106,7 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 
 		String[] edit= editProperty(null);
 		if (edit != null) {
-			XMLProperty xmlCondition= fParentActivity.getHeaderProcessor().addNewProperty();
+			XMLProperty xmlCondition= getHeaderProcessor().addNewProperty();
 			xmlCondition.setName(edit[0]);
 			xmlCondition.setStringValue(edit[1]);
 			recreateInput();
@@ -133,9 +136,9 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 	public void handleRemovePressed() {
 		XMLProperty prop= getSelectedProperty();
 		if (prop != null) {
-			int index= fParentActivity.getHeaderProcessor().getPropertyList().indexOf(prop);
+			int index= getHeaderProcessor().getPropertyList().indexOf(prop);
 			if (index != -1) {
-				fParentActivity.getHeaderProcessor().removeProperty(index);
+				getHeaderProcessor().removeProperty(index);
 				recreateInput();
 				enableButtonsForSelection(fPropertiesField, false);
 			}
@@ -153,7 +156,7 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 
 	public void recreateInput() {
 		List<Object> l = new ArrayList<Object>();
-		for(Object o : fParentActivity.getHeaderProcessor().getPropertyList()) {
+		for(Object o : getHeaderProcessor().getPropertyList()) {
 			l.add(o);
 		}
 		fPropertiesField.setElements(l);
@@ -192,21 +195,29 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 				fPropertiesField.setEnabled(true);
 				String currentName= fHeaderProcessorField.getItems()[fHeaderProcessorField.getSelectionIndex()];
 				fCurrentlySelectedHeaderProcessor= name2code(currentName);
-				fParentActivity.getHeaderProcessor().setName(fCurrentlySelectedHeaderProcessor);
+				getHeaderProcessor().setName(fCurrentlySelectedHeaderProcessor);
 				enableButtonsForSelection(fPropertiesField, false);
 			} else {
 				fPropertiesField.setEnabled(false);
 				// will be removed later
-				fParentActivity.getHeaderProcessor().setName("removeme");
+				getHeaderProcessor().setName("removeme");
 				fCurrentlySelectedHeaderProcessor= null;
 			}
 		}
 
 	}
 
-	public void init(XMLTwoWayActivity twoWayActivity) {
-		fParentActivity= twoWayActivity;
+	public void init(XMLSendOnlyActivity sendOnlyActivity) {
+		fSendOnlyActivity= sendOnlyActivity;
+		init();
+	}
 
+	public void init(XMLTwoWayActivity twoWayActivity) {
+		fParentTwoWayActivity= twoWayActivity;
+		init();
+	}
+	
+	private void init() {
 		HeaderListener headerListener= new HeaderListener();
 		fHeaderProcessorField= new ComboDialogField(SWT.READ_ONLY);
 		fHeaderProcessorField.setDialogFieldListener(headerListener);
@@ -233,13 +244,13 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 		fCurrentlySelectedHeaderProcessor= null;
 		if (hasHeaderProcessor()) {
 			// Check the name
-			String code= fParentActivity.getHeaderProcessor().getName();
+			String code= getHeaderProcessor().getName();
 			String readableName= code2name(code);
 			int index= getItemIndex(items, readableName);
 			if (readableName != null && index != -1) {
 				fPropertiesField.setEnabled(true);
 				List<Object> l = new ArrayList<Object>();
-				for(Object o : fParentActivity.getHeaderProcessor().getPropertyList()) {
+				for(Object o : getHeaderProcessor().getPropertyList()) {
 					l.add(o);
 				}
 				fPropertiesField.setElements(l);
@@ -249,7 +260,7 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 				initialized= true;
 			}
 		} else {
-			fParentActivity.addNewHeaderProcessor();
+			addNewHeaderProcessor();
 		}
 		if (!initialized) {
 			fPropertiesField.setEnabled(false);
@@ -257,6 +268,22 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 		}
 
 		enableButtonsForSelection(fPropertiesField, false);
+	}
+
+	private void addNewHeaderProcessor() {
+		if(fParentTwoWayActivity != null) {
+			fParentTwoWayActivity.addNewHeaderProcessor();
+		} else {
+			fSendOnlyActivity.addNewHeaderProcessor();
+		}
+	}
+
+	private XMLHeaderProcessor getHeaderProcessor() {
+		if(fParentTwoWayActivity != null) {
+			return fParentTwoWayActivity.getHeaderProcessor();
+		} else {
+			return fSendOnlyActivity.getHeaderProcessor();
+		}
 	}
 
 	private String code2name(String code) {
@@ -292,7 +319,7 @@ public class HeaderProcessorComponent extends StructuredDataComponent {
 	}
 
 	private boolean hasHeaderProcessor() {
-		return fParentActivity.getHeaderProcessor() != null;
+		return getHeaderProcessor() != null;
 	}
 
 	@Override

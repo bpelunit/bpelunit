@@ -28,6 +28,7 @@ import net.bpelunit.framework.xml.suite.XMLHumanPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLMapping;
 import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
 import net.bpelunit.framework.xml.suite.XMLSendActivity;
+import net.bpelunit.framework.xml.suite.XMLSendOnlyActivity;
 import net.bpelunit.framework.xml.suite.XMLSoapActivity;
 import net.bpelunit.framework.xml.suite.XMLTrack;
 import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
@@ -159,7 +160,14 @@ public class ActivitySection extends TreeSection {
 						moreActivities.add(twoWayActivity.getHeaderProcessor());
 					return moreActivities.toArray();
 				}
-				// XMLSendActivity has no children
+				if(activity instanceof XMLSendOnlyActivity) {
+					XMLSendOnlyActivity xmlSendOnlyActivity = (XMLSendOnlyActivity)activity;
+					if(xmlSendOnlyActivity.getHeaderProcessor() != null) {
+						return new Object[] { xmlSendOnlyActivity.getHeaderProcessor() };
+					} else {
+						return new Object[0];
+					}
+				}
 			}
 			return new Object[0];
 		}
@@ -176,6 +184,10 @@ public class ActivitySection extends TreeSection {
 			if (element instanceof XMLReceiveActivity)
 				return ((XMLReceiveActivity) element).getConditionList().size() > 0;
 
+			if(element instanceof XMLSendOnlyActivity) {
+				return ((XMLSendOnlyActivity)element).getHeaderProcessor() != null;
+			}
+				
 			return false;
 		}
 
@@ -262,7 +274,7 @@ public class ActivitySection extends TreeSection {
 			switch (activityConstant) {
 			case SEND_ONLY:
 				wizard = new SendOnlyWizard(getPage(), ActivityEditMode.EDIT,
-						(XMLSendActivity) currentActivity);
+						(XMLSendOnlyActivity) currentActivity);
 				break;
 			case RECEIVE_ONLY:
 				wizard = new ReceiveOnlyWizard(getPage(), ActivityEditMode.EDIT,
@@ -440,7 +452,7 @@ public class ActivitySection extends TreeSection {
 		if (index != -1) {
 			switch (type) {
 			case SEND_ONLY:
-				fCurrentPartnerTrack.setSendOnlyArray(index, (XMLSendActivity) theReplacement);
+				fCurrentPartnerTrack.setSendOnlyArray(index, (XMLSendOnlyActivity) theReplacement);
 				break;
 			case RECEIVE_ONLY:
 				fCurrentPartnerTrack
@@ -783,7 +795,7 @@ public class ActivitySection extends TreeSection {
 
 		switch (constant) {
 		case SEND_ONLY: {
-			XMLSendActivity sendOp = fCurrentPartnerTrack.addNewSendOnly();
+			XMLSendOnlyActivity sendOp = fCurrentPartnerTrack.addNewSendOnly();
 
 			// Initialize the activity:
 			sendOp.setService(new QName(""));

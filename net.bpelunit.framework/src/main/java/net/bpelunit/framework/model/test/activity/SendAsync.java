@@ -8,6 +8,7 @@ package net.bpelunit.framework.model.test.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.exception.SynchronousSendException;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
@@ -55,6 +56,10 @@ public class SendAsync extends Activity {
 	 */
 	private String fWrongBody;
 
+	/**
+	 * Registered Header Processor, if any (may be null)
+	 */
+	private IHeaderProcessor fHeaderProcessor;
 
 	// ************************** Initialization ************************
 
@@ -68,16 +73,29 @@ public class SendAsync extends Activity {
 		fParentActivity= activity;
 	}
 
-	public void initialize(SendDataSpecification spec) {
+	public void initialize(SendDataSpecification spec, IHeaderProcessor proc) {
 		fSendSpec= spec;
+		fHeaderProcessor = proc;
 		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
+	protected IHeaderProcessor getHeaderProcessor() {
+		return fHeaderProcessor;
+	}
+	
 	// ***************************** Activity **************************
 
 	@Override
 	public void runInternal(ActivityContext context) {
 
+		/** 
+		 * Necessary to guard this as a null value would override an existing header processor.
+		 * This is damaging if this Send activity is part of a two-way async activity.
+		 */
+		if(getHeaderProcessor() != null) {
+			context.setHeaderProcessor(getHeaderProcessor());
+		}
+		
 		fSendSpec.handle(context);
 
 		if (fSendSpec.hasProblems()) {

@@ -12,6 +12,9 @@ import static org.junit.Assert.assertTrue;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.ITestResultListener;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.test.util.TestTestRunner;
 import org.junit.Test;
 
@@ -57,7 +60,7 @@ import org.junit.Test;
  * </table>
  * 
  * @version $Id: End2EndTester.java,v 1.5 2006/07/11 14:27:43 phil Exp $
- * @author Philip Mayer
+ * @author Philip Mayer, Daniel Luebkbe
  * 
  */
 public class End2EndTester {
@@ -127,5 +130,31 @@ public class End2EndTester {
 			assertTrue("Validation errors should be included in the SpecificationException",
 					ex.getLocalizedMessage().contains("sendOnlyInvalid"));
 		}
+	}
+	
+	@Test
+	public void testSendOnlyWSA() throws ConfigurationException, SpecificationException, DeploymentException {
+		TestTestRunner runner = new TestTestRunner(BASEPATH + "05_WSASendOnly/", "async-wsa.bpts");
+		runner.getTestSuite().addResultListener(new ITestResultListener() {
+			
+			@Override
+			public void testCaseStarted(TestCase testCase) {
+			}
+			
+			@Override
+			public void testCaseEnded(TestCase testCase) {
+			}
+			
+			@Override
+			public void progress(ITestArtefact testArtefact) {
+			}
+		});
+		
+		runner.testRun();
+		assertEquals(1, runner.getPassed());
+		assertEquals(0, runner.getProblems());
+		
+		ITestArtefact iTestArtefact = runner.getTestSuite(). getChildren().get(0);
+		System.out.println(iTestArtefact.getClass().getName());
 	}
 }
