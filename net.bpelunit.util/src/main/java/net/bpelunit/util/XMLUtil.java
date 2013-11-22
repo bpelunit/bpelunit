@@ -253,9 +253,7 @@ public final class XMLUtil {
 			sb.append("[@name='")
 					.append(n.getAttributes().getNamedItem("name")
 							.getNodeValue()).append("']");
-		} else if(getChildrenCount((Element)n.getParentNode(), n.getNamespaceURI(), n.getLocalName()) == 1) {
-			// do nothing because it is already unique
-		}	else {
+		} else if(getChildrenCount((Element)n.getParentNode(), n.getNamespaceURI(), n.getLocalName()) != 1) {
 			sb.append("[").append(getPosition(n)).append("]");
 		}
 	}
