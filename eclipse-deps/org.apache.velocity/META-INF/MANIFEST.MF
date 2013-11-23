@@ -30,3 +30,5 @@ Export-Package: org.apache.velocity,
  org.apache.velocity.texen.util,
  org.apache.velocity.util,
  org.apache.velocity.util.introspection
+Require-Bundle: org.apache.commons.lang;bundle-version="2.4.0",
+ org.apache.commons.collections;bundle-version="3.2.0"
