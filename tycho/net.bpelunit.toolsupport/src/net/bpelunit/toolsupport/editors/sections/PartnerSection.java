@@ -208,7 +208,6 @@ public class PartnerSection extends ListSection {
 			this.addField(usernameField);
 
 			passwordField = new TextField(this, OPTION_PASSWORD, password, TextField.Style.SINGLE);
-			passwordField.setValidator(new NotEmptyValidator("Password"));
 			passwordField.setEchoChar('*');
 			this.addField(passwordField);
 

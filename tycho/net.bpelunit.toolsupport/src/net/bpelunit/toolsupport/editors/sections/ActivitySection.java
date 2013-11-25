@@ -343,7 +343,11 @@ public class ActivitySection extends TreeSection {
 
 		Object viewerSelection = getViewerSelection();
 		if (ActivityUtil.isActivity(viewerSelection)) {
-			removeActivity(fCurrentPartnerTrack, viewerSelection);
+			if(fCurrentPartnerTrack != null) {
+				removeActivity(fCurrentPartnerTrack, viewerSelection);
+			} else {
+				removeActivity(fCurrentHumanPartnerTrack, viewerSelection);
+			}
 		} // endif XMLActivity
 		else if (viewerSelection instanceof XMLMapping) {
 			XMLActivity activity = ActivityUtil.getParentActivityFor(viewerSelection);
@@ -362,6 +366,7 @@ public class ActivitySection extends TreeSection {
 		else if (viewerSelection instanceof XMLCondition) {
 			XMLCondition cond = (XMLCondition) viewerSelection;
 			XmlCursor cursor = cond.newCursor();
+			try {
 			if (cursor.toParent()) {
 				XmlObject parent = cursor.getObject();
 				if (parent instanceof XMLReceiveActivity) {
@@ -370,10 +375,24 @@ public class ActivitySection extends TreeSection {
 					if (index != -1)
 						rcvOp.removeCondition(index);
 				}
+			} 
+			} finally { 
+				cursor.dispose();
 			}
-			cursor.dispose();
 		} // endif XMLCondition
 		adjust(false);
+	}
+
+	private void removeActivity(XMLHumanPartnerTrack currentPartnerTrack,
+			Object activityToRemove) {
+		int index = currentPartnerTrack.getCompleteHumanTaskList().indexOf(activityToRemove);
+		
+		if(index >= 0) {
+			ToolSupportActivator.log(new Status(
+					IStatus.INFO, ToolSupportActivator.PLUGIN_ID,
+					"Removing CompleteHumanTask[" + index + "]"));
+			currentPartnerTrack.removeCompleteHumanTask(index);
+		}
 	}
 
 	@Override

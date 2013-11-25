@@ -34,11 +34,11 @@ public class FieldBasedInputDialog extends Dialog {
 	private String fTitle;
 	private MessageBox fMessageBox;
 
-	private List<Field> fFields= new ArrayList<Field>();
+	private List<Field> fFields = new ArrayList<Field>();
 
 	public FieldBasedInputDialog(Shell shell, String title) {
 		super(shell);
-		this.fTitle= title;
+		this.fTitle = title;
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
@@ -56,19 +56,19 @@ public class FieldBasedInputDialog extends Dialog {
 
 	@Override
 	protected Control createButtonBar(Composite parent) {
-		Control bar= super.createButtonBar(parent);
+		Control bar = super.createButtonBar(parent);
 		validateFields();
 		return bar;
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite container= (Composite) super.createDialogArea(parent);
+		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		fPanel= new Composite(container, SWT.NONE);
-		GridLayout layout= new GridLayout(2, false);
+		fPanel = new Composite(container, SWT.NONE);
+		GridLayout layout = new GridLayout(2, false);
 		fPanel.setLayout(layout);
 		fPanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
@@ -76,7 +76,7 @@ public class FieldBasedInputDialog extends Dialog {
 			field.createControl(fPanel);
 		}
 
-		fMessageBox= new MessageBox(container, SWT.NONE);
+		fMessageBox = new MessageBox(container, SWT.NONE);
 		fMessageBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		Dialog.applyDialogFont(container);
@@ -96,11 +96,14 @@ public class FieldBasedInputDialog extends Dialog {
 
 	public void validateFields() {
 		for (Field field : fFields) {
-			String validation= field.getValidator().validate(field.getSelection());
-			if (validation != null) {
-				getButton(IDialogConstants.OK_ID).setEnabled(false);
-				setErrorMessage(validation);
-				return;
+			if (field.getValidator() != null) {
+				String validation = field.getValidator().validate(
+						field.getSelection());
+				if (validation != null) {
+					getButton(IDialogConstants.OK_ID).setEnabled(false);
+					setErrorMessage(validation);
+					return;
+				}
 			}
 		}
 		setErrorMessage(null);
@@ -122,53 +125,56 @@ public class FieldBasedInputDialog extends Dialog {
 
 		public MessageBox(Composite parent, int style) {
 			super(parent, style);
-			GridLayout layout= new GridLayout();
-			layout.numColumns= 2;
+			GridLayout layout = new GridLayout();
+			layout.numColumns = 2;
 			setLayout(layout);
-			fImage= new Label(this, SWT.NONE);
-			fImage.setImage(BPELUnitActivator.getImage(BPELUnitActivator.IMAGE_INFO));
-			Point size= fImage.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			GridData gd= new GridData();
-			gd.verticalAlignment= SWT.TOP;
-			gd.widthHint= size.x;
-			gd.heightHint= size.y;
+			fImage = new Label(this, SWT.NONE);
+			fImage.setImage(BPELUnitActivator
+					.getImage(BPELUnitActivator.IMAGE_INFO));
+			Point size = fImage.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+			GridData gd = new GridData();
+			gd.verticalAlignment = SWT.TOP;
+			gd.widthHint = size.x;
+			gd.heightHint = size.y;
 			fImage.setLayoutData(gd);
 			fImage.setImage(null);
 
-			fText= new Text(this, SWT.WRAP | SWT.READ_ONLY);
+			fText = new Text(this, SWT.WRAP | SWT.READ_ONLY);
 			fText.setText(" \n "); //$NON-NLS-1$
-			gd= new GridData(SWT.FILL, SWT.FILL, true, true);
-			gd.widthHint= 350;
+			gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+			gd.widthHint = 350;
 			fText.setLayoutData(gd);
 		}
 
 		public void setMessage(String msg) {
 			if (msg == null || msg.length() == 0) {
-				msg= "";
+				msg = "";
 			}
 			fText.setText(escapeAmpersands(msg));
 			if ("".equals(msg))
 				fImage.setImage(null);
 			else {
-				fImage.setImage(BPELUnitActivator.getImage(BPELUnitActivator.IMAGE_ERROR));
+				fImage.setImage(BPELUnitActivator
+						.getImage(BPELUnitActivator.IMAGE_ERROR));
 				/*
-				 * The setMessage() call can occur before the layouting of this dialog takes place.
-				 * In that case, if the message is rather long, the dialog will get too large, so we
-				 * need to restrain the text field. Note that if the message is empty, the text
-				 * field should not be restrained, as it would take up too much space looking
-				 * awkward.
+				 * The setMessage() call can occur before the layouting of this
+				 * dialog takes place. In that case, if the message is rather
+				 * long, the dialog will get too large, so we need to restrain
+				 * the text field. Note that if the message is empty, the text
+				 * field should not be restrained, as it would take up too much
+				 * space looking awkward.
 				 */
 				if (msg.length() > 200) {
-					GridData d= (GridData) fText.getLayoutData();
-					d.heightHint= 40;
+					GridData d = (GridData) fText.getLayoutData();
+					d.heightHint = 40;
 				}
 			}
 		}
 
 		private String escapeAmpersands(String message) {
-			StringBuffer result= new StringBuffer();
-			for (int i= 0; i < message.length(); i++) {
-				char ch= message.charAt(i);
+			StringBuffer result = new StringBuffer();
+			for (int i = 0; i < message.length(); i++) {
+				char ch = message.charAt(i);
 				if (ch == '&') {
 					result.append('&');
 				}

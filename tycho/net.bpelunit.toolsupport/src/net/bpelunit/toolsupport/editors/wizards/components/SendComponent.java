@@ -70,6 +70,11 @@ import org.eclipse.swt.widgets.Text;
 public class SendComponent extends DataComponent implements MessageChangeListener,
 		StringValueListener {
 
+	private static final String[] OPTIONS = new String[] { "Document", "XML Literal", "XML File Import", "Template" };
+	private static final int OPTION_XMLEDITOR = 0;
+	private static final int OPTION_XMLLITERAL = 1;
+	private static final int OPTION_XMLIMPORT = 2;
+	private static final int OPTION_TEMPLATE = 3;
 	protected TextDialogField fSendField;
 	protected XMLSendActivity fSendData;
 	protected StringDialogField fDelayStringField;
@@ -91,22 +96,23 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 		final XmlCursor xmlCursor = xmlAny.newCursor();
 
 		try {
-			if (option == 0) {
+			if (option == OPTION_XMLEDITOR) {
 				// xmlCursor.setTextValue(messageEditor.getMessageAsXML());
 				// fSendData.setData(xmlAny);
 				if (fSendData.isSetTemplate()) {
 					fSendData.unsetTemplate();
 				}
-				
-				
-			} else if (option == 1) {
+			} else if (option == OPTION_XMLLITERAL) {
 				// xmlCursor.setTextValue(fSendField.getText());
 				// fSendData.setData(xmlAny);
 				if (fSendData.isSetTemplate()) {
 					fSendData.unsetTemplate();
 				}
+			} else if(option == OPTION_XMLIMPORT) {
+				if (fSendData.isSetTemplate()) {
+					fSendData.unsetTemplate();
+				}
 			} else {
-
 				if (!browserFolder.getText().isEmpty()) {
 					fSendData.setTemplate(null);
 					fSendData.getTemplate().setSrc(browserFolder.getText());
@@ -120,17 +126,13 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 				if(fSendData.isSetData()){
 					fSendData.unsetData();
 				}
-
 			}
-
 		} finally {
 			xmlCursor.dispose();
 		}
-
 	}
 
 	private void saveFile(String FilePath, String FileContent) {
-
 		FileWriter file;
 		BufferedWriter writer;
 		if(!FilePath.startsWith("/")){
@@ -138,24 +140,19 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 				URL url =new URL(fSendData.documentProperties().getSourceName().toString());
 				final File fBPTS = new File(url.getFile());
 				FilePath=fBPTS.getParentFile().toString()+ "/"+FilePath;
-				
-				
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				ToolSupportActivator.logErrorMessage(e.getMessage());
 			}
-			
-			
-			
-			
 		}
 		try {
 			file = new FileWriter(FilePath, false);
-			writer = new BufferedWriter(file);
-			writer.write(FileContent, 0, FileContent.length());
-
-			writer.close();
-			file.close();
+			try {
+				writer = new BufferedWriter(file);
+				writer.write(FileContent, 0, FileContent.length());
+			} finally {
+				file.close();
+			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -262,22 +259,22 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 
 		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 4;
-		final Group[] groupOptions = new Group[3];
+		final Group[] groupOptions = new Group[OPTIONS.length];
 		for (int k = 0; k < groupOptions.length; k++) {
 			groupOptions[k] = new Group(group, SWT.BORDER_DOT);
 			groupOptions[k].setLayout(gridLayout);
 		}
 		stackLayout.topControl = groupOptions[0];
 
-		createTreeMessageEditorGroup(groupOptions);
-		createLiteralMessageEditorGroup(composite, nColumns, group, groupOptions);
+		createTreeMessageEditorGroup(groupOptions[OPTION_XMLEDITOR]);
+		createLiteralMessageEditorGroup(composite, nColumns, group);
 		createTemplateEditorGroup(composite, group,  stackLayout, groupOptions);
 
 		return group;
 	}
 
-	private void createTreeMessageEditorGroup(final Group[] groupOptions) {
-		this.messageEditor = new MessageEditor(groupOptions[0], SWT.NULL, this.getTestSuite());
+	private void createTreeMessageEditorGroup(final Group group) {
+		this.messageEditor = new MessageEditor(group, SWT.NULL, this.getTestSuite());
 		if (this.getWizardPage() instanceof OperationWizardPage) {
 			OperationWizardPage comp = (OperationWizardPage) this.getWizardPage();
 			comp.getOperationDataComponent().addMessageListener(this);
@@ -287,7 +284,7 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 
 	private void createTemplateEditorGroup(Composite composite, final Group group, 
 			final StackLayout stackLayout, final Group[] groupOptions) {
-		fieldTemplate = new TemplateVelocity(groupOptions[2], SWT.MULTI | SWT.V_SCROLL
+		fieldTemplate = new TemplateVelocity(group, SWT.MULTI | SWT.V_SCROLL
 				| SWT.H_SCROLL | SWT.WRAP);
 		GridData gdField = new GridData();
 		gdField.minimumHeight = 160;
@@ -304,7 +301,7 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 			}
 		});
 
-		browserFolder = new Text(groupOptions[2], SWT.LINE_CUSTOM | SWT.BORDER);
+		browserFolder = new Text(group, SWT.LINE_CUSTOM | SWT.BORDER);
 		GridData gdPath = new GridData();
 		gdPath.minimumHeight = 100;
 		gdPath.widthHint = 0;
@@ -313,7 +310,7 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 		gdPath.grabExcessHorizontalSpace = true;
 		browserFolder.setLayoutData(gdPath);
 
-		final Button browserButton = new Button(groupOptions[2], SWT.BUTTON1);
+		final Button browserButton = new Button(group, SWT.BUTTON1);
 		browserButton.setText("Browse...");
 		browserButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
@@ -371,14 +368,14 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 
 		final Combo comboBox = new Combo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.BORDER
 				| SWT.VERTICAL);
-		comboBox.setItems(new String[] { "Document", "Xml Literal", "Template" });
+		comboBox.setItems(OPTIONS);
 		comboBox.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				option = comboBox.getSelectionIndex();
 				stackLayout.topControl = groupOptions[option];
 
-				messageEditor.setEditable(option == 0);
-				fSendField.getTextControl(null).setEditable(option == 1);
+				messageEditor.setEditable(option == OPTION_XMLEDITOR);
+				fSendField.getTextControl(null).setEditable(option == OPTION_XMLLITERAL);
 
 				group.layout();
 			}
@@ -387,8 +384,8 @@ public class SendComponent extends DataComponent implements MessageChangeListene
 	}
 
 	private void createLiteralMessageEditorGroup(Composite composite, int nColumns,
-			final Group group, final Group[] groupOptions) {
-		this.fSendField.doFillIntoGrid(groupOptions[1], nColumns);
+			final Group group) {
+		this.fSendField.doFillIntoGrid(group, nColumns);
 
 		Text text = this.fSendField.getTextControl(null);
 		text.setEditable(false);
