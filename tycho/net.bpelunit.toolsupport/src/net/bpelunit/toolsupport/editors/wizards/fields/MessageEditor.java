@@ -899,7 +899,7 @@ public class MessageEditor extends Composite {
 		}
 		if (item.getData(TREE_ITEM_FOR_START_TAG) != null) {
 			Element element = (Element) item.getData(TREE_ITEM_FOR_START_TAG);
-			if (element.getType().isComplexType()) {
+			if (element != null && element.getType() != null && element.getType().isComplexType()) {
 				return !element.getType().getAsComplexType().getAttributes().isEmpty();
 			}
 		}
