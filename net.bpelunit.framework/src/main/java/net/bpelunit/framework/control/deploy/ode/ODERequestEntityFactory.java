@@ -64,7 +64,7 @@ public final class ODERequestEntityFactory {
 	public RequestEntity getDeployRequestEntity(File file) throws DeploymentException {
 		try {
 			prepareDeploySOAP(file);
-			return new StringRequestEntity(fContent, "application/xml", "UTF8");
+			return new StringRequestEntity(fContent, "text/xml", "UTF8");
 		} catch (Exception e) {
 			throw new DeploymentException(
 					"Problem while creating SOAP request: " + e.getMessage(), e);
@@ -75,7 +75,7 @@ public final class ODERequestEntityFactory {
 			throws DeploymentException {
 		try {
 			prepareUndeploySOAP(processId);
-			return new StringRequestEntity(fContent, "application/xml", "UTF8");
+			return new StringRequestEntity(fContent, "text/xml", "UTF8");
 		} catch (Exception e) {
 			throw new DeploymentException(
 					"Problem while creating SOAP request: " + e.getMessage(), e);
