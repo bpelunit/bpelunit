@@ -54,6 +54,7 @@ import org.eclipse.ui.forms.widgets.Section;
  */
 public class PartnerSection extends ListSection {
 
+	private static final String LABEL_ADD2BUTTON = "Add &WS-HT Track...";
 	private static final String OPTION_WSDL_FILE = "WSDL file";
 	private static final String OPTION_PARTNER_WSDL_FILE = "Partner WSDL file";
 	private static final String OPTION_NAME = "Name";
@@ -150,7 +151,7 @@ public class PartnerSection extends ListSection {
 	}
 
 	public PartnerSection(Composite parent, TestSuitePage page, FormToolkit toolkit) {
-		super(parent, toolkit, page, false, false, "Add &WS-HT Track...");
+		super(parent, toolkit, page, false, false, LABEL_ADD2BUTTON);
 		init();
 	}
 
@@ -302,7 +303,7 @@ public class PartnerSection extends ListSection {
 	@Override
 	protected void add2Pressed() {
 		HumanPartnerPropertiesDialog dialog = new HumanPartnerPropertiesDialog(getShell(),
-				"Add a partner");
+				"Add a WS-HT Partner");
 
 		if (dialog.open() != Window.OK) {
 			return;
@@ -324,7 +325,6 @@ public class PartnerSection extends ListSection {
 		List<XMLTestCase> testCases = getEditor().getTestSuite().getTestCases().getTestCaseList();
 
 		if (partner instanceof XMLPartnerDeploymentInformation) {
-
 			for (XMLTestCase testCase : testCases) {
 				testCase.addNewPartnerTrack().setName(partner.getName());
 			}
@@ -431,8 +431,7 @@ public class PartnerSection extends ListSection {
 		String password = dialog.getPassword();
 
 		if (name != null && wshtEndpoint != null && name.length() > 0 && wshtEndpoint.length() > 0
-				&& username != null && username.length() > 0 && password != null
-				&& password.length() > 0) {
+				&& username != null && username.length() > 0) {
 			modelItem.setName(name);
 			modelItem.setWshtEndpoint(wshtEndpoint);
 			modelItem.setUsername(username);
