@@ -256,21 +256,34 @@ public class TestCaseAndTrackSection extends TreeSection {
 			testCase.setVary(Boolean.parseBoolean(results[3]));
 
 			testCase.addNewClientTrack();
-			List<XMLPartnerDeploymentInformation> allDeployers = getAllDeployers();
-			for (XMLPartnerDeploymentInformation information : allDeployers) {
+			List<XMLPartnerDeploymentInformation> partnerTrackDeploymentInformations = getAllPartnerTracks();
+			for (XMLPartnerDeploymentInformation information : partnerTrackDeploymentInformations) {
 				XMLPartnerTrack track = testCase.addNewPartnerTrack();
 				track.setName(information.getName());
 			}
+			List<XMLHumanPartnerDeploymentInformation> humanPartnerDeploymentInformations = getAllHumanPartnerTracks();
+			for (XMLHumanPartnerDeploymentInformation information : humanPartnerDeploymentInformations) {
+				XMLHumanPartnerTrack track = testCase.addNewHumanPartnerTrack();
+				track.setName(information.getName());
+			}
+			
 			adjust();
 			getTreeViewer().expandToLevel(testCase, AbstractTreeViewer.ALL_LEVELS);
 			getTreeViewer().setSelection(new StructuredSelection(testCase));
 		}
 	}
 
-	private List<XMLPartnerDeploymentInformation> getAllDeployers() {
+	private List<XMLPartnerDeploymentInformation> getAllPartnerTracks() {
 		XMLTestSuite model = getEditor().getTestSuite();
 		List<XMLPartnerDeploymentInformation> partnerList = model.getDeployment().getPartnerList();
 
+		return partnerList;
+	}
+	
+	private List<XMLHumanPartnerDeploymentInformation> getAllHumanPartnerTracks() {
+		XMLTestSuite model = getEditor().getTestSuite();
+		List<XMLHumanPartnerDeploymentInformation> partnerList = model.getDeployment().getHumanPartnerList();
+		
 		return partnerList;
 	}
 

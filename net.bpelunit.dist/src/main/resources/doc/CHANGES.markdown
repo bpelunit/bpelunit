@@ -19,6 +19,7 @@ Staged for next version
 * _Improvement_: Internal clean-ups in framework
 * _Architecture_: Old code coverage code is in progress of being replaced with a new implementation
 * _Improvement_: Upgrade to Jetty 8 (uses Servlet 3.0, same as recent ODE releases)
+* _Fix_: Add defined WS-HT Tracks to a test case when creating a new one
 
 Version 1.6.1
 -----------------------
