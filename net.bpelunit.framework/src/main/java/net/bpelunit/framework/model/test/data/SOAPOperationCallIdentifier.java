@@ -272,7 +272,9 @@ public class SOAPOperationCallIdentifier {
 	 * Returns the namespace URI that should be used for the elements of the
 	 * soap:Body of the SOAP Message. Only useful with the RPC style: if the
 	 * style is "document", WS-I forbids using the namespace attribute in the
-	 * soap:body child of the binding of the port type.
+	 * soap:body child of the binding of the port type. Conversely, when using
+	 * the RPC style, WS-I compliant WSDL files should use the "namespace"
+	 * attribute.
 	 */
 	public String getBodyNamespace() {
 		SOAPBody soapBody;
@@ -285,7 +287,14 @@ public class SOAPOperationCallIdentifier {
 			return soapBody.getNamespaceURI();
 		}
 		else {
-			return getTargetNamespace();
+			/*
+			 * ODE (at least) expects the wrapper *not* to be in any namespace
+			 * if the "namespace" attribute is not used in the soap:body child
+			 * of the <input> of the binding (violating the WS-I spec).
+			 *
+			 * See: https://github.com/bpelunit/bpelunit/issues/8
+			 */
+			return null;
 		}
 	}
 
