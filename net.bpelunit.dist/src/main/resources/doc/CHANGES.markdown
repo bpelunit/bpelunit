@@ -20,6 +20,7 @@ Staged for next version
 * _Architecture_: Old code coverage code is in progress of being replaced with a new implementation
 * _Improvement_: Upgrade to Jetty 8 (uses Servlet 3.0, same as recent ODE releases)
 * _Fix_: Add defined WS-HT Tracks to a test case when creating a new one
+* _Fix_: Validate on loading a Test Suite whether condition groups that are used in normal SOAP activities are declared in the test suite (Issue BPELUnit-9)
 
 Version 1.6.1
 -----------------------
