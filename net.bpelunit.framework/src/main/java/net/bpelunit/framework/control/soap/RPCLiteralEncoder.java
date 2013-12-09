@@ -114,14 +114,13 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 			final String bodyNamespace = operation.getBodyNamespace();
 			final String operationName = operation.getName();
 			final Element firstElement = getFirstElementChild(literalData);
-			final SOAPElement newWrapper = sFactory.createElement(
-					operation.getDirection() == SOAPOperationDirectionIdentifier.INPUT ? operationName : operationName + "Response",
-					RPC_WRAPPER_NAMESPACE_PREFIX, bodyNamespace);
+			final String wrapperLocalPart = operation.getDirection() == SOAPOperationDirectionIdentifier.INPUT ? operationName : operationName + "Response";
+			final SOAPElement newWrapper = bodyNamespace == null ? sFactory.createElement(wrapperLocalPart) : sFactory.createElement(wrapperLocalPart, RPC_WRAPPER_NAMESPACE_PREFIX, bodyNamespace);
 
 			NodeList partNodes;
 			final String firstElementName = firstElement != null ? firstElement.getLocalName() : null;
 			final String firstElementNS   = firstElement != null ? firstElement.getNamespaceURI() : null;
-			if (bodyNamespace.equals(firstElementNS) && (operationName.equals(firstElementName) || (operationName + "Response").equals(firstElementName))) {
+			if ((bodyNamespace == null && firstElementNS == null || bodyNamespace.equals(firstElementNS)) && (operationName.equals(firstElementName) || (operationName + "Response").equals(firstElementName))) {
 				// already wrapped according to WS-I BP 1.1 S4.7.10: the parts are the children of the wrapper
 				partNodes = firstElement.getChildNodes();
 			} else {
