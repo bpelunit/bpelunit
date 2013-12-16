@@ -120,7 +120,7 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 			NodeList partNodes;
 			final String firstElementName = firstElement != null ? firstElement.getLocalName() : null;
 			final String firstElementNS   = firstElement != null ? firstElement.getNamespaceURI() : null;
-			if ((bodyNamespace == null && firstElementNS == null || bodyNamespace.equals(firstElementNS)) && (operationName.equals(firstElementName) || (operationName + "Response").equals(firstElementName))) {
+			if (equals(bodyNamespace, firstElementNS) && (operationName.equals(firstElementName) || (operationName + "Response").equals(firstElementName))) {
 				// already wrapped according to WS-I BP 1.1 S4.7.10: the parts are the children of the wrapper
 				partNodes = firstElement.getChildNodes();
 			} else {
@@ -202,6 +202,14 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 					"A SOAPException occurred in the RPCLiteralEncoder while decoding for operation "
 							+ operation, e);
 		}
+	}
+
+	/**
+	 * Compares two values for equality. Unlike {@link Object#equals(Object)}, it
+	 * can handle the case in which the left one is <code>null</code>.
+	 */
+	private boolean equals(final String a, final String b) {
+		return a == null && b == null || a != null && a.equals(b);
 	}
 
 	private Element getFirstElementChild(Node literalData) {
