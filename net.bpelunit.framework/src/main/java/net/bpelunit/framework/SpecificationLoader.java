@@ -611,6 +611,7 @@ public class SpecificationLoader {
 			for (XMLCompleteHumanTaskActivity xmlActivity : xmlHumanPartnerTrack
 					.getCompleteHumanTaskList()) {
 				CompleteHumanTask activity = new CompleteHumanTask(pTrack);
+				activity.setId(xmlActivity.getId());
 				activity.setTaskName(xmlActivity.getTaskName());
 				NamespaceContext context = getNamespaceMap(xmlActivity
 						.newCursor());
