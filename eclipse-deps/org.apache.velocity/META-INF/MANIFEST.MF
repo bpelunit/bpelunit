@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Velocity
 Bundle-SymbolicName: org.apache.velocity
-Bundle-Version: 1.7.0
+Bundle-Version: 1.7.0.qualifier
 Bundle-Vendor: Apache Software Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.apache.velocity,

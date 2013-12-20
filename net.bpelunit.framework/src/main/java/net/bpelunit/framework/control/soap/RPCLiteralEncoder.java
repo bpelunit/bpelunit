@@ -114,14 +114,13 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 			final String bodyNamespace = operation.getBodyNamespace();
 			final String operationName = operation.getName();
 			final Element firstElement = getFirstElementChild(literalData);
-			final SOAPElement newWrapper = sFactory.createElement(
-					operation.getDirection() == SOAPOperationDirectionIdentifier.INPUT ? operationName : operationName + "Response",
-					RPC_WRAPPER_NAMESPACE_PREFIX, bodyNamespace);
+			final String wrapperLocalPart = operation.getDirection() == SOAPOperationDirectionIdentifier.INPUT ? operationName : operationName + "Response";
+			final SOAPElement newWrapper = bodyNamespace == null ? sFactory.createElement(wrapperLocalPart) : sFactory.createElement(wrapperLocalPart, RPC_WRAPPER_NAMESPACE_PREFIX, bodyNamespace);
 
 			NodeList partNodes;
 			final String firstElementName = firstElement != null ? firstElement.getLocalName() : null;
 			final String firstElementNS   = firstElement != null ? firstElement.getNamespaceURI() : null;
-			if (bodyNamespace.equals(firstElementNS) && (operationName.equals(firstElementName) || (operationName + "Response").equals(firstElementName))) {
+			if (equals(bodyNamespace, firstElementNS) && (operationName.equals(firstElementName) || (operationName + "Response").equals(firstElementName))) {
 				// already wrapped according to WS-I BP 1.1 S4.7.10: the parts are the children of the wrapper
 				partNodes = firstElement.getChildNodes();
 			} else {
@@ -203,6 +202,14 @@ public class RPCLiteralEncoder implements ISOAPEncoder {
 					"A SOAPException occurred in the RPCLiteralEncoder while decoding for operation "
 							+ operation, e);
 		}
+	}
+
+	/**
+	 * Compares two values for equality. Unlike {@link Object#equals(Object)}, it
+	 * can handle the case in which the left one is <code>null</code>.
+	 */
+	private boolean equals(final String a, final String b) {
+		return a == null && b == null || a != null && a.equals(b);
 	}
 
 	private Element getFirstElementChild(Node literalData) {

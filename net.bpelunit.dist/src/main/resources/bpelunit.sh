@@ -6,18 +6,18 @@
 # Licensed under the terms of BPELUnit itself.
 
 if [ -z "${JAVA_HOME}" ]; then
-  echo \
+  printf \
     "You should set the JAVA_HOME environment variable to the absolute\n" \
     "\rpath of the root directory of your Java Virtual Machine. Look for\n" \
-    "\rlib/tools.jar on your system if you do not know where it is." 1>&2
+    "\rlib/tools.jar on your system if you do not know where it is.\n" 1>&2
   exit 1
 fi
 
 if [ -z "${BPELUNIT_HOME}" ]; then
-  echo \
+  printf \
     "You should set the BPELUNIT_HOME environment variable to the BPELUnit\n" \
     "\rinstallation directory. This should be where you unpacked the\n" \
-    "\rstandalone distribution." 1>&2
+    "\rstandalone distribution.\n" 1>&2
   exit 2
 fi
 
@@ -28,9 +28,9 @@ MAIN_CLASS=net.bpelunit.framework.ui.command.BPELUnitCommandLineRunner
 ## UTILITIES ##########################
 
 echo_classpath() {
-  echo "$CLASSPATH"
+  printf "$CLASSPATH"
   find "$BPELUNIT_HOME/lib" -name '*.jar' -print | \
-    (while read i; do echo -n ":$i"; done)
+    (while read i; do printf ":$i"; done)
 }
 
 ## MAIN BODY ##########################

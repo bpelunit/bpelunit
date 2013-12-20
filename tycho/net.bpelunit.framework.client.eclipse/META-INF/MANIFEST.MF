@@ -16,7 +16,10 @@ Require-Bundle: net.bpelunit.framework,
  org.eclipse.ui.console,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.help,
- org.eclipse.help.ui
+ org.eclipse.help.ui,
+ org.apache.velocity;bundle-version="1.7.0",
+ org.apache.commons.lang;bundle-version="2.4.0",
+ org.apache.log4j;bundle-version="1.2.15"
 Bundle-ActivationPolicy: lazy
 Export-Package: net.bpelunit.framework.client.eclipse,
  net.bpelunit.framework.client.eclipse.dialog,
@@ -28,6 +31,3 @@ Export-Package: net.bpelunit.framework.client.eclipse,
  net.bpelunit.framework.client.model
 Bundle-Vendor: Leibniz Universität Hannover
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.apache.commons.lang,
- org.apache.log4j;version="1.2.17",
- org.apache.xmlbeans

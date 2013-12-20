@@ -23,6 +23,7 @@ Staged for next version
 * _Fix_: Add defined WS-HT Tracks to a test case when creating a new one
 * _Fix_: Place RPC wrapper in the empty namespace when the soap:body binding element does not use the 'namespace' attribute
 * _Fix_: Validate on loading a Test Suite whether condition groups that are used in normal SOAP activities are declared in the test suite (Issue BPELUnit-9)
+* _Fix_: Read ID from CompleteHumanTask activities so that dependsOn works also when target activity is triggered by a complete human task
 
 Version 1.6.1
 -----------------------

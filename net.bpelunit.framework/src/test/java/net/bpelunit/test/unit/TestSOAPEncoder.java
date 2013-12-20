@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 
+import javax.xml.XMLConstants;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
@@ -99,9 +100,10 @@ public class TestSOAPEncoder extends SimpleTest {
 		SOAPMessage message= encoder.construct(operation, literal,
 				BPELUnitConstants.SOAP_FAULT_CODE_CLIENT,
 				BPELUnitConstants.SOAP_FAULT_DESCRIPTION);
-		
-		assertEquals(0, message.getSOAPBody().getElementsByTagNameNS(operation.getBodyNamespace(), operation.getName()).getLength());
-		assertEquals(1, message.getSOAPBody().getElementsByTagNameNS(operation.getBodyNamespace(), operation.getName() + "Response").getLength());
+
+		final Node firstChild = message.getSOAPBody().getFirstChild();
+		assertEquals(XMLConstants.NULL_NS_URI, firstChild.getNamespaceURI());
+		assertEquals(operation.getName() + "Response", firstChild.getLocalName());
 	}
 	
 	@Test
