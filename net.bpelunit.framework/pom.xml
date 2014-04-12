@@ -76,7 +76,7 @@
         <configuration>
           <instructions>
             <Export-Package>net.bpelunit.framework.*</Export-Package>
-            <_exportcontents>org.apache.xmlbeans.*;org.apache.commons.lang;org.apache.log4j.*;de.schlichtherle.io.*</_exportcontents>
+            <_exportcontents>org.apache.xmlbeans.*;org.apache.commons.lang;org.apache.log4j.*</_exportcontents>
             <Import-Package>org.jdom.*;org.apache.commons.io.*;javax.wsdl.*;!*</Import-Package>
             <Require-Bundle>net.bpelunit.model.bpel,net.bpelunit.util,org.apache.velocity;bundle-version:="[1.5.0,1.6.0)"</Require-Bundle>
             <Bundle-SymbolicName>net.bpelunit.framework</Bundle-SymbolicName>
