@@ -607,40 +607,50 @@ public class SpecificationLoader {
 	private void readActivities(PartnerTrack pTrack,
 			XMLHumanPartnerTrack xmlHumanPartnerTrack, String testDirectory)
 			throws SpecificationException {
-		if (xmlHumanPartnerTrack.getCompleteHumanTaskList() != null) {
-			for (XMLCompleteHumanTaskActivity xmlActivity : xmlHumanPartnerTrack
-					.getCompleteHumanTaskList()) {
-				CompleteHumanTask activity = new CompleteHumanTask(pTrack);
-				activity.setId(xmlActivity.getId());
-				activity.setTaskName(xmlActivity.getTaskName());
-				NamespaceContext context = getNamespaceMap(xmlActivity
-						.newCursor());
-				CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(
-						activity, context, (Element) getLiteralDataForSend(
-								xmlActivity.getData(), testDirectory)
-								.getFirstChild(), pTrack);
-
-				// get conditions
-				List<XMLCondition> xmlConditionList = xmlActivity
-						.getConditionList();
-				List<ReceiveCondition> cList = new ArrayList<ReceiveCondition>();
-				if (xmlConditionList != null) {
-					for (XMLCondition xmlCondition : xmlConditionList) {
-						cList.add(new ReceiveCondition(spec, xmlCondition
-								.getExpression(), xmlCondition.getTemplate(),
-								xmlCondition.getValue()));
-					}
-				}
-
-				addConditionsFromConditionGroups(
-						xmlActivity.getConditionGroupList(), spec, cList);
-
-				spec.setConditions(cList);
-				activity.initialize(spec);
+		List<XMLActivity> activities = ActivityUtil.getActivities(xmlHumanPartnerTrack);
+		
+		for(XMLActivity xmlActivity : activities) {
+			if(xmlActivity instanceof XMLCompleteHumanTaskActivity) {
+				CompleteHumanTask activity = createCompleteHumanTaskActivity(
+						pTrack, testDirectory, (XMLCompleteHumanTaskActivity)xmlActivity);
 				pTrack.addActivity(activity);
+			} else {
+				throw new SpecificationException("Unknown Activity in Human Partner Track " + pTrack.getName() + ": " + xmlActivity.getDomNode().getLocalName());
+			}
+		}
+	}
+
+	private CompleteHumanTask createCompleteHumanTaskActivity(
+			PartnerTrack pTrack, String testDirectory,
+			XMLCompleteHumanTaskActivity xmlActivity)
+			throws SpecificationException {
+		CompleteHumanTask activity = new CompleteHumanTask(pTrack);
+		activity.setTaskName(xmlActivity.getTaskName());
+		NamespaceContext context = getNamespaceMap(xmlActivity
+				.newCursor());
+		CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(
+				activity, context, (Element) getLiteralDataForSend(
+						xmlActivity.getData(), testDirectory)
+						.getFirstChild(), pTrack);
+
+		// get conditions
+		List<XMLCondition> xmlConditionList = xmlActivity
+				.getConditionList();
+		List<ReceiveCondition> cList = new ArrayList<ReceiveCondition>();
+		if (xmlConditionList != null) {
+			for (XMLCondition xmlCondition : xmlConditionList) {
+				cList.add(new ReceiveCondition(spec, xmlCondition
+						.getExpression(), xmlCondition.getTemplate(),
+						xmlCondition.getValue()));
 			}
 		}
 
+		addConditionsFromConditionGroups(
+				xmlActivity.getConditionGroupList(), spec, cList);
+
+		spec.setConditions(cList);
+		activity.initialize(spec);
+		return activity;
 	}
 
 	private void readPartners(Map<String, Partner> suitePartners,

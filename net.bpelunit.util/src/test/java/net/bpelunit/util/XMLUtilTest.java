@@ -4,6 +4,7 @@
  */
 package net.bpelunit.util;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -266,6 +267,43 @@ public class XMLUtilTest {
 		assertEquals(2, XMLUtil.getPosition(children.get(1)));
 		assertEquals(3, XMLUtil.getPosition(children.get(2)));
 		assertEquals(4, XMLUtil.getPosition(children.get(3)));
+	}
+	
+	@Test
+	public void testResolveNamespacePrefix_NormalPrefix() throws Exception {
+		Document xml = XMLUtil.parseXML("<ns:a xmlns:ns=\"ns1\">ns:b</ns:a>");
+		String namespace = XMLUtil.resolveNamespacePrefix("ns", xml.getDocumentElement());
+		assertEquals("ns1", namespace);
+	}
+	
+	@Test
+	public void testResolveNamespacePrefix_NormalPrefixInHierarchy() throws Exception {
+		Document xml = XMLUtil.parseXML("<ns:a xmlns:ns=\"ns1\"><ns:b>ns:b</ns:b></ns:a>");
+		String namespace = XMLUtil.resolveNamespacePrefix("ns", (Element)xml.getDocumentElement().getChildNodes().item(0));
+		assertEquals("ns1", namespace);
+	}
+	
+	@Test
+	public void testResolveNamespacePrefix_DefaultNamespace() throws Exception {
+		Document xml = XMLUtil.parseXML("<a xmlns=\"ns1\">b</a>");
+		String namespace = XMLUtil.resolveNamespacePrefix("", xml.getDocumentElement());
+		assertEquals("ns1", namespace);
+	}
+	
+	@Test
+	public void testResolveQName_NormalPrefix() throws Exception {
+		Document xml = XMLUtil.parseXML("<ns:a xmlns:ns=\"ns1\">ns:b</ns:a>");
+		QName qname = XMLUtil.resolveQName("ns:a", xml.getDocumentElement());
+		assertEquals("ns1", qname.getNamespaceURI());
+		assertEquals("a", qname.getLocalPart());
+	}
+	
+	@Test
+	public void testResolveQName_DefaultNamespace() throws Exception {
+		Document xml = XMLUtil.parseXML("<a xmlns=\"ns1\">b</a>");
+		QName qname = XMLUtil.resolveQName("a", xml.getDocumentElement());
+		assertEquals("ns1", qname.getNamespaceURI());
+		assertEquals("a", qname.getLocalPart());
 	}
 	
 	private static class NodeListMock implements NodeList {

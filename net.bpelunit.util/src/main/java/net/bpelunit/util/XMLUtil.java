@@ -315,4 +315,37 @@ public final class XMLUtil {
 		return sb.toString();
 	}
 
+	public static QName resolveQName(String qNameWithPrefix, Element element) {
+		String nsPrefix;
+		String localName;
+		if(qNameWithPrefix.contains(":")) {
+			String[] parts = qNameWithPrefix.split(":");
+			nsPrefix = parts[0];
+			localName = parts[1];
+		} else {
+			nsPrefix = "";
+			localName = qNameWithPrefix;
+		}
+		
+		return new QName(resolveNamespacePrefix(nsPrefix, element), localName);
+	}
+	
+	public static String resolveNamespacePrefix(String prefix, Element element) {
+		String namespace = null;
+		
+		if("".equals(prefix)) {
+			namespace = element.getAttribute("xmlns");
+		} else {
+			namespace = element.getAttribute("xmlns:" + prefix);
+		}
+		if(namespace != null && !"".equals(namespace)) {
+			return namespace;
+		}
+		
+		if(element.getParentNode() instanceof Element) {
+			return resolveNamespacePrefix(prefix, (Element)element.getParentNode());
+		} else {
+			throw new RuntimeException("Cannot resolve prefix " + prefix);
+		}
+	}
 }
