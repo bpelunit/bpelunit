@@ -109,6 +109,32 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <discovery label="University of Hannover Site" url="http://www.se.uni-hannover.de/forschung/soa/bpelunit/"/>
    </url>
 
+   <includes
+         id="net.bpelunit.eclipse.deps.feature"
+         version="0.0.0"/>
+
+   <requires>
+      <import plugin="org.apache.velocity" version="1.7.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.io"/>
+      <import plugin="org.jdom"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.help"/>
+      <import plugin="org.eclipse.help.ui"/>
+      <import plugin="org.apache.commons.lang" version="2.4.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.log4j" version="1.2.15" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.ui.forms"/>
+   </requires>
+
    <plugin
          id="net.bpelunit.framework"
          download-size="0"
@@ -153,13 +179,6 @@ This Agreement is governed by the laws of the State of New York and the intellec
 
    <plugin
          id="net.bpelunit.toolsupport"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="net.bpelunit.toolsupport.eclipse.refactoring"
          download-size="0"
          install-size="0"
          version="0.0.0"
