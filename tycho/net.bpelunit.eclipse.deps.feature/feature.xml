@@ -6,7 +6,7 @@
       provider-name="BPELUnit">
 
    <description url="http://bpelunit.net/">
-      All the third party dependencies for BPELUnit.
+      All the third party dependencies for BPELUnit that are not normally included with a regular Eclipse install.
    </description>
 
    <copyright url="http://www.example.com/copyright">

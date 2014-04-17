@@ -77,6 +77,7 @@
     <module>net.bpelunit.toolsupport</module>
     <module>net.bpelunit.toolsupport.eclipse.refactoring</module>
     <module>net.bpelunit.eclipse.feature</module>
+    <module>net.bpelunit.eclipse.deps.feature</module>
     <module>net.bpelunit.eclipse.updatesite</module>
     <module>net.bpelunit.eclipse.target</module>
   </modules>
