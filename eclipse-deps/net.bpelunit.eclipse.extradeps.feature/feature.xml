@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="net.bpelunit.eclipse.deps.feature"
+      id="net.bpelunit.eclipse.extradeps.feature"
       label="BPELUnit Third Party Dependencies Feature"
       version="1.6.2.qualifier"
       provider-name="BPELUnit">
 
    <description url="http://bpelunit.net">
-      Third party dependencies required by BPELUnit.
+      Third party dependencies required by BPELUnit, that are not readily available in any public P2 repository.
    </description>
 
    <copyright url="http://www.example.com/copyright">
