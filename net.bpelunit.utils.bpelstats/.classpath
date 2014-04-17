@@ -3,30 +3,38 @@
 	<classpathentry including="**/*.java" kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry kind="var" path="M2_REPO/javax/activation/activation/1.1.1/activation-1.1.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/commons-cli/commons-cli/1.2/commons-cli-1.2.jar"/>
-	<classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.3/commons-codec-1.3.jar"/>
-	<classpathentry kind="var" path="M2_REPO/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/commons-digester/commons-digester/1.8/commons-digester-1.8.jar"/>
-	<classpathentry kind="var" path="M2_REPO/commons-httpclient/commons-httpclient/3.1/commons-httpclient-3.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/commons-lang/commons-lang/2.4/commons-lang-2.4.jar"/>
-	<classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/dom4j/dom4j/1.1/dom4j-1.1.jar"/>
 	<classpathentry kind="src" path="/net.bpelunit.framework"/>
-	<classpathentry kind="var" path="M2_REPO/org/jdom/jdom/1.1/jdom-1.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/junit/junit/4.8.1/junit-4.8.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.15/log4j-1.2.15.jar"/>
 	<classpathentry kind="src" path="/net.bpelunit.model.bpel"/>
-	<classpathentry kind="var" path="M2_REPO/org/objenesis/objenesis/1.2/objenesis-1.2.jar"/>
-	<classpathentry kind="var" path="M2_REPO/oro/oro/2.0.8/oro-2.0.8.jar"/>
-	<classpathentry kind="var" path="M2_REPO/stax/stax-api/1.0.1/stax-api-1.0.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/de/schlichtherle/truezip/6.8.2/truezip-6.8.2.jar"/>
 	<classpathentry kind="src" path="/net.bpelunit.util"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/velocity/velocity/1.7/velocity-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/velocity/velocity-tools/2.0/velocity-tools-2.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/wsdl4j/wsdl4j/1.6.2/wsdl4j-1.6.2.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlbeans/xmlbeans/2.4.0/xmlbeans-2.4.0.jar" sourcepath="M2_REPO/org/apache/xmlbeans/xmlbeans/2.4.0/xmlbeans-2.4.0-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="lib" path="target/dependency/activation-1.1.1.jar"/>
+	<classpathentry kind="lib" path="target/dependency/cloning-1.9.0.jar"/>
+	<classpathentry kind="lib" path="target/dependency/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="target/dependency/commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="target/dependency/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="target/dependency/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="target/dependency/commons-digester-1.8.jar"/>
+	<classpathentry kind="lib" path="target/dependency/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="target/dependency/commons-io-1.3.2.jar"/>
+	<classpathentry kind="lib" path="target/dependency/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="target/dependency/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="target/dependency/dom4j-1.1.jar"/>
+	<classpathentry kind="lib" path="target/dependency/javax.servlet-3.0.0.v201112011016.jar"/>
+	<classpathentry kind="lib" path="target/dependency/jdom-1.1.3.jar"/>
+	<classpathentry kind="lib" path="target/dependency/jetty-continuation-8.1.9.v20130131.jar"/>
+	<classpathentry kind="lib" path="target/dependency/jetty-http-8.1.9.v20130131.jar"/>
+	<classpathentry kind="lib" path="target/dependency/jetty-io-8.1.9.v20130131.jar"/>
+	<classpathentry kind="lib" path="target/dependency/jetty-server-8.1.9.v20130131.jar"/>
+	<classpathentry kind="lib" path="target/dependency/jetty-util-8.1.9.v20130131.jar"/>
+	<classpathentry kind="lib" path="target/dependency/junit-4.8.1.jar"/>
+	<classpathentry kind="lib" path="target/dependency/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="target/dependency/objenesis-1.2.jar"/>
+	<classpathentry kind="lib" path="target/dependency/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="target/dependency/slf4j-api-1.6.2.jar"/>
+	<classpathentry kind="lib" path="target/dependency/slf4j-log4j12-1.6.2.jar"/>
+	<classpathentry kind="lib" path="target/dependency/velocity-1.7.jar"/>
+	<classpathentry kind="lib" path="target/dependency/velocity-tools-2.0.jar"/>
+	<classpathentry kind="lib" path="target/dependency/wsdl4j-1.6.2.jar"/>
+	<classpathentry kind="lib" path="target/dependency/xmlbeans-2.4.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
