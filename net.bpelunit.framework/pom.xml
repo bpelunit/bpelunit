@@ -76,13 +76,13 @@
         <configuration>
           <instructions>
             <Export-Package>net.bpelunit.framework.*</Export-Package>
-            <_exportcontents>org.apache.xmlbeans.*;org.apache.commons.lang;org.apache.log4j.*</_exportcontents>
-            <Import-Package>org.jdom.*;org.apache.commons.io.*;javax.wsdl.*;!*</Import-Package>
-            <Require-Bundle>net.bpelunit.model.bpel,net.bpelunit.util,org.apache.velocity;bundle-version:="[1.5.0,1.6.0)"</Require-Bundle>
+            <_exportcontents>org.apache.xmlbeans.*</_exportcontents>
+            <Import-Package>org.jdom.*;org.apache.commons.io.*;javax.wsdl.*;org.apache.log4j;org.apache.commons.lang;!*</Import-Package>
+            <Require-Bundle>net.bpelunit.model.bpel,net.bpelunit.util,org.apache.velocity;bundle-version="1.7.0"</Require-Bundle>
             <Bundle-SymbolicName>net.bpelunit.framework</Bundle-SymbolicName>
             <Embed-Transitive>true</Embed-Transitive>
             <Embed-Directory>target/dependency</Embed-Directory>
-            <Embed-Dependency>*;scope=compile;artifactId=!stax-api|jdom|commons-io|wsdl4j|velocity</Embed-Dependency>
+            <Embed-Dependency>*;scope=compile;artifactId=!stax-api|jdom|commons-io|wsdl4j|velocity|commons-lang|log4j</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
           </instructions>
         </configuration>
