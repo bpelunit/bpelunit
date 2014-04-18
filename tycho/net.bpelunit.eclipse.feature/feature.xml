@@ -116,6 +116,8 @@ This Agreement is governed by the laws of the State of New York and the intellec
    <requires>
       <import plugin="org.apache.velocity" version="1.7.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.io"/>
+      <import plugin="org.apache.commons.lang" version="2.4.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.log4j" version="1.2.15" match="greaterOrEqual"/>
       <import plugin="org.jdom"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
@@ -129,10 +131,15 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.help"/>
       <import plugin="org.eclipse.help.ui"/>
-      <import plugin="org.apache.commons.lang" version="2.4.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.log4j" version="1.2.15" match="greaterOrEqual"/>
       <import plugin="org.eclipse.osgi"/>
       <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="javax.servlet" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="net.sf.wsdl4j"/>
+      <import plugin="org.apache.commons.codec"/>
+      <import plugin="org.apache.commons.httpclient"/>
+      <import plugin="org.eclipse.jetty.http"/>
+      <import plugin="org.eclipse.jetty.server"/>
+      <import plugin="org.eclipse.jetty.util"/>
    </requires>
 
    <plugin
