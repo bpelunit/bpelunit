@@ -10,4 +10,4 @@
 
 # Uploads the update site folder to eclipse-deps-YYYYMMDD (UTC time)
 
-lftp -e "mirror -R -x '.gitignore|.project' net.bpelunit.eclipse.deps.updatesite eclipse-deps-$(date -u +%Y%m%d%H%M)" bpelunit.net
+lftp -e "mirror -R -x '.gitignore|.project' net.bpelunit.eclipse.extradeps.updatesite eclipse-deps-$(date -u +%Y%m%d%H%M)" bpelunit.net
