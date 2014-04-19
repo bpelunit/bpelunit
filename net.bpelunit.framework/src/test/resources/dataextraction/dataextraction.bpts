@@ -55,7 +55,7 @@
                         </tes:template>
                     </tes:send>
                     <tes:receive service="pin:pingpong" fault="false">
-                        <tes:dataExtraction expression="//in" variable="correlationproperty" scope="testsuite"/>
+                        <tes:dataExtraction expression="//in/text()" variable="correlationproperty" scope="testsuite"/>
                         <tes:condition>
                             <tes:expression>//in</tes:expression>
                             <tes:value>'MYPROPERTY'</tes:value>
