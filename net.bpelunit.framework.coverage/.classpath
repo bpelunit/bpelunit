@@ -26,8 +26,6 @@
 	<classpathentry exported="true" kind="lib" path="target/dependency/log4j-1.2.15.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/objenesis-1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/oro-2.0.8.jar"/>
-	<classpathentry exported="true" kind="lib" path="target/dependency/slf4j-api-1.6.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="target/dependency/slf4j-log4j12-1.6.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/truezip-6.8.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/velocity-1.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/dependency/velocity-tools-2.0.jar"/>

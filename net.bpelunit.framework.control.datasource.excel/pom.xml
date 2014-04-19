@@ -27,7 +27,7 @@
             <Bundle-SymbolicName>
               net.bpelunit.framework.control.datasource.excel;singleton:=true
             </Bundle-SymbolicName>
-            <Import-Package>!*</Import-Package>
+            <Import-Package>org.apache.commons.lang;!*</Import-Package>
             <Embed-Transitive>true</Embed-Transitive>
             <Embed-Directory>target/dependency</Embed-Directory>
             <Embed-Dependency>*;groupId=org.apache.poi|dom4j</Embed-Dependency>
