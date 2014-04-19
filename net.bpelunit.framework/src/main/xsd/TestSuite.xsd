@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://www.bpelunit.org/schema/testSuite" 
-           xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-           xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing" 
-           targetNamespace="http://www.bpelunit.org/schema/testSuite" 
-           elementFormDefault="qualified" attributeFormDefault="unqualified">
-           
+<xs:schema xmlns="http://www.bpelunit.org/schema/testSuite"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"
+	targetNamespace="http://www.bpelunit.org/schema/testSuite"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
 	<xs:element name="testSuite" type="TestSuite">
 		<xs:annotation>
 			<xs:documentation>The testSuite root element</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="property" type="Property"/>
+	<xs:element name="property" type="Property" />
 
 	<xs:complexType name="TestSuite">
 		<xs:annotation>
@@ -29,8 +28,10 @@
 					<xs:documentation>
 						The base URL of the simulated partners and
 						client. The framework will extract a port from
-						this URL; it will also be used for asynchronous
-						callbacks. The URL should end with a slash;
+						this URL; it will
+						also be used for asynchronous
+						callbacks. The URL should end with a
+						slash;
 						partnerTrack names will be appended. Default is
 						http://localhost:7777/ws/
 					</xs:documentation>
@@ -55,14 +56,17 @@
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="conditionGroups" type="ConditionGroupSection" minOccurs="0" maxOccurs="1"></xs:element>
+			<xs:element name="conditionGroups" type="ConditionGroupSection"
+				minOccurs="0" maxOccurs="1"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="partner" type="PartnerDeploymentInformation">
 		<xs:annotation>
 			<xs:documentation>
-				The test partners of the PUT (this section is not strictly required but
-				considered good practise to keep track of things).
+				The test partners of the PUT (this section is not
+				strictly required but
+				considered good practise to keep track of
+				things).
 			</xs:documentation>
 		</xs:annotation>
 	</xs:element>
@@ -72,8 +76,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<!-- Emulate <all> with unbounded elements -->
-			<xs:element ref="partner" minOccurs="0"
-				maxOccurs="unbounded" />
+			<xs:element ref="partner" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element name="put" type="PUTDeploymentInformation">
 				<xs:annotation>
 					<xs:documentation>
@@ -82,28 +85,27 @@
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element ref="partner" minOccurs="0"
-				maxOccurs="unbounded" />
-			<xs:element ref="humanPartner"
-				minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref="partner" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element ref="humanPartner" minOccurs="0" maxOccurs="unbounded">
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="PUTDeploymentInformation">
 		<xs:annotation>
-			<xs:documentation>The PUT deployment information type</xs:documentation>
+			<xs:documentation>The PUT deployment information type
+			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<!-- Emulate <all> with unbounded elements -->
-			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element name="wsdl" type="xs:string">
 				<xs:annotation>
 					<xs:documentation>WSDL file of the PUT</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-            <xs:element name="partnerWSDL" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
-            <xs:element ref="property" minOccurs="0"
-				maxOccurs="unbounded" />
+			<xs:element name="partnerWSDL" type="xs:string" minOccurs="0"
+				maxOccurs="1"></xs:element>
+			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required">
 			<xs:annotation>
@@ -112,7 +114,9 @@
 		</xs:attribute>
 		<xs:attribute name="type" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>The type of the put - must be one of the types registered in BPELUnit through the extensions.xml file</xs:documentation>
+				<xs:documentation>The type of the put - must be one of the types
+					registered in BPELUnit through the extensions.xml file
+				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -125,8 +129,7 @@
 		<xs:complexContent>
 			<xs:extension base="AbstractDeploymentInformation">
 
-				<xs:attribute name="wsdl" type="xs:string"
-					use="required">
+				<xs:attribute name="wsdl" type="xs:string" use="required">
 					<xs:annotation>
 						<xs:documentation>
 							Location of the defining WSDL file
@@ -134,8 +137,7 @@
 					</xs:annotation>
 				</xs:attribute>
 
-				<xs:attribute name="partnerWsdl" type="xs:string"
-					use="optional">
+				<xs:attribute name="partnerWsdl" type="xs:string" use="optional">
 				</xs:attribute>
 
 			</xs:extension>
@@ -146,9 +148,11 @@
 			<xs:documentation>The testCase section</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="testCase" type="TestCase" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="testCase" type="TestCase" minOccurs="0"
+				maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>One test case represents one interaction sequence with the PUT</xs:documentation>
+					<xs:documentation>One test case represents one interaction sequence
+						with the PUT</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -158,22 +162,23 @@
 			<xs:documentation>A testCase</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="property" minOccurs="0"
-				maxOccurs="unbounded" />
+			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element name="setUp" type="SetUp" minOccurs="0"
 				maxOccurs="1">
 			</xs:element>
 			<xs:element name="clientTrack" type="Track" />
 			<xs:element name="partnerTrack" type="PartnerTrack"
 				minOccurs="0" maxOccurs="unbounded" />
-			<xs:element name="humanPartnerTrack"
-				type="HumanPartnerTrack" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="humanPartnerTrack" type="HumanPartnerTrack"
+				minOccurs="0" maxOccurs="unbounded">
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="vary" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="basedOn" type="xs:string" use="optional"/>
-		<xs:attribute name="abstract" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="vary" type="xs:boolean" use="optional"
+			default="false" />
+		<xs:attribute name="basedOn" type="xs:string" use="optional" />
+		<xs:attribute name="abstract" type="xs:boolean" use="optional"
+			default="false" />
 	</xs:complexType>
 	<xs:complexType name="Track">
 		<xs:annotation>
@@ -207,32 +212,33 @@
 					<xs:annotation>
 						<xs:documentation>
 							Receive a message, and answer with a
-							qualified response.
+							qualified
+							response.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="receiveSendAsynchronous"
-					type="TwoWayActivity">
+				<xs:element name="receiveSendAsynchronous" type="TwoWayActivity">
 					<xs:annotation>
 						<xs:documentation>
 							Receive a message, send an ACK, and then
-							send a qualified asynchronous response and
+							send a
+							qualified asynchronous response and
 							expect an ACK.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="sendReceiveAsynchronous"
-					type="TwoWayActivity">
+				<xs:element name="sendReceiveAsynchronous" type="TwoWayActivity">
 					<xs:annotation>
 						<xs:documentation>
 							Send a message, expect an ACK, and then wait
-							for a qualified asynchronous messageand send
+							for
+							a qualified asynchronous messageand send
 							an ACK.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-                <xs:element name="wait" type="WaitActivity"></xs:element>
-            </xs:choice>
+				<xs:element name="wait" type="WaitActivity"></xs:element>
+			</xs:choice>
 
 		</xs:sequence>
 	</xs:complexType>
@@ -244,19 +250,25 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="Track">
-				<xs:attribute name="name" type="xs:string"
-					use="required" />
+				<xs:attribute name="name" type="xs:string" use="required" />
 				<xs:attribute name="assume" type="xs:string" use="optional">
 					<xs:annotation>
-						<xs:documentation>If specified, XPath expression (with access to the variables in the partner track context) which must hold for the partner track to be run.
-If false, all activities in the partner track will be skipped. Skipped tasks are considered to have passed.</xs:documentation>
-					</xs:annotation></xs:attribute>
+						<xs:documentation>If specified, XPath expression (with access to
+							the variables in the partner track context) which must hold for
+							the partner track to be run.
+							If false, all activities in the partner track will be skipped.
+							Skipped tasks are considered to have passed.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="SendActivity">
 		<xs:annotation>
-			<xs:documentation>A send activity. Note: delay override and delaySequence are mutually exclusive: if you use both, BPELUnit will report an error.</xs:documentation>
+			<xs:documentation>A send activity. Note: delay override and
+				delaySequence are mutually exclusive: if you use both, BPELUnit will
+				report an error.</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="SoapActivity">
@@ -264,30 +276,31 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 					<xs:documentation>A send operation</xs:documentation>
 				</xs:annotation>
 				<xs:sequence>
-				<xs:choice minOccurs="1" maxOccurs="1">
-					<xs:element name="data" type="AnyElement">
-						<xs:annotation>
-							<xs:documentation>
-								Verbatim XML to be used as the SOAP body
-								of the message to be sent.
-							</xs:documentation>
-						</xs:annotation>
-					</xs:element>
-					<xs:element name="template" type="AnyElement">
-						<xs:annotation>
-							<xs:documentation>
-								Apache Velocity template to be expanded
-								to produce the SOAP body.
-							</xs:documentation>
-						</xs:annotation>
-					</xs:element>
-				</xs:choice>
-				<xs:element name="transportOption" type="Property"
-		maxOccurs="unbounded" minOccurs="0"></xs:element>
+					<xs:choice minOccurs="1" maxOccurs="1">
+						<xs:element name="data" type="AnyElement">
+							<xs:annotation>
+								<xs:documentation>
+									Verbatim XML to be used as the SOAP body
+									of the message to be sent.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="template" type="AnyElement">
+							<xs:annotation>
+								<xs:documentation>
+									Apache Velocity template to be expanded
+									to produce the SOAP body.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+					<xs:element name="transportOption" type="Property"
+						maxOccurs="unbounded" minOccurs="0"></xs:element>
 				</xs:sequence>
 				<xs:attribute name="fault" type="xs:boolean" use="optional" />
 				<xs:attribute name="delay" type="xs:string"></xs:attribute>
-				<xs:attribute name="delaySequence" type="xs:string" use="optional" />
+				<xs:attribute name="delaySequence" type="xs:string"
+					use="optional" />
 				<xs:attribute name="faultcode" type="xs:QName" use="optional" />
 				<xs:attribute name="faultstring" type="xs:string" use="optional" />
 			</xs:extension>
@@ -319,16 +332,32 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 					<xs:documentation>A receive operation</xs:documentation>
 				</xs:annotation>
 				<xs:sequence>
-					<xs:element name="condition" type="Condition"
-						minOccurs="0" maxOccurs="unbounded" />
-					<xs:element name="conditionGroup" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="condition" type="Condition" minOccurs="0"
+						maxOccurs="unbounded" />
+					<xs:element name="conditionGroup" type="xs:string"
+						minOccurs="0" maxOccurs="unbounded">
 						<xs:annotation>
-							<xs:documentation>A reference by id to a condition group defined in the same test suite. The conditions specified in this condition group are also checked at test run like the conditions specified in this activity.</xs:documentation>
-						</xs:annotation></xs:element>
+							<xs:documentation>
+								A reference by id to a condition group
+								defined
+								in the same test suite. The
+								conditions specified in this
+								condition
+								group are also checked at test run like
+								the conditions
+								specified in this
+								activity.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="dataExtraction" type="DataExtraction"
+						minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
 				</xs:sequence>
-				<xs:attribute name="fault" type="xs:boolean" use="optional" default="false"/>
-				<xs:attribute name="faultcode" type="xs:QName" use="optional"/>
-				<xs:attribute name="faultstring" type="xs:string" use="optional"/>
+				<xs:attribute name="fault" type="xs:boolean" use="optional"
+					default="false" />
+				<xs:attribute name="faultcode" type="xs:QName" use="optional" />
+				<xs:attribute name="faultstring" type="xs:string" use="optional" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -339,15 +368,19 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 		<xs:complexContent>
 			<xs:extension base="SoapActivity">
 				<xs:annotation>
-					<xs:documentation>A (sync or async) two-way operation</xs:documentation>
+					<xs:documentation>A (sync or async) two-way operation
+					</xs:documentation>
 				</xs:annotation>
 				<xs:all>
-					<xs:element name="receive" type="ReceiveActivity"/>
-					<xs:element name="send" type="SendActivity"/>
-					<xs:element name="mapping" type="Mapping" minOccurs="0"/>
-					<xs:element name="headerProcessor" type="HeaderProcessor" minOccurs="0">
+					<xs:element name="receive" type="ReceiveActivity" />
+					<xs:element name="send" type="SendActivity" />
+					<xs:element name="mapping" type="Mapping" minOccurs="0" />
+					<xs:element name="headerProcessor" type="HeaderProcessor"
+						minOccurs="0">
 						<xs:annotation>
-							<xs:documentation>Header processor. Can add addressing info to outgoing calls and extract it from incoming calls.</xs:documentation>
+							<xs:documentation>Header processor. Can add addressing info to
+								outgoing calls and extract it from incoming calls.
+							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 				</xs:all>
@@ -359,11 +392,12 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 			<xs:documentation>A header processor</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="property" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>Name to look the processor up in the configuration.</xs:documentation>
+				<xs:documentation>Name to look the processor up in the
+					configuration.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -373,7 +407,7 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="name" type="xs:string" use="required" />
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -384,8 +418,8 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:any namespace="##any" processContents="skip"
-				maxOccurs="unbounded" minOccurs="0"/>
+			<xs:any namespace="##any" processContents="skip" maxOccurs="unbounded"
+				minOccurs="0" />
 		</xs:sequence>
 		<xs:attribute name="src" type="xs:string" use="optional"></xs:attribute>
 	</xs:complexType>
@@ -404,26 +438,27 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="Activity">
-				<xs:attribute name="service" type="xs:QName"
-					use="optional" />
+				<xs:attribute name="service" type="xs:QName" use="optional" />
 
-				<xs:attribute name="port" type="xs:string"
-					use="optional" />
+				<xs:attribute name="port" type="xs:string" use="optional" />
 
-				<xs:attribute name="operation" type="xs:string"
-					use="optional" />
+				<xs:attribute name="operation" type="xs:string" use="optional" />
 
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="Mapping">
 		<xs:annotation>
-			<xs:documentation>Mapping type for data copy operations</xs:documentation>
+			<xs:documentation>Mapping type for data copy operations
+			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="copy" type="Copy" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="copy" type="Copy" minOccurs="0"
+				maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>Copies an input element from the input message to an output element from the output message. Only makes sense in rcv/send operations.</xs:documentation>
+					<xs:documentation>Copies an input element from the input message to
+						an output element from the output message. Only makes sense in
+						rcv/send operations.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -434,20 +469,22 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 		</xs:annotation>
 		<xs:attribute name="from" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>XPath expression on raw XML data</xs:documentation>
+				<xs:documentation>XPath expression on raw XML data
+				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="to" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>XPath expression on raw XML data</xs:documentation>
+				<xs:documentation>XPath expression on raw XML data
+				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="Condition">
 		<xs:all>
-			<xs:element name="expression" type="xs:string" minOccurs="0"/>
-			<xs:element name="template" type="xs:string" minOccurs="0"/>
-			<xs:element name="value" type="xs:string"/>
+			<xs:element name="expression" type="xs:string" minOccurs="0" />
+			<xs:element name="template" type="xs:string" minOccurs="0" />
+			<xs:element name="value" type="xs:string" />
 		</xs:all>
 	</xs:complexType>
 
@@ -472,14 +509,16 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="dataSource" type="DataSource" minOccurs="0" maxOccurs="1"></xs:element>
+			<xs:element name="dataSource" type="DataSource" minOccurs="0"
+				maxOccurs="1"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 
 	<xs:complexType name="DataSource">
 		<xs:sequence>
-			<xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="contents" type="xs:string" minOccurs="0"/>
+			<xs:element name="property" type="Property" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element name="contents" type="xs:string" minOccurs="0" />
 		</xs:sequence>
 		<xs:attribute name="type" type="xs:string" use="required"></xs:attribute>
 		<xs:attribute name="src" type="xs:string" use="optional"></xs:attribute>
@@ -494,57 +533,77 @@ If false, all activities in the partner track will be skipped. Skipped tasks are
 	</xs:complexType>
 
 	<xs:complexType name="ConditionGroup">
-        <xs:annotation>
-        	<xs:documentation>A condition group is a set of conditions that can be applied to receive activities.</xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="name" type="xs:string" minOccurs="1"
-        		maxOccurs="1">
-        	</xs:element>
-            <xs:element name="inheritFrom" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
-            <xs:element name="condition" type="Condition" minOccurs="0"
-        		maxOccurs="unbounded">
-        	</xs:element>
-        </xs:sequence>
+		<xs:annotation>
+			<xs:documentation>A condition group is a set of conditions that can
+				be applied to receive activities.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="1"
+				maxOccurs="1">
+			</xs:element>
+			<xs:element name="inheritFrom" type="xs:string" minOccurs="0"
+				maxOccurs="1"></xs:element>
+			<xs:element name="condition" type="Condition" minOccurs="0"
+				maxOccurs="unbounded">
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 
-    <xs:element name="humanPartner" type="HumanPartnerDeploymentInformation"></xs:element>
+	<xs:element name="humanPartner" type="HumanPartnerDeploymentInformation"></xs:element>
 
-    <xs:complexType name="HumanPartnerDeploymentInformation">
-    	<xs:complexContent>
-    		<xs:extension base="AbstractDeploymentInformation">
-    			<xs:attribute name="wshtEndpoint" type="xs:anyURI"></xs:attribute>
-    			<xs:attribute name="username" type="xs:string"></xs:attribute>
-    			<xs:attribute name="password" type="xs:string"></xs:attribute>
-    		</xs:extension>
-    	</xs:complexContent>
+	<xs:complexType name="HumanPartnerDeploymentInformation">
+		<xs:complexContent>
+			<xs:extension base="AbstractDeploymentInformation">
+				<xs:attribute name="wshtEndpoint" type="xs:anyURI"></xs:attribute>
+				<xs:attribute name="username" type="xs:string"></xs:attribute>
+				<xs:attribute name="password" type="xs:string"></xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="HumanPartnerTrack">
+		<xs:sequence>
+			<xs:element name="completeHumanTask" type="CompleteHumanTaskActivity"
+				minOccurs="0" maxOccurs="unbounded"></xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"></xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="CompleteHumanTaskActivity">
+		<xs:complexContent>
+			<xs:extension base="Activity">
+				<xs:sequence>
+					<xs:element name="taskName" type="xs:string"></xs:element>
+					<xs:element name="data" type="AnyElement"></xs:element>
+					<xs:element name="condition" type="Condition" minOccurs="0"
+						maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="conditionGroup" type="xs:string"
+						minOccurs="0" maxOccurs="unbounded"></xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="AbstractDeploymentInformation">
+		<xs:sequence></xs:sequence>
+		<xs:attribute name="name" type="xs:string"></xs:attribute>
+	</xs:complexType>
+
+    <xs:complexType name="DataExtraction">
+    	<xs:sequence/>
+    	<xs:attribute name="expression" type="xs:string" use="required"></xs:attribute>
+    	<xs:attribute name="variable" type="xs:string" use="required"></xs:attribute>
+    	<xs:attribute name="scope" type="VariableScope" use="required"></xs:attribute>
     </xs:complexType>
 
-    <xs:complexType name="HumanPartnerTrack">
-    	<xs:sequence>
-    		<xs:element name="completeHumanTask" type="CompleteHumanTaskActivity" minOccurs="0" maxOccurs="unbounded"></xs:element>
-    	</xs:sequence>
-    	<xs:attribute name="name" type="xs:string"></xs:attribute>
-    </xs:complexType>
-
-    <xs:complexType name="CompleteHumanTaskActivity">
-    	<xs:complexContent>
-    		<xs:extension base="Activity">
-    		<xs:sequence>
-    		<xs:element name="taskName" type="xs:string"></xs:element>
-    		<xs:element name="data" type="AnyElement"></xs:element>
-    		<xs:element name="condition" type="Condition" minOccurs="0"
-    			maxOccurs="unbounded">
-    		</xs:element>
-    		<xs:element name="conditionGroup" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
-    	</xs:sequence>
-    	</xs:extension>
-    	</xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="AbstractDeploymentInformation">
-    	<xs:sequence></xs:sequence>
-    	<xs:attribute name="name" type="xs:string"></xs:attribute>
-    </xs:complexType>
+    <xs:simpleType name="VariableScope">
+    	<xs:restriction base="xs:string">
+    		<xs:enumeration value="activity"></xs:enumeration>
+    		<xs:enumeration value="partnertrack"></xs:enumeration>
+    		<xs:enumeration value="testcase"></xs:enumeration>
+    		<xs:enumeration value="testsuite"></xs:enumeration>
+    	</xs:restriction>
+    </xs:simpleType>
 </xs:schema>
 
