@@ -37,6 +37,7 @@ public class ActiveVOSAdministrativeFunctionsMock extends
 			response.setResponse("<deploymentSummary numErrors=\"0\" numWarnings=\"0\"><globalMessages>[bpelunit-tc1.bpr] [bpelunit-tc1.bpr] Skipping BPR archive deployment as the current version is already up to date.</globalMessages></deploymentSummary>");
 			return response;
 		}
+
 	}
 
 	private final class AeContributionManagementMock implements
@@ -141,12 +142,12 @@ public class ActiveVOSAdministrativeFunctionsMock extends
 	}
 
 	@Override
-	IAeAxisActiveBpelAdmin getActiveBpelAdminPort() {
+	protected IAeAxisActiveBpelAdmin getActiveBpelAdminPort() {
 		return this.adminMock;
 	}
 
 	@Override
-	IAeContributionManagement getContributionManagementPort() {
+	protected IAeContributionManagement getContributionManagementPort() {
 		return this.contributionManagementMock;
 	}
 	
