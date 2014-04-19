@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="BPELUnit Rare Third Party Dependencies" url="http://bpelunit.net/">
+      Third party dependencies for BPELUnit that are not readily available through other public P2 repositories.
+   </description>
+   <feature url="features/net.bpelunit.eclipse.extradeps.feature_1.6.2.qualifier.jar" id="net.bpelunit.eclipse.extradeps.feature" version="1.6.2.qualifier"/>
+</site>

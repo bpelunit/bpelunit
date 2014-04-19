@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Commons Collections
 Bundle-SymbolicName: org.apache.commons.collections
-Bundle-Version: 3.2.1
+Bundle-Version: 3.2.1.qualifier
 Bundle-Vendor: Apache Software Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.apache.commons.collections,
