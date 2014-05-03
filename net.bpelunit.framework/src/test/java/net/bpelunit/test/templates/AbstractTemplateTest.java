@@ -41,4 +41,6 @@ public abstract class AbstractTemplateTest {
 
 	protected static final File TC_PRINTER_NOTEMP = new File(TEST_BPTS_DIR, "tacService-printer-nt.bpts");
 	protected static final File TC_PRINTER_TEMP = new File(TEST_BPTS_DIR, "tacService-printer-t.bpts");
+
+	protected static final File TC_DATAEXTRACTION = new File(TEST_BPTS_DIR, "dataextraction.bpts");
 }

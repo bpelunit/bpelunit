@@ -3,7 +3,7 @@
     <tes:name>dataextraction.bpts</tes:name>
     <tes:baseURL>http://localhost:7777/ws</tes:baseURL>
     <tes:deployment>
-        <tes:put type="fixed">
+        <tes:put name="DataExtraction" type="fixed">
             <tes:wsdl>pingpong.wsdl</tes:wsdl>
         </tes:put>
         <tes:partner name="ping" wsdl="pingpong.wsdl"/>
@@ -47,7 +47,6 @@
             <tes:partnerTrack name="pong">
                 <tes:receiveSend service="pin:pingpong" port="pongSOAP" operation="pingpong">
                     <tes:send service="pin:pingpong" fault="false">
-                        <tes:data/>
                         <tes:template>
                             <pin:pingpongResponse>
                                 <out>$testcase.get("correlationproperty")</out>
@@ -55,11 +54,11 @@
                         </tes:template>
                     </tes:send>
                     <tes:receive service="pin:pingpong" fault="false">
-                        <tes:dataExtraction expression="//in/text()" variable="correlationproperty" scope="testsuite"/>
                         <tes:condition>
                             <tes:expression>//in</tes:expression>
                             <tes:value>'MYPROPERTY'</tes:value>
                         </tes:condition>
+                        <tes:dataExtraction expression="//in/text()" variable="correlationproperty" scope="testsuite"/>
                     </tes:receive>
                 </tes:receiveSend>
                 <tes:sendReceive service="pin:pingpong" port="pingSOAP" operation="pingpong">
