@@ -83,6 +83,11 @@ public class ReceiveDataSpecification extends DataSpecification {
 	private List<ReceiveCondition> fConditions;
 
 	/**
+	 * A list of data extraction requests that have to be performed on the incoming messages.
+	 */
+	private List<DataExtraction> fDataExtractions;
+	
+	/**
 	 * Expected SOAP fault code (if this is a fault)
 	 */
 	private QName fFaultCode;
@@ -99,9 +104,10 @@ public class ReceiveDataSpecification extends DataSpecification {
 	}
 
 	public void initialize(SOAPOperationCallIdentifier op, String encodingStyle, ISOAPEncoder encoder, List<ReceiveCondition> conditions,
-			QName faultCode, String faultString) throws SpecificationException {
+			List<DataExtraction> deList, QName faultCode, String faultString) throws SpecificationException {
 		fOperation= op;
 		fConditions= conditions;
+		fDataExtractions= deList;
 		fDecoder= encoder;
 		fEncodingStyle= encodingStyle;
 
@@ -305,6 +311,9 @@ public class ReceiveDataSpecification extends DataSpecification {
 		List<ITestArtefact> returner = new ArrayList<ITestArtefact>();
 		for (ReceiveCondition c : fConditions) {
 			returner.add(c);
+		}
+		for (DataExtraction de : fDataExtractions) {
+			returner.add(de);
 		}
 		returner.add(new XMLData(this, "Plain incoming message", getWireFormatAsString()));
 		returner.add(new XMLData(this, "SOAP Message data", getSOAPMessageDataAsString()));

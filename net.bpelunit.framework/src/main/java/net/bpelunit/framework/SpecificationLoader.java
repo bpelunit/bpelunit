@@ -55,6 +55,7 @@ import net.bpelunit.framework.model.test.activity.TwoWayAsyncActivity;
 import net.bpelunit.framework.model.test.activity.Wait;
 import net.bpelunit.framework.model.test.data.CompleteHumanTaskSpecification;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
+import net.bpelunit.framework.model.test.data.DataExtraction;
 import net.bpelunit.framework.model.test.data.DataSpecification;
 import net.bpelunit.framework.model.test.data.ReceiveCondition;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
@@ -77,6 +78,7 @@ import net.bpelunit.framework.xml.suite.XMLCompleteHumanTaskActivity;
 import net.bpelunit.framework.xml.suite.XMLCondition;
 import net.bpelunit.framework.xml.suite.XMLConditionGroup;
 import net.bpelunit.framework.xml.suite.XMLCopy;
+import net.bpelunit.framework.xml.suite.XMLDataExtraction;
 import net.bpelunit.framework.xml.suite.XMLDeploymentSection;
 import net.bpelunit.framework.xml.suite.XMLHeaderProcessor;
 import net.bpelunit.framework.xml.suite.XMLHumanPartnerDeploymentInformation;
@@ -1301,9 +1303,16 @@ public class SpecificationLoader {
 						xmlCondition.getValue()));
 			}
 		}
+		addConditionsFromConditionGroups(xmlReceive.getConditionGroupList(), spec, cList);
 
-		addConditionsFromConditionGroups(xmlReceive.getConditionGroupList(),
-				spec, cList);
+		// get data extraction requests
+		final List<XMLDataExtraction> xmlDataExtractionList = xmlReceive.getDataExtractionList();
+		List<DataExtraction> deList = new ArrayList<DataExtraction>();
+		if (xmlDataExtractionList != null) {
+			for (XMLDataExtraction xmlDE : xmlDataExtractionList) {
+				deList.add(new DataExtraction(spec, xmlDE.getExpression(), xmlDE.getVariable(), xmlDE.getScope()));
+			}
+		}
 
 		// Add fault code and string. These will be only checked if this message
 		// is a fault and if
@@ -1311,8 +1320,7 @@ public class SpecificationLoader {
 		QName faultCode = xmlReceive.getFaultcode();
 		String faultString = xmlReceive.getFaultstring();
 
-		spec.initialize(operation, encodingStyle, encoder, cList, faultCode,
-				faultString);
+		spec.initialize(operation, encodingStyle, encoder, cList, deList, faultCode, faultString);
 		return spec;
 	}
 
