@@ -162,6 +162,11 @@ public class ReceiveDataSpecification extends DataSpecification {
 			return;
 		}
 
+		extractData(context);
+		if (hasProblems()) {
+			return;
+		}
+
 		// Receive completed.
 		setStatus(ArtefactStatus.createPassedStatus());
 	}
@@ -190,7 +195,6 @@ public class ReceiveDataSpecification extends DataSpecification {
 	}
 
 	private void validateConditions(VelocityContextProvider templateContext) {
-
 		// Check implicit fault assertions
 		SOAPBody body;
 		try {
@@ -261,10 +265,41 @@ public class ReceiveDataSpecification extends DataSpecification {
 		}
 	}
 
+	private void extractData(ActivityContext context) {
+		// Create Velocity context for the data extraction request
+		Context conditionContext;
+		try {
+			conditionContext = context.createVelocityContext();
+		} catch (Exception e) {
+			setStatus(ArtefactStatus.createErrorStatus(String.format(
+				"Could not create the Velocity context for this data extraction request: %s",
+				e.getLocalizedMessage()), e));
+			return;
+		}
+		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);
+
+		for (DataExtraction de : fDataExtractions) {
+			de.evaluate(context, fLiteralData, getNamespaceContext(), variableResolver);
+			if (de.getStatus().isError()) {
+				setStatus(ArtefactStatus.createErrorStatus(String.format(
+						"Data extraction for %s failed: %s",
+						de.getVariable(), de.getStatus().getMessage())));
+				return;
+			}
+		}
+	}
+
 	/**
-	 * Extract data from the received message according to the copy/mapping instructions of the
-	 * context
-	 * 
+	 * Extract data from the received message according to the copy/mapping
+	 * instructions of the context on the <code>mapping</code> element. This
+	 * enables BPELUnit to copy a string of text from a source element of the
+	 * incoming message of a two-way activity to the target element of the outgoing
+	 * message in the same activity.
+	 *
+	 * For more advanced scenarios involving different activities in different tracks
+	 * or that require copying something more complex than a string, use the
+	 * <code>dataExtraction</code> elements, which are interpreted from
+	 * {@link #extractData(ActivityContext).
 	 */
 	private void extractMappingData(ActivityContext context) {
 		List<DataCopyOperation> mapping= context.getMapping();

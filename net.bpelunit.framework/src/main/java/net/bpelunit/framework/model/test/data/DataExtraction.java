@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Element;
+
+import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.model.test.activity.ActivityContext;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -50,13 +59,14 @@ public class DataExtraction implements ITestArtefact {
 	/**
 	 * Parent test artefact.
 	 */
-	private ITestArtefact fParent;
+	private DataSpecification fParent;
 
-	public DataExtraction(ITestArtefact parent, String expression, String variable, Enum scope) {
+	public DataExtraction(DataSpecification parent, String expression, String variable, Enum scope) {
 		this.fParent = parent;
 		this.fExpression = expression;
 		this.fVariable = variable;
 		this.fScope = scope;
+		this.fStatus = ArtefactStatus.createInitialStatus();
 	}
 
 	/**
@@ -97,6 +107,26 @@ public class DataExtraction implements ITestArtefact {
 		this.fExtracted = extracted;
 	}
 
+	// ************************** Implementation *************************
+
+	public void evaluate(ActivityContext context, Element literalData,	NamespaceContext namespaceContext, ContextXPathVariableResolver variableResolver) {
+		final XPath xpath = XPathFactory.newInstance().newXPath();
+		xpath.setNamespaceContext(namespaceContext);
+		if (variableResolver != null) {
+			xpath.setXPathVariableResolver(variableResolver);
+		}
+	
+		try {
+			fExtracted = xpath.evaluate(fExpression, literalData, XPathConstants.NODE);
+			fStatus = ArtefactStatus.createPassedStatus();
+
+			// TODO: think of how to propagate the extracted value.
+		} catch (Exception e) {
+			Throwable root = BPELUnitUtil.findRootThrowable(e);
+			fStatus= ArtefactStatus.createErrorStatus(root.getMessage());
+		}
+	}
+	
 	// ************************** ITestArtefact ************************
 
 	@Override
