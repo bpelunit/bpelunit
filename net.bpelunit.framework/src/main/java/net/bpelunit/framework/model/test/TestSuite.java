@@ -22,6 +22,7 @@ import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.TestCaseNotFoundException;
 import net.bpelunit.framework.model.ProcessUnderTest;
+import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -38,7 +39,7 @@ import org.apache.velocity.tools.ToolManager;
  * @author Philip Mayer
  * 
  */
-public class TestSuite implements ITestArtefact {
+public class TestSuite implements ITestArtefact, VelocityContextProvider {
 
 	/**
 	 * The name of this test suite

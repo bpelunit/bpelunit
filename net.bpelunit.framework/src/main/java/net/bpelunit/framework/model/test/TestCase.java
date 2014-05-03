@@ -16,6 +16,7 @@ import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.exception.DataSourceException;
+import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -33,7 +34,7 @@ import com.rits.cloning.Cloner;
  * @author Philip Mayer
  * 
  */
-public class TestCase implements ITestArtefact {
+public class TestCase implements ITestArtefact, VelocityContextProvider {
 
 	/**
 	 * The test case name

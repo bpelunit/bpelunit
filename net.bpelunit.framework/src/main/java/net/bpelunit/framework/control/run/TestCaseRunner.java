@@ -22,6 +22,7 @@ import net.bpelunit.framework.exception.PartnerNotFoundException;
 import net.bpelunit.framework.exception.SynchronousSendException;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
@@ -44,7 +45,7 @@ import org.apache.log4j.Logger;
  * @author Philip Mayer, Antonio Garcia-Dominguez
  * 
  */
-public class TestCaseRunner {
+public class TestCaseRunner implements VelocityContextProvider {
 
 	private enum PartnerTrackResult {
 		RUNNING, COMPLETED
