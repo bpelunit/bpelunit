@@ -138,7 +138,6 @@ public class DataExtraction implements ITestArtefact {
 			fExtracted = xpath.evaluate(fExpression, literalData, XPathConstants.NODE);
 			fStatus = ArtefactStatus.createPassedStatus();
 
-			// TODO: think of how to propagate the extracted value.
 			final IExtractedDataContainer targetContainer = getTargetContainer();
 			targetContainer.putExtractedData(fVariable, fExtracted);
 		} catch (Exception e) {

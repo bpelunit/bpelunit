@@ -18,6 +18,7 @@ import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
+import net.bpelunit.framework.model.test.data.extraction.ExtractedDataContainerUtil;
 import net.bpelunit.framework.model.test.data.extraction.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
@@ -32,10 +33,8 @@ import com.rits.cloning.Cloner;
  * of PartnerTracks, which run in parallel and contain sequences of activities for interaction with
  * the PUT.
  * 
- * @version $Id$
  * @author Philip Mayer
  * @author University of Cádiz (Antonio García-Domínguez)
- * 
  */
 public class TestCase implements ITestArtefact, IExtractedDataContainer, VelocityContextProvider {
 
@@ -239,6 +238,11 @@ public class TestCase implements ITestArtefact, IExtractedDataContainer, Velocit
 	 * and extends it. To reduce overhead, the test suite context is cached so
 	 * it is only produced the first time.
 	 *
+	 * This method extends the Velocity context with the latest copies of the
+	 * extracted data from all the ancestors of <code>artefact</code> (including
+	 * itself) that are {@link IExtractedDataContainer}s, from the oldest ancestor
+	 * to the youngest one.
+	 *
 	 * @return VelocityContext with information about the test suite and test
 	 * case.
 	 * @throws DataSourceException 
@@ -261,6 +265,8 @@ public class TestCase implements ITestArtefact, IExtractedDataContainer, Velocit
 				throw new DataSourceException(e);
 			}
 		}
+
+		ExtractedDataContainerUtil.addExtractedDataFromAncestors(ctx, artefact);
 		return ctx;
 	}
 

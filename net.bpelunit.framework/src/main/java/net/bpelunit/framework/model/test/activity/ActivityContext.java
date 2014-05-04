@@ -22,6 +22,7 @@ import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.model.test.data.extraction.ExtractedDataContainerUtil;
 import net.bpelunit.framework.model.test.data.extraction.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
@@ -35,11 +36,10 @@ import org.w3c.dom.Element;
  * 
  * Through this object, activities and registered extensions like encoders and headers are able to
  * access framework functionality for sending and receiving SOAP calls, and storing/reading metadata
- * like header adressing information or copied values.
+ * like header addressing information or copied values.
  * 
- * @version $Id$
  * @author Philip Mayer
- * 
+ * @author University of Cádiz (Antonio García-Domínguez)
  */
 public class ActivityContext implements VelocityContextProvider {
 
@@ -229,17 +229,9 @@ public class ActivityContext implements VelocityContextProvider {
 	// **************************** Velocity ********************************
 
 	/**
-	 * Creates a new Velocity context for this activity. First, it creates a
-	 * context based on the partner track, and then it adds the extracted data
-	 * that is contained in all the ancestor {@link ITestArtefact}s that are
-	 * {@link IExtractedDataContainer}s.
-	 *
-	 * The extracted data is added in reverse order of ancestry, so the test
-	 * suite extracted data will be added first, then the test case data, then
-	 * the partner track data, and finally the current activity.
+	 * Creates a new Velocity context for this activity.
 	 */
 	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException {
-		WrappedContext context = fTrack.createVelocityContext(artefact);
-		return context;
+		return fTrack.createVelocityContext(artefact);
 	}
 }

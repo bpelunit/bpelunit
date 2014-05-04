@@ -42,9 +42,8 @@ import org.apache.log4j.Logger;
  * communication between threads as well as network communication and aborting
  * in case of an error, failure, or user interaction.
  * 
- * @version $Id$
- * @author Philip Mayer, Antonio Garcia-Dominguez
- * 
+ * @author Philip Mayer
+ * @author University of Cádiz (Antonio García-Domínguez)
  */
 public class TestCaseRunner implements VelocityContextProvider {
 

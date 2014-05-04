@@ -29,6 +29,7 @@ import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.ActivityContext;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.data.ContextXPathVariableResolver;
+import net.bpelunit.framework.model.test.data.extraction.ExtractedDataContainerUtil;
 import net.bpelunit.framework.model.test.data.extraction.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ArtefactStatus.StatusCode;
@@ -46,7 +47,6 @@ import com.rits.cloning.Cloner;
  * executed on behalf of the partner in a certain test case. The PartnerTrack
  * can be seen as the simulated partner itself.
  * 
- * @version $Id$
  * @author Philip Mayer
  * @author University of Cádiz (Antonio García-Domínguez)
  */
@@ -264,8 +264,13 @@ public class PartnerTrack implements ITestArtefact, IExtractedDataContainer, Run
 	 * This method obtains and caches the VelocityContext of the test case, so
 	 * it only needs to be produced once for every partner track.
 	 * 
+	 * This method extends the Velocity context with the latest copies of the
+	 * extracted data from all the ancestors of <code>artefact</code> (including
+	 * itself) that are {@link IExtractedDataContainer}s, from the oldest ancestor
+	 * to the youngest one.
+	 *
 	 * @return Base VelocityContext for the partner track.
-	 * @throws DataSourceException 
+	 * @throws DataSourceException
 	 */
 	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException   {
 		if (fTestCaseVelocityContext == null) {
@@ -282,6 +287,8 @@ public class PartnerTrack implements ITestArtefact, IExtractedDataContainer, Run
 			ctx.putReadOnly("partnerTrackReceived", fActivityContext.getReceivedMessages());
 			ctx.putReadOnly("partnerTrackSent", fActivityContext.getSentMessages());
 		}
+
+		ExtractedDataContainerUtil.addExtractedDataFromAncestors(ctx, artefact);
 		return ctx;
 	}
 

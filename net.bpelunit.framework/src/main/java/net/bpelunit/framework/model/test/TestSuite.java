@@ -24,6 +24,7 @@ import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.TestCaseNotFoundException;
 import net.bpelunit.framework.model.ProcessUnderTest;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
+import net.bpelunit.framework.model.test.data.extraction.ExtractedDataContainerUtil;
 import net.bpelunit.framework.model.test.data.extraction.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
@@ -335,6 +336,11 @@ public class TestSuite implements ITestArtefact, IExtractedDataContainer, Veloci
 	 * Creates a new VelocityContext with information about this test suite.
 	 * If necessary, it will initialize Velocity.
 	 *
+	 * This method extends the Velocity context with the latest copies of the
+	 * extracted data from all the ancestors of <code>artefact</code> (including
+	 * itself) that are {@link IExtractedDataContainer}s, from the oldest ancestor
+	 * to the youngest one.
+	 *
 	 * NOTE: to keep test cases and activities isolated, this context should
 	 * not be wrapped, but rather be cloned and then extended.
 	 * @throws DataSourceException 
@@ -368,6 +374,8 @@ public class TestSuite implements ITestArtefact, IExtractedDataContainer, Veloci
 				throw new DataSourceException(e);
 			}
 		}
+
+		ExtractedDataContainerUtil.addExtractedDataFromAncestors(ctx, artefact);
 		return ctx;
 	}
 
