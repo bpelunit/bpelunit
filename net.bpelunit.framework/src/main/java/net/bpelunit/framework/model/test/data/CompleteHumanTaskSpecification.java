@@ -86,7 +86,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 		// Create Velocity context for the conditions
 		Context conditionContext;
 		try {
-			conditionContext = partnerTrack.createVelocityContext();
+			conditionContext = partnerTrack.createVelocityContext(this);
 		} catch (Exception e) {
 			setStatus(ArtefactStatus.createFailedStatus(String.format(
 				"Could not create the Velocity context for this condition: %s",

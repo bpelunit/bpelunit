@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.TestCaseNotFoundException;
 import net.bpelunit.framework.model.ProcessUnderTest;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
+import net.bpelunit.framework.model.test.data.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -35,11 +37,10 @@ import org.apache.velocity.tools.ToolManager;
  * A BPELUnit TestSuite is a collection of TestCases, along with the description
  * of PUT and partners, including deployment information for the PUT.
  * 
- * @version $Id$
  * @author Philip Mayer
- * 
+ * @author University of Cádiz (Antonio García-Domínguez)
  */
-public class TestSuite implements ITestArtefact, VelocityContextProvider {
+public class TestSuite implements ITestArtefact, IExtractedDataContainer, VelocityContextProvider {
 
 	/**
 	 * The name of this test suite
@@ -105,6 +106,8 @@ public class TestSuite implements ITestArtefact, VelocityContextProvider {
 	private String fSetUpVelocityScript;
 
 	private final ToolManager toolManager = new ToolManager();
+
+	private final Map<String, Object> fExtractedData = new HashMap<String, Object>();
 
 	// ****************************** Initialization **************************
 
@@ -336,7 +339,7 @@ public class TestSuite implements ITestArtefact, VelocityContextProvider {
 	 * not be wrapped, but rather be cloned and then extended.
 	 * @throws DataSourceException 
 	 */
-	public WrappedContext createVelocityContext() throws DataSourceException  {
+	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException  {
 		try {
 			Velocity.init();
 		} catch(Exception e) {
@@ -409,6 +412,23 @@ public class TestSuite implements ITestArtefact, VelocityContextProvider {
 		}
 	}
 
+	// *********** IExtractedDataContainer ************
+
+	@Override
+	public void putExtractedData(String name, Object value) {
+		fExtractedData.put(name, value);
+	}
+
+	@Override
+	public Object getExtractedData(String name) {
+		return fExtractedData.get(name);
+	}
+
+	@Override
+	public Collection<String> getAllExtractedDataNames() {
+		return fExtractedData.keySet();
+	}
+	
 	// *********************** Other ******************************
 
 	private void addTestCaseToFilter(List<TestCase> filtered, String name)

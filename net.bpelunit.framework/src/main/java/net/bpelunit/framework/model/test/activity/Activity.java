@@ -6,10 +6,14 @@
 package net.bpelunit.framework.model.test.activity;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.bpelunit.framework.model.AbstractPartner;
 import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.data.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
@@ -33,7 +37,7 @@ import net.bpelunit.framework.model.test.wire.OutgoingMessage;
  * @author Philip Mayer
  * 
  */
-public abstract class Activity implements ITestArtefact {
+public abstract class Activity implements ITestArtefact, IExtractedDataContainer {
 
 	/**
 	 * The partner track this activity belongs to.
@@ -50,6 +54,8 @@ public abstract class Activity implements ITestArtefact {
 	private String id;
 
 	private List<String> dependsOn = new ArrayList<String>();
+
+	private final Map<String, Object> extractedData = new HashMap<String, Object>();
 
 	// ******************* Initialization *********************
 
@@ -145,6 +151,23 @@ public abstract class Activity implements ITestArtefact {
 
 	public void reportProgress(ITestArtefact artefact) {
 		fPartnerTrack.reportProgress(artefact);
+	}
+
+	// ************** IExtractedDataContainer ******************
+
+	@Override
+	public void putExtractedData(String name, Object value) {
+		extractedData.put(name,  value);
+	}
+
+	@Override
+	public Object getExtractedData(String name) {
+		return extractedData.get(name);
+	}
+
+	@Override
+	public Collection<String> getAllExtractedDataNames() {
+		return extractedData.keySet();
 	}
 
 	// *********************** Other ***************************

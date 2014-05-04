@@ -7,6 +7,7 @@ package net.bpelunit.framework.model.test;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import net.bpelunit.framework.control.ext.IDataSource;
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.exception.DataSourceException;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
+import net.bpelunit.framework.model.test.data.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -32,9 +34,12 @@ import com.rits.cloning.Cloner;
  * 
  * @version $Id$
  * @author Philip Mayer
+ * @author University of Cádiz (Antonio García-Domínguez)
  * 
  */
-public class TestCase implements ITestArtefact, VelocityContextProvider {
+public class TestCase implements ITestArtefact, IExtractedDataContainer, VelocityContextProvider {
+
+	private static final Cloner CLONER = new Cloner();
 
 	/**
 	 * The test case name
@@ -79,7 +84,7 @@ public class TestCase implements ITestArtefact, VelocityContextProvider {
 
 	private int fRowIndex;
 
-	private static final Cloner CLONER = new Cloner();
+	private Map<String, Object> fExtractedData;
 
 	// ****************** Initialization ************************
 
@@ -173,6 +178,23 @@ public class TestCase implements ITestArtefact, VelocityContextProvider {
 		fSuite.reportProgress(artefac);
 	}
 
+	// ********* IExtractedDataContainer **********
+
+	@Override
+	public void putExtractedData(String name, Object value) {
+		fExtractedData.put(name, value);
+	}
+
+	@Override
+	public Object getExtractedData(String name) {
+		return fExtractedData.get(name);
+	}
+
+	@Override
+	public Collection<String> getAllExtractedDataNames() {
+		return fExtractedData.keySet();
+	}
+
 	// ********************* GETTERS & SETTERS **************************
 
 	public void addProperty(String property, String value) {
@@ -221,9 +243,9 @@ public class TestCase implements ITestArtefact, VelocityContextProvider {
 	 * case.
 	 * @throws DataSourceException 
 	 * */
-	public WrappedContext createVelocityContext() throws DataSourceException {
+	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException {
 		if (fTestSuiteVelocityContext == null) {
-			fTestSuiteVelocityContext = getSuite().createVelocityContext();
+			fTestSuiteVelocityContext = getSuite().createVelocityContext(artefact);
 		}
 
 		final WrappedContext ctx = CLONER.deepClone(fTestSuiteVelocityContext);

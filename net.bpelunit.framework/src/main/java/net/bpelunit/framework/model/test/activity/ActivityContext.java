@@ -20,8 +20,10 @@ import net.bpelunit.framework.exception.HeaderProcessingException;
 import net.bpelunit.framework.exception.SynchronousSendException;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
+import net.bpelunit.framework.model.test.data.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
@@ -226,7 +228,18 @@ public class ActivityContext implements VelocityContextProvider {
 
 	// **************************** Velocity ********************************
 
-	public WrappedContext createVelocityContext() throws DataSourceException {
-		return fTrack.createVelocityContext();
+	/**
+	 * Creates a new Velocity context for this activity. First, it creates a
+	 * context based on the partner track, and then it adds the extracted data
+	 * that is contained in all the ancestor {@link ITestArtefact}s that are
+	 * {@link IExtractedDataContainer}s.
+	 *
+	 * The extracted data is added in reverse order of ancestry, so the test
+	 * suite extracted data will be added first, then the test case data, then
+	 * the partner track data, and finally the current activity.
+	 */
+	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException {
+		WrappedContext context = fTrack.createVelocityContext(artefact);
+		return context;
 	}
 }

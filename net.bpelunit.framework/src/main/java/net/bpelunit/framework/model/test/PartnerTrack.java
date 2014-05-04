@@ -6,7 +6,10 @@
 package net.bpelunit.framework.model.test;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,6 +29,7 @@ import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.ActivityContext;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.data.ContextXPathVariableResolver;
+import net.bpelunit.framework.model.test.data.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ArtefactStatus.StatusCode;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
@@ -44,11 +48,12 @@ import com.rits.cloning.Cloner;
  * 
  * @version $Id$
  * @author Philip Mayer
- * 
+ * @author University of Cádiz (Antonio García-Domínguez)
  */
-public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextProvider, BlackBoardKey {
+public class PartnerTrack implements ITestArtefact, IExtractedDataContainer, Runnable, VelocityContextProvider, BlackBoardKey {
 
 	private static final int DELAY_AT_START = 10;
+	private static final Cloner CLONER = new Cloner();
 
 	/**
 	 * The parent test case
@@ -88,7 +93,7 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 
 	private ActivityContext fActivityContext;
 
-	private static final Cloner CLONER = new Cloner();
+	private final Map<String, Object> extractedData = new HashMap<String, Object>();
 
 	public PartnerTrack(TestCase testCase, AbstractPartner client) {
 		fPartner = client;
@@ -262,9 +267,9 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 	 * @return Base VelocityContext for the partner track.
 	 * @throws DataSourceException 
 	 */
-	public WrappedContext createVelocityContext() throws DataSourceException   {
+	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException   {
 		if (fTestCaseVelocityContext == null) {
-			fTestCaseVelocityContext = fRunner.createVelocityContext();
+			fTestCaseVelocityContext = fRunner.createVelocityContext(artefact);
 		}
 		WrappedContext ctx = CLONER.deepClone(fTestCaseVelocityContext);
 		ctx.putReadOnly("partnerTrackName", getRawName());
@@ -288,7 +293,7 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 
 		Context context;
 		try {
-			context = this.createVelocityContext();
+			context = this.createVelocityContext(this);
 
 			XPath xpath = XPathFactory.newInstance().newXPath();
 			xpath.setNamespaceContext(fNamespaceContext);
@@ -306,6 +311,23 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 
 	private Document createEmptyDocument() throws ParserConfigurationException {
 		return DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+	}
+
+	// ************* IExtractedDataContainer **********
+
+	@Override
+	public void putExtractedData(String name, Object value) {
+		extractedData.put(name, value);
+	}
+
+	@Override
+	public Object getExtractedData(String name) {
+		return extractedData.get(name);
+	}
+
+	@Override
+	public Collection<String> getAllExtractedDataNames() {
+		return extractedData.keySet();
 	}
 
 }

@@ -23,6 +23,7 @@ import net.bpelunit.framework.exception.SynchronousSendException;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
@@ -402,7 +403,7 @@ public class TestCaseRunner implements VelocityContextProvider {
 	
 	// ********************* Velocity contexts *********************
 
-	public WrappedContext createVelocityContext() throws DataSourceException  {
-		return fTestCase.createVelocityContext();
+	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException  {
+		return fTestCase.createVelocityContext(artefact);
 	}
 }

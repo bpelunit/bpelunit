@@ -9,15 +9,20 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Element;
-
 import net.bpelunit.framework.control.util.BPELUnitUtil;
+import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.TestSuite;
+import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.ActivityContext;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
 import net.bpelunit.framework.xml.suite.XMLVariableScope;
 import net.bpelunit.framework.xml.suite.XMLVariableScope.Enum;
+
+import org.w3c.dom.Element;
 
 /**
  * Test artifact class for a data extraction request within a receive activity.
@@ -27,7 +32,7 @@ import net.bpelunit.framework.xml.suite.XMLVariableScope.Enum;
  * variable that can be reused in the following Velocity-based templates within
  * a certain scope.
  * 
- * @author Antonio García-Domínguez
+ * @author University of Cádiz (Antonio García-Domínguez)
  */
 public class DataExtraction implements ITestArtefact {
 
@@ -61,11 +66,22 @@ public class DataExtraction implements ITestArtefact {
 	 */
 	private DataSpecification fParent;
 
-	public DataExtraction(DataSpecification parent, String expression, String variable, Enum scope) {
+	public DataExtraction(DataSpecification parent, String expression, String variable, Enum scope) throws SpecificationException {
+		if (expression == null) {
+			throw new SpecificationException("expression must not be null");
+		}
+		if (variable == null) {
+			throw new SpecificationException("variable must not be null");
+		}
+		if (scope == null) {
+			throw new SpecificationException("scope must not be null");
+		}
+
 		this.fParent = parent;
 		this.fExpression = expression;
 		this.fVariable = variable;
 		this.fScope = scope;
+
 		this.fStatus = ArtefactStatus.createInitialStatus();
 	}
 
@@ -121,12 +137,66 @@ public class DataExtraction implements ITestArtefact {
 			fStatus = ArtefactStatus.createPassedStatus();
 
 			// TODO: think of how to propagate the extracted value.
+			final IExtractedDataContainer targetContainer = getTargetContainer();
+			targetContainer.putExtractedData(fVariable, fExtracted);
 		} catch (Exception e) {
 			Throwable root = BPELUnitUtil.findRootThrowable(e);
-			fStatus= ArtefactStatus.createErrorStatus(root.getMessage());
+			fStatus = ArtefactStatus.createErrorStatus(root.getMessage());
 		}
 	}
-	
+
+	private IExtractedDataContainer getTargetContainer() {
+		switch (fScope.intValue()) {
+		case XMLVariableScope.INT_ACTIVITY:
+			return getActivity();
+		case XMLVariableScope.INT_PARTNERTRACK:
+			return getPartnerTrack();
+		case XMLVariableScope.INT_TESTCASE:
+			return getTestCase();
+		case XMLVariableScope.INT_TESTSUITE:
+			return getTestSuite();
+		default:
+			throw new IllegalArgumentException("Unknown scope: " + fScope);
+		}
+	}
+
+	private Activity getActivity() {
+		final ITestArtefact dataSpecParent = fParent.getParent();
+		if (dataSpecParent instanceof Activity) {
+			return (Activity) dataSpecParent;
+		} else {
+			throw new IllegalArgumentException(
+					"The parent of the data specification should be an Activity, but it's a "
+							+ dataSpecParent.getClass().getName());
+		}
+	}
+
+	private PartnerTrack getPartnerTrack() {
+		return getActivity().getPartnerTrack();
+	}
+
+	private TestCase getTestCase() {
+		final ITestArtefact partnerTrackParent = getPartnerTrack().getParent();
+		if (partnerTrackParent instanceof TestCase) {
+			return (TestCase) partnerTrackParent;
+		} else {
+			throw new IllegalArgumentException(
+					"The parent of the partner track should be a TestCase, but it's a "
+							+ partnerTrackParent.getClass().getName());
+		}
+	}
+
+	private TestSuite getTestSuite() {
+		final ITestArtefact testCaseParent = getTestCase().getParent();
+		if (testCaseParent instanceof TestSuite) {
+			return (TestSuite) testCaseParent;
+		} else {
+			throw new IllegalArgumentException(
+					"The parent of the test case should be a TestSuite, but it's a "
+							+ testCaseParent.getClass().getName());
+		}
+	}
+
 	// ************************** ITestArtefact ************************
 
 	@Override

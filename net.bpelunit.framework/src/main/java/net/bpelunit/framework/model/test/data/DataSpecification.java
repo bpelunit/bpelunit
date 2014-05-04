@@ -80,7 +80,7 @@ public abstract class DataSpecification implements ITestArtefact {
 	}
 
 	protected String expandTemplateToString(VelocityContextProvider context, String template) throws DataSourceException {
-		WrappedContext velocityCtx = CLONER.deepClone(context.createVelocityContext());
+		WrappedContext velocityCtx = CLONER.deepClone(context.createVelocityContext(this));
 		velocityCtx.putReadOnly("xpath", new XPathTool(getNamespaceContext()));
 		velocityCtx.putReadOnly("printer", new XMLPrinterTool());
 

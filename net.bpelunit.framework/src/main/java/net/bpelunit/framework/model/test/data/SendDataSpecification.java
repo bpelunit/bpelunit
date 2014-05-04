@@ -258,7 +258,7 @@ public class SendDataSpecification extends DataSpecification {
 
 	public double getDelay(ActivityContext activityContext) throws DataSourceException, XPathExpressionException {
 		if (getDelayExpression() != null) {
-			final Context vtlContext = activityContext.createVelocityContext();
+			final Context vtlContext = activityContext.createVelocityContext(this);
 			final ContextXPathVariableResolver xpathResolver = new ContextXPathVariableResolver(vtlContext);
 
 			final XPath xpath = XPathFactory.newInstance().newXPath();

@@ -237,7 +237,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		// Create Velocity context for the conditions
 		Context conditionContext;
 		try {
-			conditionContext = templateContext.createVelocityContext();
+			conditionContext = templateContext.createVelocityContext(this);
 		} catch (Exception e) {
 			setStatus(ArtefactStatus.createErrorStatus(String.format(
 				"Could not create the Velocity context for this condition: %s",
@@ -269,7 +269,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		// Create Velocity context for the data extraction request
 		Context conditionContext;
 		try {
-			conditionContext = context.createVelocityContext();
+			conditionContext = context.createVelocityContext(this);
 		} catch (Exception e) {
 			setStatus(ArtefactStatus.createErrorStatus(String.format(
 				"Could not create the Velocity context for this data extraction request: %s",
