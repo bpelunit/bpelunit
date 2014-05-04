@@ -83,7 +83,7 @@ public class TestCase implements ITestArtefact, IExtractedDataContainer, Velocit
 
 	private int fRowIndex;
 
-	private Map<String, Object> fExtractedData;
+	private Map<String, Object> fExtractedData = new HashMap<String, Object>();
 
 	// ****************** Initialization ************************
 
