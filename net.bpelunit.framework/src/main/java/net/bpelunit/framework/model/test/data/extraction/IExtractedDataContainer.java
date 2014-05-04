@@ -1,4 +1,4 @@
-package net.bpelunit.framework.model.test.data;
+package net.bpelunit.framework.model.test.data.extraction;
 
 import java.util.Collection;
 

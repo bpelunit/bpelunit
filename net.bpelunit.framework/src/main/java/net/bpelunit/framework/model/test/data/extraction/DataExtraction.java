@@ -1,4 +1,4 @@
-package net.bpelunit.framework.model.test.data;
+package net.bpelunit.framework.model.test.data.extraction;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +16,8 @@ import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.framework.model.test.data.ContextXPathVariableResolver;
+import net.bpelunit.framework.model.test.data.DataSpecification;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;

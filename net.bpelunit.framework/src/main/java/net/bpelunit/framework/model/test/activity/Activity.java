@@ -13,8 +13,8 @@ import java.util.Map;
 
 import net.bpelunit.framework.model.AbstractPartner;
 import net.bpelunit.framework.model.test.PartnerTrack;
-import net.bpelunit.framework.model.test.data.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.model.test.data.extraction.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;

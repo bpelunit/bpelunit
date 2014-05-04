@@ -2,7 +2,7 @@ package net.bpelunit.framework.model.test.activity;
 
 import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.exception.DataSourceException;
-import net.bpelunit.framework.model.test.data.IExtractedDataContainer;
+import net.bpelunit.framework.model.test.data.extraction.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 
 /**
