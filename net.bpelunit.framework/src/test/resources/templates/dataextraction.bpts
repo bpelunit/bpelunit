@@ -29,30 +29,24 @@
                     </tes:receive>
                 </tes:sendReceive>
                 <tes:receiveSend service="pin:pingpong" port="pingSOAP" operation="pingpong">
-                    <tes:send service="pin:pingpong" fault="false">
-                        <tes:data>
-                            <pin:pingpongResponse>
-                                <out>#testcase.get("correlationproperty")</out>
-                            </pin:pingpongResponse>
-                        </tes:data>
-                    </tes:send>
                     <tes:receive service="pin:pingpong" fault="false">
                         <tes:condition>
                             <tes:expression>//in</tes:expression>
                             <tes:value>'MYPROPERTY'</tes:value>
                         </tes:condition>
                     </tes:receive>
-                </tes:receiveSend>
-            </tes:partnerTrack>
-            <tes:partnerTrack name="pong">
-                <tes:receiveSend service="pin:pingpong" port="pongSOAP" operation="pingpong">
                     <tes:send service="pin:pingpong" fault="false">
                         <tes:template>
                             <pin:pingpongResponse>
-                                <out>$testcase.get("correlationproperty")</out>
+                                <out>$correlationproperty.getTextContent()</out>
                             </pin:pingpongResponse>
                         </tes:template>
                     </tes:send>
+                </tes:receiveSend>
+            </tes:partnerTrack>
+
+            <tes:partnerTrack name="pong">
+                <tes:receiveSend service="pin:pingpong" port="pongSOAP" operation="pingpong">
                     <tes:receive service="pin:pingpong" fault="false">
                         <tes:condition>
                             <tes:expression>//in</tes:expression>
@@ -60,23 +54,26 @@
                         </tes:condition>
                         <tes:dataExtraction expression="//in/text()" variable="correlationproperty" scope="testsuite"/>
                     </tes:receive>
+                    <tes:send service="pin:pingpong" fault="false">
+                        <tes:template>
+                            <pin:pingpongResponse>
+                                <out>$correlationproperty.getTextContent()</out>
+                            </pin:pingpongResponse>
+                        </tes:template>
+                    </tes:send>
                 </tes:receiveSend>
                 <tes:sendReceive service="pin:pingpong" port="pingSOAP" operation="pingpong">
                     <tes:send service="pin:pingpong" fault="false">
-                        <tes:data>
+                        <tes:template>
                             <pin:pingpong>
-                                <in>#testcase.get("correlationproperty")</in>
+                                <in>$correlationproperty.getTextContent()</in>
                             </pin:pingpong>
-                        </tes:data>
+                        </tes:template>
                     </tes:send>
                     <tes:receive service="pin:pingpong" fault="false">
                         <tes:condition>
                             <tes:expression>//out</tes:expression>
                             <tes:value>'MYPROPERTY'</tes:value>
-                        </tes:condition>
-                        <tes:condition>
-                            <tes:expression>'$testcase.get("correlationproperty")'</tes:expression>
-                            <tes:value>//out</tes:value>
                         </tes:condition>
                     </tes:receive>
                 </tes:sendReceive>
