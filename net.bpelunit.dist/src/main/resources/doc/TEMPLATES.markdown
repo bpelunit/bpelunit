@@ -3,7 +3,7 @@ Test case templates in BPELUnit
 
 BPELUnit can now build the body of the SOAP messages to be sent from the mockups using [Velocity](http://velocity.apache.org) templates. These templates allow the user to easily define many test cases which have the same activities but have different content in their messages. For more information on the Velocity Template Language, check the official [guide](http://velocity.apache.org/engine/devel/developer-guide.html) and [reference](http://velocity.apache.org/engine/devel/vtl-reference-guide.html).
 
-Template variables can also be used to skip partner tracks and activities and inside receive conditions, and control delays when sending messages. See below for more details.
+Template variables can also be used to skip partner tracks and activities and inside receive conditions, control delays when sending messages or reuse pieces of previously exchanged messages. See below for more details.
 
 In addition, BPELUnit integrates all the generic tools in Velocity Tools 2.0, using the default configuration and keys listed [here](http://velocity.apache.org/tools/releases/2.0/summary.html). These can be useful if you need to perform more advanced tasks in your templates, such as comparing or manipulating dates, converting to/from strings, and so on. You can also extend the available tools: for details, please check the relevant section near the end of this file.
 
@@ -424,6 +424,39 @@ To delay the sending of a message from a `<send>` or `<sendOnly>` activity, you 
 For instance, `<send delay="2">` would always delay the message by 2 seconds, and `<send delay="$x+1">` would delay the message by one more second than the value of the data source variable `x`.
 
 It is forbidden to use both the `delay` and the `delaySequence` attributes in the same activity: BPELUnit will reject the BPTS in that case.
+
+Reusing pieces of previous messages in templates
+------------------------------------------------
+
+When testing stateful Web Service compositions, it may be necessary to reuse a piece of a previously received message in another message (e.g. a correlation identifier).
+
+BPELUnit provides the `<dataExtraction>` child element for the `<receiveOnly>` and `<receive>` elements to this effect. The `<dataExtraction>` element should have the following attributes:
+
+* `expression` (mandatory): the XPath expression to be evaluated on the received message to extract the desired information.
+* `variable` (mandatory): the name of the Velocity template variable which should store the extracted information.
+* `scope` (optional): the scope of the Velocity template variable. Valid values are `testsuite` (available for the entire test suite), `testcase` (only for the current test case), `partnertrack` (only for the current partner track) and `activity` (only for the current activity). By default, it is set to `testsuite`.
+* `type` (optional): the type of the extracted information. With `string`, the variable specified in `variable` will contain a Java String. With `node`, it will be an `org.w3c.dom.Node` object, and with `nodeset` it will be an `org.w3c.dom.NodeList` object. By default, it is set to `testsuite`.
+
+For instance, here is a `<receiveSend>` activity that extracts a correlation identifier from the `<in>` element of the received message, expecting it to be `MYPROPERTY`, and uses it inside the `<out>` element of the reply:
+
+    <receiveSend service="pin:pingpong" port="pongSOAP" operation="pingpong">
+      <receive service="pin:pingpong" fault="false">
+        <condition>
+          <expression>//in</expression>
+          <value>'MYPROPERTY'</value>
+        </condition>
+        <dataExtraction expression="//in/text()"
+                        variable="correlationproperty"
+                        scope="testsuite" type="string"/>
+      </receive>
+      <send service="pin:pingpong" fault="false">
+        <template>
+          <pin:pingpongResponse>
+            <out>$correlationproperty</out>
+          </pin:pingpongResponse>
+        </template>
+      </send>
+    </receiveSend>
 
 Expanding data sources back into regular test cases
 ---------------------------------------------------
