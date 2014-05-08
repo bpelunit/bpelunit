@@ -38,7 +38,7 @@
                     <tes:send service="pin:pingpong" fault="false">
                         <tes:template>
                             <pin:pingpongResponse>
-                                <out>$correlationproperty.getTextContent()</out>
+                                <out>$correlationproperty</out>
                             </pin:pingpongResponse>
                         </tes:template>
                     </tes:send>
@@ -57,7 +57,7 @@
                     <tes:send service="pin:pingpong" fault="false">
                         <tes:template>
                             <pin:pingpongResponse>
-                                <out>$correlationproperty.getTextContent()</out>
+                                <out>$correlationproperty</out>
                             </pin:pingpongResponse>
                         </tes:template>
                     </tes:send>
@@ -66,7 +66,7 @@
                     <tes:send service="pin:pingpong" fault="false">
                         <tes:template>
                             <pin:pingpong>
-                                <in>$correlationproperty.getTextContent()</in>
+                                <in>$correlationproperty</in>
                             </pin:pingpong>
                         </tes:template>
                     </tes:send>

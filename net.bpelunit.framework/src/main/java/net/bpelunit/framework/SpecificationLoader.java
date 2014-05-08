@@ -1310,7 +1310,7 @@ public class SpecificationLoader {
 		List<DataExtraction> deList = new ArrayList<DataExtraction>();
 		if (xmlDataExtractionList != null) {
 			for (XMLDataExtraction xmlDE : xmlDataExtractionList) {
-				deList.add(new DataExtraction(spec, xmlDE.getExpression(), xmlDE.getVariable(), xmlDE.getScope()));
+				deList.add(new DataExtraction(spec, xmlDE.getExpression(), xmlDE.getVariable(), xmlDE.getScope(), xmlDE.getType()));
 			}
 		}
 

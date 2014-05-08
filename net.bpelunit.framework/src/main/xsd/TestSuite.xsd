@@ -590,20 +590,29 @@
 		<xs:attribute name="name" type="xs:string"></xs:attribute>
 	</xs:complexType>
 
-    <xs:complexType name="DataExtraction">
-    	<xs:sequence/>
-    	<xs:attribute name="expression" type="xs:string" use="required"></xs:attribute>
-    	<xs:attribute name="variable" type="xs:string" use="required"></xs:attribute>
-    	<xs:attribute name="scope" type="VariableScope" use="required"></xs:attribute>
-    </xs:complexType>
-
     <xs:simpleType name="VariableScope">
     	<xs:restriction base="xs:string">
-    		<xs:enumeration value="activity"></xs:enumeration>
-    		<xs:enumeration value="partnertrack"></xs:enumeration>
-    		<xs:enumeration value="testcase"></xs:enumeration>
-    		<xs:enumeration value="testsuite"></xs:enumeration>
+		<xs:enumeration value="activity"/>
+		<xs:enumeration value="partnertrack"/>
+		<xs:enumeration value="testcase"/>
+		<xs:enumeration value="testsuite"/>
+	</xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ExtractionType">
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="string"/>
+		<xs:enumeration value="node"/>
+		<xs:enumeration value="nodeset"/>
     	</xs:restriction>
     </xs:simpleType>
-</xs:schema>
 
+    <xs:complexType name="DataExtraction">
+    	<xs:sequence/>
+    	<xs:attribute name="expression" type="xs:string" use="required"/>
+    	<xs:attribute name="variable" type="xs:string" use="required"/>
+    	<xs:attribute name="scope" type="VariableScope" use="required"/>
+    	<xs:attribute default="string" name="type" type="ExtractionType" use="optional"/>
+    </xs:complexType>
+
+</xs:schema>

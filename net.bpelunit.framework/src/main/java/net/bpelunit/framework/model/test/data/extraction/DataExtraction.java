@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
@@ -21,8 +22,8 @@ import net.bpelunit.framework.model.test.data.DataSpecification;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.xml.suite.XMLExtractionType;
 import net.bpelunit.framework.xml.suite.XMLVariableScope;
-import net.bpelunit.framework.xml.suite.XMLVariableScope.Enum;
 
 import org.w3c.dom.Element;
 
@@ -51,7 +52,12 @@ public class DataExtraction implements ITestArtefact {
 	/**
 	 * Desired scope for the target variable.
 	 */
-	private final Enum fScope;
+	private final XMLVariableScope.Enum fScope;
+
+	/**
+	 * Desired type for the result of the XPath expression.
+	 */
+	private final XMLExtractionType.Enum fExtractionType;
 
 	/**
 	 * Extracted value.
@@ -68,7 +74,7 @@ public class DataExtraction implements ITestArtefact {
 	 */
 	private DataSpecification fParent;
 
-	public DataExtraction(DataSpecification parent, String expression, String variable, Enum scope) throws SpecificationException {
+	public DataExtraction(DataSpecification parent, String expression, String variable, XMLVariableScope.Enum scope, XMLExtractionType.Enum extractionType) throws SpecificationException {
 		if (expression == null) {
 			throw new SpecificationException("expression must not be null");
 		}
@@ -78,11 +84,15 @@ public class DataExtraction implements ITestArtefact {
 		if (scope == null) {
 			throw new SpecificationException("scope must not be null");
 		}
+		if (extractionType == null) {
+			throw new SpecificationException("type must not be null");
+		}
 
 		this.fParent = parent;
 		this.fExpression = expression;
 		this.fVariable = variable;
 		this.fScope = scope;
+		this.fExtractionType = extractionType;
 
 		this.fStatus = ArtefactStatus.createInitialStatus();
 	}
@@ -107,8 +117,18 @@ public class DataExtraction implements ITestArtefact {
 	 * the {@link XMLVariableScope} interface and are immutable singleton
 	 * objects that can be tested for using the regular <code>==</code> operator.
 	 */
-	public Enum getScope() {
+	public XMLVariableScope.Enum getScope() {
 		return fScope;
+	}
+
+	/**
+	 * Returns the desired type of the extracted value.
+	 * {@link XMLExtractionType#STRING} maps to a Java {@link String},
+	 * {@link XMLExtractionType#NODE} maps to {@link org.w3c.dom.Node} and
+	 * {@link XMLExtractionType#NODESET} maps to {@link org.w3c.dom.NodeList}.
+	 */
+	public XMLExtractionType.Enum getExtractionType() {
+		return fExtractionType;
 	}
 
 	/**
@@ -135,7 +155,8 @@ public class DataExtraction implements ITestArtefact {
 		}
 	
 		try {
-			fExtracted = xpath.evaluate(fExpression, literalData, XPathConstants.NODE);
+			final QName returnType = getXPathReturnType();
+			fExtracted = xpath.evaluate(fExpression, literalData, returnType);
 			fStatus = ArtefactStatus.createPassedStatus();
 
 			final IExtractedDataContainer targetContainer = getTargetContainer();
@@ -143,6 +164,19 @@ public class DataExtraction implements ITestArtefact {
 		} catch (Exception e) {
 			Throwable root = BPELUnitUtil.findRootThrowable(e);
 			fStatus = ArtefactStatus.createErrorStatus(root.getMessage());
+		}
+	}
+
+	private QName getXPathReturnType() {
+		switch (fExtractionType.intValue()) {
+		case XMLExtractionType.INT_STRING:
+			return XPathConstants.STRING;
+		case XMLExtractionType.INT_NODE:
+			return XPathConstants.NODE;
+		case XMLExtractionType.INT_NODESET:
+			return XPathConstants.NODESET;
+		default:
+			throw new IllegalArgumentException("Unknown extraction type: " + fExtractionType);
 		}
 	}
 
