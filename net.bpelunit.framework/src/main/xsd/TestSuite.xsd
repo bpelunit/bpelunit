@@ -611,7 +611,7 @@
     	<xs:sequence/>
     	<xs:attribute name="expression" type="xs:string" use="required"/>
     	<xs:attribute name="variable" type="xs:string" use="required"/>
-    	<xs:attribute name="scope" type="VariableScope" use="required"/>
+    	<xs:attribute default="testsuite" name="scope" type="VariableScope" use="optional"/>
     	<xs:attribute default="string" name="type" type="ExtractionType" use="optional"/>
     </xs:complexType>
 

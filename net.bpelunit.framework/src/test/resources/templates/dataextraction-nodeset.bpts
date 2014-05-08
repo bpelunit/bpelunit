@@ -52,7 +52,7 @@
                             <tes:expression>//in</tes:expression>
                             <tes:value>'MYPROPERTY'</tes:value>
                         </tes:condition>
-                        <tes:dataExtraction expression="//in/text()" variable="correlationproperty" scope="testsuite" type="nodeset"/>
+                        <tes:dataExtraction expression="//in/text()" variable="correlationproperty" type="nodeset"/>
                     </tes:receive>
                     <tes:send service="pin:pingpong" fault="false">
                         <tes:template>
