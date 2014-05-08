@@ -14,8 +14,33 @@ import org.junit.Test;
 public class DataExtractionTest extends AbstractTemplateTest {
 
 	@Test
-	public void basicTest() throws Exception {
+	public void stringExtractionIsDefault() throws Exception {
 		// getResults(...) also checks that the .bpts passes all tests
-		TestUtil.getResults(TC_DATAEXTRACTION);
+		TestUtil.getResults(TC_DATAEXTRACTION_DEFAULT);
 	}
+
+	@Test
+	public void stringExtraction() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+			"The default extraction type and the string extraction type should produce the same results",
+			TC_DATAEXTRACTION_DEFAULT,
+			TC_DATAEXTRACTION_STRING);
+	}
+
+	@Test
+	public void nodeExtraction() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+			"The default extraction type and the node extraction type should produce the same results",
+			TC_DATAEXTRACTION_DEFAULT,
+			TC_DATAEXTRACTION_NODE);
+	}
+
+	@Test
+	public void nodesetExtraction() throws Exception {
+		TestUtil.assertSameAndSuccessfulResults(
+			"The default extraction type and the nodeset extraction type should produce the same results",
+			TC_DATAEXTRACTION_DEFAULT,
+			TC_DATAEXTRACTION_NODESET);
+	}
+
 }
