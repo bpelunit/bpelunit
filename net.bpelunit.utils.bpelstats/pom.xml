@@ -9,7 +9,7 @@
   <artifactId>bpelstats</artifactId>
   <version>1.6.2-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>BPELUnit :: Test Suite Statistics</name>
+  <name>BPELUnit :: BPEL Statistics</name>
 
   <properties>
     <mainclass>net.bpelunit.utils.bpelstats.BpelStats</mainclass>

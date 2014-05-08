@@ -256,7 +256,7 @@ public class StatisticGathererVisitor implements IVisitor {
 	public int getCountStructuredActivities() {
 		return countCatch + countCatchAll + countCompensationHandler
 				+ countFlow + countForEach + countIf
-				// TODO onAlarm handler
+				+ countOnAlarmHandler
 				+ countOnMessageHandler + countPick + countRepeatUntil
 				+ countScope + countSequence;
 	}
