@@ -630,11 +630,23 @@ public class SpecificationLoader {
 		activity.setTaskName(xmlActivity.getTaskName());
 		NamespaceContext context = getNamespaceMap(xmlActivity.newCursor());
 
-		final Element literalSendData = (Element) getLiteralDataForSend(xmlActivity.getData(), testDirectory);
-		final Element literalSendDataChild = literalSendData != null ? (Element)literalSendData.getFirstChild() : null;
+		Element rawDataRoot = null;
+		String templateText = null;
+		try {
+			if (xmlActivity.isSetData()) {
+				rawDataRoot = getLiteralDataForSend(xmlActivity.getData(), testDirectory);
+			}
+			if (xmlActivity.isSetTemplate()) {
+				templateText = getTemplateText(testDirectory, xmlActivity.getTemplate());
+			}
+		} catch (Exception ex) {
+			throw new SpecificationException(
+					"There was a problem while interpreting the 'src' attribute in activity "
+							+ activity, ex);
+		}
+		final Element literalSendDataChild = rawDataRoot != null ? (Element)rawDataRoot.getFirstChild() : null;
 		
-		CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(
-				activity, context, literalSendDataChild, pTrack);
+		CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(activity, context, literalSendDataChild, templateText, pTrack);
 
 		// get conditions
 		List<XMLCondition> xmlConditionList = xmlActivity
@@ -1099,45 +1111,10 @@ public class SpecificationLoader {
 		String templateText = null;
 		try {
 			if (xmlSend.isSetData()) {
-				rawDataRoot = getLiteralDataForSend(xmlSend.getData(),
-						testDirectory);
-			} else if (xmlSend.isSetTemplate()) {
-				if (xmlSend.getTemplate().isSetSrc()) {
-					// 'src' attribute in <template> - load as raw text, *not*
-					// XML - much less escaping involved
-					// Cannot reuse namespaces in .bpts - user must set
-					// namespaces in the .vm (same as when loading an external
-					// XML file)
-					final StringBuffer sbuf = new StringBuffer();
-					sbuf.append("<");
-					sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
-					sbuf.append(">");
-					sbuf.append(FileUtils.readFileToString(new File(
-							testDirectory, xmlSend.getTemplate().getSrc())));
-					sbuf.append("</");
-					sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
-					sbuf.append(">");
-					templateText = sbuf.toString();
-				}
-				else if (hasChildElements(xmlSend.getTemplate())) {
-					// We have child elements: import their namespaces and then dump them as text
-					Element templateRoot = copyAsRootWithNamespaces(xmlSend.getTemplate());
-					templateText = XmlObject.Factory.parse(templateRoot).xmlText();
-				}
-				else {
-					/*
-					 * No child elements: the <template> is probably using a
-					 * CDATA section to store a standalone template that is not
-					 * valid XML, so use the text as-is.
-					 */
-					final XmlCursor c = xmlSend.getTemplate().newCursor();
-					String chars = "";
-					if (!c.toFirstContentToken().isFinish()) {
-						chars = c.getChars();
-					}
-					templateText = wrapWithDummyElement(chars);
-					c.dispose();
-				}
+				rawDataRoot = getLiteralDataForSend(xmlSend.getData(), testDirectory);
+			}
+			if (xmlSend.isSetTemplate()) {
+				templateText = getTemplateText(testDirectory, xmlSend.getTemplate());
 			}
 		} catch (Exception ex) {
 			throw new SpecificationException(
@@ -1175,6 +1152,49 @@ public class SpecificationLoader {
 		}
 
 		return spec;
+	}
+
+	private String getTemplateText(String testDirectory,
+			final XMLAnyElement xmlTemplate) throws IOException,
+			SpecificationException, XmlException {
+		String templateText;
+		if (xmlTemplate.isSetSrc()) {
+			// 'src' attribute in <template> - load as raw text, *not*
+			// XML - much less escaping involved
+			// Cannot reuse namespaces in .bpts - user must set
+			// namespaces in the .vm (same as when loading an external
+			// XML file)
+			final StringBuffer sbuf = new StringBuffer();
+			sbuf.append("<");
+			sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
+			sbuf.append(">");
+			sbuf.append(FileUtils.readFileToString(new File(
+					testDirectory, xmlTemplate.getSrc())));
+			sbuf.append("</");
+			sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
+			sbuf.append(">");
+			templateText = sbuf.toString();
+		}
+		else if (hasChildElements(xmlTemplate)) {
+			// We have child elements: import their namespaces and then dump them as text
+			Element templateRoot = copyAsRootWithNamespaces(xmlTemplate);
+			templateText = XmlObject.Factory.parse(templateRoot).xmlText();
+		}
+		else {
+			/*
+			 * No child elements: the <template> is probably using a
+			 * CDATA section to store a standalone template that is not
+			 * valid XML, so use the text as-is.
+			 */
+			final XmlCursor c = xmlTemplate.newCursor();
+			String chars = "";
+			if (!c.toFirstContentToken().isFinish()) {
+				chars = c.getChars();
+			}
+			templateText = wrapWithDummyElement(chars);
+			c.dispose();
+		}
+		return templateText;
 	}
 
 	private String wrapWithDummyElement(final String text) {

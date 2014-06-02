@@ -20,16 +20,21 @@ import org.w3c.dom.Element;
 
 public class CompleteHumanTaskSpecification extends DataSpecification {
 
-	private PartnerTrack partnerTrack;
+	private final PartnerTrack partnerTrack;
 	private List<ReceiveCondition> conditions;
+
 	private XmlObject inputXMLData;
-	private XMLAnyElement outputXMLData;
-	
+	private final String templateText;
+	private final XMLAnyElement outputXMLData;
+
 	public CompleteHumanTaskSpecification(Activity parent,
-			NamespaceContext nsContext, Element xmlAnyElement, PartnerTrack partnerTrack) throws SpecificationException {
+			NamespaceContext nsContext, Element xmlLiteralOutputData,
+			String templateText, PartnerTrack partnerTrack)
+			throws SpecificationException {
 		super(parent, nsContext);
 		try {
-			this.outputXMLData = XMLAnyElement.Factory.parse(xmlAnyElement, null);
+			this.templateText = templateText;
+			this.outputXMLData = xmlLiteralOutputData != null ? XMLAnyElement.Factory.parse(xmlLiteralOutputData, null) : null;
 			this.partnerTrack = partnerTrack;
 		} catch (XmlException e) {
 			throw new SpecificationException("Could not save XML Element data: " +e.getMessage(), e);
@@ -68,6 +73,10 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 
 	public String getOutputXMLData() {
 		return outputXMLData.xmlText();
+	}
+
+	public String getTemplateText() {
+		return templateText;
 	}
 
 	public XMLAnyElement handle(XmlObject input) {
