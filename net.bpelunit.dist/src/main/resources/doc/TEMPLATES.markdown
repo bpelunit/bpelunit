@@ -430,11 +430,11 @@ Reusing pieces of previous messages in templates
 
 When testing stateful Web Service compositions, it may be necessary to reuse a piece of a previously received message in another message (e.g. a correlation identifier).
 
-BPELUnit provides the `<dataExtraction>` child element for the `<receiveOnly>` and `<receive>` elements to this effect. The `<dataExtraction>` element should have the following attributes:
+BPELUnit provides the `<dataExtraction>` child element for the `<receiveOnly>`, `<receive>` and `<completeHumanTask>` elements to this effect. The `<dataExtraction>` element should have the following attributes:
 
 * `expression` (mandatory): the XPath expression to be evaluated on the received message to extract the desired information.
 * `variable` (mandatory): the name of the Velocity template variable which should store the extracted information.
-* `scope` (optional): the scope of the Velocity template variable. Valid values are `testsuite` (available for the entire test suite), `testcase` (only for the current test case), `partnertrack` (only for the current partner track) and `activity` (only for the current activity). By default, it is set to `testsuite`.
+* `scope` (optional): the scope of the Velocity template variable. Valid values are `testsuite` (available for the entire test suite), `testcase` (only for the current test case), `partnertrack` (only for the current partner track) and `activity` (only for the current activity). By default, it is set to `testcase`.
 * `type` (optional): the type of the extracted information. With `string`, the variable specified in `variable` will contain a Java String. With `node`, it will be an `org.w3c.dom.Node` object, and with `nodeset` it will be an `org.w3c.dom.NodeList` object. By default, it is set to `testsuite`.
 
 For instance, here is a `<receiveSend>` activity that extracts a correlation identifier from the `<in>` element of the received message, expecting it to be `MYPROPERTY`, and uses it inside the `<out>` element of the reply:
