@@ -30,7 +30,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 		super(parent, nsContext);
 		try {
 			this.outputXMLData = XMLAnyElement.Factory.parse(xmlAnyElement, null);
-		this.partnerTrack = partnerTrack;
+			this.partnerTrack = partnerTrack;
 		} catch (XmlException e) {
 			throw new SpecificationException("Could not save XML Element data: " +e.getMessage(), e);
 		}

@@ -628,12 +628,13 @@ public class SpecificationLoader {
 			throws SpecificationException {
 		CompleteHumanTask activity = new CompleteHumanTask(pTrack);
 		activity.setTaskName(xmlActivity.getTaskName());
-		NamespaceContext context = getNamespaceMap(xmlActivity
-				.newCursor());
+		NamespaceContext context = getNamespaceMap(xmlActivity.newCursor());
+
+		final Element literalSendData = (Element) getLiteralDataForSend(xmlActivity.getData(), testDirectory);
+		final Element literalSendDataChild = literalSendData != null ? (Element)literalSendData.getFirstChild() : null;
+		
 		CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(
-				activity, context, (Element) getLiteralDataForSend(
-						xmlActivity.getData(), testDirectory)
-						.getFirstChild(), pTrack);
+				activity, context, literalSendDataChild, pTrack);
 
 		// get conditions
 		List<XMLCondition> xmlConditionList = xmlActivity
@@ -1200,6 +1201,10 @@ public class SpecificationLoader {
 	}
 
 	private Element getLiteralDataForSend(XMLAnyElement dataInSend, String testDirectory) throws SpecificationException {
+		if (dataInSend == null) {
+			return null;
+		}
+
 		Element rawDataRoot;
 		if (dataInSend.isSetSrc()) {
 			// src attribute in <data>

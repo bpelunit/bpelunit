@@ -574,12 +574,18 @@
 			<xs:extension base="Activity">
 				<xs:sequence>
 					<xs:element name="taskName" type="xs:string"></xs:element>
-					<xs:element name="data" type="AnyElement"></xs:element>
-					<xs:element name="condition" type="Condition" minOccurs="0"
-						maxOccurs="unbounded">
+					<xs:choice maxOccurs="1" minOccurs="1">
+						<xs:element name="data" type="AnyElement"></xs:element>
+						<xs:element name="template" type="AnyElement">
+						</xs:element>
+					</xs:choice>
+					<xs:element name="condition" type="Condition"
+						minOccurs="0" maxOccurs="unbounded">
 					</xs:element>
 					<xs:element name="conditionGroup" type="xs:string"
-						minOccurs="0" maxOccurs="unbounded"></xs:element>
+						minOccurs="0" maxOccurs="unbounded">
+					</xs:element>
+					<xs:element name="dataExtraction" type="DataExtraction" maxOccurs="unbounded" minOccurs="0"></xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
