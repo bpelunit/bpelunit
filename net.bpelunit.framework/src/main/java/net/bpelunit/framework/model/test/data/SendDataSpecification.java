@@ -6,7 +6,6 @@
 package net.bpelunit.framework.model.test.data;
 
 import java.io.ByteArrayOutputStream;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.Map;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -35,9 +33,7 @@ import net.bpelunit.framework.model.test.report.StateData;
 
 import org.apache.log4j.Logger;
 import org.apache.velocity.context.Context;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
 
 
 /**
@@ -159,7 +155,7 @@ public class SendDataSpecification extends DataSpecification {
 
 		// Expand template into literal data if there is one
 		if (fDataTemplate != null) {
-			generateLiteralDataFromTemplate(context);
+			fLiteralData = generateLiteralDataFromTemplate(context, fDataTemplate);
 		}
 		if (hasProblems()) {
 			return;
@@ -193,23 +189,6 @@ public class SendDataSpecification extends DataSpecification {
 		}
 
 		setStatus(ArtefactStatus.createPassedStatus());
-	}
-
-	private void generateLiteralDataFromTemplate(ActivityContext context) {
-		try {
-			String expandedTemplate = expandTemplateToString(context, fDataTemplate);
-
-			// Parse back to a DOM XML element
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			dbf.setNamespaceAware(true);
-			Document docExpanded = dbf.newDocumentBuilder().parse(
-					new InputSource(new StringReader(expandedTemplate)));
-			fLiteralData = docExpanded.getDocumentElement();
-			context.saveSentMessage(fLiteralData);
-		} catch (Exception ex) {
-			setStatus(ArtefactStatus.createErrorStatus("Template expansion fault: "
-					+ ex.getLocalizedMessage(), ex));
-		}
 	}
 
 	/**

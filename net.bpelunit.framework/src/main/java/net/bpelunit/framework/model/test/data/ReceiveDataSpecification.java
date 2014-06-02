@@ -163,7 +163,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 			return;
 		}
 
-		extractData(context);
+		extractData(context, fDataExtractions, fLiteralData);
 		if (hasProblems()) {
 			return;
 		}
@@ -262,30 +262,6 @@ public class ReceiveDataSpecification extends DataSpecification {
 						"Condition '%s=%s' had an error: %s.", c
 								.getExpression(), c.getExpectedValue(), c
 								.getStatus().getMessage())));
-			}
-		}
-	}
-
-	private void extractData(ActivityContext context) {
-		// Create Velocity context for the data extraction request
-		Context conditionContext;
-		try {
-			conditionContext = context.createVelocityContext(this);
-		} catch (Exception e) {
-			setStatus(ArtefactStatus.createErrorStatus(String.format(
-				"Could not create the Velocity context for this data extraction request: %s",
-				e.getLocalizedMessage()), e));
-			return;
-		}
-		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);
-
-		for (DataExtraction de : fDataExtractions) {
-			de.evaluate(context, fLiteralData, getNamespaceContext(), variableResolver);
-			if (de.getStatus().isError()) {
-				setStatus(ArtefactStatus.createErrorStatus(String.format(
-						"Data extraction for %s failed: %s",
-						de.getVariable(), de.getStatus().getMessage())));
-				return;
 			}
 		}
 	}

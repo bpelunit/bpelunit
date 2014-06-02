@@ -164,7 +164,7 @@
                 <tes:completeHumanTask>
                     <tes:taskName>Task</tes:taskName>
                     <tes:template>
-                    	<out>$In</out>
+                    	<output>$In</output>
                     </tes:template>
                     <tes:dataExtraction expression="//in/text()" variable="In" />
                 </tes:completeHumanTask>

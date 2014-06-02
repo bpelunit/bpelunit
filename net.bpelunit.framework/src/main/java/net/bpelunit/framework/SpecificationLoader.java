@@ -646,11 +646,11 @@ public class SpecificationLoader {
 		}
 		final Element literalSendDataChild = rawDataRoot != null ? (Element)rawDataRoot.getFirstChild() : null;
 		
-		CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(activity, context, literalSendDataChild, templateText, pTrack);
+		CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(
+				activity, context, literalSendDataChild, templateText, pTrack);
 
 		// get conditions
-		List<XMLCondition> xmlConditionList = xmlActivity
-				.getConditionList();
+		List<XMLCondition> xmlConditionList = xmlActivity.getConditionList();
 		List<ReceiveCondition> cList = new ArrayList<ReceiveCondition>();
 		if (xmlConditionList != null) {
 			for (XMLCondition xmlCondition : xmlConditionList) {
@@ -659,11 +659,15 @@ public class SpecificationLoader {
 						xmlCondition.getValue()));
 			}
 		}
-
 		addConditionsFromConditionGroups(
 				xmlActivity.getConditionGroupList(), spec, cList);
-
 		spec.setConditions(cList);
+
+		// get data extraction requests
+		final List<XMLDataExtraction> xmlDataExtractionList = xmlActivity.getDataExtractionList();
+		final List<DataExtraction> deList = readDataExtractionElements(spec, xmlDataExtractionList);
+		spec.setDataExtractions(deList);
+
 		activity.initialize(spec);
 		return activity;
 	}
@@ -1332,12 +1336,7 @@ public class SpecificationLoader {
 
 		// get data extraction requests
 		final List<XMLDataExtraction> xmlDataExtractionList = xmlReceive.getDataExtractionList();
-		List<DataExtraction> deList = new ArrayList<DataExtraction>();
-		if (xmlDataExtractionList != null) {
-			for (XMLDataExtraction xmlDE : xmlDataExtractionList) {
-				deList.add(new DataExtraction(spec, xmlDE.getExpression(), xmlDE.getVariable(), xmlDE.getScope(), xmlDE.getType()));
-			}
-		}
+		final List<DataExtraction> deList = readDataExtractionElements(spec, xmlDataExtractionList);
 
 		// Add fault code and string. These will be only checked if this message
 		// is a fault and if
@@ -1347,6 +1346,19 @@ public class SpecificationLoader {
 
 		spec.initialize(operation, encodingStyle, encoder, cList, deList, faultCode, faultString);
 		return spec;
+	}
+
+	private List<DataExtraction> readDataExtractionElements(
+			DataSpecification spec,
+			final List<XMLDataExtraction> xmlDataExtractionList)
+			throws SpecificationException {
+		List<DataExtraction> deList = new ArrayList<DataExtraction>();
+		if (xmlDataExtractionList != null) {
+			for (XMLDataExtraction xmlDE : xmlDataExtractionList) {
+				deList.add(new DataExtraction(spec, xmlDE.getExpression(), xmlDE.getVariable(), xmlDE.getScope(), xmlDE.getType()));
+			}
+		}
+		return deList;
 	}
 
 	private void addConditionsFromConditionGroups(
