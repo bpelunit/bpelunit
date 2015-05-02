@@ -4,7 +4,6 @@
  */
 package net.bpelunit.framework.control.deploy.activevos9;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -64,7 +63,7 @@ public class ActiveVOS9DeployerTest {
 		assertEquals("", deployer.getDeploymentLocation());
 		assertEquals(deployer.getDeploymentLocation(), getDefaultValueFor("DeploymentLocation"));
 		
-		assertEquals("http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR", deployer.getDeploymentServiceEndpoint());
+		assertEquals("http://localhost:8080/active-bpel/services/ActiveBpelAdmin", deployer.getDeploymentServiceEndpoint());
 		assertEquals(deployer.getDeploymentServiceEndpoint(), getDefaultValueFor("DeploymentServiceEndpoint"));
 	}
 	
@@ -115,7 +114,7 @@ public class ActiveVOS9DeployerTest {
 		assertEquals("deployBpr", methodCall.methodName);
 		byte[] bprContents = FileUtil.readFile(new File(BPR_FILENAME));
 		AesDeployBprType aesDeployBprType = (AesDeployBprType) methodCall.parameters[0];
-		assertArrayEquals(bprContents, aesDeployBprType.getBase64File());
+		assertEquals(javax.xml.bind.DatatypeConverter.printBase64Binary(bprContents), aesDeployBprType.getBase64File());
 		assertEquals("bpelunit-tc1.bpr", aesDeployBprType.getBprFilename());
 	}
 
