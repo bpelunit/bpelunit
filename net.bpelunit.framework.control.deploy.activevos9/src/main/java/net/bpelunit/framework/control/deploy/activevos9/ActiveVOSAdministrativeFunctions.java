@@ -206,7 +206,17 @@ class ActiveVOSAdministrativeFunctions {
 		// processes will be started
 		do {
 			runningProcesses = getRunningProcessList();
-			logger.info("Found " + runningProcesses.size() + " running process instances");
+			if(logger.isInfoEnabled()) {
+				if(runningProcesses.size() == 0) {
+					logger.info("Found no running process instances");
+				} else {
+					StringBuilder sb = new StringBuilder();
+					for(AesProcessInstanceDetail process : runningProcesses) {
+						sb.append(process.getProcessId()).append(" ");
+					}
+					logger.info("Found " + runningProcesses.size() + " running process instances: " + sb.toString());
+				} 
+			}
 			
 			for(AesProcessInstanceDetail process : runningProcesses) {
 				long pid = process.getProcessId();

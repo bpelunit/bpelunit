@@ -108,7 +108,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			description="If set to true, all running process instances will be terminated before every test case. DO USE WITH CARE!"
 	)
 	public void setTerminatePendingProcessesAfterTestCaseIsRun(String terminatePendingProcessesAfterEveryTestCase) {
-		logger.info("Running processes will be termianted after every test case: " + terminatePendingProcessesAfterEveryTestCase);
+		logger.info("Running processes will be terminated after every test case: " + terminatePendingProcessesAfterEveryTestCase);
 		this.terminatePendingProcessesAfterEveryTestCase = Boolean.valueOf(terminatePendingProcessesAfterEveryTestCase);
 	}
 	
