@@ -1,0 +1,117 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://schemas.active-endpoints.com/logging/2009/05/logging.xsd"
+           elementFormDefault="qualified"
+           targetNamespace="http://schemas.active-endpoints.com/logging/2009/05/logging.xsd">
+
+   <!-- =================================================== -->
+   <!-- Define some simple types to be used by the schema.  -->
+   <!-- =================================================== -->
+    <xs:simpleType name="AesServerLogLevelType">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="Critical"/>
+         <xs:enumeration value="Error"/>
+         <xs:enumeration value="Warning"/>
+         <xs:enumeration value="Info"/>
+         <xs:enumeration value="Verbose"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="AesServerLogSourceType">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="System"/>
+         <xs:enumeration value="Maintenance"/>
+         <xs:enumeration value="User"/>
+         <!-- Only used for the process filter when doing a query -->
+         <xs:enumeration value="All"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="AesServerLogServiceType">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="Identity"/>
+         <xs:enumeration value="Email"/>
+         <xs:enumeration value="Eventing"/>
+         <xs:enumeration value="Task"/>
+         <xs:enumeration value="Messaging"/>
+         <xs:enumeration value="Alert"/>
+         <xs:enumeration value="Engine"/>
+         <!-- logging for use from a process invoke -->
+         <xs:enumeration value="Process"/>
+         <!-- Only used for the process filter when doing a query -->
+         <xs:enumeration value="All"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+   <!-- =================================================== -->
+   <!-- Define some complex types to be used by the schema. -->
+   <!-- =================================================== -->
+   <xs:complexType name="AesServerLogOutputMessageType">
+      <xs:annotation>
+         <xs:documentation>
+            log message structure for reading
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="time" type="xs:long"/>
+         <xs:element name="logMessage" type="tns:AesServerLogMessageType"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:element name="AesServerLogOtherInfo">   
+       <xs:complexType>
+           <xs:annotation>
+               <xs:documentation>
+                  log message stgructure which has level, source, service and engineid
+               </xs:documentation>
+           </xs:annotation>
+           <xs:sequence>
+               <xs:element minOccurs="0" name="level" type="tns:AesServerLogLevelType"/>
+               <xs:element minOccurs="0" name="source" type="tns:AesServerLogSourceType"/>
+               <xs:element minOccurs="0" name="service" type="tns:AesServerLogServiceType"/>
+               <xs:element minOccurs="0" name="engineid" type="xs:int"/>
+           </xs:sequence>
+       </xs:complexType>
+   </xs:element>
+
+   <xs:complexType name="AesServerLogMessageFilterType">
+      <xs:annotation>
+         <xs:documentation>
+            log message structure for filtering
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element minOccurs="0" name="message" type="xs:string"/>
+         <xs:element minOccurs="0" ref="tns:AesServerLogOtherInfo"/>
+      </xs:sequence>
+   </xs:complexType>
+   
+   <xs:complexType name="AesServerLogWriteMessageType">
+      <xs:annotation>
+         <xs:documentation>
+            log message structure for writing
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/>
+         <xs:element default="Info" minOccurs="0" name="level" type="tns:AesServerLogLevelType"/>
+      </xs:sequence>
+   </xs:complexType>
+   
+   <xs:complexType name="AesServerLogMessageType">
+      <xs:annotation>
+         <xs:documentation>
+            log message structure for filtering, and writing.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="message" type="xs:string"/>
+         <xs:element minOccurs="0" ref="tns:AesServerLogOtherInfo"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- =================================================== -->
+   <!-- The definition (uses the above declared types).     -->
+   <!-- =================================================== -->
+   <xs:element name="logMessage" type="tns:AesServerLogMessageType"/>
+   <xs:element name="logOutputMessage" type="tns:AesServerLogOutputMessageType"/>
+   <xs:element name="logWriteMessage" type="tns:AesServerLogWriteMessageType"/>
+</xs:schema>
