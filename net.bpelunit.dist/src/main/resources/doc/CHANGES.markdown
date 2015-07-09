@@ -24,7 +24,7 @@ Staged for next version
 * _Fix_: Place RPC wrapper in the empty namespace when the soap:body binding element does not use the 'namespace' attribute
 * _Fix_: Validate on loading a Test Suite whether condition groups that are used in normal SOAP activities are declared in the test suite (Issue BPELUnit-9)
 * _Fix_: Read ID from CompleteHumanTask activities so that dependsOn works also when target activity is triggered by a complete human task
-* _Fix_: In case of dependsOn failing test cases might not terminate (Issue BPELUnit-14)
+* _Fix_: In case of dependsOn failing test cases might not terminate (Issue BPELUnit-16)
 * _Fix_: When using WS-A Header Processor multiple times with send and receive activities, BPELUnit errors can occur (Issue BPELUnit-11)
 
 Version 1.6.1
