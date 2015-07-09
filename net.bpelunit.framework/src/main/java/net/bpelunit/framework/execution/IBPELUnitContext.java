@@ -25,5 +25,6 @@ public interface IBPELUnitContext {
 	List<? extends ITestLifeCycleElement> getElementsInRunTests();
 	List<? extends ITestLifeCycleElement> getElementsInStopMocks();
 	List<? extends ITestLifeCycleElement> getElementsInReport();
+	URL getURLForService(String serviceName);
 	
 }

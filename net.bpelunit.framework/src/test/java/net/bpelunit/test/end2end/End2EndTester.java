@@ -9,6 +9,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.bpelunit.framework.BPELUnitRunner;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
@@ -153,8 +157,32 @@ public class End2EndTester {
 		runner.testRun();
 		assertEquals(1, runner.getPassed());
 		assertEquals(0, runner.getProblems());
+	}
+	
+	@Test
+	public void testAbortWithDependencies() throws ConfigurationException, SpecificationException, DeploymentException {
+		TestTestRunner runner = new TestTestRunner(BASEPATH + "06_AbortWithDependencies/", "async-wsa.bpts");
+		runner.getTestSuite().addResultListener(new ITestResultListener() {
+			
+			@Override
+			public void testCaseStarted(TestCase testCase) {
+			}
+			
+			@Override
+			public void testCaseEnded(TestCase testCase) {
+			}
+			
+			@Override
+			public void progress(ITestArtefact testArtefact) {
+			}
+		});
 		
-		ITestArtefact iTestArtefact = runner.getTestSuite(). getChildren().get(0);
-		System.out.println(iTestArtefact.getClass().getName());
+		Map<String, String> options = new HashMap<String, String>();
+		options.put(BPELUnitRunner.GLOBAL_TIMEOUT, "2000");
+		options.put(BPELUnitRunner.SKIP_UNKNOWN_EXTENSIONS, "true");
+		runner.initialize(options);
+		runner.testRun();
+		assertEquals(0, runner.getPassed());
+		assertEquals(1, runner.getProblems());
 	}
 }

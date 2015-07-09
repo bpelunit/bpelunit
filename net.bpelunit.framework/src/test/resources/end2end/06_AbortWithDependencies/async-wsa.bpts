@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:asy="http://www.example.org/async-wsa/">
+    <tes:name>async-wsa.bpts</tes:name>
+    <tes:baseURL>http://localhost:7777/ws</tes:baseURL>
+    <tes:deployment>
+        <tes:put type="testmode" name="async-wsa.wsdl">
+            <tes:wsdl>async-wsa.wsdl</tes:wsdl>
+        </tes:put>
+        <tes:partner name="Sender" wsdl="async-wsa.wsdl" partnerWsdl=""/>
+        <tes:partner name="Receiver" wsdl="async-wsa.wsdl" partnerWsdl=""/>
+    </tes:deployment>
+    <tes:testCases>
+        <tes:testCase name="TC1" basedOn="" abstract="false" vary="false">
+            <tes:clientTrack/>
+            <tes:partnerTrack name="Sender">
+            	<!-- This receive will never happen -->
+            	<tes:receiveOnly service="asy:async-wsa" port="async-wsaSOAP" operation="Send1" fault="false"/>
+                <tes:sendOnly id="send" service="asy:async-wsa" port="async-wsaSOAP" operation="Send1" fault="false">
+                    <tes:data/>
+                    <tes:headerProcessor name="wsa"/>
+                </tes:sendOnly>
+            </tes:partnerTrack>
+            <tes:partnerTrack name="Receiver">
+            	<!-- Meaning that this one will never be ready to run -->
+                <tes:receiveOnly dependsOn="send" service="asy:async-wsa" port="async-wsaSOAP" operation="Send1" fault="false"/>
+            </tes:partnerTrack>
+        </tes:testCase>
+    </tes:testCases>
+</tes:testSuite>

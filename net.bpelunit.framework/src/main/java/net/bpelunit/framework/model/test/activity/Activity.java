@@ -82,6 +82,7 @@ public abstract class Activity implements ITestArtefact {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				setStatus(ArtefactStatus.createAbortedStatus("Thread was interrupted while waiting for all dependent activities to complete."));
+				return;
 			}
 		}
 	}
