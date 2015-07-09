@@ -22,6 +22,8 @@ import net.bpelunit.framework.exception.PartnerNotFoundException;
 import net.bpelunit.framework.exception.SynchronousSendException;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
+import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
@@ -40,11 +42,10 @@ import org.apache.log4j.Logger;
  * communication between threads as well as network communication and aborting
  * in case of an error, failure, or user interaction.
  * 
- * @version $Id$
- * @author Philip Mayer, Antonio Garcia-Dominguez
- * 
+ * @author Philip Mayer
+ * @author University of Cádiz (Antonio García-Domínguez)
  */
-public class TestCaseRunner {
+public class TestCaseRunner implements VelocityContextProvider {
 
 	private enum PartnerTrackResult {
 		RUNNING, COMPLETED
@@ -401,7 +402,7 @@ public class TestCaseRunner {
 	
 	// ********************* Velocity contexts *********************
 
-	public WrappedContext createVelocityContext() throws DataSourceException  {
-		return fTestCase.createVelocityContext();
+	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException  {
+		return fTestCase.createVelocityContext(artefact);
 	}
 }

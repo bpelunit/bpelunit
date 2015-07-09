@@ -23,6 +23,7 @@ import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.ActivityContext;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
+import net.bpelunit.framework.model.test.data.extraction.DataExtraction;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -83,6 +84,11 @@ public class ReceiveDataSpecification extends DataSpecification {
 	private List<ReceiveCondition> fConditions;
 
 	/**
+	 * A list of data extraction requests that have to be performed on the incoming messages.
+	 */
+	private List<DataExtraction> fDataExtractions;
+	
+	/**
 	 * Expected SOAP fault code (if this is a fault)
 	 */
 	private QName fFaultCode;
@@ -99,9 +105,10 @@ public class ReceiveDataSpecification extends DataSpecification {
 	}
 
 	public void initialize(SOAPOperationCallIdentifier op, String encodingStyle, ISOAPEncoder encoder, List<ReceiveCondition> conditions,
-			QName faultCode, String faultString) throws SpecificationException {
+			List<DataExtraction> deList, QName faultCode, String faultString) throws SpecificationException {
 		fOperation= op;
 		fConditions= conditions;
+		fDataExtractions= deList;
 		fDecoder= encoder;
 		fEncodingStyle= encodingStyle;
 
@@ -156,6 +163,11 @@ public class ReceiveDataSpecification extends DataSpecification {
 			return;
 		}
 
+		extractData(context, fDataExtractions, fLiteralData);
+		if (hasProblems()) {
+			return;
+		}
+
 		// Receive completed.
 		setStatus(ArtefactStatus.createPassedStatus());
 	}
@@ -184,7 +196,6 @@ public class ReceiveDataSpecification extends DataSpecification {
 	}
 
 	private void validateConditions(VelocityContextProvider templateContext) {
-
 		// Check implicit fault assertions
 		SOAPBody body;
 		try {
@@ -227,7 +238,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		// Create Velocity context for the conditions
 		Context conditionContext;
 		try {
-			conditionContext = templateContext.createVelocityContext();
+			conditionContext = templateContext.createVelocityContext(this);
 		} catch (Exception e) {
 			setStatus(ArtefactStatus.createErrorStatus(String.format(
 				"Could not create the Velocity context for this condition: %s",
@@ -256,9 +267,16 @@ public class ReceiveDataSpecification extends DataSpecification {
 	}
 
 	/**
-	 * Extract data from the received message according to the copy/mapping instructions of the
-	 * context
-	 * 
+	 * Extract data from the received message according to the copy/mapping
+	 * instructions of the context on the <code>mapping</code> element. This
+	 * enables BPELUnit to copy a string of text from a source element of the
+	 * incoming message of a two-way activity to the target element of the outgoing
+	 * message in the same activity.
+	 *
+	 * For more advanced scenarios involving different activities in different tracks
+	 * or that require copying something more complex than a string, use the
+	 * <code>dataExtraction</code> elements, which are interpreted from
+	 * {@link #extractData(ActivityContext).
 	 */
 	private void extractMappingData(ActivityContext context) {
 		List<DataCopyOperation> mapping= context.getMapping();
@@ -305,6 +323,9 @@ public class ReceiveDataSpecification extends DataSpecification {
 		List<ITestArtefact> returner = new ArrayList<ITestArtefact>();
 		for (ReceiveCondition c : fConditions) {
 			returner.add(c);
+		}
+		for (DataExtraction de : fDataExtractions) {
+			returner.add(de);
 		}
 		returner.add(new XMLData(this, "Plain incoming message", getWireFormatAsString()));
 		returner.add(new XMLData(this, "SOAP Message data", getSOAPMessageDataAsString()));

@@ -61,6 +61,7 @@ import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.model.test.data.extraction.DataExtraction;
 import net.bpelunit.framework.verify.ConditionGroupsExistInTestSuiteValidator;
 import net.bpelunit.framework.verify.ITestSuiteValidator;
 import net.bpelunit.framework.verify.NoCyclesInConditionGroupInheritanceValidator;
@@ -77,6 +78,7 @@ import net.bpelunit.framework.xml.suite.XMLCompleteHumanTaskActivity;
 import net.bpelunit.framework.xml.suite.XMLCondition;
 import net.bpelunit.framework.xml.suite.XMLConditionGroup;
 import net.bpelunit.framework.xml.suite.XMLCopy;
+import net.bpelunit.framework.xml.suite.XMLDataExtraction;
 import net.bpelunit.framework.xml.suite.XMLDeploymentSection;
 import net.bpelunit.framework.xml.suite.XMLHeaderProcessor;
 import net.bpelunit.framework.xml.suite.XMLHumanPartnerDeploymentInformation;
@@ -626,16 +628,29 @@ public class SpecificationLoader {
 			throws SpecificationException {
 		CompleteHumanTask activity = new CompleteHumanTask(pTrack);
 		activity.setTaskName(xmlActivity.getTaskName());
-		NamespaceContext context = getNamespaceMap(xmlActivity
-				.newCursor());
+		NamespaceContext context = getNamespaceMap(xmlActivity.newCursor());
+
+		Element rawDataRoot = null;
+		String templateText = null;
+		try {
+			if (xmlActivity.isSetData()) {
+				rawDataRoot = getLiteralDataForSend(xmlActivity.getData(), testDirectory);
+			}
+			if (xmlActivity.isSetTemplate()) {
+				templateText = getTemplateText(testDirectory, xmlActivity.getTemplate());
+			}
+		} catch (Exception ex) {
+			throw new SpecificationException(
+					"There was a problem while interpreting the 'src' attribute in activity "
+							+ activity, ex);
+		}
+		final Element literalSendDataChild = rawDataRoot != null ? (Element)rawDataRoot.getFirstChild() : null;
+		
 		CompleteHumanTaskSpecification spec = new CompleteHumanTaskSpecification(
-				activity, context, (Element) getLiteralDataForSend(
-						xmlActivity.getData(), testDirectory)
-						.getFirstChild(), pTrack);
+				activity, context, literalSendDataChild, templateText, pTrack);
 
 		// get conditions
-		List<XMLCondition> xmlConditionList = xmlActivity
-				.getConditionList();
+		List<XMLCondition> xmlConditionList = xmlActivity.getConditionList();
 		List<ReceiveCondition> cList = new ArrayList<ReceiveCondition>();
 		if (xmlConditionList != null) {
 			for (XMLCondition xmlCondition : xmlConditionList) {
@@ -644,11 +659,15 @@ public class SpecificationLoader {
 						xmlCondition.getValue()));
 			}
 		}
-
 		addConditionsFromConditionGroups(
 				xmlActivity.getConditionGroupList(), spec, cList);
-
 		spec.setConditions(cList);
+
+		// get data extraction requests
+		final List<XMLDataExtraction> xmlDataExtractionList = xmlActivity.getDataExtractionList();
+		final List<DataExtraction> deList = readDataExtractionElements(spec, xmlDataExtractionList);
+		spec.setDataExtractions(deList);
+
 		activity.initialize(spec);
 		return activity;
 	}
@@ -1096,45 +1115,10 @@ public class SpecificationLoader {
 		String templateText = null;
 		try {
 			if (xmlSend.isSetData()) {
-				rawDataRoot = getLiteralDataForSend(xmlSend.getData(),
-						testDirectory);
-			} else if (xmlSend.isSetTemplate()) {
-				if (xmlSend.getTemplate().isSetSrc()) {
-					// 'src' attribute in <template> - load as raw text, *not*
-					// XML - much less escaping involved
-					// Cannot reuse namespaces in .bpts - user must set
-					// namespaces in the .vm (same as when loading an external
-					// XML file)
-					final StringBuffer sbuf = new StringBuffer();
-					sbuf.append("<");
-					sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
-					sbuf.append(">");
-					sbuf.append(FileUtils.readFileToString(new File(
-							testDirectory, xmlSend.getTemplate().getSrc())));
-					sbuf.append("</");
-					sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
-					sbuf.append(">");
-					templateText = sbuf.toString();
-				}
-				else if (hasChildElements(xmlSend.getTemplate())) {
-					// We have child elements: import their namespaces and then dump them as text
-					Element templateRoot = copyAsRootWithNamespaces(xmlSend.getTemplate());
-					templateText = XmlObject.Factory.parse(templateRoot).xmlText();
-				}
-				else {
-					/*
-					 * No child elements: the <template> is probably using a
-					 * CDATA section to store a standalone template that is not
-					 * valid XML, so use the text as-is.
-					 */
-					final XmlCursor c = xmlSend.getTemplate().newCursor();
-					String chars = "";
-					if (!c.toFirstContentToken().isFinish()) {
-						chars = c.getChars();
-					}
-					templateText = wrapWithDummyElement(chars);
-					c.dispose();
-				}
+				rawDataRoot = getLiteralDataForSend(xmlSend.getData(), testDirectory);
+			}
+			if (xmlSend.isSetTemplate()) {
+				templateText = getTemplateText(testDirectory, xmlSend.getTemplate());
 			}
 		} catch (Exception ex) {
 			throw new SpecificationException(
@@ -1174,6 +1158,49 @@ public class SpecificationLoader {
 		return spec;
 	}
 
+	private String getTemplateText(String testDirectory,
+			final XMLAnyElement xmlTemplate) throws IOException,
+			SpecificationException, XmlException {
+		String templateText;
+		if (xmlTemplate.isSetSrc()) {
+			// 'src' attribute in <template> - load as raw text, *not*
+			// XML - much less escaping involved
+			// Cannot reuse namespaces in .bpts - user must set
+			// namespaces in the .vm (same as when loading an external
+			// XML file)
+			final StringBuffer sbuf = new StringBuffer();
+			sbuf.append("<");
+			sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
+			sbuf.append(">");
+			sbuf.append(FileUtils.readFileToString(new File(
+					testDirectory, xmlTemplate.getSrc())));
+			sbuf.append("</");
+			sbuf.append(BPELUnitUtil.DUMMY_ELEMENT_NAME);
+			sbuf.append(">");
+			templateText = sbuf.toString();
+		}
+		else if (hasChildElements(xmlTemplate)) {
+			// We have child elements: import their namespaces and then dump them as text
+			Element templateRoot = copyAsRootWithNamespaces(xmlTemplate);
+			templateText = XmlObject.Factory.parse(templateRoot).xmlText();
+		}
+		else {
+			/*
+			 * No child elements: the <template> is probably using a
+			 * CDATA section to store a standalone template that is not
+			 * valid XML, so use the text as-is.
+			 */
+			final XmlCursor c = xmlTemplate.newCursor();
+			String chars = "";
+			if (!c.toFirstContentToken().isFinish()) {
+				chars = c.getChars();
+			}
+			templateText = wrapWithDummyElement(chars);
+			c.dispose();
+		}
+		return templateText;
+	}
+
 	private String wrapWithDummyElement(final String text) {
 		String templateText;
 		final StringBuffer sbuf = new StringBuffer();
@@ -1198,6 +1225,10 @@ public class SpecificationLoader {
 	}
 
 	private Element getLiteralDataForSend(XMLAnyElement dataInSend, String testDirectory) throws SpecificationException {
+		if (dataInSend == null) {
+			return null;
+		}
+
 		Element rawDataRoot;
 		if (dataInSend.isSetSrc()) {
 			// src attribute in <data>
@@ -1301,9 +1332,11 @@ public class SpecificationLoader {
 						xmlCondition.getValue()));
 			}
 		}
+		addConditionsFromConditionGroups(xmlReceive.getConditionGroupList(), spec, cList);
 
-		addConditionsFromConditionGroups(xmlReceive.getConditionGroupList(),
-				spec, cList);
+		// get data extraction requests
+		final List<XMLDataExtraction> xmlDataExtractionList = xmlReceive.getDataExtractionList();
+		final List<DataExtraction> deList = readDataExtractionElements(spec, xmlDataExtractionList);
 
 		// Add fault code and string. These will be only checked if this message
 		// is a fault and if
@@ -1311,9 +1344,21 @@ public class SpecificationLoader {
 		QName faultCode = xmlReceive.getFaultcode();
 		String faultString = xmlReceive.getFaultstring();
 
-		spec.initialize(operation, encodingStyle, encoder, cList, faultCode,
-				faultString);
+		spec.initialize(operation, encodingStyle, encoder, cList, deList, faultCode, faultString);
 		return spec;
+	}
+
+	private List<DataExtraction> readDataExtractionElements(
+			DataSpecification spec,
+			final List<XMLDataExtraction> xmlDataExtractionList)
+			throws SpecificationException {
+		List<DataExtraction> deList = new ArrayList<DataExtraction>();
+		if (xmlDataExtractionList != null) {
+			for (XMLDataExtraction xmlDE : xmlDataExtractionList) {
+				deList.add(new DataExtraction(spec, xmlDE.getExpression(), xmlDE.getVariable(), xmlDE.getScope(), xmlDE.getType()));
+			}
+		}
+		return deList;
 	}
 
 	private void addConditionsFromConditionGroups(

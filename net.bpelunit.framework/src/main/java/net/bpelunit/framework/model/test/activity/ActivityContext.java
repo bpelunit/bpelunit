@@ -22,6 +22,9 @@ import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
+import net.bpelunit.framework.model.test.data.extraction.ExtractedDataContainerUtil;
+import net.bpelunit.framework.model.test.data.extraction.IExtractedDataContainer;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
@@ -33,11 +36,10 @@ import org.w3c.dom.Element;
  * 
  * Through this object, activities and registered extensions like encoders and headers are able to
  * access framework functionality for sending and receiving SOAP calls, and storing/reading metadata
- * like header adressing information or copied values.
+ * like header addressing information or copied values.
  * 
- * @version $Id$
  * @author Philip Mayer
- * 
+ * @author University of Cádiz (Antonio García-Domínguez)
  */
 public class ActivityContext implements VelocityContextProvider {
 
@@ -226,7 +228,10 @@ public class ActivityContext implements VelocityContextProvider {
 
 	// **************************** Velocity ********************************
 
-	public WrappedContext createVelocityContext() throws DataSourceException {
-		return fTrack.createVelocityContext();
+	/**
+	 * Creates a new Velocity context for this activity.
+	 */
+	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException {
+		return fTrack.createVelocityContext(artefact);
 	}
 }

@@ -6,7 +6,10 @@
 package net.bpelunit.framework.model.test;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,6 +29,8 @@ import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.ActivityContext;
 import net.bpelunit.framework.model.test.activity.VelocityContextProvider;
 import net.bpelunit.framework.model.test.data.ContextXPathVariableResolver;
+import net.bpelunit.framework.model.test.data.extraction.ExtractedDataContainerUtil;
+import net.bpelunit.framework.model.test.data.extraction.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ArtefactStatus.StatusCode;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
@@ -42,13 +47,13 @@ import com.rits.cloning.Cloner;
  * executed on behalf of the partner in a certain test case. The PartnerTrack
  * can be seen as the simulated partner itself.
  * 
- * @version $Id$
  * @author Philip Mayer
- * 
+ * @author University of Cádiz (Antonio García-Domínguez)
  */
-public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextProvider, BlackBoardKey {
+public class PartnerTrack implements ITestArtefact, IExtractedDataContainer, Runnable, VelocityContextProvider, BlackBoardKey {
 
 	private static final int DELAY_AT_START = 10;
+	private static final Cloner CLONER = new Cloner();
 
 	/**
 	 * The parent test case
@@ -88,7 +93,7 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 
 	private ActivityContext fActivityContext;
 
-	private static final Cloner CLONER = new Cloner();
+	private final Map<String, Object> extractedData = new HashMap<String, Object>();
 
 	public PartnerTrack(TestCase testCase, AbstractPartner client) {
 		fPartner = client;
@@ -259,12 +264,17 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 	 * This method obtains and caches the VelocityContext of the test case, so
 	 * it only needs to be produced once for every partner track.
 	 * 
+	 * This method extends the Velocity context with the latest copies of the
+	 * extracted data from all the ancestors of <code>artefact</code> (including
+	 * itself) that are {@link IExtractedDataContainer}s, from the oldest ancestor
+	 * to the youngest one.
+	 *
 	 * @return Base VelocityContext for the partner track.
-	 * @throws DataSourceException 
+	 * @throws DataSourceException
 	 */
-	public WrappedContext createVelocityContext() throws DataSourceException   {
+	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException   {
 		if (fTestCaseVelocityContext == null) {
-			fTestCaseVelocityContext = fRunner.createVelocityContext();
+			fTestCaseVelocityContext = fRunner.createVelocityContext(artefact);
 		}
 		WrappedContext ctx = CLONER.deepClone(fTestCaseVelocityContext);
 		ctx.putReadOnly("partnerTrackName", getRawName());
@@ -277,6 +287,8 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 			ctx.putReadOnly("partnerTrackReceived", fActivityContext.getReceivedMessages());
 			ctx.putReadOnly("partnerTrackSent", fActivityContext.getSentMessages());
 		}
+
+		ExtractedDataContainerUtil.addExtractedDataFromAncestors(ctx, artefact);
 		return ctx;
 	}
 
@@ -288,7 +300,7 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 
 		Context context;
 		try {
-			context = this.createVelocityContext();
+			context = this.createVelocityContext(this);
 
 			XPath xpath = XPathFactory.newInstance().newXPath();
 			xpath.setNamespaceContext(fNamespaceContext);
@@ -306,6 +318,23 @@ public class PartnerTrack implements ITestArtefact, Runnable, VelocityContextPro
 
 	private Document createEmptyDocument() throws ParserConfigurationException {
 		return DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+	}
+
+	// ************* IExtractedDataContainer **********
+
+	@Override
+	public void putExtractedData(String name, Object value) {
+		extractedData.put(name, value);
+	}
+
+	@Override
+	public Object getExtractedData(String name) {
+		return extractedData.get(name);
+	}
+
+	@Override
+	public Collection<String> getAllExtractedDataNames() {
+		return extractedData.keySet();
 	}
 
 }

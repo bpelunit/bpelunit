@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:pin="http://test.bpelunit.net/pingpong">
+    <tes:name>dataextraction.bpts</tes:name>
+    <tes:baseURL>http://localhost:7777/ws</tes:baseURL>
+    <tes:deployment>
+        <tes:put name="DataExtraction" type="fixed">
+            <tes:wsdl>pingpong.wsdl</tes:wsdl>
+        </tes:put>
+        <tes:partner name="ping" wsdl="pingpong.wsdl"/>
+        <tes:partner name="pong" wsdl="pingpong.wsdl"/>
+    </tes:deployment>
+    <tes:testCases>
+        <tes:testCase name="TC1-PingPong" basedOn="" abstract="false" vary="false">
+            <tes:clientTrack/>
+            <tes:partnerTrack name="ping">
+                <tes:sendReceive service="pin:pingpong" port="pongSOAP" operation="pingpong">
+                    <tes:send service="pin:pingpong" fault="false">
+                        <tes:data>
+                            <pin:pingpong>
+                                <in>MYPROPERTY</in>
+                            </pin:pingpong>
+                        </tes:data>
+                    </tes:send>
+                    <tes:receive service="pin:pingpong" fault="false">
+                        <tes:condition>
+                            <tes:expression>//out</tes:expression>
+                            <tes:value>'MYPROPERTY'</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                </tes:sendReceive>
+                <tes:receiveSend service="pin:pingpong" port="pingSOAP" operation="pingpong">
+                    <tes:receive service="pin:pingpong" fault="false">
+                        <tes:condition>
+                            <tes:expression>//in</tes:expression>
+                            <tes:value>'MYPROPERTY'</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                    <tes:send service="pin:pingpong" fault="false">
+                        <tes:template>
+                            <pin:pingpongResponse>
+                                <out>$correlationproperty</out>
+                            </pin:pingpongResponse>
+                        </tes:template>
+                    </tes:send>
+                </tes:receiveSend>
+            </tes:partnerTrack>
+
+            <tes:partnerTrack name="pong">
+                <tes:receiveSend service="pin:pingpong" port="pongSOAP" operation="pingpong">
+                    <tes:receive service="pin:pingpong" fault="false">
+                        <tes:condition>
+                            <tes:expression>//in</tes:expression>
+                            <tes:value>'MYPROPERTY'</tes:value>
+                        </tes:condition>
+                        <tes:dataExtraction expression="//in/text()" variable="correlationproperty" type="string"/>
+                    </tes:receive>
+                    <tes:send service="pin:pingpong" fault="false">
+                        <tes:template>
+                            <pin:pingpongResponse>
+                                <out>$correlationproperty</out>
+                            </pin:pingpongResponse>
+                        </tes:template>
+                    </tes:send>
+                </tes:receiveSend>
+                <tes:sendReceive service="pin:pingpong" port="pingSOAP" operation="pingpong">
+                    <tes:send service="pin:pingpong" fault="false">
+                        <tes:template>
+                            <pin:pingpong>
+                                <in>$correlationproperty</in>
+                            </pin:pingpong>
+                        </tes:template>
+                    </tes:send>
+                    <tes:receive service="pin:pingpong" fault="false">
+                        <tes:condition>
+                            <tes:expression>//out</tes:expression>
+                            <tes:value>'MYPROPERTY'</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                </tes:sendReceive>
+            </tes:partnerTrack>
+        </tes:testCase>
+    </tes:testCases>
+</tes:testSuite>

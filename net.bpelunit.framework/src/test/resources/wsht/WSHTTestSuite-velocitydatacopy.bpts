@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tes:testSuite xmlns:wshtApiXsd="http://www.example.org/WS-HT/api/xsd" xmlns:exa1="http://www.example.org/WS-HT/api/xsd" xmlns:exa0="http://www.example.org/WS-HT" xmlns:exa="http://www.example.org/WS-HT/api" xmlns:tes="http://www.bpelunit.org/schema/testSuite" xmlns:wsdl="http://www.example.org/WS-HT/api/wsdl">
+    <tes:name>WSHTTestSuite.bpts</tes:name>
+    <tes:baseURL>http://localhost:7777/ws</tes:baseURL>
+    <tes:deployment>
+        <tes:put name="WSHT" type="fixed">
+            <tes:wsdl>ws-humantask-api.wsdl</tes:wsdl>
+        </tes:put>
+        <tes:humanPartner name="BankEmployee" wshtEndpoint="http://localhost:7777/ws/client" username="manager" password="manager"/>
+        <!--tes:humanPartner name="BankEmployee" wshtEndpoint="http://localhost:8081/active-bpel/services/AeB4PTaskClient-taskOperations" username="manager" password="manager"/-->
+    </tes:deployment>
+    <tes:testCases>
+        <tes:testCase name="TC1" basedOn="" abstract="false" vary="false">
+            <tes:clientTrack>
+                <tes:receiveSend service="wsdl:TaskOperations" port="TaskOperationsPort" operation="getMyTasks">
+                    <tes:send service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:data>
+                            <aetgt:getMyTasksResponse xmlns:aetgt="http://www.example.org/WS-HT/api/xsd" xmlns:htdt="http://www.example.org/WS-HT/api/xsd" xmlns:result="http://saxon.sf.net/xquery-results" xmlns:tss="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                <htdt:taskAbstract>
+                                    <htda:id xmlns:htda="http://www.example.org/WS-HT/api">urn:b4p:553</htda:id>
+                                    <htda:taskType xmlns:htda="http://www.example.org/WS-HT/api">TASK</htda:taskType>
+                                    <htda:name xmlns:htda="http://www.example.org/WS-HT/api">Task</htda:name>
+                                    <htda:status xmlns:htda="http://www.example.org/WS-HT/api">READY</htda:status>
+                                    <htda:priority xmlns:htda="http://www.example.org/WS-HT/api">0</htda:priority>
+                                    <htda:taskInitiator xmlns:htda="http://www.example.org/WS-HT/api">anonymous</htda:taskInitiator>
+                                    <htda:potentialOwners xmlns:htda="http://www.example.org/WS-HT/api">
+                                        <htd:users xmlns:htd="http://www.example.org/WS-HT">
+                                            <htd:user>manager</htd:user>
+                                        </htd:users>
+                                    </htda:potentialOwners>
+                                    <htda:businessAdministrators xmlns:htda="http://www.example.org/WS-HT/api">
+                                        <htd:users xmlns:htd="http://www.example.org/WS-HT">
+                                            <htd:user>manager</htd:user>
+                                        </htd:users>
+                                    </htda:businessAdministrators>
+                                    <htda:createdOn xmlns:htda="http://www.example.org/WS-HT/api">2100-11-12T16:17:16.779Z</htda:createdOn>
+                                    <htda:createdBy xmlns:htda="http://www.example.org/WS-HT/api">anonymous</htda:createdBy>
+                                    <htda:activationTime xmlns:htda="http://www.example.org/WS-HT/api">2011-11-12T16:17:16.779Z</htda:activationTime>
+                                    <htda:isSkipable xmlns:htda="http://www.example.org/WS-HT/api">false</htda:isSkipable>
+                                    <htda:hasPotentialOwners xmlns:htda="http://www.example.org/WS-HT/api">true</htda:hasPotentialOwners>
+                                    <htda:startByExists xmlns:htda="http://www.example.org/WS-HT/api">false</htda:startByExists>
+                                    <htda:completeByExists xmlns:htda="http://www.example.org/WS-HT/api">false</htda:completeByExists>
+                                    <htda:presentationName xmlns:htda="http://www.example.org/WS-HT/api">New Operation</htda:presentationName>
+                                    <htda:presentationSubject xmlns:htda="http://www.example.org/WS-HT/api">New Operation</htda:presentationSubject>
+                                    <htda:renderingMethodExists xmlns:htda="http://www.example.org/WS-HT/api">false</htda:renderingMethodExists>
+                                    <htda:hasOutput xmlns:htda="http://www.example.org/WS-HT/api">false</htda:hasOutput>
+                                    <htda:hasFault xmlns:htda="http://www.example.org/WS-HT/api">false</htda:hasFault>
+                                    <htda:hasAttachments xmlns:htda="http://www.example.org/WS-HT/api">false</htda:hasAttachments>
+                                    <htda:hasComments xmlns:htda="http://www.example.org/WS-HT/api">false</htda:hasComments>
+                                    <htda:escalated xmlns:htda="http://www.example.org/WS-HT/api">false</htda:escalated>
+                                    <tsst:lastModifiedTime xmlns:tsst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">2011-11-12T16:17:16.779Z</tsst:lastModifiedTime>
+                                    <tsst:rfc822CreatedOn xmlns:tsst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">Sa, 12 Nov 2011 17:17:16 +0100</tsst:rfc822CreatedOn>
+                                    <tsst:rfc822LastModifiedTime xmlns:tsst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">Sa, 12 Nov 2011 17:17:16 +0100</tsst:rfc822LastModifiedTime>
+                                    <tsst:paProcessId xmlns:tsst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">551</tsst:paProcessId>
+                                    <tsst:paExecutionCounter xmlns:tsst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">1</tsst:paExecutionCounter>
+                                </htdt:taskAbstract>
+                            </aetgt:getMyTasksResponse>
+                        </tes:data>
+                    </tes:send>
+                    <tes:receive service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:condition>
+                            <tes:expression>//wshtApiXsd:taskType</tes:expression>
+                            <tes:value>'TASK'</tes:value>
+                        </tes:condition>
+                        <tes:condition>
+                            <tes:expression>//wshtApiXsd:status</tes:expression>
+                            <tes:value>'READY'</tes:value>
+                        </tes:condition>
+                        <tes:condition>
+                            <tes:expression>//wshtApiXsd:whereClause</tes:expression>
+                            <tes:value>"Task.Name = 'Task'"</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                </tes:receiveSend>
+                <tes:receiveSend service="wsdl:TaskOperations" port="TaskOperationsPort" operation="getOutput">
+                    <tes:send service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:data>
+                            <aetgt:getInputResponse xmlns:aetgt="http://www.example.org/WS-HT/api/xsd" xmlns:htdt="http://www.example.org/WS-HT/api/xsd" xmlns:result="http://saxon.sf.net/xquery-results" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                <htdt:taskData>
+                                    <q0:NewOperation xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:aets="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:htapi="http://www.example.org/WS-HT/api" xmlns:htd="http://www.example.org/WS-HT" xmlns:htp="http://www.example.org/WS-HT/protocol" xmlns:q0="http://www.example.org/Demo/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                        <in>H</in>
+                                    </q0:NewOperation>
+                                </htdt:taskData>
+                            </aetgt:getInputResponse>
+                        </tes:data>
+                    </tes:send>
+                    <tes:receive service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:condition>
+                            <tes:expression>count(//wshtApiXsd:getInput)</tes:expression>
+                            <tes:value>1</tes:value>
+                        </tes:condition>
+                        <tes:condition>
+                            <tes:expression>//wshtApiXsd:identifier</tes:expression>
+                            <tes:value>'urn:b4p:553'</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                </tes:receiveSend>
+                <tes:receiveSend service="wsdl:TaskOperations" port="TaskOperationsPort" operation="claim">
+                    <tes:send service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:data>
+                            <exa1:claimResponse/>
+                        </tes:data>
+                    </tes:send>
+                    <tes:receive service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:condition>
+                            <tes:expression>count(//wshtApiXsd:claim)</tes:expression>
+                            <tes:value>1</tes:value>
+                        </tes:condition>
+                        <tes:condition>
+                            <tes:expression>//wshtApiXsd:identifier</tes:expression>
+                            <tes:value>'urn:b4p:553'</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                </tes:receiveSend>
+                <tes:receiveSend service="wsdl:TaskOperations" port="TaskOperationsPort" operation="start">
+                    <tes:send service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:data>
+                            <exa1:startResponse/>
+                        </tes:data>
+                    </tes:send>
+                    <tes:receive service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:condition>
+                            <tes:expression>count(//wshtApiXsd:start)</tes:expression>
+                            <tes:value>1</tes:value>
+                        </tes:condition>
+                        <tes:condition>
+                            <tes:expression>//wshtApiXsd:identifier</tes:expression>
+                            <tes:value>'urn:b4p:553'</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                </tes:receiveSend>
+                <tes:receiveSend service="wsdl:TaskOperations" port="TaskOperationsPort" operation="setOutput">
+                    <tes:send service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:data>
+                            <exa1:setOutputResponse/>
+                        </tes:data>
+                    </tes:send>
+                    <tes:receive service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                      <tes:condition>
+                      	<tes:expression>//output</tes:expression>
+                      	<tes:value>'H'</tes:value>
+                      </tes:condition>
+                    </tes:receive>
+                </tes:receiveSend>
+                <tes:receiveSend service="wsdl:TaskOperations" port="TaskOperationsPort" operation="complete">
+                    <tes:send service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:data>
+                            <exa1:completeResponse/>
+                        </tes:data>
+                    </tes:send>
+                    <tes:receive service="wsdl:TaskOperations" port="TaskOperationsPort" fault="false">
+                        <tes:condition>
+                            <tes:expression>count(//wshtApiXsd:complete)</tes:expression>
+                            <tes:value>1</tes:value>
+                        </tes:condition>
+                        <tes:condition>
+                            <tes:expression>//wshtApiXsd:identifier</tes:expression>
+                            <tes:value>'urn:b4p:553'</tes:value>
+                        </tes:condition>
+                    </tes:receive>
+                </tes:receiveSend>
+            </tes:clientTrack>
+            <tes:humanPartnerTrack name="BankEmployee">
+                <tes:completeHumanTask>
+                    <tes:taskName>Task</tes:taskName>
+                    <tes:template>
+                    	<output>$In</output>
+                    </tes:template>
+                    <tes:dataExtraction expression="//in/text()" variable="In" />
+                </tes:completeHumanTask>
+            </tes:humanPartnerTrack>
+        </tes:testCase>
+    </tes:testCases>
+</tes:testSuite>

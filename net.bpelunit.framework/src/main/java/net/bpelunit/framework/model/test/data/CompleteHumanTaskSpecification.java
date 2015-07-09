@@ -1,6 +1,7 @@
 package net.bpelunit.framework.model.test.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.namespace.NamespaceContext;
@@ -8,6 +9,8 @@ import javax.xml.namespace.NamespaceContext;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.activity.Activity;
+import net.bpelunit.framework.model.test.activity.ActivityContext;
+import net.bpelunit.framework.model.test.data.extraction.DataExtraction;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
@@ -20,17 +23,23 @@ import org.w3c.dom.Element;
 
 public class CompleteHumanTaskSpecification extends DataSpecification {
 
-	private PartnerTrack partnerTrack;
+	private final PartnerTrack partnerTrack;
 	private List<ReceiveCondition> conditions;
+
 	private XmlObject inputXMLData;
+	private final String templateText;
 	private XMLAnyElement outputXMLData;
-	
+	private List<DataExtraction> dataExtractions = new ArrayList<DataExtraction>();
+
 	public CompleteHumanTaskSpecification(Activity parent,
-			NamespaceContext nsContext, Element xmlAnyElement, PartnerTrack partnerTrack) throws SpecificationException {
+			NamespaceContext nsContext, Element xmlLiteralOutputData,
+			String templateText, PartnerTrack partnerTrack)
+			throws SpecificationException {
 		super(parent, nsContext);
 		try {
-			this.outputXMLData = XMLAnyElement.Factory.parse(xmlAnyElement, null);
-		this.partnerTrack = partnerTrack;
+			this.templateText = templateText;
+			this.outputXMLData = xmlLiteralOutputData != null ? XMLAnyElement.Factory.parse(xmlLiteralOutputData, null) : null;
+			this.partnerTrack = partnerTrack;
 		} catch (XmlException e) {
 			throw new SpecificationException("Could not save XML Element data: " +e.getMessage(), e);
 		}
@@ -70,23 +79,42 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 		return outputXMLData.xmlText();
 	}
 
-	public XMLAnyElement handle(XmlObject input) {
+	public String getTemplateText() {
+		return templateText;
+	}
+
+	public XMLAnyElement handle(ActivityContext context, XmlObject input) {
 		this.inputXMLData = input;
 		
 		validateConditions();
-		
+		extractData(context, dataExtractions, (Element)input.getDomNode());
+
+		if (templateText != null) {
+			try {
+				outputXMLData = XMLAnyElement.Factory.parse(generateLiteralDataFromTemplate(context, templateText));
+			} catch (XmlException e) {
+				setStatus(ArtefactStatus.createFailedStatus(String.format(
+					"Could not generate the reply message from the template: %s",
+					e.getLocalizedMessage())));
+			}
+		}
+
 		return outputXMLData;
 	}
 
 	public void setConditions(List<ReceiveCondition> conditions) {
 		this.conditions = conditions;
 	}
-	
+
+	public void setDataExtractions(List<DataExtraction> dataExtractions) {
+		this.dataExtractions = dataExtractions;
+	}
+
 	private void validateConditions() {
 		// Create Velocity context for the conditions
 		Context conditionContext;
 		try {
-			conditionContext = partnerTrack.createVelocityContext();
+			conditionContext = partnerTrack.createVelocityContext(this);
 		} catch (Exception e) {
 			setStatus(ArtefactStatus.createFailedStatus(String.format(
 				"Could not create the Velocity context for this condition: %s",

@@ -14,20 +14,28 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.BindingProvider;
 
+import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.util.XMLUtil;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import active_endpoints.docs.wsdl.activebpeladmin._2007._01.activebpeladmin.ActiveBpelAdmin;
+import active_endpoints.docs.wsdl.activebpeladmin._2007._01.activebpeladmin.AdminFaultMsg;
 import active_endpoints.docs.wsdl.activebpeladmin._2007._01.activebpeladmin.IAeAxisActiveBpelAdmin;
 
 import com.active_endpoints.docs.wsdl.engineapi._2010._05.enginemanagement.AdminAPIFault;
 import com.active_endpoints.docs.wsdl.engineapi._2010._05.enginemanagement.ContributionManagementService;
 import com.active_endpoints.docs.wsdl.engineapi._2010._05.enginemanagement.IAeContributionManagement;
 import com.active_endpoints.schemas.activebpeladmin._2007._01.activebpeladmin.AesDeployBprType;
+import com.active_endpoints.schemas.activebpeladmin._2007._01.activebpeladmin.AesProcessFilter;
+import com.active_endpoints.schemas.activebpeladmin._2007._01.activebpeladmin.AesProcessFilterType;
+import com.active_endpoints.schemas.activebpeladmin._2007._01.activebpeladmin.AesProcessInstanceDetail;
+import com.active_endpoints.schemas.activebpeladmin._2007._01.activebpeladmin.AesProcessListType;
+import com.active_endpoints.schemas.activebpeladmin._2007._01.activebpeladmin.AesProcessType;
 import com.active_endpoints.schemas.activebpeladmin._2007._01.activebpeladmin.AesStringResponseType;
 import com.active_endpoints.schemas.engineapi._2010._05.engineapitypes.AesContribution;
 import com.active_endpoints.schemas.engineapi._2010._05.engineapitypes.AesContributionListResult;
@@ -36,6 +44,8 @@ import com.active_endpoints.schemas.engineapi._2010._05.enginemanagementtypes.Ae
 
 class ActiveVOSAdministrativeFunctions {
 
+	private Logger logger = Logger.getLogger(getClass());
+	
 	@SuppressWarnings("serial")
 	class DeployException extends Exception {
 		public DeployException(String message, Throwable t) {
@@ -58,7 +68,8 @@ class ActiveVOSAdministrativeFunctions {
 	private static final String CONTRIBUTION_MANAGEMENT_SERVICE_WSDL_RESOURCE = "/AeContributionManagement.wsdl";
 	
 	private static final String ATTRIBUTE_ERROR_COUNT = "numErrors";
-	private static final String ENDPOINT_PATH_ACTIVE_BPEL_ADMIN_SERVICE = "/ActiveBpelDeployBPR";
+	private static final String ENDPOINT_PATH_ACTIVE_BPEL_ADMIN_SERVICE = "/ActiveBpelAdmin";
+	private static final String ENDPOINT_PATH_ACTIVE_BPEL_DEPLOY_SERVICE = "/ActiveBpelDeployBPR";
 	private static final String ENDPOINT_PATH_CONTRIBUTION_MANAGEMENT_SERVICE = "/AeContributionManagement";
 	
 	private String baseEndpoint;
@@ -77,7 +88,10 @@ class ActiveVOSAdministrativeFunctions {
 	private void calculateBaseEndpoint(String endpoint) {
 		if(endpoint.endsWith(ENDPOINT_PATH_ACTIVE_BPEL_ADMIN_SERVICE)) {
 			baseEndpoint = endpoint.substring(0, endpoint.length() - ENDPOINT_PATH_ACTIVE_BPEL_ADMIN_SERVICE.length() + 1);
-		} else {
+		} else if(endpoint.endsWith(ENDPOINT_PATH_ACTIVE_BPEL_DEPLOY_SERVICE)) {
+			// this check is done for backwards-compatibility with older test suite definitions that may end in the Deploy Endpoint
+				baseEndpoint = endpoint.substring(0, endpoint.length() - ENDPOINT_PATH_ACTIVE_BPEL_DEPLOY_SERVICE.length() + 1);
+			} else {
 			baseEndpoint = endpoint;
 		}
 		
@@ -104,7 +118,7 @@ class ActiveVOSAdministrativeFunctions {
 						.getResource(ACTIVE_BPEL_ADMIN_WSDL_RESOURCE),
 				ACTIVE_BPEL_ADMIN_SERVICE_NAME);
 
-		activeBpelAdminPort = activeBpelAdmin.getActiveBpelAdminPort();
+		activeBpelAdminPort = activeBpelAdmin.getActiveBpelAdmin();
 		setBasicAuthenticationForBindingProvider(activeBpelAdminPort, username,
 				password);
 		setEndpointForBindingProvider(activeBpelAdminPort, endpoint);
@@ -164,7 +178,7 @@ class ActiveVOSAdministrativeFunctions {
 		AesStringResponseType deployBpr;
 		
 		deployBprInput.setBprFilename(bprFileName);
-		deployBprInput.setBase64File(contents);
+		deployBprInput.setBase64File(javax.xml.bind.DatatypeConverter.printBase64Binary(contents));
 		deployBpr = getActiveBpelAdminPort().deployBpr(deployBprInput);
 
 		String responseMessage = deployBpr.getResponse();
@@ -185,8 +199,53 @@ class ActiveVOSAdministrativeFunctions {
 		} 
 	}
 
-	public void terminateAllProcessInstances() {
-		// TODO Auto-generated method stub
+	public void terminateAllProcessInstances() throws DeploymentException {
+		List<AesProcessInstanceDetail> runningProcesses;
+		
+		// loop in case any events are defined for terminating processes in which case new 
+		// processes will be started
+		do {
+			runningProcesses = getRunningProcessList();
+			if(logger.isInfoEnabled()) {
+				if(runningProcesses.size() == 0) {
+					logger.info("Found no running process instances");
+				} else {
+					StringBuilder sb = new StringBuilder();
+					for(AesProcessInstanceDetail process : runningProcesses) {
+						sb.append(process.getProcessId()).append(" ");
+					}
+					logger.info("Found " + runningProcesses.size() + " running process instances: " + sb.toString());
+				} 
+			}
+			
+			for(AesProcessInstanceDetail process : runningProcesses) {
+				long pid = process.getProcessId();
+				logger.info("Terminating PID " + pid);
+				terminateProcess(pid);
+			}
+		} while(runningProcesses.size() > 0);
+	}
+
+	private List<AesProcessInstanceDetail> getRunningProcessList() {
+		IAeAxisActiveBpelAdmin activeBpelService = getActiveBpelAdminPort();
+		AesProcessFilterType input = new AesProcessFilterType();
+		AesProcessFilter filter = new AesProcessFilter();
+		filter.setProcessState(1);
+		input.setFilter(filter);
+		AesProcessListType runningProcessesResponse = activeBpelService.getProcessList(input);
+		List<AesProcessInstanceDetail> runningProcesses = runningProcessesResponse.getResponse().getRowDetails().getItem();
+		return runningProcesses;
+	}
+
+	private void terminateProcess(long pid) throws DeploymentException {
+		IAeAxisActiveBpelAdmin activeBpelService = getActiveBpelAdminPort();
+		AesProcessType terminateProcessRequest = new AesProcessType();
+		terminateProcessRequest.setPid(pid);
+		try {
+			activeBpelService.terminateProcess(terminateProcessRequest);
+		} catch (AdminFaultMsg e) {
+			throw new DeploymentException("Error terminating process instance " + pid, e);
+		}
 	}
 	
 	//=================================

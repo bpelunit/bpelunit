@@ -15,6 +15,7 @@ Staged for next version
 * _Feature_: Allow WS-HT Partner Tracks without password
 * _Feature_: Editor supports deleting WS-HT Complete Task activities 
 * _Feature_: Editor supports data sources, suite/test setup sections and Velocity templates
+* _Feature_: Support -t option in command-line runner for setting the global time-out (#12)
 * _Improvement_: Set a default base URL when creating a new test case in Eclipse tooling
 * _Improvement_: Do not allow duplicate test case names when running a test suite
 * _Improvement_: Internal clean-ups in framework

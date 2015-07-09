@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.active_endpoints.docs.wsdl.engineapi._2010._05.enginemanagement.AdminAPIFault;
 import com.active_endpoints.schemas.engineapi._2010._05.engineapitypes.AesContribution;
 
@@ -35,8 +37,10 @@ import net.bpelunit.util.FileUtil;
 @IBPELDeployerCapabilities(canDeploy=true, canIntroduceMocks=false, canMeasureTestCoverage=false)
 public class ActiveVOS9Deployer implements IBPELDeployer {
 
+	private Logger logger = Logger.getLogger(getClass());
+	
 	private String deploymentLocation = "";
-	private String deploymentServiceEndpoint = "http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR";
+	private String deploymentServiceEndpoint = "http://localhost:8080/active-bpel/services/ActiveBpelAdmin";
 	private String deployerUserName = "bpelunit";
 	private String deployerPassword = "";
 	private boolean doUndeploy = false;	
@@ -52,14 +56,16 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			description="The (relative) path to the BPR to be deployed."
 	)
 	public void setDeploymentLocation(String deploymentLocation) {
+		logger.info("Configured BPR location: " + deploymentLocation);
 		this.deploymentLocation = deploymentLocation;
 	}
 	
 	@IBPELDeployerOption(
-			defaultValue="http://localhost:8080/active-bpel/services/ActiveBpelDeployBPR",
+			defaultValue="http://localhost:8080/active-bpel/services/ActiveBpelAdmin",
 			description="The URL of ActiveVOS' deployment service."
 	)
 	public void setDeploymentServiceEndpoint(String deploymentServiceEndpoint) {
+		logger.info("Configured deployment service endpoint: " + deploymentServiceEndpoint);
 		this.deploymentServiceEndpoint  = deploymentServiceEndpoint;
 	}
 
@@ -84,6 +90,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			description="Controls whether the process should be undeployed after the test suite has run. Valid values are true/false."
 	)
 	public void setDoUndeploy(String doUndeploy) {
+		logger.info("BPR will be undeployed: " + doUndeploy);
 		this.doUndeploy = Boolean.valueOf(doUndeploy);
 	}
 	
@@ -92,6 +99,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			description="If set to true, all running process instances will be terminated before running the test suite. DO USE WITH CARE!"
 	)
 	public void setTerminatePendingProcessesBeforeTestSuiteIsRun(String terminatePendingProcessesBeforeTestSuiteIsRun) {
+		logger.info("Running Processes will be terminated before test suite is run: " + terminatePendingProcessesBeforeTestSuiteIsRun);
 		this.terminatePendingProcessesBeforeTestSuiteIsRun = Boolean.valueOf(terminatePendingProcessesBeforeTestSuiteIsRun);
 	}
 
@@ -100,6 +108,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			description="If set to true, all running process instances will be terminated before every test case. DO USE WITH CARE!"
 	)
 	public void setTerminatePendingProcessesAfterTestCaseIsRun(String terminatePendingProcessesAfterEveryTestCase) {
+		logger.info("Running processes will be terminated after every test case: " + terminatePendingProcessesAfterEveryTestCase);
 		this.terminatePendingProcessesAfterEveryTestCase = Boolean.valueOf(terminatePendingProcessesAfterEveryTestCase);
 	}
 	
@@ -128,10 +137,12 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 		ActiveVOSAdministrativeFunctions activevos = getAdministrativeFunctions();
 		
 		if(terminatePendingProcessesBeforeTestSuiteIsRun) {
+			logger.info("Terminating running processes prior to test suite run...");
 			activevos.terminateAllProcessInstances();
 		}
 		
 		if(doUndeploy) {
+			logger.info("Fetching current contributions on server...");
 			previouslyDeployedContributions = activevos.getAllContributions();
 		}
 		
@@ -145,6 +156,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			byte[] bprContents = FileUtil.readFile(bprFile);
 			String fileName = new File(deploymentLocation).getName();
 			
+			logger.info("Deploying " + fileName + "...");
 			activevos.deployBpr(fileName, bprContents);
 			
 		} catch(IOException e) {
@@ -165,6 +177,7 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			throws DeploymentException {
 		
 		if(doUndeploy) {
+			logger.info("Undeploying...");
 			ActiveVOSAdministrativeFunctions activevos = getAdministrativeFunctions();
 			List<AesContribution> allContributions = activevos.getAllContributions();
 			
@@ -175,7 +188,9 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 			
 			for(Integer contributionId : idsToRemove) {
 				try {
+					logger.info("Undeploying Contribution " + contributionId);
 					activevos.takeContributionOffline(contributionId);
+					logger.info("Deleting Contribution " + contributionId + " and all associated process instances");
 					activevos.deleteContribution(contributionId, true);
 				} catch (AdminAPIFault e) {
 					throw new DeploymentException("Cannot undeploy process: " + e.getMessage(), e);
@@ -199,8 +214,9 @@ public class ActiveVOS9Deployer implements IBPELDeployer {
 	}
 
 	@Override
-	public void cleanUpAfterTestCase() {
+	public void cleanUpAfterTestCase() throws DeploymentException {
 		if(terminatePendingProcessesAfterEveryTestCase) {
+			logger.info("Terminating process instances after Test Case...");
 			getAdministrativeFunctions().terminateAllProcessInstances();
 		}
 	}

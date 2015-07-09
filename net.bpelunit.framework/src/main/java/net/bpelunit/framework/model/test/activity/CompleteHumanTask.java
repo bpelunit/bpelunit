@@ -72,8 +72,8 @@ public class CompleteHumanTask extends Activity {
 				this.taskId = taskToFinish.getId();
 				
 				XmlObject data = client.getInput(taskToFinish.getId()).getTaskData();
-				XmlObject output = dataSpec.handle(data);
-				
+				XmlObject output = dataSpec.handle(context, data);
+
 				client.completeTaskWithOutput(taskToFinish.getId(), output);
 			} finally {
 				if(locked) {

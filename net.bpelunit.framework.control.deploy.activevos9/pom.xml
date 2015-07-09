@@ -50,7 +50,7 @@
 				<configuration>
 					<wsdlDirectory>src/main/resources</wsdlDirectory>
 					<wsdlFiles>
-						<wsdlFile>wsdl/ActiveBpelDeployBPR.wsdl</wsdlFile>
+						<wsdlFile>wsdl/ActiveBpelAdmin.wsdl</wsdlFile>
 						<wsdlFile>wsdl/AeContributionManagement.wsdl</wsdlFile>
 					</wsdlFiles>
 				</configuration>

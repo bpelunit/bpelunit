@@ -5,12 +5,14 @@
 package net.bpelunit.test.wsht;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
+import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.test.util.TestTestRunner;
 import net.bpelunit.test.util.TestUtil;
 
@@ -42,4 +44,11 @@ public class WSHTTest {
 				new File(BASEPATH, "WSHTTestSuite.bpts"),
 				new File(BASEPATH, "WSHTTestSuite-fi.bpts"));
 	}
+
+	@Test
+	public void wshtDataExtractionWorks() throws Exception {
+		TestSuite results = TestUtil.getResults(new File(BASEPATH, "WSHTTestSuite-velocitydatacopy.bpts"));
+		assertTrue("Tests should have passed", results.getStatus().isPassed());
+	}
+
 }
