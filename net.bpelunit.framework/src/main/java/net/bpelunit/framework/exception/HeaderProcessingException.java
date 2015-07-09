@@ -16,13 +16,13 @@ import javax.xml.soap.SOAPException;
  */
 public class HeaderProcessingException extends BPELUnitException {
 
-	private static final long serialVersionUID= -4639185955223357969L;
+	private static final long serialVersionUID = -4639185955223357969L;
 
 	public HeaderProcessingException(String message) {
 		super(message);
 	}
 
-	public HeaderProcessingException(String string, SOAPException e) {
+	public HeaderProcessingException(String string, Exception e) {
 		super(string, e);
 	}
 
