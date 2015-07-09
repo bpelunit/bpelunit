@@ -5,8 +5,6 @@
  */
 package net.bpelunit.framework.exception;
 
-import javax.xml.soap.SOAPException;
-
 /**
  * A problem while processing SOAP headers.
  * 
