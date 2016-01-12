@@ -73,7 +73,7 @@
 				<configuration>
 					<instructions>
 						<Export-Package>net.bpelunit.model.bpel*</Export-Package>
-						<Import-Package>net.bpelunit.util,org.apache.commons.io;version="[1.3,2)",!*</Import-Package>
+						<Import-Package>net.bpelunit.util,org.apache.commons.io;version="1.3",!*</Import-Package>
 						<Bundle-SymbolicName>net.bpelunit.model.bpel</Bundle-SymbolicName>
 						<Embed-Transitive>true</Embed-Transitive>
 						<Embed-Directory>target/dependency</Embed-Directory>
