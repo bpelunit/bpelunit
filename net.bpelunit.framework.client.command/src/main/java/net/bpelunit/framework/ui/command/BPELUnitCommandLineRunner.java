@@ -16,7 +16,6 @@ import java.util.Map;
 
 import net.bpelunit.framework.base.BPELUnitBaseRunner;
 import net.bpelunit.framework.control.result.XMLResultProducer;
-import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
@@ -63,6 +62,8 @@ import org.apache.log4j.varia.NullAppender;
 public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 		ITestResultListener {
 
+	private static final String PARAMETER_HALT_ON_ERROR = "haltonerror";
+	private static final String PARAMETER_HALT_ON_FAILURE = "haltonfailure";
 	private static final String PARAMETER_DETAILEDCOVERAGEFILE = "d"; //$NON-NLS-1$
 	private static final String PARAMETER_COVERAGEFILE = "c"; //$NON-NLS-1$
 	private static final String PARAMETER_LOGFILE = "l"; //$NON-NLS-1$
@@ -82,6 +83,8 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 	private List<String> testCaseNames;
 	private Options options;
 	private long timeout;
+	private boolean haltOnError;
+	private boolean haltOnFailure;
 
 	public BPELUnitCommandLineRunner(String[] args) {
 		this(new Console(), args);
@@ -124,6 +127,8 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 				.withDescription(
 						Messages.getString("BPELUnitCommandLineRunner.PARAMTER_DESCRIPTION_TIMEOUT")) //$NON-NLS-1$
 				.hasArg().withArgName("TIMEOUT").create(PARAMETER_TIMEOUT));
+		options.addOption(OptionBuilder.withDescription(Messages.getString("BPELUnitCommandLineRunner.PARAMETER_DESCRIPTION_HALT_ON_ERROR")).create(PARAMETER_HALT_ON_ERROR)); //$NON-NLS-1$
+		options.addOption(OptionBuilder.withDescription(Messages.getString("BPELUnitCommandLineRunner.PARAMETER_DESCRIPTION_HALT_ON_FAILURE")).create(PARAMETER_HALT_ON_FAILURE));//$NON-NLS-1$
 	}
 
 	@SuppressWarnings("unchecked")
@@ -146,6 +151,14 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 				timeout = Long.parseLong(cmd.getOptionValue(PARAMETER_TIMEOUT));
 			}
 
+			if(cmd.hasOption(PARAMETER_HALT_ON_FAILURE)) {
+				haltOnFailure = true;
+			}
+			
+			if(cmd.hasOption(PARAMETER_HALT_ON_ERROR)) {
+				haltOnError = true;
+			}
+			
 			ArrayList<String> remainingOptions = new ArrayList<String>(
 					cmd.getArgList());
 			setAndValidateTestSuiteFileName(remainingOptions.remove(0));
@@ -196,7 +209,8 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new BPELUnitCommandLineRunner(args).run();
+		BPELUnitCommandLineRunner runner = new BPELUnitCommandLineRunner(args);
+		runner.run();
 	}
 
 	// ************************* Implementation *********************
@@ -231,13 +245,13 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 		screen.println(StringUtils.repeat("-", bpelUnitRunner.length())); //$NON-NLS-1$
 
 		try {
-			Map<String, String> options;
-			if (timeout == 0) {
-				options = BPELUnitConstants.NULL_OPTIONS;
-			} else {
-				options = new HashMap<String, String>();
+			Map<String, String> options = new HashMap<String, String>();
+			if (timeout != 0) {
 				options.put(GLOBAL_TIMEOUT, "" + timeout);
 			}
+			options.put(HALT_ON_ERROR, "" + haltOnError);
+			options.put(HALT_ON_FAILURE, "" + haltOnFailure);
+			
 
 			initialize(options);
 
