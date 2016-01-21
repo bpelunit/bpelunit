@@ -628,6 +628,7 @@ public class SpecificationLoader {
 			throws SpecificationException {
 		CompleteHumanTask activity = new CompleteHumanTask(pTrack);
 		activity.setTaskName(xmlActivity.getTaskName());
+		activity.setId(xmlActivity.getId());
 		NamespaceContext context = getNamespaceMap(xmlActivity.newCursor());
 
 		Element rawDataRoot = null;
