@@ -85,6 +85,7 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 	private long timeout;
 	private boolean haltOnError;
 	private boolean haltOnFailure;
+	private long testCaseStartTimestamp;
 
 	public BPELUnitCommandLineRunner(String[] args) {
 		this(new Console(), args);
@@ -329,6 +330,7 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 					.getString("BPELUnitCommandLineRunner.MSG_PROGRESS_UNDEPLOYED")); //$NON-NLS-1$
 			screen.println(Messages
 					.getString("BPELUnitCommandLineRunner.MSG_BYE")); //$NON-NLS-1$
+			
 		} catch (ConfigurationException e) {
 			abort(Messages
 					.getString("BPELUnitCommandLineRunner.MSG_ERROR_COFIGURATION_ERROR"), e); //$NON-NLS-1$
@@ -339,6 +341,8 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 	}
 
 	public void testCaseEnded(TestCase test) {
+		long testCaseDuration = System.currentTimeMillis() - testCaseStartTimestamp;
+		
 		String status = "ended"; //$NON-NLS-1$
 		String error = null;
 		if (test.getStatus().isError()) {
@@ -355,11 +359,12 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 		if (test.getStatus().isPassed()) {
 			status = "passed"; //$NON-NLS-1$
 		}
-		screen.println("Test Case " + status + ": " + test.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		screen.println("Test Case " + status + ": " + test.getName() + " in " + testCaseDuration + "ms." //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ ((error != null) ? error : "")); //$NON-NLS-1$
 	}
 
 	public void testCaseStarted(TestCase test) {
+		testCaseStartTimestamp = System.currentTimeMillis();
 		if (verbose) {
 			screen.println(Messages
 					.getString("BPELUnitCommandLineRunner.MSG_PROGRESS_TESTCASE_STARTED") + test.getName() + ".\n"); //$NON-NLS-1$ //$NON-NLS-2$
