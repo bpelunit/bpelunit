@@ -331,6 +331,9 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 			screen.println(Messages
 					.getString("BPELUnitCommandLineRunner.MSG_BYE")); //$NON-NLS-1$
 			
+			if(suite.getStatus().hasProblems()) {
+				console.exit(2);
+			}
 		} catch (ConfigurationException e) {
 			abort(Messages
 					.getString("BPELUnitCommandLineRunner.MSG_ERROR_COFIGURATION_ERROR"), e); //$NON-NLS-1$
