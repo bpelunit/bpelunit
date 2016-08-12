@@ -64,10 +64,7 @@ public class FileSelector {
 		IFile newFile= selectFile(shell, "File selection", "Select a file.", filter, project, file);
 
 		if (newFile != null) {
-			IPath projPath= newFile.getProjectRelativePath();
-			if (directory.getProjectRelativePath().isPrefixOf(projPath))
-				projPath= projPath.removeFirstSegments(directory.getProjectRelativePath().segmentCount());
-
+			IPath projPath = newFile.getFullPath().makeRelativeTo(directory.getFullPath());
 			path= projPath.toString();
 		}
 		return path;
