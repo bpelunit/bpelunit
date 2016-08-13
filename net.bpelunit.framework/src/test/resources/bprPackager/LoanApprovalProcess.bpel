@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Copyright (C) 2009 Antonio García Domínguez
+
+   This file is part of the LoanApprovalDoc composition in the UCASE
+   WS-BPEL composition repository.
+
+   This program is free software: you can redistribute it and/or
+   modify it under the terms of the GNU General Public License as
+   published by the Free Software Foundation, either version 3 of the
+   License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<process
+   name="LoanApprovalProcess"
+   targetNamespace="http://enterprise.netbeans.org/bpel/N6_ServicioPrestamo/LoanApprovalProcess"
+   xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:tns="http://enterprise.netbeans.org/bpel/N6_ServicioPrestamo/LoanApprovalProcess"
+   xmlns:ns1="http://j2ee.netbeans.org/wsdl/ApprovalService"
+   xmlns:ns2="http://j2ee.netbeans.org/wsdl/AssessorService"
+   xmlns:ns0="http://xml.netbeans.org/schema/Loans"
+   xmlns:ns3="http://j2ee.netbeans.org/wsdl/LoanService">
+  <import namespace="http://j2ee.netbeans.org/wsdl/ApprovalService"
+          location="ApprovalService.wsdl"
+          importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <import namespace="http://j2ee.netbeans.org/wsdl/AssessorService"
+          location="AssessorService.wsdl"
+          importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <import namespace="http://j2ee.netbeans.org/wsdl/LoanService"
+          location="LoanService.wsdl"
+          importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <partnerLinks>
+    <partnerLink name="assessor"
+                 partnerLinkType="ns2:AssessorService1"
+                 partnerRole="AssessorServicePortTypeRole"/>
+    <partnerLink name="approver"
+                 partnerLinkType="ns1:ApprovalService1"
+                 partnerRole="ApprovalServicePortTypeRole"/>
+    <partnerLink name="client" partnerLinkType="ns3:LoanService1"
+                 myRole="LoanServicePortTypeRole"/>
+  </partnerLinks>
+  <variables>
+    <variable name="processOutput" messageType="ns3:LoanServiceOperationReply"/>
+    <variable name="processInput" messageType="ns3:LoanServiceOperationRequest"/>
+    <variable name="assessorOutput" messageType="ns2:AssessorServiceOperationReply"/>
+    <variable name="assessorInput" messageType="ns2:AssessorServiceOperationRequest" />
+    <variable name="approverOutput" messageType="ns1:ApprovalServiceOperationReply"/>
+    <variable name="approverInput" messageType="ns1:ApprovalServiceOperationRequest"/>
+  </variables>
+  <sequence name="Main">
+    <receive name="Receive1" createInstance="yes" partnerLink="client"
+             operation="grantLoan" portType="ns3:LoanServicePortType"
+             variable="processInput"/>
+    <assign name="DefaultValues">
+      <copy>
+        <from>
+          <literal><ns0:AssessorRequest><ns0:amount>0.0</ns0:amount></ns0:AssessorRequest></literal>
+        </from>
+        <to part="input" variable="assessorInput"/>
+      </copy>
+      <copy>
+        <from>
+          <literal><ns0:ApprovalResponse><ns0:accept>false</ns0:accept></ns0:ApprovalResponse></literal>
+        </from>
+        <to part="output" variable="processOutput"/>
+      </copy>
+      <copy>
+        <from>
+          <literal><ns0:ApprovalRequest><ns0:amount>0.0</ns0:amount></ns0:ApprovalRequest></literal>
+        </from>
+        <to part="input" variable="approverInput"/>
+      </copy>
+    </assign>
+    <if name="If1">
+      <condition> ( number(string($processInput.input/ns0:amount)) &lt;= 10000 ) </condition>
+      <sequence name="SmallAmount">
+        <assign name="copyLoanInfoToAssessorInput">
+          <copy>
+            <from>$processInput.input/ns0:amount</from>
+            <to>$assessorInput.input/ns0:amount</to>
+          </copy>
+        </assign>
+        <invoke name="queryAssessor" partnerLink="assessor"
+                operation="assessLoan" portType="ns2:AssessorServicePortType"
+                inputVariable="assessorInput"
+                outputVariable="assessorOutput"/>
+        <if name="If2">
+          <condition> ( string($assessorOutput.output/ns0:risk) = 'high' ) </condition>
+          <sequence name="SmallAmountHighRisk">
+            <assign name="copyLoanInfoToApproverInput">
+              <copy>
+                <from>$processInput.input/ns0:amount</from>
+                <to>$approverInput.input/ns0:amount</to>
+              </copy>
+            </assign>
+            <invoke name="queryApprover" partnerLink="approver"
+                    operation="approveLoan"
+                    portType="ns1:ApprovalServicePortType"
+                    inputVariable="approverInput"
+                    outputVariable="approverOutput"/>
+            <assign name="copyApproval">
+              <copy>
+                <from>$approverOutput.output/ns0:accept</from>
+                <to>$processOutput.output/ns0:accept</to>
+              </copy>
+            </assign>
+          </sequence>
+          <else>
+            <sequence name="SmallAmountLowRisk">
+              <assign name="approveLoan">
+                <copy>
+                  <from>true()</from>
+                  <to>$processOutput.output/ns0:accept</to>
+                </copy>
+              </assign>
+            </sequence>
+          </else>
+        </if>
+      </sequence>
+      <else>
+        <sequence name="LargeAmount">
+          <assign name="copyLoanInfoToApproverInput2">
+            <copy>
+              <from>$processInput.input/ns0:amount</from>
+              <to>$approverInput.input/ns0:amount</to>
+            </copy>
+          </assign>
+          <invoke name="queryApprover2"
+                  partnerLink="approver"
+                  operation="approveLoan"
+                  portType="ns1:ApprovalServicePortType"
+                  inputVariable="approverInput"
+                  outputVariable="approverOutput"/>
+          <assign name="copyApproval2">
+            <copy>
+              <from>$approverOutput.output/ns0:accept</from>
+              <to>$processOutput.output/ns0:accept</to>
+            </copy>
+          </assign>
+        </sequence>
+      </else>
+    </if>
+    <reply name="Reply1" partnerLink="client" operation="grantLoan"
+           portType="ns3:LoanServicePortType" variable="processOutput"/>
+  </sequence>
+</process>

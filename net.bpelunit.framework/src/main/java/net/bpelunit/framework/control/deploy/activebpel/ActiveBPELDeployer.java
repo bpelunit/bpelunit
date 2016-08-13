@@ -14,13 +14,6 @@ import java.util.regex.Pattern;
 
 import javax.xml.soap.SOAPException;
 
-import net.bpelunit.framework.control.deploy.IBPELDeployer;
-import net.bpelunit.framework.control.deploy.IBPELDeployer.IBPELDeployerCapabilities;
-import net.bpelunit.framework.control.deploy.IDeployment;
-import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
-import net.bpelunit.framework.exception.DeploymentException;
-import net.bpelunit.framework.model.ProcessUnderTest;
-
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -30,6 +23,13 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
+
+import net.bpelunit.framework.control.deploy.IBPELDeployer;
+import net.bpelunit.framework.control.deploy.IBPELDeployer.IBPELDeployerCapabilities;
+import net.bpelunit.framework.control.deploy.IDeployment;
+import net.bpelunit.framework.control.util.NoPersistenceConnectionManager;
+import net.bpelunit.framework.exception.DeploymentException;
+import net.bpelunit.framework.model.ProcessUnderTest;
 
 /**
  * ActiveBPEL Deployer - deploys a process to an ActiveBPEL server.
@@ -89,7 +89,7 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 	private Logger fLogger = Logger.getLogger(getClass());
 
 	private String fResultingFile;
-	private File fBPRFile;
+	private File fBPELFileForGeneratingBPR, fBPRFile;
 	private String fDeploymentDirectory;
 
 	private String fDeploymentAdminServiceURL = DEFAULT_DEPLOYMENT_URL;
@@ -101,6 +101,11 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 	/* for unit testing */
 	private static int terminatedProcessCount = 0;
+
+	@IBPELDeployerOption(testSuiteSpecific = true)
+	public void setBPELFileForGeneratingBPR(String bpelFile) {
+		this.fBPELFileForGeneratingBPR = new File(bpelFile);
+	}
 
 	@IBPELDeployerOption(testSuiteSpecific = false)
 	public void setBPRFile(String bprFile) {
@@ -172,9 +177,16 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 
 		// changed the way the archive location is obtained.
 		boolean fileReplaced = false;
-		String archivePath = getArchiveLocation(pathToTest);
-
-		File uploadingFile = new File(archivePath);
+		final File uploadingFile = resolveFile(pathToTest, fBPRFile);
+		if (fBPELFileForGeneratingBPR != null) {
+			try {
+				final File resolvedBPELFile = resolveFile(pathToTest, fBPELFileForGeneratingBPR);
+				DeploymentArchivePackager packager = new DeploymentArchivePackager(resolvedBPELFile);
+				packager.generateBPR(uploadingFile);
+			} catch (Exception ex) {
+				throw new DeploymentException("An error ocurred while generating BPR from " + fBPELFileForGeneratingBPR, ex);
+			}
+		}
 
 		if (!uploadingFile.exists()) {
 			throw new DeploymentException(
@@ -258,18 +270,18 @@ public class ActiveBPELDeployer implements IBPELDeployer {
 		}
 	}
 
-	private String getArchiveLocation(String pathToTest) {
+	private static File resolveFile(String pathToTest, File file) {
 		try {
-			if (fBPRFile.isAbsolute()) {
+			if (file.isAbsolute()) {
 				// absolute paths are left as is
-				return fBPRFile.getCanonicalPath();
+				return file.getCanonicalFile();
 			} else {
 				// relative paths are resolved from the directory of the .bpts
-				return new File(pathToTest, fBPRFile.getName()).getCanonicalPath();
+				return new File(pathToTest, file.getName());
 			}
 		} catch (IOException e) {
 			// if the path cannot be cleaned up, just turn it into an absolute path
-			return fBPRFile.getAbsolutePath();
+			return file.getAbsoluteFile();
 		}
 	}
 

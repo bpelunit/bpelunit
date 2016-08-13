@@ -17,6 +17,7 @@ Staged for next version
 * _Feature_: Editor supports data sources, suite/test setup sections and Velocity templates
 * _Feature_: Support -t option in command-line runner for setting the global time-out (#12)
 * _Feature_: Support --haltonerror and --haltonfailure in command-line runner for stopping the test run in case of errors (#18)
+* _Feature_: When using the ActiveBPEL deployment, the new "BPELFileForGeneratingBPR" option can be used to generate the BPR file automatically. It takes the path to the BPEL file, relative from the .bpts file.
 * _Improvement_: Set a default base URL when creating a new test case in Eclipse tooling
 * _Improvement_: Do not allow duplicate test case names when running a test suite
 * _Improvement_: Internal clean-ups in framework
