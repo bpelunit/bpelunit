@@ -31,6 +31,7 @@ Staged for next version
 * _Fix_: Read ID from CompleteHumanTask activities so that dependsOn works also when target activity is triggered by a complete human task
 * _Fix_: In case of dependsOn failing test cases might not terminate (Issue BPELUnit-16)
 * _Fix_: When using WS-A Header Processor multiple times with send and receive activities, BPELUnit errors can occur (Issue BPELUnit-11)
+* _Fix_: When the .bpts is not in the project root, browsing to select a WSDL file would result in incorrect paths (Issue BPELUnit-4)
 
 Version 1.6.1
 -----------------------
