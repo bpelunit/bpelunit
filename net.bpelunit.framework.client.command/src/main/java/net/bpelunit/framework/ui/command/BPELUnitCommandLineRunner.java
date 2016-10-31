@@ -64,6 +64,7 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 
 	private static final String PARAMETER_HALT_ON_ERROR = "haltonerror";
 	private static final String PARAMETER_HALT_ON_FAILURE = "haltonfailure";
+	private static final String PARAMETER_MEMORY_EFFICIENT_MODE = "memoryefficient";
 	private static final String PARAMETER_DETAILEDCOVERAGEFILE = "d"; //$NON-NLS-1$
 	private static final String PARAMETER_COVERAGEFILE = "c"; //$NON-NLS-1$
 	private static final String PARAMETER_LOGFILE = "l"; //$NON-NLS-1$
@@ -86,6 +87,7 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 	private boolean haltOnError;
 	private boolean haltOnFailure;
 	private long testCaseStartTimestamp;
+	private boolean memoryEffcientMode;
 
 	public BPELUnitCommandLineRunner(String[] args) {
 		this(new Console(), args);
@@ -130,6 +132,7 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 				.hasArg().withArgName("TIMEOUT").create(PARAMETER_TIMEOUT));
 		options.addOption(OptionBuilder.withDescription(Messages.getString("BPELUnitCommandLineRunner.PARAMETER_DESCRIPTION_HALT_ON_ERROR")).create(PARAMETER_HALT_ON_ERROR)); //$NON-NLS-1$
 		options.addOption(OptionBuilder.withDescription(Messages.getString("BPELUnitCommandLineRunner.PARAMETER_DESCRIPTION_HALT_ON_FAILURE")).create(PARAMETER_HALT_ON_FAILURE));//$NON-NLS-1$
+		options.addOption(OptionBuilder.withDescription(Messages.getString("BPELUnitCommandLineRunner.PARAMETER_DESCRIPTION_MEMORY_EFFICIENT_MODE")).create(PARAMETER_MEMORY_EFFICIENT_MODE));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -158,6 +161,10 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 			
 			if(cmd.hasOption(PARAMETER_HALT_ON_ERROR)) {
 				haltOnError = true;
+			}
+			
+			if(cmd.hasOption(PARAMETER_MEMORY_EFFICIENT_MODE)) {
+				memoryEffcientMode = true;
 			}
 			
 			ArrayList<String> remainingOptions = new ArrayList<String>(
@@ -252,7 +259,7 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 			}
 			options.put(HALT_ON_ERROR, "" + haltOnError);
 			options.put(HALT_ON_FAILURE, "" + haltOnFailure);
-			
+			options.put(MEMORY_EFFICIENT_MODE, "" + memoryEffcientMode);
 
 			initialize(options);
 

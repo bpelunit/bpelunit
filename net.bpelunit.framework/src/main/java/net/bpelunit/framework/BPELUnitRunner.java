@@ -78,6 +78,8 @@ public abstract class BPELUnitRunner {
 	public static final String MEASURE_COVERAGE = "MEASURE_COVERAGE";
 
 	public static final String CHANGE_ENDPOINTS = "CHANGE_ENDPOINTS";
+	
+	public static final String MEMORY_EFFICIENT_MODE = "MEMORY_EFFICIENT_MODE";
 
 	/*
 	 * Default values of options:
@@ -91,6 +93,8 @@ public abstract class BPELUnitRunner {
 	private static boolean fHaltOnFailure = false;
 
 	private static boolean fChangeEndpoints = false;
+
+	private static boolean fIsMemoryEfficient = false;
 
 	/**
 	 * Indicates whether the runner has been properly initialized
@@ -141,6 +145,14 @@ public abstract class BPELUnitRunner {
 			setHaltOnFailure(false);
 		}
 
+		fIsMemoryEfficient = false;
+		String memoryEfficient = options.get(MEMORY_EFFICIENT_MODE);
+		if ((memoryEfficient != null) && (memoryEfficient.equalsIgnoreCase("true"))) {
+			setMemoryEfficientMode(true);
+		} else {
+			setMemoryEfficientMode(false);
+		}
+		
 		String changeEndpoints = options.get(CHANGE_ENDPOINTS);
 		if ((changeEndpoints != null)
 				&& (changeEndpoints.equalsIgnoreCase("true"))) {
@@ -169,6 +181,10 @@ public abstract class BPELUnitRunner {
 
 		// Okay
 		fInitialized = true;
+	}
+
+	public void setMemoryEfficientMode(boolean b) {
+		fIsMemoryEfficient = b;
 	}
 
 	public void setHaltOnFailure(boolean b) {
@@ -328,6 +344,10 @@ public abstract class BPELUnitRunner {
 		return fChangeEndpoints;
 	}
 
+	public static boolean isMemoryEfficientMode() {
+		return fIsMemoryEfficient ;
+	}
+	
 	// ******************** internals ******************
 
 	private void initializeXMLParser() throws ConfigurationException {
@@ -339,4 +359,5 @@ public abstract class BPELUnitRunner {
 					"Could not initialize XML Parser Component.", e);
 		}
 	}
+
 }

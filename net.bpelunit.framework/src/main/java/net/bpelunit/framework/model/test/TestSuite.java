@@ -235,6 +235,10 @@ public class TestSuite implements ITestArtefact, IExtractedDataContainer, Veloci
 					break;
 				}
 			}
+			
+			if(BPELUnitRunner.isMemoryEfficientMode()) {
+				testCase.freeResources();
+			}
 
 			if (fAbortedByUser) {
 				break;

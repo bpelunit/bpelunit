@@ -33,5 +33,8 @@
 	<classpathentry kind="lib" path="target/dependency/velocity-tools-2.0.jar"/>
 	<classpathentry kind="lib" path="target/dependency/wsdl4j-1.6.2.jar"/>
 	<classpathentry kind="lib" path="target/dependency/xmlbeans-2.4.0.jar"/>
+	<classpathentry kind="lib" path="target/dependency/antlr4-annotations-4.2.jar"/>
+	<classpathentry kind="lib" path="target/dependency/antlr4-runtime-4.2.jar"/>
+	<classpathentry kind="lib" path="target/dependency/xq-parser-1.0.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

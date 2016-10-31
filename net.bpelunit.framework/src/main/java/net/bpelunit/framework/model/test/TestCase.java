@@ -8,6 +8,7 @@ package net.bpelunit.framework.model.test;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,14 +30,15 @@ import org.apache.velocity.app.Velocity;
 import com.rits.cloning.Cloner;
 
 /**
- * A BPELUnit Test Case is a description of an interaction with the BPEL PUT, consisting of a number
- * of PartnerTracks, which run in parallel and contain sequences of activities for interaction with
- * the PUT.
+ * A BPELUnit Test Case is a description of an interaction with the BPEL PUT,
+ * consisting of a number of PartnerTracks, which run in parallel and contain
+ * sequences of activities for interaction with the PUT.
  * 
  * @author Philip Mayer
  * @author University of Cádiz (Antonio García-Domínguez)
  */
-public class TestCase implements ITestArtefact, IExtractedDataContainer, VelocityContextProvider {
+public class TestCase implements ITestArtefact, IExtractedDataContainer,
+		VelocityContextProvider {
 
 	private static final Cloner CLONER = new Cloner();
 
@@ -88,17 +90,17 @@ public class TestCase implements ITestArtefact, IExtractedDataContainer, Velocit
 	// ****************** Initialization ************************
 
 	public TestCase(TestSuite suite, String name) {
-		fSuite= suite;
-		fName= name;
-		fAbortedByUser= false;
+		fSuite = suite;
+		fName = name;
+		fAbortedByUser = false;
 
-		fMetaDataMap= new HashMap<String, String>();
-		fPartnerTracks= new ArrayList<PartnerTrack>();
-		fStatus= ArtefactStatus.createInitialStatus();
+		fMetaDataMap = new HashMap<String, String>();
+		fPartnerTracks = new ArrayList<PartnerTrack>();
+		fStatus = ArtefactStatus.createInitialStatus();
 	}
 
 	public void setName(String name) {
-		fName= name;
+		fName = name;
 	}
 
 	public void addPartnerTrack(PartnerTrack track) {
@@ -111,30 +113,30 @@ public class TestCase implements ITestArtefact, IExtractedDataContainer, Velocit
 
 		fSuite.startTestCase(this);
 
-		fRunner= new TestCaseRunner(fSuite.getLocalServer(), this);
+		fRunner = new TestCaseRunner(fSuite.getLocalServer(), this);
 		fRunner.run();
 
 		for (PartnerTrack partnerTrack : fPartnerTracks) {
 			if (partnerTrack.getStatus().isError()) {
-				fStatus= partnerTrack.getStatus();
+				fStatus = partnerTrack.getStatus();
 			} else if (partnerTrack.getStatus().isFailure()) {
-				fStatus= partnerTrack.getStatus();
+				fStatus = partnerTrack.getStatus();
 			}
 		}
 
 		if (fAbortedByUser) {
-			fStatus= ArtefactStatus.createAbortedStatus("Aborted by user.");
+			fStatus = ArtefactStatus.createAbortedStatus("Aborted by user.");
 		}
 
 		if (!fStatus.hasProblems()) {
-			fStatus= ArtefactStatus.createPassedStatus();
+			fStatus = ArtefactStatus.createPassedStatus();
 		}
 
 		fSuite.endTestCase(this);
 	}
 
 	public void abortTest() {
-		fAbortedByUser= true;
+		fAbortedByUser = true;
 		fRunner.abortTest();
 	}
 
@@ -149,7 +151,7 @@ public class TestCase implements ITestArtefact, IExtractedDataContainer, Velocit
 	}
 
 	public List<ITestArtefact> getChildren() {
-		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
+		List<ITestArtefact> children = new ArrayList<ITestArtefact>();
 		for (PartnerTrack track : getPartnerTracks()) {
 			children.add(track);
 		}
@@ -165,7 +167,7 @@ public class TestCase implements ITestArtefact, IExtractedDataContainer, Velocit
 	}
 
 	public List<StateData> getStateData() {
-		List<StateData> stateData= new ArrayList<StateData>();
+		List<StateData> stateData = new ArrayList<StateData>();
 		stateData.addAll(fStatus.getAsStateData());
 		for (String key : fMetaDataMap.keySet()) {
 			stateData.add(new StateData(key, fMetaDataMap.get(key)));
@@ -237,19 +239,21 @@ public class TestCase implements ITestArtefact, IExtractedDataContainer, Velocit
 	 * isolated, the context does not wrap the test suite context, but clones
 	 * and extends it. To reduce overhead, the test suite context is cached so
 	 * it is only produced the first time.
-	 *
+	 * 
 	 * This method extends the Velocity context with the latest copies of the
 	 * extracted data from all the ancestors of <code>artefact</code> (including
-	 * itself) that are {@link IExtractedDataContainer}s, from the oldest ancestor
-	 * to the youngest one.
-	 *
+	 * itself) that are {@link IExtractedDataContainer}s, from the oldest
+	 * ancestor to the youngest one.
+	 * 
 	 * @return VelocityContext with information about the test suite and test
-	 * case.
-	 * @throws DataSourceException 
+	 *         case.
+	 * @throws DataSourceException
 	 * */
-	public WrappedContext createVelocityContext(ITestArtefact artefact) throws DataSourceException {
+	public WrappedContext createVelocityContext(ITestArtefact artefact)
+			throws DataSourceException {
 		if (fTestSuiteVelocityContext == null) {
-			fTestSuiteVelocityContext = getSuite().createVelocityContext(artefact);
+			fTestSuiteVelocityContext = getSuite().createVelocityContext(
+					artefact);
 		}
 
 		final WrappedContext ctx = CLONER.deepClone(fTestSuiteVelocityContext);
@@ -260,7 +264,8 @@ public class TestCase implements ITestArtefact, IExtractedDataContainer, Velocit
 		if (fSetUpVelocityScript != null) {
 			StringWriter sW = new StringWriter();
 			try {
-				Velocity.evaluate(ctx, sW, "setUpTestCase", fSetUpVelocityScript);
+				Velocity.evaluate(ctx, sW, "setUpTestCase",
+						fSetUpVelocityScript);
 			} catch (Exception e) {
 				throw new DataSourceException(e);
 			}
@@ -293,5 +298,13 @@ public class TestCase implements ITestArtefact, IExtractedDataContainer, Velocit
 	public int getRowIndex() {
 		return fRowIndex;
 	}
-}
 
+	public void freeResources() {
+		for(PartnerTrack pt : fPartnerTracks) {
+			pt.freeResources();
+		}
+		fPartnerTracks = Collections.emptyList();
+		fTestSuiteVelocityContext = null;
+		reportProgress(this);
+	}
+}

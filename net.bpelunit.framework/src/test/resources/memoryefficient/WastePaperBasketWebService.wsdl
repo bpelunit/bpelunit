@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://examples.bpelunit.org/WastePaperBasketWebService" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:client="http://examples.bpelunit.org/WastePaperBasketWebService" targetNamespace="http://examples.bpelunit.org/WastePaperBasketWebService" name="WastePaperBasketWebService">
+	<types>
+		<schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://examples.bpelunit.org/WastePaperBasketWebService" xmlns="http://www.w3.org/2001/XMLSchema">
+			<element name="WastePaperBasketUsage">
+				<complexType>
+					<sequence>
+						<element name="wasteThrower" type="string"/>
+						<element name="wasteContent" type="string"/>
+					</sequence>
+				</complexType>
+			</element>
+		</schema>
+	</types>
+	<message name="WastePaperBasketWebServiceRequestMessage">
+		<part name="payload" element="tns:WastePaperBasketUsage"/>
+	</message>
+	<portType name="WastePaperBasketWebService">
+		<operation name="initiate">
+			<input message="tns:WastePaperBasketWebServiceRequestMessage"/>
+		</operation>
+	</portType>
+	<binding name="WastePaperBasketWebServiceBinding" type="tns:WastePaperBasketWebService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="initiate">
+			<soap:operation soapAction="initiate" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+		</operation>
+	</binding>
+	<service name="WastePaperBasketWebService">
+		<port name="WastePaperBasketWebServicePort" binding="tns:WastePaperBasketWebServiceBinding">
+			<soap:address location="http://localhost:7777/ws/WastePaperBasket"/>
+		</port>
+	</service>
+	<plnk:partnerLinkType name="WastePaperBasketWebService">
+		<plnk:role name="WastePaperBasketWebServiceProvider">
+			<plnk:portType name="tns:WastePaperBasketWebService"/>
+		</plnk:role>
+	</plnk:partnerLinkType>
+</definitions>
