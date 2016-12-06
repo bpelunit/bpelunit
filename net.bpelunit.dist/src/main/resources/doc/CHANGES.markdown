@@ -32,6 +32,7 @@ Staged for next version
 * _Fix_: In case of dependsOn failing test cases might not terminate (Issue BPELUnit-16)
 * _Fix_: When using WS-A Header Processor multiple times with send and receive activities, BPELUnit errors can occur (Issue BPELUnit-11)
 * _Fix_: When the .bpts is not in the project root, browsing to select a WSDL file would result in incorrect paths (Issue BPELUnit-4)
+* _Fix_: WS-HT Client send xsi:type declarations for task output (Issue BPELUnit-22)
 
 Version 1.6.1
 -----------------------
