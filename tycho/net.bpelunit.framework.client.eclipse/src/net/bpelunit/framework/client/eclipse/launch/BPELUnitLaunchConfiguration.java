@@ -44,7 +44,6 @@ public class BPELUnitLaunchConfiguration {
 	/**
 	 * @return list of test cases to be executed. An empty list if all test cases shall be executed. Always not null.
 	 */
-	@SuppressWarnings("unchecked")
 	public List<String> getTestCaseNamesToBeExecuted() {
 		List<String> testCaseNames = new ArrayList<String>();
 		try {
