@@ -14,7 +14,7 @@
   <name>BPELUnit :: Tycho Parent</name>
 
   <properties>
-    <tycho.version>0.16.0</tycho.version>
+    <tycho.version>1.0.0</tycho.version>
   </properties>
 
   <build>
