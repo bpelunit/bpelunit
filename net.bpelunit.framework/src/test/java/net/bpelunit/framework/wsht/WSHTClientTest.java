@@ -1,9 +1,17 @@
 package net.bpelunit.framework.wsht;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
+import java.io.File;
+import java.io.StringWriter;
 import java.net.URL;
 
+import net.bpelunit.framework.xml.suite.XMLAnyElement;
+
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlObject;
+import org.example.wsHT.api.xsd.XMLSetOutputDocument;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,5 +52,16 @@ public class WSHTClientTest {
 		String ar2 = client.getAuthorizationRealm();
 		
 		assertEquals(ar1, ar2);
+	}
+	
+	@Test
+	public void testCreateSetOutputMessage() throws Exception {
+		XmlObject payload = XmlObject.Factory.parse("<a/>");
+		XMLSetOutputDocument output = client.createSetOutputMessage("taskId", payload);
+		
+		StringWriter xmlAsString = new StringWriter();
+		output.save(xmlAsString);
+		
+		assertFalse(xmlAsString.toString().contains("xsi:type"));
 	}
 }

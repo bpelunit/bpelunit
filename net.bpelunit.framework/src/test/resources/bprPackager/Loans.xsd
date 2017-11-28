@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Copyright (C) 2009 Antonio García Domínguez
+
+   This file is part of the LoanApprovalDoc composition in the UCASE
+   WS-BPEL composition repository.
+
+   This program is free software: you can redistribute it and/or
+   modify it under the terms of the GNU General Public License as
+   published by the Free Software Foundation, either version 3 of the
+   License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://xml.netbeans.org/schema/Loans"
+            xmlns:tns="http://xml.netbeans.org/schema/Loans"
+            elementFormDefault="qualified">
+  <xsd:simpleType name="RiskType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="high"/>
+      <xsd:enumeration value="low"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="ApprovalRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="amount" type="xsd:float"></xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="ApprovalResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="accept" type="xsd:boolean"></xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AssessorRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="amount" type="xsd:float"></xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AssessorResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="risk" type="tns:RiskType"></xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

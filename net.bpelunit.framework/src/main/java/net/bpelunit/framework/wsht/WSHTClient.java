@@ -140,17 +140,24 @@ public class WSHTClient {
 
 	private void setOutput(String taskId, XmlObject xmlPayload) {
 		try {
-			XMLSetOutputDocument setOutputDoc = XMLSetOutputDocument.Factory
-					.newInstance();
-			SetOutput setOutput = setOutputDoc.addNewSetOutput();
-			setOutput.setIdentifier(taskId);
-			XmlObject taskData = setOutput.addNewTaskData();
-			taskData.set(xmlPayload);
+			XMLSetOutputDocument setOutputDoc = createSetOutputMessage(taskId,
+					xmlPayload);
 
 			makeWSHTSOAPRequest(setOutputDoc);
 		} catch (Exception e) {
 			throw new WSHTException(e.getMessage(), e);
 		}
+	}
+
+	XMLSetOutputDocument createSetOutputMessage(String taskId,
+			XmlObject xmlPayload) {
+		XMLSetOutputDocument setOutputDoc = XMLSetOutputDocument.Factory
+				.newInstance();
+		SetOutput setOutput = setOutputDoc.addNewSetOutput();
+		setOutput.setIdentifier(taskId);
+		XmlObject taskData = setOutput.addNewTaskData();
+		taskData.set(xmlPayload);
+		return setOutputDoc;
 	}
 
 	private void complete(String taskId) {

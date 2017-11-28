@@ -18,6 +18,7 @@ Staged for next version
 * _Feature_: Support -t option in command-line runner for setting the global time-out (#12)
 * _Feature_: Support --haltonerror and --haltonfailure in command-line runner for stopping the test run in case of errors (#18)
 * _Feature_: Introduce a memory efficient mode for the command-line runner to support stress tests. This option will break the XML log (#21)
+* _Feature_: When using the ActiveBPEL deployment, the new "BPELFileForGeneratingBPR" option can be used to generate the BPR file automatically. It takes the path to the BPEL file, relative from the .bpts file.
 * _Improvement_: Set a default base URL when creating a new test case in Eclipse tooling
 * _Improvement_: Do not allow duplicate test case names when running a test suite
 * _Improvement_: Internal clean-ups in framework
@@ -31,6 +32,9 @@ Staged for next version
 * _Fix_: Read ID from CompleteHumanTask activities so that dependsOn works also when target activity is triggered by a complete human task
 * _Fix_: In case of dependsOn failing test cases might not terminate (Issue BPELUnit-16)
 * _Fix_: When using WS-A Header Processor multiple times with send and receive activities, BPELUnit errors can occur (Issue BPELUnit-11)
+* _Fix_: When the .bpts is not in the project root, browsing to select a WSDL file would result in incorrect paths (Issue BPELUnit-4)
+* _Fix_: WS-HT Client send xsi:type declarations for task output (Issue BPELUnit-22)
+* _Fix_: Honour fault=true on two-way async activities (Issue BPELUnit-24)
 
 Version 1.6.1
 -----------------------

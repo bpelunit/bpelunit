@@ -10,9 +10,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -348,4 +350,40 @@ public final class XMLUtil {
 			throw new RuntimeException("Cannot resolve prefix " + prefix);
 		}
 	}
+
+	/**
+	 * Converts a "[prefix:]localPart" string into a proper QName. Looks up the
+	 * prefix using the specified node as context. If it doesn't have a prefix,
+	 * it will use the specified target namespace. If that doesn't work either,
+	 * it will use the default empty namespace (the one mapped to
+	 * {@link XMLConstants#DEFAULT_NS_PREFIX}).
+	 *
+	 * @param sName
+	 *            String-based name to be converted.
+	 * @param context
+	 *            Node to be used as context to look up namespace prefixes.
+	 * @param targetNS
+	 *            Target namespace of the whole document (like in WSDL or in XML
+	 *            Schema). Can be <code>null</code> is no such concept exists.
+	 * @return QName formed by the namespace URI of the prefix (if any) and the
+	 *         local part of the original name.
+	 */
+	public static QName resolveQNameTargetNS(String sName, Node context, String targetNS) {
+		if (sName == null || sName.isEmpty()) {
+			return null;
+		}
+
+		String sPrefijo = XMLConstants.DEFAULT_NS_PREFIX, sLocal = sName, ns;
+		if (sName.contains(":")) {
+			sPrefijo = sName.substring(0, sName.indexOf(':'));
+			sLocal = sName.substring(sName.indexOf(':') + 1);
+			ns = context.lookupNamespaceURI(sPrefijo);
+		} else if (targetNS != null && targetNS.length() > 0) {
+			ns = targetNS;
+		} else {
+			ns = context.lookupNamespaceURI(null);
+		}
+		return new QName(ns, sLocal, sPrefijo);
+	}
+
 }

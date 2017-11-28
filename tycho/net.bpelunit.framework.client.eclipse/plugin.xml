@@ -18,11 +18,11 @@
             class="net.bpelunit.framework.client.eclipse.preferences.BPELUnitDeploymentPreferencePage"
             id="net.bpelunit.framework.client.eclipse.preferences.BPELUnit.config"
             name="Deployment"/>
-      <page
+      <!-- <page
             category="net.bpelunit.framework.client.eclipse.preferences.BPELUnit"
             class="net.bpelunit.framework.client.eclipse.preferences.BPELUnitCoveragePreferencePage"
             id="net.bpelunit.framework.client.eclipse.preferences.BPELUnit.coverage"
-            name="Test Coverage"/>
+            name="Test Coverage"/> -->
       <page
             category="net.bpelunit.framework.client.eclipse.preferences.BPELUnit"
             class="net.bpelunit.framework.client.eclipse.preferences.RegisteredExtensionsPreferencePage"

@@ -3,11 +3,6 @@ package net.bpelunit.framework.client.eclipse.launch.ui;
 import java.util.Arrays;
 import java.util.Collections;
 
-import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
-import net.bpelunit.framework.client.eclipse.launch.LaunchConstants;
-import net.bpelunit.framework.xml.suite.XMLTestCase;
-import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -26,6 +21,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
+
+import net.bpelunit.framework.client.eclipse.BPELUnitActivator;
+import net.bpelunit.framework.client.eclipse.launch.LaunchConstants;
+import net.bpelunit.framework.xml.suite.XMLTestCase;
+import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 
 public class BPELUnitLaunchTestCasesTab extends AbstractLaunchConfigurationTab
 		implements IBPELUnitLaunchMainTabListener {
@@ -139,7 +139,6 @@ public class BPELUnitLaunchTestCasesTab extends AbstractLaunchConfigurationTab
 	 * @param config
 	 *            the configuration we are editing
 	 */
-	@SuppressWarnings("unchecked")
 	private void updateTestCasesFromConfig(ILaunchConfiguration config) {
 		String[] testCaseNames = new String[0];
 		try {
@@ -166,8 +165,9 @@ public class BPELUnitLaunchTestCasesTab extends AbstractLaunchConfigurationTab
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		if (runAllTestCasesButton.getSelection()) {
+			java.util.List<String> emptyList = Collections.emptyList();
 			configuration.setAttribute(LaunchConstants.ATTR_TEST_CASES_NAMES,
-					Collections.EMPTY_LIST);
+					emptyList);
 		} else {
 			configuration.setAttribute(LaunchConstants.ATTR_TEST_CASES_NAMES,
 					Arrays.asList(testCasesList.getSelection()));

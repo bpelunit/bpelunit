@@ -50,7 +50,7 @@ public class LaunchConstants {
 	/**
 	 * An empty list for fetching launch config list attributes
 	 */
-	public static final List<?> EMPTY_LIST = Collections.EMPTY_LIST;
+	public static final List<String> EMPTY_LIST = Collections.emptyList();
 
 	/**
 	 * Launch configuration attribute key. The value is a boolean indicating whether BPELUnit should halt after an error occurred.

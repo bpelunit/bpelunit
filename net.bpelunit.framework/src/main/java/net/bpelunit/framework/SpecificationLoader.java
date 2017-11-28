@@ -1017,13 +1017,13 @@ public class SpecificationLoader {
 
 		SendAsync sendAct = new SendAsync(twoWayActivity);
 		SendDataSpecification sSpec = createSendSpecificationFromStandalone(
-				sendAct, xmlSend, SOAPOperationDirectionIdentifier.INPUT,
+				sendAct, xmlSend, xmlSend.getFault() ?  SOAPOperationDirectionIdentifier.FAULT : SOAPOperationDirectionIdentifier.INPUT,
 				round, testDirectory);
 		sendAct.initialize(sSpec, null);
 
 		ReceiveAsync receiveAct = new ReceiveAsync(twoWayActivity);
 		ReceiveDataSpecification rSpec = createReceiveSpecificationStandalone(
-				receiveAct, xmlReceive, SOAPOperationDirectionIdentifier.INPUT);
+				receiveAct, xmlReceive, xmlReceive.getFault() ? SOAPOperationDirectionIdentifier.FAULT : SOAPOperationDirectionIdentifier.INPUT);
 		receiveAct.initialize(rSpec);
 
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);

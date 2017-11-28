@@ -1,7 +1,6 @@
 package net.bpelunit.framework.model.test.data;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.xml.namespace.NamespaceContext;
@@ -14,7 +13,6 @@ import net.bpelunit.framework.model.test.data.extraction.DataExtraction;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
-import net.bpelunit.framework.xml.suite.XMLAnyElement;
 
 import org.apache.velocity.context.Context;
 import org.apache.xmlbeans.XmlException;
@@ -28,7 +26,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 
 	private XmlObject inputXMLData;
 	private final String templateText;
-	private XMLAnyElement outputXMLData;
+	private XmlObject outputXMLData;
 	private List<DataExtraction> dataExtractions = new ArrayList<DataExtraction>();
 
 	public CompleteHumanTaskSpecification(Activity parent,
@@ -38,7 +36,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 		super(parent, nsContext);
 		try {
 			this.templateText = templateText;
-			this.outputXMLData = xmlLiteralOutputData != null ? XMLAnyElement.Factory.parse(xmlLiteralOutputData, null) : null;
+			this.outputXMLData = xmlLiteralOutputData != null ? XmlObject.Factory.parse(xmlLiteralOutputData, null) : null;
 			this.partnerTrack = partnerTrack;
 		} catch (XmlException e) {
 			throw new SpecificationException("Could not save XML Element data: " +e.getMessage(), e);
@@ -83,7 +81,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 		return templateText;
 	}
 
-	public XMLAnyElement handle(ActivityContext context, XmlObject input) {
+	public XmlObject handle(ActivityContext context, XmlObject input) {
 		this.inputXMLData = input;
 		
 		validateConditions();
@@ -91,7 +89,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 
 		if (templateText != null) {
 			try {
-				outputXMLData = XMLAnyElement.Factory.parse(generateLiteralDataFromTemplate(context, templateText));
+				outputXMLData = XmlObject.Factory.parse(generateLiteralDataFromTemplate(context, templateText));
 			} catch (XmlException e) {
 				setStatus(ArtefactStatus.createFailedStatus(String.format(
 					"Could not generate the reply message from the template: %s",

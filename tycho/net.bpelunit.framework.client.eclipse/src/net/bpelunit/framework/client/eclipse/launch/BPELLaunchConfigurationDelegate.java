@@ -64,7 +64,6 @@ public class BPELLaunchConfigurationDelegate implements
 					LaunchConstants.ATTR_PROJECT_NAME, "");
 			String fileName = configuration.getAttribute(
 					LaunchConstants.ATTR_SUITE_FILE_NAME, "");
-			@SuppressWarnings("unchecked")
 			List<String> testCasesToRun = configuration.getAttribute(
 					LaunchConstants.ATTR_TEST_CASES_NAMES,
 					LaunchConstants.EMPTY_LIST);

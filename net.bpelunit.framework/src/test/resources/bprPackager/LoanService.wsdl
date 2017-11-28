@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Copyright (C) 2009 Antonio García Domínguez
+
+   This file is part of the LoanApprovalDoc composition in the UCASE
+   WS-BPEL composition repository.
+
+   This program is free software: you can redistribute it and/or
+   modify it under the terms of the GNU General Public License as
+   published by the Free Software Foundation, either version 3 of the
+   License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<definitions name="LoanService" targetNamespace="http://j2ee.netbeans.org/wsdl/LoanService"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:tns="http://j2ee.netbeans.org/wsdl/LoanService"
+             xmlns:ns="http://xml.netbeans.org/schema/Loans"
+             xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <types>
+    <xsd:schema targetNamespace="http://j2ee.netbeans.org/wsdl/LoanService">
+      <xsd:import namespace="http://xml.netbeans.org/schema/Loans"
+                  schemaLocation="Loans.xsd"/>
+    </xsd:schema>
+  </types>
+  <message name="LoanServiceOperationRequest">
+    <part name="input" element="ns:ApprovalRequest"/>
+  </message>
+  <message name="LoanServiceOperationReply">
+    <part name="output" element="ns:ApprovalResponse"/>
+  </message>
+  <portType name="LoanServicePortType">
+    <operation name="grantLoan">
+      <input name="input1" message="tns:LoanServiceOperationRequest"/>
+      <output name="output1" message="tns:LoanServiceOperationReply"/>
+    </operation>
+  </portType>
+  <binding name="LoanServiceBinding" type="tns:LoanServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="grantLoan">
+      <soap:operation/>
+      <input name="input1">
+        <soap:body use="literal"/>
+      </input>
+      <output name="output1">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="LoanServiceService">
+    <port name="LoanServicePort" binding="tns:LoanServiceBinding">
+      <soap:address location="http://localhost:8080/active-bpel/services/LoanServiceService"/>
+    </port>
+  </service>
+  <plnk:partnerLinkType name="LoanService1">
+    <!-- A partner link type is automatically generated when a new
+         port type is added. Partner link types are used by BPEL processes.  In
+         a BPEL process, a partner link represents the interaction between the
+         BPEL process and a partner service. Each partner link is associated
+         with a partner link type.  A partner link type characterizes the
+         conversational relationship between two services. The partner link
+         type can have one or two roles.-->
+    <plnk:role name="LoanServicePortTypeRole"
+               portType="tns:LoanServicePortType"/>
+  </plnk:partnerLinkType>
+</definitions>
