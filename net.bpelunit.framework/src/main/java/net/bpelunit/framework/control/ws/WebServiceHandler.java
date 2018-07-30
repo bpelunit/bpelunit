@@ -7,6 +7,7 @@ package net.bpelunit.framework.control.ws;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.concurrent.TimeoutException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpMethods;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.util.ByteArrayISO8859Writer;
+import org.w3c.dom.NodeList;
 
 /**
  * The handler for incoming HTTP connections. Each incoming request is related
@@ -193,6 +195,21 @@ public class WebServiceHandler extends org.eclipse.jetty.server.handler.Abstract
 	
 	private void sendResponse(HttpServletResponse response, int code, SOAPMessage body)
 	throws IOException {
+		try {
+			NodeList childNodes = body.getSOAPBody().getChildNodes();
+			boolean debug = false;
+			for(int i = 0; i < childNodes.getLength(); i++) {
+				if(childNodes.item(i).getLocalName().contains("BpInformation")) {
+					debug = true;
+				}
+			}
+			if(debug) {
+				System.out.println();
+			}
+		} catch (SOAPException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		// TODO Refactor all message serializations into an own utility method
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
@@ -208,22 +225,16 @@ public class WebServiceHandler extends org.eclipse.jetty.server.handler.Abstract
 			throws IOException {
 
 		response.setContentType(BPELUnitConstants.TEXT_XML_CONTENT_TYPE);
+		response.setCharacterEncoding(BPELUnitConstants.DEFAULT_HTTP_CHARSET);
 		response.setStatus(code);
 
 		if(body == null) {
 			body = "";
 		}
-		ByteArrayISO8859Writer writer = new ByteArrayISO8859Writer(2048);
-		try {
-		writer.write(body);
-		writer.flush();
-
-		response.setContentLength(writer.size());
-		writer.writeTo(response.getOutputStream()); 
-		} finally {
-			writer.close();
-			writer.destroy();
+		try (Writer w = response.getWriter()) {
+			w.write(body);
 		}
+
 	}
 
 }

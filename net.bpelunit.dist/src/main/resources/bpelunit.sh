@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # BPELUnit wrapper script
-# Copyright (C) 2010 Antonio García-Domínguez
+# Copyright (C) 2010 Antonio Garcï¿½a-Domï¿½nguez
 #
 # Licensed under the terms of BPELUnit itself.
 

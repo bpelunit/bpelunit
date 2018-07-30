@@ -35,6 +35,7 @@ Staged for next version
 * _Fix_: When the .bpts is not in the project root, browsing to select a WSDL file would result in incorrect paths (Issue BPELUnit-4)
 * _Fix_: WS-HT Client send xsi:type declarations for task output (Issue BPELUnit-22)
 * _Fix_: Honour fault=true on two-way async activities (Issue BPELUnit-24)
+* _Fix_: Correctly handle UTF-8 characters (Issue BPELUnit-25)
 
 Version 1.6.1
 -----------------------

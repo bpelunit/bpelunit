@@ -139,4 +139,19 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 			}
 		}
 	}
+
+
+	public void setInput(String s) {
+		try {
+			inputXMLData = XmlObject.Factory.parse(
+					"<message>" + 
+					s
+						.replaceAll("<","&lt;") 
+						.replaceAll(">","&gt;") 
+						.replaceAll("\"","&quot;") 
+					+ "</message>");
+		} catch (XmlException e) {
+			// ignore
+		}
+	}
 }

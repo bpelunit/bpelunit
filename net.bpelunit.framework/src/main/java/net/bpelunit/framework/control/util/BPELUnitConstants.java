@@ -63,7 +63,7 @@ public final class BPELUnitConstants {
 	/**
 	 * Default charset for HTTP requests
 	 */
-	public static final String DEFAULT_HTTP_CHARSET= "ISO-8859-1";
+	public static final String DEFAULT_HTTP_CHARSET= "UTF-8";
 
 	/**
 	 * Content type for sending XML over HTTP.

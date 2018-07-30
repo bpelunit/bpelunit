@@ -1,5 +1,7 @@
 package net.bpelunit.framework.model.test.activity;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +91,11 @@ public class CompleteHumanTask extends Activity {
 		} catch(InterruptedException e) {
 			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for task.", e));
 		} catch (Exception e) {
+			StringWriter s = new StringWriter();
+			PrintWriter p = new PrintWriter(s);
+			e.printStackTrace(p);
+			p.flush();
+			dataSpec.setInput(s.toString());
 			setStatus(ArtefactStatus.createErrorStatus("Error while completing human task: " + e.getMessage(), e));
 		}
 	}
