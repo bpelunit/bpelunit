@@ -66,6 +66,14 @@ public abstract class TwoWayAsyncActivity extends Activity {
 		super(partnerTrack);
 	}
 
+	public TwoWayAsyncActivity(Activity parent) {
+		super(parent);
+	}
+
+	public TwoWayAsyncActivity(ITestArtefact parent) {
+		super(parent);
+	}
+
 	public void initialize(SendAsync sendAct, ReceiveAsync receiveAct, IHeaderProcessor proc, List<DataCopyOperation> mapping) {
 		fSendAsync= sendAct;
 		fReceiveAsync= receiveAct;
@@ -79,16 +87,6 @@ public abstract class TwoWayAsyncActivity extends Activity {
 	public int getActivityCount() {
 		// The parent itself and the two children
 		return 3;
-	}
-
-	// ************************** ITestArtefact ************************
-
-	/**
-	 * Returns the parent of this activity. This is always the partner track.
-	 */
-	@Override
-	public ITestArtefact getParent() {
-		return getPartnerTrack();
 	}
 
 }

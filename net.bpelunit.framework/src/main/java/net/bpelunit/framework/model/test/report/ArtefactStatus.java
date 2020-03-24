@@ -115,6 +115,10 @@ public final class ArtefactStatus {
 		return fCode == StatusCode.INPROGRESS;
 	}
 
+	public boolean isFinal() {
+		return fCode == StatusCode.ABORTED || fCode == StatusCode.ERROR || fCode == StatusCode.FAILED || fCode == StatusCode.PASSED;
+	}
+	
 	// ******************** Other tools ***********************
 
 	public StatusCode getCode() {

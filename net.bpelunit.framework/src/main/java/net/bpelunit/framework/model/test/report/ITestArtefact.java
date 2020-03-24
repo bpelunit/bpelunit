@@ -46,7 +46,7 @@ public interface ITestArtefact {
 	 * 
 	 * @return list of children
 	 */
-	List<ITestArtefact> getChildren();
+	List<? extends ITestArtefact> getChildren();
 
 	/**
 	 * Returns a list of state data of interest. Must return the empty list if there is no state

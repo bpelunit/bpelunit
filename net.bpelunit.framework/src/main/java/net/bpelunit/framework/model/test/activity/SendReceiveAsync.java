@@ -11,6 +11,7 @@ import java.util.List;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.wire.IncomingMessage;
 
 /**
  * A send/receive asynchronous activity is a combination of an asynchronous send and an asynchronous
@@ -29,7 +30,14 @@ public class SendReceiveAsync extends TwoWayAsyncActivity {
 
 	public SendReceiveAsync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		setStatus(ArtefactStatus.createInitialStatus());
+	}
+	
+	public SendReceiveAsync(Activity parent) {
+		super(parent);
+	}
+	
+	public SendReceiveAsync(ITestArtefact parent) {
+		super(parent);
 	}
 
 	// ***************************** Activity **************************
@@ -80,4 +88,13 @@ public class SendReceiveAsync extends TwoWayAsyncActivity {
 		return children;
 	}
 
+	@Override
+	public boolean isStartingWithMessageReceive() {
+		return false;
+	}
+	
+	@Override
+	public boolean canExecute(ActivityContext context, IncomingMessage message) {
+		return false;
+	}
 }

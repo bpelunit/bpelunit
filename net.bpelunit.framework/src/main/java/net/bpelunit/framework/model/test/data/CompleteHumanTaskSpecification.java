@@ -5,6 +5,11 @@ import java.util.List;
 
 import javax.xml.namespace.NamespaceContext;
 
+import org.apache.velocity.context.Context;
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlObject;
+import org.w3c.dom.Element;
+
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.activity.Activity;
@@ -13,11 +18,7 @@ import net.bpelunit.framework.model.test.data.extraction.DataExtraction;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
-
-import org.apache.velocity.context.Context;
-import org.apache.xmlbeans.XmlException;
-import org.apache.xmlbeans.XmlObject;
-import org.w3c.dom.Element;
+import net.bpelunit.framework.xml.suite.XMLAnyElement;
 
 public class CompleteHumanTaskSpecification extends DataSpecification {
 
@@ -26,7 +27,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 
 	private XmlObject inputXMLData;
 	private final String templateText;
-	private XmlObject outputXMLData;
+	private XMLAnyElement outputXMLData;
 	private List<DataExtraction> dataExtractions = new ArrayList<DataExtraction>();
 
 	public CompleteHumanTaskSpecification(Activity parent,
@@ -36,7 +37,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 		super(parent, nsContext);
 		try {
 			this.templateText = templateText;
-			this.outputXMLData = xmlLiteralOutputData != null ? XmlObject.Factory.parse(xmlLiteralOutputData, null) : null;
+			this.outputXMLData = xmlLiteralOutputData != null ? XMLAnyElement.Factory.parse(xmlLiteralOutputData, null) : null;
 			this.partnerTrack = partnerTrack;
 		} catch (XmlException e) {
 			throw new SpecificationException("Could not save XML Element data: " +e.getMessage(), e);
@@ -81,7 +82,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 		return templateText;
 	}
 
-	public XmlObject handle(ActivityContext context, XmlObject input) {
+	public XMLAnyElement handle(ActivityContext context, XmlObject input) {
 		this.inputXMLData = input;
 		
 		validateConditions();
@@ -89,7 +90,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 
 		if (templateText != null) {
 			try {
-				outputXMLData = XmlObject.Factory.parse(generateLiteralDataFromTemplate(context, templateText));
+				outputXMLData = XMLAnyElement.Factory.parse(generateLiteralDataFromTemplate(context, templateText));
 			} catch (XmlException e) {
 				setStatus(ArtefactStatus.createFailedStatus(String.format(
 					"Could not generate the reply message from the template: %s",
@@ -122,7 +123,7 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);
 
 		for (ReceiveCondition c : conditions) {
-			c.evaluate(partnerTrack, (Element)inputXMLData.getDomNode(), getNamespaceContext(), variableResolver);
+			c.evaluate(partnerTrack, (Element)inputXMLData.getDomNode(), getNamespaceContext(), variableResolver, true);
 
 			if (c.isFailure()) {
 				setStatus(ArtefactStatus.createFailedStatus(String.format(
@@ -137,21 +138,6 @@ public class CompleteHumanTaskSpecification extends DataSpecification {
 								.getStatus().getMessage())));
 				break;
 			}
-		}
-	}
-
-
-	public void setInput(String s) {
-		try {
-			inputXMLData = XmlObject.Factory.parse(
-					"<message>" + 
-					s
-						.replaceAll("<","&lt;") 
-						.replaceAll(">","&gt;") 
-						.replaceAll("\"","&quot;") 
-					+ "</message>");
-		} catch (XmlException e) {
-			// ignore
 		}
 	}
 }

@@ -5,12 +5,11 @@
  */
 package net.bpelunit.framework.control.ws;
 
-import net.bpelunit.framework.control.run.TestCaseRunner;
-
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
+
+import net.bpelunit.framework.control.run.TestCaseRunner;
 
 /**
  * The class LocalHTTPServer implements the necessary functionality for starting
@@ -69,11 +68,6 @@ public class LocalHTTPServer {
 	}
 
 	public void stopServer() throws Exception {
-		final Connector firstConnector = fServer.getConnectors()[0];
-
-		LOGGER.info("Connections = " + firstConnector.getConnections());
-		LOGGER.info("ConnectionsOpen = " + firstConnector.getConnectionsOpen());
-		LOGGER.info("ConnectionsRequests = " + firstConnector.getRequests());
 		fServer.stop();
 	}
 

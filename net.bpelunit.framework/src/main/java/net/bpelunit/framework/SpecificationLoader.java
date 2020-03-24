@@ -26,6 +26,18 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlObject;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import net.bpelunit.framework.control.datasource.DataSourceUtil;
 import net.bpelunit.framework.control.deploy.IBPELDeployer;
 import net.bpelunit.framework.control.ext.IDataSource;
@@ -46,12 +58,14 @@ import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.activity.Activity;
 import net.bpelunit.framework.model.test.activity.CompleteHumanTask;
+import net.bpelunit.framework.model.test.activity.Parallel;
 import net.bpelunit.framework.model.test.activity.ReceiveAsync;
 import net.bpelunit.framework.model.test.activity.ReceiveSendAsync;
 import net.bpelunit.framework.model.test.activity.ReceiveSendSync;
 import net.bpelunit.framework.model.test.activity.SendAsync;
 import net.bpelunit.framework.model.test.activity.SendReceiveAsync;
 import net.bpelunit.framework.model.test.activity.SendReceiveSync;
+import net.bpelunit.framework.model.test.activity.Sequence;
 import net.bpelunit.framework.model.test.activity.TwoWayAsyncActivity;
 import net.bpelunit.framework.model.test.activity.Wait;
 import net.bpelunit.framework.model.test.data.CompleteHumanTaskSpecification;
@@ -63,6 +77,7 @@ import net.bpelunit.framework.model.test.data.SOAPOperationCallIdentifier;
 import net.bpelunit.framework.model.test.data.SOAPOperationDirectionIdentifier;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
 import net.bpelunit.framework.model.test.data.extraction.DataExtraction;
+import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.verify.ConditionGroupsExistInTestSuiteValidator;
 import net.bpelunit.framework.verify.ITestSuiteValidator;
 import net.bpelunit.framework.verify.NoCyclesInConditionGroupInheritanceValidator;
@@ -86,6 +101,7 @@ import net.bpelunit.framework.xml.suite.XMLHumanPartnerDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLHumanPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLMapping;
 import net.bpelunit.framework.xml.suite.XMLPUTDeploymentInformation;
+import net.bpelunit.framework.xml.suite.XMLParallelActivity;
 import net.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLProperty;
@@ -101,20 +117,6 @@ import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
 import net.bpelunit.framework.xml.suite.XMLTrack;
 import net.bpelunit.framework.xml.suite.XMLTwoWayActivity;
 import net.bpelunit.framework.xml.suite.XMLWaitActivity;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-import org.apache.xmlbeans.XmlCursor;
-import org.apache.xmlbeans.XmlException;
-import org.apache.xmlbeans.XmlObject;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import com.ibm.wsdl.Constants;
 
 /**
  * The specificaton loader reads test suite documents and creates the in-memory
@@ -191,7 +193,8 @@ public class SpecificationLoader {
 				new ConditionGroupsExistInTestSuiteValidator(),
 				new NoCyclesInConditionGroupInheritanceValidator(),
 				new XMLDataIsEitherSetOrImportedValidator(),
-				new TestCaseNamesAreUniqueValidator()};
+				new TestCaseNamesAreUniqueValidator(),
+		};
 
 		for (ITestSuiteValidator v : validators) {
 			v.validate(doc);
@@ -431,7 +434,7 @@ public class SpecificationLoader {
 		try {
 			WSDLFactory factory = WSDLFactory.newInstance();
 			WSDLReader reader = factory.newWSDLReader();
-			reader.setFeature(Constants.FEATURE_VERBOSE, false);
+			reader.setFeature("javax.wsdl.verbose", false);
 			return reader.readWSDL(wsdlFileName);
 		} catch (WSDLException e) {
 			throw new SpecificationException(
@@ -746,7 +749,6 @@ public class SpecificationLoader {
 	 * @param round
 	 * @throws SpecificationException
 	 */
-	@SuppressWarnings("unchecked")
 	private void readActivities(PartnerTrack partnerTrack,
 			XMLTestCase xmlTestCase, XMLTrack xmlTrack, int round,
 			String testDirectory) throws SpecificationException {
@@ -780,74 +782,95 @@ public class SpecificationLoader {
 			partnerTrack.setActivities(new ArrayList<Activity>());
 
 		} else {
-			List<Activity> activities = new ArrayList<Activity>();
-			for (XMLActivity event : xmlActivities) {
-
-				Activity a;
-				/*
-				 * Each activity is one of the seven specified activites:
-				 * ReceiveOnly, SendOnly, ReceiveSendSync, SendReceiveSync,
-				 * ReceiveSendAsync, SendReceiveAsync, and Wait.
-				 */
-				if (event instanceof XMLWaitActivity) {
-					a = readWait(partnerTrack, activities, event,
-							(XMLWaitActivity) event);
-				} else if (event instanceof XMLReceiveActivity) {
-					a = readReceive(partnerTrack, activities, event,
-							(XMLReceiveActivity) event);
-				} else if (event instanceof XMLSendOnlyActivity) {
-					a = readSend(partnerTrack, round, testDirectory, activities,
-							event, (XMLSendOnlyActivity) event);
-				} else if (event instanceof XMLTwoWayActivity) {
-					XMLTwoWayActivity op = (XMLTwoWayActivity) event;
-					a = readTwoWayActivity(partnerTrack, round, testDirectory,
-							activities, event, op);
-				} else {
-					throw new SpecificationException(
-							"No activity found when reading event list for "
-									+ partnerTrack);
-				}
-				a.setId(event.getId());
-				a.setDependsOn(event.getDependsOn());
-			}
-
-			partnerTrack.setActivities(activities);
+			partnerTrack.setActivities(readActivities(partnerTrack, round, testDirectory, xmlActivities));
 		}
 	}
 
-	private Activity readTwoWayActivity(PartnerTrack partnerTrack, int round,
-			String testDirectory, List<Activity> activities, XMLActivity event,
-			XMLTwoWayActivity op) throws SpecificationException {
+	@SuppressWarnings("unchecked")
+	private List<Activity> readActivities(ITestArtefact parent, int round, String testDirectory,
+			List<XMLActivity> xmlActivities) throws SpecificationException {
+		List<Activity> activities = new ArrayList<Activity>();
+		for (XMLActivity xmlActivity : xmlActivities) {
+
+			Activity a;
+			if (xmlActivity instanceof XMLWaitActivity) {
+				a = readWait(parent, (XMLWaitActivity) xmlActivity);
+			} else if (xmlActivity instanceof XMLReceiveActivity) {
+				a = readReceive(parent, (XMLReceiveActivity) xmlActivity);
+			} else if (xmlActivity instanceof XMLSendOnlyActivity) {
+				a = readSend(parent, round, testDirectory, (XMLSendOnlyActivity) xmlActivity);
+			} else if (xmlActivity instanceof XMLTwoWayActivity) {
+				XMLTwoWayActivity op = (XMLTwoWayActivity) xmlActivity;
+				a = readTwoWayActivity(parent, round, testDirectory, op);
+			} else if(xmlActivity instanceof XMLParallelActivity) {
+				XMLParallelActivity p = (XMLParallelActivity) xmlActivity;
+				a = readParallel(parent, round, testDirectory, p);
+			} else if(xmlActivity instanceof XMLTrack) {
+				a = readSequence(parent, (XMLTrack)xmlActivity, round, testDirectory);
+			} else {
+				throw new SpecificationException("No activity found when reading event list for " + parent);
+			}
+			a.setId(xmlActivity.getId());
+			a.setDependsOn(xmlActivity.getDependsOn());
+			activities.add(a);
+		}
+
+		return activities;
+	}
+
+	private Activity readParallel(ITestArtefact parent, int round, String testDirectory, XMLParallelActivity xmlActivity) throws SpecificationException {
+		Parallel activity = new Parallel(parent);
+		for(XMLTrack s : xmlActivity.getSequenceList()) {
+			Sequence sequence = readSequence(activity, s, round, testDirectory);
+			activity.addActivity(sequence);
+		}
+
+		return activity;
+	}
+
+	private Sequence readSequence(ITestArtefact parent, XMLTrack xmlTrack, int round, String testDirectory) throws SpecificationException {
+		Sequence sequence = new Sequence(parent);
+		
+		List<XMLActivity> xmlActivities = ActivityUtil.getActivities(xmlTrack);
+		
+		List<Activity> activities = readActivities(sequence, round, testDirectory, xmlActivities);
+		for(Activity a : activities) {
+			sequence.addActivity(a);
+		}
+		
+		return sequence;
+	}
+
+	private Activity readTwoWayActivity(ITestArtefact parent, int round,
+			String testDirectory, XMLTwoWayActivity op) throws SpecificationException {
 		Activity activity = null;
 		if (ActivityUtil.isActivity(op, ActivityConstant.RECEIVE_SEND_SYNC)) {
-			activity = createReceiveSendSynchronous(op, partnerTrack, round,
+			activity = createReceiveSendSynchronous(op, parent, round,
 					testDirectory);
 		} else if (ActivityUtil.isActivity(op,
 				ActivityConstant.SEND_RECEIVE_SYNC)) {
-			activity = createSendReceiveSynchronous(op, partnerTrack, round,
+			activity = createSendReceiveSynchronous(op, parent, round,
 					testDirectory);
 		} else if (ActivityUtil.isActivity(op,
 				ActivityConstant.RECEIVE_SEND_ASYNC)) {
-			ReceiveSendAsync a = new ReceiveSendAsync(partnerTrack);
+			ReceiveSendAsync a = new ReceiveSendAsync(parent);
 			fillAsyncTwoWay(a, op, round, testDirectory);
 			activity = a;
 		} else if (ActivityUtil.isActivity(op,
 				ActivityConstant.SEND_RECEIVE_ASYNC)) {
-			SendReceiveAsync a = new SendReceiveAsync(partnerTrack);
+			SendReceiveAsync a = new SendReceiveAsync(parent);
 			fillAsyncTwoWay(a, op, round, testDirectory);
 			activity = a;
 		}
 
-		activity.setAssumption(event.getAssume());
-		activities.add(activity);
+		activity.setAssumption(op.getAssume());
 		
 		return activity;
 	}
 
-	private Activity readSend(PartnerTrack partnerTrack, int round,
-			String testDirectory, List<Activity> activities, XMLActivity event,
-			XMLSendOnlyActivity xmlSend) throws SpecificationException {
-		SendAsync activity = new SendAsync(partnerTrack);
+	private Activity readSend(ITestArtefact parent, int round,
+			String testDirectory, XMLSendOnlyActivity xmlSend) throws SpecificationException {
+		SendAsync activity = new SendAsync(parent);
 		SendDataSpecification spec = createSendSpecificationFromStandalone(
 				activity, xmlSend, SOAPOperationDirectionIdentifier.INPUT,
 				round, testDirectory);
@@ -857,31 +880,25 @@ public class SpecificationLoader {
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
 
 		activity.initialize(spec, proc);
-		activity.setAssumption(event.getAssume());
+		activity.setAssumption(xmlSend.getAssume());
 
-		activities.add(activity);
 		return activity;
 	}
 
-	private Activity readReceive(PartnerTrack partnerTrack,
-			List<Activity> activities, XMLActivity event,
-			XMLReceiveActivity xmlReceive) throws SpecificationException {
-		ReceiveAsync activity = new ReceiveAsync(partnerTrack);
+	private Activity readReceive(ITestArtefact parent, XMLReceiveActivity xmlReceive) throws SpecificationException {
+		ReceiveAsync activity = new ReceiveAsync(parent);
 		ReceiveDataSpecification spec = createReceiveSpecificationStandalone(
 				activity, xmlReceive, SOAPOperationDirectionIdentifier.INPUT);
 		activity.initialize(spec);
-		activity.setAssumption(event.getAssume());
+		activity.setAssumption(xmlReceive.getAssume());
 
-		activities.add(activity);
 		return activity;
 	}
 
-	private Activity readWait(PartnerTrack partnerTrack, List<Activity> activities,
-			XMLActivity event, XMLWaitActivity xmlWait) {
-		Wait activity = new Wait(partnerTrack);
+	private Activity readWait(ITestArtefact parent, XMLWaitActivity xmlWait) {
+		Wait activity = new Wait(parent);
 		activity.setWaitDuration(xmlWait.getWaitForMilliseconds());
-		activity.setAssumption(event.getAssume());
-		activities.add(activity);
+		activity.setAssumption(xmlWait.getAssume());
 		return activity;
 	}
 
@@ -904,10 +921,10 @@ public class SpecificationLoader {
 	 * 
 	 */
 	private Activity createSendReceiveSynchronous(
-			XMLTwoWayActivity xmlSendReceiveSync, PartnerTrack partnerTrack,
+			XMLTwoWayActivity xmlSendReceiveSync, ITestArtefact parent,
 			int round, String testDirectory) throws SpecificationException {
 
-		SendReceiveSync activity = new SendReceiveSync(partnerTrack);
+		SendReceiveSync activity = new SendReceiveSync(parent);
 
 		XMLSendActivity xmlSend = xmlSendReceiveSync.getSend();
 		XMLReceiveActivity xmlReceive = xmlSendReceiveSync.getReceive();
@@ -941,18 +958,16 @@ public class SpecificationLoader {
 		return activity;
 	}
 
-	/**
-	 * Creates a synchronous receive/send activity.
-	 * 
-	 * @throws IOException
-	 * @throws XmlException
-	 * 
-	 */
 	private Activity createReceiveSendSynchronous(
-			XMLTwoWayActivity xmlReceiveSendSync, PartnerTrack partnerTrack,
+			XMLTwoWayActivity xmlReceiveSendSync, ITestArtefact parent,
 			int round, String testDirectory) throws SpecificationException {
 
-		ReceiveSendSync activity = new ReceiveSendSync(partnerTrack);
+		ReceiveSendSync activity = new ReceiveSendSync(parent);
+		return readInReceiveSendSynchronous(xmlReceiveSendSync, round, testDirectory, activity);
+	}
+
+	private Activity readInReceiveSendSynchronous(XMLTwoWayActivity xmlReceiveSendSync, int round, String testDirectory,
+			ReceiveSendSync activity) throws SpecificationException {
 		activity.setAssumption(xmlReceiveSendSync.getAssume());
 
 		XMLSendActivity xmlSend = xmlReceiveSendSync.getSend();
@@ -1018,13 +1033,13 @@ public class SpecificationLoader {
 
 		SendAsync sendAct = new SendAsync(twoWayActivity);
 		SendDataSpecification sSpec = createSendSpecificationFromStandalone(
-				sendAct, xmlSend, xmlSend.getFault() ?  SOAPOperationDirectionIdentifier.FAULT : SOAPOperationDirectionIdentifier.INPUT,
+				sendAct, xmlSend, SOAPOperationDirectionIdentifier.INPUT,
 				round, testDirectory);
 		sendAct.initialize(sSpec, null);
 
 		ReceiveAsync receiveAct = new ReceiveAsync(twoWayActivity);
 		ReceiveDataSpecification rSpec = createReceiveSpecificationStandalone(
-				receiveAct, xmlReceive, xmlReceive.getFault() ? SOAPOperationDirectionIdentifier.FAULT : SOAPOperationDirectionIdentifier.INPUT);
+				receiveAct, xmlReceive, SOAPOperationDirectionIdentifier.INPUT);
 		receiveAct.initialize(rSpec);
 
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
@@ -1558,7 +1573,7 @@ public class SpecificationLoader {
 	    		result.put(currentAttribute.getLocalName(), currentAttribute.getNodeValue());
 	    	}
 	    	if((currentPrefix == null || currentPrefix.equals("")) && "xmlns".equals(currentAttribute.getLocalName())) {
-	    		result.put("", currentAttribute.getNodeValue());
+	    		result.put("",  currentAttribute.getNodeValue());
 	    	}
 	    }
 		

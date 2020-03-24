@@ -6,6 +6,7 @@ import java.util.List;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.wire.IncomingMessage;
 
 public class Wait extends Activity {
 
@@ -13,6 +14,14 @@ public class Wait extends Activity {
 
 	public Wait(PartnerTrack partnerTrack) {
 		super(partnerTrack);
+	}
+
+	public Wait(Activity parent) {
+		super(parent);
+	}
+
+	public Wait(ITestArtefact parent) {
+		super(parent);
 	}
 
 	@Override
@@ -36,11 +45,6 @@ public class Wait extends Activity {
 	}
 
 	@Override
-	public ITestArtefact getParent() {
-		return getPartnerTrack();
-	}
-
-	@Override
 	public void runInternal(ActivityContext context) {
 		setStatus(ArtefactStatus.createInProgressStatus());
 
@@ -49,15 +53,25 @@ public class Wait extends Activity {
 		while(System.currentTimeMillis() < waitTill) {
 			try {
 				Thread.sleep(Math.max(0, waitTill - System.currentTimeMillis()));
+				setStatus(ArtefactStatus.createPassedStatus());
 			} catch (InterruptedException e) {
-				// Ignore this of time being
+				setStatus(ArtefactStatus.createErrorStatus("Aborted while waiting"));
 			}
 		}
 		
-		setStatus(ArtefactStatus.createPassedStatus());
 	}
 
 	public void setWaitDuration(long waitForMilliseconds) {
 		this.waitDuration = waitForMilliseconds;
-	}	
+	}
+	
+	@Override
+	public boolean isStartingWithMessageReceive() {
+		return false;
+	}
+	
+	@Override
+	public boolean canExecute(ActivityContext context, IncomingMessage message) {
+		return false;
+	}
 }

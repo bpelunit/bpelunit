@@ -41,11 +41,6 @@ import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 public class SendAsync extends Activity {
 
 	/**
-	 * The parent activity, if there is one.
-	 */
-	private TwoWayAsyncActivity fParentActivity;
-
-	/**
 	 * The send specification, which handles the actual send
 	 */
 	private SendDataSpecification fSendSpec;
@@ -65,12 +60,14 @@ public class SendAsync extends Activity {
 
 	public SendAsync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		fParentActivity= null;
 	}
 
-	public SendAsync(TwoWayAsyncActivity activity) {
+	public SendAsync(Activity activity) {
 		super(activity.getPartnerTrack());
-		fParentActivity= activity;
+	}
+
+	public SendAsync(ITestArtefact parent) {
+		super(parent);
 	}
 
 	public void initialize(SendDataSpecification spec, IHeaderProcessor proc) {
@@ -153,15 +150,6 @@ public class SendAsync extends Activity {
 	}
 
 	@Override
-	public ITestArtefact getParent() {
-		if (fParentActivity != null) {
-			return fParentActivity;
-		} else {
-			return getPartnerTrack();
-		}
-	}
-
-	@Override
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
 		children.add(fSendSpec);
@@ -176,5 +164,15 @@ public class SendAsync extends Activity {
 			stateData.add(new StateData("Return Body", fWrongBody));
 		}
 		return stateData;
+	}
+	
+	@Override
+	public boolean isStartingWithMessageReceive() {
+		return false;
+	}
+	
+	@Override
+	public boolean canExecute(ActivityContext context, IncomingMessage message) {
+		return false;
 	}
 }

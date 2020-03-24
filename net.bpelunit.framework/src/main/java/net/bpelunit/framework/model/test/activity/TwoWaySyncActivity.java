@@ -57,6 +57,14 @@ public abstract class TwoWaySyncActivity extends Activity {
 	public TwoWaySyncActivity(PartnerTrack partnerTrack) {
 		super(partnerTrack);
 	}
+	
+	public TwoWaySyncActivity(Activity parent) {
+		super(parent);
+	}
+
+	public TwoWaySyncActivity(ITestArtefact parent) {
+		super(parent);
+	}
 
 	/**
 	 * Initializes this activity.
@@ -82,14 +90,6 @@ public abstract class TwoWaySyncActivity extends Activity {
 	}
 
 	// ************************** ITestArtefact ************************
-
-	/**
-	 * Returns the parent of this activity. This is always the partner track.
-	 */
-	@Override
-	public ITestArtefact getParent() {
-		return getPartnerTrack();
-	}
 
 	public SendDataSpecification getSendSpec() {
 		return fSendSpec;

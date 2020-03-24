@@ -35,10 +35,6 @@ import net.bpelunit.framework.model.test.wire.OutgoingMessage;
  */
 public class ReceiveAsync extends Activity {
 
-	/**
-	 * The parent activity, if there is one.
-	 */
-	private TwoWayAsyncActivity fParentActivity;
 
 	/**
 	 * The receive specification handling the actual receive
@@ -49,12 +45,14 @@ public class ReceiveAsync extends Activity {
 
 	public ReceiveAsync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		fParentActivity= null;
 	}
 
-	public ReceiveAsync(TwoWayAsyncActivity activity) {
-		super(activity.getPartnerTrack());
-		fParentActivity= activity;
+	public ReceiveAsync(Activity activity) {
+		super(activity);
+	}
+	
+	public ReceiveAsync(ITestArtefact parent) {
+		super(parent);
 	}
 
 	public void initialize(ReceiveDataSpecification spec) {
@@ -65,17 +63,10 @@ public class ReceiveAsync extends Activity {
 	// ***************************** Activity **************************
 
 	@Override
-	public void runInternal(ActivityContext context) {
+	public void runInternal(ActivityContext context, IncomingMessage incoming) {
 
-		IncomingMessage incoming;
-		try {
-			incoming= context.receiveMessage(this.getPartnerTrack());
-		} catch (TimeoutException e) {
-			setStatus(ArtefactStatus.createErrorStatus("Timeout while waiting for incoming asynchronous message", e));
-			return;
-		} catch (InterruptedException e) {
-			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming asynchronous messsage", e));
-			return;
+		if(incoming == null) {
+			throw new RuntimeException("incoming must not be null");
 		}
 
 		fReceiveSpec.handle(context, incoming);
@@ -145,19 +136,20 @@ public class ReceiveAsync extends Activity {
 	}
 
 	@Override
-	public ITestArtefact getParent() {
-		if (fParentActivity != null) {
-			return fParentActivity;
-		} else {
-			return getPartnerTrack();
-		}
-	}
-
-	@Override
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children= new ArrayList<ITestArtefact>();
 		children.add(fReceiveSpec);
 		return children;
 	}
 
+	@Override
+	public boolean isStartingWithMessageReceive() {
+		return true;
+	}
+	
+	@Override
+	public boolean canExecute(ActivityContext context, IncomingMessage message) {
+		return fReceiveSpec.areAllConditionsFulfilled(context, message);
+	}
+	
 }

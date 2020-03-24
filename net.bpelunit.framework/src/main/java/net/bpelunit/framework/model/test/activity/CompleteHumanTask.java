@@ -1,7 +1,5 @@
 package net.bpelunit.framework.model.test.activity;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +9,7 @@ import net.bpelunit.framework.model.test.data.CompleteHumanTaskSpecification;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.wsht.WSHTClient;
 
 import org.apache.xmlbeans.XmlObject;
@@ -91,11 +90,6 @@ public class CompleteHumanTask extends Activity {
 		} catch(InterruptedException e) {
 			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for task.", e));
 		} catch (Exception e) {
-			StringWriter s = new StringWriter();
-			PrintWriter p = new PrintWriter(s);
-			e.printStackTrace(p);
-			p.flush();
-			dataSpec.setInput(s.toString());
 			setStatus(ArtefactStatus.createErrorStatus("Error while completing human task: " + e.getMessage(), e));
 		}
 	}
@@ -116,11 +110,6 @@ public class CompleteHumanTask extends Activity {
 	}
 
 	@Override
-	public ITestArtefact getParent() {
-		return getPartnerTrack();
-	}
-
-	@Override
 	public List<ITestArtefact> getChildren() {
 		List<ITestArtefact> children = new ArrayList<ITestArtefact>();
 		children.add(dataSpec);
@@ -132,5 +121,15 @@ public class CompleteHumanTask extends Activity {
 		List<StateData> stateData = super.getStateData();
 		stateData.add(new StateData("Task ID", taskId));
 		return stateData;
+	}
+
+	@Override
+	public boolean isStartingWithMessageReceive() {
+		return false;
+	}
+
+	@Override
+	public boolean canExecute(ActivityContext context, IncomingMessage message) {
+		return false;
 	}
 }

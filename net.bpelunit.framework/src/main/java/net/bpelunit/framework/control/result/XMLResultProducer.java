@@ -75,7 +75,7 @@ public final class XMLResultProducer {
 			transferState(activity, xmlActivityNew);
 			xmlActivityNew.setType(activity.getActivityCode());
 
-			List<ITestArtefact> children= activity.getChildren();
+			List<? extends ITestArtefact> children= activity.getChildren();
 			for (ITestArtefact innerArtefact : children) {
 				handleLowLevel(xmlActivityNew, innerArtefact);
 			}
@@ -88,7 +88,7 @@ public final class XMLResultProducer {
 
 			// And may have children of type XMLData and ReceiveCondition
 
-			List<ITestArtefact> children= dataSpec.getChildren();
+			List<? extends ITestArtefact> children= dataSpec.getChildren();
 			for (ITestArtefact artefact : children) {
 				if (artefact instanceof XMLData) {
 					XMLData data= (XMLData) artefact;
@@ -177,7 +177,7 @@ public final class XMLResultProducer {
                                         xmlActivity.setType(activity.getActivityCode());
                                         transferState(activity, xmlActivity);
 
-                                        List<ITestArtefact> activityChildren= activity.getChildren();
+                                        List<? extends ITestArtefact> activityChildren= activity.getChildren();
                                         // Activity children may be other activites, dataPackages, or arbitrary data
                                         for (ITestArtefact artefact3 : activityChildren) {
                                                 handleLowLevel(xmlActivity, artefact3);

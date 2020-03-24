@@ -6,10 +6,13 @@
 package net.bpelunit.framework.model.test.activity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
+
+import org.w3c.dom.Element;
 
 import net.bpelunit.framework.control.datasource.WrappedContext;
 import net.bpelunit.framework.control.ext.IHeaderProcessor;
@@ -22,13 +25,9 @@ import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.data.SendDataSpecification;
-import net.bpelunit.framework.model.test.data.extraction.ExtractedDataContainerUtil;
-import net.bpelunit.framework.model.test.data.extraction.IExtractedDataContainer;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
-
-import org.w3c.dom.Element;
 
 /**
  * An activity context is a contextual object created for a single enclosing top-level activity
@@ -49,11 +48,17 @@ public class ActivityContext implements VelocityContextProvider {
 	private TestCaseRunner fRunner;
 
 	public void markActivityAsExecuted(String activityId) {
-		fRunner.markActivityAsExecuted(activityId);
+		if(fRunner != null) {
+			fRunner.markActivityAsExecuted(activityId);
+		}
 	}
 
 	public List<String> getExecutedActivities() {
-		return fRunner.getExecutedActivities();
+		if(fRunner != null) {
+			return fRunner.getExecutedActivities();
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
 	/**

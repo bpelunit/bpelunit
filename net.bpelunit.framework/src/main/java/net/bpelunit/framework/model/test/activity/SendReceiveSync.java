@@ -42,9 +42,15 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 
 	public SendReceiveSync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
+	public SendReceiveSync(Activity parent) {
+		super(parent);
+	}
+	
+	public SendReceiveSync(ITestArtefact parent) {
+		super(parent);
+	}
 
 	// ***************************** Activity **************************
 
@@ -132,4 +138,13 @@ public class SendReceiveSync extends TwoWaySyncActivity {
 		return stateData;
 	}
 
+	@Override
+	public boolean isStartingWithMessageReceive() {
+		return false;
+	}
+	
+	@Override
+	public boolean canExecute(ActivityContext context, IncomingMessage message) {
+		return false;
+	}
 }

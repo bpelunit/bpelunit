@@ -15,6 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.eclipse.jetty.http.HttpMethods;
+import org.eclipse.jetty.server.Request;
+import org.w3c.dom.NodeList;
+
 import net.bpelunit.framework.control.run.TestCaseRunner;
 import net.bpelunit.framework.control.util.BPELUnitConstants;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
@@ -22,13 +28,6 @@ import net.bpelunit.framework.exception.PartnerNotFoundException;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.eclipse.jetty.http.HttpMethods;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.util.ByteArrayISO8859Writer;
-import org.w3c.dom.NodeList;
 
 /**
  * The handler for incoming HTTP connections. Each incoming request is related

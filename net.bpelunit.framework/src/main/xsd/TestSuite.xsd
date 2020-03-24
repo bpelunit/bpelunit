@@ -238,6 +238,7 @@
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="wait" type="WaitActivity"></xs:element>
+				<xs:element name="parallel" type="ParallelActivity"></xs:element>
 			</xs:choice>
 
 		</xs:sequence>
@@ -493,6 +494,16 @@
 			<xs:extension base="Activity">
 				<xs:sequence>
 					<xs:element name="waitForMilliseconds" type="xs:unsignedInt"></xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="ParallelActivity">
+		<xs:complexContent>
+			<xs:extension base="Activity">
+				<xs:sequence>
+					<xs:element name="sequence" type="Track" minOccurs="0" maxOccurs="unbounded"></xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>

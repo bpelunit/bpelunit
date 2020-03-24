@@ -6,7 +6,9 @@
 package net.bpelunit.test.util;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.bpelunit.framework.BPELUnitRunner;
@@ -31,11 +33,13 @@ import org.apache.commons.io.FileUtils;
  */
 public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultListener {
 
-	private int fProblems;
+	private int problems;
 
-	private int fPassed;
+	private int passed;
 
-	private TestSuite fSuite;
+	private TestSuite suite;
+	
+	private List<String> errorMessages = new ArrayList<String>();
 
 	@Override
 	public void configureInit() throws ConfigurationException {
@@ -44,16 +48,16 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 
 	public TestTestRunner(File fBPTS) throws ConfigurationException, SpecificationException {
 		super();
-		fProblems= 0;
-		fPassed= 0;
+		problems = 0;
+		passed = 0;
 
 		Map<String, String> options= new HashMap<String, String>();
 		options.put(BPELUnitRunner.SKIP_UNKNOWN_EXTENSIONS, "true");
 		options.put(BPELUnitRunner.GLOBAL_TIMEOUT, "10000");
 		initialize(options);
 
-		fSuite = loadTestSuite(fBPTS);
-		fSuite.addResultListener(this);
+		suite = loadTestSuite(fBPTS);
+		suite.addResultListener(this);
 		
 		// TODO DL: Fix structure:
 		// Option A: Pass option flags to TestSuite and remove dep TestSuite->Runner (easy change)
@@ -67,19 +71,19 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 	public void testRun() throws DeploymentException {
 
 		try {
-			fSuite.setUp();
-			fSuite.run();
+			suite.setUp();
+			suite.run();
 		} finally {
-				fSuite.shutDown();
+				suite.shutDown();
 		}
 	}
 
 	public int getProblems() {
-		return fProblems;
+		return problems;
 	}
 
 	public int getPassed() {
-		return fPassed;
+		return passed;
 	}
 
 	public void progress(ITestArtefact test) {
@@ -87,10 +91,12 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 	}
 
 	public void testCaseEnded(TestCase test) {
-		if (test.hasProblems())
-			fProblems++;
-		else
-			fPassed++;
+		if (test.hasProblems()) {
+			problems++;
+			errorMessages.add(test.getStatus().getMessage());
+		} else {
+			passed++;
+		}
 	}
 
 	public void testCaseStarted(TestCase test) {
@@ -103,8 +109,11 @@ public class TestTestRunner extends BPELUnitBaseRunner implements ITestResultLis
 	}
 
 	public TestSuite getTestSuite() {
-		return fSuite;
+		return suite;
 	}
 
+	public List<String> getErrorMessages() {
+		return errorMessages;
+	}
 }
 

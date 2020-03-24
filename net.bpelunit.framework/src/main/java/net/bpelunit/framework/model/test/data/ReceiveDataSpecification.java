@@ -158,7 +158,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 		}
 
 		context.saveReceivedMessage(fLiteralData);
-		validateConditions(context);
+		setStatusBasedOnConditions(context);
 		if (hasProblems()) {
 			return;
 		}
@@ -195,44 +195,56 @@ public class ReceiveDataSpecification extends DataSpecification {
 		}
 	}
 
-	private void validateConditions(VelocityContextProvider templateContext) {
+	public boolean areAllConditionsFulfilled(VelocityContextProvider templateContext, IncomingMessage message) {
+		setInWireFormat(message);
+		decodeMessage();
+		boolean result = calculateStatus(templateContext, false).isPassed();
+
+		// Tidy up. This was only temporary
+		fPlainMessage = null;
+		fLiteralData = null;
+		setStatus(ArtefactStatus.createInitialStatus());
+		
+		return result;
+	}
+	
+	private void setStatusBasedOnConditions(VelocityContextProvider templateContext) {
+		setStatus(calculateStatus(templateContext, true));
+	}
+	
+	private ArtefactStatus calculateStatus(VelocityContextProvider templateContext, boolean updateChildren) {
 		// Check implicit fault assertions
 		SOAPBody body;
 		try {
 			body = fSOAPMessage.getSOAPBody();
 		} catch (SOAPException e) {
-			setStatus(ArtefactStatus.createErrorStatus(
-				"Exception during condition validation", e));
-			return;
+			return ArtefactStatus.createErrorStatus(
+				"Exception during condition validation", e);
 		}
 		if (fOperation.isFault()) {
 			SOAPFault fault = body.getFault();
 			if (fault == null) {
-				setStatus(ArtefactStatus.createFailedStatus(
+				return ArtefactStatus.createFailedStatus(
 					"A fault was expected in operation "
 					+ this
-					+ ", but none was found in input data."));
-				return;
+					+ ", but none was found in input data.");
 			}
 			if (fFaultCode != null && !fFaultCode.equals(fault.getFaultCodeAsQName())) {
-				setStatus(ArtefactStatus.createFailedStatus(String.format(
+				return ArtefactStatus.createFailedStatus(String.format(
 					"Expected the fault code %s, got %s instead",
-					fFaultCode, fault.getFaultCodeAsQName())));
-				return;
+					fFaultCode, fault.getFaultCodeAsQName()));
 			}
 			if (fFaultString != null && !fFaultString.equals(fault.getFaultString())) {
-				setStatus(ArtefactStatus.createFailedStatus(String.format(
+				return ArtefactStatus.createFailedStatus(String.format(
 					"Expected the fault string %s, got %s instead",
-					fFaultString, fault.getFaultString())));
-				return;
+					fFaultString, fault.getFaultString()));
 			}
 		}
 		else if (body.getFault() != null) {
-			setStatus(ArtefactStatus.createFailedStatus(
+			return ArtefactStatus.createFailedStatus(
 				"The operation "
 				+ this
-				+ " was expected to succeed, but replied with a SOAP fault."));
-			return;
+				+ " was expected to succeed, but replied with a SOAP fault.");
 		}
 
 		// Create Velocity context for the conditions
@@ -240,30 +252,22 @@ public class ReceiveDataSpecification extends DataSpecification {
 		try {
 			conditionContext = templateContext.createVelocityContext(this);
 		} catch (Exception e) {
-			setStatus(ArtefactStatus.createErrorStatus(String.format(
+			return ArtefactStatus.createErrorStatus(String.format(
 				"Could not create the Velocity context for this condition: %s",
-				e.getLocalizedMessage()), e));
-			return;
+				e.getLocalizedMessage()), e);
 		}
 		ContextXPathVariableResolver variableResolver = new ContextXPathVariableResolver(conditionContext);
 
+		ArtefactStatus result = ArtefactStatus.createPassedStatus();
 		for (ReceiveCondition c : fConditions) {
-			c.evaluate(templateContext, fLiteralData, getNamespaceContext(), variableResolver);
+			ArtefactStatus receiveStatus = c.evaluate(templateContext, fLiteralData, getNamespaceContext(), variableResolver, updateChildren);
 
-			if (c.isFailure()) {
-				if(! getStatus().isError()) {
-				setStatus(ArtefactStatus.createFailedStatus(String.format(
-						"Condition '%s=%s' did not hold: %s",
-						c.getExpression(), c.getExpectedValue(), c.getStatus()
-								.getMessage())));
-				}
-			} else if (c.isError()) {
-				setStatus(ArtefactStatus.createErrorStatus(String.format(
-						"Condition '%s=%s' had an error: %s.", c
-								.getExpression(), c.getExpectedValue(), c
-								.getStatus().getMessage())));
+			if (receiveStatus.hasProblems()) {
+				result = receiveStatus;
 			}
 		}
+		
+		return result;
 	}
 
 	/**

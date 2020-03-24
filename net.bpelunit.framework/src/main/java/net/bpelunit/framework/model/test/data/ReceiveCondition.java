@@ -86,8 +86,10 @@ public class ReceiveCondition implements ITestArtefact {
 
 	// ******************** Implementation ***************************
 
-	public void evaluate(VelocityContextProvider activityContext, Element literalData, NamespaceContext context, XPathVariableResolver variableResolver) {
+	public ArtefactStatus evaluate(VelocityContextProvider activityContext, Element literalData, NamespaceContext context, XPathVariableResolver variableResolver, boolean updateStatus) {
 
+		ArtefactStatus status = ArtefactStatus.createPassedStatus();
+		
 		XPath xpath= XPathFactory.newInstance().newXPath();
 		xpath.setNamespaceContext(context);
 		if (variableResolver != null) {
@@ -113,15 +115,22 @@ public class ReceiveCondition implements ITestArtefact {
 				// Get expected value
 				String sExpectedValue = xpath.evaluate(fExpectedValue, literalData);
 
-				fStatus= ArtefactStatus.createFailedStatus(String.format("Condition failed. Obtained value was '%s', expected '%s'", smartGuess, sExpectedValue));
-
-			} else {
-				fStatus= ArtefactStatus.createPassedStatus();
+				status= ArtefactStatus.createFailedStatus(String.format("Condition failed. Obtained value was '%s', expected '%s'", smartGuess, sExpectedValue));
 			}
 		} catch (Exception e) {
 			Throwable root= BPELUnitUtil.findRootThrowable(e);
-			fStatus= ArtefactStatus.createErrorStatus(root.getMessage());
+			status= ArtefactStatus.createErrorStatus(root.getMessage());
 		}
+		if(updateStatus) {
+			this.fStatus = status;
+		} else {
+			fActualValue = null;
+			if(fTemplate != null) {
+				fExpression = null;
+			}
+		}
+		
+		return status;
 	}
 
 

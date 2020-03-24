@@ -42,28 +42,24 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 
 	public ReceiveSendSync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		setStatus(ArtefactStatus.createInitialStatus());
+	}
+	
+	public ReceiveSendSync(Activity parent) {
+		super(parent);
 	}
 
+	public ReceiveSendSync(ITestArtefact parent) {
+		super(parent);
+	}
 
 	// ***************************** Activity **************************
 
+
 	@Override
-	public void runInternal(ActivityContext context) {
+	public void runInternal(ActivityContext context, IncomingMessage incoming) {
 
 		context.setHeaderProcessor(getHeaderProcessor());
 		context.setMapping(getMapping());
-
-		IncomingMessage incoming;
-		try {
-			incoming= context.receiveMessage(this.getPartnerTrack());
-		} catch (TimeoutException e) {
-			setStatus(ArtefactStatus.createErrorStatus("Timeout while waiting for incoming synchronous message", e));
-			return;
-		} catch (InterruptedException e) {
-			setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming synchronous message", e));
-			return;
-		}
 
 		getReceiveSpec().handle(context, incoming);
 
@@ -147,5 +143,15 @@ public class ReceiveSendSync extends TwoWaySyncActivity {
 		children.add(getSendSpec());
 
 		return children;
+	}
+	
+	@Override
+	public boolean isStartingWithMessageReceive() {
+		return true;
+	}
+	
+	@Override
+	public boolean canExecute(ActivityContext context, IncomingMessage message) {
+		return getReceiveSpec().areAllConditionsFulfilled(context, message);
 	}
 }

@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 import net.bpelunit.framework.model.AbstractPartner;
 import net.bpelunit.framework.model.test.PartnerTrack;
@@ -18,6 +19,7 @@ import net.bpelunit.framework.model.test.data.extraction.IExtractedDataContainer
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
+import net.bpelunit.framework.model.test.wire.IncomingMessage;
 import net.bpelunit.framework.model.test.wire.OutgoingMessage;
 
 /**
@@ -42,12 +44,12 @@ public abstract class Activity implements ITestArtefact, IExtractedDataContainer
 	/**
 	 * The partner track this activity belongs to.
 	 */
-	private PartnerTrack fPartnerTrack;
+	private PartnerTrack partnerTrack;
 
 	/**
 	 * The status of this object
 	 */
-	private ArtefactStatus fStatus;
+	private ArtefactStatus status;
 
 	private String fAssumption;
 
@@ -57,30 +59,87 @@ public abstract class Activity implements ITestArtefact, IExtractedDataContainer
 
 	private final Map<String, Object> extractedData = new HashMap<String, Object>();
 
+	private ITestArtefact parent;
+
 	// ******************* Initialization *********************
 
-	public Activity(PartnerTrack partnerTrack) {
-		fPartnerTrack= partnerTrack;
-		fStatus= ArtefactStatus.createInitialStatus();
+	public Activity(PartnerTrack partnerTrack, ITestArtefact parent) {
+		this.partnerTrack= partnerTrack;
+		this.parent = parent;
+		
+		status = ArtefactStatus.createInitialStatus();
+	}
+	
+	public Activity(Activity parent) {
+		this(parent.getPartnerTrack(), parent);
+	}
+	
+	public Activity(PartnerTrack pt) {
+		this(pt, pt);
 	}
 
+	public Activity(ITestArtefact parent) {
+		ITestArtefact partnerTrack = parent;
+		
+		while(!(partnerTrack instanceof PartnerTrack)) {
+			partnerTrack = partnerTrack.getParent();
+		}
+		this.partnerTrack = (PartnerTrack)partnerTrack;
+		this.parent = parent;
+		
+		status = ArtefactStatus.createInitialStatus();
+	}
 
 	// ************************** Run *************************
 
+
 	public final void run(ActivityContext context) {
+		run(context, null);
+	}
+	
+	public final void run(ActivityContext context, IncomingMessage message) {
 		try {
 			preRun(context);
 			if(getStatus().isAborted()) {
 				return;
 			}
 		
-			runInternal(context);
+			if(isStartingWithMessageReceive()) {
+				if(message == null) {
+					try {
+						message = context.receiveMessage(this.getPartnerTrack());
+					} catch (TimeoutException e) {
+						setStatus(ArtefactStatus.createErrorStatus("Timeout while waiting for incoming asynchronous message", e));
+						return;
+					} catch (InterruptedException e) {
+						setStatus(ArtefactStatus.createAbortedStatus("Aborted while waiting for incoming asynchronous messsage", e));
+						return;
+					}
+				}
+				runInternal(context, message);
+			} else {
+				runInternal(context);
+			}
+			
+			
 		} finally {
 			postRun(context);
 		}
 	}
 	
-	public abstract void runInternal(ActivityContext context);
+	/**
+	 * Called for activities that do NOT require a message to be received first
+	 */
+	public void runInternal(ActivityContext context) {
+		
+	}
+	
+	/**
+	 * Called for activities that require a message to be received first
+	 */
+	public void runInternal(ActivityContext context, IncomingMessage message) {
+		
+	}
 
 	protected void preRun(ActivityContext context) {
 		while(!context.getExecutedActivities().containsAll(dependsOn)) {
@@ -88,7 +147,6 @@ public abstract class Activity implements ITestArtefact, IExtractedDataContainer
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				setStatus(ArtefactStatus.createAbortedStatus("Thread was interrupted while waiting for all dependent activities to complete."));
-				return;
 			}
 		}
 	}
@@ -101,12 +159,12 @@ public abstract class Activity implements ITestArtefact, IExtractedDataContainer
 	// ******************* Getters and Setters ***************
 
 	public PartnerTrack getPartnerTrack() {
-		return fPartnerTrack;
+		return partnerTrack;
 	}
 
 
 	public AbstractPartner getPartner() {
-		return fPartnerTrack.getPartner();
+		return partnerTrack.getPartner();
 	}
 
 	public abstract int getActivityCount();
@@ -135,23 +193,25 @@ public abstract class Activity implements ITestArtefact, IExtractedDataContainer
 	public abstract String getName();
 
 	public ArtefactStatus getStatus() {
-		return fStatus;
+		return status;
 	}
 
 	protected void setStatus(ArtefactStatus status) {
-		this.fStatus = status;
+		this.status = status;
 	}
 	
-	public abstract ITestArtefact getParent();
+	public final ITestArtefact getParent() {
+		return parent;
+	}
 
-	public abstract List<ITestArtefact> getChildren();
+	public abstract List<? extends ITestArtefact> getChildren();
 
 	public List<StateData> getStateData() {
-		return fStatus.getAsStateData();
+		return status.getAsStateData();
 	}
 
 	public void reportProgress(ITestArtefact artefact) {
-		fPartnerTrack.reportProgress(artefact);
+		partnerTrack.reportProgress(artefact);
 	}
 
 	// ************** IExtractedDataContainer ******************
@@ -198,5 +258,14 @@ public abstract class Activity implements ITestArtefact, IExtractedDataContainer
 		} else {
 			this.dependsOn = new ArrayList<String>();
 		}
+	}
+	
+	/** 
+	 * A flag whether an activity's first operation is to wait for a message or not
+	 */
+	public abstract boolean isStartingWithMessageReceive();
+	
+	public boolean canExecute(ActivityContext context, IncomingMessage message) {
+		return false;
 	}
 }

@@ -12,6 +12,7 @@ import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.data.DataCopyOperation;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
+import net.bpelunit.framework.model.test.wire.IncomingMessage;
 
 /**
  * A receive/send asynchronous activity is a combination of an asynchronous receive and an
@@ -31,19 +32,25 @@ public class ReceiveSendAsync extends TwoWayAsyncActivity {
 
 	public ReceiveSendAsync(PartnerTrack partnerTrack) {
 		super(partnerTrack);
-		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
+	public ReceiveSendAsync(Activity parent) {
+		super(parent);
+	}
 
+	public ReceiveSendAsync(ITestArtefact parent) {
+		super(parent);
+	}
+	
 	// ***************************** Activity **************************
 
 	@Override
-	public void runInternal(ActivityContext context) {
+	public void runInternal(ActivityContext context, IncomingMessage message) {
 
 		context.setHeaderProcessor(getHeaderProcessor());
 		context.setMapping(getMapping());
 
-		getReceiveAsync().run(context);
+		getReceiveAsync().run(context, message);
 		reportProgress(getReceiveAsync());
 
 		/*
@@ -100,4 +107,13 @@ public class ReceiveSendAsync extends TwoWayAsyncActivity {
 		return children;
 	}
 
+	@Override
+	public boolean isStartingWithMessageReceive() {
+		return true;
+	}
+	
+	@Override
+	public boolean canExecute(ActivityContext context, IncomingMessage message) {
+		return getReceiveAsync().canExecute(context, message);
+	}
 }
