@@ -75,6 +75,7 @@ public class XMLResultProducerTest {
 	 * refactoring goes smoothly.
 	 */
 	@Test
+	
 	public void testSendOnlyReceiveOnlyResultsAreComplete() throws Exception {
 		final String sPassed = ArtefactStatus.StatusCode.PASSED.toString();
 		final Map<String, String> passedState = new HashMap<String, String>();
@@ -162,8 +163,6 @@ public class XMLResultProducerTest {
 				assertEquals(null, cond.getActualValue());
 			}
 		}
-
-
 	}
 
 	private void checkDataPackage(XMLData dataPackage, boolean bIsSend,

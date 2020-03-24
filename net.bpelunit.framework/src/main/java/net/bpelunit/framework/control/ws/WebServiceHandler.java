@@ -231,8 +231,11 @@ public class WebServiceHandler extends org.eclipse.jetty.server.handler.Abstract
 		if(body == null) {
 			body = "";
 		}
-		try (Writer w = response.getWriter()) {
+		Writer w = response.getWriter();
+		try {
 			w.write(body);
+		} finally {
+			w.close();
 		}
 
 	}

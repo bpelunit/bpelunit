@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.wsdl.Definition;
 import javax.wsdl.WSDLException;
@@ -109,6 +110,7 @@ import org.apache.xmlbeans.XmlObject;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -601,8 +603,7 @@ public class SpecificationLoader {
 
 		PartnerTrack pTrack = new PartnerTrack(test, realPartner);
 		readActivities(pTrack, xmlHumanPartnerTrack, testDirectory);
-		pTrack.setNamespaceContext(getNamespaceMap(xmlHumanPartnerTrack
-				.newCursor()));
+		pTrack.setNamespaceContext(getNamespaceMap(xmlHumanPartnerTrack));
 		test.addPartnerTrack(pTrack);
 	}
 
@@ -629,7 +630,7 @@ public class SpecificationLoader {
 		CompleteHumanTask activity = new CompleteHumanTask(pTrack);
 		activity.setTaskName(xmlActivity.getTaskName());
 		activity.setId(xmlActivity.getId());
-		NamespaceContext context = getNamespaceMap(xmlActivity.newCursor());
+		NamespaceContext context = getNamespaceMap(xmlActivity);
 
 		Element rawDataRoot = null;
 		String templateText = null;
@@ -696,7 +697,7 @@ public class SpecificationLoader {
 		PartnerTrack pTrack = new PartnerTrack(test, realPartner);
 		readActivities(pTrack, xmlTestCase, xmlPartnerTrack, round,
 				testDirectory);
-		pTrack.setNamespaceContext(getNamespaceMap(xmlPartnerTrack.newCursor()));
+		pTrack.setNamespaceContext(getNamespaceMap(xmlPartnerTrack));
 		if (xmlPartnerTrack.isSetAssume()) {
 			pTrack.setAssumption(xmlPartnerTrack.getAssume());
 		}
@@ -710,7 +711,7 @@ public class SpecificationLoader {
 
 		PartnerTrack track = new PartnerTrack(test, suiteClient);
 		readActivities(track, xmlTestCase, xmlClientTrack, round, testDirectory);
-		track.setNamespaceContext(getNamespaceMap(xmlClientTrack.newCursor()));
+		track.setNamespaceContext(getNamespaceMap(xmlClientTrack));
 		test.addPartnerTrack(track);
 	}
 
@@ -1088,7 +1089,7 @@ public class SpecificationLoader {
 			int round, String testDirectory) throws SpecificationException {
 
 		// Namespaces
-		NamespaceContext context = getNamespaceMap(xmlSend.newCursor());
+		NamespaceContext context = getNamespaceMap(xmlSend);
 
 		SendDataSpecification spec = new SendDataSpecification(activity, context);
 
@@ -1315,7 +1316,7 @@ public class SpecificationLoader {
 			XMLReceiveActivity xmlReceive) throws SpecificationException {
 
 		// Namespaces
-		NamespaceContext context = getNamespaceMap(xmlReceive.newCursor());
+		NamespaceContext context = getNamespaceMap(xmlReceive);
 
 		ReceiveDataSpecification spec = new ReceiveDataSpecification(activity,
 				context);
@@ -1524,15 +1525,44 @@ public class SpecificationLoader {
 	 * way of specifiying the test suite document were the tool support...
 	 * 
 	 */
-	private NamespaceContextImpl getNamespaceMap(XmlCursor newCursor) {
-
-		Map<String, String> namespaces = new HashMap<String, String>();
-		newCursor.getAllNamespaces(namespaces);
-		NamespaceContextImpl context = new NamespaceContextImpl();
-		for (String prefix : namespaces.keySet()) {
-			context.setNamespace(prefix, namespaces.get(prefix));
+	private static NamespaceContextImpl getNamespaceMap(XmlObject object) {
+		Map<String, String> namespaces = getNamespaceMap(object.getDomNode());
+		
+		NamespaceContextImpl result = new NamespaceContextImpl();
+		
+		for(Entry<String, String> namespaceEntry : namespaces.entrySet()) {
+			result.setNamespace(namespaceEntry.getKey(), namespaceEntry.getValue());
 		}
-		return context;
+		
+		return result;
+	}
+	
+	static Map<String, String> getNamespaceMap(Node object) {
+		if(object.getNodeType() == Node.DOCUMENT_NODE) {
+			return new HashMap<String, String>();
+		}
+		
+		if(object.getNodeType() != Node.ELEMENT_NODE) {
+			return getNamespaceMap(object.getParentNode());
+		}
+		
+		Map<String, String> result = getNamespaceMap(object.getParentNode());
+		Element e = (Element)object;
+		
+		NamedNodeMap atts = e.getAttributes();
+	    for (int i = 0; i < atts.getLength(); i++) {
+	    	Node currentAttribute = atts.item(i);
+	    	String currentPrefix = currentAttribute.getPrefix();
+	    	
+	    	if("xmlns".equals(currentPrefix)) {
+	    		result.put(currentAttribute.getLocalName(), currentAttribute.getNodeValue());
+	    	}
+	    	if((currentPrefix == null || currentPrefix.equals("")) && "xmlns".equals(currentAttribute.getLocalName())) {
+	    		result.put("", currentAttribute.getNodeValue());
+	    	}
+	    }
+		
+		return result;
 	}
 
 	/**
