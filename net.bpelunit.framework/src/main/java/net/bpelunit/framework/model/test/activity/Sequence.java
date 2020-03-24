@@ -1,6 +1,7 @@
 package net.bpelunit.framework.model.test.activity;
 
 import net.bpelunit.framework.model.test.PartnerTrack;
+import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
 
@@ -33,7 +34,11 @@ public class Sequence extends ContainerActivity<Activity> {
 	public boolean isStartingWithMessageReceive() {
 		if (currentIndex >= 0) {
 			Activity nextActivity = getNextActivity();
-			return nextActivity.isStartingWithMessageReceive();
+			if(nextActivity != null) {
+				return nextActivity.isStartingWithMessageReceive();
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
@@ -42,7 +47,11 @@ public class Sequence extends ContainerActivity<Activity> {
 	public boolean canExecute(ActivityContext context, IncomingMessage message) {
 		if (currentIndex >= 0) {
 			Activity nextActivity = getNextActivity();
-			return nextActivity.canExecute(context, message);
+			if(nextActivity != null) {
+				return nextActivity.canExecute(context, message);
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
@@ -51,14 +60,19 @@ public class Sequence extends ContainerActivity<Activity> {
 	public void runNext(ActivityContext context) {
 		Activity nextActivity = getNextActivity();
 
-		nextActivity.run(context);
-
-		if (nextActivity.hasProblems()) {
-			setStatus(nextActivity.getStatus());
+		if(nextActivity != null) {
+			nextActivity.run(context);
+	
+			if (nextActivity.hasProblems()) {
+				setStatus(nextActivity.getStatus());
+			} else {
+				progressToNextActivity();
+			}
+		} else {
+			setStatus(ArtefactStatus.createPassedStatus());
+			progressToNextActivity();
 		}
 		reportProgress(this);
-
-		progressToNextActivity();
 	}
 
 	private Activity getNextActivity() {
@@ -72,10 +86,14 @@ public class Sequence extends ContainerActivity<Activity> {
 	public void runNext(ActivityContext context, IncomingMessage incoming) {
 		Activity nextActivity = getNextActivity();
 
-		nextActivity.run(context, incoming);
-
-		if (nextActivity.hasProblems()) {
-			setStatus(nextActivity.getStatus());
+		if(nextActivity != null) {
+			nextActivity.run(context, incoming);
+	
+			if (nextActivity.hasProblems()) {
+				setStatus(nextActivity.getStatus());
+			}
+		} else {
+			setStatus(ArtefactStatus.createPassedStatus());
 		}
 		reportProgress(this);
 
@@ -83,10 +101,14 @@ public class Sequence extends ContainerActivity<Activity> {
 	}
 
 	private void progressToNextActivity() {
-		currentIndex++;
-		if (currentIndex >= getActivities().size()) {
-			currentIndex = -1;
-			setStatus(getChildren().get(getChildren().size() - 1).getStatus()); // final state
+		if(currentIndex >= 0) {
+			currentIndex++;
+			if (currentIndex >= getActivities().size()) {
+				currentIndex = -1;
+				if(!getStatus().isFinal()) {
+					setStatus(getActivities().get(getActivities().size() - 1).getStatus());
+				}
+			}
 		}
 	}
 
