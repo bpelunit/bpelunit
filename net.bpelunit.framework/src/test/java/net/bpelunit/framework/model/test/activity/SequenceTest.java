@@ -89,7 +89,7 @@ public class SequenceTest {
 			public void handle(ActivityContext context, IncomingMessage msg) {
 			}
 		};
-		r1.initialize(spec);
+		r1.initialize(spec, null);
 		Empty e2 = new Empty(sequence);
 		Empty e3 = new Empty(sequence);
 		

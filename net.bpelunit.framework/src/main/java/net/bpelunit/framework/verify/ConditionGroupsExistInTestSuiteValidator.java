@@ -11,7 +11,7 @@ import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.xml.suite.XMLCompleteHumanTaskActivity;
 import net.bpelunit.framework.xml.suite.XMLConditionGroup;
 import net.bpelunit.framework.xml.suite.XMLHumanPartnerTrack;
-import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
+import net.bpelunit.framework.xml.suite.XMLReceiveOnlyActivity;
 import net.bpelunit.framework.xml.suite.XMLTestCase;
 import net.bpelunit.framework.xml.suite.XMLTestSuite;
 import net.bpelunit.framework.xml.suite.XMLTestSuiteDocument;
@@ -93,7 +93,7 @@ public class ConditionGroupsExistInTestSuiteValidator implements
 
 		for (XMLTrack pt : partnerTracks) {
 			if (pt.getReceiveOnlyList() != null) {
-				for (XMLReceiveActivity a : pt.getReceiveOnlyList()) {
+				for (XMLReceiveOnlyActivity a : pt.getReceiveOnlyList()) {
 					retval.addAll(a.getConditionGroupList());
 				}
 			}

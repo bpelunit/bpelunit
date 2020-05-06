@@ -23,6 +23,7 @@ import net.bpelunit.framework.exception.ConfigurationException;
 import net.bpelunit.framework.exception.DeploymentException;
 import net.bpelunit.framework.exception.SpecificationException;
 import net.bpelunit.framework.model.test.ITestResultListener;
+import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.TestCase;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.test.util.TestTestRunner;
@@ -167,6 +168,33 @@ public class End2EndTester {
 	@Test
 	public void testAbortWithDependencies() throws ConfigurationException, SpecificationException, DeploymentException {
 		TestTestRunner runner = new TestTestRunner(BASEPATH + "06_AbortWithDependencies/", "async-wsa.bpts");
+		runner.getTestSuite().addResultListener(new ITestResultListener() {
+			
+			@Override
+			public void testCaseStarted(TestCase testCase) {
+			}
+			
+			@Override
+			public void testCaseEnded(TestCase testCase) {
+			}
+			
+			@Override
+			public void progress(ITestArtefact testArtefact) {
+			}
+		});
+		
+		Map<String, String> options = new HashMap<String, String>();
+		options.put(BPELUnitRunner.GLOBAL_TIMEOUT, "2000");
+		options.put(BPELUnitRunner.SKIP_UNKNOWN_EXTENSIONS, "true");
+		runner.initialize(options);
+		runner.testRun();
+		assertEquals(0, runner.getPassed());
+		assertEquals(1, runner.getProblems());
+	}
+	
+	@Test
+	public void testReceiveFault() throws ConfigurationException, SpecificationException, DeploymentException {
+		TestTestRunner runner = new TestTestRunner(BASEPATH + "07_ReceiveWithFault/", "WastePaperBasketTestSuite.bpts");
 		runner.getTestSuite().addResultListener(new ITestResultListener() {
 			
 			@Override

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import net.bpelunit.framework.control.ext.IHeaderProcessor;
 import net.bpelunit.framework.model.test.PartnerTrack;
 import net.bpelunit.framework.model.test.data.ReceiveDataSpecification;
 import net.bpelunit.framework.model.test.report.ArtefactStatus;
@@ -41,6 +42,12 @@ public class ReceiveAsync extends Activity {
 	 */
 	private ReceiveDataSpecification fReceiveSpec;
 
+
+	/**
+	 * Registered Header Processor, if any (may be null)
+	 */
+	private IHeaderProcessor fHeaderProcessor;
+	
 	// ************************** Initialization ************************
 
 	public ReceiveAsync(PartnerTrack partnerTrack) {
@@ -55,11 +62,16 @@ public class ReceiveAsync extends Activity {
 		super(parent);
 	}
 
-	public void initialize(ReceiveDataSpecification spec) {
-		fReceiveSpec= spec;
+	public void initialize(ReceiveDataSpecification spec, IHeaderProcessor proc) {
+		fReceiveSpec = spec;
+		fHeaderProcessor = proc;
 		setStatus(ArtefactStatus.createInitialStatus());
 	}
 
+	protected IHeaderProcessor getHeaderProcessor() {
+		return fHeaderProcessor;
+	}
+	
 	// ***************************** Activity **************************
 
 	@Override
@@ -69,6 +81,10 @@ public class ReceiveAsync extends Activity {
 			throw new RuntimeException("incoming must not be null");
 		}
 
+		if(getHeaderProcessor() != null) {
+			context.setHeaderProcessor(getHeaderProcessor());
+		}
+		
 		fReceiveSpec.handle(context, incoming);
 
 		/*

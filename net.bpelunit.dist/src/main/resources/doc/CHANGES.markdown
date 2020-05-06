@@ -4,6 +4,7 @@ Changelog
 Staged for next version
 -----------------------
 
+* _Feature_: Support of parallel activities within a partner by the use of the parallel activity
 * _Feature_: Velocity templates are now explicitly forbidden to override predefined variables. Trying to do so will result in an exception being thrown.
 * _Feature_: CDATA sections are now supported for the 'template' element, as an alternative to using 'src' for templates that are not well-formed XML.
 * _Feature_: Eclipse runner does now allow to make a launch config with selected test cases
@@ -11,7 +12,6 @@ Staged for next version
 * _Feature_: Eclipse runner supports "halt on error" and "halt on failure"
 * _Feature_: Activities can have execution dependencies across partner tracks. This way it is possible to defer a send activity until another activity has been finished
 * _Feature_: the ActiveBPEL deployer can now take a username and password for deployment. Authentication for composition invocation still needs to be provided using custom HTTP headers in the send activities of the client track ("protocol options").
-* _Feature_: One-Way Sends (Asynchronous Send Only) can now transmit WS-Addressing headers
 * _Feature_: Allow WS-HT Partner Tracks without password
 * _Feature_: Editor supports deleting WS-HT Complete Task activities 
 * _Feature_: Editor supports data sources, suite/test setup sections and Velocity templates
@@ -19,13 +19,15 @@ Staged for next version
 * _Feature_: Support --haltonerror and --haltonfailure in command-line runner for stopping the test run in case of errors (#18)
 * _Feature_: Introduce a memory efficient mode for the command-line runner to support stress tests. This option will break the XML log (#21)
 * _Feature_: When using the ActiveBPEL deployment, the new "BPELFileForGeneratingBPR" option can be used to generate the BPR file automatically. It takes the path to the BPEL file, relative from the .bpts file.
+* _Feature_: Ability to specify an expected HTTP response code for One-Way operations in order to also test interaction with infrastructure components (which might send non-202 replies).
+* _Feature_: Ability to use header processors in one-way activities. This allows, e.g., WSA-headers to be sent with one-way messages.
 * _Improvement_: Set a default base URL when creating a new test case in Eclipse tooling
 * _Improvement_: Do not allow duplicate test case names when running a test suite
 * _Improvement_: Internal clean-ups in framework
-* _Architecture_: Old code coverage code is in progress of being replaced with a new implementation
 * _Improvement_: Upgrade to Jetty 8 (uses Servlet 3.0, same as recent ODE releases)
 * _Improvement_: Log test case duration in command-line client
 * _Improvement_: Exit with status 2 if test cases have failed in command-line client
+* _Architecture_: Old code coverage code is in progress of being replaced with a new implementation
 * _Fix_: Add defined WS-HT Tracks to a test case when creating a new one
 * _Fix_: Place RPC wrapper in the empty namespace when the soap:body binding element does not use the 'namespace' attribute
 * _Fix_: Validate on loading a Test Suite whether condition groups that are used in normal SOAP activities are declared in the test suite (Issue BPELUnit-9)

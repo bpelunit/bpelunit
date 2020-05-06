@@ -15,6 +15,9 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 
+import org.apache.velocity.context.Context;
+import org.w3c.dom.Element;
+
 import net.bpelunit.framework.control.ext.ISOAPEncoder;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
 import net.bpelunit.framework.exception.HeaderProcessingException;
@@ -28,9 +31,6 @@ import net.bpelunit.framework.model.test.report.ArtefactStatus;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.framework.model.test.report.StateData;
 import net.bpelunit.framework.model.test.wire.IncomingMessage;
-
-import org.apache.velocity.context.Context;
-import org.w3c.dom.Element;
 
 /**
  * The receive data specification is a data package which contains all necessary information to
@@ -239,8 +239,7 @@ public class ReceiveDataSpecification extends DataSpecification {
 					"Expected the fault string %s, got %s instead",
 					fFaultString, fault.getFaultString()));
 			}
-		}
-		else if (body.getFault() != null) {
+		} else if (body.getFault() != null) {
 			return ArtefactStatus.createFailedStatus(
 				"The operation "
 				+ this

@@ -89,7 +89,7 @@ public class ReceiveAsyncTest {
 				SOAPOperationDirectionIdentifier.INPUT);
 		ISOAPEncoder soapEncoder = new DocumentLiteralEncoder();
 		spec.initialize(soapOperationcallIdentifier , "literal", soapEncoder, new ArrayList<ReceiveCondition>(), new ArrayList<DataExtraction>(), null, null);
-		r1.initialize(spec);
+		r1.initialize(spec, null);
 		
 		ActivityContext ctx = new ActivityContext("http://localhost:7777/ws/Dummy") {
 			@Override
@@ -151,7 +151,7 @@ public class ReceiveAsyncTest {
 				SOAPOperationDirectionIdentifier.INPUT);
 		ISOAPEncoder soapEncoder = new DocumentLiteralEncoder();
 		spec.initialize(soapOperationcallIdentifier , "literal", soapEncoder, new ArrayList<ReceiveCondition>(), new ArrayList<DataExtraction>(), null, null);
-		r1.initialize(spec);
+		r1.initialize(spec, null);
 		
 		final IncomingMessage message = new IncomingMessage();
 		

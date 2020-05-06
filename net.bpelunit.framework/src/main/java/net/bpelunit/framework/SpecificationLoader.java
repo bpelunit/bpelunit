@@ -106,6 +106,7 @@ import net.bpelunit.framework.xml.suite.XMLPartnerDeploymentInformation;
 import net.bpelunit.framework.xml.suite.XMLPartnerTrack;
 import net.bpelunit.framework.xml.suite.XMLProperty;
 import net.bpelunit.framework.xml.suite.XMLReceiveActivity;
+import net.bpelunit.framework.xml.suite.XMLReceiveOnlyActivity;
 import net.bpelunit.framework.xml.suite.XMLSendActivity;
 import net.bpelunit.framework.xml.suite.XMLSendOnlyActivity;
 import net.bpelunit.framework.xml.suite.XMLSetUp;
@@ -795,6 +796,8 @@ public class SpecificationLoader {
 			Activity a;
 			if (xmlActivity instanceof XMLWaitActivity) {
 				a = readWait(parent, (XMLWaitActivity) xmlActivity);
+			} else if (xmlActivity instanceof XMLReceiveOnlyActivity) {
+				a = readReceive(parent, (XMLReceiveOnlyActivity) xmlActivity);
 			} else if (xmlActivity instanceof XMLReceiveActivity) {
 				a = readReceive(parent, (XMLReceiveActivity) xmlActivity);
 			} else if (xmlActivity instanceof XMLSendOnlyActivity) {
@@ -871,12 +874,13 @@ public class SpecificationLoader {
 	private Activity readSend(ITestArtefact parent, int round,
 			String testDirectory, XMLSendOnlyActivity xmlSend) throws SpecificationException {
 		SendAsync activity = new SendAsync(parent);
+		activity.setExpectedHttpResponseCode(xmlSend.getExpectedHttpResponseCode().intValue());
+		
 		SendDataSpecification spec = createSendSpecificationFromStandalone(
 				activity, xmlSend, SOAPOperationDirectionIdentifier.INPUT,
 				round, testDirectory);
 		
-		XMLHeaderProcessor xmlHeaderProcessor = xmlSend
-				.getHeaderProcessor();
+		XMLHeaderProcessor xmlHeaderProcessor = xmlSend.getHeaderProcessor();
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
 
 		activity.initialize(spec, proc);
@@ -884,12 +888,26 @@ public class SpecificationLoader {
 
 		return activity;
 	}
+	
+	private Activity readReceive(ITestArtefact parent, XMLReceiveOnlyActivity xmlReceive) throws SpecificationException {
+		ReceiveAsync activity = new ReceiveAsync(parent);
+		ReceiveDataSpecification spec = createReceiveSpecificationStandalone(
+				activity, xmlReceive, SOAPOperationDirectionIdentifier.INPUT);
+		
+		XMLHeaderProcessor xmlHeaderProcessor = xmlReceive.getHeaderProcessor();
+		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
+		activity.initialize(spec, proc);
+		
+		activity.setAssumption(xmlReceive.getAssume());
+		
+		return activity;
+	}
 
 	private Activity readReceive(ITestArtefact parent, XMLReceiveActivity xmlReceive) throws SpecificationException {
 		ReceiveAsync activity = new ReceiveAsync(parent);
 		ReceiveDataSpecification spec = createReceiveSpecificationStandalone(
 				activity, xmlReceive, SOAPOperationDirectionIdentifier.INPUT);
-		activity.initialize(spec);
+		activity.initialize(spec, null);
 		activity.setAssumption(xmlReceive.getAssume());
 
 		return activity;
@@ -1031,16 +1049,18 @@ public class SpecificationLoader {
 		List<net.bpelunit.framework.model.test.data.DataCopyOperation> mapping = getCopyOperations(
 				twoWayActivity, xmlAsyncTwoWay);
 
+		SOAPOperationDirectionIdentifier sendDirection = xmlSend.getFault() ? SOAPOperationDirectionIdentifier.FAULT : SOAPOperationDirectionIdentifier.INPUT;
 		SendAsync sendAct = new SendAsync(twoWayActivity);
 		SendDataSpecification sSpec = createSendSpecificationFromStandalone(
-				sendAct, xmlSend, SOAPOperationDirectionIdentifier.INPUT,
+				sendAct, xmlSend, sendDirection,
 				round, testDirectory);
 		sendAct.initialize(sSpec, null);
 
+		SOAPOperationDirectionIdentifier receiveDirection = xmlReceive.getFault() ? SOAPOperationDirectionIdentifier.FAULT : SOAPOperationDirectionIdentifier.INPUT;
 		ReceiveAsync receiveAct = new ReceiveAsync(twoWayActivity);
 		ReceiveDataSpecification rSpec = createReceiveSpecificationStandalone(
-				receiveAct, xmlReceive, SOAPOperationDirectionIdentifier.INPUT);
-		receiveAct.initialize(rSpec);
+				receiveAct, xmlReceive, receiveDirection);
+		receiveAct.initialize(rSpec, null);
 
 		IHeaderProcessor proc = getHeaderProcessor(xmlHeaderProcessor);
 

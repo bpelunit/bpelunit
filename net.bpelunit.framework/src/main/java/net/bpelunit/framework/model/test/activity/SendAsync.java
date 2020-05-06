@@ -56,6 +56,8 @@ public class SendAsync extends Activity {
 	 */
 	private IHeaderProcessor fHeaderProcessor;
 
+	private Integer expectedHttpResponseCode;
+	
 	// ************************** Initialization ************************
 
 	public SendAsync(PartnerTrack partnerTrack) {
@@ -121,14 +123,23 @@ public class SendAsync extends Activity {
 			return;
 		}
 
-		if (incoming.getReturnCode() > 200 && incoming.getReturnCode() < 300) {
-			setStatus(ArtefactStatus.createPassedStatus());
+		if(expectedHttpResponseCode != null) {
+			if(incoming.getReturnCode() == expectedHttpResponseCode.intValue()) {
+				setStatus(ArtefactStatus.createPassedStatus());
+			} else {
+				setStatus(ArtefactStatus.createErrorStatus("Asynchronous send got a non-expected error code: " + expectedHttpResponseCode + " but was " + incoming.getReturnCode(), null));
+				fWrongBody= incoming.getMessageAsString();
+			}
 		} else {
-			// This is not possible unless there was a really grave error at the
-			// server side.
-			// Asynchronous receives may not throw a SOAP error.
-			setStatus(ArtefactStatus.createErrorStatus("Asynchronous send got a non-2XX error code: " + incoming.getReturnCode(), null));
-			fWrongBody= incoming.getMessageAsString();
+			if (incoming.getReturnCode() > 200 && incoming.getReturnCode() < 300) {
+				setStatus(ArtefactStatus.createPassedStatus());
+			} else {
+				// This is not possible unless there was a really grave error at the
+				// server side.
+				// Asynchronous receives may not throw a SOAP error.
+				setStatus(ArtefactStatus.createErrorStatus("Asynchronous send got a non-2XX error code: " + incoming.getReturnCode(), null));
+				fWrongBody= incoming.getMessageAsString();
+			}
 		}
 	}
 
@@ -174,5 +185,13 @@ public class SendAsync extends Activity {
 	@Override
 	public boolean canExecute(ActivityContext context, IncomingMessage message) {
 		return false;
+	}
+	
+	public void setExpectedHttpResponseCode(Integer statusCode) {
+		this.expectedHttpResponseCode = statusCode;
+	}
+
+	public Integer getExpectedHttpResponseCode() {
+		return expectedHttpResponseCode;
 	}
 }

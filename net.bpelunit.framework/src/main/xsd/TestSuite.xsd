@@ -193,7 +193,7 @@
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="receiveOnly" type="ReceiveActivity">
+				<xs:element name="receiveOnly" type="ReceiveOnlyActivity">
 					<xs:annotation>
 						<xs:documentation>
 							Receive a message, send an ACK.
@@ -320,6 +320,7 @@
 						</xs:annotation>
 					</xs:element>
 				</xs:sequence>
+				<xs:attribute name="expectedHttpResponseCode" type="xs:positiveInteger" use="optional" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -359,6 +360,22 @@
 					default="false" />
 				<xs:attribute name="faultcode" type="xs:QName" use="optional" />
 				<xs:attribute name="faultstring" type="xs:string" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ReceiveOnlyActivity">
+		<xs:annotation>
+			<xs:documentation>A standalone (async) receive activity. In contrast to the receive activities embedded in two-way activities, this activity can have a header processor.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ReceiveActivity">
+				<xs:sequence>
+					<xs:element name="headerProcessor" type="HeaderProcessor" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Header processor. Can add addressing info to outgoing calls and extract it from incoming calls.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

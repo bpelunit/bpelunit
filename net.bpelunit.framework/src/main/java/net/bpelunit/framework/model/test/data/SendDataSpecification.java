@@ -125,7 +125,7 @@ public class SendDataSpecification extends DataSpecification {
 		 * Options to be set for the underlaying transport protocol (ATM HTTP only)
 		 */
 		private Map<String, String> protocolOptions = new HashMap<String, String>();
-		
+
 	// ******************** Initialization ************************
 
 	public SendDataSpecification(Activity parent, NamespaceContext nsContext) throws SpecificationException {

@@ -14,6 +14,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.varia.NullAppender;
+
 import net.bpelunit.framework.base.BPELUnitBaseRunner;
 import net.bpelunit.framework.control.result.XMLResultProducer;
 import net.bpelunit.framework.control.util.BPELUnitUtil;
@@ -28,20 +42,6 @@ import net.bpelunit.framework.model.test.TestSuite;
 import net.bpelunit.framework.model.test.data.XMLData;
 import net.bpelunit.framework.model.test.report.ITestArtefact;
 import net.bpelunit.util.Console;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.varia.NullAppender;
 
 /**
  * The command line runner for BPELUnit.
@@ -338,6 +338,11 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 			screen.println(Messages
 					.getString("BPELUnitCommandLineRunner.MSG_BYE")); //$NON-NLS-1$
 			
+			String resultMessage = Messages.getString("BPELUnitCommandLineRunner.MSG_RESULT");
+			resultMessage = resultMessage.replace("$PASSED", "" + calculatePassedTestCases(suite));
+			resultMessage = resultMessage.replace("$ERROR", "" + calculateErrorTestCases(suite));
+			screen.println(resultMessage);
+			
 			if(suite.getStatus().hasProblems()) {
 				console.exit(2);
 			}
@@ -348,6 +353,26 @@ public class BPELUnitCommandLineRunner extends BPELUnitBaseRunner implements
 			abort(Messages
 					.getString("BPELUnitCommandLineRunner.MSG_ERROR_BPTS_ERROR"), e); //$NON-NLS-1$
 		}
+	}
+
+	private int calculatePassedTestCases(TestSuite suite) {
+		int result = 0;
+		for(TestCase tc : suite.getTestCasesToExecute()) {
+			if(tc.getStatus().isPassed()) {
+				result++;
+			}
+		}
+		return result;
+	}
+	
+	private int calculateErrorTestCases(TestSuite suite) {
+		int result = 0;
+		for(TestCase tc : suite.getTestCasesToExecute()) {
+			if(tc.getStatus().hasProblems()) {
+				result++;
+			}
+		}
+		return result;
 	}
 
 	public void testCaseEnded(TestCase test) {
