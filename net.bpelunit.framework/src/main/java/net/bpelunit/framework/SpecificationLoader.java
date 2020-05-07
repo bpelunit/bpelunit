@@ -874,7 +874,9 @@ public class SpecificationLoader {
 	private Activity readSend(ITestArtefact parent, int round,
 			String testDirectory, XMLSendOnlyActivity xmlSend) throws SpecificationException {
 		SendAsync activity = new SendAsync(parent);
-		activity.setExpectedHttpResponseCode(xmlSend.getExpectedHttpResponseCode().intValue());
+		if(xmlSend.isSetExpectedHttpResponseCode()) {
+			activity.setExpectedHttpResponseCode(xmlSend.getExpectedHttpResponseCode().intValue());
+		}
 		
 		SendDataSpecification spec = createSendSpecificationFromStandalone(
 				activity, xmlSend, SOAPOperationDirectionIdentifier.INPUT,
